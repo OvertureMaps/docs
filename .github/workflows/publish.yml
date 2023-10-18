@@ -1,0 +1,56 @@
+---
+name: Build the how-to pages with docusaurus
+
+on:
+  push:
+    branches: [main]
+
+  # Allow running from the actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  pages: write
+
+jobs:
+  publish:
+    if: github.repository == 'overturemaps/how-to'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the how-to repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "19"
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Build Docusaurus Pages 🔧
+        run: npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
+
+      # - name: Upload a Build Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: github-pages
+      #     path: build/
+    
+      # - name: Deploy GitHub Pages site
+      #   uses: actions/deploy-pages@v1.2.9
+
+      #- name: Configure GitHub Pages
+      #  uses: actions/configure-pages@v3.0.6
+        
+      # - name: Deploy
+      #  uses: peaceiris/actions-gh-pages@v3
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    publish_dir: ./build
