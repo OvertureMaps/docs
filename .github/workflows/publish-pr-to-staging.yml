@@ -11,7 +11,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the schema-wg repository
+      - name: Check out the how-to repository
         uses: actions/checkout@v3
 
       - name: Set up Node.js
@@ -20,7 +20,7 @@ jobs:
           node-version: "19"
 
       - name: Install NPM dependencies
-        run: cd docusaurus && npm install
+        run: npm install
 
       - name: Build Docusaurus website
         env:
