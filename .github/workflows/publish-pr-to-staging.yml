@@ -26,7 +26,7 @@ jobs:
         env:
           DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
           DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/
-        run: cd docusaurus && npm run build
+        run: npm run build
 
       - name: Fetch AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -36,7 +36,7 @@ jobs:
 
       - name: Copy Docusaurus website to staging bucket how-to/pr/${{github.event.number}}/
         run: |
-          cd docusaurus/build && aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING . s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
+          cd build && aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING . s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
 
       - name: Purge CDN cache
         run: |
