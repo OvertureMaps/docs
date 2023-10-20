@@ -7,7 +7,8 @@ const sidebars = {
       label: 'Getting Started',
       collapsed: false,
       items: [
-        'getting_started/access'
+        'getting_started/access',
+        'getting_started/build-a-map'
       ]
     },
     {
