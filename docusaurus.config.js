@@ -40,8 +40,6 @@ const config = {
     locales: ['en'],
   },
 
-  themes: ["docusaurus-json-schema-plugin"],
-
   presets: [
     [
       'classic',

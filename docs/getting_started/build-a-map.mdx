@@ -1,0 +1,403 @@
+---
+title: Build a Basemap
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Building a Basemap from Overture Data
+
+
+
+### Part 1: Downloading the Data
+
+For each theme, we can use Amazon Athena to efficiently extract a CSV of just the data in our bounding box. We can then use DuckDB and Tippecanoe to turn this CSV into a PMTiles archive.
+
+<Tabs>
+
+<TabItem value="buildings" label="Buildings" default>
+
+1. Query the buildings theme using Amazon Athena and download the results as a CSV file, `buildings.csv`:
+
+    ```sql
+    SELECT class,
+        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as local_name,
+        height,
+        level,
+        CAST(sources AS JSON) as sources,
+        ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+    FROM overture_2023_10_19_alpha_0
+    WHERE theme = 'buildings' AND type = 'building'
+        AND bbox.minX > -122.679404 AND bbox.maxX < -121.978275
+        AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+    ```
+
+
+2. Use DuckDB to convert `buildings.csv` into a GeoJSONSeq file.
+
+    <details><summary>DuckDB Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    COPY (
+        SELECT
+            "class",
+            "local_name",
+            "height",
+            "level",
+            "sources",
+            ST_GeomFromText(geometry_wkt) as geometry
+        FROM read_csv('csv/buildings.csv', header=True,
+            COLUMNS={
+                'class':'VARCHAR',
+                'local_name':'VARCHAR',
+                'height':'DOUBLE',
+                'level':'VARCHAR',
+                'sources':'VARCHAR',
+                'geometry_wkt':'VARCHAR'
+            }
+        )
+        ) TO 'geojson/buildings.geojsonseq'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+    ```
+    </details>
+
+3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `buildings.geojsonseq`
+
+    ```bash
+    tippecanoe -o tiles/buildings.pmtiles -Z13 -z13 -l buildings -P geojson/buildings.geojsonseq
+    ```
+
+    <details><summary>Tippecanoe flag explanation</summary>
+
+    - `-o tiles/buildings.pmtiles` is our output file.
+    - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (so only 1 zoom level).
+    - `-l buildings` names the layer "buildings"
+    - `-P` allows tippecanoe to read the file in parallel. Since we created a GeoJSON sequence file instead of a single GeoJSON Feature Collection, tippecanoe can process the input data more efficiently.
+
+    </details>
+
+</TabItem>
+<TabItem value="roads" label="Roads" default>
+
+1. Query the transportation theme using Amazon Athena and download the results as a CSV file, `roads.csv`:
+
+    ```sql
+    SELECT
+        level,
+        JSON_EXTRACT_SCALAR(road, '$.class') AS road_class,
+        JSON_EXTRACT_SCALAR(road, '$.roadNames.common[0].value') AS road_name,
+        sources[1].dataset AS source,
+        ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+    FROM overture_2023_10_19_alpha_0
+    WHERE theme = 'transportation' AND type = 'segment'
+        AND bbox.minX > -122.679404 AND bbox.maxX < -121.978275
+        AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+    ```
+
+2. Use DuckDB to convert `roads.csv` into a GeoJSONSeq file.
+
+    ```sql
+    COPY (
+        SELECT
+            road_class as class,
+            road_name as name,
+            level,
+            ST_GeomFromText(geometry_wkt) as geometry
+        FROM 'csv/roads.csv'
+        ) TO 'geojson/roads.geojsonseq'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+    ```
+
+3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `roads.geojsonseq`
+
+    ```bash
+    tippecanoe -o tiles/roads.pmtiles -Z10 -B10 -z13 -l roads -P geojson/roads.geojsonseq
+    ```
+
+    <details><summary>Tippecanoe flag explanation</summary>
+
+    - `-o tiles/roads.pmtiles` is our output file.
+    - `-Z10` and `-z13` will produce a tileset starting at zoom 10 and going up to zoom 13.
+    - `-B10` will ensure that all featuers are present from zoom level 10.
+    - `-l roads` names the layer "roads"
+    - `-P` allows tippecanoe to read the file in parallel. Since we created a GeoJSON sequence file instead of a single GeoJSON Feature Collection, tippecanoe can process the input data more efficiently.
+
+    </details>
+
+</TabItem>
+<TabItem value="places" label="Places" default>
+
+1. Query the buildings theme using Amazon Athena and download the results as a CSV file, `buildings.csv`:
+
+    <details><summary>Athena Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    SELECT class,
+        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as local_name,
+        height,
+        level,
+        CAST(sources AS JSON) as sources,
+        ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+    FROM overture_2023_10_19_alpha_0
+    WHERE theme = 'buildings'
+        AND type = 'building'
+        AND bbox.minX > -122.679404
+        AND bbox.maxX < -121.978275
+        AND bbox.minY > 47.360619
+        AND bbox.maxY < 47.786336
+    ```
+    </details>
+
+2. Use DuckDB to convert `buildings.csv` into a GeoJSONSeq file.
+
+    <details><summary>DuckDB Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    COPY (
+        SELECT
+            "class",
+            "local_name",
+            "height",
+            "level",
+            "sources",
+            ST_GeomFromText(geometry_wkt) as geometry
+        FROM read_csv('csv/buildings.csv', header=True,
+            COLUMNS={
+                'class':'VARCHAR',
+                'local_name':'VARCHAR',
+                'height':'DOUBLE',
+                'level':'VARCHAR',
+                'sources':'VARCHAR',
+                'geometry_wkt':'VARCHAR'
+            }
+        )
+        ) TO 'geojson/buildings.geojsonseq'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+    ```
+    </details>
+
+3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `buildings.geojsonseq`
+
+    ```bash
+    tippecanoe -o tiles/buildings.pmtiles -Z13 -z13 -l buildings -P geojson/buildings.geojsonseq
+    ```
+
+    <details><summary>Tippecanoe flag explanation</summary>
+
+    - `-o tiles/buildings.pmtiles` is our output file.
+    - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (so only 1 zoom level).
+    - `-l buildings` names the layer "buildings"
+    - `-P` allows tippecanoe to read the file in parallel. Since we created a GeoJSON sequence file instead of a single GeoJSON Feature Collection, tippecanoe can process the input data more efficiently.
+
+    </details>
+
+</TabItem>
+<TabItem value="water" label="Water" default>
+
+1. Query the buildings theme using Amazon Athena and download the results as a CSV file, `buildings.csv`:
+
+    <details><summary>Athena Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    SELECT class,
+        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as local_name,
+        height,
+        level,
+        CAST(sources AS JSON) as sources,
+        ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+    FROM overture_2023_10_19_alpha_0
+    WHERE theme = 'buildings'
+        AND type = 'building'
+        AND bbox.minX > -122.679404
+        AND bbox.maxX < -121.978275
+        AND bbox.minY > 47.360619
+        AND bbox.maxY < 47.786336
+    ```
+    </details>
+
+2. Use DuckDB to convert `buildings.csv` into a GeoJSONSeq file.
+
+    <details><summary>DuckDB Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    COPY (
+        SELECT
+            "class",
+            "local_name",
+            "height",
+            "level",
+            "sources",
+            ST_GeomFromText(geometry_wkt) as geometry
+        FROM read_csv('csv/buildings.csv', header=True,
+            COLUMNS={
+                'class':'VARCHAR',
+                'local_name':'VARCHAR',
+                'height':'DOUBLE',
+                'level':'VARCHAR',
+                'sources':'VARCHAR',
+                'geometry_wkt':'VARCHAR'
+            }
+        )
+        ) TO 'geojson/buildings.geojsonseq'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+    ```
+    </details>
+
+3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `buildings.geojsonseq`
+
+    ```bash
+    tippecanoe -o tiles/buildings.pmtiles -Z13 -z13 -l buildings -P geojson/buildings.geojsonseq
+    ```
+
+    <details><summary>Tippecanoe flag explanation</summary>
+
+    - `-o tiles/buildings.pmtiles` is our output file.
+    - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (so only 1 zoom level).
+    - `-l buildings` names the layer "buildings"
+    - `-P` allows tippecanoe to read the file in parallel. Since we created a GeoJSON sequence file instead of a single GeoJSON Feature Collection, tippecanoe can process the input data more efficiently.
+
+    </details>
+
+</TabItem>
+
+<TabItem value="land" label="Land" default>
+
+1. Query the buildings theme using Amazon Athena and download the results as a CSV file, `buildings.csv`:
+
+    <details><summary>Athena Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    SELECT class,
+        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as local_name,
+        height,
+        level,
+        CAST(sources AS JSON) as sources,
+        ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+    FROM overture_2023_10_19_alpha_0
+    WHERE theme = 'buildings'
+        AND type = 'building'
+        AND bbox.minX > -122.679404
+        AND bbox.maxX < -121.978275
+        AND bbox.minY > 47.360619
+        AND bbox.maxY < 47.786336
+    ```
+    </details>
+
+2. Use DuckDB to convert `buildings.csv` into a GeoJSONSeq file.
+
+    <details><summary>DuckDB Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    COPY (
+        SELECT
+            "class",
+            "local_name",
+            "height",
+            "level",
+            "sources",
+            ST_GeomFromText(geometry_wkt) as geometry
+        FROM read_csv('csv/buildings.csv', header=True,
+            COLUMNS={
+                'class':'VARCHAR',
+                'local_name':'VARCHAR',
+                'height':'DOUBLE',
+                'level':'VARCHAR',
+                'sources':'VARCHAR',
+                'geometry_wkt':'VARCHAR'
+            }
+        )
+        ) TO 'geojson/buildings.geojsonseq'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+    ```
+    </details>
+
+3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `buildings.geojsonseq`
+
+    ```bash
+    tippecanoe -o tiles/buildings.pmtiles -Z13 -z13 -l buildings -P geojson/buildings.geojsonseq
+    ```
+
+    <details><summary>Tippecanoe flag explanation</summary>
+
+    - `-o tiles/buildings.pmtiles` is our output file.
+    - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (so only 1 zoom level).
+    - `-l buildings` names the layer "buildings"
+    - `-P` allows tippecanoe to read the file in parallel. Since we created a GeoJSON sequence file instead of a single GeoJSON Feature Collection, tippecanoe can process the input data more efficiently.
+
+    </details>
+
+</TabItem>
+
+<TabItem value="landuse" label="Land Use" default>
+
+1. Query the buildings theme using Amazon Athena and download the results as a CSV file, `buildings.csv`:
+
+    <details><summary>Athena Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    SELECT class,
+        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as local_name,
+        height,
+        level,
+        CAST(sources AS JSON) as sources,
+        ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+    FROM overture_2023_10_19_alpha_0
+    WHERE theme = 'buildings'
+        AND type = 'building'
+        AND bbox.minX > -122.679404
+        AND bbox.maxX < -121.978275
+        AND bbox.minY > 47.360619
+        AND bbox.maxY < 47.786336
+    ```
+    </details>
+
+2. Use DuckDB to convert `buildings.csv` into a GeoJSONSeq file.
+
+    <details><summary>DuckDB Query ( <code>SQL</code> )</summary>
+
+    ```sql
+    COPY (
+        SELECT
+            "class",
+            "local_name",
+            "height",
+            "level",
+            "sources",
+            ST_GeomFromText(geometry_wkt) as geometry
+        FROM read_csv('csv/buildings.csv', header=True,
+            COLUMNS={
+                'class':'VARCHAR',
+                'local_name':'VARCHAR',
+                'height':'DOUBLE',
+                'level':'VARCHAR',
+                'sources':'VARCHAR',
+                'geometry_wkt':'VARCHAR'
+            }
+        )
+        ) TO 'geojson/buildings.geojsonseq'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+    ```
+    </details>
+
+3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `buildings.geojsonseq`
+
+    ```bash
+    tippecanoe -o tiles/buildings.pmtiles -Z13 -z13 -l buildings -P geojson/buildings.geojsonseq
+    ```
+
+    <details><summary>Tippecanoe flag explanation</summary>
+
+    - `-o tiles/buildings.pmtiles` is our output file.
+    - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (so only 1 zoom level).
+    - `-l buildings` names the layer "buildings"
+    - `-P` allows tippecanoe to read the file in parallel. Since we created a GeoJSON sequence file instead of a single GeoJSON Feature Collection, tippecanoe can process the input data more efficiently.
+
+    </details>
+
+</TabItem>
+
+</Tabs>
+
+
+### Part 2: Make a map with maplibre
