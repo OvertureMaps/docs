@@ -18,6 +18,14 @@ const sidebars = {
       items: [
         'downloading/athena'
       ]
+    }, 
+    {
+      type: 'category',
+      label: 'Visualizing Data',
+      collapsed: false,
+      items: [
+        'visualizing_places_data/visualizing-places'
+      ]
     }
   ]
 };
