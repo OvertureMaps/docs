@@ -1,0 +1,94 @@
+---
+title: Cloud Services
+---
+
+
+## Amazon Athena
+
+1. You will need an AWS account.
+2. Ensure that you are operating in the us-west-2 region.
+3. Run the following command in the Athena Query Console:
+
+    <details><summary>Click to view complete `CREATE` command</summary>
+
+    ```sql
+    CREATE EXTERNAL TABLE `overture`(
+        `categories` struct<main:string,alternate:array<string>>,
+        `level` int,
+        `socials` array<string>,
+        `subtype` string,
+        `numfloors` int,
+        `entityid` string,
+        `class` string,
+        `sourcetags` map<string,string>,
+        `localitytype` string,
+        `emails` array<string>,
+        `drivingside` string,
+        `adminlevel` int,
+        `road` string,
+        `isocountrycodealpha2` string,
+        `isosubcountrycode` string,
+        `updatetime` string,
+        `wikidata` string,
+        `confidence` double,
+        `defaultlanguage` string,
+        `brand` struct<names:struct<common:array<struct<value:string,language:string>>,official:array<struct<value:string,language:string>>,alternate:array<struct<value:string,language:string>>,short:array<struct<value:string,language:string>>>,wikidata:string>,
+        `addresses` array<struct<freeform:string,locality:string,postCode:string,region:string,country:string>>,
+        `names` struct<common:array<struct<value:string,language:string>>,official:array<struct<value:string,language:string>>,alternate:array<struct<value:string,language:string>>,short:array<struct<value:string,language:string>>>,
+        `isintermittent` boolean,
+        `connectors` array<string>,
+        `surface` string,
+        `version` int,
+        `phones` array<string>,
+        `id` string,
+        `geometry` binary,
+        `context` string,
+        `height` double,
+        `maritime` boolean,
+        `sources` array<struct<property:string,dataset:string,recordId:string,confidence:double>>,
+        `websites` array<string>,
+        `issalt` boolean,
+        `bbox` struct<minx:double,maxx:double,miny:double,maxy:double>)
+    PARTITIONED BY (
+        `theme` string,
+        `type` string)
+    STORED AS PARQUET
+    LOCATION
+        's3://overturemaps-us-west-2/release/2023-10-19-alpha.0'
+    ```
+    </details>
+
+4. Load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
+
+
+## Microsft Synapse
+1. You will need an Azure account.
+2. Create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace).
+
+3. <details><summary>Example SQL query to read places in Seattle</summary>
+
+    ```sql
+    SELECT TOP 10 *
+    FROM
+        OPENROWSET(
+            BULK 'https://overturemapswestus2.blob.core.windows.net/release/2023-10-19-alpha.0/theme=places/type=place/',
+            FORMAT = 'PARQUET'
+        )
+    WITH
+        (
+            names VARCHAR(MAX),
+            categories VARCHAR(MAX),
+            websites VARCHAR(MAX),
+            phones VARCHAR(MAX),
+            bbox VARCHAR(200),
+            geometry VARBINARY(MAX)
+        )
+       AS
+            [result]
+    WHERE
+            TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.minx')) > -122.4447744
+        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxx')) < -122.2477071
+        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.miny')) > 47.5621587
+        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxy')) < 47.7120663
+    ```
+    </details>
