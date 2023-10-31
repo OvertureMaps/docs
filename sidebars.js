@@ -4,21 +4,21 @@ const sidebars = {
     'index',
     {
       type: 'category',
-      label: 'Getting Started',
+      label: 'Accessing the Data',
       collapsed: false,
       items: [
-        'getting_started/access',
-        'getting_started/build-a-map'
+        'accessing-the-data/cloud-services',
+        'accessing-the-data/locally'
       ]
     },
     {
       type: 'category',
-      label: 'Downloading Data',
+      label: 'Using the Data',
       collapsed: false,
       items: [
-        'downloading/athena'
+        'getting_started/build-a-map'
       ]
-    }
+    },
   ]
 };
 
