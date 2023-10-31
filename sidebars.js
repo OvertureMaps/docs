@@ -16,9 +16,9 @@ const sidebars = {
       label: 'Using the Data',
       collapsed: false,
       items: [
-        'getting_started/build-a-map'
+        'using-the-data/build-a-map'
       ]
-    }, 
+    },
     {
       type: 'category',
       label: 'Visualizing Data',
