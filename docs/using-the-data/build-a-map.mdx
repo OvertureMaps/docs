@@ -5,21 +5,116 @@ title: Build a Basemap
 import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Map from '@site/src/components/map';
+import {Admins, Buildings, Places, Transportation, Water, LandUse, Land} from '@site/src/components/layers.js';
 
-# Building a Basemap from Overture Data
+# Building a basemap with Overture
 
-### Step 1: Download the Data
+<Map></Map>
 
-Because Overture data is released as a single collection of data in a cloud-native format (parquet), interfacing with the data through a service that can take advantage of the cloud-native properties of the data.
+### Step 1: Downloading and processing only what you need
 
-The queries presented here are meant to run in Amazon Athena against the `overture_2023_10_19_alpha_0` table, as set up in [these instructions](https://github.com/OvertureMaps/data#accessing-overture-maps-data-1).
+Overture data is released as a single dataset in a cloud-native format (parquet), that is partitioned by theme. Accessing the data through a service that can take advantage of these properties provides the best performance. After downloading and converting the data to GeoJSON, we can use [tippecanoe](https://github.com/felt/tippecanoe) to create a [`PMTiles`](https://github.com/protomaps/PMTiles) archive.
 
-Below are different queries for each theme that extract only the relevant attributes for each feature within a specific bounding box. In this case, Seattle, Washington, USA. Each Athena query produces a `CSV` file which can be turned into `GeoJSON` file using [DuckDB](https://duckdb.org/) and then run through [tippecanoe](https://github.com/felt/tippecanoe) to produce a [`PMTiles`](https://github.com/protomaps/PMTiles) archive:
+For illustration, this tutorial demonstrates multiple methods of downloading Overture data across the different themes. Performance tradeoffs are discussed for each theme.
 
-<Tabs queryString="athena-query" >
+<Tabs queryString="theme-data" >
+
+<!-- Places  -->
+<TabItem value="places" label="Places" default>
+
+The places data theme represents business and points of interest in the real world. Read more about the places data schema in the [documentation](https://docs.overturemaps.org/reference/places/place).
+
+1. To download places data for a specific region, we can use the following DuckDB query to download the places data within a specific bounding box and generate a `GeoJSON` file.
+
+    ```sql
+    LOAD spatial;
+    LOAD httpfs;
+    -- Access the data on AWS in this example
+    SET s3_region='us-west-2';
+
+    COPY (
+        SELECT
+            FILTER(names.common, x->x.language = 'local') [ 1 ].value as name,
+            categories.main as category,
+            ROUND(confidence,2) as confidence,
+            ST_GeomFromWKB(geometry) as geometry
+        FROM read_parquet('s3://overturemaps-us-west-2/release/2023-10-19-alpha.0/theme=places/type=*/*',
+                            filename=true, hive_partitioning=1)
+        WHERE
+            -- Point geometry doesn't require looking at both min and max:
+            bbox.minX BETWEEN -122.679404 AND -121.978275 AND
+            bbox.minY BETWEEN 47.360619 AND 47.786336)
+    TO 'places.geojson'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326');
+    ```
+
+2. Next, create a `pmtiles` archive from `places.geojson` with [tippecanoe](https://github.com/felt/tippecanoe).
+
+    ```bash
+    tippecanoe -fo places.pmtiles -Z13 -z13 -l places places.geojson
+    ```
+
+    <details><summary>Tippecanoe flag explanation</summary>
+
+    - `-fo places.pmtiles` The output file will be places.pmtiles. It will be overwritten if it exists.
+    - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (only 1 zoom level).
+    - `-l places` names the layer "places"
+
+   </details>
+
+</TabItem>
+
+<!-- Placenames -->
+
+<TabItem value="placenames" label="Placenames" default>
+The admins theme contains named localities and their administrative boundaries. To add labels for populated places to the map, we query the admins theme and calculate centroids of administrative areas.
+
+1. Run the following DuckDB to download placenames from the admins theme for the bounding box to create `placenames.geojson`
+
+    ```sql
+    LOAD spatial;
+    LOAD azure;
+    -- Access the data on Microsoft Azure in this example
+    SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=overturemapswestus2;AccountKey=;EndpointSuffix=core.windows.net';
+    COPY (
+        SELECT
+            subType,
+            localityType,
+            FILTER(names.common, x -> x.language = 'local')[1].value as name,
+            adminLevel,
+            ST_CENTROID(ST_GeomFromWKB(geometry)) as geometry
+        FROM read_parquet('azure://release/2023-10-19-alpha.0/theme=admins/type=locality/*',
+                            filename=true, hive_partitioning=1)
+        WHERE bbox.minX > -122.679404 AND bbox.maxX < -121.978275
+          AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+    ) TO 'placenames.geojson'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326');
+    ```
+
+2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `placenames.geojson`
+
+    ```bash
+    tippecanoe -o placenames.pmtiles -Z5 -z10 -l placenames placenames.geojson
+    ```
+
+    <details><summary>Tippecanoe flag explanation</summary>
+
+    - `-fo buildings.pmtiles` is our output file. It will be overwritten if it exists.
+    - `-Z5` and `-z10` will produce a tileset starting at zoom 5 and going up to zoom 13.
+    - `-l placenames` names the layer "placenames"
+
+    </details>
+
+</TabItem>
+
+<!-- Buildings -->
+
 <TabItem value="buildings" label="Buildings" default>
 
-1. Athena query to produce `buildings.csv`:
+Since there are 1.3B buildings in the Overture data, we can first leverage Amazon Athena to filter for only the buildings in the bounding box.
+
+1. Run this query in  Amazon Athena against the `overture_2023_10_19_alpha_0` table, as set up in [these instructions](https://github.com/OvertureMaps/data#accessing-overture-maps-data-1). Download the results as `buildings.csv`
 
     ```sql
     SELECT class,
@@ -36,42 +131,26 @@ Below are different queries for each theme that extract only the relevant attrib
 
 2. Use DuckDB to convert `buildings.csv` into a GeoJSONSeq file.
 
-    <details><summary>DuckDB Query ( <code>SQL</code> )</summary>
-
     ```sql
+    LOAD spatial;
     COPY (
         SELECT
-            "class",
-            "local_name",
-            "height",
-            "level",
-            "sources",
+            class, local_name as name, height, level,
             ST_GeomFromText(geometry_wkt) as geometry
-        FROM read_csv('csv/buildings.csv', header=True,
-            COLUMNS={
-                'class':'VARCHAR',
-                'local_name':'VARCHAR',
-                'height':'DOUBLE',
-                'level':'VARCHAR',
-                'sources':'VARCHAR',
-                'geometry_wkt':'VARCHAR'
-            }
-        )
-        ) TO 'geojson/buildings.geojsonseq'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+        FROM read_csv('buildings.csv', header=True, auto_detect=True)
+        ) TO 'buildings.geojsonseq'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
     ```
-
-    </details>
 
 3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `buildings.geojsonseq`
 
     ```bash
-    tippecanoe -o tiles/buildings.pmtiles -Z13 -z13 -l buildings -P geojson/buildings.geojsonseq
+    tippecanoe -o buildings.pmtiles -Z13 -z13 -l buildings -P buildings.geojsonseq
     ```
 
     <details><summary>Tippecanoe flag explanation</summary>
 
-    - `-o tiles/buildings.pmtiles` is our output file.
+    - `-fo buildings.pmtiles` is our output file. It will be overwritten if it exists.
     - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (so only 1 zoom level).
     - `-l buildings` names the layer "buildings"
     - `-P` allows tippecanoe to read the file in parallel. Since we created a GeoJSON sequence file instead of a single GeoJSON Feature Collection, tippecanoe can process the input data more efficiently.
@@ -83,8 +162,9 @@ Below are different queries for each theme that extract only the relevant attrib
 <!-- Roads -->
 
 <TabItem value="roads" label="Roads" default>
+Similarly to buildings, we can first use Amazon Athena to generate a CSV of only the roads in our bounding box from the transportation theme.
 
-1. Athena query to produce `roads.csv`:
+1. Run this query in Amazon Athena against the `overture_2023_10_19_alpha_0` table, as set up in [these instructions](https://github.com/OvertureMaps/data#accessing-overture-maps-data-1). Download the results as `roads.csv`
 
     ```sql
     SELECT
@@ -102,26 +182,27 @@ Below are different queries for each theme that extract only the relevant attrib
 2. Use DuckDB to convert `roads.csv` into a GeoJSONSeq file.
 
     ```sql
+    LOAD spatial;
     COPY (
         SELECT
             road_class as class,
             road_name as name,
             level,
             ST_GeomFromText(geometry_wkt) as geometry
-        FROM 'csv/roads.csv'
-        ) TO 'geojson/roads.geojsonseq'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+        FROM 'roads.csv'
+        ) TO 'roads.geojsonseq'
+    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
     ```
 
 3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `roads.geojsonseq`
 
     ```bash
-    tippecanoe -o tiles/roads.pmtiles -Z10 -B10 -z13 -l roads -P geojson/roads.geojsonseq
+    tippecanoe -fo roads.pmtiles -Z10 -B10 -z13 -l roads -P roads.geojsonseq
     ```
 
     <details><summary>Tippecanoe flag explanation</summary>
 
-    - `-o tiles/roads.pmtiles` is our output file.
+    - `-fo roads.pmtiles` is our output file. It will be overwritten if it exists.
     - `-Z10` and `-z13` will produce a tileset starting at zoom 10 and going up to zoom 13.
     - `-B10` will ensure that all featuers are present from zoom level 10.
     - `-l roads` names the layer "roads"
@@ -131,152 +212,210 @@ Below are different queries for each theme that extract only the relevant attrib
 
 </TabItem>
 
-<!-- Places -->
 
-<TabItem value="places" label="Places" default>
 
-1. Athena query to produce `places.csv`:
+<TabItem value="base" label="Base (Land, Land Use & Water)" default>
+
+1. `Land`, `Landuse`, and `Water` are the three types available in the `Base` theme. We can use 3 separate queries to obtain the features and then we can combine them into a single pmtiles archive with different layers.
+
+    <details><summary>Athena query to produce `land.csv`</summary>
 
     ```sql
-    SELECT
+    SELECT subType,
+    class,
+    TRY(
+        FILTER(names.common, x->x.language = 'local') [ 1 ].value
+    ) as name,
+    ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+    FROM overture_2023_10_19_alpha_0
+    WHERE theme = 'base'
+        AND type IN 'land'
+        AND ST_INTERSECTS(
+            ST_ENVELOPE(
+                ST_MULTIPOINT( ARRAY [
+                    ST_POINT(-122.679404, 47.360619),
+                    ST_POINT(-121.978275, 47.360619),
+                    ST_POINT(-122.679404, 47.786336),
+                    ST_POINT(-121.978275, 47.786336)
+                ])
+            ),
+            ST_GeomFromBinary(geometry)
+    )
+    ```
+    </details>
+
+    <details><summary>Athena query to produce `landuse.csv`</summary>
+
+     ```sql
+     SELECT subType,
+         class,
+         surface,
+         TRY(
+             FILTER(names.common, x->x.language = 'local') [ 1 ].value
+         ) as name,
+         ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+         FROM overture_2023_10_19_alpha_0
+         WHERE theme = 'base'
+             AND type = 'landuse'
+             AND ST_INTERSECTS(
+                 ST_ENVELOPE(
+                     ST_MULTIPOINT( ARRAY [
+                         ST_POINT(-122.679404, 47.360619),
+                         ST_POINT(-121.978275, 47.360619),
+                         ST_POINT(-122.679404, 47.786336),
+                         ST_POINT(-121.978275, 47.786336)
+                     ])
+                 ),
+                 ST_GeomFromBinary(geometry)
+         )
+     ```
+    </details>
+
+    <details><summary>Athena query to produce `water.csv`</summary>
+
+    ```sql
+    SELECT subType,
+        class,
         TRY(
             FILTER(names.common, x->x.language = 'local') [ 1 ].value
-        ) as local_name,
-       categories.main as category,
-       ROUND(confidence,2) as confidence,
-       TRY(websites[1]) AS url,
-       TRY(addresses[1]) AS address,
-       sources[1] as source,
-       ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
+        ) as name,
+        ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
     FROM overture_2023_10_19_alpha_0
-    WHERE theme = 'places' AND type = 'place'
-        AND bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-        AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+    WHERE theme = 'base'
+        AND subType in ('ocean', 'lake', 'pond', 'reservoir', 'river', 'stream', 'water', 'canal')
+        AND ST_INTERSECTS(
+                ST_ENVELOPE(
+                    ST_MULTIPOINT( ARRAY [
+                        ST_POINT(-122.679404, 47.360619),
+                        ST_POINT(-121.978275, 47.360619),
+                        ST_POINT(-122.679404, 47.786336),
+                        ST_POINT(-121.978275, 47.786336)
+                    ])
+                ),
+                ST_GeomFromBinary(geometry)
+        )
     ```
+    </details>
 
-2. Use DuckDB to convert `places.csv` into a GeoJSONSeq file.
+2. Use DuckDB to convert the `csv` files into `GeoJSONSeq` files.
+
+    <details><summary>DuckDB Query (SQL)</summary>
 
     ```sql
-    COPY (
-    SELECT
-        local_name as name,
-        confidence, category, url, address, source,
-        ST_GeomFromText(geometry_wkt) as geometry
-    FROM 'csv/places.csv'
-    ) TO 'geojson/places.geojsonseq'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
+    LOAD SPATIAL;
+      -- Land
+      COPY
+       (
+          SELECT
+              subtype, class, name,
+              ST_GeomFromText(geometry_wkt) as geometry
+          FROM read_csv('land.csv', auto_detect=True, header=True)
+          ) TO 'land.geojsonseq'
+      WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
+      -- LandUse
+      COPY (
+          SELECT
+              subtype, class, name, surface,
+              ST_GeomFromText(geometry_wkt) as geometry
+          FROM read_csv('landuse.csv', auto_detect=True, header=True)
+          ) TO 'landuse.geojsonseq'
+      WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
+      -- Water
+      COPY (
+          SELECT
+              subtype, class, name,
+              ST_GeomFromText(geometry_wkt) as geometry
+          FROM read_csv('water.csv', auto_detect=True, header=True)
+          ) TO 'water.geojsonseq'
+      WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
     ```
+    </details>
 
-3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `places.geojsonseq`
+3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive with three `geojsonseq` file as input:
 
     ```bash
-    tippecanoe -fo tiles/places.pmtiles -Z13 -z13 -l places -P geojson/places.geojsonseq
+    tippecanoe -o base.pmtiles -Z8 -z13 -P \
+        --named-layer=land:land.geojsonseq \
+        --named-layer=landuse:landuse.geojsonseq \
+        --named-layer=water:water.geojsonseq
     ```
 
     <details><summary>Tippecanoe flag explanation</summary>
 
-    - `-fo tiles/places.pmtiles` is our output file, which we can overwrite (f) if it exists.
-    - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (so only 1 zoom level).
-    - `-l places` names the layer "buildings"
+    - `-fo tiles/base.pmtiles` is our output file. It will be overwritten if it exists.
+    - `-Z8` and `-z13` will produce a tileset starting at zoom 8 going up to zoom 13.
+    - `--named-layer=land:land.geojsonseq` creates the `land` layer from the contents of `land.geojson` (and similarly for the other files)
     - `-P` allows tippecanoe to read the file in parallel. Since we created a GeoJSON sequence file instead of a single GeoJSON Feature Collection, tippecanoe can process the input data more efficiently.
 
     </details>
 
 </TabItem>
 
-<!-- Water -->
+</Tabs>
 
-<TabItem value="water" label="Water" default>
+At this point, we should have created five `PMTiles` archives, one for each Overture theme.
 
-1. Athena query to produce `water.csv`:
+### Step 2: Creating a map with Maplibre + PMTiles
 
-    ```sql
-    SELECT
-        subType,
-        class,
-        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as name,
-        height,
-        ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
-    FROM overture_2023_10_19_alpha_0
-    WHERE theme = 'base' AND type = 'water' AND subType in ('ocean','lake','river')
-        AND bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-        AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
-    ```
+The map on this page combines a [react maplibre example](https://docs.maptiler.com/react/maplibre-gl-js/how-to-use-maplibre-gl-js/) with [PMTiles](https://codesandbox.io/s/black-dream-oycvf2?file=/src/App.js). You can [view the source](https://github.com/OvertureMaps/how-to/blob/building-a-map-improvements/src/components/map.js) for the above map on github for a complete example using react, or, check out the [map based on July's release](https://labs.overturemaps.org/overture-with-daylight) for a non-react implementation of PMTiles.
 
-2. Use DuckDB to convert `water.csv` into a GeoJSON file (using GeoJSON instead of GeoJSONSeq purely as an example).
+Using PMTiles with react requires adding the [PMtiles protocol](https://docs.protomaps.com/pmtiles/maplibre), like this in react:
 
-    ```sql
-    COPY (
-        SELECT
-            subType, class, name,
-            ST_GeomFromText(geometry_wkt) as geometry
-        FROM read_csv('csv/water.csv', auto_detect=True)
-        ) TO 'geojson/water.geojson'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326');
-    ```
+```javascript
+import maplibregl from 'maplibre-gl';
+import { Protocol } from 'pmtiles';
 
-3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `water.geojson`
+useEffect(() => {
+  let protocol = new Protocol();
+  maplibregl.addProtocol("pmtiles",protocol.tile);
 
-    ```bash
-    tippecanoe -o tiles/water.pmtiles -Z8 -z10 -l buildings geojson/water.geojson
-    ```
+  ... initialize your map here ...
 
-    <details><summary>Tippecanoe flag explanation</summary>
+  return () => {
+    maplibregl.removeProtocol("pmtiles");
+  }
+}, []);
+```
 
-    - `-o tiles/water.pmtiles` is our output file.
-    - `-Z8` and `-z13` will produce a tileset starting at zoom 8 and going up to zoom 12.
-    - `-l water` names the layer "buildings"
+Then, reference the tile archives with a relative path when initializing the map:
 
-    </details>
+```javascript
+  style: {
+    sources: {
+      roads: {
+        type: "vector",
+        url: "pmtiles://../example-map/tiles/roads.pmtiles"
+      },
+      places: {
+        type: "vector",
+        url: "pmtiles://../example-map/tiles/places.pmtiles"
+      },
+    ...
+```
 
+### Step 3: Styling the layers
+Listed in each tab are the complete styles in the [Maplibre Style Spec](https://maplibre.org/maplibre-style-spec/) for the map on this page.
+
+<Tabs queryString="map-layer" >
+<TabItem value="places" label="Places" default>
+    <CodeBlock language="json">{ JSON.stringify(Places, null, 2) }</CodeBlock>
 </TabItem>
-
 <TabItem value="placenames" label="Placenames" default>
-
-1. Athena query to produce `placenames.csv`:
-
-    ```sql
-    SELECT
-        subType,
-        localityType,
-        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as local_name,
-        adminLevel,
-        ST_ASTEXT(ST_CENTROID(ST_GeomFromBinary(geometry))) as geometry_wkt
-    FROM overture_2023_10_19_alpha_0
-    WHERE theme = 'admins' AND type = 'locality'
-        AND bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-        AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
-    ```
-
-
-2. Use DuckDB to convert `placenames.csv` into a GeoJSON file.
-
-    ```sql
-   COPY (
-       SELECT
-           localityType,
-           local_name as name,
-           adminlevel,
-           ST_GeomFromText(geometry_wkt) as geometry
-       FROM read_csv_auto('csv/placenames.csv')
-   ) TO 'geojson/placenames.geojson'
-   WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326');
-    ```
-
-3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `placenames.geojson`
-
-    ```bash
-    tippecanoe -o tiles/placenames.pmtiles -Z5 -z10 -l buildings geojson/placenames.geojson
-    ```
-
-    <details><summary>Tippecanoe flag explanation</summary>
-
-    - `-o tiles/buildings.pmtiles` is our output file.
-    - `-Z5` and `-z10` will produce a tileset starting at zoom 5 and going up to zoom 13.
-    - `-l placenames` names the layer "buildings"
-
-    </details>
-
+    <CodeBlock language="json">{ JSON.stringify(Admins, null, 2) }</CodeBlock>
 </TabItem>
-
+<TabItem value="buildings" label="Buildings" default>
+    <CodeBlock language="json">{ JSON.stringify(Buildings, null, 2) }</CodeBlock>
+</TabItem>
+<TabItem value="roads" label="Roads" default>
+    <CodeBlock language="json">{ JSON.stringify(Transportation, null, 2) }</CodeBlock>
+</TabItem>
+<TabItem value="land" label="Land" default>
+    <CodeBlock language="json">{ JSON.stringify(Land, null, 2) }</CodeBlock>
+</TabItem>
+<TabItem value="landuse" label="Landuse" default>
+    <CodeBlock language="json">{ JSON.stringify(LandUse, null, 2) }</CodeBlock>
+</TabItem>
+<TabItem value="water" label="Water" default>
+    <CodeBlock language="json">{ JSON.stringify(Water, null, 2) }</CodeBlock>
+</TabItem>
 </Tabs>
