@@ -6,7 +6,7 @@ import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Map from '@site/src/components/map';
-import {Admins, Buildings, Places, Transportation, Water, LandUse, Land} from '@site/src/components/layers.js';
+import {Admins, Buildings, Places, Transportation, Water, Landuse, Land} from '@site/src/components/layers.js';
 
 # Building a basemap with Overture
 
@@ -357,7 +357,7 @@ At this point, we should have created five `PMTiles` archives, one for each Over
 
 ### Step 2: Creating a map with Maplibre + PMTiles
 
-The map on this page combines a [react maplibre example](https://docs.maptiler.com/react/maplibre-gl-js/how-to-use-maplibre-gl-js/) with [PMTiles](https://codesandbox.io/s/black-dream-oycvf2?file=/src/App.js). You can [view the source](https://github.com/OvertureMaps/how-to/blob/building-a-map-improvements/src/components/map.js) for the above map on github for a complete example using react, or, check out the [map based on July's release](https://labs.overturemaps.org/overture-with-daylight) for a non-react implementation of PMTiles.
+The map on this page combines a [react maplibre example](https://docs.maptiler.com/react/maplibre-gl-js/how-to-use-maplibre-gl-js/) with [PMTiles](https://codesandbox.io/s/black-dream-oycvf2?file=/src/App.js). You can [view the source](https://github.com/OvertureMaps/how-to/tree/main/src/components/map.js) for the above map on github for a complete example using react, or, check out the [map based on July's release](https://labs.overturemaps.org/overture-with-daylight) for a non-react implementation of PMTiles.
 
 Using PMTiles with react requires adding the [PMtiles protocol](https://docs.protomaps.com/pmtiles/maplibre), like this in react:
 
@@ -413,7 +413,7 @@ Listed in each tab are the complete styles in the [Maplibre Style Spec](https://
     <CodeBlock language="json">{ JSON.stringify(Land, null, 2) }</CodeBlock>
 </TabItem>
 <TabItem value="landuse" label="Landuse" default>
-    <CodeBlock language="json">{ JSON.stringify(LandUse, null, 2) }</CodeBlock>
+    <CodeBlock language="json">{ JSON.stringify(Landuse, null, 2) }</CodeBlock>
 </TabItem>
 <TabItem value="water" label="Water" default>
     <CodeBlock language="json">{ JSON.stringify(Water, null, 2) }</CodeBlock>

@@ -38,24 +38,24 @@ export default function Map() {
         sources: {
           roads: {
               type: "vector",
-              url: "pmtiles://../example-map/tiles/roads.pmtiles"
+              url: "pmtiles://../../example-map/tiles/roads.pmtiles"
           },
           places: {
               type: "vector",
-              url: "pmtiles://../example-map/tiles/places.pmtiles"
+              url: "pmtiles://../../example-map/tiles/places.pmtiles"
           },
           // This is really "Admins"
           placenames: {
               type: "vector",
-              url: "pmtiles://../example-map/tiles/placenames.pmtiles"
+              url: "pmtiles://../../example-map/tiles/placenames.pmtiles"
           },
           buildings: {
               type: "vector",
-              url: "pmtiles://../example-map/tiles/buildings.pmtiles"
+              url: "pmtiles://../../example-map/tiles/buildings.pmtiles"
           },
           base: {
               type: "vector",
-              url: "pmtiles://../example-map/tiles/base.pmtiles"
+              url: "pmtiles://../../example-map/tiles/base.pmtiles"
           }
         },
         layers: [
@@ -75,7 +75,8 @@ export default function Map() {
             Land.forest,
 
             //LandUse
-            //TODO
+            Landuse.parks,
+            Landuse.golfGreens,
 
             //Water
             Water.waterPolygons,

@@ -578,7 +578,30 @@ const Land = {
 }
 
 const Landuse = {
-
+    "parks": {
+        "id": "parks",
+        "type": "fill",
+        "source": 'base',
+        "source-layer": 'landuse',
+        "filter": ["match", ["get", "subType"], ["park"], true, false],
+        "minzoom": 0,
+        "maxzoom": 24,
+        "paint": {
+            "fill-color": "hsl(131, 35%, 90%)"
+        }
+    },
+    "golfGreens": {
+        "id": "golfGreens",
+        "type": "fill",
+        "source": 'base',
+        "source-layer": 'landuse',
+        "filter": ["==", ["get", "class"], "green"],
+        "minzoom": 0,
+        "maxzoom": 24,
+        "paint": {
+            "fill-color": "hsl(131, 35%, 85%)"
+        }
+    },
 }
 
 const Water ={
