@@ -180,6 +180,11 @@ export default function Map() {
       }
 
     map.current.addControl(new layerControl(), 'bottom-left');
+    map.current.addControl(new maplibregl.AttributionControl({
+      customAttribution: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>, '+
+       '<a href="https://overturemaps.org" target="_blank">OvertureMaps Foundation</a>'
+    }), 'bottom-right');
+
 
     return () => {
       maplibregl.removeProtocol("pmtiles");
