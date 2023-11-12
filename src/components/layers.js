@@ -1,3 +1,20 @@
+// color palette
+var land = "#ccdae8"
+var building = "#dce6ef"
+var water = "#3063d2"
+var wetland = "#00A9BF"
+var park = "#09bac6"
+var forest = "#09bac6"
+var sand = "#EBD5BD"
+var pedestrian = "#b9ccdf"
+var roadCasing = "#dce6ef"
+var roadMinor = "#a7bfd7"
+var roadMajor = "#95b2d0"
+var roadLabel = "#071F3F"
+var placeLabel = "#071F3F"
+var placeCasing = "#dce6ef"
+
+
 const Admins = {
     "placeHighZoom": {
         "id": "placeHighZoom",
@@ -10,9 +27,7 @@ const Admins = {
         "layout": {
             "text-field": ["get", "name"],
             "text-font": ["Noto Sans Bold"],
-            "text-size": [
-                "step",
-                ["zoom"],
+            "text-size": ["step", ["zoom"],
                 14,
                 10,
                 ["match", ["get", "localityType"], ["borough"], 14, ["suburb"], 12, 0],
@@ -33,25 +48,9 @@ const Admins = {
             "text-justify": "auto"
         },
         "paint": {
-            "text-color": [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                9,
-                "hsl(214, 8%, 30%)",
-                10,
-                ["match", ["get", "subclass"], ["borough"], "hsl(214, 8%, 30%)", ["suburb"], "hsl(214, 8%, 30%)", "hsl(214, 8%, 30%)"],
-                11,
-                ["match", ["get", "subclass"], ["borough"], "hsl(214, 8%, 30%)", ["suburb", "neighborhood"], "hsl(214, 8%, 30%)", "hsl(214, 8%, 30%)"],
-                12,
-                "hsl(214, 8%, 30%)",
-                14,
-                ["match", ["get", "subclass"], ["borough", "suburb"], "hsl(214, 8%, 30%)", ["neighborhood"], "hsl(215, 8%, 20%)", "hsl(214, 8%, 30%)"],
-                16,
-                ["match", ["get", "subclass"], ["borough", "block"], "hsl(214, 8%, 30%)", ["suburb", "neighborhood"], "hsl(214, 8%, 30%)", "hsl(214, 8%, 30%)"]
-            ],
-            "text-halo-color": "hsl(0, 0%, 100%)",
-            "text-halo-width": ["match", ["get", "subclass"], ["megacity", "metropolis"], 1, ["city", "municipality"], 1, 1]
+            "text-color": placeLabel,
+            "text-halo-color": placeCasing,
+            "text-halo-width": 1
         }
     },
     "placeMidZoom": {
@@ -118,57 +117,9 @@ const Admins = {
             "text-justify": "auto"
         },
         "paint": {
-            "text-color": [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                8,
-                ["match", ["get", "localityType"], ["town"], "hsl(214, 8%, 30%)", "hsl(214, 8%, 30%)"],
-                9,
-                [
-                    "match",
-                    ["get", "subclass"],
-                    ["megacity", "metropolis", "city"],
-                    "hsl(215, 8%, 20%)",
-                    ["town", "municipality"],
-                    "hsl(214, 8%, 30%)",
-                    "hsl(214, 8%, 30%)"
-                ],
-                10,
-                [
-                    "match",
-                    ["get", "localityType"],
-                    ["megacity", "metropolis"],
-                    "hsl(215, 8%, 20%)",
-                    ["town", "city", "municipality"],
-                    "hsl(214, 8%, 30%)",
-                    "hsl(214, 8%, 30%)"
-                ],
-                11,
-                [
-                    "match",
-                    ["get", "localityType"],
-                    ["megacity", "metropolis"],
-                    "hsl(215, 8%, 20%)",
-                    ["town", "village", "city", "municipality"],
-                    "hsl(214, 8%, 30%)",
-                    "hsl(214, 8%, 30%)"
-                ],
-                12,
-                [
-                    "match",
-                    ["get", "localityType"],
-                    ["megacity", "metropolis"],
-                    "hsl(215, 8%, 20%)",
-                    ["town", "village", "city", "municipality"],
-                    "hsl(214, 8%, 30%)",
-                    "hsl(214, 8%, 30%)"
-                ],
-                14,
-                "hsl(214, 8%, 30%)"
-            ],
-            "text-halo-color": "hsl(0, 0%, 100%)",
-            "text-halo-width": ["match", ["get", "subclass"], ["megacity", "metropolis"], 1, ["city", "municipality"], 1, 1]
+            "text-color": placeLabel,
+            "text-halo-color": placeCasing,
+            "text-halo-width": 1
         }
     }
 }
@@ -176,14 +127,12 @@ const Admins = {
 const Buildings = {
     "id": 'buildings',
     "type": "fill-extrusion",
+    "minzoom":12, "maxzoom": 24,
     "source": 'buildings',
     "source-layer": 'buildings',
     "paint": {
-        "fill-extrusion-color": ["match",
-            ["get", "class"],
-            ["commercial"], "hsl(218, 26%, 82%)",
-            "hsl(218, 20%, 88%)"
-        ],
+        "fill-extrusion-color": building,
+        "fill-extrusion-opacity": 0.6,
         "fill-extrusion-base": 0,
         "fill-extrusion-height": ["case",
             ["has", "height"],
@@ -201,23 +150,21 @@ const Places = {
         ["has", "name"],
         [">", ["get", "confidence"], 0.75]
     ],
-    "minzoom": 13, "maxzoom": 24,
+    "minzoom": 15, "maxzoom": 24,
     "layout": {
-        "text-field": ["get", "name"],
-        "text-font": ["Noto Sans Regular"],
+        "text-field": ["concat", "■\n",["get", "name"]],
+        "text-font": ["Noto Sans Bold"],
         "text-max-width": 5,
         "text-size": 10,
         "text-line-height": 1,
-        "icon-image": "places",
-        "text-justify": "auto",
-        "text-variable-anchor": ["literal", ["right", "left"]],
+        "text-justify": "center",
+        "text-anchor": "center",
         "text-radial-offset": 0.8,
-        "text-padding": 0,
-        "visibility" : "visible"
+        "text-padding": 2,
     },
     "paint": {
-        "text-color": "hsl(245, 40%, 35%)",
-        "text-halo-color": "hsl(0,0%,100%)", "text-halo-width": 1
+        "text-color": placeLabel,
+        "text-halo-color": placeCasing, "text-halo-width": 1
     }
 }
 
@@ -234,7 +181,7 @@ const Transportation = {
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.25, 20, 1.3],
             "line-gap-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.5, 16, 3, 22, 25],
-            "line-color": "hsl(214, 26%, 85%)"
+            "line-color": roadCasing
         }
     },
     "footway": {
@@ -249,7 +196,7 @@ const Transportation = {
         "layout": { "line-cap": "round", "line-join": "round" },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.5, 16, 3, 22, 25],
-            "line-color": "hsl(214, 36%, 97%)"
+            "line-color": pedestrian
         }
     },
     "parkingAisleUnknownCasing": {
@@ -261,10 +208,7 @@ const Transportation = {
         "layout": { "line-cap": "round", "line-join": "round" },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.25, 20, 1.3], "line-gap-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.5, 16, 3.5, 22, 75],
-            "line-color": ["step", ["zoom"],
-                "hsl(216,26%,89%)",
-                16, "hsl(214, 26%, 80%)"
-            ]
+            "line-color": roadCasing
         }
     },
     "residentialCasing": {
@@ -276,10 +220,7 @@ const Transportation = {
         "layout": { "line-cap": "round", "line-join": "round" },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.75, 20, 1.3], "line-gap-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 1, 16, 6, 22, 125],
-            "line-color": ["step", ["zoom"],
-                "hsl(216,26%,89%)",
-                16, "hsl(214, 26%, 80%)"
-            ]
+            "line-color": roadCasing
         }
     },
     "secondaryTertiaryCasing": {
@@ -290,11 +231,7 @@ const Transportation = {
         "filter": ["match", ["get", "class"], ["secondary", "tertiary"], true, false],
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 1, 20, 1.3], "line-gap-width": ["interpolate", ["exponential", 1.5], ["zoom"], 10, 0.5, 12, 2.2, 16, 6.6, 22, 160],
-            "line-color": ["step",["zoom"],
-            "hsl(0, 0%, 100%)",
-            12,"hsl(216,26%,89%)",
-            16,"hsl(214, 26%, 80%)"
-        ]
+            "line-color": roadCasing
         }
     },
     "primaryCasing": {
@@ -306,13 +243,7 @@ const Transportation = {
         "layout": { "line-cap": ["step", ["zoom"], "butt", 16, "round"], "line-join": ["step", ["zoom"], "miter", 16, "round"] },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 1, 20, 1.4], "line-gap-width": ["interpolate", ["exponential", 1.5], ["zoom"], 8, 0.5, 12, 3.1, 16, 9.3, 22, 175],
-            "line-color": ["step",["zoom"],
-            "hsl(0, 0%, 100%)",
-            10,"hsl(0, 0%, 100%)",
-            11,"hsl(0, 0%, 100%)",
-            12,"hsl(216,26%,89%)",
-            16,"hsl(214, 26%, 80%)"
-        ]
+            "line-color": roadCasing
         }
     },
     "parkingAisleUnknown": {
@@ -344,7 +275,7 @@ const Transportation = {
                 22,
                 75
             ],
-            "line-color": "hsl(0, 0%, 100%)"
+            "line-color": roadMinor
         }
     },
     "residential": {
@@ -358,7 +289,7 @@ const Transportation = {
         "layout": { "line-cap": ["step", ["zoom"], "butt", 13, "round"], "line-join": ["step", ["zoom"], "miter", 13, "round"] },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 1, 16, 6, 22, 125],
-            "line-color": "hsl(0, 0%, 100%)"
+            "line-color": roadMinor
         }
     },
     "secondaryTertiary": {
@@ -372,13 +303,7 @@ const Transportation = {
         "layout": { "line-cap": ["step", ["zoom"], "butt", 13, "round"], "line-join": ["step", ["zoom"], "miter", 13, "round"] },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 10, 0.5, 12, 2.2, 16, 6.6, 22, 160],
-            "line-color": ["step", ["zoom"], "hsl(214, 26%, 80%)",
-                11,
-                "hsl(214, 26%, 85%)",
-                12,
-                "hsl(0, 0%, 100%)",
-                16,
-                "hsl(0, 0%, 100%)"]
+            "line-color": roadMinor
         }
     },
     "primary": {
@@ -396,16 +321,7 @@ const Transportation = {
         },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 8, 0.5, 12, 3.1, 16, 9.3, 22, 175],
-            "line-color": ["step", ["zoom"],
-                "hsl(214, 26%, 69%)",
-                10,
-                "hsl(214, 26%, 79%)",
-                11,
-                "hsl(214, 26%, 85%)",
-                12,
-                "hsl(0, 0%, 100%)",
-                16,
-                "hsl(0, 0%, 100%)"]
+            "line-color": roadMinor
         }
     },
     "motorwayCasing": {
@@ -423,23 +339,7 @@ const Transportation = {
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 1, 20, 1.4],
             "line-gap-width": ["interpolate", ["exponential", 1.5], ["zoom"], 6, 0.5, 12, 3.3, 16, 9.9, 22, 175],
-            "line-color": [
-                "step",
-                [
-                    "zoom"
-                ],
-                "hsl(0, 0%, 100%)",
-                8,
-                "hsl(0, 0%, 100%)",
-                10,
-                "hsl(0, 0%, 100%)",
-                11,
-                "hsl(0, 0%, 100%)",
-                12,
-                "hsl(214, 26%, 77%)",
-                16,
-                "hsl(214, 26%, 70%)"
-            ]
+            "line-color": roadCasing
         }
     },
     "motorway": {
@@ -456,18 +356,7 @@ const Transportation = {
         },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 6, 0.5, 12, 3.3, 16, 9.9, 22, 175],
-            "line-color": ["step", ["zoom"],
-                "hsl(214, 26%, 67%)",
-                8,
-                "hsl(214, 26%, 70%)",
-                10,
-                "hsl(214, 26%, 75%)",
-                11,
-                "hsl(214, 26%, 77%)",
-                12,
-                "hsl(214, 26%, 87%)",
-                16,
-                "hsl(214, 21%, 85%)"]
+            "line-color": roadMajor
         }
     },
 
@@ -486,12 +375,12 @@ const Transportation = {
                 18, ["match", ["get", "class"], ["access", "path"], 12, 14]],
             "text-max-angle": 30,
             "symbol-spacing": ["interpolate", ["linear"], ["zoom"], 13, 200, 16, 400],
-            "text-field": ["to-string", ["get", "commoname"]],
+            "text-field": ["to-string", ["get", "name"]],
             "text-font": ["Noto Sans Regular"],
             "symbol-placement": "line", "text-padding": 5
         },
         "paint": {
-            "text-color": "hsl(214, 16%, 55%)",
+            "text-color": roadLabel,
             "text-halo-color": "hsl(0,0%,100%)",
             "text-halo-width": 1
         }
@@ -510,12 +399,12 @@ const Transportation = {
                 18, ["match", ["get", "class"], ["access", "path"], 12, 14]],
             "text-max-angle": 30,
             "symbol-spacing": ["interpolate", ["linear"], ["zoom"], 13, 200, 16, 400],
-            "text-field": ["get", "name"],
+            "text-field": ["get", "commoname"],
             "text-font": ["Noto Sans Bold"],
             "symbol-placement": "line", "text-padding": 5
         },
         "paint": {
-            "text-color": "hsl(214, 16%, 45%)",
+            "text-color": roadLabel,
             "text-halo-color": "hsl(0,0%,100%)",
             "text-halo-width": 1
         }
@@ -532,11 +421,7 @@ const Land = {
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
-            "fill-color": [
-                "interpolate", ["linear"], ["zoom"],
-                5, "hsl(216,20%,99%)",
-                16, "hsl(216,20%,95%)"
-            ]
+            "fill-color": land
         }
     },
     "sand": {
@@ -548,7 +433,7 @@ const Land = {
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
-            "fill-color": "hsl(43, 69%, 95%)"
+            "fill-color": sand
         }
     },
     "wetland": {
@@ -560,7 +445,7 @@ const Land = {
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
-            "fill-color": "hsl(132, 36%, 89%)"
+            "fill-color": wetland
         }
     },
     "forest": {
@@ -572,7 +457,7 @@ const Land = {
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
-            "fill-color": "hsl(131, 35%, 90%)"
+            "fill-color": forest
         }
     },
 }
@@ -587,7 +472,7 @@ const Landuse = {
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
-            "fill-color": "hsl(131, 35%, 90%)"
+            "fill-color": park
         }
     },
     "golfGreens": {
@@ -599,7 +484,7 @@ const Landuse = {
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
-            "fill-color": "hsl(131, 35%, 85%)"
+            "fill-color": park
         }
     },
 }
@@ -614,7 +499,7 @@ const Water ={
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
-            "fill-color": "hsl(204,88%,82%)"
+            "fill-color": water
         }
     },
     "waterLinestrings": {
@@ -627,7 +512,7 @@ const Water ={
         "maxzoom": 24,
         "paint": {
             'line-width': 3,
-            "line-color": "hsl(204,88%,82%)"
+            "line-color": water
         }
     }
 }
