@@ -160,7 +160,7 @@ const Places = {
         "text-justify": "center",
         "text-anchor": "center",
         "text-radial-offset": 0.8,
-        "text-padding": 2,
+        "text-padding": 4,
     },
     "paint": {
         "text-color": placeLabel,
@@ -370,13 +370,14 @@ const Transportation = {
         "maxzoom": 24,
         "filter": ["match", ["get", "class"], ["residential", "unknown"], true, false],
         "layout": {
+            "text-transform": "uppercase",
             "text-size": ["interpolate", ["linear"], ["zoom"],
                 13, 9,
-                18, ["match", ["get", "class"], ["access", "path"], 12, 14]],
+                18, ["match", ["get", "class"], ["access", "path"], 9, 12]],
             "text-max-angle": 30,
             "symbol-spacing": ["interpolate", ["linear"], ["zoom"], 13, 200, 16, 400],
-            "text-field": ["to-string", ["get", "name"]],
-            "text-font": ["Noto Sans Regular"],
+            "text-field": ["get", "name"],
+            "text-font": ["Noto Sans Bold"],
             "symbol-placement": "line", "text-padding": 5
         },
         "paint": {
@@ -394,14 +395,15 @@ const Transportation = {
         "maxzoom": 24,
         "filter": ["match", ["get", "class"], ["motorway", "primary", "secondary", "tertiary"], true, false],
         "layout": {
+            "text-transform": "uppercase",
             "text-size": ["interpolate", ["linear"], ["zoom"],
-                13, 11,
-                18, ["match", ["get", "class"], ["access", "path"], 12, 14]],
+                13, 9,
+                18, ["match", ["get", "class"], ["access", "path"], 9, 12]],
             "text-max-angle": 30,
             "symbol-spacing": ["interpolate", ["linear"], ["zoom"], 13, 200, 16, 400],
-            "text-field": ["get", "commoname"],
+            "text-field": ["get", "name"],
             "text-font": ["Noto Sans Bold"],
-            "symbol-placement": "line", "text-padding": 5
+            "symbol-placement": "line"
         },
         "paint": {
             "text-color": roadLabel,

@@ -97,6 +97,9 @@ export default function Map() {
             Transportation.motorwayCasing,
             Transportation.motorway,
 
+            Transportation.residentialLabel,
+            Transportation.highwayLabel,
+
             //Buildings
             Buildings,
 
