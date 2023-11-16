@@ -39,7 +39,7 @@ The places data theme represents business and points of interest in the real wor
             categories.main as category,
             ROUND(confidence,2) as confidence,
             ST_GeomFromWKB(geometry) as geometry
-        FROM read_parquet('s3://overturemaps-us-west-2/release/2023-10-19-alpha.0/theme=places/type=*/*',
+        FROM read_parquet('s3://overturemaps-us-west-2/release/2023-11-14-alpha.0/theme=places/type=*/*',
                             filename=true, hive_partitioning=1)
         WHERE
             -- Point geometry doesn't require looking at both min and max:
@@ -84,7 +84,7 @@ The admins theme contains named localities and their administrative boundaries. 
             FILTER(names.common, x -> x.language = 'local')[1].value as name,
             adminLevel,
             ST_CENTROID(ST_GeomFromWKB(geometry)) as geometry
-        FROM read_parquet('azure://release/2023-10-19-alpha.0/theme=admins/type=locality/*',
+        FROM read_parquet('azure://release/2023-11-14-alpha.0/theme=admins/type=locality/*',
                             filename=true, hive_partitioning=1)
         WHERE bbox.minX > -122.679404 AND bbox.maxX < -121.978275
           AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
