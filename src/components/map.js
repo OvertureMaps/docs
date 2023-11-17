@@ -33,6 +33,7 @@ export default function Map() {
         mobileHelpText: 'Use 2 fingers to move the map.'
       },
       style: {
+        light:{"anchor":"viewport","color":"white","intensity":0.8},
         version: 8,
         glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
         sources: {
@@ -95,6 +96,9 @@ export default function Map() {
             Transportation.primary,
             Transportation.motorwayCasing,
             Transportation.motorway,
+
+            Transportation.residentialLabel,
+            Transportation.highwayLabel,
 
             //Buildings
             Buildings,
