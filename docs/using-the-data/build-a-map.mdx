@@ -14,7 +14,7 @@ import {Admins, Buildings, Places, Transportation, Water, Landuse, Land} from '@
 
 ### Step 1: Downloading and processing only what you need
 
-Overture data is released as a single dataset in a cloud-native format (parquet), that is partitioned by theme. Accessing the data through a service that can take advantage of these properties provides the best performance. After downloading and converting the data to GeoJSON, we can use [tippecanoe](https://github.com/felt/tippecanoe) to create a [`PMTiles`](https://github.com/protomaps/PMTiles) archive.
+Overture data is released as a single dataset in a cloud-native format (geoparquet), that is partitioned by theme. Accessing the data through a service that can take advantage of these properties provides the best performance. After downloading and converting the data to GeoJSON, we can use [tippecanoe](https://github.com/felt/tippecanoe) to create a [`PMTiles`](https://github.com/protomaps/PMTiles) archive.
 
 For illustration, this tutorial demonstrates multiple methods of downloading Overture data across the different themes. Performance tradeoffs are discussed for each theme.
 
