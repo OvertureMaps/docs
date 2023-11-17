@@ -112,16 +112,39 @@ The admins theme contains named localities and their administrative boundaries. 
 
 <TabItem value="buildings" label="Buildings" default>
 
-Since there are 1.3B buildings in the Overture data, we can first leverage Amazon Athena to filter for only the buildings in the bounding box.
+Overture contains more than 1.3B buildings. While we can use DuckDB again to access the files without going through a cloud-service, it will take significantly longer. A better option in this case is to first leverage Amazon Athena to filter for only the buildings in the bounding box.
 
-1. Run this query in  Amazon Athena against the `overture_2023_10_19_alpha_0` table, as set up in [these instructions](https://github.com/OvertureMaps/data#accessing-overture-maps-data-1). Download the results as `buildings.csv`
+1. Download buildings from Overture as `GeoJSONSeq`
+
+    #### Option 1: Single DuckDB query (slow)
 
     ```sql
-    SELECT class,
-        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as local_name,
-        height,
-        level,
-        CAST(sources AS JSON) as sources,
+     LOAD spatial;
+     LOAD azure;
+
+     -- Access the data on Microsoft Azure in this example
+     SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=overturemapswestus2;AccountKey=;EndpointSuffix=core.windows.net';
+     COPY (
+         SELECT
+             FILTER(names.common, x -> x.language = 'local')[1].value as name,
+             height,
+             level,
+             CAST(sources AS JSON) as sources,
+             ST_GeomFromWKB(geometry) as geometry
+         FROM read_parquet('azure://release/2023-11-14-alpha.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
+         WHERE bbox.minX > -122.679404 AND bbox.maxX < -121.978275
+         AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+     ) TO 'buildings.geojsonseq'
+     WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
+     ```
+
+    #### Option 2: Obtain CSV with Amazon Athena then convert to GeoJSONSeq with DuckDB (faster)
+
+    First, run this query in  Amazon Athena against the `overture_2023_11_14_alpha_0` table, as set up in [these instructions](https://github.com/OvertureMaps/data#accessing-overture-maps-data-1). Download the results as `buildings.csv`
+
+    ```sql
+    SELECT class, height, level,
+        TRY(FILTER(names.common, x -> x.language = 'local')[1].value) as name,
         ST_ASTEXT(ST_GeomFromBinary(geometry)) as geometry_wkt
     FROM overture_2023_10_19_alpha_0
     WHERE theme = 'buildings' AND type = 'building'
@@ -129,23 +152,23 @@ Since there are 1.3B buildings in the Overture data, we can first leverage Amazo
         AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
     ```
 
-2. Use DuckDB to convert `buildings.csv` into a GeoJSONSeq file.
+    Next, use DuckDB to convert `buildings.csv` into a GeoJSONSeq file.
 
     ```sql
     LOAD spatial;
     COPY (
         SELECT
-            class, local_name as name, height, level,
+            class, name, height, level,
             ST_GeomFromText(geometry_wkt) as geometry
         FROM read_csv('buildings.csv', header=True, auto_detect=True)
         ) TO 'buildings.geojsonseq'
     WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
     ```
 
-3. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `buildings.geojsonseq`
+2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `buildings.geojsonseq`
 
     ```bash
-    tippecanoe -o buildings.pmtiles -Z13 -z13 -l buildings -P buildings.geojsonseq
+    tippecanoe -fo buildings.pmtiles -Z13 -z13 -l buildings -P buildings.geojsonseq
     ```
 
     <details><summary>Tippecanoe flag explanation</summary>
@@ -353,13 +376,14 @@ Similarly to buildings, we can first use Amazon Athena to generate a CSV of only
 
 </Tabs>
 
-At this point, we should have created five `PMTiles` archives, one for each Overture theme.
+<hr />
 
 ### Step 2: Creating a map with Maplibre + PMTiles
+At this point, we should have created five `PMTiles` archives, one for each Overture theme.
 
 The map on this page combines a [react maplibre example](https://docs.maptiler.com/react/maplibre-gl-js/how-to-use-maplibre-gl-js/) with [PMTiles](https://codesandbox.io/s/black-dream-oycvf2?file=/src/App.js). You can [view the source](https://github.com/OvertureMaps/how-to/tree/main/src/components/map.js) for the above map on github for a complete example using react, or, check out the [map based on July's release](https://labs.overturemaps.org/overture-with-daylight) for a non-react implementation of PMTiles.
 
-Using PMTiles with react requires adding the [PMtiles protocol](https://docs.protomaps.com/pmtiles/maplibre), like this in react:
+Using PMTiles with react requires adding the [PMtiles protocol](https://docs.protomaps.com/pmtiles/maplibre):
 
 ```javascript
 import maplibregl from 'maplibre-gl';
@@ -394,7 +418,7 @@ Then, reference the tile archives with a relative path when initializing the map
 ```
 
 ### Step 3: Styling the layers
-Listed in each tab are the complete styles in the [Maplibre Style Spec](https://maplibre.org/maplibre-style-spec/) for the map on this page.
+Each tab below contains the complete styles in the [Maplibre Style Spec](https://maplibre.org/maplibre-style-spec/) for the map on this page.
 
 <Tabs queryString="map-layer" >
 <TabItem value="places" label="Places" default>
