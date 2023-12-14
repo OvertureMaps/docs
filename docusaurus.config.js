@@ -8,8 +8,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 // const defaultBaseUrl = 'how-to/';
 
 // While the page is _private_
-const defaultUrl = 'https://ideal-adventure-qk1kgoe.pages.github.io/';
-const defaultBaseUrl = '/';
+const defaultUrl = 'https://labs.overturemaps.org';
+const defaultBaseUrl = '/how-to/';
 
 function getFromEnvironment(variableName, defaultValue) {
   const environmentValue = process.env[variableName];
