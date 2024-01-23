@@ -9,7 +9,8 @@ title: Cloud Services
 2. Ensure that you are operating in the `us-west-2` region.
 3. Run the following command in the Athena Query Console:
 
-    <details><summary>Click to view complete `CREATE` command</summary>
+    <details>
+        <summary>Click to view complete `CREATE` command</summary>
 
     ```sql
     CREATE EXTERNAL TABLE `overture`(
@@ -56,16 +57,18 @@ title: Cloud Services
     LOCATION
         's3://overturemaps-us-west-2/release/2023-10-19-alpha.0'
     ```
+
     </details>
 
 4. Load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
 
-
 ## Microsft Synapse
+
 1. You will need an Azure account.
 2. Create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace).
 
-3. <details><summary>Example SQL query to read places in Seattle</summary>
+3. <details>
+    <summary>Example SQL query to read places in Seattle</summary>
 
     ```sql
     SELECT TOP 10 *
@@ -91,4 +94,5 @@ title: Cloud Services
         AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.miny')) > 47.5621587
         AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxy')) < 47.7120663
     ```
+
     </details>
