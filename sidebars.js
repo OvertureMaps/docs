@@ -16,7 +16,8 @@ const sidebars = {
       label: 'Using the Data',
       collapsed: false,
       items: [
-        'using-the-data/build-a-map'
+        'using-the-data/build-a-map',
+        'using-the-data/community-projects'
       ]
     },
     {
