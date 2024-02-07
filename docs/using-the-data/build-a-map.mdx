@@ -55,7 +55,8 @@ The places data theme represents business and points of interest in the real wor
     tippecanoe -fo places.pmtiles -Z13 -z13 -l places places.geojson
     ```
 
-    <details><summary>Tippecanoe flag explanation</summary>
+    <details>
+        <summary>Tippecanoe flag explanation</summary>
 
     - `-fo places.pmtiles` The output file will be places.pmtiles. It will be overwritten if it exists.
     - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (only 1 zoom level).
@@ -98,7 +99,8 @@ The admins theme contains named localities and their administrative boundaries. 
     tippecanoe -o placenames.pmtiles -Z5 -z10 -l placenames placenames.geojson
     ```
 
-    <details><summary>Tippecanoe flag explanation</summary>
+    <details>
+        <summary>Tippecanoe flag explanation</summary>
 
     - `-fo buildings.pmtiles` is our output file. It will be overwritten if it exists.
     - `-Z5` and `-z10` will produce a tileset starting at zoom 5 and going up to zoom 13.
@@ -171,7 +173,8 @@ Overture contains more than 1.3B buildings. While we can use DuckDB again to acc
     tippecanoe -fo buildings.pmtiles -Z13 -z13 -l buildings -P buildings.geojsonseq
     ```
 
-    <details><summary>Tippecanoe flag explanation</summary>
+    <details>
+        <summary>Tippecanoe flag explanation</summary>
 
     - `-fo buildings.pmtiles` is our output file. It will be overwritten if it exists.
     - `-Z13` and `-z13` will produce a tileset starting at zoom 13 and going up to zoom 13 (so only 1 zoom level).
@@ -223,7 +226,8 @@ Similarly to buildings, we can first use Amazon Athena to generate a CSV of only
     tippecanoe -fo roads.pmtiles -Z10 -B10 -z13 -l roads -P roads.geojsonseq
     ```
 
-    <details><summary>Tippecanoe flag explanation</summary>
+    <details>
+        <summary>Tippecanoe flag explanation</summary>
 
     - `-fo roads.pmtiles` is our output file. It will be overwritten if it exists.
     - `-Z10` and `-z13` will produce a tileset starting at zoom 10 and going up to zoom 13.
@@ -241,7 +245,8 @@ Similarly to buildings, we can first use Amazon Athena to generate a CSV of only
 
 1. `Land`, `Landuse`, and `Water` are the three types available in the `Base` theme. We can use 3 separate queries to obtain the features and then we can combine them into a single pmtiles archive with different layers.
 
-    <details><summary>Athena query to produce `land.csv`</summary>
+    <details>
+        <summary>Athena query to produce `land.csv`</summary>
 
     ```sql
     SELECT subType,
@@ -267,7 +272,8 @@ Similarly to buildings, we can first use Amazon Athena to generate a CSV of only
     ```
     </details>
 
-    <details><summary>Athena query to produce `landuse.csv`</summary>
+    <details>
+        <summary>Athena query to produce `landuse.csv`</summary>
 
      ```sql
      SELECT subType,
@@ -294,7 +300,8 @@ Similarly to buildings, we can first use Amazon Athena to generate a CSV of only
      ```
     </details>
 
-    <details><summary>Athena query to produce `water.csv`</summary>
+    <details>
+        <summary>Athena query to produce `water.csv`</summary>
 
     ```sql
     SELECT subType,
@@ -322,7 +329,8 @@ Similarly to buildings, we can first use Amazon Athena to generate a CSV of only
 
 2. Use DuckDB to convert the `csv` files into `GeoJSONSeq` files.
 
-    <details><summary>DuckDB Query (SQL)</summary>
+    <details>
+        <summary>DuckDB Query (SQL)</summary>
 
     ```sql
     LOAD SPATIAL;
@@ -363,7 +371,8 @@ Similarly to buildings, we can first use Amazon Athena to generate a CSV of only
         --named-layer=water:water.geojsonseq
     ```
 
-    <details><summary>Tippecanoe flag explanation</summary>
+    <details>
+        <summary>Tippecanoe flag explanation</summary>
 
     - `-fo tiles/base.pmtiles` is our output file. It will be overwritten if it exists.
     - `-Z8` and `-z13` will produce a tileset starting at zoom 8 going up to zoom 13.
