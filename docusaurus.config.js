@@ -20,6 +20,10 @@ const config = {
   tagline: '',
   favicon: 'img/favicon.png',
 
+  customFields: {
+    overtureRelease: '2024-01-17.alpha.0',
+  },
+
   // Set the production url of your site here
   url: getFromEnvironment('DOCUSAURUS_URL', defaultUrl),
   // Set the /<baseUrl>/ pathname under which your site is served
