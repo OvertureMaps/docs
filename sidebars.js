@@ -17,9 +17,9 @@ const sidebars = {
       label: 'Exploring Data',
       collapsed: false,
       items: [
-        'using-data/build-a-map',
-        'using-data/community-projects',
-        'using-data/index'
+        'exploring-data/build-a-map',
+        'exploring-data/community-projects',
+        'exploring-data/index'
       ]
     },
     {
