@@ -4,20 +4,22 @@ const sidebars = {
     'index',
     {
       type: 'category',
-      label: 'Accessing the Data',
+      label: 'Accessing Data',
       collapsed: false,
       items: [
-        'accessing-the-data/cloud-services',
-        'accessing-the-data/locally'
+        'accessing-data/cloud-services',
+        'accessing-data/locally',
+        'accessing-data/index'
       ]
     },
     {
       type: 'category',
-      label: 'Using the Data',
+      label: 'Exploring Data',
       collapsed: false,
       items: [
-        'using-the-data/build-a-map',
-        'using-the-data/community-projects'
+        'using-data/build-a-map',
+        'using-data/community-projects',
+        'using-data/index'
       ]
     },
     {
@@ -25,7 +27,8 @@ const sidebars = {
       label: 'Visualizing Data',
       collapsed: false,
       items: [
-        'visualizing_places_data/visualizing-places'
+        'visualizing-data/visualizing-places',
+        'visualizing-data/index'
       ]
     }
   ]
