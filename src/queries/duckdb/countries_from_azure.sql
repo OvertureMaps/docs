@@ -1,6 +1,6 @@
 LOAD spatial;
-LOAD httpfs;
-SET s3_region='us-west-2';
+LOAD azure;
+SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=overturemapswestus2;AccountKey=;EndpointSuffix=core.windows.net';
 
 COPY (
     SELECT
