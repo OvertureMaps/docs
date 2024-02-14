@@ -2,4 +2,26 @@
 title: Buildings in kepler.gl
 ---
 
- In this tutorial, we'll show you how to use AWS Athena and [kepler.gl](https://kepler.gl) to explore an extract of Overture buildings.
+ In this tutorial, we'll show you how to use AWS Athena and [kepler.gl](https://kepler.gl) to query the Overture buildings theme and explore the primary data sources of the Overture buildings in Hyderabad, India.
+
+ ## Query the data in AWS Athena
+
+
+ ```sql
+SELECT id, theme, class, CAST(sources AS JSON) AS sources, sources[1].dataset AS primary_source, CAST(names AS JSON) AS names, ST_GeomFromBinary(geometry) AS geometry
+FROM overture
+WHERE theme='buildings'
+    AND type='building'
+    AND  bbox.minx > 78.4194
+        AND bbox.maxx < 78.5129
+        AND bbox.miny > 17.3427
+        AND bbox.maxy < 17.4192
+ ```
+
+ Download the results as a CSV file. 
+
+ ## Explore buildings data sources in kepler.gl
+
+Drag and drop the CSV file into [kepler.gl](https://kepler.gl/demo). Style the features using the primary_source field in the data layer to examine the different sources of buildings data in this area. 
+
+![kepler.gl example](/img/kepler-overture-hyderabad.png)
