@@ -25,7 +25,7 @@ const sidebars = {
       },
       collapsed: false,
       items: [
-        'exploring-data/build-a-map',
+        'exploring-data/kepler-gl',
         'exploring-data/community-projects'
       ]
     },
@@ -38,7 +38,8 @@ const sidebars = {
       },
       collapsed: false,
       items: [
-        'visualizing-data/visualizing-places'
+        'visualizing-data/visualizing-places',
+        'visualizing-data/build-a-map'
       ]
     }
   ]
