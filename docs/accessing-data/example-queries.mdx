@@ -2,7 +2,7 @@
 title: Example Queries
 ---
 
-## DuckDB 0.10.0
+## DuckDB
 
 ### 100 Buildings
 
@@ -69,9 +69,10 @@ Tip: To write the data to a shapefile, replace the last 2 lines with:
 ```sql
       ) TO 'places_seattle.shp'
    WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
+```   
 
 
-## Administrative Boundaries
+### Administrative Boundaries
 
 ```sql
 LOAD httpfs;
