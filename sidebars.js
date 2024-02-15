@@ -2,30 +2,45 @@
 const sidebars = {
   docs: [
     'index',
+
     {
       type: 'category',
-      label: 'Accessing the Data',
+      label: 'Accessing Data',
+      link: {
+        type: 'doc',
+        id: 'accessing-data/index'
+      },
       collapsed: false,
       items: [
-        'accessing-the-data/cloud-services',
-        'accessing-the-data/locally'
+        'accessing-data/cloud-services',
+        'accessing-data/locally',
+        'accessing-data/example-queries'
       ]
     },
     {
       type: 'category',
-      label: 'Using the Data',
+      label: 'Exploring Data',
+      link: {
+        type: 'doc',
+        id: 'exploring-data/index'
+      },
       collapsed: false,
       items: [
-        'using-the-data/build-a-map',
-        'using-the-data/community-projects'
+        'exploring-data/kepler-gl',
+        'exploring-data/community-projects'
       ]
     },
     {
       type: 'category',
       label: 'Visualizing Data',
+      link: {
+        type: 'doc',
+        id: 'visualizing-data/index'
+      },
       collapsed: false,
       items: [
-        'visualizing_places_data/visualizing-places'
+        'visualizing-data/visualizing-places',
+        'visualizing-data/build-a-map'
       ]
     }
   ]
