@@ -2,7 +2,9 @@
 title: Getting Overture data
 ---
 
-Overture's data releases are distributed as geoparquet files available on both Amazon S3 and Microsoft Azure Blob Storage. You do not need an AWS or Azure account to access the data.
+## Official Overture Data Releases
+
+Overture's data releases are distributed as geoparquet files available on both Amazon S3 and Microsoft Azure Blob Storage. You do not need AWS or Azure accounts to access the data.
 
 The data is available at the following locations:
 
@@ -12,8 +14,13 @@ The data is available at the following locations:
 | Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/` |
 
 
-Our friends in the Overture developer community have made repackaged and repartioned verstions of our  data available 
+## Parquet Schema
 
+The Parquet files match the Overture Data Schema for each theme with the following enhancements:
 
-Read the [Overture Data Schema Reference](https://docs.overturemaps.org/reference) to understand the Overture Data Schema and see the [`overturemaps/data`](https://github.com/OvertureMaps/data) Github repository for information on the latest release.
+- The `id` column contains unique identifiers in the Global Entity Reference System (GERS) format.
+- The `bbox` column is a `struct` with the following attributes: `minX`, `maxX`, `minY`, `maxY`. This column allows you to craft more efficient spatial queries when running SQL against the cloud.
+- The `geometry` column is encoded as WKB (the files are geoparquet).
+
+Read the [Overture Data Schema Reference](https://docs.overturemaps.org/reference) to understand the Overture Data Schema and see the [`overturemaps/data`](https://github.com/OvertureMaps/data) Github repository for additional information on the latest release.
 
