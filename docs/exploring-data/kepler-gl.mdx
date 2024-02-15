@@ -8,7 +8,7 @@ title: Buildings in kepler.gl
 
  ## Query the data in AWS Athena
 
- Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. You can then run this in the query console:
+ Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. Then you can run this in the query console:
 
  ```sql
 SELECT id, theme, class, CAST(sources AS JSON) AS sources, sources[1].dataset AS primary_source, CAST(names AS JSON) AS names, ST_GeomFromBinary(geometry) AS geometry
