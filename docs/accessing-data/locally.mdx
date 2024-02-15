@@ -5,7 +5,7 @@ title: Locally
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-[DuckDB](https://duckdb.org/) is an analytics tool you can install locally that can efficiently query remote Parquet files using SQL. It will only download the subset of files it needs to fulfill your queries.
+[DuckDB](https://duckdb.org/) is an analytics tool you can install locally that can efficiently query remote Parquet files using SQL. It will only download the subset of files it needs to fulfill your queries. **Note: updating to DuckDB 0.10.0 will dramatically improve query performance.**
 
 You will need to install the following extensions (from the DuckDB CLI)
 1. `INSTALL SPATIAL;` to install the [duckdb_spatial](https://github.com/duckdblabs/duckdb_spatial) extension.
