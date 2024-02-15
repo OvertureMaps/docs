@@ -2,13 +2,14 @@
 title: Querying Data in the Cloud
 ---
 
-You can access Overture parquet files directly in the cloud using one of the SQL query options documented below.
+You can access and query Overture parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account. 
 
 ## Amazon Athena
 
-1. You will need an AWS account.
-2. Ensure that you are operating in the `us-west-2` region.
-3. Run the following command in the Athena Query Console:
+Run the set-up query below in the Athena Query Console. It will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket. You can then query Overture data directly from Athena without needing to copy it.
+
+- TIP: Athena only allows one SQL statement to be run at a time, so highlight and run each SQL query separately.
+- TIP: Overture's S3 bucket is located in the us-west-2 AWS region, so use Athena in `us-west-2` for best performance.
 
 ```sql
     CREATE EXTERNAL TABLE `overture`(
@@ -77,11 +78,7 @@ More information on using Athena is available in the [Amazon Athena User Guide](
 
 ## Microsft Synapse
 
-1. You will need an Azure account.
-2. Create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace).
-
-
-Example SQL query to read places in Seattle:
+In your Azure account, create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace). You can then run this SQL query to read places in Seattle:
 
 ```sql
     SELECT TOP 10 *
