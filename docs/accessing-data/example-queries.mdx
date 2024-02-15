@@ -2,119 +2,103 @@
 title: Example Queries
 ---
 
-## Set up the Overture Maps data tables in Amazon Athena on AWS
+## DuckDB 0.10.0
 
-The below Athena SQL queries will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket. You can then query Overture data directly from Athena without needing to copy it.
-
-- TIP: Athena only allows one SQL statement to be run at a time, so highlight and run each SQL query separately.
-- TIP: Overture's S3 bucket is located in the us-west-2 AWS region, so use Athena in us-west-2 for best performance.
-
-Themes distributed since the October 2023 release are described using compatible schemas and may be viewed as part of a unified table. partitioned by `theme` and `type`.
-
-```sql 
-CREATE EXTERNAL TABLE `overture` (
-  `id` string,
-  `geometry` binary,
-  `bbox` struct<minx:double,maxx:double,miny:double,maxy:double>,
-  `subtype` string,
-  `localitytype` string,
-  `names` struct<common:array<struct<value:string,language:string>>,official:array<struct<value:string,language:string>>,alternate:array<struct<value:string,language:string>>,short:array<struct<value:string,language:string>>>,
-  `contextid` string,
-  `adminlevel` int,
-  `isocountrycodealpha2` string,
-  `isosubcountrycode` string,
-  `defaultlanguage` string,
-  `drivingside` string,
-  `version` int,
-  `updatetime` string,
-  `sources` array<struct<property:string,dataset:string,recordId:string,confidence:double>>,
-  `ismaritime` boolean,
-  `geopoldisplay` string,
-  `localityid` string,
-  `class` string,
-  `sourcetags` map<string,string>,
-  `wikidata` string,
-  `surface` string,
-  `issalt` boolean,
-  `isintermittent` boolean,
-  `hasparts` boolean,
-  `height` double,
-  `numfloors` int,
-  `facadecolor` string,
-  `facadematerial` string,
-  `roofmaterial` string,
-  `roofshape` string,
-  `roofdirection` double,
-  `rooforientation` string,
-  `roofcolor` string,
-  `eaveheight` double,
-  `level` int,
-  `minheight` double,
-  `buildingid` string,
-  `categories` struct<main:string,alternate:array<string>>,
-  `confidence` double,
-  `websites` array<string>,
-  `socials` array<string>,
-  `emails` array<string>,
-  `phones` array<string>,
-  `brand` struct<names:struct<common:array<struct<value:string,language:string>>,official:array<struct<value:string,language:string>>,alternate:array<struct<value:string,language:string>>,short:array<struct<value:string,language:string>>>,wikidata:string>,
-  `addresses` array<struct<freeform:string,locality:string,postcode:string,region:string,country:string>>,
-  `connectors` array<string>,
-  `road` string)
-PARTITIONED BY (
-  `theme` string,
-  `type` string)
-STORED AS PARQUET
-LOCATION
-  's3://overturemaps-us-west-2/release/<release-version>/'
-```
-
-After running the set-up query above, run a separate query to load the partitions. 
+### 100 Buildings
 
 ```sql
-MSCK REPAIR TABLE `overture`;
-```
+LOAD httpfs;
+LOAD spatial;
 
-Example Athena SQL query to download a CSV of places in Seattle:
-
-```sql
-SELECT
-       CAST(names AS JSON),
-       geometry -- WKB
-FROM
-       places
-WHERE
-       bbox.minX > -122.4447744
-   AND bbox.maxX < -122.2477071
-   AND bbox.minY > 47.5621587
-   AND bbox.maxY < 47.7120663
-```
-
-
-## Example SQL query in Microsoft Synapse
-
-
-```sql
-    SELECT TOP 10 *
+COPY (
+    SELECT
+        type,
+        version,
+        CAST(updatetime as varchar) as updateTime,
+        height,
+        numfloors as numFloors,
+        level,
+        class,
+        JSON(names) as names,
+        JSON(sources) as sources,
+        ST_GeomFromWKB(geometry) as geometry
     FROM
-        OPENROWSET(
-            BULK 'https://overturemapswestus2.blob.core.windows.net/release/2024-02-15-alpha.0/theme=places/type=place/',
-            FORMAT = 'PARQUET'
-        )
-    WITH
-        (
-            names VARCHAR(MAX),
-            categories VARCHAR(MAX),
-            websites VARCHAR(MAX),
-            phones VARCHAR(MAX),
-            bbox VARCHAR(200),
-            geometry VARBINARY(MAX)
-        )
-       AS
-            [result]
+        read_parquet('s3://overturemaps-us-west-2/release/<release-version>/theme=buildings/type=*/*', hive_partitioning=1)
+    LIMIT
+        100
+    ) TO 'buildings_sample.geojsonseq'
+WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
+```
+
+### Places in Seattle
+
+This will create a 5mb GeoJSONSeq file with 23k places in Seattle.
+
+```sql
+LOAD httpfs;
+LOAD spatial;
+
+COPY (
+    SELECT
+       id,
+       updatetime,
+       version,
+       CAST(names AS JSON) AS names,
+       CAST(categories AS JSON) AS categories,
+       confidence,
+       CAST(websites AS JSON) AS websites,
+       CAST(socials AS JSON) AS socials,
+       CAST(emails AS JSON) AS emails,
+       CAST(phones AS JSON) AS phones,
+       CAST(brand AS JSON) AS brand,
+       CAST(addresses AS JSON) AS addresses,
+       CAST(sources AS JSON) AS sources,
+       ST_GeomFromWKB(geometry)
+    FROM
+       read_parquet('s3://overturemaps-us-west-2/release/<release-version>/theme=places/type=*/*', hive_partitioning=1)
     WHERE
-            TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.minx')) > -122.4447744
-        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxx')) < -122.2477071
-        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.miny')) > 47.5621587
-        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxy')) < 47.7120663
+        bbox.minx > -122.4447744
+        AND bbox.maxx < -122.2477071
+        AND bbox.miny > 47.5621587
+        AND bbox.maxy < 47.7120663
+    ) TO 'places_seattle.geojsonseq'
+WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
+```
+
+Tip: To write the data to a shapefile, replace the last 2 lines with:
+```sql
+      ) TO 'places_seattle.shp'
+   WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
+
+
+## Administrative Boundaries
+
+```sql
+LOAD httpfs;
+LOAD spatial;
+
+CREATE VIEW admins_view AS
+SELECT * FROM read_parquet('s3://overturemaps-us-west-2/release/<release-version>/theme=admins/type=*/*', filename=true, hive_partitioning=1);
+
+COPY (
+    SELECT
+            admins.id,
+            admins.subType,
+            admins.isoCountryCodeAlpha2,
+            JSON(admins.names) AS names,
+            JSON(admins.sources) AS sources,
+            areas.areaId,
+            ST_GeomFromWKB(areas.areaGeometry) as geometry
+    FROM admins_view AS admins
+    INNER JOIN (
+        SELECT 
+            id as areaId, 
+            localityId, 
+            geometry AS areaGeometry
+        FROM admins_view
+    ) AS areas ON areas.localityId == admins.id
+    WHERE admins.adminLevel = 2
+    LIMIT 10    
+) TO 'admins_sample.geojsonseq'
+WITH (FORMAT GDAL, DRIVER 'GeoJSON');
 ```
