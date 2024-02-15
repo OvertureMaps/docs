@@ -13,7 +13,8 @@ const sidebars = {
       collapsed: false,
       items: [
         'accessing-data/cloud-services',
-        'accessing-data/locally'
+        'accessing-data/locally',
+        'accessing-data/example-queries'
       ]
     },
     {
@@ -25,7 +26,6 @@ const sidebars = {
       },
       collapsed: false,
       items: [
-        'exploring-data/example-queries',
         'exploring-data/kepler-gl',
         'exploring-data/community-projects'
       ]
