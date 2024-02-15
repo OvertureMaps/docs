@@ -2,10 +2,13 @@
 title: Buildings in kepler.gl
 ---
 
- In this tutorial, we'll show you how to use AWS Athena and [kepler.gl](https://kepler.gl) to query the Overture buildings theme and explore the primary data sources of the Overture buildings in Hyderabad, India.
+ In this tutorial, you'll use AWS Athena to query Overture's buildings theme and extract data by bounding box for a region in Hyderabad, India. Next, you'll pull the extracted data into kepler.gl and style it lightly so that you can see which buildings came from OpenStreetMap and which ones came from Microsoft ML Buildings dataset.
+
+ Requirements: you'll need an AWS account and access to an S3 bucket. You do not an account on kepler.gl. 
 
  ## Query the data in AWS Athena
 
+ Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. You can then run this in the query console:
 
  ```sql
 SELECT id, theme, class, CAST(sources AS JSON) AS sources, sources[1].dataset AS primary_source, CAST(names AS JSON) AS names, ST_GeomFromBinary(geometry) AS geometry
@@ -18,10 +21,16 @@ WHERE theme='buildings'
         AND bbox.maxy < 17.4192
  ```
 
- Download the results as a CSV file. 
+ This outputs around 106,000 buildings in a table view. 
+
+![AWS query result](/img/amazon-athena-buildings-query-result.png)
+
+ Download the results as a CSV file that about 37 MB. 
 
  ## Explore buildings data sources in kepler.gl
 
-Drag and drop the CSV file into [kepler.gl](https://kepler.gl/demo). Style the features using the primary_source field in the data layer to examine the different sources of buildings data in this area. 
+Drag and drop the CSV file into [kepler.gl](https://kepler.gl/demo). Style the feature layer by choosing different colors based on the `primary_source` field. Then you can explore the data sources that were combined to create the Overture buildings theme in this area. 
 
 ![kepler.gl example](/img/kepler-overture-hyderabad.png)
+
+![kepler.gl gif](/img/kepler_overture_buildings_hyderabad.gif)

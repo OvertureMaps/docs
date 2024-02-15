@@ -25,6 +25,7 @@ const sidebars = {
       },
       collapsed: false,
       items: [
+        'exploring-data/example-queries',
         'exploring-data/kepler-gl',
         'exploring-data/community-projects'
       ]
