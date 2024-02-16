@@ -2,19 +2,33 @@
 title: Buildings in kepler.gl
 ---
 
+<<<<<<< Updated upstream
 import QueryBuilder from '@site/src/components/queryBuilder';
 import HyderabadBuildingsAthena from '!!raw-loader!@site/src/queries/athena/hyderabad_buildings.sql';
 import HyderabadBuildingsDuckDB from '!!raw-loader!@site/src/queries/duckdb/hyderabad_buildings.sql';
 
 In this tutorial, you'll query Overture's buildings theme and extract data by bounding box for a region in Hyderabad, India. Next, you'll pull the extracted data into kepler.gl and style it lightly so that you can see which buildings came from OpenStreetMap and which ones came from Microsoft ML Buildings dataset.
+=======
+ In this tutorial, you'll query the Overture buildings theme and extract data by bounding box for a region in Hyderabad, India. Next, you'll pull the data into kepler.gl and style it lightly so that you can see which buildings came from [OpenStreetMap](https://wiki.openstreetmap.org/wiki/Key:building) and which ones came from the [Microsoft ML Building Footprints](https://github.com/microsoft/GlobalMLBuildingFootprints) dataset.
+
+ Requirements: you'll need an AWS account and access to an S3 bucket if you want to use Athena. If you're using DuckDB (we recommend 0.10.0), you'll need to install and load the spatial and S3 or Azure extensions. You do not need an account on kepler.gl. 
+>>>>>>> Stashed changes
 
 Requirements: you'll need an AWS account and access to an S3 bucket if you want to use Athena. If you're using DuckDB (we recommend 0.10.0), you'll need to install and load the spatial and S3 or Azure extensions. You do not an account on kepler.gl. 
 
+<<<<<<< Updated upstream
 ## Query the data in AWS Athena
+=======
+ Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. Then you can run this query in the Athena query console:
+>>>>>>> Stashed changes
 
 Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. Then you can run this in the Athena query console:
 
+<<<<<<< Updated upstream
 <QueryBuilder query={HyderabadBuildingsAthena}></QueryBuilder>
+=======
+ The output is a table view with the geometry and attributes for about 106,000 buildings. You can download that table as a CSV file. 
+>>>>>>> Stashed changes
 
 This outputs around 106,000 buildings in a table view that you can download as a CSV file. 
 
