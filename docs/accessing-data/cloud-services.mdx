@@ -1,37 +1,35 @@
 ---
-title: Cloud Services
+title: Querying Data in the Cloud
 ---
 
 import QueryBuilder from '@site/src/components/queryBuilder';
-
 import CreateAthenaTable       from '!!raw-loader!@site/src/queries/athena/0_create_external_table.sql';
 import MicrosoftSynapseExample from '!!raw-loader!@site/src/queries/synapse/seattle_places.sql';
+import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.sql';
 
-
+You can access and query Overture parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account. 
 
 ## Amazon Athena
 
-1. You will need an AWS account.
-2. Ensure that you are operating in the `us-west-2` region.
-3. Run the following command in the Athena Query Console:
+Run the set-up query below in the Athena Query Console. It will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket. You can then query Overture data directly from Athena without needing to copy it.
 
-    <details>
-        <summary>Click to view complete `CREATE` command</summary>
+- TIP: Athena only allows one SQL statement to be run at a time, so highlight and run each SQL query separately.
+- TIP: Overture's S3 bucket is located in the us-west-2 AWS region, so use Athena in `us-west-2` for best performance.
 
-    <QueryBuilder query={CreateAthenaTable}></QueryBuilder>
+<QueryBuilder query={CreateAthenaTable}></QueryBuilder>
 
-    </details>
+After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
 
-4. Load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
+Example Athena SQL query to download a CSV of places in Seattle:
+
+<QueryBuilder query={SeattlePlaces}></QueryBuilder>
+
+More information on using Athena is available in the [Amazon Athena User Guide](https://docs.aws.amazon.com/athena/latest/ug/what-is.html).
 
 ## Microsft Synapse
 
-1. You will need an Azure account.
-2. Create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace).
+In your Azure account, create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace). You can then run this SQL query to read places in Seattle:
 
-3. <details>
-    <summary>Example SQL query to read places in Seattle</summary>
+<QueryBuilder query={MicrosoftSynapseExample}></QueryBuilder>
 
-    <QueryBuilder query={MicrosoftSynapseExample}></QueryBuilder>
-
-    </details>
+More information is available at ["Query files using a serverless SQL pool"](https://learn.microsoft.com/en-us/training/modules/query-data-lake-using-azure-synapse-serverless-sql-pools/3-query-files) on Microsoft Learn.

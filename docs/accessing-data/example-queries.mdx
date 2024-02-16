@@ -7,13 +7,11 @@ import _100Buildings from '!!raw-loader!@site/src/queries/duckdb/100_buildings.s
 import SeattlePlaces from '!!raw-loader!@site/src/queries/duckdb/seattle_places.sql';
 import AdminBoundaries from '!!raw-loader!@site/src/queries/duckdb/admin_boundaries.sql';
 
-
 ## DuckDB
 
 ### 100 Buildings
 
 <QueryBuilder query={_100Buildings}></QueryBuilder>
-
 
 ### Places in Seattle
 
@@ -21,14 +19,12 @@ This will create a 5mb GeoJSONSeq file with 23k places in Seattle.
 
 <QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
-
 Tip: To write the data to a shapefile, replace the last 2 lines with:
 
 ```sql
     ) TO 'places_seattle.shp'
 WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
 ```
-
 
 ### Administrative Boundaries
 

@@ -8,25 +8,22 @@ import HyderabadBuildingsDuckDB from '!!raw-loader!@site/src/queries/duckdb/hyde
 
 In this tutorial, you'll query Overture's buildings theme and extract data by bounding box for a region in Hyderabad, India. Next, you'll pull the extracted data into kepler.gl and style it lightly so that you can see which buildings came from OpenStreetMap and which ones came from Microsoft ML Buildings dataset.
 
-Requirements: you'll need an AWS account and access to an S3 bucket if you want to use Athena. If you're using DuckDB (we recommend 0.10.0), you'll need to install and load the spatial and S3 or Azure extensions. You do not an account on kepler.gl.
+Requirements: you'll need an AWS account and access to an S3 bucket if you want to use Athena. If you're using DuckDB (we recommend 0.10.0), you'll need to install and load the spatial and S3 or Azure extensions. You do not an account on kepler.gl. 
 
 ## Query the data in AWS Athena
 
- Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. Then you can run this in the Athena query console:
+Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. Then you can run this in the Athena query console:
 
 <QueryBuilder query={HyderabadBuildingsAthena}></QueryBuilder>
 
-This outputs around 106,000 buildings in a table view that you can download as a CSV file.
-
+This outputs around 106,000 buildings in a table view that you can download as a CSV file. 
 
 ## Query the data using DuckDB
-
-Here's a similar query in DuckDB's flavor of SQL that outputs a GeoJSON file.
+Here's a similar query in DuckDB's flavor of SQL that outputs a GeoJSON file. 
 
 <QueryBuilder query={HyderabadBuildingsDuckDB}></QueryBuilder>
 
 ## Explore the data in kepler.gl
-
 Drag and drop the CSV or GeoJSON file into [kepler.gl](https://kepler.gl/demo). Style the feature layer by choosing different colors based on the `primary_source` field. Then you can explore the data sources that Overture conflated to create the buildings theme.
 
 ![kepler.gl example](/img/kepler-overture-hyderabad.png)
