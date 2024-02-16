@@ -2,55 +2,29 @@
 title: Buildings in kepler.gl
 ---
 
- In this tutorial, you'll query Overture's buildings theme and extract data by bounding box for a region in Hyderabad, India. Next, you'll pull the extracted data into kepler.gl and style it lightly so that you can see which buildings came from OpenStreetMap and which ones came from Microsoft ML Buildings dataset.
+import QueryBuilder from '@site/src/components/queryBuilder';
+import HyderabadBuildingsAthena from '!!raw-loader!@site/src/queries/athena/hyderabad_buildings.sql';
+import HyderabadBuildingsDuckDB from '!!raw-loader!@site/src/queries/duckdb/hyderabad_buildings.sql';
 
- Requirements: you'll need an AWS account and access to an S3 bucket if you want to use Athena. If you're using DuckDB (we recommend 0.10.0), you'll need to install and load the spatial and S3 or Azure extensions. You do not an account on kepler.gl. 
+In this tutorial, you'll query Overture's buildings theme and extract data by bounding box for a region in Hyderabad, India. Next, you'll pull the extracted data into kepler.gl and style it lightly so that you can see which buildings came from OpenStreetMap and which ones came from Microsoft ML Buildings dataset.
 
- ## Query the data in AWS Athena
+Requirements: you'll need an AWS account and access to an S3 bucket if you want to use Athena. If you're using DuckDB (we recommend 0.10.0), you'll need to install and load the spatial and S3 or Azure extensions. You do not an account on kepler.gl. 
 
- Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. Then you can run this in the Athena query console:
+## Query the data in AWS Athena
 
- ```sql
-SELECT id, theme, class, CAST(sources AS JSON) AS sources, sources[1].dataset AS primary_source, CAST(names AS JSON) AS names, ST_GeomFromBinary(geometry) AS geometry
-FROM overture
-WHERE theme='buildings'
-    AND type='building'
-    AND  bbox.minx > 78.4194
-        AND bbox.maxx < 78.5129
-        AND bbox.miny > 17.3427
-        AND bbox.maxy < 17.4192
- ```
+Follow the [instructions for running Overture's set-up queries](./../../accessing-data/cloud-services) in Amazon Athena. Then you can run this in the Athena query console:
 
- This outputs around 106,000 buildings in a table view that you can download as a CSV file. 
+<QueryBuilder query={HyderabadBuildingsAthena}></QueryBuilder>
 
+This outputs around 106,000 buildings in a table view that you can download as a CSV file. 
 
 ## Query the data using DuckDB
-
 Here's a similar query in DuckDB's flavor of SQL that outputs a GeoJSON file. 
 
- ```sql
- COPY (
-     SELECT
-        id,
-        level,
-        height,
-        JSON(names) AS names,
-        JSON(sources) AS sources,
-        ST_GeomFromWkb(geometry) AS geometry
-     FROM read_parquet('s3://overturemaps-us-west-2/release/2024-02-15-alpha.0/theme=buildings/type=*/*', filename=true, hive_partitioning=1)
-     WHERE 
-        bbox.minx > 78.4194
-        AND bbox.maxx < 78.5129
-        AND bbox.miny > 17.3427
-        AND bbox.maxy < 17.4192
-        )
-      TO 'buildings_hyderabad.geojson'
-      WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326'); 
-```
+<QueryBuilder query={HyderabadBuildingsDuckDB}></QueryBuilder>
 
- ## Explore the data in kepler.gl
-
-Drag and drop the CSV or GeoJSON file into [kepler.gl](https://kepler.gl/demo). Style the feature layer by choosing different colors based on the `primary_source` field. Then you can explore the data sources that Overture conflated to create the buildings theme. 
+## Explore the data in kepler.gl
+Drag and drop the CSV or GeoJSON file into [kepler.gl](https://kepler.gl/demo). Style the feature layer by choosing different colors based on the `primary_source` field. Then you can explore the data sources that Overture conflated to create the buildings theme.
 
 ![kepler.gl example](/img/kepler-overture-hyderabad.png)
 

@@ -2,6 +2,11 @@
 title: Querying Data in the Cloud
 ---
 
+import QueryBuilder from '@site/src/components/queryBuilder';
+import CreateAthenaTable       from '!!raw-loader!@site/src/queries/athena/0_create_external_table.sql';
+import MicrosoftSynapseExample from '!!raw-loader!@site/src/queries/synapse/seattle_places.sql';
+import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.sql';
+
 You can access and query Overture parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account. 
 
 ## Amazon Athena
@@ -11,68 +16,13 @@ Run the set-up query below in the Athena Query Console. It will create tables in
 - TIP: Athena only allows one SQL statement to be run at a time, so highlight and run each SQL query separately.
 - TIP: Overture's S3 bucket is located in the us-west-2 AWS region, so use Athena in `us-west-2` for best performance.
 
-```sql
-    CREATE EXTERNAL TABLE `overture`(
-        `categories` struct<main:string,alternate:array<string>>,
-        `level` int,
-        `socials` array<string>,
-        `subtype` string,
-        `numfloors` int,
-        `entityid` string,
-        `class` string,
-        `sourcetags` map<string,string>,
-        `localitytype` string,
-        `emails` array<string>,
-        `drivingside` string,
-        `adminlevel` int,
-        `road` string,
-        `isocountrycodealpha2` string,
-        `isosubcountrycode` string,
-        `updatetime` string,
-        `wikidata` string,
-        `confidence` double,
-        `defaultlanguage` string,
-        `brand` struct<names:struct<common:array<struct<value:string,language:string>>,official:array<struct<value:string,language:string>>,alternate:array<struct<value:string,language:string>>,short:array<struct<value:string,language:string>>>,wikidata:string>,
-        `addresses` array<struct<freeform:string,locality:string,postCode:string,region:string,country:string>>,
-        `names` struct<common:array<struct<value:string,language:string>>,official:array<struct<value:string,language:string>>,alternate:array<struct<value:string,language:string>>,short:array<struct<value:string,language:string>>>,
-        `isintermittent` boolean,
-        `connectors` array<string>,
-        `surface` string,
-        `version` int,
-        `phones` array<string>,
-        `id` string,
-        `geometry` binary,
-        `context` string,
-        `height` double,
-        `maritime` boolean,
-        `sources` array<struct<property:string,dataset:string,recordId:string,confidence:double>>,
-        `websites` array<string>,
-        `issalt` boolean,
-        `bbox` struct<minx:double,maxx:double,miny:double,maxy:double>)
-    PARTITIONED BY (
-        `theme` string,
-        `type` string)
-    STORED AS PARQUET
-    LOCATION
-        's3://overturemaps-us-west-2/release/2024-02-15-alpha.0'
-```
+<QueryBuilder query={CreateAthenaTable}></QueryBuilder>
 
-4. After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
+After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
 
 Example Athena SQL query to download a CSV of places in Seattle:
 
-```sql
-SELECT
-       CAST(names AS JSON),
-       geometry -- WKB
-FROM
-       places
-WHERE
-       bbox.minX > -122.4447744
-   AND bbox.maxX < -122.2477071
-   AND bbox.minY > 47.5621587
-   AND bbox.maxY < 47.7120663
-```
+<QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
 More information on using Athena is available in the [Amazon Athena User Guide](https://docs.aws.amazon.com/athena/latest/ug/what-is.html).
 
@@ -80,29 +30,6 @@ More information on using Athena is available in the [Amazon Athena User Guide](
 
 In your Azure account, create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace). You can then run this SQL query to read places in Seattle:
 
-```sql
-    SELECT TOP 10 *
-    FROM
-        OPENROWSET(
-            BULK 'https://overturemapswestus2.blob.core.windows.net/release/2024-02-15-alpha.0/theme=places/type=place/',
-            FORMAT = 'PARQUET'
-        )
-    WITH
-        (
-            names VARCHAR(MAX),
-            categories VARCHAR(MAX),
-            websites VARCHAR(MAX),
-            phones VARCHAR(MAX),
-            bbox VARCHAR(200),
-            geometry VARBINARY(MAX)
-        )
-       AS
-            [result]
-    WHERE
-            TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.minx')) > -122.4447744
-        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxx')) < -122.2477071
-        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.miny')) > 47.5621587
-        AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxy')) < 47.7120663
-```
+<QueryBuilder query={MicrosoftSynapseExample}></QueryBuilder>
 
-  More information is available at ["Query files using a serverless SQL pool"](https://learn.microsoft.com/en-us/training/modules/query-data-lake-using-azure-synapse-serverless-sql-pools/3-query-files) on Microsoft Learn.
+More information is available at ["Query files using a serverless SQL pool"](https://learn.microsoft.com/en-us/training/modules/query-data-lake-using-azure-synapse-serverless-sql-pools/3-query-files) on Microsoft Learn.
