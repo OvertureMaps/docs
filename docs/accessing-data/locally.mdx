@@ -10,12 +10,12 @@ import DuckDBCountriesAzure from '!!raw-loader!@site/src/queries/duckdb/countrie
 
 [DuckDB](https://duckdb.org/) is an analytics tool that can query remote parquet files using SQL. It will only download the subset of files it needs to fulfill your queries. **Note: updating to DuckDB 0.10.0 will dramatically improve query performance** because this version [enables faster row and row-group filtering](https://github.com/duckdb/duckdb/pull/10314) on parquet files containing a `struct`. ([A `struct` is a column](https://arrow.apache.org/blog/2022/10/08/arrow-parquet-encoding-part-2/#:~:text=Struct%20%2F%20Group%20Columns,analogous%20to%20a%20JSON%20object.&text=More%20technical%20detail%20is%20available%20in%20the%20StructArray%20format%20specification) containing one or more other columns in named fields and is analogous to a JSON object.) 
 
-[Install DuckDB locally](https://duckdb.org/docs/installation/). You'll need extensions to work with spatial data in the cloud. From the DuckDB CLI, do the following:
+[Install DuckDB locally](https://duckdb.org/docs/installation/). You'll need extensions to work with spatial data in the cloud. Using the DuckDB CLI, do the following:
 
 1. `INSTALL SPATIAL;` to install the [duckdb_spatial](https://github.com/duckdblabs/duckdb_spatial) extension.
 2. `INSTALL httpfs;` or `INSTALL azure;` to read from either Amazon S3 ([httpfs](https://duckdb.org/docs/guides/import/s3_import.html)) or Microsoft Azure Blob Storage ([azure](https://duckdb.org/docs/extensions/azure)).
 
-Here is an example query that downloads all of the country boundaries from the `admins` theme and create a single GeoJSON file:
+Here is an example query that downloads all of the country boundaries from the `admins` theme and creates a single GeoJSON file:
 
 <Tabs queryString="duckdb-setup" >
 <TabItem value="s3" label="Amazon S3" default>

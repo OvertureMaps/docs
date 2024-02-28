@@ -3,29 +3,48 @@ title: Example Queries
 ---
 
 import QueryBuilder from '@site/src/components/queryBuilder';
-import _100Buildings from '!!raw-loader!@site/src/queries/duckdb/100_buildings.sql';
+import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
+import ConfidentMountains from '!!raw-loader!@site/src/queries/duckdb/confident_mountains.sql';
 import SeattlePlaces from '!!raw-loader!@site/src/queries/duckdb/seattle_places.sql';
 import AdminBoundaries from '!!raw-loader!@site/src/queries/duckdb/admin_boundaries.sql';
 
 ## DuckDB
 
-### 100 Buildings
+### Buildings in Detroit
 
-<QueryBuilder query={_100Buildings}></QueryBuilder>
+This query pulls building geometries and selected attributes in Detroit from the Overture buildings dataset in Azure blog storage.
 
-### Places in Seattle
+<QueryBuilder query={DetroitBuildings}></QueryBuilder>
 
-This will create a 5mb GeoJSONSeq file with 23k places in Seattle.
+```
+┌───────────────────────────────────┬───────────────────────────────┬────────┬──────────────────────────────────┐             
+│                id                 │          primary_name         │ height │             geometry             │
+│              varchar              │             varchar           │ double │             geometry             │
+├───────────────────────────────────┼───────────────────────────────┼────────┼──────────────────────────────────┤
+│ 08b2ab21134f2fff02006e4bce500d24  │ Tim Hortons                   │    3.9 │ POLYGON ((-82.9630332 42.237824… │
+│ 08b2ab2113ccafff0200e2d996e2f0d9  │ Integrity Tool and Mold Inc.  │    5.7 │ POLYGON ((-82.9549427 42.242094… │
+│ 08b2ab211204dfff02001b45a7e93951  │ SilverCity Windsor Cinemas    │   11.8 │ POLYGON ((-82.96496 42.2515954,… │
+│ 08b2ab211206efff0200115a3e241b9a  │ Chuck's Roadhouse             │   10.3 │ POLYGON ((-82.9643397 42.252692… │
+│ 08b2ab211206cfff02009ca923267442  │ Taka                          │    5.6 │ POLYGON ((-82.9637321 42.252767… │
+└───────────────────────────────────┴───────────────────────────────┴────────┴──────────────────────────────────┘
+```
 
-<QueryBuilder query={SeattlePlaces}></QueryBuilder>
+### Confident Mountains
 
-Tip: To write the data to a shapefile, replace the last 2 lines with:
+This query selects POIs in the mountain category that have a `confidence` value greater than .90 and outputs them to a GeoJSON file.   
+
+<QueryBuilder query={ConfidentMountains}></QueryBuilder>
+
+
+Tip: to write the data to a shapefile, replace the last 2 lines with:
 
 ```sql
-    ) TO 'places_seattle.shp'
+    ) TO 'overture_places_mountains_gt90.shp'
 WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
 ```
 
-### Administrative Boundaries
+### Country Polygons
+
+This query grabs country-level geometries and their attributes from the `admins` dataset and outputs them to a GeoJSON file. See [here for examples](https://gist.github.com/danabauer/c50979ead5ce33669ff6c47bfa915319) showing the schema changes for this dataset from July 2023 to February 2024 and beyond.
 
 <QueryBuilder query={AdminBoundaries}></QueryBuilder>

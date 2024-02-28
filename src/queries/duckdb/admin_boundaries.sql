@@ -1,19 +1,20 @@
 LOAD httpfs;
 LOAD spatial;
+SET s3_region='us-west-2';
 
 CREATE VIEW admins_view AS (
     SELECT
         *
     FROM
-        read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=admins/type=*/*', filename=true, hive_partitioning=1)
+        read_parquet('s3://overturemaps-us-west-2/release/2024-02-15-alpha.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
 );
 COPY (
     SELECT
             admins.id,
             admins.subType,
             admins.isoCountryCodeAlpha2,
-            JSON(admins.names) AS names,
-            JSON(admins.sources) AS sources,
+            names.primary AS primary_name,
+            sources[1].dataset AS primary_source,
             areas.areaId,
             ST_GeomFromWKB(areas.areaGeometry) as geometry
     FROM admins_view AS admins
@@ -24,7 +25,7 @@ COPY (
             geometry AS areaGeometry
         FROM admins_view
     ) AS areas ON areas.localityId == admins.id
-    WHERE admins.adminLevel = 2
-    LIMIT 10
-) TO 'admins_sample.geojsonseq'
+    WHERE admins.adminLevel = 1
+    LIMIT 100
+) TO '100_countries.geojson'
 WITH (FORMAT GDAL, DRIVER 'GeoJSON');
