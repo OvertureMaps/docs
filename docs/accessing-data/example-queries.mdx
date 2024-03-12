@@ -6,32 +6,20 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
 import ConfidentMountains from '!!raw-loader!@site/src/queries/duckdb/confident_mountains.sql';
 import SeattlePlaces from '!!raw-loader!@site/src/queries/duckdb/seattle_places.sql';
-import AdminBoundaries from '!!raw-loader!@site/src/queries/duckdb/admin_boundaries.sql';
+import CountryGeometries from '!!raw-loader!@site/src/queries/duckdb/country_level_geometries.sql';
 
 ## DuckDB
 
 ### Buildings in Detroit
 
-This query pulls building geometries and selected attributes in Detroit from the Overture buildings dataset in Azure blog storage.
+This query pulls building geometries and selected attributes from the Overture buildings dataset for an area in Detroit.
 
 <QueryBuilder query={DetroitBuildings}></QueryBuilder>
 
-```
-┌───────────────────────────────────┬───────────────────────────────┬────────┬──────────────────────────────────┐             
-│                id                 │          primary_name         │ height │             geometry             │
-│              varchar              │             varchar           │ double │             geometry             │
-├───────────────────────────────────┼───────────────────────────────┼────────┼──────────────────────────────────┤
-│ 08b2ab21134f2fff02006e4bce500d24  │ Tim Hortons                   │    3.9 │ POLYGON ((-82.9630332 42.237824… │
-│ 08b2ab2113ccafff0200e2d996e2f0d9  │ Integrity Tool and Mold Inc.  │    5.7 │ POLYGON ((-82.9549427 42.242094… │
-│ 08b2ab211204dfff02001b45a7e93951  │ SilverCity Windsor Cinemas    │   11.8 │ POLYGON ((-82.96496 42.2515954,… │
-│ 08b2ab211206efff0200115a3e241b9a  │ Chuck's Roadhouse             │   10.3 │ POLYGON ((-82.9643397 42.252692… │
-│ 08b2ab211206cfff02009ca923267442  │ Taka                          │    5.6 │ POLYGON ((-82.9637321 42.252767… │
-└───────────────────────────────────┴───────────────────────────────┴────────┴──────────────────────────────────┘
-```
 
 ### Confident Mountains
 
-This query selects POIs in the mountain category that have a `confidence` value greater than .90 and outputs them to a GeoJSON file.   
+This query selects POIs in the mountain category from the Overture places dataset and outputs them to a GeoJSON file.   
 
 <QueryBuilder query={ConfidentMountains}></QueryBuilder>
 
@@ -45,6 +33,6 @@ WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
 
 ### Country Polygons
 
-This query grabs country-level geometries and their attributes from the `admins` dataset and outputs them to a GeoJSON file. See [here for examples](https://gist.github.com/danabauer/c50979ead5ce33669ff6c47bfa915319) showing the schema changes for this dataset from July 2023 to February 2024 and beyond.
+This query grabs country-level geometries and their attributes from the admins dataset and outputs them to a GeoJSON file. See [here for examples](https://gist.github.com/danabauer/c50979ead5ce33669ff6c47bfa915319) showing the schema changes for this dataset from July 2023 to February 2024 and beyond.
 
-<QueryBuilder query={AdminBoundaries}></QueryBuilder>
+<QueryBuilder query={CountryGeometries}></QueryBuilder>
