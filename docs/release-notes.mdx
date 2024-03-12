@@ -13,6 +13,7 @@ In the Admins theme, we changed `camelCase` to `snake_case` for properties to be
 In the April 2024 release, Overture will implement a refactor of the `Admins` theme called `Divisions`. Admins and Divisions will coexist for three releases, at which point Divisions will fully replace Admins. More information on this change [here](https://github.com/OvertureMaps/schema/discussions/117).
 
 ### Theme-specific updates
+The data sources for each theme are cited [here](data-sources). 
 
 **Transportation** 
 - Refreshed to include OSM data up to 2024-03-03.
@@ -22,32 +23,32 @@ In the April 2024 release, Overture will implement a refactor of the `Admins` th
 - Added one-way road access restrictions.
 - Added road widths property to segments.
 - Acheived stability of GERS IDs for connectors and segments for this and future releases.
-- Data in the transportation theme is licensed under ODbL.
+- Note: data in the transportation theme is licensed under ODbL.
 
 **Administrative Boundaries (Admins)**
 - Refreshed to include OSM data up to 2024-03-07.
-- Adapted schema to use `snake_case` for properties to be more compatible with some SQL engines.
+- Adapted schema to use `snake_case` to make attribute names more compatible with some SQL engines.
 - Correctly set locality types.
 - Made minor fixes:
      - All country localities now have ISO codes.
      - All non-country localities now have context property set.
-- Data in the Admin theme is licensed under ODbL.
+- Note: data in the Admin theme is licensed under ODbL.
 
 **Places**
 - Achieved roughly 54 million place records. 
 - Propagated stable GERS IDs from the previous release.
 - Made incremental improvements to accuracy and data quality.
-- Data in the Places theme is licensed under CDLA Permissive 2.0.
+- Note: data in the Places theme is licensed under CDLA Permissive 2.0.
 
 **Buildings**
 - Exposed the logic Overture uses to transform OSM tags into building attributes.
 - Made incremental improvements to further ensure the data conforms to the buildings schema.
-- Data in the Buildings theme is licensed under ODbL.
+- Note: data in the Buildings theme is licensed under ODbL.
 
 **Base**
 - Exposed the logic Overture uses to transform OSM tags into attributes in the land use, land and water data types.
 - Made incremental improvements to further ensure the data conforms to the base schema.
-- Data in the Base theme is licensed under ODbL.
+- Note: data in the Base theme is licensed under ODbL.
 
 
 
