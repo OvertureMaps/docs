@@ -1,0 +1,54 @@
+---
+description: Overture's Monthly Release Notes
+title: Release Notes
+---
+
+# Release Notes: `2024-03-12-alpha.0`
+
+Here are the highlights of what's new and updated in Overture's `2024-03-12-alpha.0` release. This release includes a schema change from `camelCase` to `snake_case` in the Admins theme, an expansion of GERS IDs across several themes and incremental updates to schema and datasets across all themes. Theme-specific highlights are available below.
+
+ 
+## Breaking changes
+In the Admins theme, we changed `camelCase` to `snake_case` for properties to be more compatible with some SQL engines. This may break your existing code and queries.
+
+## Deprecations
+Beginning with the April 2024 release, Overture will add a refactor of the Admins theme called Divisions to the schema and datasets. Admins and Divisions will coexist for three releases, at which point Divisions will fully replace Admins More information [here](https://github.com/OvertureMaps/schema/discussions/117).
+
+## Theme-specific updates
+
+### Transportation 
+- Refreshed to include OSM data up to 2024-03-03.
+- Added ferry and alley segments.
+- Included 125K previously unsupported turn restrictions.
+- Added support for max weight, height, width and length access restrictions.
+- Added one-way road access restrictions.
+- Added road widths property to segments.
+- Acheived stabiliy of GERS IDs for connectors and segments for this and future releases.
+- Data in the transportation theme is licensed under ODbL.
+
+### Administrative Boundaries (Admins)
+- Refreshed to include OSM data up to 2024-03-07.
+- Adapted schema to use snake_case for properties to be more compatible with some SQL engines.
+- Correctly set locality types.
+- Made minor fixes:
+     - All country localities now have ISO codes.
+     - All non-country localities now have context property set.
+- Data sources: OpenStreetMap, geoBoundaries and Esri.
+- Data in the Admin theme is licensed under ODbL.
+
+### Places
+- Acheived roughly 54 million place records. 
+- Propagated GERS stableids from the previous release.
+- Made incremental improvements to accuracy and data quality.
+- Data in the Places theme is licensed under CDLA Permissive 2.0.
+
+### Buildings
+- Made incremental improvements to further ensure the data conforms to the buildings layer schema.
+- Data in the Buildings theme is licensed under ODbL.
+
+### Base
+- Made incremental improvements to further ensure the data conforms to the base schema.
+- Data in the Base theme is licensed under ODbL.
+
+
+

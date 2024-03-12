@@ -42,7 +42,9 @@ const sidebars = {
         'visualizing-data/visualizing-places',
         'visualizing-data/build-a-map'
       ]
-    }
+    },
+    'release-notes',
+    'data-sources'
   ]
 };
 
