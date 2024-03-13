@@ -1,6 +1,6 @@
 SELECT id, theme, class, CAST(sources AS JSON) AS sources, sources[1].dataset AS primary_source, CAST(names AS JSON) AS names, ST_GeomFromBinary(geometry) AS geometry
 FROM
-       overture
+    overture.release.v2024_03_12_alpha_0
 WHERE theme='places'
     AND type='place'
     AND bbox.minX > -122.4447744

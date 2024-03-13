@@ -21,7 +21,7 @@ const config = {
   favicon: 'img/favicon.png',
 
   customFields: {
-    overtureRelease: '2024-02-15-alpha.0',
+    overtureRelease: '2024-03-12-alpha.0',
   },
 
   // Set the production url of your site here

@@ -3,28 +3,56 @@ title: Querying Data in the Cloud
 ---
 
 import QueryBuilder from '@site/src/components/queryBuilder';
-import CreateAthenaTable       from '!!raw-loader!@site/src/queries/athena/0_create_external_table.sql';
+import AthenaSelectExample from '!!raw-loader!@site/src/queries/athena/0_select_from_release.sql';
+import CreateAthenaTable from '!!raw-loader!@site/src/queries/athena/0_create_external_table.sql';
 import MicrosoftSynapseExample from '!!raw-loader!@site/src/queries/synapse/seattle_places.sql';
 import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.sql';
 
-You can access and query Overture parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account. 
+You can access and query Overture parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account.
 
 ## Amazon Athena
 
-Run the set-up query below in the Athena Query Console. It will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket. You can then query Overture data directly from Athena without needing to copy it.
+You can add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html).
+The Catalog ID is `913550007193`:
 
-- TIP: Athena only allows one SQL statement to be run at a time, so highlight and run each SQL query separately.
 - TIP: Overture's S3 bucket is located in the us-west-2 AWS region, so use Athena in `us-west-2` for best performance.
 
-<QueryBuilder query={CreateAthenaTable}></QueryBuilder>
+<details>
+    <summary>Screenshot</summary>
+    <div>
+        ![AWS Glue Catalog](/img/accessing-data/aws-glue-data-catalog-values.png)
+    </div>
+</details>
 
-After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
+After adding `overture` as a data source, you can access the latest release (note the `v` at the beginning of the table name):
+
+<QueryBuilder query={AthenaSelectExample}></QueryBuilder>
+
+
+The `overture` data catalog will be updated with a new table for each release in the future.
 
 Example Athena SQL query to download a CSV of places in Seattle:
 
 <QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
 More information on using Athena is available in the [Amazon Athena User Guide](https://docs.aws.amazon.com/athena/latest/ug/what-is.html).
+
+#### Optional: Add the table directly using the DDL
+
+If you prefer to create the table in your own data catalog, you can run the query below in the Athena Query Console. It will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket. You can then query Overture data directly from Athena without needing to copy it.
+
+<details>
+    <summary>DDL Query Statement</summary>
+    <div>
+        <QueryBuilder query={CreateAthenaTable}></QueryBuilder>
+        After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
+
+        Example Athena SQL query to download a CSV of places in Seattle:
+
+        <QueryBuilder query={SeattlePlaces}></QueryBuilder>
+    </div>
+</details>
+
 
 ## Microsft Synapse
 

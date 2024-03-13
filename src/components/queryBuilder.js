@@ -7,9 +7,13 @@ export default function QueryBuilder(args){
         siteConfig: {customFields},
     } = useDocusaurusContext();
 
+    var rendered_query = args.query.replace('__OVERTURE_RELEASE', customFields.overtureRelease)
+
+    rendered_query = rendered_query.replace('__ATHENA_OVERTURE_RELEASE', 'v' + customFields.overtureRelease.replaceAll('.','_').replaceAll('-','_'))
+
     return (
         <CodeBlock language='sql' title={args.title}>
-            {args.query.replace('__OVERTURE_RELEASE', customFields.overtureRelease)}
+            {rendered_query}
         </CodeBlock>
       );
 }
