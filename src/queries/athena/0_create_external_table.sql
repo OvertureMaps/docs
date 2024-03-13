@@ -1,4 +1,4 @@
-CREATE EXTERNAL TABLE `overture` (
+CREATE EXTERNAL TABLE `__ATHENA_OVERTURE_RELEASE` (
   `id` string,
   `geometry` binary,
   `bbox` struct<minx:double,maxx:double,miny:double,maxy:double>,
