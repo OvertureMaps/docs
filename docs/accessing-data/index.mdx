@@ -35,14 +35,14 @@ You can download the Parquet files directly from either Azure Blob Storage or Am
 After installing the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), you can download the files from S3 using the below command. Set `<DESTINATION>` to a local directory path to download the files, or to an `s3://` path you control to copy them into your S3 bucket.
 
 <QueryBuilder   query="aws s3 cp --region us-west-2 --no-sign-request --recursive s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/ <DESTINATION>"
-                language="bash">
+                language="text">
 </QueryBuilder>
 
 You can download the files from Azure Blob Storage using [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/) or the [AzCopy](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json#download-azcopy) command. An example `azcopy` command is given below.
 
 
 <QueryBuilder   query='azcopy copy "https://overturemapswestus2.dfs.core.windows.net/release/__OVERTURE_RELEASE/" "<<local directory path>>"  --recursive'
-                language="bash">
+                language="text">
 </QueryBuilder>
 
 ## Parquet Schema
