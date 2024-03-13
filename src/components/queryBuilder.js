@@ -11,8 +11,10 @@ export default function QueryBuilder(args){
 
     rendered_query = rendered_query.replace('__ATHENA_OVERTURE_RELEASE', 'v' + customFields.overtureRelease.replaceAll('.','_').replaceAll('-','_'))
 
+    var lang = args.language || 'sql'
+
     return (
-        <CodeBlock language='sql' title={args.title}>
+        <CodeBlock language={lang} title={args.title}>
             {rendered_query}
         </CodeBlock>
       );
