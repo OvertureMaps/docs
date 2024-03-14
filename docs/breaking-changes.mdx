@@ -1,0 +1,54 @@
+---
+description: Examples of breaking changes
+title: Breaking Changes
+---
+
+### Understanding a breaking change in Overture's `2024-03-12-alpha.0` release
+
+In previous releases of Overture data, we used `camelCase` for attribute names throughout the schema. A duckdb query to find Pennsylvania in our admins dataset might have looked like this:
+
+```sql
+LOAD spatial;
+LOAD httpfs:
+
+SELECT 
+   id, 
+   isoSubCountryCode, 
+   contextId, 
+   names.primary,
+   ST_GeomFromWKB(geometry) as geometry   
+FROM 
+   read_parquet('s3://overturemaps-us-west-2/release/2024-02-15-alpha.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
+WHERE type='locality'
+   AND subType='administrativeLocality'
+   AND adminLevel=2
+   AND names.primary LIKE 'Pennsylvania';
+```
+
+In the March release, we changed all property names and enumeration member names to `snake_case`. This is a big one-time churn to improve SQL compatibility. That same query to find Pennsylvania now looks like this:
+
+```sql
+LOAD spatial;
+LOAD httpfs:
+
+SELECT 
+   id, 
+   iso_sub_country_code, 
+   context_id, 
+   names.primary,
+   ST_GeomFromWKB(geometry) as geometry
+FROM 
+   read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
+WHERE type='locality'
+   AND subtype='administrative_locality'
+   AND admin_level=2
+   AND names.primary LIKE 'Pennsylvania';
+```
+```
+┌──────────────────────────────────┬──────────────────────┬──────────────────────────────────┬──────────────┬────────────────────────────────┐
+│                id                │ iso_sub_country_code │            context_id            │   primary    │            geometry            │
+│             varchar              │       varchar        │             varchar              │   varchar    │            geometry            │
+├──────────────────────────────────┼──────────────────────┼──────────────────────────────────┼──────────────┼────────────────────────────────┤
+│ 0857b2b73fffffff01914c596abbfacd │ US-PA                │ 0850c861bfffffff01aeb407d56d3441 │ Pennsylvania │ POINT (-77.7278831 40.9699889) │
+└──────────────────────────────────┴──────────────────────┴──────────────────────────────────┴──────────────┴────────────────────────────────┘
+```

@@ -4,10 +4,10 @@ title: Release Notes
 ---
 
 
-Here are the highlights of what's new and updated in Overture's `2024-03-12-alpha.0` release. This release includes a schema change to `snake_case` for attribute names in the Admins theme, an expansion of stable GERS IDs and incremental updates to the schema and datasets. More detailed [schema release notes and a changelog](https://github.com/OvertureMaps/schema/releases/tag/v0.9.0) are available in the `OvertureMaps/schema`. 
+Here are the highlights of what's new and updated in Overture's `2024-03-12-alpha.0` release. This release includes a schema change from `camelCase` to `snake_case` for all property names and enumeration member names, an expansion of stable GERS IDs and incremental updates to the schema and datasets. More detailed [schema release notes and a changelog](https://github.com/OvertureMaps/schema/releases/tag/v0.9.0) are available in the `OvertureMaps/schema`. 
 
  ### Breaking changes
-In the Admins theme, we changed `camelCase` to `snake_case` for properties to be more compatible with some SQL engines. This may break existing code and queries.
+We changed `camelCase` to `snake_case` in the schema for properties to be more compatible with some SQL engines. This may break existing code and queries. See [here for an example](/breaking-changes) of how this breaking change affects a query to the Admins dataset.
 
 ### Deprecations
 In the April 2024 release, Overture will implement a refactor of the `Admins` theme called `Divisions`. Admins and Divisions will coexist for three releases, at which point Divisions will fully replace Admins. More information on this change [here](https://github.com/OvertureMaps/schema/discussions/117).
