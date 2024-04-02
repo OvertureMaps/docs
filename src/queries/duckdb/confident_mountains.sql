@@ -6,8 +6,8 @@ COPY(
     SELECT 
        id,
        names.primary as primary_name,
-       bbox.minx as x,
-       bbox.miny as y,
+       bbox.xmin as x,
+       bbox.ymin as y,
        ST_GeomFromWKB(geometry) as geometry,
        categories.main as main_category,
        sources[1].dataset AS primary_source,

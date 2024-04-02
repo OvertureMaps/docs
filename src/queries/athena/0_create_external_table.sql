@@ -1,7 +1,7 @@
 CREATE EXTERNAL TABLE `__ATHENA_OVERTURE_RELEASE` (
   `id` string,
   `geometry` binary,
-  `bbox` struct<minx:double,maxx:double,miny:double,maxy:double>,
+  `bbox` struct<xmin:float,xmax:float,ymin:float,ymax:float>,
   `admin_level` int,
   `is_maritime` boolean,
   `geopol_display` string,
