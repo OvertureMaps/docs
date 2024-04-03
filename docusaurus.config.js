@@ -79,21 +79,27 @@ const config = {
         },
         items: [
           {
-            to: 'https://docs.overturemaps.org',
-            label: 'Data Schema',
+            type: 'docSidebar',
+            sidebarId: 'docs',
+            position: 'left',
+            label: 'Docs',
+          },
+          {
+            to: 'https://schema.overturemaps.org',
+            label: 'Schema Reference',
             target: ''
           },
           {
             to: 'https://docs.overturemaps.org/gers',
-            label: 'Global Entity Reference System',
+            label: 'Blog',
             target: '',
             className: 'header-github-link',
           },
           {
-            type: 'docSidebar',
-            sidebarId: 'docs',
-            position: 'left',
-            label: 'How-to Guides',
+            to: 'https://docs.overturemaps.org/gers',
+            label: 'Community',
+            target: '',
+            className: 'header-github-link',
           },
         ],
       },

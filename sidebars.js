@@ -44,6 +44,19 @@ const sidebars = {
         'visualizing-data/build-a-map'
       ]
     },
+    {
+      type: 'category',
+      label: 'Global Entity Reference System',
+      collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'gers/index'
+      },
+      items: [
+        'gers/scenarios',
+        'gers/terminology'
+      ]
+    },
     'release-notes',
     'data-sources'
   ]
