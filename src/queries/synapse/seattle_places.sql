@@ -16,7 +16,7 @@ WITH
     AS
         [result]
 WHERE
-        TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.minx')) > -122.4447744
-    AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxx')) < -122.2477071
-    AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.miny')) > 47.5621587
-    AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.maxy')) < 47.7120663
+        TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.xmin')) > -122.4447744
+    AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.xmax')) < -122.2477071
+    AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.ymin')) > 47.5621587
+    AND TRY_CONVERT(FLOAT, JSON_VALUE(bbox, '$.ymax')) < 47.7120663

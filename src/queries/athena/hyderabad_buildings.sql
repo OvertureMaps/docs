@@ -9,7 +9,7 @@ SELECT
 FROM overture
 WHERE theme='buildings'
     AND type='building'
-    AND  bbox.minx > 78.4194
-    AND bbox.maxx < 78.5129
-    AND bbox.miny > 17.3427
-    AND bbox.maxy < 17.4192
+    AND  bbox.xmin > 78.4194
+    AND bbox.xmax < 78.5129
+    AND bbox.ymin > 17.3427
+    AND bbox.ymax < 17.4192
