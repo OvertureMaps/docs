@@ -27,7 +27,8 @@ const sidebars = {
       collapsed: false,
       items: [
         'exploring-data/kepler-gl',
-        'exploring-data/community-projects'
+        'exploring-data/community-projects',
+        'exploring-data/QGIS',
       ]
     },
     {
