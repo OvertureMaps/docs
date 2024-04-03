@@ -10,7 +10,7 @@ const sidebars = {
         type: 'doc',
         id: 'accessing-data/index'
       },
-      collapsed: false,
+      collapsed: true,
       items: [
         'accessing-data/cloud-services',
         'accessing-data/locally',
@@ -24,7 +24,7 @@ const sidebars = {
         type: 'doc',
         id: 'exploring-data/index'
       },
-      collapsed: false,
+      collapsed: true,
       items: [
         'exploring-data/kepler-gl',
         'exploring-data/community-projects',
@@ -38,7 +38,7 @@ const sidebars = {
         type: 'doc',
         id: 'visualizing-data/index'
       },
-      collapsed: false,
+      collapsed: true,
       items: [
         'visualizing-data/visualizing-places',
         'visualizing-data/build-a-map'

@@ -89,18 +89,18 @@ const config = {
             label: 'Schema Reference',
             target: ''
           },
-          {
-            to: 'https://docs.overturemaps.org/gers',
-            label: 'Blog',
-            target: '',
-            className: 'header-github-link',
-          },
-          {
-            to: 'https://docs.overturemaps.org/gers',
-            label: 'Community',
-            target: '',
-            className: 'header-github-link',
-          },
+          // {
+          //   to: '#',
+          //   label: 'Blog',
+          //   target: '',
+          //   className: 'header-github-link',
+          // },
+          // {
+          //   to: '#',
+          //   label: 'Community',
+          //   target: '',
+          //   className: 'header-github-link',
+          // },
         ],
       },
       footer: {
