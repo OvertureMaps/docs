@@ -6,8 +6,8 @@ const {themes} = require('prism-react-renderer');
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
 
-const defaultUrl = 'https://labs.overturemaps.org/';
-const defaultBaseUrl = 'how-to/';
+const defaultUrl = 'https://docs.overturemaps.org';
+const defaultBaseUrl = '/';
 
 function getFromEnvironment(variableName, defaultValue) {
   const environmentValue = process.env[variableName];
@@ -33,7 +33,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'OvertureMaps', // Usually your GitHub org/user name.
-  projectName: 'how-to', // Usually your repo name.
+  projectName: 'docs', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
@@ -79,22 +79,24 @@ const config = {
         },
         items: [
           {
-            to: 'https://docs.overturemaps.org',
-            label: 'Data Schema',
-            target: ''
-          },
-          {
-            to: 'https://docs.overturemaps.org/gers',
-            label: 'Global Entity Reference System',
-            target: '',
-            className: 'header-github-link',
-          },
-          {
             type: 'docSidebar',
             sidebarId: 'docs',
             position: 'left',
-            label: 'How-to Guides',
+            label: 'Docs',
           },
+          {
+            to: 'https://schema.overturemaps.org',
+            label: 'Schema Reference',
+            target: ''
+          },
+          {
+            to: 'https://overturemaps.org/news-blogs/',
+            label: 'Blog',
+          },
+          {
+            to: 'https://docs.overturemaps.org/community/',
+            label: 'Community',
+          }
         ],
       },
       footer: {
