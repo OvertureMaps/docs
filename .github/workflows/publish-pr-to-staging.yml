@@ -67,7 +67,7 @@ jobs:
           name: secondary_docs
           path: docusaurus/build
 
-  copy_schema_into_docs:
+  copy_schema_into_docs_and_deploy:
     needs:
       - build_primary_docs
       - build_secondary_docs
@@ -84,11 +84,6 @@ jobs:
           name: secondary_docs
           path: schema/
 
-  deploy_to_aws:
-    needs: copy_schema_into_docs
-    name: Deploy to AWS
-    runs-on: ubuntu-latest
-    steps:
       - name: Fetch AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
