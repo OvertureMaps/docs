@@ -15,10 +15,10 @@ permissions:
 
 jobs:
   publish:
-    if: github.repository == 'overturemaps/how-to'
+    if: github.repository == 'overturemaps/docs'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the how-to repo
+      - name: Check out the docs repo
         uses: actions/checkout@v3
 
       - name: Set up Node.js
