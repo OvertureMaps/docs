@@ -94,7 +94,7 @@ const config = {
             label: 'Blog',
           },
           {
-            to: 'https://docs.overturemaps.org/community/',
+            to: '/community',
             label: 'Community',
           }
         ],
