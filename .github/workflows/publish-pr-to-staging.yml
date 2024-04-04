@@ -47,7 +47,7 @@ jobs:
       - name: Build the schema reference documentation pages
         env:
           DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
-          DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/
+          DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/schema/
         run: cd schema_docs/docusaurus && npm run build
 
       - name: Copy schema docs to outer docs
