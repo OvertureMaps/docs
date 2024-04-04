@@ -89,18 +89,14 @@ const config = {
             label: 'Schema Reference',
             target: ''
           },
-          // {
-          //   to: '#',
-          //   label: 'Blog',
-          //   target: '',
-          //   className: 'header-github-link',
-          // },
-          // {
-          //   to: '#',
-          //   label: 'Community',
-          //   target: '',
-          //   className: 'header-github-link',
-          // },
+          {
+            to: 'https://overturemaps.org/news-blogs/',
+            label: 'Blog',
+          },
+          {
+            to: 'https://docs.overturemaps.org/community/',
+            label: 'Community',
+          }
         ],
       },
       footer: {
