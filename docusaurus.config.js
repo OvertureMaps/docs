@@ -85,16 +85,16 @@ const config = {
             label: 'Docs',
           },
           {
-            to: 'https://schema.overturemaps.org',
+            to: '/schema/',
             label: 'Schema Reference',
-            target: ''
           },
           {
             to: 'https://overturemaps.org/news-blogs/',
             label: 'Blog',
+            target: '_blank',
           },
           {
-            to: '/community',
+            to: '/community/',
             label: 'Community',
           }
         ],
