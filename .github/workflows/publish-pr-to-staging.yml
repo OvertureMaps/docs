@@ -31,6 +31,12 @@ jobs:
           DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/
         run: npm run build
 
+      - name: Upload primary docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: primary_docs
+          path: build
+
   build_secondary_docs:
     name: Build schema documentation
     runs-on: ubuntu-latest
@@ -39,7 +45,6 @@ jobs:
       - name: Checkout schema repo
         uses: actions/checkout@v3
         with:
-          path: schema_docs
           repository: OvertureMaps/schema
           ref: main
           sparse-checkout: |
@@ -48,13 +53,19 @@ jobs:
             examples
 
       - name: Install NPM dependencies
-        run: cd schema_docs/docusaurus && npm install
+        run: cd docusaurus && npm install
 
       - name: Build the schema reference documentation pages
         env:
           DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
           DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/schema/
-        run: cd schema_docs/docusaurus && npm run build
+        run: cd docusaurus && npm run build
+
+      - name: Upload schema reference docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: secondary_docs
+          path: docusaurus/build
 
   copy_schema_into_docs:
     needs:
@@ -62,8 +73,16 @@ jobs:
       - build_secondary_docs
     runs-on: ubuntu-latest
     steps:
-      - name: Copy schema docs to outer docs
-        run: cp -r schema_docs/docusaurus/build/* build/schema
+      - name: Download primary docs
+        uses: actions/download-artifact@v4
+        with:
+          name: primary_docs
+
+      - name: Download schema reference docs
+        uses: actions/download-artifact@v4
+        with:
+          name: secondary_docs
+          path: schema/
 
   deploy_to_aws:
     needs: copy_schema_into_docs
@@ -78,7 +97,7 @@ jobs:
 
       - name: Copy Docusaurus website to staging bucket how-to/pr/${{github.event.number}}/
         run: |
-          cd build && aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING . s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
+          aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING . s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
 
       - name: Purge CDN cache
         run: |
