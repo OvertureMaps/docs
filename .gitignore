@@ -5,4 +5,4 @@ docs/_examples/
 docs/_schema/
 docs/reference/
 src/YAML_FILE_TREE.js
-*.lock
+build/

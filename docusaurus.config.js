@@ -38,7 +38,7 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
 
-  trailingSlash: true,
+  // trailingSlash: true,
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -49,6 +49,24 @@ const config = {
   },
 
   themes: ["docusaurus-json-schema-plugin"],
+
+  plugins: [
+    () => ({
+      name: 'custom-docusaurus-plugin',
+      configureWebpack() {
+        return {
+          module: {
+            rules: [
+              {
+                test: /\.pmtiles$/,
+                use: 'raw-loader'
+              },
+            ],
+          },
+        };
+      },
+    }),
+  ],
 
   presets: [
     [
