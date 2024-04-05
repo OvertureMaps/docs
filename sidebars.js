@@ -58,6 +58,68 @@ const sidebars = {
     },
     'release-notes',
     'data-sources'
+  ],
+
+  // This should be imported from the schema repo
+  reference: [
+    {
+      type: 'category',
+      label: 'Schema Reference',
+      link: {
+        type: 'generated-index',
+        slug: '/reference',
+      },
+      collapsed: true,
+      items: [
+        {
+          type: 'category',
+          label: 'admins',
+          collapsed: false,
+          items: [
+              'reference/admins/administrative-boundary',
+              'reference/admins/locality',
+              'reference/admins/locality-area',
+          ]
+        },
+        {
+          type: 'category',
+          label: 'base',
+          collapsed: false,
+          items: [
+              'reference/base/infrastructure',
+              'reference/base/land',
+              'reference/base/land-use',
+              'reference/base/water',
+          ]
+        },
+        {
+          type: 'category',
+          label: 'buildings',
+          collapsed: false,
+          items: [
+            'reference/buildings/building',
+            'reference/buildings/building_part'
+          ]
+        },
+        {
+          type: 'category',
+          label: 'places',
+          collapsed: false,
+          items: [
+            'reference/places/place',
+          ]
+        },
+        {
+          type: 'category',
+          label: 'transportation',
+          collapsed: false,
+          items: [
+            'reference/transportation/connector',
+            'reference/transportation/segment',
+          ]
+        }
+      ]
+    }
   ]
 };
 

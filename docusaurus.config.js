@@ -48,6 +48,8 @@ const config = {
     locales: ['en'],
   },
 
+  themes: ["docusaurus-json-schema-plugin"],
+
   presets: [
     [
       'classic',
@@ -83,6 +85,12 @@ const config = {
             sidebarId: 'docs',
             position: 'left',
             label: 'Docs',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'reference',
+            position: 'left',
+            label: 'Schema Ref (2)',
           },
           {
             to: 'https://docs.overturemaps.org/schema/',
