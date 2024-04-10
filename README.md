@@ -1,6 +1,6 @@
 # Overture Documentation
 
-Built using [Docusaurus 2](https://docusaurus.io/)
+Built using [Docusaurus 3](https://docusaurus.io/)
 
 ## Local Development
 
