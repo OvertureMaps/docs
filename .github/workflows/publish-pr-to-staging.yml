@@ -81,11 +81,11 @@ jobs:
         with:
           name: primary_docs
 
-      - name: Download schema reference docs
-        uses: actions/download-artifact@v4
-        with:
-          name: secondary_docs
-          path: schema/
+      # - name: Download schema reference docs
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: secondary_docs
+      #     path: schema/
 
       - name: Fetch AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
