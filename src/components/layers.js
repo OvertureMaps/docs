@@ -480,11 +480,23 @@ const Landuse = {
         "type": "fill",
         "source": 'base',
         "source-layer": 'landuse',
-        "filter": ["==", ["get", "class"], "green"],
+        "filter": ["==", ["get", "class"], "fairway"],
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
             "fill-color": park
+        }
+    },
+    "recSand": {
+        "id": "golfBunker",
+        "type": "fill",
+        "source": 'base',
+        "source-layer": 'landuse',
+        "filter": ["match", ["get", "surface"], ["recreation_sand"], true, false],
+        "minzoom": 0,
+        "maxzoom": 24,
+        "paint": {
+            "fill-color": sand
         }
     },
 }

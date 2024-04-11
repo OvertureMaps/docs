@@ -77,6 +77,7 @@ export default function Map() {
             Land.forest,
 
             //LandUse
+            Landuse.recSand,
             Landuse.parks,
             Landuse.golfGreens,
 
