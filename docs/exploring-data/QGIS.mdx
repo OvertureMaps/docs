@@ -5,41 +5,41 @@ title: Exploring Overture Data in QGIS
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-[QGIS](https://www.qgis.org/), an open source geographic information system can read a number of geospatial data formats. To read Overture data with QGIS, we just need to obtain the data we want in a format that is compatible with QGIS:
+[QGIS](https://www.qgis.org/), an open source geographic information system can read a number of geospatial data formats. To read Overture data with QGIS, we just need to obtain the data we want in a format that is compatible with QGIS.
+
+DuckDB's spatial extension is capable of writing data to any number of GDAL
+
+Alternatively, any build of QGIS that includes GDAL > 3.5 is capable of reading parquet data. We recommend trying this.
 
 
-#### First, Install a version of QGIS that can read `parquet`.
-
-<Tabs>
-    <TabItem value="mac" label="MacOS" default>
-        The [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
-
-        You can find the latest installers for Mac here: [github.com/opengisch/qgis-conda-builder/releases](https://github.com/opengisch/qgis-conda-builder/releases)
-    </TabItem>
-
-    <TabItem value="windows" label="Windows" default>
-        Most distributions of QGIS for Windows have support for parquet.
-    </TabItem>
-
-    <TabItem value="linux" label="Linux" default>
-        The [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
-
-        Additionally, there is a Flatpak QGIS package that includes support for Parquet:
-
-        ```bash
-        flatpak install --user https://dl.flathub.org/build-repo/94031/org.qgis.qgis.flatpakref
-        ```
-    </TabItem>
-</Tabs>
-
-#### Next, Download some Overture data in parquet format
-Overture data is distributed as a series of hundreds of geoparquet files. These files are partitioned as follows: theme/type/location. For example,
-
-
+###
 
 <details>
-<summary>
-If I'm downloading data through DuckDB, why shouldn't I just use the `spatial` extension to convert it to a shapefile, GeoJSON, etc.?
-</summary>
 
+    <summary>Instructions: Install a version of QGIS that can read `(geo)parquet`</summary>
+
+    <Tabs>
+        <TabItem value="mac" label="MacOS" default>
+            The [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
+
+            You can find the latest installers for Mac here: [github.com/opengisch/qgis-conda-builder/releases](https://github.com/opengisch/qgis-conda-builder/releases)
+        </TabItem>
+
+        <TabItem value="windows" label="Windows" default>
+            Most distributions of QGIS for Windows have support for parquet.
+        </TabItem>
+
+        <TabItem value="linux" label="Linux" default>
+            The [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
+
+            Additionally, there is a Flatpak QGIS package that includes support for Parquet:
+
+            ```bash
+            flatpak install --user https://dl.flathub.org/build-repo/94031/org.qgis.qgis.flatpakref
+            ```
+        </TabItem>
+    </Tabs>
 </details>
+
+### Downloading Overture data in parquet format
+Overture data is distributed as a series of hundreds of geoparquet files. These files are partitioned as follows: theme/type/location. For example
