@@ -25,6 +25,7 @@ export default function Map() {
       container: mapContainer.current,
       center: [lng, lat],
       zoom: zoom,
+      minZoom: 10,
       pitch: 45,
       hash: true,
       cooperativeGestures: {
@@ -76,6 +77,7 @@ export default function Map() {
             Land.forest,
 
             //LandUse
+            Landuse.recSand,
             Landuse.parks,
             Landuse.golfGreens,
 
