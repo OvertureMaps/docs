@@ -14,16 +14,16 @@ import {Admins, Buildings, Places, Transportation, Water, Landuse, Land} from '@
 
 ### Step 1: Download only what you need
 
-Overture data is released in the cloud-native format `geoparquet`. It is partitioned by theme. Accessing the data through a service that can take advantage of these properties provides the best performance. This example will use [DuckDB](https://duckdb.org/). After downloading and converting the data to GeoJSON, we can use [tippecanoe](https://github.com/felt/tippecanoe) to create a [`PMTiles`](https://github.com/protomaps/PMTiles) archive for each theme.
+Overture data is released in the cloud-native format `geoparquet`. It is further partitioned by *theme* and *type*. Downloading the data through a tool like [DuckDB](https://duckdb.org/) can take advantage of these properties, giving the best performance. After downloading and converting the data to GeoJSON, we can use [tippecanoe](https://github.com/felt/tippecanoe) to create a [`PMTiles`](https://github.com/protomaps/PMTiles) archive for each theme.
 
 <Tabs queryString="theme-data" >
 
 <!-- Places  -->
 <TabItem value="places" label="Places" default>
 
-The places data theme represents business and points of interest in the real world. Read more about the places data schema in the [documentation](https://docs.overturemaps.org/reference/places/place).
+The places data theme represents business and points of interest in the real world. Read more about the places data schema in the [documentation](https://docs.overturemaps.org/schema/reference/places/place).
 
-1. To download places data for a specific region, we can use the following DuckDB query to download the places data within a specific bounding box and generate a `GeoJSON` file.
+1. The following DuckDB query downloads places data within a specific bounding box and writes a `GeoJSON` file.
 
     ```sql
       LOAD spatial;
@@ -68,7 +68,7 @@ The places data theme represents business and points of interest in the real wor
 <TabItem value="placenames" label="Placenames" default>
 The admins theme contains named localities and their administrative boundaries. To add labels for populated places to the map, we query the admins theme and calculate centroids of administrative areas.
 
-1. Run the following DuckDB to download placenames from the admins theme for the bounding box to create `placenames.geojson`
+1. The following DuckDB queries downloads placenames from the admins theme within the bounding box and saves it as `seattle_placenames.geojson`
 
     ```sql
      LOAD spatial;
@@ -109,9 +109,9 @@ The admins theme contains named localities and their administrative boundaries. 
 <!-- Buildings -->
 <TabItem value="buildings" label="Buildings" default>
 
-Overture contains billions of buildings across dozens of geoparquet files. The following query will scan the metadata for each file and download only the buildings within our bounding box.
+Overture contains billions of buildings distirbuted across hundreds of geoparquet files.
 
-1. This DuckDB query downloads buildings from Overture to a `GeoJSONSeq` file.
+1. The following DuckDB query reads only the metadata of each file and then downloads *only* the buildings within our bounding box to a line-delimited `GeoJSONSeq` file.
 
     ```sql
     LOAD spatial;
