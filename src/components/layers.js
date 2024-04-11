@@ -30,15 +30,15 @@ const Admins = {
             "text-size": ["step", ["zoom"],
                 14,
                 10,
-                ["match", ["get", "localityType"], ["borough"], 14, ["suburb"], 12, 0],
+                ["match", ["get", "locality_type"], ["borough"], 14, ["suburb"], 12, 0],
                 12,
-                ["match", ["get", "localityType"], ["borough"], 16, ["suburb"], 14, ["neighborhood"], 10, 0],
+                ["match", ["get", "locality_type"], ["borough"], 16, ["suburb"], 14, ["neighborhood"], 10, 0],
                 14,
-                ["match", ["get", "localityType"], ["borough"], 18, ["suburb"], 16, ["neighborhood"], 12, 0],
+                ["match", ["get", "locality_type"], ["borough"], 18, ["suburb"], 16, ["neighborhood"], 12, 0],
                 15,
-                ["match", ["get", "localityType"], ["borough"], 20, ["suburb"], 18, ["neighborhood"], 14, 0],
+                ["match", ["get", "locality_type"], ["borough"], 20, ["suburb"], 18, ["neighborhood"], 14, 0],
                 16,
-                ["match", ["get", "localityType"], ["borough"], 20, ["suburb"], 18, ["neighborhood"], 14, ["block"], 12, 0]
+                ["match", ["get", "locality_type"], ["borough"], 20, ["suburb"], 18, ["neighborhood"], 14, ["block"], 12, 0]
             ],
             "text-transform": ["step", ["zoom"], "none", 11, "uppercase"],
             "text-max-width": 6,
@@ -204,7 +204,7 @@ const Transportation = {
         "type": "line",
         "source": "roads", "source-layer": "roads",
         "minzoom": 14, "maxzoom": 24,
-        "filter": ["match", ["get", "class"], ["parkingAisle", "unknown"], true, false],
+        "filter": ["match", ["get", "class"], ["parking_aisle", "unknown"], true, false],
         "layout": { "line-cap": "round", "line-join": "round" },
         "paint": {
             "line-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.25, 20, 1.3], "line-gap-width": ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0.5, 16, 3.5, 22, 75],
@@ -253,7 +253,7 @@ const Transportation = {
         "source-layer": "roads",
         "minzoom": 14,
         "maxzoom": 24,
-        "filter": ["match", ["get", "class"], ["parkingAisle", "unknown"], true, false],
+        "filter": ["match", ["get", "class"], ["parking_aisle", "unknown"], true, false],
         "layout": {
             "line-cap": "round",
             "line-join": "round"
@@ -419,7 +419,7 @@ const Land = {
         "type": "fill",
         "source": 'base',
         "source-layer": 'land',
-        "filter": ["match", ["get", "subType"], ["land"], true, false],
+        "filter": ["match", ["get", "subtype"], ["land"], true, false],
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
@@ -431,7 +431,7 @@ const Land = {
         "type": "fill",
         "source": 'base',
         "source-layer": 'land',
-        "filter": ["match", ["get", "subType"], ["sand"], true, false],
+        "filter": ["match", ["get", "subtype"], ["sand"], true, false],
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
@@ -443,7 +443,7 @@ const Land = {
         "type": "fill",
         "source": 'base',
         "source-layer": 'land',
-        "filter": ["match", ["get", "subType"], ["wetland"], true, false],
+        "filter": ["match", ["get", "subtype"], ["wetland"], true, false],
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
@@ -455,7 +455,7 @@ const Land = {
         "type": "fill",
         "source": 'base',
         "source-layer": 'land',
-        "filter": ["match", ["get", "subType"], ["forest", "grass", "scrub"], true, false],
+        "filter": ["match", ["get", "subtype"], ["forest", "grass", "scrub"], true, false],
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
@@ -470,7 +470,7 @@ const Landuse = {
         "type": "fill",
         "source": 'base',
         "source-layer": 'landuse',
-        "filter": ["match", ["get", "subType"], ["park"], true, false],
+        "filter": ["match", ["get", "subtype"], ["park"], true, false],
         "minzoom": 0,
         "maxzoom": 24,
         "paint": {
