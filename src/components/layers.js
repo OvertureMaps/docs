@@ -23,7 +23,6 @@ const Admins = {
         "source-layer": "placenames",
         "minzoom": 9,
         "maxzoom": 24,
-        // "filter": ["all", ["has", "name"], ["==", "localityType", "local"]],
         "layout": {
             "text-field": ["get", "name"],
             "text-font": ["Noto Sans Bold"],
@@ -43,7 +42,6 @@ const Admins = {
             "text-transform": ["step", ["zoom"], "none", 11, "uppercase"],
             "text-max-width": 6,
             "symbol-avoid-edges": true,
-            "symbol-sort-key": ["get", "sort_key"],
             "text-padding": 10,
             "text-justify": "auto"
         },
