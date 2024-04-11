@@ -40,40 +40,40 @@ jobs:
           name: primary_docs
           path: build
 
-  build_secondary_docs:
-    name: Build schema documentation
-    runs-on: ubuntu-latest
-    steps:
-      # Now checkout the schema repo?
-      - name: Checkout schema repo
-        uses: actions/checkout@v3
-        with:
-          repository: OvertureMaps/schema
-          ref: dev
-          sparse-checkout: |
-            docusaurus
-            schema
-            examples
+  # build_secondary_docs:
+  #   name: Build schema documentation
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     # Now checkout the schema repo?
+  #     - name: Checkout schema repo
+  #       uses: actions/checkout@v3
+  #       with:
+  #         repository: OvertureMaps/schema
+  #         ref: dev
+  #         sparse-checkout: |
+  #           docusaurus
+  #           schema
+  #           examples
 
-      - name: Install NPM dependencies
-        run: cd docusaurus && npm install
+  #     - name: Install NPM dependencies
+  #       run: cd docusaurus && npm install
 
-      - name: Build the schema reference documentation pages
-        env:
-          DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
-          DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/schema/
-        run: cd docusaurus && npm run build
+  #     - name: Build the schema reference documentation pages
+  #       env:
+  #         DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
+  #         DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/schema/
+  #       run: cd docusaurus && npm run build
 
-      - name: Upload schema reference docs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: secondary_docs
-          path: docusaurus/build
+  #     - name: Upload schema reference docs artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: secondary_docs
+  #         path: docusaurus/build
 
   copy_schema_into_docs_and_deploy:
     needs:
       - build_primary_docs
-      - build_secondary_docs
+      # - build_secondary_docs
     runs-on: ubuntu-latest
     steps:
       - name: Download primary docs
