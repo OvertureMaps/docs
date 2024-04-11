@@ -66,7 +66,7 @@ The places data theme represents business and points of interest in the real wor
 
 <!-- Placenames -->
 <TabItem value="placenames" label="Placenames" default>
-The admins theme contains named localities and their administrative boundaries. To add labels for populated places to the map, we query the admins theme and calculate centroids of administrative areas.
+The admins theme contains named localities and their administrative boundaries. To add labels for populated places to the map, we query the admins theme to get the primary name for each locality.
 
 1. The following DuckDB queries downloads placenames from the admins theme within the bounding box and saves it as `seattle_placenames.geojson`
 
