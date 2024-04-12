@@ -5,55 +5,55 @@ const sidebars = {
 
     {
       type: 'category',
-      label: 'Accessing Data',
+      label: 'Getting Started',
       link: {
         type: 'doc',
-        id: 'accessing-data/index'
+        id: 'getting-started/index'
       },
       collapsed: true,
       items: [
-        'accessing-data/cloud-services',
-        'accessing-data/locally',
-        'accessing-data/example-queries'
+        'getting-started/cloud-services',
+        'getting-started/locally',
+        'getting-started/example-queries'
+        'getting-started/feature-model/index.mdx',
+        'getting-started/feature-model/names.mdx',
+        'getting-started/feature-model/scoping-rules.mdx'
       ]
     },
     {
       type: 'category',
-      label: 'Exploring Data',
+      label: 'Examples',
       link: {
         type: 'doc',
-        id: 'exploring-data/index'
+        id: 'examples/index'
       },
       collapsed: true,
       items: [
-        'exploring-data/kepler-gl',
-        // 'exploring-data/QGIS',
+        'examples/kepler-gl',
+        'examples/rapid-id',
+        'examples/build-a-map'
+        'examples/QGIS',
       ]
     },
     {
       type: 'category',
-      label: 'Visualizing Data',
+      label: 'Guides',
       link: {
         type: 'doc',
-        id: 'visualizing-data/index'
+        id: 'guides/index'
       },
       collapsed: true,
       items: [
-        'visualizing-data/visualizing-places',
-        'visualizing-data/build-a-map'
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Global Entity Reference System',
-      collapsed: true,
-      link: {
-        type: 'doc',
-        id: 'gers/index'
-      },
-      items: [
-        'gers/scenarios',
-        'gers/terminology'
+        'guides/places',
+        'guides/buildings',
+        'guides/admins',
+        'guides/divisions',
+        'guides/transportation/index.mdx'
+        'guides/transportation/roads.mdx'
+        'guides/transportation/travel-modes.mdx'
+        'guides/transportation/shape-connectivity.mdx',
+        'guides/base',
+        'guides/gers'
       ]
     },
     'release-notes',
