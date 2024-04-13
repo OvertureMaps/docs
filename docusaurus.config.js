@@ -24,6 +24,7 @@ const config = {
     overtureRelease: '2024-03-12-alpha.0',
   },
 
+
   // Set the production url of your site here
   url: getFromEnvironment('DOCUSAURUS_URL', defaultUrl),
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -47,6 +48,26 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  themes: ["docusaurus-json-schema-plugin"],
+
+  plugins: [
+    () => ({
+      name: 'custom-docusaurus-plugin',
+      configureWebpack() {
+        return {
+          module: {
+            rules: [
+              {
+                test: /\.pmtiles$/,
+                use: 'raw-loader'
+              },
+            ],
+          },
+        };
+      },
+    }),
+  ],
 
   presets: [
     [

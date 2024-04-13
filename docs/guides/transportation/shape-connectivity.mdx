@@ -35,7 +35,7 @@ types: segments and connectors.
 
 ## Connectors
 
-The [connector](/reference/transportation/connector) feature type
+The [connector](//docs.overturemaps.org/schema/reference/transportation/connector) feature type
 carries point geometry which describes a location where a physical
 connection between two or more segments occurs (or may occur in the
 future).
@@ -52,7 +52,7 @@ modeled on segments.
 
 ## Segments
 
-The [segment](/reference/transportation/segment) feature type carries
+The [segment](//docs.overturemaps.org/schema/reference/transportation/segment) feature type carries
 `LineString` geometry which describes the physical shape of a section of
 the transportation network. A segment may represent an entity with a
 tangible real-world existence, such as a paved road; or it may represent
@@ -209,7 +209,7 @@ back toward the start of the segment.
 
 
 🚧 We are developing a segment-level directionality concept similar to
-[lane directionality](roads#lane-directionality) to indicate what travel
+[lane directionality](/guides/transportation/roads#lane-directionality) to indicate what travel
 headings are allowed or prohibited along the segment. This effort is
 ongoing, so please check back soon.
 
@@ -223,7 +223,7 @@ The `subtype` property may be one of `road`, `rail`, or `water` but
 only `road` is currently well defined. A `road` segment models any kind
 of road, street, or trail, including a dedicated path for walking,
 cycling and similar activities. For more information about `road`
-segments, see the page on [roads](roads).
+segments, see the page on [roads](/guides/transportation/roads).
 
 ### Level (Z-order)
 
@@ -312,7 +312,7 @@ The reason Overture pursues shape stability is to improve the ability to assess 
 two segments from different points in time (or from different upstream data
 sources) represent the same real-world entity. Overture's success at this assessment
 directly feeds into the stability and precision of
-[Global Entity Reference System](/gers) (GERS) IDs assigned to segments. In
+[Global Entity Reference System](/guides/gers) (GERS) IDs assigned to segments. In
 turn, higher GERS ID stability and precision makes transportation theme data
 more useful for conflation.
 
@@ -330,7 +330,7 @@ east-west axis has not. If the back alley is subsequently mapped in the source
 data, the Overture segmentation process can connect to the transportation
 network without having to subdivide any existing segments by simply introducing
 internal connectors on the north-south road segments bordering the block to the
-east and west. As a result, the [GERS](/gers) IDs of the north-south road
+east and west. As a result, the [GERS](/guides/gers) IDs of the north-south road
 segments remain as they were and no data needs to be re-conflated.
 
 <figure>
@@ -384,13 +384,13 @@ a very minor alteration of the segment's shape.
 Many segment properties may include a linear reference so that they apply only
 to a part of the segment geometry. We refer to these linearly-referenced
 property values as being geometrically scoped and discuss geometric scoping
-at greater length in the page on [scoped properties](/overview/feature-model/scoping-rules).
+at greater length in the page on [scoped properties](/guides/feature-model/scoping-rules).
 
 Geometric scoping allows the segmentation algorithm to avoid introducing
 segment splits simply because a certain property has different values along
 different parts of the geometry. Like interior connectors, geometrically-scoped
 properties enable the segmentation process to make decisions that promote shape
-stability, ultimately resulting in more precise and stable [GERS](/gers) IDs and
+stability, ultimately resulting in more precise and stable [GERS](/guides/gers) IDs and
 less churn in conflated data.
 
 <div style={{textAlign: 'center'}}>

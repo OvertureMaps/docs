@@ -2,7 +2,6 @@
 const sidebars = {
   docs: [
     'introduction',
-
     {
       type: 'category',
       label: 'Getting Overture Data',
