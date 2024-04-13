@@ -1,23 +1,21 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   docs: [
-    'index',
+    'introduction',
 
     {
       type: 'category',
-      label: 'Getting Started',
+      label: 'Getting Overture Data',
       link: {
         type: 'doc',
-        id: 'getting-started/index'
+        id: 'getting-data/index'
       },
       collapsed: true,
       items: [
-        'getting-started/cloud-services',
-        'getting-started/locally',
-        'getting-started/example-queries'
-        'getting-started/feature-model/index.mdx',
-        'getting-started/feature-model/names.mdx',
-        'getting-started/feature-model/scoping-rules.mdx'
+        'getting-data/cloud-services',
+        'getting-data/locally',
+        'getting-data/example-queries',
+        'getting-data/overturemaps-py',
       ]
     },
     {
@@ -31,33 +29,67 @@ const sidebars = {
       items: [
         'examples/kepler-gl',
         'examples/rapid-id',
-        'examples/build-a-map'
+        'examples/build-a-map',
         'examples/QGIS',
       ]
     },
     {
       type: 'category',
-      label: 'Guides',
+      label: 'Data Guides',
       link: {
         type: 'doc',
         id: 'guides/index'
       },
       collapsed: true,
       items: [
+        {
+          type: 'category',
+          label: 'Overture Feature Model',
+          link: {
+            type: 'doc',
+            id: 'guides/feature-model/index',
+          },
+          items: [
+            'guides/feature-model/geojson',
+            'guides/feature-model/geoparquet',
+            'guides/feature-model/names',
+            'guides/feature-model/scoping-rules',
+            ],
+        },
+        'guides/gers',
         'guides/places',
         'guides/buildings',
         'guides/admins',
         'guides/divisions',
-        'guides/transportation/index.mdx'
-        'guides/transportation/roads.mdx'
-        'guides/transportation/travel-modes.mdx'
-        'guides/transportation/shape-connectivity.mdx',
         'guides/base',
-        'guides/gers'
+        {
+          type: 'category',
+          label: 'Transportation',
+          link: {
+            type: 'doc',
+            id: 'guides/transportation/index',
+          },
+          items: [
+            'guides/transportation/roads',
+            'guides/transportation/travel-modes',
+            'guides/transportation/shape-connectivity',
+            ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Release Notes',
+      link: {
+        type: 'doc',
+        id: 'release-notes/index'
+      },
+      collapsed: true,
+      items: [
+        'release-notes/data-attribution',
+        'release-notes/breaking-changes',
       ]
     },
-    'release-notes',
-    'data-sources'
   ]
 };
 

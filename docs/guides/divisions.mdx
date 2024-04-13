@@ -1,5 +1,5 @@
 ---
-title: Working with Overture divisions data
+title: Divisions
 ---
 
 The Overture `divisions` theme includes features that represent human settlements in the real world, such as countries, regions, states, cities and towns. 
@@ -13,57 +13,6 @@ The Overture `divisions` theme includes features that represent human settlement
 
 ## Properties of features
 
-This is an overview of the 
-<table>
-  <tr>
-    <th>Type</th>
-    <th>Geometry</th>
-    <th>Example</th>
-    <th>Properties</th>
-  </tr>
-  <tr>
-    <td>`division`</td>
-    <td>`Point`</td>
-    <td>Country, province, city, or neighborhood as seen from a given political perspective</td>
-     <td>
-     <ul>
-     <li>`subtype`: **required**: the `division` type contains two subtypes, country and region.</li>
-     <li>`local_type`: **optional**: string value indicating what the division is called locally, e.g. `subtype` might contain the normalized value "region" while `local_type` might be province, territory, state or "départment, for example.</li>
-     <li>`names`: **required**: standard Overture names object.</li>
-     <li>`hierarchies`: **required**: array of hierarchy arrays (defined below) containing the full descendant hierarchy (or hierarchies) of the `division`.</li>
-     <li>`parent_division_id`: division ID of the division's default parent division; required for certain `subtype` values (e.g. a province, a neighborhood), not allowed for top-level `subtype` values (e.g. a country); the default parent division is the parent division seen from the default perspective, if there is one, and is otherwise chosen somewhat arbitrarily; the reason for having a single scalar-valued property here is also the reason for country and subdivision being scalar: to allow simple use cases to be simple.</li>
-     <li>`country`: **required**: default [ISO 3166-1 alpha-2 country code](https://www.iso.org/iso-3166-country-codes.html) of the country or country-like entity the `division` represents or to which it belongs.
-     <li>`region`: **optional**: default [ISO 3166-2 principal subdivision code](https://www.iso.org/iso-3166-country-codes.html) for entities and the children of those entities. </li>
-     <li>norms: optional norms object (defined below) containing information about local rules and customs applicable in that division and any of its sub-divisions, for example driving side, official and primary languages, etc.</li>
-     <li>perspectives</li>
-     <li>population</li>
-     <li>capital_division_id</li>
-     <li>wikidata</li>
-     </ol>
-     </td>
-  </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Jackson</td>
-    <td>94</td>
-  </tr>
-</table>
-| Type | Geometry | Example | Properties |
-| `division` | `Point` | Country, province, city, or neighborhood as seen from a given political perspective | 1. subType or divisionType: required enumerated type, e.g. country, region, county, locality, neighborhood similar to a Who's on First placetype—from a finite, ordered, hierarchical list—further details can be found below.
-2. localType: optional string value indicating what the division is called locally, e.g. subType might contain the normalized value "region" while localType might be "province", "territory", "state", "départment", etc.
-names: required standard Overture names object.
-perspectives: optional non-empty array of political perspectives (defined below) documenting the political perspectives from which the division is seen.
-hierarchies: required array of hierarchy arrays (defined below) containing the full descendant hierarchy (or hierarchies) of the division.
-parentDivisionId: division ID of the division's default parent division; required for certain subType values (e.g. a province, a neighborhood), not allowed for top-level subType values (e.g. a country); the default parent division is the parent division seen from the default perspective, if there is one, and is otherwise chosen somewhat arbitrarily; the reason for having a single scalar-valued property here is also the reason for country and subDivision being scalar: to allow simple use cases to be simple.
-country: required default ISO 3166-1 alpha-2 country code of the country or country-like entity the division represents or belongs to (a consequence of "or belongs to" is that all divisions, at any level of hierarchy, belonging to a parent country have the ISO country code repeated in this field); in some cases, a sub-country entity like Puerto Rico will have its own value in country ("PR") rather than the parent country's code ("US"); if more than one ancestor division is a country (e.g. in case of different political perspectives) the default country code is found by traversing the parentId chain up to the root.
-subDivision: optional default ISO 3166-2 principal subdivision code for those entities that have one and children of those entities; not allowed for some subType values, e.g. a country; if more than one ancestor division is the top-level principal sub-division (e.g. in case of different political perspectives) the default country code is found by traversing the parentId chain up to the root.
-norms: optional norms object (defined below) containing information about local rules and customs applicable in that division and any of its sub-divisions, for example driving side, official and primary languages, etc.
-demographics: optional demographics object (defined below) containing information about the division's demographics, e.g. population.
-wikidata: optional wikidata ID string; this is included to duplicate the existing structure but probably ought to be folded into a more generalized aliases or concordances property.
 
+  
 
-## Schema reference
-
-- [Explore the schema reference for divisions](/reference/admins/administrative-boundary).
-- [Explore the schema reference for the locality feature type](/reference/admins/locality).
-- [Explore the schema reference for the locality area feature type](/reference/admins/locality-area).
