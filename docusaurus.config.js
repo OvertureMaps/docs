@@ -16,13 +16,14 @@ function getFromEnvironment(variableName, defaultValue) {
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'How-To Guides for Overture Maps',
+  title: 'Overture Maps Documentation',
   tagline: '',
   favicon: 'img/favicon.png',
 
   customFields: {
     overtureRelease: '2024-03-12-alpha.0',
   },
+
 
   // Set the production url of your site here
   url: getFromEnvironment('DOCUSAURUS_URL', defaultUrl),
@@ -47,6 +48,26 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  themes: ["docusaurus-json-schema-plugin"],
+
+  plugins: [
+    () => ({
+      name: 'custom-docusaurus-plugin',
+      configureWebpack() {
+        return {
+          module: {
+            rules: [
+              {
+                test: /\.pmtiles$/,
+                use: 'raw-loader'
+              },
+            ],
+          },
+        };
+      },
+    }),
+  ],
 
   presets: [
     [

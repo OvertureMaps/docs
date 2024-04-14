@@ -1,18 +1,27 @@
 ---
 title: Divisions
 ---
+:::info
 
-The Overture `divisions` theme includes features that represent human settlements in the real world, such as countries, regions, states, cities and towns. 
+Overture Maps [has announced(release-notes/index) the deprecation of the [`admins` schema](admins). We are replacing it with the new `divisions` schema, released in April 2024. Both themes will be available to users through June 2024. In the July 2024 release, `admins` will be removed from Overture Maps. We encourage you to begin the transition to `divisions` now.  
 
+:::
+
+
+## Overview
+
+The Overture Maps `divisions` theme includes features that represent human settlements in the real world, such as countries, regions, states, cities and towns.
 
 ## Divisions feature types
 
-- A `division` is a feature that represents an official or non-official organization of people-- country, region, province, city, neighborhood, etc.-- as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature.
-- An `area` is a feature that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry.
-- A `boundary` is a feature that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water.
+- A `division` is a feature type that represents an official or non-official organization of people-- country, region, province, city, neighborhood, etc.-- as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature.
+- An `area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry.
+- A `boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water.
 
-## Properties of features
+## Schema reference 
 
+- [Explore the schema reference for the `boundary` feature type](https://docs.overturemaps.org/schema/reference/divisions/boundary).
+- [Explore the schema reference for the `division` feature type](https://docs.overturemaps.org/schema/reference/divisions/division).
+- [Explore the schema reference for the `area` feature type](https://docs.overturemaps.org/schema/reference/divisions/area).
 
-  
 

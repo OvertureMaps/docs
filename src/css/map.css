@@ -13,12 +13,13 @@
 button.layer{
     margin: 5px 0;
     padding: 8px 12px;
-    /* background-color: #4a8ad8; */
-    /* color: rgb(232, 222, 222); */
+    background-color: #4a8ad8;
+    color: rgb(232, 222, 222);
     cursor: pointer;
     border: none;
     border-radius: 4px;
-    font-family: 'Londrina Solid', cursive;
+    font-family: Montserrat,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+    font-weight: 600;
     font-size: larger;
 }
 

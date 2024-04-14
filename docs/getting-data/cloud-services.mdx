@@ -8,7 +8,7 @@ import CreateAthenaTable from '!!raw-loader!@site/src/queries/athena/0_create_ex
 import MicrosoftSynapseExample from '!!raw-loader!@site/src/queries/synapse/seattle_places.sql';
 import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.sql';
 
-You can access and query Overture parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account.
+You can access and query Overture Maps parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account.
 
 ## Amazon Athena (AWS)
 
@@ -20,13 +20,13 @@ The Catalog ID is `913550007193`:
     <details>
         <summary>Screenshot</summary>
         <div>
-            ![AWS Glue Catalog](/img/accessing-data/aws-glue-data-catalog-values.png)
+            ![AWS Glue Catalog](/img/getting-data/aws-glue-data-catalog-values.png)
         </div>
     </details>
 
 2. Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name):
 
-    ![AWS Glue Catalog](/img/accessing-data/overture-release-tables.png)
+    ![AWS Glue Catalog](/img/getting-data/overture-release-tables.png)
 
     The `overture` data catalog will be updated with a new table for each release in the future.
 

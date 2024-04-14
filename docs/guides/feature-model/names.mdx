@@ -2,24 +2,23 @@
 title: Names
 ---
 
-import JSONSchemaViewer from "@theme/JSONSchemaViewer";
-import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
-import yamlLoad from "@site/src/components/yamlLoad"
-import MainDefs from "!!raw-loader!@site/docs/_schema/defs.yaml";
+<!-- import JSONSchemaViewer from "@theme/JSONSchemaViewer"; -->
+<!-- import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions" -->
+<!-- import yamlLoad from "@site/src/components/yamlLoad" -->
+<!-- import MainDefs from "!!raw-loader!@site/docs/_schema/defs.yaml"; -->
 
-## Common Names Schema
+## Common names schema
 
-Named entities in Overture share a common name schema.
+Named entities in Overture Map share a common name schema.
 
-### `primary`
+### Primary
 
-If a feature has a name, expect the `names` attribute to have at least one property: `primary`. This will always be populated with the primary, localized name of a feature. Example: "Empire State Building" or "Eiffel Tower"
+If a feature has a name, expect the `names` attribute to have at least one property: `primary`. This will always be populated with the localized name of a feature. Example: "Empire State Building" or "Eiffel Tower"
 
 ```yaml
 names:
   primary: The White House
 ```
-
 
 ### Variations
 
@@ -44,6 +43,7 @@ names:
       value: White House
 ```
 
-## Official Names Schema
+<!-- ## Official Names Schema -->
 
-<JSONSchemaViewer schema={ yamlLoad(MainDefs) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/defs.yaml', jsonPointer: '#/$defs/propertyDefinitions/names'})}/>
+<!-- <JSONSchemaViewer schema={ yamlLoad(MainDefs) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/defs.yaml', jsonPointer: '#/$defs/propertyDefinitions/names'})}/> -->
+

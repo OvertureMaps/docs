@@ -2,7 +2,6 @@
 const sidebars = {
   docs: [
     'introduction',
-
     {
       type: 'category',
       label: 'Getting Overture Data',
@@ -14,7 +13,7 @@ const sidebars = {
       items: [
         'getting-data/cloud-services',
         'getting-data/locally',
-        'getting-data/example-queries',
+        'getting-data/more-queries',
         'getting-data/overturemaps-py',
       ]
     },
@@ -35,7 +34,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Data Guides',
+      label: 'Guides',
       link: {
         type: 'doc',
         id: 'guides/index'
@@ -88,6 +87,7 @@ const sidebars = {
       items: [
         'release-notes/data-attribution',
         'release-notes/breaking-changes',
+        'release-notes/deprecation-notices'
       ]
     },
   ]

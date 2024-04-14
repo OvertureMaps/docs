@@ -1,11 +1,11 @@
 {
-  "name": "overture-how-to",
+  "name": "overture-documentation",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "npm run docusaurus start",
-    "build": "npm run docusaurus build",
+    "start": "./fetch_examples.sh && npm run docusaurus start",
+    "build": "./fetch_examples.sh && npm run docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

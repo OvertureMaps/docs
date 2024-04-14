@@ -11,13 +11,13 @@ In previous releases of Overture data, we used `camelCase` for attribute names t
 LOAD spatial;
 LOAD httpfs:
 
-SELECT 
-   id, 
-   isoSubCountryCode, 
-   contextId, 
+SELECT
+   id,
+   isoSubCountryCode,
+   contextId,
    names.primary,
-   ST_GeomFromWKB(geometry) as geometry   
-FROM 
+   ST_GeomFromWKB(geometry) as geometry
+FROM
    read_parquet('s3://overturemaps-us-west-2/release/2024-02-15-alpha.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
 WHERE type='locality'
    AND subType='administrativeLocality'
@@ -31,13 +31,13 @@ In the March release, we changed all property names and enumeration member names
 LOAD spatial;
 LOAD httpfs:
 
-SELECT 
-   id, 
-   iso_sub_country_code, 
-   context_id, 
+SELECT
+   id,
+   iso_sub_country_code,
+   context_id,
    names.primary,
    ST_GeomFromWKB(geometry) as geometry
-FROM 
+FROM
    read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
 WHERE type='locality'
    AND subtype='administrative_locality'
