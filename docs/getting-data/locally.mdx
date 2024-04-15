@@ -1,0 +1,56 @@
+---
+title: Extracting Data Locally
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import DuckDBCountriesS3 from '!!raw-loader!@site/src/queries/duckdb/countries_from_s3.sql';
+import DuckDBCountriesAzure from '!!raw-loader!@site/src/queries/duckdb/countries_from_azure.sql';
+
+## DuckDB
+
+[DuckDB](https://duckdb.org/) is an analytics tool that can query remote parquet files using SQL. It will only download the subset of files it needs to fulfill your queries. **Note: updating to DuckDB 0.10.0 will dramatically improve query performance** because this version [enables faster row and row-group filtering](https://github.com/duckdb/duckdb/pull/10314) on parquet files containing a `struct`. ([A `struct` is a column](https://arrow.apache.org/blog/2022/10/08/arrow-parquet-encoding-part-2/#:~:text=Struct%20%2F%20Group%20Columns,analogous%20to%20a%20JSON%20object.&text=More%20technical%20detail%20is%20available%20in%20the%20StructArray%20format%20specification) containing one or more other columns in named fields and is analogous to a JSON object.)
+
+[Install DuckDB locally](https://duckdb.org/docs/installation/). You'll need extensions to work with spatial data in the cloud. Using the DuckDB CLI, do the following:
+
+1. `INSTALL SPATIAL;` to install the [duckdb_spatial](https://github.com/duckdblabs/duckdb_spatial) extension.
+2. `INSTALL httpfs;` or `INSTALL azure;` to read from either Amazon S3 ([httpfs](https://duckdb.org/docs/guides/import/s3_import.html)) or Microsoft Azure Blob Storage ([azure](https://duckdb.org/docs/extensions/azure)).
+
+Here is an example query that downloads all of the country boundaries from the `admins` theme and creates a single GeoJSON file:
+
+<Tabs queryString="duckdb-setup" >
+<TabItem value="s3" label="Amazon S3" default>
+
+<QueryBuilder query={DuckDBCountriesS3}></QueryBuilder>
+
+</TabItem>
+<TabItem value="azure" label="Azure" default>
+
+<QueryBuilder query={DuckDBCountriesAzure}></QueryBuilder>
+
+</TabItem>
+</Tabs>
+
+## Apache Sedona (Python + Spatial SQL)
+[Sedona](https://sedona.apache.org/) is a cluster computing system for spatial data. You can get a single-node Sedona Docker image from [Apache Software Foundation DockerHub](https://hub.docker.com/r/apache/sedona) or install Sedona to Databricks, AWS EMR and Snowflake using [Wherobots](https://www.wherobots.ai/demo).
+
+To get started with the single-node docker image, run:
+```bash
+docker pull apache/sedona
+docker run -p 8888:8888 apache/sedona:latest
+```
+
+A Jupyter Lab and notebook examples will then be available at [localhost:8888](http://localhost:8888/). The following Python + Spatial SQL code reads the Places dataset and runs a spatial filter query on it.
+
+```python
+from sedona.spark import *
+
+config = SedonaContext.builder().config("fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider").getOrCreate()
+sedona = SedonaContext.create(config)
+
+df = sedona.read.format("geoparquet").load("s3a://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=places/type=place")
+df.filter("ST_Contains(ST_GeomFromWKT('POLYGON((-122.48 47.43,-122.20 47.75,-121.92 47.37,-122.48 47.43))'), geometry) = true").show()
+```
+
+For more examples from wherobots, check out their Overture-related [Notebook examples](https://github.com/wherobots/OvertureMaps).

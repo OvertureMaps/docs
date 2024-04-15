@@ -1,63 +1,95 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   docs: [
-    'index',
-
+    'introduction',
     {
       type: 'category',
-      label: 'Accessing Data',
+      label: 'Getting Overture Data',
       link: {
         type: 'doc',
-        id: 'accessing-data/index'
+        id: 'getting-data/index'
       },
       collapsed: true,
       items: [
-        'accessing-data/cloud-services',
-        'accessing-data/locally',
-        'accessing-data/example-queries'
+        'getting-data/cloud-services',
+        'getting-data/locally',
+        'getting-data/more-queries',
+        'getting-data/overturemaps-py',
       ]
     },
     {
       type: 'category',
-      label: 'Exploring Data',
+      label: 'Examples',
       link: {
         type: 'doc',
-        id: 'exploring-data/index'
+        id: 'examples/index'
       },
       collapsed: true,
       items: [
-        'exploring-data/kepler-gl',
-        // 'exploring-data/QGIS',
+        'examples/kepler-gl',
+        'examples/rapid-id',
+        'examples/build-a-map',
+        'examples/QGIS',
       ]
     },
     {
       type: 'category',
-      label: 'Visualizing Data',
+      label: 'Guides',
       link: {
         type: 'doc',
-        id: 'visualizing-data/index'
+        id: 'guides/index'
       },
       collapsed: true,
       items: [
-        'visualizing-data/visualizing-places',
-        'visualizing-data/build-a-map'
-      ]
+        {
+          type: 'category',
+          label: 'Overture Feature Model',
+          link: {
+            type: 'doc',
+            id: 'guides/feature-model/index',
+          },
+          items: [
+            'guides/feature-model/geojson',
+            'guides/feature-model/geoparquet',
+            'guides/feature-model/names',
+            'guides/feature-model/scoping-rules',
+            ],
+        },
+        'guides/gers',
+        'guides/places',
+        'guides/buildings',
+        'guides/admins',
+        'guides/divisions',
+        'guides/base',
+        {
+          type: 'category',
+          label: 'Transportation',
+          link: {
+            type: 'doc',
+            id: 'guides/transportation/index',
+          },
+          items: [
+            'guides/transportation/roads',
+            'guides/transportation/travel-modes',
+            'guides/transportation/shape-connectivity',
+            ],
+        },
+      ],
     },
     {
       type: 'category',
-      label: 'Global Entity Reference System',
-      collapsed: true,
+      label: 'Release Notes',
       link: {
         type: 'doc',
-        id: 'gers/index'
+        id: 'release-notes/index'
       },
+      collapsed: true,
       items: [
-        'gers/scenarios',
-        'gers/terminology'
+        'release-notes/data-attribution',
+        'release-notes/breaking-changes',
+        'release-notes/deprecation-notices'
       ]
     },
-    'release-notes',
-    'data-sources'
   ]
 };
 
