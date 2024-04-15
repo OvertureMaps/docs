@@ -7,7 +7,7 @@ SELECT
   names.primary as primary_name,
   height,
   ST_GeomFromWKB(geometry) as geometry
-FROM read_parquet('azure://release/2024-03-12-alpha.0/theme=buildings/type=*/*', filename=true, hive_partitioning=1)
+FROM read_parquet('azure://release/__OVERTURE_RELEASE/theme=buildings/type=*/*', filename=true, hive_partitioning=1)
 WHERE primary_name IS NOT NULL
 AND bbox.xmin > -84.36
 AND bbox.xmax < -82.42
