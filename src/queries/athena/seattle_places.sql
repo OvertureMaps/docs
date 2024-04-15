@@ -8,7 +8,7 @@ FROM
     overture.release.__ATHENA_OVERTURE_RELEASE
 WHERE theme='places'
     AND type='place'
-    AND bbox.xmin > -122.4447744
-        AND bbox.xmax < -122.2477071
-        AND bbox.ymin > 47.5621587
-        AND bbox.ymax < 47.7120663
+    AND bbox.xmin > -122.44
+        AND bbox.xmax < -122.25
+        AND bbox.ymin > 47.56
+        AND bbox.ymax < 47.71

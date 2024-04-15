@@ -6,7 +6,7 @@ SELECT
     sources[1].dataset AS primary_source,
     CAST(names AS JSON) AS names,
     ST_GeomFromBinary(geometry) AS geometry
-FROM overture
+FROM overture.release.__ATHENA_OVERTURE_RELEASE
 WHERE theme='buildings'
     AND type='building'
     AND  bbox.xmin > 78.4194
