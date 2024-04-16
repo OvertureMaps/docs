@@ -20,9 +20,9 @@ COPY (
     FROM
        read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=*/*', hive_partitioning=1)
     WHERE
-        bbox.xmin > -122.4447744
-        AND bbox.xmax < -122.2477071
-        AND bbox.xmin > 47.5621587
-        AND bbox.xmax < 47.7120663
+        bbox.xmin > -122.44
+        AND bbox.xmax < -122.25
+        AND bbox.xmin > 47.56
+        AND bbox.xmax < 47.71
     ) TO 'places_seattle.geojsonseq'
 WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');

@@ -4,9 +4,9 @@ title: Getting Data
 
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-## Official Overture Data Releases
+## Overture Maps data release
 
-Overture's data releases are distributed as geoparquet files available on both Amazon S3 and Microsoft Azure Blob Storage. You do not need AWS or Azure accounts to access the data.
+Overture Maps data is distributed as GeoParquet files available on both Amazon S3 and Microsoft Azure Blob Storage. You do not need AWS or Azure accounts to access the data.
 
 The data is available at the following locations:
 
@@ -20,17 +20,17 @@ The latest release path is:
 
 We _strongly recommend_ accessing the data in the cloud by querying it either [locally](locally) or via [cloud services](cloud-services). This allows you to download only the subset of data you want:
 
-## Accessing in the Cloud
+## Accessing in the cloud
 
-1. [DuckDB (local)](locally)
-1. [Amazon Athena](cloud-services/#amazon-athena-aws)
-1. [Microsoft Synapse](cloud-services/#microsft-synapse-azure)
+- [DuckDB (local)](locally)
+- [Amazon Athena](cloud-services/#amazon-athena-aws)
+- [Microsoft Synapse](cloud-services/#microsft-synapse-azure)
 
 However, it is also possible to download the geoparquet files directly:
 
-## Direct Download
+## Direct download
 
-You can download the Parquet files directly from either Azure Blob Storage or Amazon S3 at the locations given above. **Note: the total size of all of the files is a little over 200 GB.**
+You can download the Parquet files directly from either Azure Blob Storage or Amazon S3 at the locations given above. **Note: the total size of all the files is over 200 GB.**
 
 After installing the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), you can download the files from S3 using the below command. Set `<DESTINATION>` to a local directory path to download the files, or to an `s3://` path you control to copy them into your S3 bucket.
 
@@ -45,12 +45,3 @@ You can download the files from Azure Blob Storage using [Azure Storage Explorer
                 language="text">
 </QueryBuilder>
 
-## Parquet Schema
-
-The Parquet files match the Overture Data Schema for each theme with the following enhancements:
-
-- The `id` column contains unique identifiers in the Global Entity Reference System (GERS) format.
-- The `bbox` column is a `struct` with the following attributes: `minX`, `maxX`, `minY`, `maxY`. This column allows you to craft more efficient spatial queries when running SQL against the cloud.
-- The `geometry` column is encoded as WKB (the files are geoparquet).
-
-Read the [Overture Data Schema Reference](https://docs.overturemaps.org/reference) to understand the Overture Data Schema and see the [`overturemaps/data`](https://github.com/OvertureMaps/data) Github repository for additional information on the latest release.

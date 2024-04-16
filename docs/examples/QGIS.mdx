@@ -5,8 +5,9 @@ title: Overture Maps + QGIS
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+In this example, we'll show you how to get Overture Maps data into [QGIS](https://www.qgis.org/), a powerful and popular open source geographic information system. QGIS can ingest almost every spatial data format, including [Parquet](https://parquet.apache.org/docs/) and [GeoParquet](https://geoparquet.org/). Once you get your data into QGIS, the sky's the limit for data analysis, data conflation, visualization and beautiful mapmaking. 
 
-[QGIS](https://www.qgis.org/), an open source geographic information system can read a number of geospatial data formats. To read Overture data with QGIS, we just need to obtain the data we want in a format that is compatible with QGIS. Additionally, we recommend installing a version of QGIS with GDAL > 3.5 that can read `(geo)parquet`.
+The trickiest part of this example is making sure you're installing a newer version of QGIS (with GDAL > 3.5) that can directly read `Parquet` and `GeoParquet` files. We'll walk you through the processs.
 
 <details>
 
@@ -101,8 +102,15 @@ import TabItem from '@theme/TabItem';
 
 </Tabs>
 
-## 2. Add the data to QGIS
-Add the data retrieved in the previous step to QGIS as you might any other vector layer. The easiest method is to drag-and-drop the file direclty into the application.
+## 2. Clean the data
 
-<!-- Add images and GIFs? --another -->
+We need to clean the data and unpack values from the nested arrays in the attribute fields. This will make it easier for us to work with the data in QGIS.
+
+More instructions TK.
+
+## 3. Add the data to QGIS
+All of the data files we created in Step 1 are vector files that can be added as layers in QGIS. The easiest method is to drag-and-drop the file(s) directly into the map canvas.
+
+<!-- [Overture parquet files in QGIS](/img/qgis-parquet-drag-drop.gif) -->
+<img src='/img/qgis-parquet-drag-drop.gif' alt='Drag-n-drop parquet files in QGIS' width='65%'/> 
 
