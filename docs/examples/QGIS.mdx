@@ -5,7 +5,7 @@ title: Overture Maps + QGIS
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-In this example, we'll show you how to get Overture Maps data into [QGIS](https://www.qgis.org/), a powerful and popular open source geographic information system. QGIS can ingest almost every spatial data format, including [Parquet](https://parquet.apache.org/docs/) and [GeoParquet](https://geoparquet.org/). Once you get your data into QGIS, the sky's the limit for data analysis, data conflation, visualization and beautiful mapmaking. 
+In this example, we'll show you how to get Overture Maps data into [QGIS](https://www.qgis.org/), a powerful and popular open source geographic information system. QGIS can ingest almost every spatial data format, including [Parquet](https://parquet.apache.org/docs/) and [GeoParquet](https://geoparquet.org/). Once you get your data into QGIS, the sky's the limit for data analysis, data conflation, visualization and beautiful mapmaking.
 
 The trickiest part of this example is making sure you're installing a newer version of QGIS (with GDAL > 3.5) that can directly read `Parquet` and `GeoParquet` files. We'll walk you through the processs.
 
@@ -49,10 +49,10 @@ The trickiest part of this example is making sure you're installing a newer vers
             SELECT
 		        *
 	        FROM
-		        read_parquet("s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=*/type=*/*", filename=true, hive_partitioning=1, union_by_name=true)
+		        read_parquet("s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=*/type=*/*", union_by_name=true)
 	        WHERE
-		            bbox.minX >= -105.30 AND bbox.minY >= 39.98
-                AND bbox.maxX <= -105.24 AND bbox.maxY <= 40.07
+		            bbox.xmin >= -105.30 AND bbox.ymin >= 39.98
+                AND bbox.xmax <= -105.24 AND bbox.ymax <= 40.07
         ) TO 'boulder_co_overture.parquet' WITH (FORMAT PARQUET);
         ```
         Note that this query gathers data from all Overture themes with `theme=*/type=*/*`. The resulting file has _all_ of the columns and multiple geometry types.
@@ -73,11 +73,11 @@ The trickiest part of this example is making sure you're installing a newer vers
                 names.primary AS name,
                 JSON_EXTRACT(road, '$.class') AS class,
                 ST_GeomFromWKB(geometry) as geometry
-            FROM read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=transportation/type=segment/*',filename=true, hive_partitioning=1)
+            FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=transportation/type=segment/*')
             WHERE
                 subtype = 'road'
-                AND bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-                AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+                AND bbox.xmin > -122.68 AND bbox.xmax < -121.98
+                AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
         ) TO 'seattle_roads.shp'
         WITH (FORMAT GDAL, DRIVER 'Esri Shapefile', SRS 'EPSG:4326');
         ```
@@ -86,7 +86,7 @@ The trickiest part of this example is making sure you're installing a newer vers
 
     <TabItem value="Python">
 
-        The new `[overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)` Python utility can download Overture data as both `geojson` and `geoparquet`. This example downloads buildlings around Boston.
+        The new [`overturemaps-py`](https://github.com/OvertureMaps/overturemaps-py) Python utility can download Overture data as both `geojson` and `geoparquet`. This example downloads buildlings around Boston.
 
         ```bash
         $ pip install overturemaps
@@ -112,5 +112,4 @@ More instructions TK.
 All of the data files we created in Step 1 are vector files that can be added as layers in QGIS. The easiest method is to drag-and-drop the file(s) directly into the map canvas.
 
 <!-- [Overture parquet files in QGIS](/img/qgis-parquet-drag-drop.gif) -->
-<img src='/img/qgis-parquet-drag-drop.gif' alt='Drag-n-drop parquet files in QGIS' width='65%'/> 
-
+<img src='/img/qgis-parquet-drag-drop.gif' alt='Drag-n-drop parquet files in QGIS' width='65%'/>
