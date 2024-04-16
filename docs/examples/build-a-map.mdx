@@ -35,12 +35,11 @@ The places data theme represents business and points of interest in the real wor
               categories.main as category,
               ROUND(confidence,2) as confidence,
               ST_GeomFromWKB(geometry) as geometry
-          FROM read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=places/*/*',
-                              filename=true, hive_partitioning=1)
+          FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=places/*/*')
           WHERE
               -- Point geometry doesn't require looking at both min and max:
-              bbox.minX BETWEEN -122.68 AND -121.98 AND
-              bbox.minY BETWEEN 47.36 AND 47.79)
+              bbox.xmin BETWEEN -122.68 AND -121.98 AND
+              bbox.ymin BETWEEN 47.36 AND 47.79)
       TO 'seattle_places.geojson'
       WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326');
     ```
@@ -80,10 +79,10 @@ The admins theme contains named localities and their administrative boundaries. 
              locality_type,
              names.primary as name,
              ST_GeomFromWKB(geometry) as geometry
-         FROM read_parquet('azure://release/2024-03-12-alpha.0/theme=admins/type=locality/*',
+         FROM read_parquet('azure://release/2024-04-16-beta.0/theme=admins/type=locality/*',
                              filename=true, hive_partitioning=1)
-         WHERE bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-         AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+         WHERE bbox.xmin > -122.679404 AND bbox.xmax < -121.978275
+         AND bbox.ymin > 47.360619 AND bbox.ymax < 47.786336
      ) TO 'seattle_placenames.geojson'
      WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326');
     ```
@@ -124,9 +123,9 @@ Overture contains billions of buildings distirbuted across hundreds of geoparque
         height,
         level,
         ST_GeomFromWKB(geometry) as geometry
-    FROM read_parquet('azure://release/2024-03-12-alpha.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
-    WHERE bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-    AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+    FROM read_parquet('azure://release/2024-04-16-beta.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
+    WHERE bbox.xmin > -122.68 AND bbox.xmax < -121.98
+    AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
     ) TO 'seattle_buildings.geojsonseq'
     WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
     ```
@@ -165,11 +164,11 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
             names.primary AS name,
             JSON_EXTRACT_STRING(road, '$.class') AS class,
             ST_GeomFromWKB(geometry) as geometry
-        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=transportation/type=segment/*',filename=true, hive_partitioning=1)
+        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=transportation/type=segment/*')
         WHERE
             subtype = 'road'
-            AND bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-            AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+            AND bbox.xmin > -122.68 AND bbox.xmax < -121.98
+            AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
     ) TO 'seattle_roads.geojsonseq'
     WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
     ```
@@ -212,10 +211,10 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
         class,
         names.primary AS name,
         ST_GeomFromWKB(geometry) as geometry
-    FROM read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=base/type=land/*',filename=true, hive_partitioning=1)
+    FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=base/type=land/*')
     WHERE
-        bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-        AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+        bbox.xmin > -122.68 AND bbox.xmax < -121.98
+        AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
     )
     TO 'seattle_land.geojsonseq'
     WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
@@ -236,10 +235,10 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
             names.primary AS name,
             surface,
             ST_GeomFromWKB(geometry) as geometry
-        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=base/type=land_use/*',filename=true, hive_partitioning=1)
+        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=base/type=land_use/*')
         WHERE
-            bbox.minX > -122.679404 AND bbox.maxX < -121.978275
-            AND bbox.minY > 47.360619 AND bbox.maxY < 47.786336
+            bbox.xmin > -122.68 AND bbox.xmax < -121.98
+            AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
         )
     TO 'seattle_land_use.geojsonseq'
     WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
@@ -259,11 +258,11 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
             class,
             names.primary AS name,
             ST_GeomFromWKB(geometry) as geometry
-        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=base/type=water/*',filename=true, hive_partitioning=1)
+        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=base/type=water/*',filename=true, hive_partitioning=1)
         WHERE
             subtype in ('ocean', 'lake', 'pond', 'reservoir', 'river', 'stream', 'water', 'canal')
-            AND bbox.minX > -123 AND bbox.maxX < -122
-            AND bbox.minY > 47 AND bbox.maxY < 48
+            AND bbox.xmin > -123 AND bbox.xmax < -122
+            AND bbox.ymin > 47 AND bbox.ymax < 48
         )
     TO 'seattle_water.geojsonseq'
     WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
