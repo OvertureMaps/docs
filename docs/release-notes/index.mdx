@@ -4,7 +4,11 @@ title: Release Notes
 ---
 ### **`2024-04-16-beta.0` release**
 
-Here are the highlights for what's new and updated in the Overture Maps `2024-04-16-beta.0` release. This is the first release designated as a "beta" release. The beta designation indicates the data and schema are largely stable. Developers wishing to adopt Overture Maps base layers are encouraged to begin evaluating and providing feedback on the data, schema, and GERS IDs. Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.   
+Here are the highlights for what's new and updated in the Overture Maps `2024-04-16-beta.0` release. The "beta" designation indicates the data and schema are largely stable. 
+
+Overture Maps `2024-04-16-beta.0` is available in GeoParquet and stored on AWS and Azure. Users can select the data of interest and download it by following the process outlined [here](https://docs.overturemaps.org/getting-data/).
+
+We encourage developers wishing to adopt Overture Maps base layers to begin evaluating and providing [feedback on the data, schema, and GERS IDs](https://github.com/OvertureMaps/data/discussions). Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.   
 
 ## Breaking changes
 We renamed the `bbox` column fields to align with the upcoming [GeoParquet](https://geoparquet.org/) 1.1 spec. 
@@ -44,12 +48,12 @@ See [here](data-attribution) for information about licensing and data attributio
 
 
 **Places**
-- Included ~53M place records.
-- Included GERS stableids propagated from the previous release; roughly 51M of the ids are propagated and 2M are new.
+- Included ~53 million place records.
+- Included stable GERS IDs propagated from the previous release; roughly 51 million of the IDs are propagated and 2 million are new.
 - Made incremental changes to improve the accuracy and quality of the dataset.
 
 **Transportation**
-- Include OSM data up to 4/7.
+- Included OSM data up to 4/7.
 - Classified 12.2M segments as path.
 - Added `is_covered` flag to denote partially enclosed segments.
 - Improved scope merging; fewer access restrictions entries are now required.
