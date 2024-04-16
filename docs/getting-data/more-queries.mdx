@@ -17,7 +17,7 @@ This query pulls building geometries and selected attributes from the Overture b
 <QueryBuilder query={DetroitBuildings}></QueryBuilder>
 
 
-### Confident Mountains
+### Mountains
 
 This query selects POIs in the mountain category from the Overture places dataset and outputs them to a GeoJSON file.   
 
@@ -31,7 +31,7 @@ Tip: to write the data to a shapefile, replace the last 2 lines with:
 WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
 ```
 
-### Country Polygons
+### Country polygons
 
 This query grabs country-level geometries and their attributes from the admins dataset and outputs them to a GeoJSON file. See [here for examples](https://gist.github.com/danabauer/c50979ead5ce33669ff6c47bfa915319) showing the schema changes for this dataset from July 2023 to February 2024 and beyond.
 

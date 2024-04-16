@@ -49,8 +49,8 @@ const sidebars = {
             id: 'guides/feature-model/index',
           },
           items: [
-            'guides/feature-model/geojson',
-            'guides/feature-model/geoparquet',
+            <!--'guides/feature-model/geojson',-->
+            <!--'guides/feature-model/geoparquet',-->
             'guides/feature-model/names',
             'guides/feature-model/scoping-rules',
             ],
@@ -87,7 +87,7 @@ const sidebars = {
       items: [
         'release-notes/data-attribution',
         'release-notes/breaking-changes',
-        'release-notes/deprecation-notices'
+        <!--'release-notes/deprecation-notices'-->
       ]
     },
   ]
