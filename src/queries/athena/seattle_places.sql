@@ -1,8 +1,7 @@
 SELECT id,
        class,
-       CAST(sources AS JSON) AS sources,
        sources[1].dataset AS primary_source,
-       CAST(names AS JSON) AS names,
+       names.primary AS primary_names,
        ST_GeomFromBinary(geometry) AS geometry
 FROM
     overture.release.__ATHENA_OVERTURE_RELEASE
