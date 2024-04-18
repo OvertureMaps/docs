@@ -5,8 +5,7 @@ SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountNam
 CREATE OR REPLACE VIEW admins_view AS (
     SELECT
         *
-    FROM
-        FROM read_parquet('azure://release/2024-03-12-alpha.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
+    FROM read_parquet('azure://release/__OVERTURE_RELEASE/theme=admins/type=*/*', filename=true, hive_partitioning=1)
 );
 
 COPY (

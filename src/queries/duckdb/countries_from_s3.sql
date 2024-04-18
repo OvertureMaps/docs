@@ -2,11 +2,11 @@ LOAD spatial;
 LOAD httpfs;
 SET s3_region='us-west-2';
 
-CREATE VIEW admins_view AS (
+CREATE OR REPLACE VIEW admins_view AS (
     SELECT
         *
     FROM
-        read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
+        read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=admins/type=*/*', filename=true, hive_partitioning=1)
 );
 
 COPY (

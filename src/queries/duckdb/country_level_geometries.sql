@@ -6,8 +6,9 @@ CREATE OR REPLACE VIEW admins_view AS (
     SELECT
         *
     FROM
-        read_parquet('s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
+        read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
 );
+
 COPY (
     SELECT
             admins.id,
