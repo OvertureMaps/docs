@@ -78,7 +78,13 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/'
         },
-        blog: false,
+        blog: {
+          blogTitle: 'Overture Maps Engineering',
+          blogDescription: 'Technical posts from the Overture Maps engineering team',
+          blogSidebarTitle: 'Overture Maps Engineering Blog',
+          blogSidebarCount: 'ALL',
+          postsPerPage: 'ALL',
+        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -111,9 +117,9 @@ const config = {
             target: '_self'
           },
           {
-            to: 'https://overturemaps.org/news-blogs/',
+            to: 'blog',
             label: 'Blog',
-            target: '_blank',
+            position: 'left',
           },
           {
             to: '/community/',
@@ -123,7 +129,7 @@ const config = {
       },
       footer: {
         style: 'dark',
-        copyright: `Copyright © ${new Date().getFullYear()} Overture Maps Foundation. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Overture Maps Foundation.`,
       },
       prism: {
         theme: lightCodeTheme,

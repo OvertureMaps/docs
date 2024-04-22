@@ -1,0 +1,21 @@
+---
+title: Exploring our beta release
+description: Highlights from Overture Maps beta release
+---
+
+Last week Overture Maps [announced the beta release](https://overturemaps.org/overture-maps-foundation-releases-beta-of-its-first-open-map-dataset/) of our schema and data. After months of hard work and steady improvements, we are nearing production-level stability. In a series of posts over the next few weeks, we’ll unpack some of the changes and improvements you’ll see in the beta release and beyond. 
+
+## Faster and easier to use
+The first thing you might notice with the beta release is how much faster you can [move Overture Maps data out of the cloud and into your system](https://docs.overturemaps.org/getting-data/locally/). We made this possible through the repartitioning and spatial optimization of our GeoParquet files and by working closely with partner companies to improve the developer tools that play nicely with our data. We’ll cover the details of this work in a future blog post. 
+
+<!-- truncate -->
+
+Another highlight of the beta release is the transition to an easier-to-use schema for our administrative boundary data. We first [explored this idea](https://github.com/OvertureMaps/schema/discussions/117) with the Overture Maps community in February, and after two short months of work, the [new divisions schema and data](https://docs.overturemaps.org/guides/divisions/) are ready to go. We announced our plan to [deprecate admins](https://docs.overturemaps.org/release-notes/), the original schema, by the July release. In the meantime, both admins and divisions will be available to users. We'll dig into use cases or our `divisions` data in an upcoming post. 
+
+## Bridges, islands, graveyards, and more!
+In the beta release, we added more rich detail to our `base` layer, including an `infrastructure` type that adds familiar features from [Facebook’s Daylight map distribution](https://daylightmap.org/): `bridges`, `power_lines`, `aerialways`, and more. We also added new classes for the `land` feature type, including `desert`, `island`, `mountain_range`, `plateau`, and more. To our `land_use` feature type we added `beach_resort`, `graveyard`, `pedestrian`, and `plaza` classes. Our `water` feature type now includes `bay`, `blowhole`, `geyser`, `hot_spring`, and `waterfall` classes. Ready to make your own map? We have a [tutorial to help you get started](https://docs.overturemaps.org/examples/build-a-map/#13/47.6/-122.33/0/45). 
+
+## Stay tuned for more highlights
+We'll be back next week with more posts about our beta release. In the meantime, we invite you to [get started with our data](https://docs.overturemaps.org/getting-data/) and share with us your [comments and feedback](https://github.com/OvertureMaps/data/discussions). 
+
+
