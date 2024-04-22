@@ -83,7 +83,6 @@ const config = {
           blogDescription: 'Technical posts from the Overture Maps engineering team',
           blogSidebarTitle: 'Overture Maps Engineering Blog',
           blogSidebarCount: 'ALL',
-          postsPerPage: 'ALL',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
