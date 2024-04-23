@@ -7,6 +7,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Map from '@site/src/components/map';
 import {Admins, Buildings, Places, Transportation, Water, Landuse, Land} from '@site/src/components/layers.js';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import SeattlePlaces from '!!raw-loader!@site/src/queries/duckdb/seattle_places_for_map.sql';
+import SeattlePlacenames from '!!raw-loader!@site/src/queries/duckdb/seattle_placenames_for_map.sql';
+import SeattleBuildings from '!!raw-loader!@site/src/queries/duckdb/seattle_buildings_for_map.sql';
+import SeattleRoads from '!!raw-loader!@site/src/queries/duckdb/seattle_roads_for_map.sql';
+import SeattleLand from '!!raw-loader!@site/src/queries/duckdb/seattle_land_for_map.sql';
+import SeattleLanduse from '!!raw-loader!@site/src/queries/duckdb/seattle_land_use_for_map.sql';
+import SeattleWater from '!!raw-loader!@site/src/queries/duckdb/seattle_water_for_map.sql';
+
+
 
 <Map></Map>
 
@@ -23,26 +33,8 @@ The places data theme represents business and points of interest in the real wor
 
 1. The following DuckDB query downloads places data within a specific bounding box and writes a `GeoJSON` file.
 
-    ```sql
-      LOAD spatial;
-      LOAD httpfs;
-      -- Access the data on AWS in this example
-      SET s3_region='us-west-2';
+    <QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
-      COPY (
-          SELECT
-              names.primary AS name,
-              categories.main as category,
-              ROUND(confidence,2) as confidence,
-              ST_GeomFromWKB(geometry) as geometry
-          FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=places/*/*')
-          WHERE
-              -- Point geometry doesn't require looking at both min and max:
-              bbox.xmin BETWEEN -122.68 AND -121.98 AND
-              bbox.ymin BETWEEN 47.36 AND 47.79)
-      TO 'seattle_places.geojson'
-      WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326');
-    ```
 
 2. Next, create a `pmtiles` archive from `seattle_places.geojson` with [tippecanoe](https://github.com/felt/tippecanoe).
 
@@ -68,24 +60,7 @@ The admins theme contains named localities and their administrative boundaries. 
 
 1. The following DuckDB queries downloads placenames from the admins theme within the bounding box and saves it as `seattle_placenames.geojson`
 
-    ```sql
-     LOAD spatial;
-     LOAD azure;
-     -- Access the data on Microsoft Azure in this example
-     SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=overturemapswestus2;AccountKey=;EndpointSuffix=core.windows.net';
-     COPY (
-         SELECT
-             subtype,
-             locality_type,
-             names.primary as name,
-             ST_GeomFromWKB(geometry) as geometry
-         FROM read_parquet('azure://release/2024-04-16-beta.0/theme=admins/type=locality/*',
-                             filename=true, hive_partitioning=1)
-         WHERE bbox.xmin > -122.679404 AND bbox.xmax < -121.978275
-         AND bbox.ymin > 47.360619 AND bbox.ymax < 47.786336
-     ) TO 'seattle_placenames.geojson'
-     WITH (FORMAT GDAL, DRIVER 'GeoJSON', SRS 'EPSG:4326');
-    ```
+    <QueryBuilder query={SeattlePlacenames}></QueryBuilder>
 
 2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `seattle_placenames.geojson`
 
@@ -111,24 +86,7 @@ Overture contains billions of buildings distirbuted across hundreds of geoparque
 
 1. The following DuckDB query reads only the metadata of each file and then downloads *only* the buildings within our bounding box to a line-delimited `GeoJSONSeq` file.
 
-    ```sql
-    LOAD spatial;
-    LOAD azure;
-
-    -- Access the data on Microsoft Azure in this example
-    SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=overturemapswestus2;AccountKey=;EndpointSuffix=core.windows.net';
-    COPY (
-    SELECT
-        names.primary as name,
-        height,
-        level,
-        ST_GeomFromWKB(geometry) as geometry
-    FROM read_parquet('azure://release/2024-04-16-beta.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
-    WHERE bbox.xmin > -122.68 AND bbox.xmax < -121.98
-    AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
-    ) TO 'seattle_buildings.geojsonseq'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
-    ```
+    <QueryBuilder query={SeattleBuildings}></QueryBuilder>
 
 2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `seattle_buildings.geojsonseq`
 
@@ -155,23 +113,8 @@ Overture contains billions of buildings distirbuted across hundreds of geoparque
 The Overture Maps transportation theme has two types: `connectors` and `segments`. Since we want to render the road lines, we will query for `type=segment`.
 
 1. This DuckDB query downloads road segments from Overture to a `GeoJSONSeq` file.
-    ```sql
-    LOAD spatial;
-    LOAD httpfs;
-    COPY (
-        SELECT
-            level,
-            names.primary AS name,
-            JSON_EXTRACT_STRING(road, '$.class') AS class,
-            ST_GeomFromWKB(geometry) as geometry
-        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=transportation/type=segment/*')
-        WHERE
-            subtype = 'road'
-            AND bbox.xmin > -122.68 AND bbox.xmax < -121.98
-            AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
-    ) TO 'seattle_roads.geojsonseq'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
-    ```
+
+    <QueryBuilder query={SeattleRoads}></QueryBuilder>
 
 2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `seattle_roads.geojsonseq`
 
@@ -202,71 +145,21 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
     <details>
         <summary>1. DuckDB query to produce `land.geojsonseq`</summary>
 
-    ```sql
-    LOAD spatial;
-    LOAD httpfs;
-    COPY (
-    SELECT
-        subtype,
-        class,
-        names.primary AS name,
-        ST_GeomFromWKB(geometry) as geometry
-    FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=base/type=land/*')
-    WHERE
-        bbox.xmin > -122.68 AND bbox.xmax < -121.98
-        AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
-    )
-    TO 'seattle_land.geojsonseq'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
-    ```
+    <QueryBuilder query={SeattleLand}></QueryBuilder>
 
     </details>
 
     <details>
         <summary>2. DuckDB query to produce `land_use.geojsonseq`</summary>
 
-    ```sql
-    LOAD spatial;
-    LOAD httpfs;
-    COPY (
-        SELECT
-            subtype,
-            class,
-            names.primary AS name,
-            surface,
-            ST_GeomFromWKB(geometry) as geometry
-        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=base/type=land_use/*')
-        WHERE
-            bbox.xmin > -122.68 AND bbox.xmax < -121.98
-            AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
-        )
-    TO 'seattle_land_use.geojsonseq'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
-    ```
+    <QueryBuilder query={SeattleLanduse}></QueryBuilder>
 
     </details>
 
     <details>
         <summary>3. DuckDB query to produce `water.geojsonseq`</summary>
 
-    ```sql
-    LOAD spatial;
-    LOAD httpfs;
-    COPY (
-        SELECT
-            subtype,
-            class,
-            names.primary AS name,
-            ST_GeomFromWKB(geometry) as geometry
-        FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=base/type=water/*',filename=true, hive_partitioning=1)
-        WHERE
-            subtype in ('ocean', 'lake', 'pond', 'reservoir', 'river', 'stream', 'water', 'canal')
-            AND bbox.xmin > -123 AND bbox.xmax < -122
-            AND bbox.ymin > 47 AND bbox.ymax < 48
-        )
-    TO 'seattle_water.geojsonseq'
-    WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
-    ```
+    <QueryBuilder query={SeattleWater}></QueryBuilder>
 
     Note: We use a slightly larger bounding box to capture the Ocean water polygons, too
 
