@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[2535],{5641:e=>{e.exports=JSON.parse('{"title":"Overture Maps Engineering Blog","items":[{"title":"Exploring our beta release","permalink":"/blog/2024/04/22/beta-release","unlisted":false},{"title":"Welcome!","permalink":"/blog/2024/04/21/welcome","unlisted":false}]}')}}]);
