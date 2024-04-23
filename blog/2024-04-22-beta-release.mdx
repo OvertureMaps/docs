@@ -2,14 +2,60 @@
 title: Exploring our beta release
 description: Highlights from Overture Maps beta release
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-Last week Overture Maps [announced the beta release](https://overturemaps.org/overture-maps-foundation-releases-beta-of-its-first-open-map-dataset/) of our schema and data. After months of hard work and steady improvements, we are nearing production-level stability. In a series of posts over the next few weeks, we’ll unpack the highlights and improvements you'll see in this release and beyond. 
+Last week Overture Maps [announced the beta release](https://overturemaps.org/overture-maps-foundation-releases-beta-of-its-first-open-map-dataset/) of our schema and data. After months of hard work and steady improvements, we are nearing production-level stability. In a series of posts over the next few weeks -- starting with this one -- we’ll unpack the highlights and improvements you'll see in this release and beyond. 
 
 ## Making geospatial fast
-The first thing you'll notice is how much faster you can [move Overture Maps data out of the cloud and into your system](https://docs.overturemaps.org/getting-data/locally/). We made this possible by working closely with open-source collaborators on the repartitioning and [spatial optimization](https://cloudnativegeo.org/blog/2024/03/coming-soon-geoparquet-1.1/) of our GeoParquet files. We also partnered with DuckDB to [improve the way their tooling](https://github.com/duckdb/duckdb/pull/10314) interacts with our data. With the folks at Development Seed, an [Overture Maps Foundation member](https://overturemaps.org/about/members/), we're building special tools for Overture Maps data on top of [lonboard](https://developmentseed.org/lonboard/latest/), their Python library for visualizing large geospatial datasets in Jupyter. And recently our friends at Wherobots [took a comprehensive look](https://wherobots.com/overture-maps-data-cloud-native-geoparquet-apache-sedona/) at how our use of GeoParquet makes querying and analyzing our data with Apache Sedona super efficient. The community continues to move forward together, iterating on data, software, and specifications with the shared goal of making geospatial **_fast_** and fun.
+The first thing you'll notice is how much faster you can [pull Overture Maps data for your area of interest out of the cloud](https://docs.overturemaps.org/getting-data/locally/). We made this possible by working closely with open-source collaborators on the repartitioning and [spatial optimization](https://cloudnativegeo.org/blog/2024/03/coming-soon-geoparquet-1.1/) of our GeoParquet files. We also partnered with DuckDB to [improve the way their tooling](https://github.com/duckdb/duckdb/pull/10314) interacts with our data. 
+
+<details>
+
+<summary>Query speeds have improved significantly from our February release to the April beta release. This example compares DuckDB queries for buildings in Philadelphia. [See here for more information about our performance testing](https://github.com/opengeospatial/geoparquet/discussions/188#discussioncomment-8909348).</summary>
+
+    <Tabs>
+        <TabItem value="february" label="2024-02-15-alpha.0 release" default>
+            ```
+            SELECT 
+            *
+            FROM 
+                read_parquet('s3://overturemaps-us-west-2/release/2024-02-15-alpha.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
+            WHERE 
+                bbox.minx > -75.60154
+                AND bbox.maxx < -74.955763
+                AND bbox.miny > 39.867004
+                AND bbox.maxy < 40.137992;
+            ```
+            820,915 buildings   
+            ~120s
+        </TabItem>
+
+    
+        <TabItem value="april" label="2024-04-16-beta.0 release" default>
+            ```
+            SELECT 
+            *
+            FROM   
+                read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
+            WHERE 
+                bbox.xmin > -75.60154
+                AND bbox.xmax < -74.955763
+                AND bbox.ymin > 39.867004
+                AND bbox.ymax < 40.137992
+            ```
+            852,487 buildings    
+            ~25s
+        </TabItem>
+    </Tabs>
+</details>
+
+We're still working to makes things faster and easier. Along with the folks at Development Seed, an [Overture Maps Foundation member](https://overturemaps.org/about/members/), we're [building special tools for Overture Maps data on top of lonboard](https://developmentseed.org/lonboard/latest/examples/overture-maps/), their Python library for visualizing large geospatial datasets in Jupyter. And recently our friends at Wherobots [took a comprehensive look](https://wherobots.com/overture-maps-data-cloud-native-geoparquet-apache-sedona/) at how our use of GeoParquet makes querying and analyzing our data with Apache Sedona very efficient. 
+
+We're moving forward with the community to iterate on data, software, and specifications with the shared goal of making geospatial **_fast_**.
 
 ## Easier-to-use schema
-Another highlight of the beta release is the transition to an easier-to-use schema for our administrative boundary data. We first [explored this idea](https://github.com/OvertureMaps/schema/discussions/117) with the Overture Maps community in February, and after two short months of work, the [new divisions schema and data](https://docs.overturemaps.org/guides/divisions/) are ready to go. Now we can use DuckDB to grab all the countries in the world like this:
+Another highlight of the beta release is the transition to an easier-to-use schema for our administrative boundary data. We first [explored this idea](https://github.com/OvertureMaps/schema/discussions/117) with the Overture Maps community in February, and after two short months of work, the [new divisions schema and data](https://docs.overturemaps.org/guides/divisions/) are ready to go. Here's a query to `divisions` that grabs geometries for all the countries in the world:
 
 ```
 SELECT *
@@ -17,38 +63,55 @@ SELECT *
 WHERE subtype = 'country';
 ```
  
- With the admins schema, we need a two-part query that's a bit of a doozy.
+ You can see that the `divisions` query above is much simpler than a comparable query to `admins`:
 
 
 ```
-CREATE OR REPLACE VIEW admins_view AS (
-    SELECT
-        *
-    FROM
-        read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
-);
+WITH admins AS (
+    SELECT *
+    FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
+  )
 
-SELECT
-    admins.id,
-    areas.area_id,
-    ST_GeomFromWKB(areas.area_geometry) as geometry
-FROM admins_view AS admins
-    INNER JOIN (
-        SELECT
-            id as area_id,
-            locality_id,
-            geometry AS area_geometry
-        FROM admins_view
-    ) AS areas ON areas.locality_id == admins.id
-WHERE admins.admin_level = 1
+  SELECT *
+    FROM admins country_locality
+    JOIN admins country_area
+      ON country_area.locality_id = country_locality.id
+   WHERE country_locality.locality_type = 'country';
+
 ```    
 
-We plan to [deprecate admins](https://docs.overturemaps.org/release-notes/) by July. In the meantime, both `admins` and `divisions` will be available to users. 
+We plan to [deprecate admins](https://docs.overturemaps.org/release-notes/) by the July release. In the meantime, both `admins` and `divisions` will be available to users. 
 
-## Bridges, islands, graveyards, and more!
-We added more rich detail to our `base` layer in this release, including an `infrastructure` type that adds familiar features from [Facebook’s Daylight map distribution](https://daylightmap.org/): `bridges`, `power_lines`, `aerialways`, and more. We also added new classes for the `land` feature type, including `desert`, `island`, `mountain_range`, `plateau`, and more. To our `land_use` feature type we added `beach_resort`, `graveyard`, `pedestrian`, and `plaza` classes. Our `water` feature type now includes `bay`, `blowhole`, `geyser`, `hot_spring`, and `waterfall` classes. Ready to make your own map? We have a [tutorial to help you get started](https://docs.overturemaps.org/examples/build-a-map/#13/47.6/-122.33/0/45). 
+## Bridges, islands, waterfalls, and more!
+We added more rich detail to our `base` layer in this release, including an `infrastructure` type with familiar features from [Facebook’s Daylight map distribution](https://daylightmap.org/). We also added new subtypes and classes for the `land`, `land_use`, and `water` feature types. We listed a few of the new features below, with icons from the [Noun Project](https://thenounproject.com/) just for fun. You'll find a comprehensive listing of the subtypes and classes for each feature type in our [schema reference docs](https://docs.overturemaps.org/schema/reference/base/infrastructure). 
+
+| `infrastructure`| |
+| ----- | ----- |
+| `bridge` | ![bridge](/img/blog/bridges.png) |
+| `power_line` | ![power lines](/img/blog/power-lines.png) |
+| `aerialway` | ![cable car](/img/blog/cable-car.png) |
+
+| `land`|          |
+| ----- | ----- |
+| `desert` | ![desert](/img/blog/desert.png) |
+| `mountain_range` | ![mountain range](/img/blog/mountain-range.png) |
+| `plateau` | ![plateau](/img/blog/plateau.png) |
+
+
+| `land_use`|      |
+| ----- | ----- |
+| `beach_resort`| ![beach resort](/img/blog/beach-resort.png) |
+| `graveyard` | ![graveyard](/img/blog/graveyard.png) |
+
+
+| `water`|        |
+| ----- | ----- |
+| `blowhole` | ![blowhole](/img/blog/blowhole.png) |
+| `waterfall` | ![waterfall](/img/blog/waterfall.png) |
+
+Ready to make your own map? We have a [tutorial to help you get started](https://docs.overturemaps.org/examples/build-a-map/#13/47.6/-122.33/0/45). 
 
 ## Stay tuned for more highlights
-We'll be back next week with more posts that tell the stories of how we got to beta and how we plan to get to production. In the meantime, we invite you to [get started with our data](https://docs.overturemaps.org/getting-data/) and share with us your [comments and feedback](https://github.com/OvertureMaps/data/discussions). 
+We'll be back next week with more posts that tell the stories of how we got to the beta release and how we plan to get to production. In the meantime, we invite you to [get started with our data](https://docs.overturemaps.org/getting-data/) and share with us your [comments and feedback](https://github.com/OvertureMaps/data/discussions). 
 
 
