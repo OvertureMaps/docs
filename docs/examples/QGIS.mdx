@@ -4,6 +4,9 @@ title: Overture Maps + QGIS
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import BoulderCoDuckDB from '!!raw-loader!@site/src/queries/duckdb/boulder_co_duckdb.sql';
+import BoulderCoDuckDBSpatial from '!!raw-loader!@site/src/queries/duckdb/boulder_co_duckdb_spatial.sql';
 
 In this example, we'll show you how to get Overture Maps data into [QGIS](https://www.qgis.org/), a powerful and popular open source geographic information system. QGIS can ingest almost every spatial data format, including [Parquet](https://parquet.apache.org/docs/) and [GeoParquet](https://geoparquet.org/). Once you get your data into QGIS, the sky's the limit for data analysis, data conflation, visualization and beautiful mapmaking.
 
@@ -15,9 +18,9 @@ The trickiest part of this example is making sure you're installing a newer vers
 
     <Tabs>
         <TabItem value="mac" label="MacOS" default>
-            The [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
-
             You can find the latest installers for Mac here: [github.com/opengisch/qgis-conda-builder/releases](https://github.com/opengisch/qgis-conda-builder/releases)
+
+            Additionally, the [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
         </TabItem>
 
         <TabItem value="windows" label="Windows" default>
@@ -43,18 +46,8 @@ The trickiest part of this example is making sure you're installing a newer vers
 
         Using only the `bbox` parameters, we can efficiently retrieve all Overture data without processing any geometries. With SELECT `*`, we will simply download _all_ of the data in Overture across all themes and types. Note: if your query is interupted by a connection error, you might try running the following command first: `SET http_keep_alive=false;`.
 
-        ```sql
-        LOAD httpfs;
-        COPY(
-            SELECT
-		        *
-	        FROM
-		        read_parquet("s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=*/type=*/*", union_by_name=true)
-	        WHERE
-		            bbox.xmin >= -105.30 AND bbox.ymin >= 39.98
-                AND bbox.xmax <= -105.24 AND bbox.ymax <= 40.07
-        ) TO 'boulder_co_overture.parquet' WITH (FORMAT PARQUET);
-        ```
+        <QueryBuilder query={BoulderCoDuckDB}></QueryBuilder>
+
         Note that this query gathers data from all Overture themes with `theme=*/type=*/*`. The resulting file has _all_ of the columns and multiple geometry types.
 
 
@@ -64,23 +57,7 @@ The trickiest part of this example is making sure you're installing a newer vers
 
         The `spatial` plugin allows DuckDB to read the geometry and convert the file to a common spatial format. This query will download all of the `road` subtypes of `segments` in the `transportation` theme to a _shapefile_.
 
-        ```sql
-        LOAD spatial;
-        LOAD httpfs;
-        -- Roads
-        COPY (
-            SELECT
-                names.primary AS name,
-                JSON_EXTRACT(road, '$.class') AS class,
-                ST_GeomFromWKB(geometry) as geometry
-            FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=transportation/type=segment/*')
-            WHERE
-                subtype = 'road'
-                AND bbox.xmin > -122.68 AND bbox.xmax < -121.98
-                AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
-        ) TO 'seattle_roads.shp'
-        WITH (FORMAT GDAL, DRIVER 'Esri Shapefile', SRS 'EPSG:4326');
-        ```
+        <QueryBuilder query={BoulderCoDuckDBSpatial}></QueryBuilder>
 
     </TabItem>
 
