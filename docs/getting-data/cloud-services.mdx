@@ -26,7 +26,10 @@ The Catalog ID is `913550007193`:
 
 2. Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name):
 
-    ![AWS Glue Catalog](/img/getting-data/overture-release-tables.png)
+    ![Release Tables](/img/getting-data/overture-release-tables.png)
+
+        
+
 
     The `overture` data catalog will be updated with a new table for each release in the future.
 
@@ -34,7 +37,7 @@ The Catalog ID is `913550007193`:
 
     <QueryBuilder query={AthenaSelectExample}></QueryBuilder>
 
-    Example Athena SQL query to download a CSV of places in Seattle:
+    Example Athena SQL query to get places in Seattle:
 
     <QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
