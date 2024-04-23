@@ -52,7 +52,7 @@ The first thing you'll notice is how much faster you can [pull Overture Maps dat
 
 We're still working to makes things faster and easier. Along with the folks at Development Seed, an [Overture Maps Foundation member](https://overturemaps.org/about/members/), we're [building special tools for Overture Maps data on top of lonboard](https://developmentseed.org/lonboard/latest/examples/overture-maps/), their Python library for visualizing large geospatial datasets in Jupyter. And recently our friends at Wherobots [took a comprehensive look](https://wherobots.com/overture-maps-data-cloud-native-geoparquet-apache-sedona/) at how our use of GeoParquet makes querying and analyzing our data with Apache Sedona very efficient. 
 
-We're moving forward with the community to iterate on data, software, and specifications with the shared goal of making geospatial **_fast_**.
+As you can see, we're moving forward with the community to iterate on data, software, and specifications with the shared goal of making geospatial **_fast_**.
 
 ## Easier-to-use schema
 Another highlight of the beta release is the transition to an easier-to-use schema for our administrative boundary data. We first [explored this idea](https://github.com/OvertureMaps/schema/discussions/117) with the Overture Maps community in February, and after two short months of work, the [new divisions schema and data](https://docs.overturemaps.org/guides/divisions/) are ready to go. Here's a query to `divisions` that grabs geometries for all the countries in the world:
@@ -83,7 +83,7 @@ WITH admins AS (
 We plan to [deprecate admins](https://docs.overturemaps.org/release-notes/) by the July release. In the meantime, both `admins` and `divisions` will be available to users. 
 
 ## Bridges, islands, waterfalls, and more!
-We added more rich detail to our `base` layer in this release, including an `infrastructure` type with familiar features from [Facebook’s Daylight map distribution](https://daylightmap.org/). We also added new subtypes and classes for the `land`, `land_use`, and `water` feature types. We listed a few of the new features below, with icons from the [Noun Project](https://thenounproject.com/) just for fun. You'll find a comprehensive listing of the subtypes and classes for each feature type in our [schema reference docs](https://docs.overturemaps.org/schema/reference/base/infrastructure). 
+We added more rich detail to our `base` layer in this release, including an `infrastructure` type with familiar features from [Facebook’s Daylight map distribution](https://daylightmap.org/). We also added new subtypes and classes for the `land`, `land_use`, and `water` feature types. We listed a few of the new features below, with icons from the [Noun Project](https://thenounproject.com/) just for fun. You'll find a comprehensive listing of the subtypes and classes for each feature type in our [schema reference docs](https://docs.overturemaps.org/schema/reference/base/infrastructure). Ready to make your own map? We have a [tutorial to help you get started](https://docs.overturemaps.org/examples/build-a-map/#13/47.6/-122.33/0/45).
 
 | `infrastructure`| |
 | ----- | ----- |
@@ -109,9 +109,8 @@ We added more rich detail to our `base` layer in this release, including an `inf
 | `blowhole` | ![blowhole](/img/blog/blowhole.png) |
 | `waterfall` | ![waterfall](/img/blog/waterfall.png) |
 
-Ready to make your own map? We have a [tutorial to help you get started](https://docs.overturemaps.org/examples/build-a-map/#13/47.6/-122.33/0/45). 
-
+ 
 ## Stay tuned for more highlights
-We'll be back next week with more posts that tell the stories of how we got to the beta release and how we plan to get to production. In the meantime, we invite you to [get started with our data](https://docs.overturemaps.org/getting-data/) and share with us your [comments and feedback](https://github.com/OvertureMaps/data/discussions). 
+We'll be back next week with more posts that explore our path from the beta release to production. In the meantime, we invite you to [get started with our data](https://docs.overturemaps.org/getting-data/) and share with us your [comments and feedback](https://github.com/OvertureMaps/data/discussions). 
 
 
