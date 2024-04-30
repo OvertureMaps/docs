@@ -18,10 +18,20 @@ You can access and query Overture Maps parquet files directly in the cloud using
 
 ### 1. Add Overture as a data source
 
-Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html). The Catalog ID is `913550007193` and the permissions policy required for querying is listed below.
+Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html). The Catalog ID is `913550007193`. 
+
+  <details>
+        <summary>AWS Glue Data Catalog</summary>
+        <div>
+            ![AWS Glue Catalog](/img/getting-data/aws-glue-data-catalog-values.png)
+        </div>
+    </details>
+
+
+Depending on the permissions attached to your AWS user account/role, you may need to explicitly enable access to the Overture catalog. You can do that by [adding a new IAM policy](https://console.aws.amazon.com/iam/home?#/policies?type=customer)-- we suggest calling it `OvertureGlueCatalogAccess` -- with the following permissions: 
 
 <details>
-  <summary>IAM Policy for Overture Glue catalog access</summary>
+  <summary>IAM policy for Overture Glue Data Catalog access</summary>
   <div>
 ```json
 {
@@ -42,16 +52,10 @@ Add Overture as a cross-account data source using [these instructions](https://d
     }
   ]
 }
-{insert fence here}
+```
   </div>
 </details>
 
-  <details>
-        <summary>Screenshot</summary>
-        <div>
-            ![AWS Glue Catalog](/img/getting-data/aws-glue-data-catalog-values.png)
-        </div>
-    </details>
 
 
 ### 2. Inspect release tables 
@@ -59,7 +63,7 @@ Add Overture as a cross-account data source using [these instructions](https://d
 Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name). The `overture` data catalog will be updated with a new table for each new release.
 
  <details>
-        <summary>Screenshot</summary>
+        <summary>Overture Maps release tables</summary>
         <div>
             ![Release Tables](/img/getting-data/overture-release-tables.png)
         </div>
@@ -68,11 +72,11 @@ Now each release is available as a table under the `release` database in the `ov
    
 ### 3. Access data from a release table
 
-Access Overture data in a particular release like this:
+You can access Overture Maps data in a particular release like this:
 
     <QueryBuilder query={AthenaSelectExample}></QueryBuilder>
 
-    Example Athena SQL query to get places in Seattle:
+ Here's how you might write an Athena SQL query to get Overture Maps places in Seattle:
 
     <QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
@@ -85,7 +89,7 @@ More information on using Athena is available in the [Amazon Athena User Guide](
 If you prefer to create the table in your own data catalog, you can run the complete DDL query in the Athena Query Console. This will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket.
 
 <details>
-    <summary>DDL Query Statement</summary>
+    <summary>DDL query statement</summary>
     <div>
         <QueryBuilder query={CreateAthenaTable}></QueryBuilder>
     </div>
@@ -97,7 +101,11 @@ After you run the set-up query, you can load the partitions by running `MSCK REP
 
 If you want to share this catalog with other users and accounts, you'll need to add a policy enabling cross-account Glue catalog access. To do so, navigate to the [data catalog settings](https://console.aws.amazon.com/glue/home#/v2/security/settings) and add a catalog policy that looks this:
 
-```
+<details>
+  <summary>Policy for sharing Overture Maps catalog</summary>
+  <div>
+
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -119,9 +127,11 @@ If you want to share this catalog with other users and accounts, you'll need to 
 }
 ```
 `release` is the name of the database containing Overture tables.
+</div>
+</details>
 
 
-## Microsft Synapse (Azure)
+## Microsoft Synapse (Azure)
 
 In your Azure account, create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace). You can then run this SQL query to read places in Seattle:
 
