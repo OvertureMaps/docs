@@ -10,30 +10,64 @@ import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.
 
 You can access and query Overture Maps parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account.
 
+:::tip
+   Overture's S3 bucket is located in the us-west-2 AWS region, so use `us-west-2` for best performance.
+:::
+
 ## Amazon Athena (AWS)
 
-1. Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html).
-The Catalog ID is `913550007193`:
+### 1. Add Overture as a data source
 
-   - TIP: Overture's S3 bucket is located in the us-west-2 AWS region, so use Athena in `us-west-2` for best performance.
+Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html). The Catalog ID is `913550007193`.
 
-    <details>
+  <details>
         <summary>Screenshot</summary>
         <div>
             ![AWS Glue Catalog](/img/getting-data/aws-glue-data-catalog-values.png)
         </div>
     </details>
 
-2. Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name):
+
+
+:::info
+The cross-account Glue catalog policy (`AWS Glue → Catalog settings → Permissions`) looks like this:
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": [
+        "glue:GetTable*",
+        "glue:GetDatabase*",
+        "glue:GetPartition*"
+      ],
+      "Resource": [
+        "arn:aws:glue:<region>:<account id>:catalog",
+        "arn:aws:glue:<region>:<account id>:database/release",
+        "arn:aws:glue:<region>:<account id>:table/*"
+      ]
+    }
+  ]
+}
+```
+`release` is the name of the database containing Overture tables.
+:::
+
+
+### 2. Inspect release tables 
+
+Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name):
 
     ![Release Tables](/img/getting-data/overture-release-tables.png)
 
-        
+The `overture` data catalog will be updated with a new table for each release in the future.
 
+### 3. Choose the release you want
 
-    The `overture` data catalog will be updated with a new table for each release in the future.
-
-3. Access Overture data in a particular release like this:
+Access Overture data in a particular release like this:
 
     <QueryBuilder query={AthenaSelectExample}></QueryBuilder>
 
@@ -43,7 +77,7 @@ The Catalog ID is `913550007193`:
 
 More information on using Athena is available in the [Amazon Athena User Guide](https://docs.aws.amazon.com/athena/latest/ug/what-is.html).
 
-#### Optional: Add the table directly using the DDL
+### Optional: Add the table directly using the DDL
 
 If you prefer to create the table in your own data catalog, you can run the complete DDL query in the Athena Query Console. This will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket.
 
