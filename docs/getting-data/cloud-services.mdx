@@ -95,7 +95,7 @@ After you run the set-up query, you can load the partitions by running `MSCK REP
 
 #### Add a policy in your data catalog settings
 
-You'll want to navigate to the [data catalog settings](https://console.aws.amazon.com/glue/home#/v2/security/settings) and add permissions. The cross-account Glue catalog policy (AWS Glue → Catalog settings → Permissions) looks like this:
+If you want to share this catalog with other users and accounts, you'll need to add a policy enabling cross-account Glue catalog access. To do so, navigate to the [data catalog settings](https://console.aws.amazon.com/glue/home#/v2/security/settings) and add a catalog policy that looks this:
 
 ```
 {
