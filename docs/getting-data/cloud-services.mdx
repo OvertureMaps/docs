@@ -18,7 +18,33 @@ You can access and query Overture Maps parquet files directly in the cloud using
 
 ### 1. Add Overture as a data source
 
-Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html). The Catalog ID is `913550007193`.
+Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html). The Catalog ID is `913550007193` and the permissions policy required for querying is listed below.
+
+<details>
+  <summary>IAM Policy for Overture Glue catalog access</summary>
+  <div>
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "glue:GetTable*",
+        "glue:GetDatabase*",
+        "glue:GetPartition*"
+      ],
+      "Resource": [
+        "arn:aws:glue:us-west-2:913550007193:catalog",
+        "arn:aws:glue:us-west-2:913550007193:database/release",
+        "arn:aws:glue:us-west-2:913550007193:table/*"
+      ]
+    }
+  ]
+}
+{insert fence here}
+  </div>
+</details>
 
   <details>
         <summary>Screenshot</summary>
