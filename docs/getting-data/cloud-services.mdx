@@ -28,9 +28,48 @@ Add Overture as a cross-account data source using [these instructions](https://d
     </details>
 
 
+### 2. Inspect release tables 
 
-:::info
-The cross-account Glue catalog policy (`AWS Glue → Catalog settings → Permissions`) looks like this:
+Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name). The `overture` data catalog will be updated with a new table for each new release.
+
+ <details>
+        <summary>Screenshot</summary>
+        <div>
+            ![Release Tables](/img/getting-data/overture-release-tables.png)
+        </div>
+    </details>
+
+   
+### 3. Access data from a release table
+
+Access Overture data in a particular release like this:
+
+    <QueryBuilder query={AthenaSelectExample}></QueryBuilder>
+
+    Example Athena SQL query to get places in Seattle:
+
+    <QueryBuilder query={SeattlePlaces}></QueryBuilder>
+
+More information on using Athena is available in the [Amazon Athena User Guide](https://docs.aws.amazon.com/athena/latest/ug/what-is.html).
+
+### Optional 
+
+#### Add the table directly using the DDL
+
+If you prefer to create the table in your own data catalog, you can run the complete DDL query in the Athena Query Console. This will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket.
+
+<details>
+    <summary>DDL Query Statement</summary>
+    <div>
+        <QueryBuilder query={CreateAthenaTable}></QueryBuilder>
+    </div>
+</details>
+
+After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
+
+#### Add a policy in your data catalog settings
+
+You'll want to navigate to the [data catalog settings](https://console.aws.amazon.com/glue/home#/v2/security/settings) and add permissions. The cross-account Glue catalog policy (AWS Glue → Catalog settings → Permissions) looks like this:
 
 ```
 {
@@ -54,41 +93,6 @@ The cross-account Glue catalog policy (`AWS Glue → Catalog settings → Permis
 }
 ```
 `release` is the name of the database containing Overture tables.
-:::
-
-
-### 2. Inspect release tables 
-
-Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name):
-
-    ![Release Tables](/img/getting-data/overture-release-tables.png)
-
-The `overture` data catalog will be updated with a new table for each release in the future.
-
-### 3. Choose the release you want
-
-Access Overture data in a particular release like this:
-
-    <QueryBuilder query={AthenaSelectExample}></QueryBuilder>
-
-    Example Athena SQL query to get places in Seattle:
-
-    <QueryBuilder query={SeattlePlaces}></QueryBuilder>
-
-More information on using Athena is available in the [Amazon Athena User Guide](https://docs.aws.amazon.com/athena/latest/ug/what-is.html).
-
-### Optional: Add the table directly using the DDL
-
-If you prefer to create the table in your own data catalog, you can run the complete DDL query in the Athena Query Console. This will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket.
-
-<details>
-    <summary>DDL Query Statement</summary>
-    <div>
-        <QueryBuilder query={CreateAthenaTable}></QueryBuilder>
-    </div>
-</details>
-
-After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
 
 
 ## Microsft Synapse (Azure)
