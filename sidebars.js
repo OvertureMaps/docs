@@ -85,7 +85,7 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        'release-notes/data-attribution',
+        'release-notes/attribution',
         'release-notes/breaking-changes',
         <!--'release-notes/deprecation-notices'-->
       ]
