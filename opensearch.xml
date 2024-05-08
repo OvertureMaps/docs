@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Overture Maps Documentation</ShortName>
+  <Description>Search Overture Maps Documentation</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">https://docs.overturemaps.org/img/favicon.png</Image>
+  <Url type="text/html" method="get" template="https://docs.overturemaps.org/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://docs.overturemaps.org/opensearch.xml" />
+  <moz:SearchForm>https://docs.overturemaps.org/</moz:SearchForm>
+</OpenSearchDescription>
