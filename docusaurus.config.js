@@ -62,6 +62,10 @@ const config = {
                 test: /\.pmtiles$/,
                 use: 'raw-loader'
               },
+              {
+                test: /\.yaml$/,
+                use: 'raw-loader'
+              },
             ],
           },
         };
@@ -125,9 +129,13 @@ const config = {
             label: 'Docs',
           },
           {
-            to: 'https://docs.overturemaps.org/schema/',
+            type: 'docSidebar',
+            sidebarId: 'schema',
+            position: 'left',
             label: 'Schema Reference',
-            target: '_self'
+            // to: 'https://docs.overturemaps.org/schema/',
+            // target: '_self'
+            // to: '/schema',
           },
           {
             to: 'release/latest',
