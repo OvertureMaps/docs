@@ -79,12 +79,14 @@ const sidebars = {
     {
       type: 'category',
       label: 'Release Notes',
-      link: {
-        type: 'doc',
-        id: 'release-notes/index'
-      },
+      <!--link: {-->
+        <!--type: 'doc',-->
+        <!--id: 'release-notes/index'-->
+      <!--},-->
       collapsed: true,
       items: [
+        'release-notes/index',
+        'release-notes/archived',
         'release-notes/attribution',
         'release-notes/breaking-changes',
         <!--'release-notes/deprecation-notices'-->

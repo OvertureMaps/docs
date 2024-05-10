@@ -1,16 +1,18 @@
 ---
 description: Overture Maps Monthly Release Notes
-title: Release Notes
+title: Latest
 ---
-### **`2024-04-16-beta.0` release**
 
+## **`2024-04-16-beta.0` release**
+
+### Highlights
 Here are the highlights for what's new and updated in the Overture Maps `2024-04-16-beta.0` release. The "beta" designation indicates the data and schema are largely stable. 
 
 Overture Maps `2024-04-16-beta.0` is available in GeoParquet and stored on AWS and Azure. Users can select the data of interest and download it by following the process outlined [here](https://docs.overturemaps.org/getting-data/).
 
 We encourage developers wishing to adopt Overture Maps base layers to begin evaluating and providing [feedback on the data, schema, and GERS IDs](https://github.com/OvertureMaps/data/discussions). Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.   
 
-## Breaking changes
+### Breaking changes
 We renamed the `bbox` column fields to align with the upcoming [GeoParquet](https://geoparquet.org/) 1.1 spec. 
 
 ```
@@ -22,10 +24,13 @@ maxy → ymax
 
 The fields are all now [Parquet Float (32-bit)](https://parquet.apache.org/docs/file-format/types/) where as they had previously been distributed as Double (64-bit).
 
-## Deprecations
+### Deprecations
 In this release, we implemented a refactor of the `admins` theme called `divisions`. The `divisions` schema and data are [now available](/guides/divisions). The two themes will coexist for two subsequent releases (May 2024 and June 2024), at which point `divisions` will fully replace `admins`. More information on why we made this change [here](https://github.com/OvertureMaps/schema/discussions/117).
 
-## Theme-specific updates
+### Changelog
+See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
+
+### Theme-specific updates
 See [here](attribution) for information about licensing and data attribution for each theme.
 
 **Administrative Boundaries Admins/Divisions**
@@ -63,57 +68,10 @@ See [here](attribution) for information about licensing and data attribution for
 - Renamed `at` to `between` for ranged linear referencing. 
 - Removed `mode_not` scoping.
 
-
-See additional [schema release notes](https://github.com/OvertureMaps/schema/releases) here.
-
-
-
-# Previous releases
-
-### **`2024-03-12-alpha.0` release**
-
-Here are the highlights of what's new and updated in Overture's `2024-03-12-alpha.0` release. This release includes a schema change from `camelCase` to `snake_case` for all property names and enumeration member names, an expansion of stable GERS IDs and incremental updates to the schema and datasets. More detailed [schema release notes and a changelog](https://github.com/OvertureMaps/schema/releases/tag/v0.9.0) are available in the `OvertureMaps/schema`.
-
-## Breaking changes
-We changed `camelCase` to `snake_case` in the schema for properties to be more compatible with some SQL engines. This may break existing code and queries. See [here for an example](/release-notes/breaking-changes) of how this breaking change affects a query to the Admins dataset.
-
-## Deprecations
-In the April 2024 release, Overture will implement a refactor of the `Admins` theme called `Divisions`. Admins and Divisions will coexist for three releases, at which point Divisions will fully replace Admins. More information on this change [here](https://github.com/OvertureMaps/schema/discussions/117).
-
-## Theme-specific updates
+### Attribution
 The data sources for each theme are cited [here](/release-notes/attribution).
 
-**Transportation**
-- Refreshed to include OSM data up to 2024-03-03.
-- Added ferry and alley segments.
-- Included 125K previously unsupported turn restrictions.
-- Added support for max weight, height, width and length access restrictions.
-- Added one-way road access restrictions.
-- Added road widths property to segments.
-- Acheived stability of GERS IDs for connectors and segments for this and future releases.
-- Note: data in the transportation theme is licensed under ODbL.
 
-**Administrative Boundaries (Admins)**
-- Refreshed to include OSM data up to 2024-03-07.
-- Adapted schema to use `snake_case` to make attribute names more compatible with some SQL engines.
-- Correctly set locality types.
-- Made minor fixes:
-     - All country localities now have ISO codes.
-     - All non-country localities now have context property set.
-- Note: data in the Admin theme is licensed under ODbL.
 
-**Places**
-- Achieved roughly 54 million place records.
-- Propagated stable GERS IDs from the previous release.
-- Made incremental improvements to accuracy and data quality.
-- Note: data in the Places theme is licensed under CDLA Permissive 2.0.
 
-**Buildings**
-- Exposed the logic Overture uses to transform OSM tags into building attributes.
-- Made incremental improvements to further ensure the data conforms to the buildings schema.
-- Note: data in the Buildings theme is licensed under ODbL.
 
-**Base**
-- Exposed the logic Overture uses to transform OSM tags into attributes in the land use, land and water data types.
-- Made incremental improvements to further ensure the data conforms to the base schema.
-- Note: data in the Base theme is licensed under ODbL.
