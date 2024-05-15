@@ -9,7 +9,7 @@ COPY (
         categories.main as category,
         ROUND(confidence,2) as confidence,
         ST_GeomFromWKB(geometry) as geometry
-FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELASE/theme=places/*/*')
+FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
 WHERE
     -- Point geometry doesn't require looking at both min and max:
     bbox.xmin BETWEEN -122.68 AND -121.98 AND
