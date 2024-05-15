@@ -12,7 +12,9 @@ The Overture Maps `buildings` theme describes human-made structures with roofs o
 - **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint -- or roofprint if traced from satellite/aerial imagery -- of a building.
 - **`building_part`**: A single part of a building. Building parts may have the same properties as buildings, including color, material, and shape. A building part is associated with a parent building via a `building_id`, if its geometry is contained within the building footprint.
 
-The datasets are available as GeoParquet files with the following attributes: 
+<details>
+        <summary>Attribute tables for the GeoParquet files in the buildings theme</summary> 
+        <div>
 <Tabs>
 <TabItem value="building" label="building" default>
 
@@ -74,6 +76,8 @@ The datasets are available as GeoParquet files with the following attributes:
 | type             | varchar | 
 </TabItem>
 </Tabs>
+</div>
+</details>
 
 
 
