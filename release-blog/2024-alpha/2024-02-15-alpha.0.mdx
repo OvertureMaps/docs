@@ -1,0 +1,91 @@
+---
+title: 2024-02-15-alpha.0
+slug: 2024-02-15-alpha.0
+---
+
+### Highlights
+Overture `2024-02-15-alpha.0` is now available. This release includes several incremental improvements, addition of geopolitical boundary information in the Admins Theme and expansion of GERS IDs across several themes. More information about these additions is available in the relevant sections below.
+
+This data is formatted in the Overture Data Schema unless otherwise noted.
+
+This data is available for use under the designated licenses for each theme.
+
+We would like feedback on the data, its usefulness, and how it could be improved. Please use this Github repo for discussions and feedback related to this data release.
+
+Overture `2024-02-15-alpha.0` is available in GeoParquet and stored on AWS and Azure.
+
+### Changelog
+See our [changelog](https://github.com/OvertureMaps/schema/releases/tag/v0.8.0) here.
+
+### Theme-specific updates
+Overture `2024-02-15-alpha.0` is released in five themes.
+
+**Buildings Theme**
+The dataset includes 2.35B conflated building footprints from OSM, Esri Community Maps, Microsoft ML Building Footprints, and Google Open Buildings.
+The order of conflation is OpenStreetMap → Esri Community Maps → high precision Google Open Buildings → Microsoft ML Building Footprints → lower precision Google Open Buildings. For example, if Esri has a building that does not exist in OSM, we take that building, then we “fill-in” the rest of the map with any ML buildings that do not intersect with either OSM or Esri.
+We use the 90% precision confidence threshold to delineate between high and lower precision for Google Open Buildings, this threshold varies per s2 cell.
+
+We've made incremental improvements to further ensure the data conforms to the buildings layer schema.
+
+3d attributes from OSM, such as roof shape, are now available.
+
+The sources of the buildings theme include OpenStreetMap, Esri Community Maps, Microsoft Building footprints, and Google Open Buildings. Some building heights have also been derived using lidar from USGS 3DEP.
+
+Data in the Buildings theme is licensed under ODbL.
+
+**Transportation Theme**
+- Refreshed data to include OSM data up to Feb 5
+- Segment names are now a top-level property with a unified schema
+- Access restrictions are now populated for most simple cases
+- OSM source IDs are now included for all segments
+
+:::note
+GERS IDs for connectors and segments should now be considered stable for this and future releases
+:::
+
+Data in the Transportation theme is licensed under ODbL.
+
+**Base Theme**
+- All of the features in the base theme are from OpenStreetMap, sourced via the latest Daylight Map Distribution (v1.40).
+- Includes 44M water features, 63M land features, and 34M land use features.
+Most original OSM tags remain on all features. Some tags become normalized and added as top-level properties, such as the surface or wikidata tags.
+
+Data in the Base theme is licensed under ODbL.
+
+**Places Theme**
+This release has roughly 54M place records. The Places theme in this release includes incremental improvements to improve the accuracy and quality of the dataset.
+
+:::note
+For the first time, this release includes GERS stableids propagated from the previous release. Roughly 50M of the ids are propagated and 4M of the ids are new.
+:::
+
+Data in the Places theme is licensed under CDLA Permissive 2.0.
+
+**Administrative Boundaries (Admins) Theme**
+- First version where all countries have second-level subdivisions.
+- In 37 countries we used geoBoundaries as data source for second-level subdivisions where OpenStreetMap data is missing or is incomplete.
+- Data from OSM is updated to 8th of February.
+- `AdminLevel` property value changed from 2 for Country, 4 for State and 6 for County to be 1 for Country, 2 for State and 3 for County.
+- Added Wikidata and Population properties.
+- All administrative localities now have `isoCountryCodeAlpha2` set for easier filtering to specific country.
+
+:::note
+Known issue: All first-level subdivisions have type=state and all second-level subdivisions have type=county which is not always true, we plan to address this issue in following release. Will be fixed in March release.
+:::
+
+The sources of the admin theme are OpenStreetMap, geoBoundaries and Esri.
+
+The Administrative Boundary data is in the Overture Maps data schema for Admin.
+
+Data in the Admin theme is licensed under ODbL.
+
+**Documentation**
+Updated schema, reference and GERS technical documentation.
+Integrated https://labs.overturemaps.org/how-to/ with core documentation.
+Added new guides and tutorials for accessing, exploring  and visualizing data.
+
+### Attribution
+- © OpenStreetMap contributors available under the Open Database License (www.openstreetmap.org/copyright)
+- U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Program
+- Building data © OpenStreetMap contributors, Microsoft, Esri Community Maps contributors, Google Open Buildings
+- Administrative Boundaries from geoBoundaries.

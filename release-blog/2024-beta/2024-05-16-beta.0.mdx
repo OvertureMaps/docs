@@ -1,13 +1,11 @@
 ---
-description: Overture Maps Monthly Release Notes
-title: Latest
+title: 2024-05-16-beta.0
+slug: latest
 ---
 
-## **`2024-05-16-beta.0` release**
+Here's what's new and updated in the Overture Maps `2024-05-16-beta.0` release. The "beta" designation indicates the data and schema are largely stable.
 
-Here's what's new and updated in the Overture Maps `2024-05-16-beta.0` release. The "beta" designation indicates the data and schema are largely stable. 
-
-Overture Maps `2024-05-16-beta.0` is available in GeoParquet and stored on AWS and Azure. Users can select the data of interest and download it by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage developers wishing to adopt Overture Maps base layers to begin evaluating and providing [feedback on the data, schema, and GERS IDs](https://github.com/OvertureMaps/data/discussions). Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.   
+Overture Maps `2024-05-16-beta.0` is available in GeoParquet and stored on AWS and Azure. Users can select the data of interest and download it by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage developers wishing to adopt Overture Maps base layers to begin evaluating and providing [feedback on the data, schema, and GERS IDs](https://github.com/OvertureMaps/data/discussions). Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.
 
 ### Breaking changes
 
@@ -17,12 +15,12 @@ In the `buildings` theme, we promoted `class` to `subtype` and introduced new `c
 ### Deprecations
 Last month, we announced the deprecation of our `admins` theme and launched its replacement, `divisions`. Because of issues with missing data in `divisions`, we have extended the life of `admins`. Here is the new deprecation schedule: the two themes will coexist in the May, June, and July 2024 releases; in the August 2024 release, we will fully remove `admins` from our schema and data. More information on why we made this change [here](https://github.com/OvertureMaps/schema/discussions/117).
 
-### Changelog
+### Schema Changelog
 See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
 
 ### Theme-specific updates
 
-**Divisions/Admins** 
+**Divisions/Admins**
 
 - refreshed data with OpenStreetMap snap on 10 May 2024
 - populated `region` field for `division_area` type
@@ -58,9 +56,4 @@ See information above about the deprecation of `admins` schema and data
 
 ### Attribution
 
-You'll find information about attribution and licensing [here](attribution).
-
-
-
-
-
+You'll find information about attribution and licensing [here](//attribution).

@@ -67,6 +67,20 @@ const config = {
         };
       },
     }),
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'release-blog',
+        blogSidebarTitle: 'Releases',
+        blogTitle: "Overture Release Notes and Changelog",
+        blogDescription: "Overture Maps Release Notes and Changelog",
+        showReadingTime: false,
+        postsPerPage: 1,
+        blogSidebarCount: 'ALL',
+        routeBasePath: 'release',
+        path: './release-blog',
+      },
+    ],
   ],
 
   presets: [
@@ -114,6 +128,11 @@ const config = {
             to: 'https://docs.overturemaps.org/schema/',
             label: 'Schema Reference',
             target: '_self'
+          },
+          {
+            to: 'release/latest',
+            label: 'Releases',
+            position: 'left',
           },
           {
             to: 'blog',
