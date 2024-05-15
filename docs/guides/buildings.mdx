@@ -1,15 +1,82 @@
 ---
-title: Buildings
+title: Working with buildings data
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
 
 ## Overview
 
-The Overture Maps `buildings` theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)).
+The Overture Maps `buildings` theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). The theme includes two feature types:
+- **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint -- or roofprint if traced from satellite/aerial imagery -- of a building.
+- **`building_part`**: A single part of a building. Building parts may have the same properties as buildings, including color, material, and shape. A building part is associated with a parent building via a `building_id`, if its geometry is contained within the building footprint.
 
-## Key schema design choices
+The datasets are available as GeoParquet files with the following attributes: 
+<Tabs>
+<TabItem value="building" label="building" default>
 
-- **Extensible attributes.** Overture starts from a basic model containing footprint polygons and a small number of optional attributes. Attributes currently not covered in the official schema release are allowed to exist with the prefix `ext` in their name.
-- **Easy transformation from other data sources.** Classes such as `residential`, `commercial` or `education` are intended to be broad categories in which many different OSM tagging combinations can map to the same class.
+| column           | type    | 
+| ---------------- | ------- | 
+| id               | varchar | 
+| geometry         | blob    | 
+| bbox             | struct  |
+| version          | integer | 
+| update_time      | varchar | 
+| sources          | struct  |
+| subtype          | varchar |
+| names            | struct  | 
+| class            | varchar | 
+| level            | integer | 
+| has_parts        | boolean | 
+| height           | double  |
+| num_floors       | integer | 
+| min_height       | double  | 
+| min_floor        | integer | 
+| facade_color     | varchar | 
+| facade_material  | varchar | 
+| roof_material    | varchar | 
+| roof_shape       | varchar | 
+| roof_direction   | double  | 
+| roof_orientation | varchar | 
+| roof_color       | varchar |  
+| eave_height      | double  | 
+| filename         | varchar | 
+| theme            | varchar | 
+| type             | varchar | 
+</TabItem>
+<TabItem value="building_part" label="building_part" default>
+| column           | type    | 
+| ---------------- | ------- | 
+| id               | varchar | 
+| geometry         | blob    | 
+| bbox             | struct  |
+| version          | integer | 
+| update_time      | varchar | 
+| sources          | struct  |
+| names            | struct  | 
+| class            | varchar | 
+| level            | integer | 
+| height           | double  |
+| num_floors       | integer | 
+| min_height       | double  | 
+| min_floor        | integer | 
+| facade_color     | varchar | 
+| facade_material  | varchar | 
+| roof_material    | varchar | 
+| roof_shape       | varchar | 
+| roof_direction   | double  | 
+| roof_orientation | varchar | 
+| roof_color       | varchar |  
+| building_id      | varchar | 
+| filename         | varchar | 
+| theme            | varchar | 
+| type             | varchar | 
+</TabItem>
+</Tabs>
+
+
+
 
 ## Schema reference
 

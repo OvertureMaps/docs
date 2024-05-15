@@ -3,73 +3,62 @@ description: Overture Maps Monthly Release Notes
 title: Latest
 ---
 
-## **`2024-04-16-beta.0` release**
+## **`2024-05-16-beta.0` release**
 
-### Highlights
-Here are the highlights for what's new and updated in the Overture Maps `2024-04-16-beta.0` release. The "beta" designation indicates the data and schema are largely stable. 
+Here's what's new and updated in the Overture Maps `2024-05-16-beta.0` release. The "beta" designation indicates the data and schema are largely stable. 
 
-Overture Maps `2024-04-16-beta.0` is available in GeoParquet and stored on AWS and Azure. Users can select the data of interest and download it by following the process outlined [here](https://docs.overturemaps.org/getting-data/).
-
-We encourage developers wishing to adopt Overture Maps base layers to begin evaluating and providing [feedback on the data, schema, and GERS IDs](https://github.com/OvertureMaps/data/discussions). Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.   
+Overture Maps `2024-05-16-beta.0` is available in GeoParquet and stored on AWS and Azure. Users can select the data of interest and download it by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage developers wishing to adopt Overture Maps base layers to begin evaluating and providing [feedback on the data, schema, and GERS IDs](https://github.com/OvertureMaps/data/discussions). Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.   
 
 ### Breaking changes
-We renamed the `bbox` column fields to align with the upcoming [GeoParquet](https://geoparquet.org/) 1.1 spec. 
 
-```
-minx → xmin
-miny → ymin
-maxx → xmax
-maxy → ymax
-```
+In the `buildings` theme, we promoted `class` to `subtype` and introduced new `class` values. This allows for more detail in a feature. Parking garages, for example, now have the attributes: `subtype=transportation` and `class=parking`.
 
-The fields are all now [Parquet Float (32-bit)](https://parquet.apache.org/docs/file-format/types/) where as they had previously been distributed as Double (64-bit).
 
 ### Deprecations
-In this release, we implemented a refactor of the `admins` theme called `divisions`. The `divisions` schema and data are [now available](/guides/divisions). The two themes will coexist for two subsequent releases (May 2024 and June 2024), at which point `divisions` will fully replace `admins`. More information on why we made this change [here](https://github.com/OvertureMaps/schema/discussions/117).
+Last month, we announced the deprecation of our `admins` theme and launched its replacement, `divisions`. Because of issues with missing data in `divisions`, we have extended the life of `admins`. Here is the new deprecation schedule: the two themes will coexist in the May, June, and July 2024 releases; in the August 2024 release, we will fully remove `admins` from our schema and data. More information on why we made this change [here](https://github.com/OvertureMaps/schema/discussions/117).
 
 ### Changelog
 See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
 
 ### Theme-specific updates
-See [here](attribution) for information about licensing and data attribution for each theme.
 
-**Administrative Boundaries Admins/Divisions**
-- Included OSM data up to 4/8.
-- Implemented the schema for the `divisions` theme, which has a better defined schema supporting perspectives, different types of polygons, and other new features.
-- Note: see information above about the deprecation of `admins`.
+**Divisions/Admins** 
+
+- refreshed data with OpenStreetMap snap on 10 May 2024
+- populated `region` field for `division_area` type
+- populated `local_type` field `division` type
+- known issue: the `capital_division_id` field in `division` type is missing data
+
+:::warning
+See information above about the deprecation of `admins` schema and data
+:::
 
 **Base**
-- Included OSM data up to 3/16 (sourced via Daylight Map Distribution v1.44).
-- Included 46M water features, 55M land features, 40M land use features, and 48M infrastructure features.
-- Maintained the original OSM tags remain on all features.
-- Normalized and added `elevation`, `surface`, and `wikidata` as top-level properties.
+
+- added `land_cover` schema and data derived from ESA WorldCover high-resolution Earth observation imagery
+- added new subtypes in `infrastructure` type: `barrier`, `pedestrian`, `utility`, `waste_management`, `water`
+- added `min_zoom` and `max_zoom` attributes for cartographic purposes
 
 **Buildings**
-- Included OSM data up to 3/16 (sourced via Daylight Map Distribution v1.44).
-- Included 2.35B conflated building footprints from OSM, Esri Community Maps, Microsoft ML Building Footprints, and Google Open Buildings.
-- Made incremental improvements to further ensure the data conforms to the buildings layer schema.
-- Added 3d attributes from OSM, such as roof shape.
-- Note: The order of conflation is OpenStreetMap → Esri Community Maps → high precision Google Open Buildings → Microsoft ML Building Footprints → lower precision Google Open Buildings. For example, if Esri has a building that does not exist in OSM, we take that building, then we “fill-in” the rest of the map with any ML buildings that do not intersect with either OSM or Esri. We use the 90% precision confidence threshold to delineate between high and lower precision for Google Open Buildings, this threshold varies per s2 cell.
 
+- promoted `class` to `subtype` and introduced new class values for buildings. Where relevant, the class tag is the value of the building key in OSM. This allows anyone to use previous class types as subtype (backwards compatible) and introduces new class values that allow for more detail, like parking. Parking garages, for example, now have the attributes: `subtype=transportation`, `class=parking`; example of new subtypes, promoted from class: `agricultural`, `civic`, `commercial`, `education`, `entertainment`, `industrial`, `medical`, `military`, `outbuilding`, `religious`, `residential`, `service`, `transportation`
+- made incremental updates from OSM since the previous release
 
 **Places**
-- Included ~53 million place records.
-- Included stable GERS IDs propagated from the previous release; roughly 51 million of the IDs are propagated and 2 million are new.
-- Made incremental changes to improve the accuracy and quality of the dataset.
+
+- made incremental changes to improve the accuracy and quality of the dataset
 
 **Transportation**
-- Included OSM data up to 4/7.
-- Classified 12.2M segments as path.
-- Added `is_covered` flag to denote partially enclosed segments.
-- Improved scope merging; fewer access restrictions entries are now required.
-- Fixed a projection issue affecting segment length calculation and linear referencing
-- Promoted `class` to a top-level property.
-- Moved `level` property into `road` property to allow linear referencing. 84% of all segments which had previously dropped `level` will now have that information.
-- Renamed `at` to `between` for ranged linear referencing. 
-- Removed `mode_not` scoping.
+
+- added missing vehicle travel mode
+- added missing `is_covered` road flag
+- populated `is_abandoned` flag when relevant abandoned or disused tags are present
+- added OSM source ids for connectors
+- fixed null linear referencing for names in some cases
 
 ### Attribution
-The data sources for each theme are cited [here](/release-notes/attribution).
+
+You'll find information about attribution and licensing [here](/release-notes/attribution).
 
 
 

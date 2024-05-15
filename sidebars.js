@@ -57,10 +57,18 @@ const sidebars = {
         },
         'guides/gers',
         'guides/places',
-        'guides/buildings',
+        {
+          type: 'doc',
+          id: 'guides/buildings',
+          label: 'Buildings',
+        },
         'guides/admins',
         'guides/divisions',
-        'guides/base',
+        {
+          type: 'doc',
+          id: 'guides/base',
+          label: 'Base',
+        },  
         {
           type: 'category',
           label: 'Transportation',
@@ -88,7 +96,7 @@ const sidebars = {
         'release-notes/index',
         'release-notes/archived',
         'release-notes/attribution',
-        'release-notes/breaking-changes',
+        <!--'release-notes/breaking-changes',-->
         <!--'release-notes/deprecation-notices'-->
       ]
     },
