@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>Overture Maps Documentation Blog</title>
+        <link>https://docs.overturemaps.org/release</link>
+        <description>Overture Maps Documentation Blog</description>
+        <lastBuildDate>Thu, 16 May 2024 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[2024-05-16-beta.0]]></title>
+            <link>https://docs.overturemaps.org/release/latest</link>
+            <guid>https://docs.overturemaps.org/release/latest</guid>
+            <pubDate>Thu, 16 May 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Here's what's new and updated in the Overture Maps 2024-05-16-beta.0 release. The "beta" designation indicates the data and schema are largely stable.]]></description>
+            <content:encoded><![CDATA[<p>Here's what's new and updated in the Overture Maps <code>2024-05-16-beta.0</code> release. The "beta" designation indicates the data and schema are largely stable.</p>
+<p>Overture Maps <code>2024-05-16-beta.0</code> is available in GeoParquet and stored on AWS and Azure. Users can select the data of interest and download it by following the process outlined <a href="https://docs.overturemaps.org/getting-data/" target="_blank" rel="noopener noreferrer">here</a>. We encourage developers wishing to adopt Overture Maps base layers to begin evaluating and providing <a href="https://github.com/OvertureMaps/data/discussions" target="_blank" rel="noopener noreferrer">feedback on the data, schema, and GERS IDs</a>. Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="breaking-changes">Breaking changes<a href="https://docs.overturemaps.org/release/latest#breaking-changes" class="hash-link" aria-label="Direct link to Breaking changes" title="Direct link to Breaking changes">​</a></h3>
+<p>In the <code>buildings</code> theme, we promoted <code>class</code> to <code>subtype</code> and introduced new <code>class</code> values. This allows for more detail in a feature. Parking garages, for example, now have the attributes: <code>subtype=transportation</code> and <code>class=parking</code>.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="deprecations">Deprecations<a href="https://docs.overturemaps.org/release/latest#deprecations" class="hash-link" aria-label="Direct link to Deprecations" title="Direct link to Deprecations">​</a></h3>
+<p>Last month, we announced the deprecation of our <code>admins</code> theme and launched its replacement, <code>divisions</code>. Because of issues with missing data in <code>divisions</code>, we have extended the life of <code>admins</code>. Here is the new deprecation schedule: the two themes will coexist in the May, June, and July 2024 releases; in the August 2024 release, we will fully remove <code>admins</code> from our schema and data. More information on why we made this change <a href="https://github.com/OvertureMaps/schema/discussions/117" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="schema-changelog">Schema Changelog<a href="https://docs.overturemaps.org/release/latest#schema-changelog" class="hash-link" aria-label="Direct link to Schema Changelog" title="Direct link to Schema Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/latest#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p><strong>Divisions/Admins</strong></p>
+<ul>
+<li>refreshed data with OpenStreetMap snap on 10 May 2024</li>
+<li>populated <code>region</code> field for <code>division_area</code> type</li>
+<li>populated <code>local_type</code> field <code>division</code> type</li>
+<li>known issue: the <code>capital_division_id</code> field in <code>division</code> type is missing data</li>
+</ul>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>warning</div><div class="admonitionContent_BuS1"><p>See information above about the deprecation of <code>admins</code> schema and data</p></div></div>
+<p><strong>Base</strong></p>
+<ul>
+<li>added <code>land_cover</code> schema and data derived from ESA WorldCover high-resolution Earth observation imagery</li>
+<li>added new subtypes in <code>infrastructure</code> type: <code>barrier</code>, <code>pedestrian</code>, <code>utility</code>, <code>waste_management</code>, <code>water</code></li>
+<li>added <code>min_zoom</code> and <code>max_zoom</code> attributes for cartographic purposes</li>
+</ul>
+<p><strong>Buildings</strong></p>
+<ul>
+<li>promoted <code>class</code> to <code>subtype</code> and introduced new class values for buildings. Where relevant, the class tag is the value of the building key in OSM. This allows anyone to use previous class types as subtype (backwards compatible) and introduces new class values that allow for more detail, like parking. Parking garages, for example, now have the attributes: <code>subtype=transportation</code>, <code>class=parking</code>; example of new subtypes, promoted from class: <code>agricultural</code>, <code>civic</code>, <code>commercial</code>, <code>education</code>, <code>entertainment</code>, <code>industrial</code>, <code>medical</code>, <code>military</code>, <code>outbuilding</code>, <code>religious</code>, <code>residential</code>, <code>service</code>, <code>transportation</code></li>
+<li>made incremental updates from OSM since the previous release</li>
+</ul>
+<p><strong>Places</strong></p>
+<ul>
+<li>made incremental changes to improve the accuracy and quality of the dataset</li>
+</ul>
+<p><strong>Transportation</strong></p>
+<ul>
+<li>added missing vehicle travel mode</li>
+<li>added missing <code>is_covered</code> road flag</li>
+<li>populated <code>is_abandoned</code> flag when relevant abandoned or disused tags are present</li>
+<li>added OSM source ids for connectors</li>
+<li>fixed null linear referencing for names in some cases</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/latest#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<p>You'll find information about attribution and licensing <a href="https://attribution/" target="_blank" rel="noopener noreferrer">here</a>.</p>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2024-04-16-beta.0]]></title>
+            <link>https://docs.overturemaps.org/release/2024-04-16-beta.0</link>
+            <guid>https://docs.overturemaps.org/release/2024-04-16-beta.0</guid>
+            <pubDate>Tue, 16 Apr 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Highlights]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://docs.overturemaps.org/release/2024-04-16-beta.0#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3>
+<p>Here are the highlights for what's new and updated in the Overture Maps <code>2024-04-16-beta.0</code> release. The "beta" designation indicates the data and schema are largely stable.</p>
+<p>Overture Maps <code>2024-04-16-beta.0</code> is available in GeoParquet and stored on AWS and Azure. Users can select the data of interest and download it by following the process outlined <a href="https://docs.overturemaps.org/getting-data/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<p>We encourage developers wishing to adopt Overture Maps base layers to begin evaluating and providing <a href="https://github.com/OvertureMaps/data/discussions" target="_blank" rel="noopener noreferrer">feedback on the data, schema, and GERS IDs</a>. Depending on the feedback from this release and subsequent releases, we anticipate moving to a production release in the next few months.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="breaking-changes">Breaking changes<a href="https://docs.overturemaps.org/release/2024-04-16-beta.0#breaking-changes" class="hash-link" aria-label="Direct link to Breaking changes" title="Direct link to Breaking changes">​</a></h3>
+<p>We renamed the <code>bbox</code> column fields to align with the upcoming <a href="https://geoparquet.org/" target="_blank" rel="noopener noreferrer">GeoParquet</a> 1.1 spec.</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">minx → xmin</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">miny → ymin</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">maxx → xmax</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">maxy → ymax</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>The fields are all now <a href="https://parquet.apache.org/docs/file-format/types/" target="_blank" rel="noopener noreferrer">Parquet Float (32-bit)</a> where as they had previously been distributed as Double (64-bit).</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="deprecations">Deprecations<a href="https://docs.overturemaps.org/release/2024-04-16-beta.0#deprecations" class="hash-link" aria-label="Direct link to Deprecations" title="Direct link to Deprecations">​</a></h3>
+<p>In this release, we implemented a refactor of the <code>admins</code> theme called <code>divisions</code>. The <code>divisions</code> schema and data are <a href="https://docs.overturemaps.org/guides/divisions/">now available</a>. The two themes will coexist for two subsequent releases (May 2024 and June 2024), at which point <code>divisions</code> will fully replace <code>admins</code>. More information on why we made this change <a href="https://github.com/OvertureMaps/schema/discussions/117" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="https://docs.overturemaps.org/release/2024-04-16-beta.0#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/2024-04-16-beta.0#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p>See <a href="https://attribution/" target="_blank" rel="noopener noreferrer">here</a> for information about licensing and data attribution for each theme.</p>
+<p><strong>Administrative Boundaries Admins/Divisions</strong></p>
+<ul>
+<li>Included OSM data up to 4/8.</li>
+<li>Implemented the schema for the <code>divisions</code> theme, which has a better defined schema supporting perspectives, different types of polygons, and other new features.</li>
+<li>Note: see information above about the deprecation of <code>admins</code>.</li>
+</ul>
+<p><strong>Base</strong></p>
+<ul>
+<li>Included OSM data up to 3/16 (sourced via Daylight Map Distribution v1.44).</li>
+<li>Included 46M water features, 55M land features, 40M land use features, and 48M infrastructure features.</li>
+<li>Maintained the original OSM tags remain on all features.</li>
+<li>Normalized and added <code>elevation</code>, <code>surface</code>, and <code>wikidata</code> as top-level properties.</li>
+</ul>
+<p><strong>Buildings</strong></p>
+<ul>
+<li>Included OSM data up to 3/16 (sourced via Daylight Map Distribution v1.44).</li>
+<li>Included 2.35B conflated building footprints from OSM, Esri Community Maps, Microsoft ML Building Footprints, and Google Open Buildings.</li>
+<li>Made incremental improvements to further ensure the data conforms to the buildings layer schema.</li>
+<li>Added 3d attributes from OSM, such as roof shape.</li>
+<li>Note: The order of conflation is OpenStreetMap → Esri Community Maps → high precision Google Open Buildings → Microsoft ML Building Footprints → lower precision Google Open Buildings. For example, if Esri has a building that does not exist in OSM, we take that building, then we “fill-in” the rest of the map with any ML buildings that do not intersect with either OSM or Esri. We use the 90% precision confidence threshold to delineate between high and lower precision for Google Open Buildings, this threshold varies per s2 cell.</li>
+</ul>
+<p><strong>Places</strong></p>
+<ul>
+<li>Included ~53 million place records.</li>
+<li>Included stable GERS IDs propagated from the previous release; roughly 51 million of the IDs are propagated and 2 million are new.</li>
+<li>Made incremental changes to improve the accuracy and quality of the dataset.</li>
+</ul>
+<p><strong>Transportation</strong></p>
+<ul>
+<li>Included OSM data up to 4/7.</li>
+<li>Classified 12.2M segments as path.</li>
+<li>Added <code>is_covered</code> flag to denote partially enclosed segments.</li>
+<li>Improved scope merging; fewer access restrictions entries are now required.</li>
+<li>Fixed a projection issue affecting segment length calculation and linear referencing</li>
+<li>Promoted <code>class</code> to a top-level property.</li>
+<li>Moved <code>level</code> property into <code>road</code> property to allow linear referencing. 84% of all segments which had previously dropped <code>level</code> will now have that information.</li>
+<li>Renamed <code>at</code> to <code>between</code> for ranged linear referencing.</li>
+<li>Removed <code>mode_not</code> scoping.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/2024-04-16-beta.0#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<p>The data sources for each theme are cited <a href="https://attribution/" target="_blank" rel="noopener noreferrer">here</a>.</p>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2024-03-12-alpha.0]]></title>
+            <link>https://docs.overturemaps.org/release/2024-03-12-alpha.0</link>
+            <guid>https://docs.overturemaps.org/release/2024-03-12-alpha.0</guid>
+            <pubDate>Tue, 12 Mar 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Highlights]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://docs.overturemaps.org/release/2024-03-12-alpha.0#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3>
+<p>Here are the highlights of what's new and updated in Overture's <code>2024-03-12-alpha.0</code> release. This release includes a schema change from <code>camelCase</code> to <code>snake_case</code> for all property names and enumeration member names, an expansion of stable GERS IDs and incremental updates to the schema and datasets.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="breaking-changes">Breaking changes<a href="https://docs.overturemaps.org/release/2024-03-12-alpha.0#breaking-changes" class="hash-link" aria-label="Direct link to Breaking changes" title="Direct link to Breaking changes">​</a></h3>
+<p>We changed <code>camelCase</code> to <code>snake_case</code> in the schema for properties to be more compatible with some SQL engines. This may break existing code and queries:</p>
+<p>In previous releases of Overture data, we used <code>camelCase</code> for attribute names throughout the schema. A duckdb query to find Pennsylvania in our admins dataset might have looked like this:</p>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">LOAD</span><span class="token plain"> spatial</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">LOAD</span><span class="token plain"> httpfs:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   isoSubCountryCode</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   contextId</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   names</span><span class="token punctuation" style="color:#393A34">.</span><span class="token keyword" style="color:#00009f">primary</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   ST_GeomFromWKB</span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">geometry</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">as</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">geometry</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   read_parquet</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">'s3://overturemaps-us-west-2/release/2024-02-15-alpha.0/theme=admins/type=*/*'</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> filename</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">true</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> hive_partitioning</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">type</span><span class="token operator" style="color:#393A34">=</span><span class="token string" style="color:#e3116c">'locality'</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> subType</span><span class="token operator" style="color:#393A34">=</span><span class="token string" style="color:#e3116c">'administrativeLocality'</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> adminLevel</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">2</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> names</span><span class="token punctuation" style="color:#393A34">.</span><span class="token keyword" style="color:#00009f">primary</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">LIKE</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">'Pennsylvania'</span><span class="token punctuation" style="color:#393A34">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>In the March release, we changed all property names and enumeration member names to <code>snake_case</code>. This is a big one-time churn to improve SQL compatibility. That same query to find Pennsylvania now looks like this:</p>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">LOAD</span><span class="token plain"> spatial</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">LOAD</span><span class="token plain"> httpfs:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   iso_sub_country_code</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   context_id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   names</span><span class="token punctuation" style="color:#393A34">.</span><span class="token keyword" style="color:#00009f">primary</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   ST_GeomFromWKB</span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">geometry</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">as</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">geometry</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   read_parquet</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">'s3://overturemaps-us-west-2/release/2024-03-12-alpha.0/theme=admins/type=*/*'</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> filename</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">true</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> hive_partitioning</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">type</span><span class="token operator" style="color:#393A34">=</span><span class="token string" style="color:#e3116c">'locality'</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> subtype</span><span class="token operator" style="color:#393A34">=</span><span class="token string" style="color:#e3116c">'administrative_locality'</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> admin_level</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">2</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> names</span><span class="token punctuation" style="color:#393A34">.</span><span class="token keyword" style="color:#00009f">primary</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">LIKE</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">'Pennsylvania'</span><span class="token punctuation" style="color:#393A34">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">┌──────────────────────────────────┬──────────────────────┬──────────────────────────────────┬──────────────┬────────────────────────────────┐</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│                id                │ iso_sub_country_code │            context_id            │   primary    │            geometry            │</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│             varchar              │       varchar        │             varchar              │   varchar    │            geometry            │</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├──────────────────────────────────┼──────────────────────┼──────────────────────────────────┼──────────────┼────────────────────────────────┤</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│ 0857b2b73fffffff01914c596abbfacd │ US-PA                │ 0850c861bfffffff01aeb407d56d3441 │ Pennsylvania │ POINT (-77.7278831 40.9699889) │</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">└──────────────────────────────────┴──────────────────────┴──────────────────────────────────┴──────────────┴────────────────────────────────┘</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="deprecations">Deprecations<a href="https://docs.overturemaps.org/release/2024-03-12-alpha.0#deprecations" class="hash-link" aria-label="Direct link to Deprecations" title="Direct link to Deprecations">​</a></h3>
+<p>In the April 2024 release, Overture will implement a refactor of the <code>Admins</code> theme called <code>Divisions</code>. Admins and Divisions will coexist for three releases, at which point Divisions will fully replace Admins. More information on this change <a href="https://github.com/OvertureMaps/schema/discussions/117" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="https://docs.overturemaps.org/release/2024-03-12-alpha.0#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases/tag/v0.9.0" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/2024-03-12-alpha.0#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p><strong>Transportation</strong></p>
+<ul>
+<li>Refreshed to include OSM data up to 2024-03-03.</li>
+<li>Added ferry and alley segments.</li>
+<li>Included 125K previously unsupported turn restrictions.</li>
+<li>Added support for max weight, height, width and length access restrictions.</li>
+<li>Added one-way road access restrictions.</li>
+<li>Added road widths property to segments.</li>
+<li>Acheived stability of GERS IDs for connectors and segments for this and future releases.</li>
+<li>Note: data in the transportation theme is licensed under ODbL.</li>
+</ul>
+<p><strong>Administrative Boundaries (Admins)</strong></p>
+<ul>
+<li>Refreshed to include OSM data up to 2024-03-07.</li>
+<li>Adapted schema to use <code>snake_case</code> to make attribute names more compatible with some SQL engines.</li>
+<li>Correctly set locality types.</li>
+<li>Made minor fixes:<!-- -->
+<ul>
+<li>All country localities now have ISO codes.</li>
+<li>All non-country localities now have context property set.</li>
+</ul>
+</li>
+<li>Note: data in the Admin theme is licensed under ODbL.</li>
+</ul>
+<p><strong>Places</strong></p>
+<ul>
+<li>Achieved roughly 54 million place records.</li>
+<li>Propagated stable GERS IDs from the previous release.</li>
+<li>Made incremental improvements to accuracy and data quality.</li>
+<li>Note: data in the Places theme is licensed under CDLA Permissive 2.0.</li>
+</ul>
+<p><strong>Buildings</strong></p>
+<ul>
+<li>Exposed the logic Overture uses to transform OSM tags into building attributes.</li>
+<li>Made incremental improvements to further ensure the data conforms to the buildings schema.</li>
+<li>Note: data in the Buildings theme is licensed under ODbL.</li>
+</ul>
+<p><strong>Base</strong></p>
+<ul>
+<li>Exposed the logic Overture uses to transform OSM tags into attributes in the land use, land and water data types.</li>
+<li>Made incremental improvements to further ensure the data conforms to the base schema.</li>
+<li>Note: data in the Base theme is licensed under ODbL.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/2024-03-12-alpha.0#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<p>The data sources for each theme are cited <a href="https://attribution/" target="_blank" rel="noopener noreferrer">here</a>.</p>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2024-02-15-alpha.0]]></title>
+            <link>https://docs.overturemaps.org/release/2024-02-15-alpha.0</link>
+            <guid>https://docs.overturemaps.org/release/2024-02-15-alpha.0</guid>
+            <pubDate>Thu, 15 Feb 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Highlights]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://docs.overturemaps.org/release/2024-02-15-alpha.0#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3>
+<p>Overture <code>2024-02-15-alpha.0</code> is now available. This release includes several incremental improvements, addition of geopolitical boundary information in the Admins Theme and expansion of GERS IDs across several themes. More information about these additions is available in the relevant sections below.</p>
+<p>This data is formatted in the Overture Data Schema unless otherwise noted.</p>
+<p>This data is available for use under the designated licenses for each theme.</p>
+<p>We would like feedback on the data, its usefulness, and how it could be improved. Please use this Github repo for discussions and feedback related to this data release.</p>
+<p>Overture <code>2024-02-15-alpha.0</code> is available in GeoParquet and stored on AWS and Azure.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="https://docs.overturemaps.org/release/2024-02-15-alpha.0#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases/tag/v0.8.0" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/2024-02-15-alpha.0#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p>Overture <code>2024-02-15-alpha.0</code> is released in five themes.</p>
+<p><strong>Buildings Theme</strong>
+The dataset includes 2.35B conflated building footprints from OSM, Esri Community Maps, Microsoft ML Building Footprints, and Google Open Buildings.
+The order of conflation is OpenStreetMap → Esri Community Maps → high precision Google Open Buildings → Microsoft ML Building Footprints → lower precision Google Open Buildings. For example, if Esri has a building that does not exist in OSM, we take that building, then we “fill-in” the rest of the map with any ML buildings that do not intersect with either OSM or Esri.
+We use the 90% precision confidence threshold to delineate between high and lower precision for Google Open Buildings, this threshold varies per s2 cell.</p>
+<p>We've made incremental improvements to further ensure the data conforms to the buildings layer schema.</p>
+<p>3d attributes from OSM, such as roof shape, are now available.</p>
+<p>The sources of the buildings theme include OpenStreetMap, Esri Community Maps, Microsoft Building footprints, and Google Open Buildings. Some building heights have also been derived using lidar from USGS 3DEP.</p>
+<p>Data in the Buildings theme is licensed under ODbL.</p>
+<p><strong>Transportation Theme</strong></p>
+<ul>
+<li>Refreshed data to include OSM data up to Feb 5</li>
+<li>Segment names are now a top-level property with a unified schema</li>
+<li>Access restrictions are now populated for most simple cases</li>
+<li>OSM source IDs are now included for all segments</li>
+</ul>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>GERS IDs for connectors and segments should now be considered stable for this and future releases</p></div></div>
+<p>Data in the Transportation theme is licensed under ODbL.</p>
+<p><strong>Base Theme</strong></p>
+<ul>
+<li>All of the features in the base theme are from OpenStreetMap, sourced via the latest Daylight Map Distribution (v1.40).</li>
+<li>Includes 44M water features, 63M land features, and 34M land use features.
+Most original OSM tags remain on all features. Some tags become normalized and added as top-level properties, such as the surface or wikidata tags.</li>
+</ul>
+<p>Data in the Base theme is licensed under ODbL.</p>
+<p><strong>Places Theme</strong>
+This release has roughly 54M place records. The Places theme in this release includes incremental improvements to improve the accuracy and quality of the dataset.</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>For the first time, this release includes GERS stableids propagated from the previous release. Roughly 50M of the ids are propagated and 4M of the ids are new.</p></div></div>
+<p>Data in the Places theme is licensed under CDLA Permissive 2.0.</p>
+<p><strong>Administrative Boundaries (Admins) Theme</strong></p>
+<ul>
+<li>First version where all countries have second-level subdivisions.</li>
+<li>In 37 countries we used geoBoundaries as data source for second-level subdivisions where OpenStreetMap data is missing or is incomplete.</li>
+<li>Data from OSM is updated to 8th of February.</li>
+<li><code>AdminLevel</code> property value changed from 2 for Country, 4 for State and 6 for County to be 1 for Country, 2 for State and 3 for County.</li>
+<li>Added Wikidata and Population properties.</li>
+<li>All administrative localities now have <code>isoCountryCodeAlpha2</code> set for easier filtering to specific country.</li>
+</ul>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>Known issue: All first-level subdivisions have type=state and all second-level subdivisions have type=county which is not always true, we plan to address this issue in following release. Will be fixed in March release.</p></div></div>
+<p>The sources of the admin theme are OpenStreetMap, geoBoundaries and Esri.</p>
+<p>The Administrative Boundary data is in the Overture Maps data schema for Admin.</p>
+<p>Data in the Admin theme is licensed under ODbL.</p>
+<p><strong>Documentation</strong>
+Updated schema, reference and GERS technical documentation.
+Integrated <a href="https://labs.overturemaps.org/how-to/" target="_blank" rel="noopener noreferrer">https://labs.overturemaps.org/how-to/</a> with core documentation.
+Added new guides and tutorials for accessing, exploring  and visualizing data.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/2024-02-15-alpha.0#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<ul>
+<li>© OpenStreetMap contributors available under the Open Database License (<a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">www.openstreetmap.org/copyright</a>)</li>
+<li>U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Program</li>
+<li>Building data © OpenStreetMap contributors, Microsoft, Esri Community Maps contributors, Google Open Buildings</li>
+<li>Administrative Boundaries from geoBoundaries.</li>
+</ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2024-01-17-alpha.0]]></title>
+            <link>https://docs.overturemaps.org/release/2024-01-17-alpha.0</link>
+            <guid>https://docs.overturemaps.org/release/2024-01-17-alpha.0</guid>
+            <pubDate>Wed, 17 Jan 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Highlights]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://docs.overturemaps.org/release/2024-01-17-alpha.0#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3>
+<p>Overture <code>2024-01-17-alpha.0</code> is now available. This release includes several incremental improvements, addition of geopolitical boundary information in the Admins Theme and expansion of GERS IDs across several themes. More information about these additions is available in the relevant sections below.</p>
+<p>This data is formatted in the Overture Data Schema unless otherwise noted.</p>
+<p>This data is available for use under the designated licenses for each theme.</p>
+<p>We would like feedback on the data, its usefulness, and how it could be improved. Please use this Github repo for discussions and feedback related to this data release.</p>
+<p>Overture <code>2024-01-17-alpha.0</code> is available in GeoParquet and stored on AWS and Azure.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="https://docs.overturemaps.org/release/2024-01-17-alpha.0#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases/tag/v0.8.0" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/2024-01-17-alpha.0#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p>Overture <code>2024-01-17-alpha.0</code> is released in five themes.</p>
+<p><strong>Buildings Theme</strong>
+The dataset includes 2.35B conflated building footprints from OSM, Esri Community Maps, Microsoft ML Building Footprints, and Google Open Buildings.
+The order of conflation is OpenStreetMap → Esri Community Maps → high precision Google Open Buildings → Microsoft ML Building Footprints → lower precision Google Open Buildings. For example, if Esri has a building that does not exist in OSM, we take that building, then we “fill-in” the rest of the map with any ML buildings that do not intersect with either OSM or Esri.
+We use the 90% precision confidence threshold to delineate between high and lower precision for Google Open Buildings, this threshold varies per s2 cell.</p>
+<p>We've made incremental improvements to further ensure the data conforms to the buildings layer schema.</p>
+<p>3d attributes from OSM, such as roof shape, are now available.</p>
+<p>The sources of the buildings theme include OpenStreetMap, Esri Community Maps, Microsoft Building footprints, and Google Open Buildings. Some building heights have also been derived using lidar from USGS 3DEP.</p>
+<p>Data in the Buildings theme is licensed under ODbL.</p>
+<p><strong>Transportation Theme</strong>
+Refreshed data to include OSM data up to Dec 19</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>GERS IDs for connectors and segments should now be considered stable for future releases</p></div></div>
+<p>Data in the Transportation theme is licensed under ODbL.</p>
+<p><strong>Base Theme</strong>
+All of the features in the base theme are from OpenStreetMap, sourced via the latest Daylight Map Distribution (v1.38).</p>
+<p>Includes 43M water features, 63M land features, and 44M land use features.</p>
+<p>Most original OSM tags remain on all features. Some tags become normalized and added as top-level properties, such as the surface or wikidata tags.</p>
+<p>Data in the Base theme is licensed under ODbL.</p>
+<p><strong>Places Theme</strong>
+This release has over 57M place records.</p>
+<p>The Places theme in this release includes incremental improvements to improve the accuracy and quality of the dataset.</p>
+<p>Data in the Places theme is licensed under CDLA Permissive 2.0.</p>
+<p><strong>Administrative Boundaries (Admins) Theme</strong>
+Minor improvements on second-level subdivision of countries.
+Data from OSM is updated to 15th of January.</p>
+<p>This is first release with "geopolDisplay" property set on boundaries.</p>
+<p>Known issues:</p>
+<ul>
+<li>Second-level subdivision are still not complete world-wide, as we search for data sources that are compatible with ODbL.</li>
+<li>All first-level subdivisions have type=state and all second-level subdivisions have type=county which is not always true, we plan to address this issue in following release.</li>
+<li>We plan to use admin_level=8,9,10 to add polygons to cities, towns, villages and other localities when available depending on individual country mapping.</li>
+</ul>
+<p>The sources of the admin theme are OpenStreetMap and Esri. The Administrative Boundary data is in the Overture Maps data schema for Admin.</p>
+<p>Data in the Admin theme is licensed under ODbL.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/2024-01-17-alpha.0#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<ul>
+<li>© OpenStreetMap contributors available under the Open Database License (<a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">www.openstreetmap.org/copyright</a>)</li>
+<li>U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Program</li>
+<li>Building data © OpenStreetMap contributors, Microsoft, Esri Community Maps contributors, Google Open Buildings</li>
+</ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2023-12-14-alpha.0]]></title>
+            <link>https://docs.overturemaps.org/release/2023-12-14-alpha.0</link>
+            <guid>https://docs.overturemaps.org/release/2023-12-14-alpha.0</guid>
+            <pubDate>Thu, 14 Dec 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Highlights]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://docs.overturemaps.org/release/2023-12-14-alpha.0#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3>
+<p>Overture <code>2023-12-14-alpha.0</code> is now available. This release includes several incremental improvements, the conflation of Google Open Buildings into the Building theme and expansion of GERS IDs across several themes. More information about these additions is available in the relevant sections below.</p>
+<p>This data is formatted in the Overture Data Schema unless otherwise noted.</p>
+<p>This data is available for use under the designated licenses for each theme.</p>
+<p>We would like feedback on the data, its usefulness, and how it could be improved. Please use this Github repo for discussions and feedback related to this data release.</p>
+<p>Overture Overture <code>2023-12-14-alpha.0</code> is available in cloud-native Parquet (updated to Geo Parquet format for this release) and stored on AWS and Azure.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="https://docs.overturemaps.org/release/2023-12-14-alpha.0#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases/tag/v0.7.0" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/2023-12-14-alpha.0#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p>Overture <code>2023-12-14-alpha.0</code> is released in five themes.</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">+--------------+----------------------+----------+</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|theme         |type                  |count     |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">+--------------+----------------------+----------+</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|admins        |administrativeBoundary|59281     |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|admins        |locality              |3817886   |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|admins        |localityArea          |422245    |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|base          |land                  |62239589  |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|base          |landUse               |43818585  |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|base          |water                 |42556151  |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|buildings     |building              |2339547325|</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|buildings     |part                  |2850221   |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|places        |place                 |57619504  |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|transportation|connector             |340035621 |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">|transportation|segment               |300834113 |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">+--------------+----------------------+----------+</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>Buildings Theme</strong>
+The dataset includes 2.4B conflated building footprints from OSM, Esri Community Maps, Microsoft ML Building Footprints, and Google Open Buildings.
+The order of conflation is OpenStreetMap → Esri Community Maps → high precision Google Open Buildings → Microsoft ML Building Footprints → lower precision Google Open Buildings. For example, if Esri has a building that does not exist in OSM, we take that building, then we “fill-in” the rest of the map with any ML buildings that do not intersect with either OSM or Esri.</p>
+<p>We use the 90% precision confidence threshold to delineate between high and lower precision for Google Open Buildings, which varies per s2 cell.
+Google Open Building coverage is primarily in the southern hemisphere and the m3 release adds nearly 1.1B buildings from the Google Open Buildings Dataset, replacing existing MSFT ML buildings where Google was found to have higher quality data.</p>
+<p>We've introduced a new 3d part type to support 3d building renderings. This is the first release of this dataset and sourced from OpenStreetMap.
+We've made incremental improvements to further ensure the data conforms to the buildings layer schema.</p>
+<p>The sources of the buildings theme include OpenStreetMap, Esri Community Maps, Microsoft Building footprints, and Google Open Buildings. Some building heights have also been derived using lidar from USGS 3DEP.</p>
+<p>Data in the Buildings theme is licensed under ODbL.</p>
+<p><strong>Transportation Theme</strong></p>
+<ul>
+<li>Refreshed Data to include OSM data up to Nov 27</li>
+<li>Added two additional road classes for pedestrians: sidewalk and crosswalk</li>
+<li>Features previously classified as footway will now be reassigned to one of: footway, sidewalk, or crosswalk</li>
+<li>Speed-limit properties that apply to the entire segment are now captured as an array with one element instead of an enum</li>
+<li>This is a simplification of the schema to reduce cases where there is different typing based on scoping conditions</li>
+</ul>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>GERS ID format updated to match Schema definition</p></div></div>
+<p>Data in the Transportation theme is licensed under ODbL.</p>
+<p><strong>Base Theme</strong>
+All of the features in the base theme are from OpenStreetMap, sourced via the latest Daylight Map Distribution (v1.35). Data validation improvements fixed the classification of 400k landUse features and added 620k new land features and 295k new water features. Most original OSM tags remain on all features. Some tags become normalized and added as top-level properties, such as the surface or wikidata tags.</p>
+<p>Data in the Base theme is licensed under ODbL.</p>
+<p><strong>Places Theme</strong>
+This release has over 57M place records.
+The Places theme in this release includes incremental improvements to improve the accuracy and quality of the dataset.
+New data has been included to improve category coverage.
+Updated to computation of confidence scores.
+Minor updates to formatting for categories.</p>
+<p>Data in the Places theme is licensed under CDLA Permissive 2.0.</p>
+<p><strong>Administrative Boundaries (Admins) Theme</strong>
+The Admins theme in this release includes only minor fix to not set adminLevel on namedLocalities</p>
+<p>Known issues:</p>
+<ul>
+<li>Second-level subdivision did not undergo worldwide inspection of quality so some missing or wrong data is expected.</li>
+<li>All first-level subdivisions have type=state and all second-level subdivisions have type=county which is not always true, we plan to address this issue in following releases.</li>
+<li>We plan to use admin_level=8,9,10 to add polygons to cities, towns, villages and other localities when available depending on individual country mapping.</li>
+</ul>
+<p>The sources of the admin theme are OpenStreetMap and Esri. The Administrative Boundary data is in the Overture Maps data schema for Admin.</p>
+<p>Data in the Admin theme is licensed under ODbL.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/2023-12-14-alpha.0#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<ul>
+<li>© OpenStreetMap contributors available under the Open Database License (<a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">www.openstreetmap.org/copyright</a>)</li>
+<li>U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Program</li>
+<li>Building data © OpenStreetMap contributors, Microsoft, Esri Community Maps contributors, Google Open Buildings</li>
+</ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2023-11-14-alpha.0]]></title>
+            <link>https://docs.overturemaps.org/release/2023-11-14-alpha.0</link>
+            <guid>https://docs.overturemaps.org/release/2023-11-14-alpha.0</guid>
+            <pubDate>Tue, 14 Nov 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Highlights]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://docs.overturemaps.org/release/2023-11-14-alpha.0#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3>
+<p>Overture <code>2023-11-14-alpha.0</code> is now available. This is an incremental release that includes several improvements to the data quality and coverage as well as updates for data currency. More information about these additions is available in the relevant sections below.</p>
+<p>This data is formatted in the Overture Data Schema unless otherwise noted.</p>
+<p>This data is available for use under the designated licenses for each theme. While Overture intends to release open map data on a regular cadence in the future, the date of subsequent releases has not yet been established.</p>
+<p>We would like feedback on the data, its usefulness, and how it could be improved. Please use this Github repo for discussions and feedback related to this data release.</p>
+<p>Overture <code>2023-11-14-alpha.0</code> is available in cloud-native Parquet and stored on AWS and Azure.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="https://docs.overturemaps.org/release/2023-11-14-alpha.0#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases/tag/v0.6.0" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/2023-11-14-alpha.0#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p>Overture <code>2023-11-14-alpha.0</code> is released in five themes. Updated to Geo Parquet format for this release:</p>
+<p><strong>Transportation Theme</strong>
+The Transportation theme includes the following improvements:</p>
+<ul>
+<li>Collective OSM changes through October 15th, updated and converted to Overture’s Schema.</li>
+<li>Over 1.5 million turn restrictions worldwide.</li>
+</ul>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>The data includes some provisional Global Entity Reference System (GERS) data which is used to express relationships between road segments. This may not be representative of the final GERS format and should not be the basis for long-term development work.</p></div></div>
+<p>Data in the Transportation theme is licensed under ODbL.</p>
+<p><strong>Base Theme</strong>
+All of the features in the base theme are from OpenStreetMap, sourced via the Daylight Map Distribution. Most original OSM tags remain on all features. Some tags become normalized and added as top-level properties, such as the surface or wikidata tags.</p>
+<p>Data in the Base theme is licensed under ODbL.</p>
+<p><strong>Buildings Theme</strong>
+The dataset includes 1.4B conflated building footprints from OSM, Esri Community Maps, and Microsoft ML Building Footprints. Similar to the previous release, the order of conflation is OpenStreetMap -&gt; Esri Community Maps -&gt; Microsoft ML Building Footprints. For example, if Esri has a building that does not exist in OSM, we take that building, then, we “fill-in” the rest of the map with any Microsoft ML buildings that do not intersect with either OSM or Esri.</p>
+<p>We've made some incremental improvements to further ensure the data conforms to the buildings layer schema.</p>
+<p>The sources of the buildings theme include OpenStreetMap, Microsoft Building footprints, and Esri Community Partners. Some building heights have also been derived using lidar from USGS 3DEP.</p>
+<p>Data in the Buildings theme is licensed under ODbL.</p>
+<p><strong>Places Theme</strong>
+This release has over 57M place records. The Places theme in this release includes incremental improvements to improve the accuracy and quality of the dataset:</p>
+<ul>
+<li>Corrected missing postal codes from the previous release (2023-10-19-alpha.0).</li>
+<li>New data has been included to improve category coverage.</li>
+</ul>
+<p>Data in the Places theme is licensed under CDLA Permissive 2.0.</p>
+<p><strong>Administrative Boundaries (Admins) Theme</strong>
+The Admins theme in this release includes several modifications to improve schema of the dataset:</p>
+<ul>
+<li>We added ability for admins to have point and area, in future multiple areas like landmass and maritime area</li>
+<li>Fixed issue with invalid format of updateTime property</li>
+</ul>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>Known issues:</p><ul>
+<li>Second-level subdivision did not undergo worldwide inspection of quality so some missing or wrong data is expected.</li>
+<li>All first-level subdivisions have type=state and all second-level subdivisions have type=county which is not always true, we plan to address this issue in following releases.</li>
+<li>We plan to use admin_level=8,9,10 to add polygons to cities, towns, villages and other localities when available depending on individual country mapping.</li>
+</ul></div></div>
+<p>The sources of the admin theme are OpenStreetMap and Esri. The Administrative Boundary data is in the Overture Maps data schema for Admin.</p>
+<p>Data in the Admin theme is licensed under ODbL.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/2023-11-14-alpha.0#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<ul>
+<li>© OpenStreetMap contributors available under the Open Database License (<a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">www.openstreetmap.org/copyright</a>)</li>
+<li>U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Program</li>
+<li>Building data © OpenStreetMap contributors, Microsoft, Esri Community Maps contributors</li>
+</ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2023-10-19-alpha.0]]></title>
+            <link>https://docs.overturemaps.org/release/2023-10-19-alpha.0</link>
+            <guid>https://docs.overturemaps.org/release/2023-10-19-alpha.0</guid>
+            <pubDate>Thu, 19 Oct 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Highlights]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://docs.overturemaps.org/release/2023-10-19-alpha.0#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3>
+<p>Overture <code>2023-10-19-alpha.0</code> is now available. This release includes several improvements to the data quality and coverage as well as updates for data currency.  There are two new additions of note:</p>
+<ul>
+<li><strong>Base Theme</strong>: A new Base theme that provides three context data subtypes. These can be used with the other themes to allow developers to build complete maps using any Overture release.</li>
+<li><strong>Buildings Theme</strong>: Stable identifiers have been added to 1.6M buildings in 8 cities to demonstrate how Overture will implement stable identifiers (named Global Entity Reference System or GERS).</li>
+</ul>
+<p>More information about these additions is available in the relevant sections below.</p>
+<p>This data is formatted in the Overture Data Schema unless otherwise noted.</p>
+<p>This data is available for use under the designated licenses for each theme. While Overture intends to release open map data on a regular cadence in the future, the date of subsequent releases has not yet been established.</p>
+<p>We would like feedback on the data, its usefulness, and how it could be improved. Please use this Github repo for discussions and feedback related to this data release.</p>
+<p>Overture <code>2023-10-19-alpha.0</code> is formatted in the Overture Maps schema described here. It is available in cloud-native Parquet and stored on AWS and Azure.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="https://docs.overturemaps.org/release/2023-10-19-alpha.0#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases/tag/v0.5.0" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/2023-10-19-alpha.0#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p>Overture <code>2023-10-19-alpha.0</code> is released in five themes.</p>
+<p><strong>Base Theme</strong>
+The Base theme is an entirely new theme with 3 subTypes: land, landUse, and water. The overall purpose of this new theme is to allow users to create a complete map using any Overture release. Descriptions of the subTypes for Base are:</p>
+<ul>
+<li>land: Physical representations of land surfaces. Derived from the inverse of OSM Coastlines.</li>
+<li>landUse: Classifications of the human use of a section of land. Mostly derived from the key landuse in OpenStreetMap</li>
+<li>water: Physical representations of inland and ocean marine surfaces. Derived from OSM Coastlines, and the keys natural and waterway in OpenStreetMap.</li>
+</ul>
+<p>All of the features in the base theme are from OpenStreetMap, sourced via the Daylight Map Distribution. Original OSM tags remain on all features. Some tags become top-level properties, such as the surface or wikidata tags.</p>
+<p>Data in the Base theme is licensed under ODbL.</p>
+<p><strong>Buildings Theme</strong>
+The dataset includes 1.39B conflated building footprints from OSM, Esri Community Maps, and Microsoft ML Building Footprints. This is an increase of ~700M building footprints from the July Alpha release by including the complete Microsoft ML Building footprint dataset.</p>
+<p>The order of conflation is OpenStreetMap &gt; Esri Community Maps &gt; Microsoft ML Building Footprints. For example, if Esri has a building that does not exist in OSM, we take that building, then, we "fill-in" the rest of the map with any Microsoft ML buildings that do not intersect with either OSM or Esri.</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>A sample set of 1.6M buildings from OpenStreetMap and Esri have been assigned an initial GERS ID for demonstration purposes. These IDs are 32 character strings. By referencing these other datasets to this data release, we can match GERS IDs to external datasets and demonstrate how GERS can enable ID-based joins between two geospatial datasets. These are located in the following cities:</p><ul>
+<li>United States: Seattle, Washington; Macon, Georgia; Charleston, South Carolina; Spokane, Washington</li>
+<li>Canada: Kingston, Ontario</li>
+<li>Netherlands: Leeuwarden, Friesland</li>
+<li>Germany: Berlin</li>
+<li>Brazil: Rio De Janeiro</li>
+</ul><p>For a deeper look at how GERS is used to link datasets on this data, see <a href="https://www.esri.com/arcgis-blog/products/arcgis-online/mapping/enriching-overture-data-with-gers/" target="_blank" rel="noopener noreferrer">this blog post from Deane Kensok at Esri</a>.</p></div></div>
+<p>The sources include OpenStreetMap, Microsoft Building footprints, and Esri Community Partners. Some building heights have also been derived using lidar from USGS 3DEP. The Building data is in the Overture Maps data schema for Buildings.</p>
+<p>Data in the Buildings theme is licensed under ODbL.</p>
+<p><strong>Administrative Boundaries (Admins) Theme</strong>
+The Admins theme includes multiple locality types:</p>
+<ul>
+<li>Countries formed from OpenStreetMap relations, primarily admin_level=2, with few exceptions such as admin_level=3 French Polynesia.</li>
+<li>First-level subdivisions under the country which was mapped from OpenStreetMap admin_level depending on country, in most countries admin_level=4.</li>
+<li>Second-level subdivisions under the country which was mapped from OpenStreetMap admin_level depending on country, in most countries admin_level=6.</li>
+<li>Cities, Town, Villages, Neighborhoods... based on place=* tag. In most cases these are just points. When relation with place=* tag exist we provide polygon geometry.</li>
+</ul>
+<p>It also includes administrative boundaries representing borders of countries, first-level subdivisions and second-level subdivisions. The Administrative Boundary data is in the Overture Maps data schema for Admin.
+Second-level subdivision did not undergo worldwide inspection of quality so some missing or wrong data is expected. All first-level subdivisions have <code>type=state</code> and all second-level subdivisions have <code>type=county</code> which is not always true; we plan to address this issue in future releases. We plan to use admin_level=8,9,10 to add polygons to cities, town, villages and other localities when available depending on individual country mapping.</p>
+<p>Data in the Admin theme is licensed under ODbL. The sources of the admin theme are OpenStreetMap and Esri.</p>
+<p><strong>Places Theme</strong>
+This release has over 57M place records. The Places theme in this release includes several modifications to improve the accuracy and quality of the dataset:</p>
+<ul>
+<li>Increased deduplication on significant landmarks by revising the screening criteria for signals based on check-ins only</li>
+<li>Removal of places determined to be non-existent</li>
+<li>Address normalization bug fix that was yielding incorrect pin locations. In addition, support for website, phone and category was added to the Microsoft sourced data.</li>
+<li>Some additional place records were added as a result of tuning of the algorithms.</li>
+</ul>
+<p>Data in the Places theme is licensed under CDLA Permissive 2.0.</p>
+<p><strong>Transportation Theme</strong>
+The Transportation theme includes the following improvements:</p>
+<ul>
+<li>Collective OSM changes through September 15th, updated and converted to Overture's Schema.</li>
+<li>Addition of Linear Referenced features, enabling the description of properties that apply along only portions of a segment.</li>
+<li>Over 1.3 million turn restrictions worldwide</li>
+<li>Additional scoping types populated in the Transportation data, including Travel Modes, Temporal Scoping, Geometric Scoping, and Heading</li>
+<li>Additional properties populated in the Transportation data, including Speed Limits, surface, and road flags.</li>
+</ul>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>There are several missing properties in this data release that will be added in future releases:</p><ul>
+<li>Only includes road segments made from Ways that include a ‘highway’ tag</li>
+<li>Non-geometric scoping properties are not included</li>
+<li>Turn and Access restrictions are not included</li>
+<li>Lane information is not included</li>
+<li>Some language/scripts are not included in names properties</li>
+</ul></div></div>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>The data includes some provisional Global Entity Reference System (GERS) data which is used to express relationships between road segments. This may not be representative of the final GERS format and should not be the basis for long-term development work.</p></div></div>
+<p>Data in the Transportation theme is licensed under ODbL.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/2023-10-19-alpha.0#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<ul>
+<li>© OpenStreetMap contributors available under the Open Database License (<a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">www.openstreetmap.org/copyright</a>)</li>
+<li>U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Program</li>
+<li>Building data © OpenStreetMap contributors, Microsoft, Esri Community Maps contributors</li>
+</ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2023-07-26-alpha.0]]></title>
+            <link>https://docs.overturemaps.org/release/2023-07-26-alpha.0</link>
+            <guid>https://docs.overturemaps.org/release/2023-07-26-alpha.0</guid>
+            <pubDate>Wed, 26 Jul 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Highlights]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="highlights">Highlights<a href="https://docs.overturemaps.org/release/2023-07-26-alpha.0#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3>
+<p>Overture <code>2023-07-26-alpha.0</code> is a first release version of open map data, establishing a baseline for future releases by the Overture Maps Foundation. The data is available for use under the designated licenses for each theme.  Users should note that while Overture intends to release open map data on a regular cadence in the future, the date of subsequent releases has not been established yet.</p>
+<p>We would like feedback on the data, its usefulness and how it could be improved.  Please use this Github repo for discussions and feedback related to this data release.</p>
+<p>Overture <code>2023-07-26-alpha.0</code> is formatted in the Overture Maps schema described here. It is available in cloud-native Parquet and stored on AWS and Azure.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="https://docs.overturemaps.org/release/2023-07-26-alpha.0#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h3>
+<p>See our <a href="https://github.com/OvertureMaps/schema/releases/tag/v0.4.0" target="_blank" rel="noopener noreferrer">changelog</a> here.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="theme-specific-updates">Theme-specific updates<a href="https://docs.overturemaps.org/release/2023-07-26-alpha.0#theme-specific-updates" class="hash-link" aria-label="Direct link to Theme-specific updates" title="Direct link to Theme-specific updates">​</a></h3>
+<p>Overture <code>2023-07-26-alpha.0</code> is being released in four themes:</p>
+<p><strong>Places Theme</strong>
+The Places theme includes Point of Interest (POI) Data on approximately 59M places worldwide. Place records include the name, address, pin location, category and social media handles to the extent these are available.  The data also includes a confidence score for each record. The sources of the Places theme include Meta and Microsoft places data. The Places data is formated in the Overture Maps schema for Places.</p>
+<p>Data in the Places theme is licensed under CDLA Permissive 2.0.</p>
+<p><strong>Buildings Theme</strong>
+The Buildings theme includes building footprint and height data as available.  It includes approximately 785M building outlines worldwide.  The sources include OpenStreetMap, Microsoft Building footprints and Esri Community Partners. Some building heights have also been derived using lidar from USGS 3DEP. The Building data is in the Overture Maps data schema for Buildings.</p>
+<p>Data in the Buildings theme is licensed under ODbL.</p>
+<p><strong>Transportation Theme</strong>
+The transportation theme includes road networks data based on OpenStreetMap.  This release is a demonstration of our Shape and Connectivity model of the transportation network, and also showcases how Geometric Scoping (LR) interacts with a subset of the final properties. The data has been put into the Overture Maps data schema for transportation.  As such, the data has been re-segmented and structured with some conditional attributes. For example, scoping dimensions related to speed limits have geometric scoping when speed limits change along a road segment.</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>The data includes some provisional Global Entity Reference System (GERS) data which is used to express relationships between road segments. This may not be representative of the final GERS format and should not be the basis for long term development work.</p></div></div>
+<p>There are several missing properties in this data release that will be added in future releases:</p>
+<ul>
+<li>Only includes road segments made from Ways that include a 'highway' tag</li>
+<li>Non-geometric scoping properties are not included</li>
+<li>Turn and Access restrictions are not included</li>
+<li>Lane information is not included</li>
+<li>Some language/scripts are not included in names properties</li>
+</ul>
+<p>Data is the Transportation theme is licensed under ODbL.</p>
+<p><strong>Administrative Boundaries (Admins) Theme</strong>
+The Admins theme includes administrative boundaries for Level 2 (country-level) and Level 4 (first-level subdivisions under the country) worldwide. Admin records include the translated names for regions in ~40 languages, Context and Sources and placeholder GERS IDs. The sources of the admin theme are Esri and TomTom. The Administrative Boundary data is in the Overture Maps data schema for Admin.</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>Placeholder GERS IDs are populated in the data. These are needed to populate the Context property which points to another admin entity. For example, the Context property of Washington state feature has GERS ID of United States entity as value. This may not be representative of the final GERS format and should not be the basis for long term development work.</p></div></div>
+<p>Data in the Admins theme is licensed under CDLA Permissive 2.0.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="attribution">Attribution<a href="https://docs.overturemaps.org/release/2023-07-26-alpha.0#attribution" class="hash-link" aria-label="Direct link to Attribution" title="Direct link to Attribution">​</a></h3>
+<ul>
+<li>© OpenStreetMap contributors available under the Open Database License (<a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">www.openstreetmap.org/copyright</a>)</li>
+<li>U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Program</li>
+<li>Building data © OpenStreetMap contributors, Microsoft, Esri Community Maps contributors</li>
+</ul>]]></content:encoded>
+        </item>
+    </channel>
+</rss>
