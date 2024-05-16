@@ -1,0 +1,97 @@
+---
+title: 2023-12-14-alpha.0
+slug: 2023-12-14-alpha.0
+---
+
+### Highlights
+Overture `2023-12-14-alpha.0` is now available. This release includes several incremental improvements, the conflation of Google Open Buildings into the Building theme and expansion of GERS IDs across several themes. More information about these additions is available in the relevant sections below.
+
+This data is formatted in the Overture Data Schema unless otherwise noted.
+
+This data is available for use under the designated licenses for each theme.
+
+We would like feedback on the data, its usefulness, and how it could be improved. Please use this Github repo for discussions and feedback related to this data release.
+
+Overture Overture `2023-12-14-alpha.0` is available in cloud-native Parquet (updated to Geo Parquet format for this release) and stored on AWS and Azure.
+
+### Changelog
+See our [changelog](https://github.com/OvertureMaps/schema/releases/tag/v0.7.0) here.
+
+### Theme-specific updates
+Overture `2023-12-14-alpha.0` is released in five themes.
+
+```
++--------------+----------------------+----------+
+|theme         |type                  |count     |
++--------------+----------------------+----------+
+|admins        |administrativeBoundary|59281     |
+|admins        |locality              |3817886   |
+|admins        |localityArea          |422245    |
+|base          |land                  |62239589  |
+|base          |landUse               |43818585  |
+|base          |water                 |42556151  |
+|buildings     |building              |2339547325|
+|buildings     |part                  |2850221   |
+|places        |place                 |57619504  |
+|transportation|connector             |340035621 |
+|transportation|segment               |300834113 |
++--------------+----------------------+----------+
+```
+
+**Buildings Theme**
+The dataset includes 2.4B conflated building footprints from OSM, Esri Community Maps, Microsoft ML Building Footprints, and Google Open Buildings.
+The order of conflation is OpenStreetMap → Esri Community Maps → high precision Google Open Buildings → Microsoft ML Building Footprints → lower precision Google Open Buildings. For example, if Esri has a building that does not exist in OSM, we take that building, then we “fill-in” the rest of the map with any ML buildings that do not intersect with either OSM or Esri.
+
+We use the 90% precision confidence threshold to delineate between high and lower precision for Google Open Buildings, which varies per s2 cell.
+Google Open Building coverage is primarily in the southern hemisphere and the m3 release adds nearly 1.1B buildings from the Google Open Buildings Dataset, replacing existing MSFT ML buildings where Google was found to have higher quality data.
+
+We've introduced a new 3d part type to support 3d building renderings. This is the first release of this dataset and sourced from OpenStreetMap.
+We've made incremental improvements to further ensure the data conforms to the buildings layer schema.
+
+The sources of the buildings theme include OpenStreetMap, Esri Community Maps, Microsoft Building footprints, and Google Open Buildings. Some building heights have also been derived using lidar from USGS 3DEP.
+
+Data in the Buildings theme is licensed under ODbL.
+
+**Transportation Theme**
+- Refreshed Data to include OSM data up to Nov 27
+- Added two additional road classes for pedestrians: sidewalk and crosswalk
+- Features previously classified as footway will now be reassigned to one of: footway, sidewalk, or crosswalk
+- Speed-limit properties that apply to the entire segment are now captured as an array with one element instead of an enum
+- This is a simplification of the schema to reduce cases where there is different typing based on scoping conditions
+
+:::note
+GERS ID format updated to match Schema definition
+:::
+
+Data in the Transportation theme is licensed under ODbL.
+
+**Base Theme**
+All of the features in the base theme are from OpenStreetMap, sourced via the latest Daylight Map Distribution (v1.35). Data validation improvements fixed the classification of 400k landUse features and added 620k new land features and 295k new water features. Most original OSM tags remain on all features. Some tags become normalized and added as top-level properties, such as the surface or wikidata tags.
+
+Data in the Base theme is licensed under ODbL.
+
+**Places Theme**
+This release has over 57M place records.
+The Places theme in this release includes incremental improvements to improve the accuracy and quality of the dataset.
+New data has been included to improve category coverage.
+Updated to computation of confidence scores.
+Minor updates to formatting for categories.
+
+Data in the Places theme is licensed under CDLA Permissive 2.0.
+
+**Administrative Boundaries (Admins) Theme**
+The Admins theme in this release includes only minor fix to not set adminLevel on namedLocalities
+
+Known issues:
+- Second-level subdivision did not undergo worldwide inspection of quality so some missing or wrong data is expected.
+- All first-level subdivisions have type=state and all second-level subdivisions have type=county which is not always true, we plan to address this issue in following releases.
+- We plan to use admin_level=8,9,10 to add polygons to cities, towns, villages and other localities when available depending on individual country mapping.
+
+The sources of the admin theme are OpenStreetMap and Esri. The Administrative Boundary data is in the Overture Maps data schema for Admin.
+
+Data in the Admin theme is licensed under ODbL.
+
+### Attribution
+- © OpenStreetMap contributors available under the Open Database License (www.openstreetmap.org/copyright)
+- U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Program
+- Building data © OpenStreetMap contributors, Microsoft, Esri Community Maps contributors, Google Open Buildings

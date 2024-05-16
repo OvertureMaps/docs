@@ -57,18 +57,10 @@ const sidebars = {
         },
         'guides/gers',
         'guides/places',
-        {
-          type: 'doc',
-          id: 'guides/buildings',
-          label: 'Buildings',
-        },
+        'guides/buildings',
         'guides/admins',
         'guides/divisions',
-        {
-          type: 'doc',
-          id: 'guides/base',
-          label: 'Base',
-        },  
+        'guides/base',
         {
           type: 'category',
           label: 'Transportation',
@@ -84,22 +76,7 @@ const sidebars = {
         },
       ],
     },
-    {
-      type: 'category',
-      label: 'Release Notes',
-      <!--link: {-->
-        <!--type: 'doc',-->
-        <!--id: 'release-notes/index'-->
-      <!--},-->
-      collapsed: true,
-      items: [
-        'release-notes/index',
-        'release-notes/archived',
-        'release-notes/attribution',
-        <!--'release-notes/breaking-changes',-->
-        <!--'release-notes/deprecation-notices'-->
-      ]
-    },
+    'attribution'
   ]
 };
 

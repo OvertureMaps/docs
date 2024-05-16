@@ -1,9 +1,13 @@
 ---
-description: Examples of breaking changes
-title: Breaking Changes
+title: 2024-03-12-alpha.0
+slug: 2024-03-12-alpha.0
 ---
 
-### Understanding a breaking change in Overture's `2024-03-12-alpha.0` release
+### Highlights
+Here are the highlights of what's new and updated in Overture's `2024-03-12-alpha.0` release. This release includes a schema change from `camelCase` to `snake_case` for all property names and enumeration member names, an expansion of stable GERS IDs and incremental updates to the schema and datasets.
+
+### Breaking changes
+We changed `camelCase` to `snake_case` in the schema for properties to be more compatible with some SQL engines. This may break existing code and queries:
 
 In previous releases of Overture data, we used `camelCase` for attribute names throughout the schema. A duckdb query to find Pennsylvania in our admins dataset might have looked like this:
 
@@ -52,3 +56,50 @@ WHERE type='locality'
 │ 0857b2b73fffffff01914c596abbfacd │ US-PA                │ 0850c861bfffffff01aeb407d56d3441 │ Pennsylvania │ POINT (-77.7278831 40.9699889) │
 └──────────────────────────────────┴──────────────────────┴──────────────────────────────────┴──────────────┴────────────────────────────────┘
 ```
+
+
+### Deprecations
+In the April 2024 release, Overture will implement a refactor of the `Admins` theme called `Divisions`. Admins and Divisions will coexist for three releases, at which point Divisions will fully replace Admins. More information on this change [here](https://github.com/OvertureMaps/schema/discussions/117).
+
+### Changelog
+See our [changelog](https://github.com/OvertureMaps/schema/releases/tag/v0.9.0) here.
+
+### Theme-specific updates
+
+**Transportation**
+- Refreshed to include OSM data up to 2024-03-03.
+- Added ferry and alley segments.
+- Included 125K previously unsupported turn restrictions.
+- Added support for max weight, height, width and length access restrictions.
+- Added one-way road access restrictions.
+- Added road widths property to segments.
+- Acheived stability of GERS IDs for connectors and segments for this and future releases.
+- Note: data in the transportation theme is licensed under ODbL.
+
+**Administrative Boundaries (Admins)**
+- Refreshed to include OSM data up to 2024-03-07.
+- Adapted schema to use `snake_case` to make attribute names more compatible with some SQL engines.
+- Correctly set locality types.
+- Made minor fixes:
+     - All country localities now have ISO codes.
+     - All non-country localities now have context property set.
+- Note: data in the Admin theme is licensed under ODbL.
+
+**Places**
+- Achieved roughly 54 million place records.
+- Propagated stable GERS IDs from the previous release.
+- Made incremental improvements to accuracy and data quality.
+- Note: data in the Places theme is licensed under CDLA Permissive 2.0.
+
+**Buildings**
+- Exposed the logic Overture uses to transform OSM tags into building attributes.
+- Made incremental improvements to further ensure the data conforms to the buildings schema.
+- Note: data in the Buildings theme is licensed under ODbL.
+
+**Base**
+- Exposed the logic Overture uses to transform OSM tags into attributes in the land use, land and water data types.
+- Made incremental improvements to further ensure the data conforms to the base schema.
+- Note: data in the Base theme is licensed under ODbL.
+
+### Attribution
+The data sources for each theme are cited [here](//attribution).
