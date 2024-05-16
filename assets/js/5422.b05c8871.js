@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[5422],{65422:(e,t,a)=>{a.r(t),a.d(t,{default:()=>s});const s=a.p+"assets/images/overture-release-tables-2aa5d8e182c732df17c42ab77c1b2050.png"}}]);

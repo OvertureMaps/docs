@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[1725],{11725:(e,a,t)=>{t.r(a),t.d(a,{default:()=>n});const n=t.p+"assets/images/amazon-athena-buildings-query-b1aa7969742ae7950454538a57085857.png"}}]);

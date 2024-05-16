@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[5071],{95071:(e,a,t)=>{t.r(a),t.d(a,{default:()=>s});const s=t.p+"assets/images/qgis-parquet-drag-drop-60a9e6d6120ae719e03f6949f0d8a914.gif"}}]);

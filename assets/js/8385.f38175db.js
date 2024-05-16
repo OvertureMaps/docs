@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[8385],{58385:(e,t,a)=>{a.r(t),a.d(t,{default:()=>c});const c=a.p+"assets/images/review-and-create-876b82044e39a4f83100dcac8dc4fec1.png"}}]);

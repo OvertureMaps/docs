@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[9040],{99040:(e,t,s)=>{s.r(t),s.d(t,{default:()=>n});const n=s.p+"assets/images/turn-restriction-01-light-4f337e5da11304d306d040c8ff3cdafb.png"}}]);
