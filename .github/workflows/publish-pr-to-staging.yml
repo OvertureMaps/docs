@@ -11,8 +11,8 @@ permissions:
   contents: read
 
 jobs:
-  build_primary_docs:
-    name: Build primary documentation
+  build:
+    name: Build documentation and push to staging
     runs-on: ubuntu-latest
     steps:
       - name: Check out the main docs repo repository and build.
@@ -32,22 +32,6 @@ jobs:
           DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/
         run: npm run build
 
-      - name: Upload primary docs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: primary_docs
-          path: build
-
-  copy_schema_into_docs_and_deploy:
-    needs:
-      - build_primary_docs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download primary docs
-        uses: actions/download-artifact@v4
-        with:
-          name: primary_docs
-
       - name: Fetch AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -56,7 +40,7 @@ jobs:
 
       - name: Copy Docusaurus website to staging bucket how-to/pr/${{github.event.number}}/
         run: |
-          aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING . s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
+          aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING build s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
 
       - name: Purge CDN cache
         run: |
