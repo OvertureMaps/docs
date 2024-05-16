@@ -39,7 +39,7 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
 
-  trailingSlash: true,
+  trailingSlash: false,
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -60,6 +60,10 @@ const config = {
             rules: [
               {
                 test: /\.pmtiles$/,
+                use: 'raw-loader'
+              },
+              {
+                test: /\.yaml$/,
                 use: 'raw-loader'
               },
             ],
@@ -125,9 +129,13 @@ const config = {
             label: 'Docs',
           },
           {
-            to: 'https://docs.overturemaps.org/schema/',
+            type: 'docSidebar',
+            sidebarId: 'schema',
+            position: 'left',
             label: 'Schema Reference',
-            target: '_self'
+            // to: 'https://docs.overturemaps.org/schema/',
+            // target: '_self'
+            // to: '/schema',
           },
           {
             to: 'release/latest',
