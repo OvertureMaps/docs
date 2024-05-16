@@ -19,7 +19,7 @@ echo "Copying Schema Pages"
 rm -rf docs/schema
 mkdir -p docs/schema/reference/ && cp -R schema/docusaurus/docs/reference/* docs/schema/reference/
 mv docs/schema/reference/index.mdx docs/schema/index.mdx
-sed -i '' 's|slug: /|slug: /schema|' docs/schema/index.mdx
+sed -i 's|slug: /|slug: /schema|' docs/schema/index.mdx
 
 echo "Removing schema repo"
 rm -rf schema/
