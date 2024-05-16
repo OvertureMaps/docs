@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "npm run docusaurus start",
+    "start": "./fetch_schema.sh && npm run docusaurus start",
     "build": "./fetch_schema.sh && npm run docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -19,7 +19,7 @@
     "@mdx-js/react": "^3.0.0",
     "clsx": "^1.2.1",
     "docusaurus": "^1.14.7",
-    "docusaurus-json-schema-plugin": "^1.6.0",
+    "docusaurus-json-schema-plugin": "^1.12.0",
     "js-yaml": "^4.1.0",
     "maplibre-gl": "^3.6.2",
     "pmtiles": "^2.11.0",
