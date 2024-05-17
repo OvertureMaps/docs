@@ -1,0 +1,18 @@
+---
+title: Land cover is live
+---
+
+Mapmakers rejoice! The May release of Overture Maps includes high-resolution land cover data *and* new cartographic schema properties.
+
+Our `land_cover` feature type is vectorized data derived from the [European Space Agency’s 2020 WorldCover (10m) rasters](https://esa-worldcover.org/en). It's similar to the land cover layer in the [Daylight](https://daylightmap.org/2023/10/11/landcover.html) map distribution, but the Overture Maps version includes a high-resolution version of the data (zoom level 15).
+
+The high-resolution land cover includes 10 subtypes: snow, forest, urban, grass, crop, barren, wetland, moss, mangrove, and shrub. There are seven subtypes in the lower-resolution data: snow, forest, urban, grass, crop, barren, and shrub. 
+
+Our May release also includes new schema properties that offer cartographic "hints" for optimal use of Overture Maps data in mapmaking. For the `land_cover` type, we added `min_zoom` and `max_zoom` to define the recommended zooms for each resolution of land cover, using the common “slippy maps” zoom level specification. These new properties are just the first step toward improving the user experience for mapmakers. We plan to expand these properties in future releases of Overture Maps data.
+
+If you'd like to explore Overture Maps land cover data using [lonboard](https://developmentseed.org/lonboard/latest/), check out our notebook example below.
+
+import PartialExample from '@site/blog/notebooks/overture-land_cover.md';
+
+<PartialExample name='embedding markdown'/>
+
