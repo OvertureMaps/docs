@@ -1,7 +1,7 @@
 ---
 name: Publish docs to staging website (for PR)
 
-on: 
+on:
   pull_request:
 
   workflow_dispatch:
@@ -11,44 +11,8 @@ permissions:
   contents: read
 
 jobs:
-
-  build_schema_docs:
-    name: Build schema documentation
-    runs-on: ubuntu-latest
-    steps:
-      # Now checkout the schema repo?
-      - name: Checkout schema repo
-        uses: actions/checkout@v4
-        with:
-          repository: OvertureMaps/schema
-          ref: dev
-          sparse-checkout: |
-            docusaurus
-            schema
-            examples
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "19"
-
-      - name: Install NPM dependencies
-        run: cd docusaurus && npm install
-
-      - name: Build the schema reference documentation pages
-        env:
-          DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
-          DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/schema/
-        run: cd docusaurus && npm run build
-
-      - name: Upload schema reference docs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: schema_reference_docs_dev
-          path: docusaurus/build
-
-  build_primary_docs:
-    name: Build primary documentation
+  build:
+    name: Build documentation and push to staging
     runs-on: ubuntu-latest
     steps:
       - name: Check out the main docs repo repository and build.
@@ -60,38 +24,13 @@ jobs:
           node-version: "19"
 
       - name: Install NPM dependencies
-        run: npm install
+        run: npm install --prefer-dedupe
 
       - name: Build Docusaurus website
         env:
           DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
           DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/
         run: npm run build
-
-      - name: Upload primary docs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: primary_docs
-          path: build
-
-  
-
-  copy_schema_into_docs_and_deploy:
-    needs:
-      - build_primary_docs
-      - build_schema_docs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download primary docs
-        uses: actions/download-artifact@v4
-        with:
-          name: primary_docs
-
-      - name: Download schema reference docs
-        uses: actions/download-artifact@v4
-        with:
-          name: schema_reference_docs_dev
-          path: schema/
 
       - name: Fetch AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -101,7 +40,7 @@ jobs:
 
       - name: Copy Docusaurus website to staging bucket how-to/pr/${{github.event.number}}/
         run: |
-          aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING . s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
+          aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING build s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
 
       - name: Purge CDN cache
         run: |

@@ -1,5 +1,5 @@
 const yaml = require('js-yaml')
-// const YAML_FILES = require('@site/src/YAML_FILE_TREE.js').default
+const YAML_FILES = require('@site/src/YAML_FILE_TREE.js').default
 
 var generatePath = require("@site/src/components/shared-libs/generatePath");
 
