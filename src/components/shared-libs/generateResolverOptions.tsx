@@ -1,8 +1,5 @@
-import LocalFileResolver from "@site/src/components/shared-libs/localFileResolver"
 import RemoteResolver from "@site/src/components/shared-libs/remoteResolver"
-// import yamlFileResolver from "@site/src/components/shared-libs/yamlFileResolver"
-
-var yamlFileResolver  = require("@site/src/components/shared-libs/yamlFileResolver");
+import YAMLFileResolver from "@site/src/components/shared-libs/yamlFileResolver"
 
 type Params = {
   basePath?: string
@@ -18,13 +15,7 @@ export default function generateResolverOptions(params: Params) {
 
   if (yamlBasePath || yamlBasePath == "") {
     config["resolvers"] = {
-        file: (0, yamlFileResolver.default)(yamlBasePath),
-    }
-}
-
-  if (basePath) {
-    config["resolvers"] = {
-      file: LocalFileResolver(basePath),
+        file: YAMLFileResolver(yamlBasePath),
     }
   }
 

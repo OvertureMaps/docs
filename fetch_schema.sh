@@ -1,5 +1,5 @@
 rm -rf schema/
-git clone --branch=main -n --depth=1 --filter=tree:0 https://github.com/overturemaps/schema
+git clone --branch=docusaurus-updates -n --depth=1 --filter=tree:0 https://github.com/overturemaps/schema
 cd schema
 git sparse-checkout set --no-cone examples schema docusaurus
 git checkout
@@ -17,9 +17,7 @@ mkdir -p docs/_schema && cp -R schema/schema/* docs/_schema/
 
 echo "Copying Schema Pages"
 rm -rf docs/schema
-mkdir -p docs/schema/reference/ && cp -R schema/docusaurus/docs/reference/* docs/schema/reference/
-mv docs/schema/reference/index.mdx docs/schema/index.mdx
-sed -i 's|slug: /|slug: /schema|' docs/schema/index.mdx
+mkdir -p docs/schema/ && cp -R schema/docusaurus/docs/schema/* docs/schema/
 
 echo "Removing schema repo"
 rm -rf schema/
