@@ -56,7 +56,7 @@ and its relative importance within the transportation network. The
 For example, the class `sidewalk` implies that the default
 [access restrictions](#access-restrictions) for the segment allow access for the [travel mode](/guides/transportation/travel-modes) `foot` and deny access to all other
 travel modes. Unlike many road segment properties, a road segment's `road.class`
-property does not support [geometric scoping](/guides/feature-model/scoping-rules#geometric-scoping-linear-referencing) (linear referencing). Consequently whenever a linear range of real-world road makes a class transition (for example, between secondary and residential), the Overture transportation
+property does not support [geometric scoping](/schema/feature-model/scoping-rules#geometric-scoping-linear-referencing) (linear referencing). Consequently whenever a linear range of real-world road makes a class transition (for example, between secondary and residential), the Overture transportation
 [segmentation](/guides/transportation/shape-connectivity#segmentation) algorithm will generate a segment split.
 
 Every road segment has a class. If the `road.class` property is missing
@@ -79,8 +79,7 @@ The `road.surface` property of a road indicates its physical surface. If
 omitted, a reasonable default value should be assumed based on the
 `road.class`.
 
-Like many road segment properties, the `road.surface` property supports[geometric scoping](/guides/feature-model/scoping-rules#geometric-scoping-linear-referencing)
->>>>>>> ba43714b1e41da1e832b12aaa504a0527dd69d4a
+Like many road segment properties, the `road.surface` property supports[geometric scoping](/schema/feature-model/scoping-rules#geometric-scoping-linear-referencing)
 (linear referencing). Consequently, the effective road surface may vary
 along different sub-ranges of a road segment's geometry.
 
@@ -93,7 +92,7 @@ For example, a road segment with
 `road.flags = [is_link, is_under_construction]` is a link segment that is
 physically under construction.
 
-Like many road segment properties, the `road.flags` property supports [geometric scoping](/guides/feature-model/scoping-rules#geometric-scoping-linear-referencing). Consequently, the applicable road flags may vary along different sub-ranges of a road segment's geometry.
+Like many road segment properties, the `road.flags` property supports [geometric scoping](/schema/feature-model/scoping-rules#geometric-scoping-linear-referencing). Consequently, the applicable road flags may vary along different sub-ranges of a road segment's geometry.
 
 ## Restrictions
 
@@ -115,7 +114,7 @@ at the level of individual [lanes](#lanes), as explained elsewhere.)
 
 It is technically possible to specify a blanket access grant or refusal
 of access applying to everyone and everything; but where, as is typical,
-a more precise outcome is needed, one or more [rules](/guides/feature-model/scoping-rules#rules-and-rule-based-properties) will be used to specify access restrictions. As with all rule-based properties, if no rule matches the specific facts, then the default restrictions for the road class govern.
+a more precise outcome is needed, one or more [rules](/schema/feature-model/scoping-rules#rules-and-rule-based-properties) will be used to specify access restrictions. As with all rule-based properties, if no rule matches the specific facts, then the default restrictions for the road class govern.
 
 <Tabs>
   <TabItem value="blanketDenial" label="Blanket denial of access." default>
@@ -334,7 +333,7 @@ providing an explicit value for the property
 specified at the level of individual [lanes](#lanes), as explained
 elsewhere.
 
-As with access restrictions and turn restrictions, speed limits can be specified using [rules](/guides/feature-model/scoping-rules#rules-and-rule-based-properties).
+As with access restrictions and turn restrictions, speed limits can be specified using [rules](/schema/feature-model/scoping-rules#rules-and-rule-based-properties).
 
 <Tabs>
   <TabItem value="speedLimitSimple" label="Simple speed limit" default>
@@ -519,7 +518,7 @@ the only mandatory property.
 
 When the allowed travel heading changes based on a regular schedule,
 the appropriate "definite" directionalities (`forward`, `backward`, and
-`both_ways`) should be used along with [temporal scoping](/guides/feature-model/scoping-rules#temporal-scoping-opening-hours) at the lane block level.
+`both_ways`) should be used along with [temporal scoping](/schema/feature-model/scoping-rules#temporal-scoping-opening-hours) at the lane block level.
 
 When the allowed travel heading changes based on unpredictable local
 factors, such that allowed heading at any given time can only be known
@@ -555,17 +554,17 @@ to release soon.
 
 The traffic lane structure of a road segment can be different at different
 points along the segment, or at different times of the day, or both.
-Consequently, instead of having a static lane block, road segments carry a list of lane block [rules](/guides/feature-model/scoping-rules#rules-and-rule-based-properties)
+Consequently, instead of having a static lane block, road segments carry a list of lane block [rules](/schema/feature-model/scoping-rules#rules-and-rule-based-properties)
 in the optional `road.lanes`  property.
 
-- A rule may be scoped [geometrically](/guides/feature-model/scoping-rules#geometric-scoping-linear-referencing),
+- A rule may be scoped [geometrically](/schema/feature-model/scoping-rules#geometric-scoping-linear-referencing),
 which allows linear referencing to be used to specify the portion of the
 segment geometry where the lane block exists.
-- A rule may also be scoped [temporally](/guides/feature-model/scoping-rules#temporal-scoping-opening-hours), which allows the time of day that the lane block exists to be specified. Temporal scoping is useful for modeling cases like lanes which are used
+- A rule may also be scoped [temporally](/schema/feature-model/scoping-rules#temporal-scoping-opening-hours), which allows the time of day that the lane block exists to be specified. Temporal scoping is useful for modeling cases like lanes which are used
 for parking at off hours and traffic during peak hours. In such a case,
 the lane block rule would be scoped to peak hours.
 
-As with all rule-based properties in the Overture schema, the [rule evaluation algorithm](/guides/feature-model/scoping-rules#rule-evaluation-algorithm) must be applied to determine which lane block rule, if any, is
+As with all rule-based properties in the Overture schema, the [rule evaluation algorithm](/schema/feature-model/scoping-rules#rule-evaluation-algorithm) must be applied to determine which lane block rule, if any, is
 applicable at a given place and time along the road segment. Once the
 determining rule for a certain scope is known, its rule block defines
 the lane structure within that scope.
@@ -600,7 +599,7 @@ segments.
 
 <figcaption>
 
-*A segment with two [geometrically-scoped](/guides/feature-model/scoping-rules#geometric-scoping-linear-referencing) lane blocks connected to a segment oriented in the opposite direction.*
+*A segment with two [geometrically-scoped](/schema/feature-model/scoping-rules#geometric-scoping-linear-referencing) lane blocks connected to a segment oriented in the opposite direction.*
 
 </figcaption>
 

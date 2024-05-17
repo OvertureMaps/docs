@@ -41,20 +41,6 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        {
-          type: 'category',
-          label: 'Overture Feature Model',
-          link: {
-            type: 'doc',
-            id: 'guides/feature-model/index',
-          },
-          items: [
-            //'guides/feature-model/geojson',
-            //'guides/feature-model/geoparquet',
-            'guides/feature-model/names',
-            'guides/feature-model/scoping-rules',
-            ],
-        },
         'guides/gers',
         'guides/places',
         'guides/buildings',
