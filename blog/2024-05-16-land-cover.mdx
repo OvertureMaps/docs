@@ -14,15 +14,15 @@ Our May release also includes new schema properties that offer cartographic "hin
 
 ## Exploring land cover
 
-In the example below, we use [lonboard](https://developmentseed.org/lonboard/latest/) and [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py), our Python command-line tool, to extract, process, and visualize Overture Maps land cover data for our area of interest. We recommend that you consult [the Overture Maps buildings example](https://developmentseed.org/lonboard/latest/examples/overture-maps/ ) in the lonboard docs for more information about the methods used here. 
+In the example below, we'll show you how to use [lonboard](https://developmentseed.org/lonboard/latest/) and the Overture Maps Python command-line tool to extract, process, and visualize land cover data for an area of interest. We recommend that you consult [the Overture Maps buildings example](https://developmentseed.org/lonboard/latest/examples/overture-maps/ ) in the lonboard docs to better understand the methods used here. 
 
 ![land cover](/img/blog/notebook-overture-lc.png)
 
-You'll need to [install lonboard](https://developmentseed.org/lonboard/latest/#install) and the Overture Maps Python command-line tool. For this example, you'll need to clone the [`overturemaps-py` repository](https://github.com/OvertureMaps/overturemaps-py) and install the latest (pre-release) version in the directory.
+You'll need to [install lonboard](https://developmentseed.org/lonboard/latest/#install) and [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py) before you get started. 
 
 ```
 #pip install overturemaps
-pip install -e . 
+pip install -e . #clone repo and install pre-release version in directory
 ```
 
 ``` python
