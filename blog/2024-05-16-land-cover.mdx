@@ -4,21 +4,19 @@ title: Land cover is live
 
 ## Mapmakers rejoice! 
 
-The [May release](https://docs.overturemaps.org/release/latest) of Overture Maps includes high-resolution land cover data *and* cartographic schema properties.
+The [May release](https://docs.overturemaps.org/release/latest) of Overture Maps includes new high-resolution land cover data *and* new cartographic schema properties.
 
-Our new `land_cover` layer is vectorized data derived from the [European Space Agency’s 2020 WorldCover (10m) rasters](https://esa-worldcover.org/en). It's similar to the land cover data in the [Daylight](https://daylightmap.org/2023/10/11/landcover.html) map distribution, but Overture Maps is including a high-resolution version (zoom level 15) with more detail and land cover classes. 
+Our `land_cover` layer is vectorized data derived from the [European Space Agency’s 2020 WorldCover (10m) rasters](https://esa-worldcover.org/en). It's similar to the land cover layer in the [Daylight](https://daylightmap.org/2023/10/11/landcover.html) map distribution, but Overture Maps added higher-resolution data (zoom level 15) with more detail and land cover classes. You'll find 10 subtypes in the new data: snow, forest, urban, grass, crop, barren, wetland, moss, mangrove, and shrub. 
 
-You'll find 10 subtypes in our `land_cover` type: snow, forest, urban, grass, crop, barren, wetland, moss, mangrove, and shrub. We also offer lower-resolution data with seven subtypes: snow, forest, urban, grass, crop, barren, and shrub. 
-
-Our May release also includes new schema properties that offer cartographic "hints" for optimal use of Overture Maps data in mapmaking. We added `min_zoom` and `max_zoom` to define the recommended zooms for each resolution of land cover, using the common “slippy maps” zoom level specification. This is a first step toward improving the user experience for mapmakers. We plan to expand these properties in future releases of Overture Maps data.
+Our May release also includes schema properties that offer cartographic "hints" for optimal use of Overture Maps data in mapmaking. We added `min_zoom` and `max_zoom` to define the recommended zooms for each resolution of land cover, using the common “slippy maps” zoom level specification. This is a first step toward improving the user experience for mapmakers. We plan to expand these properties in future releases of Overture Maps data.
 
 ## Exploring land cover
 
-In the example below, we'll show you how to use [lonboard](https://developmentseed.org/lonboard/latest/) and the Overture Maps Python command-line tool to extract, process, and visualize land cover data for an area of interest. We recommend that you consult [the Overture Maps buildings example](https://developmentseed.org/lonboard/latest/examples/overture-maps/ ) in the lonboard docs to better understand the methods used here. 
+In the example below, we'll show you how to extract, process, and visualize land cover data for an area of interest using [lonboard](https://developmentseed.org/lonboard/latest/) and the Overture Maps Python command-line tool. We recommend that you consult [the Overture Maps buildings example](https://developmentseed.org/lonboard/latest/examples/overture-maps/ ) in the lonboard docs to better understand the methods used here. 
 
-![land cover](/img/blog/notebook-overture-lc.png)
+![land cover gif](/img/blog/lc.gif)
 
-You'll need to [install lonboard](https://developmentseed.org/lonboard/latest/#install) and [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py) before you get started. 
+You'll need to install [lonboard](https://developmentseed.org/lonboard/latest/#install) and [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py) before you get started. 
 
 ```
 #pip install overturemaps
@@ -112,6 +110,6 @@ view_state = {
 m = Map(layer, view_state=view_state)
 m
 ```
+![land cover](/img/blog/notebook-overture-lc.png)
 
-![land cover gif](/img/blog/lc.gif)
 
