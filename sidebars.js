@@ -46,20 +46,7 @@ const sidebars = {
         'guides/buildings',
         'guides/admins',
         'guides/divisions',
-        'guides/base',
-        {
-          type: 'category',
-          label: 'Transportation',
-          link: {
-            type: 'doc',
-            id: 'guides/transportation/index',
-          },
-          items: [
-            'guides/transportation/roads',
-            'guides/transportation/travel-modes',
-            'guides/transportation/shape-connectivity',
-            ],
-        },
+        'guides/base'
       ],
     },
 
