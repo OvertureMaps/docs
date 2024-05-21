@@ -94,7 +94,8 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          routeBasePath: '/'
+          routeBasePath: '/',
+          showLastUpdateTime: true,
         },
         blog: {
           blogTitle: 'Overture Maps Engineering',
