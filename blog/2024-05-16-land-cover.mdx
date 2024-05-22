@@ -20,14 +20,13 @@ In the example below, we'll show you how to extract, process, and visualize land
 You'll need to install [lonboard](https://developmentseed.org/lonboard/latest/#install) and [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py) before you get started. 
 
 ```
-#pip install overturemaps
-pip install -e . #clone repo and install pre-release version in directory
+pip install overturemaps
 ```
 
 ``` python
 import pandas as pd
 import geopandas as gpd
-import overturemaps #dev branch, pre-release 
+import overturemaps 
 from shapely import wkb
 from lonboard import Map, PolygonLayer
 from lonboard.colormap import apply_categorical_cmap

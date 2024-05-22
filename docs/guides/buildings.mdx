@@ -1,16 +1,17 @@
 ---
-title: Working with buildings data
+title: Buildings
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
+# Working with Overture Maps buildings
 
 ## Overview
 
 The Overture Maps `buildings` theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). The theme includes two feature types:
 - **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint -- or roofprint if traced from satellite/aerial imagery -- of a building.
-- **`building_part`**: A single part of a building. Building parts may have the same properties as buildings, including color, material, and shape. A building part is associated with a parent building via a `building_id`, if its geometry is contained within the building footprint.
+- **`building_part`**: A single part of a building. Building parts may have the same properties as buildings. A building part is associated with a parent building via a `building_id`.
 
 <details>
         <summary>Attribute tables for the GeoParquet files in the buildings theme</summary> 
