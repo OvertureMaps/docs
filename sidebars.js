@@ -41,7 +41,6 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        'guides/gers',
         'guides/places',
         'guides/buildings',
         'guides/admins',
@@ -49,7 +48,18 @@ const sidebars = {
         'guides/base'
       ],
     },
-
+    {
+      type: 'category',
+      label: 'Global Entity Reference System',
+      link: {
+        type: 'doc',
+        id: 'gers/index'
+      },
+      collapsed: true,
+      items: [
+        'gers/changelog',
+      ]
+    },
     'attribution'
   ],
   schema:[
