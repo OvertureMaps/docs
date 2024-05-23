@@ -45,7 +45,8 @@ const sidebars = {
         'guides/buildings',
         'guides/admins',
         'guides/divisions',
-        'guides/base'
+        'guides/base',
+        'guides/transportation',
       ],
     },
     {
