@@ -39,7 +39,7 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
 
-  trailingSlash: false,
+  trailingSlash: true,
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -94,7 +94,8 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          routeBasePath: '/'
+          routeBasePath: '/',
+          showLastUpdateTime: true,
         },
         blog: {
           blogTitle: 'Overture Maps Engineering',

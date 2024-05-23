@@ -1,0 +1,49 @@
+---
+title: Global Entity Reference System (GERS)
+slug: /gers
+---
+
+## Understanding GERS
+
+The Global Entity Reference System (GERS) is a framework for structuring, encoding, and matching map data to a shared universal reference. All features in Overture Maps have a unique id, and for some feature types that unique id is registered to GERS.
+
+GERS provides a mechanism to match features across datasets. For example, multiple building features from separate datasets that each represent the footprint of the Empire State Building in New York City can be matched if the features reference the same id in GERS. 
+
+## What does an Overture Maps id look like?
+
+A unique id in Overture Maps is 128 bits. In this example, you can see five unique ids for five features in the buildings dataset from the May 2024 data release. The ids for the building feature type are registered to GERS. 
+
+```sql
+D SET s3_region='us-west-2';
+D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-05-16-beta.0/theme=buildings/type=buiding/*', filename=true, hive_partitioning=1) limit 5;
+┌──────────────────────────────────┐
+│                id                │
+│             varchar              │
+├──────────────────────────────────┤
+│ 08bf2a40219b0fff0200c394dae731bd │
+│ 08bf35ad6a05afff0200e90ab3b011fa │
+│ 08bf35ad6a058fff020009945ce09d65 │
+│ 08bf35ad6a04efff02006264a736fc56 │
+│ 08bf35ad6a04afff0200cf5e511a3f1b │
+├──────────────────────────────────┤
+│             5 rows               │
+└──────────────────────────────────┘
+```
+
+## Stability and traceability
+
+Unique ids registered to GERS are intended to be stable &mdash; within a reasonable tolerance of error &mdash; across multiple releases of Overture Maps data. When stability is not possible, we will attempt to provide traceability in a GERS changelog. For example:
+
+- a single road segment is bisected by a new road and becomes two road segments: 1 unique ID → 2 new unique IDs;
+- a large building footprint is determined to be four smaller buildings when a higher resolution dataset becomes available: 1 unique ID → 4 new unique ID;
+- a building is shifted 10 meters to the west when higher resolution imagery is made available: the unique ID is preserved for that feature.
+
+## Using GERS
+
+Overture Maps intends for GERS to be used in two ways:
+
+1. **Associating data.** Users can independently conflate their own data with a current Overture Maps dataset, identifying matches among features across datasets. A user can assign an Overture Maps id to features that match. The associated data will not become part of Overture Maps, but it will become GERS-enabled data, ready to be matched to any of the available datasets in the Overture Maps data ecosystem.
+2. **Contributing data.** If an organization contributes data to the Overture Maps Foundation, our engineering team will match the features in that dataset to existing features in Overture Maps. Matched features may be assigned an Overture Maps id, and new features may be assigned a new id registered to GERS.
+ 
+
+Feedback on GERS is welcome on [GitHub](https://github.com/OvertureMaps/data/discussions).
