@@ -85,6 +85,15 @@ const config = {
         path: './release-blog',
       },
     ],
+    [
+      '@docusaurus/plugin-content-pages',
+      {
+        id: 'community',
+        path: './community',
+        routeBasePath: 'community',
+        showLastUpdateTime: true,
+      }
+    ]
   ],
 
   presets: [
@@ -134,9 +143,6 @@ const config = {
             sidebarId: 'schema',
             position: 'left',
             label: 'Schema Reference',
-            // to: 'https://docs.overturemaps.org/schema/',
-            // target: '_self'
-            // to: '/schema',
           },
           {
             to: 'release/latest',
@@ -149,8 +155,9 @@ const config = {
             position: 'left',
           },
           {
-            to: '/community/',
+            to: 'community',
             label: 'Community',
+            position: 'left',
           }
         ],
       },
