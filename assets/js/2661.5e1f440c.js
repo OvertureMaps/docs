@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[2661],{42661:(e,t,s)=>{s.r(t),s.d(t,{default:()=>u});const u=s.p+"assets/images/circle-unlooped-light-ea4f1117421975b4fe171a65d43023f5.png"}}]);

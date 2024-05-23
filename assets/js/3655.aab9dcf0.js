@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[3655],{53655:(e,s,t)=>{t.r(s),t.d(s,{default:()=>u});const u=t.p+"assets/images/fused_overture_buildings_dec2023-ad397b63eca4b9875e4633a95b6f5f03.gif"}}]);

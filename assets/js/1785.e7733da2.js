@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[1785],{31785:(e,c,t)=>{t.r(c),t.d(c,{default:()=>s});const s=t.p+"assets/images/lc-c21dcecb5a1eb0a0b7ed5428f9c4f694.gif"}}]);

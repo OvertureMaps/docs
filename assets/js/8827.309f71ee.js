@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[8827],{8827:(e,t,c)=>{c.r(t),c.d(t,{default:()=>o});const o=c.p+"assets/images/notebook-overture-lc-9b4cdc6573cb3433034dc8b5de8feb91.png"}}]);

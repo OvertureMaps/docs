@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[1794],{91794:(e,c,a)=>{a.r(c),a.d(c,{default:()=>t});const t=a.p+"assets/images/circle-looped-dark-68b698279c3b5ee27cb84c84a5c3a2ab.png"}}]);

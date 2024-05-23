@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[3839],{23839:(a,e,t)=>{t.r(e),t.d(e,{default:()=>s});const s=t.p+"assets/images/aws-glue-data-catalog-values-56499d44a76f8a08a4ccd2037b1bab47.png"}}]);

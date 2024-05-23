@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[7983],{17983:(e,t,a)=>{a.r(t),a.d(t,{default:()=>s});const s=a.p+"assets/images/omf_logo_text_transparent-b4cf2a581e54cfee4f3ae5a24abd9ee4.png"}}]);

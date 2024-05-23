@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[5774],{35774:(e,t,a)=>{a.r(t),a.d(t,{default:()=>d});const d=a.p+"assets/images/kepler_overture_buildings_hyderabad-48f61bd38da94df6776371f57ab63d03.gif"}}]);
