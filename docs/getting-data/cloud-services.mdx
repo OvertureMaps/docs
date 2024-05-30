@@ -18,7 +18,7 @@ You can access and query Overture Maps parquet files directly in the cloud using
 
 ### 1. Add Overture as a data source
 
-Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html). The Catalog ID is `913550007193`. 
+Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html). The Catalog ID is `913550007193`.
 
   <details>
         <summary>AWS Glue Data Catalog</summary>
@@ -28,7 +28,7 @@ Add Overture as a cross-account data source using [these instructions](https://d
     </details>
 
 
-Depending on the permissions attached to your AWS user account/role, you may need to explicitly enable access to the Overture catalog. You can do that by [adding a new IAM policy](https://console.aws.amazon.com/iam/home?#/policies?type=customer)-- we suggest calling it `OvertureGlueCatalogAccess` -- with the following permissions: 
+Depending on the permissions attached to your AWS user account/role, you may need to explicitly enable access to the Overture catalog. You can do that by [adding a new IAM policy](https://console.aws.amazon.com/iam/home?#/policies?type=customer)-- we suggest calling it `OvertureGlueCatalogAccess` -- with the following permissions:
 
 <details>
   <summary>IAM policy for Overture Glue Data Catalog access</summary>
@@ -58,7 +58,7 @@ Depending on the permissions attached to your AWS user account/role, you may nee
 
 
 
-### 2. Inspect release tables 
+### 2. Inspect release tables
 
 Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name). The `overture` data catalog will be updated with a new table for each new release.
 
@@ -69,7 +69,7 @@ Now each release is available as a table under the `release` database in the `ov
         </div>
     </details>
 
-   
+
 ### 3. Access data from a release table
 
 You can access Overture Maps data in a particular release like this:
@@ -82,7 +82,7 @@ You can access Overture Maps data in a particular release like this:
 
 More information on using Athena is available in the [Amazon Athena User Guide](https://docs.aws.amazon.com/athena/latest/ug/what-is.html).
 
-### Optional 
+### Optional
 
 #### Add the table directly using the DDL
 
