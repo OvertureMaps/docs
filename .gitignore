@@ -4,5 +4,6 @@ node_modules/
 docs/_examples/
 docs/_schema/
 docs/schema/
+docs/schema
 static/_schema/
 build/
