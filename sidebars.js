@@ -59,6 +59,7 @@ const sidebars = {
       collapsed: true,
       items: [
         'gers/changelog',
+        'gers/stability',
       ]
     },
     'attribution'

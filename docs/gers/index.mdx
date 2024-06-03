@@ -1,11 +1,11 @@
 ---
-title: Overture Id System
+title: Overture ID System
 slug: /gers
 ---
 
 ## Understanding the Overture ID System
 
-The Overture ID System is a framework for structuring, encoding, and matching map data to a shared universal reference. All features in Overture Maps have a unique Overture ID.
+The Overture ID System is a framework for structuring, encoding, and matching map data to a shared universal reference. All Overture features have a unique Overture ID.
 
 Overture IDs provide a mechanism for matching features across datasets. For example, multiple building features that each represent the footprint of the Empire State Building in New York City can be matched if the features reference the same Overture ID. 
 
@@ -32,7 +32,7 @@ D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-05-16-be
 
 ## Stability and traceability
 
-For some feature types, Overture IDs are intended to be stable &mdash; within a reasonable tolerance of error &mdash; across multiple releases of Overture data. When stability is not possible, we will attempt to provide traceability in a changelog. For example:
+[For some feature types, Overture IDs are intended to be stable](stability) &mdash; within a reasonable tolerance of error &mdash; across multiple releases of Overture data. When stability is not possible, we will attempt to provide traceability in a changelog. For example:
 
 - a single road segment is bisected by a new road and becomes two road segments: 1 unique Overture ID → 2 new unique Overture IDs;
 - a large building footprint is determined to be four smaller buildings when a higher resolution dataset becomes available: 1 Overture ID → 4 new Overture IDs;
