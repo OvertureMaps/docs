@@ -1,17 +1,15 @@
 ---
-title: Overture ID System
+title: Overture ID
 slug: /gers
 ---
 
-## Understanding the Overture ID System
+## A unique ID
 
-The Overture ID System is a framework for structuring, encoding, and matching map data to a shared universal reference. All Overture features have a unique Overture ID.
-
-Overture IDs provide a mechanism for matching features across datasets. For example, multiple building features that each represent the footprint of the Empire State Building in New York City can be matched if the features reference the same Overture ID. 
+Each feature in Overture has a unique ID called an Overture ID. Overture IDs provide a mechanism for matching map data across multiple datasets. For example, we can match several building features, each representing the footprint of the Empire State Building in New York City, if those features reference the same Overture ID. 
 
 ## What does an Overture ID look like?
 
-An Overture ID is 128 bits. In this example, you can see the structure of Overture Ids for five features in the buildings dataset from the May 2024 data release. 
+An Overture ID is 128 bits. In this example, you can see the structure of the Overture IDs for five features in the buildings dataset from Overture's May 2024 data release. 
 
 ```sql
 D SET s3_region='us-west-2';
@@ -40,8 +38,8 @@ D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-05-16-be
 
 ## Using Overture IDs
 
-Overture intends for its ID system to be used in the following ways:
+We intend for Overture IDs to be used in the following ways:
 
-1. **Associating data.** Users can independently conflate their own data with a current Overture dataset, identifying matches among features across datasets. A user can assign an Overture ID to features that match. The associated data will not become part of Overture, but it will become part of the Overture ID system, ready to be matched to any of the available datasets in the Overture data ecosystem.
-2. **Contributing data.** If an organization contributes data to the Overture Maps Foundation, our engineering team will match the features in that dataset to existing features in Overture. Matched features may be assigned an Overture Id, and new features may be assigned a new Overture ID.
+1. **Associating data.** Users can independently conflate their own data with a current Overture dataset, identifying matches among features across datasets. A user can assign existing Overture IDs to features that match. The Overture IDs make it possible to match that data to other datasets tagged with Overture IDs.
+2. **Contributing data.** If an organization contributes data to the Overture Maps Foundation, our engineering team will match the features in that dataset to existing features in Overture. Matched features may be assigned an existing Overture ID, and new features may be assigned a new Overture ID.
  
