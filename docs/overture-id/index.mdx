@@ -1,6 +1,6 @@
 ---
 title: Overture ID
-slug: /gers
+slug: /overture-id
 ---
 
 ## What is an Overture ID?
@@ -26,7 +26,7 @@ D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-05-16-be
 
 ## Stability and traceability
 
-[For some feature types, Overture IDs are intended to be stable](stability) &mdash; within a reasonable tolerance of error &mdash; across multiple releases of Overture data. When stability is not possible, we will attempt to provide traceability in a changelog. For example:
+For some feature types, Overture IDs are intended to be stable &mdash; within a reasonable tolerance of error &mdash; across multiple releases of Overture data. When stability is not possible, we will attempt to provide traceability in a changelog. For example:
 
 - a single road segment is bisected by a new road and becomes two road segments: 1 unique Overture ID → 2 new unique Overture IDs;
 - a large building footprint is determined to be four smaller buildings when a higher resolution dataset becomes available: 1 Overture ID → 4 new Overture IDs;
