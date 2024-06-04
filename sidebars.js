@@ -51,15 +51,15 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Global Entity Reference System',
+      label: 'Overture ID',
       link: {
         type: 'doc',
-        id: 'gers/index'
+        id: 'overture-id/index'
       },
       collapsed: true,
       items: [
-        'gers/changelog',
-        'gers/stability',
+        'overture-id/changelog',
+        'overture-id/stability',
       ]
     },
     'attribution'
