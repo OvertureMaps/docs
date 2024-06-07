@@ -4,9 +4,7 @@ title: Getting Overture Data
 
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-## GeoParquet
-
-Overture distributes its five data themes &mdash; [base](/guides/base), [buildings](/guides/buildings), [admins/divisions](/guides/divisions), [places](/guides/places), and [transportation](/guides/transportation) &mdash; as [GeoParquet](https://guide.cloudnativegeo.org/geoparquet/) files. **The total size of the latest release is ~440 GB.** The GeoParquet files for each dataset are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+Overture's five data themes &mdash; [base](/guides/base), [buildings](/guides/buildings), [admins/divisions](/guides/divisions), [places](/guides/places), and [transportation](/guides/transportation) &mdash; are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations: 
 
 | Provider | Location |
 | ------ | -------- |
@@ -15,6 +13,10 @@ Overture distributes its five data themes &mdash; [base](/guides/base), [buildin
 
 The latest release path is:
 <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
+
+## GeoParquet
+
+Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).  
 
 ## Accessing only the data you want (recommended)
 
