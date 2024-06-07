@@ -1,7 +1,9 @@
 SELECT id,
-       class,
-       sources[1].dataset AS primary_source,
-       names.primary AS primary_names,
+       names,
+       addresses,
+       categories,
+       confidence,
+       sources,
        ST_GeomFromBinary(geometry) AS geometry
 FROM
     overture.release.__ATHENA_OVERTURE_RELEASE
