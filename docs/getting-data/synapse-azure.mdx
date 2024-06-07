@@ -1,0 +1,14 @@
+---
+title: Synapse (Azure)
+---
+
+import QueryBuilder from '@site/src/components/queryBuilder';
+import MicrosoftSynapseExample from '!!raw-loader!@site/src/queries/synapse/seattle_places.sql';
+
+You will need to create an account to use [Synapse](https://azure.microsoft.com/en-us/products/synapse-analytics/) and other Microsoft Azure services.
+
+In your Azure account, create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace). You can then run this example query to get places in Seattle:
+
+<QueryBuilder query={MicrosoftSynapseExample}></QueryBuilder>
+
+More information is available at ["Query files using a serverless SQL pool"](https://learn.microsoft.com/en-us/training/modules/query-data-lake-using-azure-synapse-serverless-sql-pools/3-query-files) on Microsoft Learn.

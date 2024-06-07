@@ -11,9 +11,10 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        'getting-data/cloud-services',
-        'getting-data/locally',
-        'getting-data/more-queries',
+        'getting-data/athena-aws',
+        'getting-data/synapse-azure',
+        'getting-data/duckdb',
+        'getting-data/sedona',
         'getting-data/overturemaps-py',
       ]
     },

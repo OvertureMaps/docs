@@ -1,22 +1,20 @@
 ---
-title: Cloud Services
+title: Athena (AWS)
 ---
 
 import QueryBuilder from '@site/src/components/queryBuilder';
 import AthenaSelectExample from '!!raw-loader!@site/src/queries/athena/0_select_from_release.sql';
 import CreateAthenaTable from '!!raw-loader!@site/src/queries/athena/0_create_external_table.sql';
-import MicrosoftSynapseExample from '!!raw-loader!@site/src/queries/synapse/seattle_places.sql';
 import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.sql';
 
-You can access and query Overture Maps parquet files directly in the cloud using one of the SQL query options documented below. You'll need an AWS account or a Microsoft Azure account.
+You can follow the steps belows to access and query Overture data directly in AWS. Note: you will need to create an account to use [Athena](https://aws.amazon.com/athena/) and other AWS services. 
 
 :::tip
    Overture's S3 bucket is located in the us-west-2 AWS region, so use `us-west-2` for best performance.
 :::
 
-## Amazon Athena (AWS)
 
-### 1. Add Overture as a data source
+## 1. Add Overture as a data source
 
 Add Overture as a cross-account data source using [these instructions](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html). The Catalog ID is `913550007193`.
 
@@ -28,7 +26,7 @@ Add Overture as a cross-account data source using [these instructions](https://d
     </details>
 
 
-Depending on the permissions attached to your AWS user account/role, you may need to explicitly enable access to the Overture catalog. You can do that by [adding a new IAM policy](https://console.aws.amazon.com/iam/home?#/policies?type=customer)-- we suggest calling it `OvertureGlueCatalogAccess` -- with the following permissions:
+Depending on the permissions attached to your AWS user account/role, you may need to explicitly enable access to the Overture catalog. You can do that by [adding a new IAM policy](https://console.aws.amazon.com/iam/home?#/policies?type=customer) &mdash; we suggest calling it `OvertureGlueCatalogAccess` &mdash; with the following permissions:
 
 <details>
   <summary>IAM policy for Overture Glue Data Catalog access</summary>
@@ -58,7 +56,7 @@ Depending on the permissions attached to your AWS user account/role, you may nee
 
 
 
-### 2. Inspect release tables
+## 2. Inspect release tables
 
 Now each release is available as a table under the `release` database in the `overture` data source (note the `v` at the beginning of the table name). The `overture` data catalog will be updated with a new table for each new release.
 
@@ -70,21 +68,21 @@ Now each release is available as a table under the `release` database in the `ov
     </details>
 
 
-### 3. Access data from a release table
+## 3. Access data from a release table
 
-You can access Overture Maps data in a particular release like this:
+You can access Overture data in a particular release like this:
 
     <QueryBuilder query={AthenaSelectExample}></QueryBuilder>
 
- Here's how you might write an Athena SQL query to get Overture Maps places in Seattle:
+ Here's an example query to get ~25k places in Seattle:
 
     <QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
 More information on using Athena is available in the [Amazon Athena User Guide](https://docs.aws.amazon.com/athena/latest/ug/what-is.html).
 
-### Optional
+## Optional
 
-#### Add the table directly using the DDL
+### Add the table directly using the DDL
 
 If you prefer to create the table in your own data catalog, you can run the complete DDL query in the Athena Query Console. This will create tables in your AWS account's data catalog pointing directly to data hosted on Overture's S3 bucket.
 
@@ -97,7 +95,7 @@ If you prefer to create the table in your own data catalog, you can run the comp
 
 After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
 
-#### Add a policy in your data catalog settings
+### Add a policy in your data catalog settings
 
 If you want to share this catalog with other users and accounts, you'll need to add a policy enabling cross-account Glue catalog access. To do so, navigate to the [data catalog settings](https://console.aws.amazon.com/glue/home#/v2/security/settings) and add a catalog policy that looks this:
 
@@ -131,10 +129,4 @@ If you want to share this catalog with other users and accounts, you'll need to 
 </details>
 
 
-## Microsoft Synapse (Azure)
 
-In your Azure account, create a [Synapse workspace](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace). You can then run this SQL query to read places in Seattle:
-
-<QueryBuilder query={MicrosoftSynapseExample}></QueryBuilder>
-
-More information is available at ["Query files using a serverless SQL pool"](https://learn.microsoft.com/en-us/training/modules/query-data-lake-using-azure-synapse-serverless-sql-pools/3-query-files) on Microsoft Learn.
