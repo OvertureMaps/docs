@@ -1,4 +1,4 @@
-CREATE EXTERNAL TABLE `__ATHENA_OVERTURE_RELEASE`(
+CREATE EXTERNAL TABLE `v2024_06_13_beta_0`(
   `id` string,
   `geometry` binary,
   `bbox` struct<xmin:float,xmax:float,ymin:float,ymax:float>,
@@ -79,7 +79,7 @@ STORED AS INPUTFORMAT
 OUTPUTFORMAT
   'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
 LOCATION
-  's3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/'
+  's3://overturemaps-us-west-2/release/2024-06-13-beta.0/'
 TBLPROPERTIES (
   'averageRecordSize'='248',
   'classification'='parquet',
