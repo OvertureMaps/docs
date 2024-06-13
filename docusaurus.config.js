@@ -21,7 +21,7 @@ const config = {
   favicon: 'img/favicon.png',
 
   customFields: {
-    overtureRelease: '2024-05-16-beta.0',
+    overtureRelease: '2024-06-13-beta.0',
   },
 
 
