@@ -14,12 +14,12 @@ Overture's `2024-06-13-beta.0` release is available in GeoParquet and stored on 
 - [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py)
 - [Explore site](https://github.com/OvertureMaps/io-site)
 
-Depending on the feedback, we anticipate moving to a general availability (GA) release soon.
+Depending on feedback, we anticipate moving to a general availability (GA) release soon.
 
 
 ### Breaking changes
 
-Based on feedback from developers and data analysts in the Overture ecosystem, we simplified ("flattened") the structure of our road data to make it easier to query road attributes. TO=o make this transition easier for users, we also included the now deprecated road JSON column in this release. 
+In response to feedback from developers and data analysts in the Overture ecosystem, we simplified ("flattened") the structure of our road data to make it easier to query road attributes. To make this transition easier for users, we included the now deprecated road JSON column in this release. We will remove the road JSON column in the next release. 
 
 <details>
         <summary>Breaking change in structure of road data</summary>
@@ -96,7 +96,7 @@ We deprecated the admins theme and replaced it with the divisions theme. This wi
 
 ### Schema changelog
 
-See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
+See our schema [changelog](https://github.com/OvertureMaps/schema/releases) here.
 
 ### Theme-specific updates
 
@@ -111,7 +111,7 @@ See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
 
 **Base**
 
-- added the `elevated_surface` attribute to infrastructure and land feature types
+- added the `surface` attribute to infrastructure and land feature types
 - made incremental updates from OSM, based on Daylight v1.48
 - added a new cartographic property called `sort_key`: an ascending number signifying the importance of a feature in relation to other features
 
@@ -123,12 +123,12 @@ See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
 **Places**
 
 - began a comprehensive audit of data quality
-- continued building our places matcher 
+- worked on calibrating confidence values
 
 **Transportation**
 
 :::warning
-- Breaking change: transformed `segment` properties from JSON to structured Parquet columns
+- Breaking change: transformed road properties from JSON to structured Parquet columns
 - Breaking change: restructured vehicle constraint property
 :::
 - updated speed limit min/max values 
