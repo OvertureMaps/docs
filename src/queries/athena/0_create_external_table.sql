@@ -17,7 +17,7 @@ CREATE EXTERNAL TABLE `__ATHENA_OVERTURE_RELEASE`(
   `iso_sub_country_code` string,
   `default_language` string,
   `driving_side` string,
-  `names` struct<primary:string,common:map<string,string>,rules:array<struct<variant:string,language:string,value:string,between:array<double>,side:string>>>,
+  `names` struct<primary:string,common:map<string,string>,rules:array<struct<variant:string,language:string,"value":string,"between":array<double>,side:string>>>,
   `locality_id` string,
   `class` string,
   `surface` string,
@@ -58,20 +58,35 @@ CREATE EXTERNAL TABLE `__ATHENA_OVERTURE_RELEASE`(
   `socials` array<string>,
   `emails` array<string>,
   `phones` array<string>,
-  `brand` struct<wikidata:string,names:struct<primary:string,common:map<string,string>,rules:array<struct<variant:string,language:string,value:string,between:array<double>,side:string>>>>,
+  `brand` struct<wikidata:string,names:struct<primary:string,common:map<string,string>,rules:array<struct<variant:string,language:string,"value":string,"between":array<double>,side:string>>>>,
   `addresses` array<struct<freeform:string,locality:string,postcode:string,region:string,country:string>>,
   `connector_ids` array<string>,
-  `access_restrictions` array<struct<access_type:string,when:struct<during:string,heading:string,using:array<string>,recognized:array<string>,mode:array<string>,vehicle:array<struct<dimension:string,comparison:string,value:double,unit:string>>>,between:array<double>>>,
-  `level_rules` array<struct<value:int,between:array<double>>>,
-  `prohibited_transitions` array<struct<sequence:array<struct<connector_id:string,segment_id:string>>,final_heading:string,when:struct<heading:string,during:string,using:array<string>,recognized:array<string>,mode:array<string>,vehicle:array<struct<dimension:string,comparison:string,value:double,unit:string>>>,between:array<double>>>,
-  `road_surface` array<struct<value:string,between:array<double>>>,
-  `road_flags` array<struct<values:array<string>,between:array<double>>>,
-  `speed_limits` array<struct<min_speed:struct<value:int,unit:string>,max_speed:struct<value:int,unit:string>,is_max_speed_variable:boolean,when:struct<during:string,heading:string,using:array<string>,recognized:array<string>,mode:array<string>,vehicle:array<struct<dimension:string,comparison:string,value:double,unit:string>>>,between:array<double>>>,
-  `width_rules` array<struct<value:double,between:array<double>>>,
+  `access_restrictions` array<struct<access_type:string,"when":struct<during:string,heading:string,using:array<string>,recognized:array<string>,mode:array<string>,vehicle:array<struct<dimension:string,comparison:string,"value":double,unit:string>>>,"between":array<double>>>,
+  `level_rules` array<struct<"value":int,"between":array<double>>>,
+  `prohibited_transitions` array<struct<sequence:array<struct<connector_id:string,segment_id:string>>,final_heading:string,"when":struct<heading:string,during:string,using:array<string>,recognized:array<string>,mode:array<string>,vehicle:array<struct<dimension:string,comparison:string,"value":double,unit:string>>>,"between":array<double>>>,
+  `road_surface` array<struct<"value":string,"between":array<double>>>,
+  `road_flags` array<struct<"value"s:array<string>,"between":array<double>>>,
+  `speed_limits` array<struct<min_speed:struct<"value":int,unit:string>,max_speed:struct<"value":int,unit:string>,is_max_speed_variable:boolean,"when":struct<during:string,heading:string,using:array<string>,recognized:array<string>,mode:array<string>,vehicle:array<struct<dimension:string,comparison:string,"value":double,unit:string>>>,"between":array<double>>>,
+  `width_rules` array<struct<"value":double,"between":array<double>>>,
   `road` string)
 PARTITIONED BY (
   `theme` string,
   `type` string)
-STORED AS PARQUET
+ROW FORMAT SERDE
+  'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
+STORED AS INPUTFORMAT
+  'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
+OUTPUTFORMAT
+  'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
 LOCATION
-  's3://overturemaps-us-west-2/release/__OVERTURE_RELEASE'
+  's3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/'
+TBLPROPERTIES (
+  'averageRecordSize'='248',
+  'classification'='parquet',
+  'compressionType'='none',
+  'exclusions'='[\"s3://overturemaps-us-west-2/release/2023-04-02-alpha/**\"]',
+  'objectCount'='16',
+  'partition_filtering.enabled'='true',
+  'recordCount'='91479076',
+  'sizeKey'='11960428494',
+  'typeOfData'='file')
