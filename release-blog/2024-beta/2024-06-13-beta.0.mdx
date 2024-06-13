@@ -19,7 +19,7 @@ Depending on the feedback, we anticipate moving to a general availability (GA) r
 
 ### Breaking changes
 
-Based on feedback from developers and data analysts in the Overture ecosystem, we simplified ("flattened") the structure of our road data to make it easier to query road attributes. We included the now deprecated road JSON column in this release to make the transition easier for users. 
+Based on feedback from developers and data analysts in the Overture ecosystem, we simplified ("flattened") the structure of our road data to make it easier to query road attributes. TO=o make this transition easier for users, we also included the now deprecated road JSON column in this release. 
 
 <details>
         <summary>Breaking change in structure of road data</summary>
@@ -90,11 +90,11 @@ speed_limits:
 
 ### Deprecations
 
-In the transportation theme, we deprecated the road JSON column and will remove it in the next release. We replaced the road JSON column with structured Parquet columns.
+In the transportation theme, we deprecated the road JSON column and will remove it in the next release. We replaced the road JSON column with structured Parquet columns for road attributes.
 
-We deprecated the admins theme and replaced it with divisions. This will be the last supported release for the admins schema and data. In the next release, admins will be available in an archive but not supported. 
+We deprecated the admins theme and replaced it with the divisions theme. This will be the last supported release for the admins schema and data. In the next release, admins will be available in an archive but not supported. 
 
-### Schema Changelog
+### Schema changelog
 
 See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
 
@@ -128,7 +128,7 @@ See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
 **Transportation**
 
 :::warning
-- Breaking change: transformed `segment` properties from JSON structured parquet columns
+- Breaking change: transformed `segment` properties from JSON to structured Parquet columns
 - Breaking change: restructured vehicle constraint property
 :::
 - updated speed limit min/max values 
@@ -138,4 +138,4 @@ See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
 
 ### Attribution
 
-You'll find information about attribution and licensing here.
+You'll find information about attribution and licensing [here](https://docs.overturemaps.org/attribution/).
