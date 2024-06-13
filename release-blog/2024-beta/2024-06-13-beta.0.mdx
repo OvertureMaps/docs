@@ -14,7 +14,7 @@ Overture's `2024-06-13-beta.0` release is available in GeoParquet and stored on 
 - [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py)
 - [Explore site](https://github.com/OvertureMaps/io-site)
 
-Depending on the feedback, we anticipate moving to a production release soon.
+Depending on the feedback, we anticipate moving to a general availability (GA) release soon.
 
 
 ### Breaking changes
@@ -45,7 +45,7 @@ Also in this release, we simplified the non-geometry vehicle scoping block.
         <summary>Breaking change in structure of vehicle scoping block</summary>
         <div>
 <Tabs>
-<TabItem value="speed_limits last release" label="speed_limits last release" default>
+<TabItem value="old speed_limits structure" label="old speed_limits structure" default>
 ```
 speed_limits:
   when:
@@ -69,7 +69,7 @@ speed_limits:
         ...
 ```
 </TabItem>
-<TabItem value="speed_limits current release" label="speed_limits current release" default>
+<TabItem value="new speed_limits structure" label="new speed_limits structure" default>
 
 ```
 speed_limits:
@@ -92,7 +92,7 @@ speed_limits:
 
 In the transportation theme, we deprecated the road JSON column and will remove it in the next release. We replaced the road JSON column with structured Parquet columns.
 
-We deprecated the `admins` theme and replaced it with `divisions`. This will be the last supported release for `admins`. In the next release, `admins` data will be available in an archive but not supported. 
+We deprecated the admins theme and replaced it with divisions. This will be the last supported release for the admins schema and data. In the next release, admins will be available in an archive but not supported. 
 
 ### Schema Changelog
 
@@ -113,7 +113,7 @@ See our [changelog](https://github.com/OvertureMaps/schema/releases) here.
 
 - added the `elevated_surface` attribute to infrastructure and land feature types
 - made incremental updates from OSM, based on Daylight v1.48
-- added a new cartographic property: `sort_key`
+- added a new cartographic property called `sort_key`: an ascending number signifying the importance of a feature in relation to other features
 
 **Buildings**
 
