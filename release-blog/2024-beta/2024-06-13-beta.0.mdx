@@ -1,0 +1,142 @@
+---
+title: 2024-06-13-beta.0
+slug: latest
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+Overture's `2024-06-13-beta.0` release is available in GeoParquet and stored on AWS and Azure. You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage users to report bugs and provide feedback on the data, schema, and GERS via any publicly-available Overture Maps repository on GitHub: 
+
+- [Schema](https://github.com/OvertureMaps/schema)
+- [Data](https://github.com/OvertureMaps/data)
+- [Docs](https://github.com/OvertureMaps/docs)
+- [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py)
+- [Explore site](https://github.com/OvertureMaps/io-site)
+
+Depending on feedback, we anticipate moving to a general availability (GA) release soon.
+
+
+### Breaking changes
+
+In response to feedback from developers and data analysts in the Overture ecosystem, we simplified ("flattened") the structure of our road data to make it easier to query road attributes. To make this transition easier for users, we included the now deprecated road JSON column in this release. We will remove the road JSON column in the next release. 
+
+<details>
+        <summary>Breaking change in structure of road data</summary>
+        <div>
+
+| old JSON path	| new Parquet column | 
+| ------------- | ------------------ |
+| road.restrictions.speed_limits |	speed_limits |
+| road.restrictions.access	| access_restrictions |
+| road.restrictions.prohibited_transitions | prohibited_transitions |
+| road.surface | road_surface |
+| road.flags | road_flags |
+| road.width | width_rules |
+| road.lanes | lanes |
+| road.level | level_rules |
+
+</div>
+</details>
+
+Also in this release, we simplified the non-geometry vehicle scoping block.
+
+<details>
+        <summary>Breaking change in structure of vehicle scoping block</summary>
+        <div>
+<Tabs>
+<TabItem value="old speed_limits structure" label="old speed_limits structure" default>
+```
+speed_limits:
+  when:
+    ...
+    vehicle:
+      axle_count:
+        is_more_than:
+          value:
+          unit:
+        is_less_than:
+          ...
+        ...
+        ...
+      height:
+        ...
+      length:
+        ...
+      weight:
+        ...
+      width:
+        ...
+```
+</TabItem>
+<TabItem value="new speed_limits structure" label="new speed_limits structure" default>
+
+```
+speed_limits:
+  when:
+    ...
+    vehicle:
+      - dimension: <axle_count, height, length, weight, width>
+        comparison: <greater_than, greater_than_equal, equal, less_than, less_than_equal>
+        value: str
+        unit: str
+```
+</TabItem>
+
+</Tabs>
+</div>
+</details>
+
+
+### Deprecations
+
+In the transportation theme, we deprecated the road JSON column and will remove it in the next release. We replaced the road JSON column with structured Parquet columns for road attributes.
+
+We deprecated the admins theme and replaced it with the divisions theme. This will be the last supported release for the admins schema and data. In the next release, admins will be available in an archive but not supported. 
+
+### Schema changelog
+
+See our schema [changelog](https://github.com/OvertureMaps/schema/releases) here.
+
+### Theme-specific updates
+
+**Divisions/Admins**
+
+- added support for MultiLineString geometries to improve the stability of Overture IDs for boundary features
+- extended the schema to support multiple capitals of a division
+- added the option to include or exclude boundaries based on perspectives
+- updated OpenStreetMap data to 2024.06.05
+- changed modeling of municipalities/cities in Brazil from counties to localities, which we believe better reflects ground truth
+- made improvements to the names data and fixed several bugs 
+
+**Base**
+
+- added the `surface` attribute to infrastructure and land feature types
+- made incremental updates from OSM, based on Daylight v1.48
+- added a new cartographic property called `sort_key`: an ascending number signifying the importance of a feature in relation to other features
+
+**Buildings**
+
+- made regular updates to buildings, including adding the latest open data from OSM, Esri Community Maps, and Microsoft 
+- expanded the previous definition of class for buildings to include specific amenity tags that are either already an official Overture place category or can be matched to one
+
+**Places**
+
+- began a comprehensive audit of data quality
+- worked on calibrating confidence values
+
+**Transportation**
+
+:::warning
+- Breaking change: transformed road properties from JSON to structured Parquet columns
+- Breaking change: restructured vehicle constraint property
+:::
+- updated speed limit min/max values 
+- added 19K previously filtered segments which contained self-intersecting lines that are still OGC-valid
+- fixed OSM source ids for connectors
+- known issue: in `road_flags` a value of 0 or 1 on the linear referencing between property can be null in some cases
+
+
+### Attribution
+
+You'll find information about attribution and licensing [here](https://docs.overturemaps.org/attribution/).
