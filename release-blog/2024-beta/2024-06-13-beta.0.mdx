@@ -16,6 +16,21 @@ Overture's `2024-06-13-beta.0` release is available in GeoParquet and stored on 
 
 Depending on feedback, we anticipate moving to a general availability (GA) release soon.
 
+### New data: GERS changelog
+
+You'll find in this release a new GERS changelog that captures feature changes from the previous release to the current release. The changlog is available as Parquet files &mdash; partitioned by theme, type, and `change_type` &mdash; at the following locations:
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-06-13-beta.0
+
+s3://overturemaps-us-west-2/changelog/2024-06-13-beta.0
+```
+Valid values for the `change_type` include:
+- added: Overture ID is new and was not in the previous release
+- removed: Overture ID is not in the current release and was in the previous release
+- data_changed: Overture ID is in the current release and was in the previous release and the feature's attributes or geometry have changed
+- unchanged: Overture ID is in the current release and was in the previous release, and the feature's attributes and geometry have not changed 
+
+
 
 ### Breaking changes
 
@@ -113,7 +128,8 @@ See our schema [changelog](https://github.com/OvertureMaps/schema/releases) here
 
 - added the `surface` attribute to infrastructure and land feature types
 - made incremental updates from OSM, based on Daylight v1.48
-- added a new cartographic property called `sort_key`: an ascending number signifying the importance of a feature in relation to other features
+- added to the land_cover feature type a new cartographic property `cartography.sort_key`: an ascending number signifying the importance of a feature in relation to other features. 
+
 
 **Buildings**
 
