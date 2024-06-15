@@ -25,10 +25,10 @@ wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-06-13-beta.0
 s3://overturemaps-us-west-2/changelog/2024-06-13-beta.0
 ```
 Valid values for the `change_type` include:
-- added: Overture ID is new, was not in the previous release
-- removed: Overture ID is not in the current release, but was in the previous release
-- data_changed: Overture ID is in the current release and the previous release, and the feature's attributes or geometry have changed
-- unchanged: Overture ID is in the current release and the previous release, and the feature's attributes and geometry have not changed 
+- added: Overture ID is new and was not in the previous release
+- removed: Overture ID is not in the current release and was in the previous release
+- data_changed: Overture ID is in the current release and was in the previous release and the feature's attributes or geometry have changed
+- unchanged: Overture ID is in the current release and was in the previous release, and the feature's attributes and geometry have not changed 
 
 
 
@@ -128,7 +128,7 @@ See our schema [changelog](https://github.com/OvertureMaps/schema/releases) here
 
 - added the `surface` attribute to infrastructure and land feature types
 - made incremental updates from OSM, based on Daylight v1.48
-- added to the land_cover feature type a new cartographic property `cartography.sort_key`: an ascending number signifying the importance of a feature in relation to other features. You can access it in this way:
+- added to the land_cover feature type a new cartographic property `cartography.sort_key`: an ascending number signifying the importance of a feature in relation to other features. 
 
 
 **Buildings**
