@@ -1,10 +1,29 @@
 ---
-title: 2024-06-13-beta.0
+title: 2024-06-13-beta.1
 slug: latest
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
+
+:::info
+
+_24 June 2024_  
+
+Today Overture released a patch to fix data issues in the June release. This hotfix addressed the following regressions:
+- in the transportation theme, a bug in one of our automated processes inadvertently caused the conversion of unicode characters to ASCII. This affected roughly 10% of `segment` features that contained characters outside of the ASCII range, primarily names but possibly things like speed limit/weight restrictions if those properties contained values with characters outside that range.
+- in the buildings theme, the `roof_height` property was not fully populated; the hotfix adds 143k `roof_height` values to the release. 
+
+The new release paths are:
+```
+Azure path: wasbs://release@overturemapswestus2.blob.core.windows.net/2024-06-13-beta.1
+
+AWS path: s3://overturemaps-us-west-2/release/2024-06-13-beta.1
+```
+:::
+
+
+
 
 Overture's `2024-06-13-beta.0` release is available in GeoParquet and stored on AWS and Azure. You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage users to report bugs and provide feedback on the data, schema, and GERS via any publicly-available Overture Maps repository on GitHub: 
 
