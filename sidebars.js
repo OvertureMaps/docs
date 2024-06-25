@@ -42,11 +42,10 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        'guides/places',
-        'guides/buildings',
-        'guides/admins',
-        'guides/divisions',
         'guides/base',
+        'guides/buildings',
+        'guides/divisions',
+        'guides/places',
         'guides/transportation',
       ],
     },
@@ -59,6 +58,7 @@ const sidebars = {
       },
       collapsed: true,
       items: [
+        'gers/stability',
         'gers/changelog',
       ]
     },
