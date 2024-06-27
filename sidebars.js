@@ -60,6 +60,7 @@ const sidebars = {
       items: [
         'gers/stability',
         'gers/changelog',
+        'gers/gers-demonstrations',
       ]
     },
     'attribution'
