@@ -5,12 +5,37 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-
 ## Overview
 
 The Overture Maps `buildings` theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). The theme includes two feature types:
-- **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint -- or roofprint if traced from satellite/aerial imagery -- of a building.
-- **`building_part`**: A single part of a building. Building parts may have the same properties as buildings. A building part is associated with a parent building via a `building_id`.
+
+- **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
+- **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
+
+### Data Sources
+<div>
+  <img src="/img/guides/buildings/san_diego_buildings_3.jpg" alt="Overture buildings in San Diego" />
+    <span style={{'backgroundColor':'rgb(36,39,47)', padding:2}}>
+    <span style={{color:'rgb(194,42,87)'}}>&#x25AC;   <span style={{color:'white'}}>OpenStreetMap | </span></span>
+    <span style={{color:'rgb(4,151,188)'}}>&#x25AC;   <span style={{color:'white'}}>Esri Community Maps | </span></span>
+    <span style={{color:'rgb(243,175,102)'}}>&#x25AC; <span style={{color:'white'}}>Microsoft ML Buildings | </span></span>
+    <span style={{color:'rgb(236,253,188)'}}>&#x25AC; <span style={{color:'white'}}>Google Open Buildings </span></span>
+  </span>
+</div>
+
+Above is a screenshot from [kepler.gl](//kepler.gl) visualizing buildings near San Diego, USA where multiple datasets are conflated. Notice how Esri and OSM buildings appear in big blocks while the Google and Microsoft buildings appear to mix together. This is a product of our conflation process that prioritizes community contributed data first and then "fills in" the rest of the map with the best ML data available.
+
+Currently, the Overture buildings dataset is a combination of the following open building datasets:
+
+| Source                     |  Type                 | Conflation <br /> Priority | Count    |
+| -------------------------- | --------------------- | -------------------------- | ----------- |
+| [OpenStreetMap](//osm.org) | Community-contributed | 1                          |~600 Million  |
+| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2| ~14 Million |
+| [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&gt;90% precision) | 3|~400 Million |
+| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) |ML-derived roofprints  | 4|~600 Million |
+| [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&lt;90% precision) | 5|~700 Million |
+
+### Understanding the Parquet Files
 
 <details>
         <summary>Attribute tables for the GeoParquet files in the buildings theme</summary>
@@ -69,9 +94,6 @@ The Overture Maps `buildings` theme describes human-made structures with roofs o
 </Tabs>
 </div>
 </details>
-
-
-
 
 ## Schema reference
 
