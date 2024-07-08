@@ -14,7 +14,7 @@ The Overture Maps `buildings` theme describes human-made structures with roofs o
 - **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
 - **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
 
-### Data Sources
+## Data Sources
 
 <figure>
   <ThemedImage
@@ -48,7 +48,7 @@ Currently, the Overture buildings dataset is a combination of the following open
 | [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) |ML-derived roofprints  | 4|~600 Million |
 | [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&lt;90% precision) | 5|~700 Million |
 
-### Understanding the Parquet Files
+## Understanding the Parquet Files
 
 <details>
         <summary>Attribute tables for the GeoParquet files in the buildings theme</summary>
