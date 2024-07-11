@@ -7,6 +7,8 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
+import BuildingsMap from '@site/src/components/buildings-map';
+
 ## Overview
 
 The Overture Maps `buildings` theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). The theme includes two feature types:
@@ -14,18 +16,23 @@ The Overture Maps `buildings` theme describes human-made structures with roofs o
 - **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
 - **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
 
+
+
+
+
 ## Data Sources
 
 <figure>
-  <ThemedImage
+  <BuildingsMap></BuildingsMap>
+  <!-- <ThemedImage
     alt="Overture buildings in San Diego"
     sources={{
       light: useBaseUrl('/img/guides/buildings/san_diego_buildings_3.jpg'),
       dark: useBaseUrl('/img/guides/buildings/san_diego_buildings_3.jpg'),
     }}
-  />
+  /> -->
   <figcaption>
-  <div style={{'text-align':'center'}}>
+  <div style={{'textAlign':'center'}}>
     <span style={{'backgroundColor':'rgb(36,39,47)', padding:2}}>
     <span style={{color:'rgb(194,42,87)'}}>&#x25AC;   <span style={{color:'white'}}>OpenStreetMap | </span></span>
     <span style={{color:'rgb(4,151,188)'}}>&#x25AC;   <span style={{color:'white'}}>Esri Community Maps | </span></span>
@@ -36,7 +43,7 @@ The Overture Maps `buildings` theme describes human-made structures with roofs o
   </figcaption>
 </figure>
 
-Above is a screenshot from [kepler.gl](//kepler.gl) visualizing buildings near San Diego, USA where multiple datasets are conflated. Notice how Esri and OSM buildings appear in big blocks while the Google and Microsoft buildings appear to mix together. This is a product of our conflation process that prioritizes community contributed data first and then "fills in" the rest of the map with the best ML data available.
+Above is a visualization of San Diego, USA where multiple datasets are conflated. Notice how Esri and OSM buildings appear in big blocks while the Google and Microsoft buildings appear to mix together. This is a product of our conflation process that prioritizes community contributed data first and then "fills in" the rest of the map with the best ML data available.
 
 Currently, the Overture buildings dataset is a combination of the following open building datasets:
 
