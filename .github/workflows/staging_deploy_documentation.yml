@@ -1,18 +1,28 @@
 ---
-name: Publish docs to staging website (for PR)
+name: Staging Deploy
+run-name: Publish docs to staging website (for PR)
 
 on:
   pull_request:
 
+  # Allow running from the actions tab
   workflow_dispatch:
+    inputs:
+      schema_branch:
+        description: 'Schema branch to pull from for /reference'
+        required: true
+        default: 'main'
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  build:
-    name: Build documentation and push to staging
+  build_and_publish:
+    environment:
+      name: staging
+      url: https://dfhx9f55j8eg5.cloudfront.net/how-to/pr/${{github.event.number}}/
+    name: Build documentation and publish to staging
     runs-on: ubuntu-latest
     steps:
       - name: Check out the main docs repo repository and build.
@@ -21,7 +31,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "19"
+          node-version: "20"
 
       - name: Install NPM dependencies
         run: npm install --prefer-dedupe
@@ -30,10 +40,11 @@ jobs:
         env:
           DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
           DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/
+          SCHEMA_BRANCH: ${{ inputs.schema_branch }}
         run: npm run build
 
       - name: Fetch AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::207370808101:role/Overture_GitHub_schema_Publish_Docs_Staging
           aws-region: us-east-2
