@@ -1,17 +1,11 @@
 ---
-name: Staging Deploy
-run-name: Publish docs to staging website (for PR)
+name: Publish docs to staging website (for PR)
+run-name: Publish docs to staging website
 
 on:
   pull_request:
 
-  # Allow running from the actions tab
   workflow_dispatch:
-    inputs:
-      schema_branch:
-        description: 'Schema branch to pull from for /reference'
-        required: true
-        default: 'main'
 
 permissions:
   id-token: write
@@ -40,8 +34,7 @@ jobs:
         env:
           DOCUSAURUS_URL: https://dfhx9f55j8eg5.cloudfront.net/
           DOCUSAURUS_BASE_URL: /how-to/pr/${{github.event.number}}/
-          SCHEMA_BRANCH: ${{ inputs.schema_branch }}
-        run: npm run build
+        run: npm run build-dev
 
       - name: Fetch AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
