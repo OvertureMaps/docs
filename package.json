@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "./fetch_schema.sh && npm run docusaurus start",
-    "build": "./fetch_schema.sh && npm run docusaurus build",
+    "start": "./fetch_schema.sh dev && npm run docusaurus start",
+    "build-dev": "./fetch_schema.sh dev && npm run docusaurus build",
+    "build": "./fetch_schema.sh main && npm run docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
