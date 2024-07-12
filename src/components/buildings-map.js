@@ -51,15 +51,18 @@ export default function GlobalBuildingsMap() {
           divisions: {
             type: "vector",
             url: "pmtiles://https://d32gfzcnkb85e2.cloudfront.net/2024-06-13-beta/divisions.pmtiles"
-
           },
-          // densities: {
-          //   type: "vector",
-          //   url: "pmtiles://../../buildings/densities.pmtiles"
-          // },
-          // densities_hi: {
-          //   type: "vector",
-          //   url: "pmtiles://../../buildings/densities-z6.pmtiles"
+          base: {
+            type: "vector",
+            url: "pmtiles://https://d32gfzcnkb85e2.cloudfront.net/2024-06-13-beta/base.pmtiles"
+          },
+          // TODO: Determine best source for some sat imagery here?
+          // 'satellite-bg': {
+          //   'type': 'raster',
+          //   'tiles': [
+
+          //   ],
+          // 'tileSize': 256,
           // }
         },
         layers: [
@@ -72,49 +75,26 @@ export default function GlobalBuildingsMap() {
                 "background-color": "hsl(216,20%,95%)"
             }
           },
+          // TODO (Hope)
           // {
-          //   "id": 'density',
-          //   "type": "fill",
-          //   "source": 'densities',
-          //   "source-layer": 'density',
-          //   "minzoom": 2,
-          //   "maxzoom": 6.01,
-          //   "paint": {
-          //     "fill-color": [
-          //       'interpolate',
-          //       ['exponential', 1],
-          //       ['get', 'buildings_per_sq_km'],
-          //       1, 'white',
-          //       8, 'rgb(67,80,197)'
-          //     ],
-          //     "fill-opacity": 0.8
-          //   }
+          //   'id': 'sat-bg',
+          //   'type': 'raster',
+          //   'source': 'satellite-bg',
+          //   'minzoom': 0,
+          //   'maxzoom': 22
           // },
-          // {
-          //   "id": 'density_high',
-          //   "type": "fill",
-          //   "source": 'densities_hi',
-          //   "source-layer": 'density',
-          //   "minzoom": 6,
-          //   "maxzoom": 14.01,
-          //   "paint": {
-          //     "fill-color": [
-          //       'interpolate',
-          //       ['exponential', 1],
-          //       ['get', 'buildings_per_sq_km'],
-          //       1, 'rgba(255,255,255,0)',
-          //       8, 'rgb(67,80,197)'
-          //     ],
 
-          //     "fill-opacity": [
-          //       'interpolate',
-          //       ['linear'],
-          //       ['zoom'],
-          //       6, 0.8,
-          //       14, 0
-          //     ]
-          //   }
-          // },
+          {
+            "id": 'land',
+            "type": 'fill',
+            "source": 'base',
+            "source-layer": 'land',
+            "paint": {
+              "fill-color": "hsla(97, 13%, 66%, 1)",
+              "fill-outline-color": "hsl(216, 30%, 95%)",
+              "fill-opacity": 0.1
+            }
+          },
 
           {
             "id": 'transportation',
@@ -219,19 +199,40 @@ export default function GlobalBuildingsMap() {
             }
           },
 
+          {
+            "id": 'building-names',
+            "type": 'symbol',
+            "source": 'buildings',
+            "source-layer": 'building',
+            "minzoom": 14.5,
+            "layout": {
+              "text-field": ["get", "@name"],
+              "text-font": ["Noto Sans Bold"],
+              "text-size": 10,
+            },
+            "paint": {
+              "text-color": "black",
+              "text-halo-color": "#fff",
+              "text-halo-width": 1,
+              "text-halo-blur": 0.5,
+            }
+          },
+
           //Admins
           {
             "id": 'admins',
             "type": 'symbol',
             "source": 'divisions',
             "source-layer": 'division',
-            "filter": ["any", ["==", ["get", "subtype"], "locality"],
-            ["==", ["get", "subtype"], "region"],
-            ["==", ["get", "subtype"], "locality"],   ],
+            "filter": ["any",
+              ["==", ["get", "subtype"], "locality"],
+              ["==", ["get", "subtype"], "region"]
+            ],
             "layout": {
               "text-field": ["get", "@name"],
               "text-font": ["Noto Sans Bold"]
-            }
+            },
+            "maxzoom": 14,
           },
         ]
       }
