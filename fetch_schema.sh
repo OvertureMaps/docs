@@ -1,5 +1,8 @@
+# This script checks out the overturemaps/schema repository.
+# It will pull from `main` unless SCHEMA_BRANCH is explicitly set to something else
+
 rm -rf schema/
-git clone --branch=$1 -n --depth=1 --filter=tree:0 https://github.com/overturemaps/schema
+git clone --branch=${SCHEMA_BRANCH:-main} -n --depth=1 --filter=tree:0 https://github.com/overturemaps/schema
 cd schema
 git sparse-checkout set --no-cone examples schema docusaurus
 git checkout

@@ -1,5 +1,6 @@
 ---
-name: Build and deploy documentation
+name: Production Deploy
+run-name: Build and deploy production documentation
 
 on:
   push:
@@ -7,6 +8,11 @@ on:
 
   # Allow running from the actions tab
   workflow_dispatch:
+    inputs:
+      schema_branch:
+        description: 'Schema branch to pull from for /reference'
+        required: true
+        default: 'main'
 
 permissions:
   contents: write
@@ -31,6 +37,8 @@ jobs:
         run: npm install --prefer-dedupe
 
       - name: Build Docusaurus Pages 🔧
+        env:
+          SCHEMA_BRANCH: ${{ inputs.schema_branch }}
         run: npm run build
 
       - name: Deploy 🚀
