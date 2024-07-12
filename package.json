@@ -5,7 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "./fetch_schema.sh dev && npm run docusaurus start",
-    "build-dev": "./fetch_schema.sh dev && npm run docusaurus build",
+    "build-dev": "./fetch_schema.sh staging && npm run docusaurus build",
     "build": "./fetch_schema.sh main && npm run docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
