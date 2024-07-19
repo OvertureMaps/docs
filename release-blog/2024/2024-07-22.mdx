@@ -66,22 +66,11 @@ In April, we deprecated the admins theme and offered the divisions theme as a re
 
 - made regular updates to buildings, including adding the latest open data from OSM, Esri Community Maps, and Microsoft 
 - removed `update_time` from top level buildings schema
-- added `update_time` to the sources structure (examples below)
-```
-- Microsoft buildings update time comes from the imagery capture data from Microsoft.
-example: [{property=, dataset=Microsoft ML Buildings, record_id=709fc8cf0b55, update_time=2023-06-23T00:00:00.000Z, confidence=null}]
-- OpenStreetMap update time comes from the feature's created_at field.
-example: [{property=, dataset=OpenStreetMap, record_id=w416377106@1, update_time=2016-05-07T10:47:10.000Z, confidence=null}]
-- ESRI update time is being set to the date when ESRI delivered dataset.
-Example: [{property=, dataset=Esri Community Maps, record_id=esri_ChittendenCountyVT4379, update_time=2024-05-23T00:00:00.000Z, confidence=null}]
-- Google Buildings are all set to 5/1/2023 when they dropped the latest dataset
-Example: [{property=, dataset=Google Open Buildings, record_id=21393422627317995, update_time=2023-05-01T00:00:00.000Z, confidence=0.77}]
-```
-
+- added `update_time` to the sources structure 
 - added `update_time` to the sources structure for building parts
 - capped `height` and `roof_height` at 850 meters and discarded values over that limit
 - added a test to check that building `min_height` is less than `height`
-- resolved [Include building parts inside building relation outline even when not an explicit member](https://github.com/OvertureMaps/tf-buildings/issues/102)
+- included building parts inside building relation outline even when part is not an explicit member
 - resolved issue with building and building_part polygons having identical geometries
 - added classification for bridge structures to schema
 - added `is_underground` to all buildings
@@ -99,10 +88,10 @@ known issues in the buildings data:
  
 - removed deprecated road column 
 - added rail segments (just geometries for now) 
-- resolved most schema validation issues (<1K down from ~1M)
+- resolved most schema validation issues (<1K down from 1M)
 - added language tag filtering and normalizing 
 - fixed missing LR values for `road_flags`
-- fixed bugs in vehicle constraint and max speed properties (https://github.com/OvertureMaps/tf-transportation/pull/252/files)
+- fixed bugs in vehicle constraint and max speed properties 
 - made incremental improvements to the data
 
 
