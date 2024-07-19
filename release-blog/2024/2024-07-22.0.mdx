@@ -1,0 +1,111 @@
+---
+title: 2024-07-22.0
+slug: latest
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+
+Overture's `2024-07-22.0` release is available in GeoParquet and stored on AWS and Azure. The release paths are:
+
+```
+add release paths here
+```
+
+You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage users to report bugs and provide feedback on the data, schema, and GERS via any publicly-available Overture repository on GitHub: 
+
+- [Schema](https://github.com/OvertureMaps/schema)
+- [Data](https://github.com/OvertureMaps/data)
+- [Docs](https://github.com/OvertureMaps/docs)
+- [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py)
+- [Explore site](https://github.com/OvertureMaps/io-site)
+
+
+### GERS changelog
+
+We are now publishing a GERS changelog that captures feature changes by Overture ID from the previous release to the current release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and `change_type` &mdash; at the following locations:
+
+```
+add changelog paths here
+```
+
+Valid values for the `change_type` include:
+- added: Overture ID is new and was not in the previous release
+- removed: Overture ID is not in the current release and was in the previous release
+- data_changed: Overture ID is in the current release and was in the previous release and the feature's attributes or geometry have changed
+- unchanged: Overture ID is in the current release and was in the previous release, and the feature's attributes and geometry have not changed 
+
+
+
+### Breaking changes
+
+- removed `update_time` from a top-level schema property to a property within the sources structure
+ 
+### Deprecations
+
+In the transportation theme, we deprecated the road JSON column in the June release and removed it in the current release. We replaced the road JSON column with structured Parquet columns for road attributes.
+
+In April, we deprecated the admins theme and offered the divisions theme as a replacement. We removed admins in this release and are no longer supporting it. You can still access the admins data and schema in previous Overture releases. 
+
+
+### Theme-specific updates
+
+**Divisions**
+
+- added the dependency subtype in `division` and `division_area`
+- added the microhood subtype in `division`
+- made incremental improvements to the data
+
+**Base**
+
+- made incremental updates from OSM, based on Daylight v1.49
+
+
+**Buildings**
+
+- made regular updates to buildings, including adding the latest open data from OSM, Esri Community Maps, and Microsoft 
+- removed `update_time` from top level buildings schema
+- added `update_time` to the sources structure (examples below)
+```
+- Microsoft buildings update time comes from the imagery capture data from Microsoft.
+example: [{property=, dataset=Microsoft ML Buildings, record_id=709fc8cf0b55, update_time=2023-06-23T00:00:00.000Z, confidence=null}]
+- OpenStreetMap update time comes from the feature's created_at field.
+example: [{property=, dataset=OpenStreetMap, record_id=w416377106@1, update_time=2016-05-07T10:47:10.000Z, confidence=null}]
+- ESRI update time is being set to the date when ESRI delivered dataset.
+Example: [{property=, dataset=Esri Community Maps, record_id=esri_ChittendenCountyVT4379, update_time=2024-05-23T00:00:00.000Z, confidence=null}]
+- Google Buildings are all set to 5/1/2023 when they dropped the latest dataset
+Example: [{property=, dataset=Google Open Buildings, record_id=21393422627317995, update_time=2023-05-01T00:00:00.000Z, confidence=0.77}]
+```
+
+- added `update_time` to the sources structure for building parts
+- capped `height` and `roof_height` at 850 meters and discarded values over that limit
+- added a test to check that building `min_height` is less than `height`
+- resolved [Include building parts inside building relation outline even when not an explicit member](https://github.com/OvertureMaps/tf-buildings/issues/102)
+- resolved {Some building and building_part polygons have identical geometries}(https://github.com/OvertureMaps/tf-buildings/issues/130)
+[Add classification for bridge structures to schema. Action Item](https://github.com/OvertureMaps/tf-buildings/issues/144)
+- added `is_underground` to all buildings
+
+:::note
+known issues in the buildings data:
+- `roof_height` = null
+- some `is_underground` = null
+
+**Places**
+
+- changed the schema to allow for NULL categories
+
+**Transportation**
+ 
+- removed deprecated road column 
+- added rail segments (just geometries for now) 
+- resolved most schema validation issues (<1K down from ~1M)
+- added language tag filtering and normalizing 
+- fixed missing LR values for `road_flags`
+- fixed bugs in vehicle constraint and max speed properties (https://github.com/OvertureMaps/tf-transportation/pull/252/files)
+- made incremental improvements to the data
+
+
+### Attribution
+
+You'll find information about attribution and licensing [here](https://docs.overturemaps.org/attribution/).
