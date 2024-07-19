@@ -21,6 +21,10 @@ You can access the datasets by following the process outlined [here](https://doc
 - [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py)
 - [Explore site](https://github.com/OvertureMaps/io-site)
 
+### New theme: addresses
+
+In this release, Overture has added a new theme called addresses that includes over 200 million address features for 14 countries. We are releasing this theme in alpha and anticipate significant changes over the next several Overture releases. Feedback from users will inform the schema evolution and help us ensure it will work across a worldwide set of address data. 
+
 
 ### GERS changelog
 
@@ -51,11 +55,13 @@ In April, we deprecated the admins theme and offered the divisions theme as a re
 
 ### Theme-specific updates
 
-**Divisions**
+:::info
+The base, buildings, divisions, and places themes are now in the general availability (GA) phase. The transportation theme is in beta, and the addresses theme is in alpha.
+:::
 
-- added the dependency subtype in `division` and `division_area`
-- added the microhood subtype in `division`
-- made incremental improvements to the data
+**Addresses**
+- added over 200 million addresses for 14 countries in this brand new Overture theme
+
 
 **Base**
 
@@ -79,6 +85,13 @@ In April, we deprecated the admins theme and offered the divisions theme as a re
 known issues in the buildings data:
 - `roof_height` = null
 - some `is_underground` = null
+:::
+
+**Divisions**
+
+- added the dependency subtype in `division` and `division_area`
+- added the microhood subtype in `division`
+- made incremental improvements to the data
 
 **Places**
 
@@ -88,7 +101,7 @@ known issues in the buildings data:
  
 - removed deprecated road column 
 - added rail segments (just geometries for now) 
-- resolved most schema validation issues (<1K down from 1M)
+- resolved most schema validation issues 
 - added language tag filtering and normalizing 
 - fixed missing LR values for `road_flags`
 - fixed bugs in vehicle constraint and max speed properties 
@@ -98,3 +111,4 @@ known issues in the buildings data:
 ### Attribution
 
 You'll find information about attribution and licensing [here](https://docs.overturemaps.org/attribution/).
+
