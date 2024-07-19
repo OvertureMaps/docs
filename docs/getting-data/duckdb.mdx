@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 import ConfidentMountains from '!!raw-loader!@site/src/queries/duckdb/confident_mountains.sql';
 import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
-import CountryGeometries from '!!raw-loader!@site/src/queries/duckdb/country_level_geometries.sql';
+import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level_geometries.sql';
 
 [DuckDB](https://duckdb.org/) is an analytics tool that allows you to query remote files and download only the data you want. 
 
@@ -40,11 +40,11 @@ This query pulls building geometries and selected attributes from the Overture b
 
 <QueryBuilder query={DetroitBuildings}></QueryBuilder>
 
-### Country polygons
+### County polygons
 
-This query grabs country-level geometries and their attributes from the admins dataset and outputs them to a GeoJSON file. 
+This query grabs county-level geometries for Pennsylvania from the divisions dataset and outputs them to a GeoJSON file. 
 
-<QueryBuilder query={CountryGeometries}></QueryBuilder>
+<QueryBuilder query={CountyGeometries}></QueryBuilder>
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: 2024-07-22.0
+title: 2024-07-22
 slug: latest
 ---
 import Tabs from '@theme/Tabs';
@@ -7,7 +7,9 @@ import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
 
-Overture's `2024-07-22.0` release is available in GeoParquet and stored on AWS and Azure. The release paths are:
+Overture's `2024-07-22` release is live. Our base, buildings, divisions, and places themes are now in General Availability (GA). Our transportation theme is still in beta, and the Overture transportation task force anticipates breaking changes in the next release. We also released a new addresses theme, available in alpha. The Overture addresses task force will be making significant changes to the schema and updating and adding to the data over the next several releases. 
+
+The datasets are available in GeoParquet and stored on AWS and Azure. The release paths are:
 
 ```
 add release paths here
@@ -23,12 +25,11 @@ You can access the datasets by following the process outlined [here](https://doc
 
 ### New theme: addresses
 
-In this release, Overture has added a new theme called addresses that includes over 200 million address features for 14 countries. We are releasing this theme in alpha and anticipate significant changes over the next several Overture releases. Feedback from users will inform the schema evolution and help us ensure it will work across a worldwide set of address data. 
-
+In this release, we added a new theme called addresses that includes over 200 million address features for 14 countries. We are releasing this theme in alpha and anticipate significant changes over the next several Overture releases. We invite the Overture community to test the addresses schema and data. User will inform the schema evolution and help us ensure it will work across a global addresses dataset.
 
 ### GERS changelog
 
-We are now publishing a GERS changelog that captures feature changes by Overture ID from the previous release to the current release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and `change_type` &mdash; at the following locations:
+We are now publishing a GERS changelog with each release that captures feature changes by Overture ID. The changelog is available as Parquet files &mdash; partitioned by theme, type, and `change_type` &mdash; at the following locations:
 
 ```
 add changelog paths here
@@ -44,7 +45,15 @@ Valid values for the `change_type` include:
 
 ### Breaking changes
 
-- removed `update_time` from a top-level schema property to a property within the sources structure
+We removed `update_time` from a top-level schema property to a property within the sources structure. See below for an example of this change in the buildings theme.
+
+```
+Microsoft buildings `update_time` comes from Microsoft's imagery capture data.
+
+[{property=, dataset=Microsoft ML Buildings, record_id=709fc8cf0b55, update_time=2023-06-23T00:00:00.000Z, confidence=null}]
+
+```
+
  
 ### Deprecations
 
