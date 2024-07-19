@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "UNSET SCHEMA_BRANCH && ./fetch_schema.sh && npm run docusaurus start",
+    "start": "./fetch_schema.sh && npm run docusaurus start",
     "start-dev": "EXPORT SCHEMA_BRANCH=dev && ./fetch_schema.sh && npm run docusaurus start",
     "start-staging": "EXPORT SCHEMA_BRANCH=staging && ./fetch_schema.sh && npm run docusaurus start",
     "build": "./fetch_schema.sh && npm run docusaurus build",

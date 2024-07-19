@@ -1,0 +1,121 @@
+---
+title: 2024-07-22.0
+slug: latest
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+
+**The Overture `2024-07-22.0` data release and `v1.0.0` of the Overture schema are live.** Our base, buildings, divisions, and places themes are now in the General Availability (GA) phase of their development. Our transportation theme remains in beta, and the Overture transportation task force anticipates breaking changes in the next release. We also released a new addresses theme, available in alpha. The Overture addresses task force will be making significant changes to the schema and updating and adding to the data over the next several releases.
+
+The datasets are available as GeoParquet files stored on AWS and Azure. The release paths are:
+
+##### Microsoft Azure:
+```
+wasbs://release@overturemapswestus2.blob.core.windows.net/2024-07-22.0
+```
+
+##### Amazon S3:
+```
+s3://overturemaps-us-west-2/release/2024-07-22.0
+```
+
+You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage users to report bugs and provide feedback on the data, schema, and GERS on one of our Overture GitHub repositories:
+
+- [Schema](https://github.com/OvertureMaps/schema)
+- [Data](https://github.com/OvertureMaps/data)
+- [Docs](https://github.com/OvertureMaps/docs)
+- [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py)
+- [Explore site](https://github.com/OvertureMaps/io-site)
+
+### New theme: addresses
+
+In this release, we added a new theme called [addresses](/schema/reference/addresses/address) that includes over 200 million address features for 14 countries. We are releasing this theme in alpha and anticipate significant changes over the next several releases. We invite the Overture community to test the addresses schema and data and offer feedback via the [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repos.
+
+### Global Entity Reference System (GERS) changelog
+
+The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations on Azure and AWS:
+
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-07-22.0
+```
+```
+s3://overturemaps-us-west-2/changelog/2024-07-22.0
+```
+
+The types of feature changes in the changelog include:
+
+- `added`: Feature with this ID is new (was not present in the previous release).
+- `removed`: Feature with this ID was present in the previous release, but not this release.
+- `data_changed`: The feature with this ID contains a change in attributes (geometry or otherwise) from the feature with this ID in the previous release.
+- `unchanged`: The feature with this ID in this release matches the geometry and attributes of the feature with this ID in the previous release.
+
+
+
+### Breaking changes
+
+We removed `update_time` from a top-level schema property to a property within the sources structure. For example, the Microsoft buildings `update_time` comes from Microsoft's imagery capture data:
+```
+[{property=, dataset=Microsoft ML Buildings, record_id=709fc8cf0b55, update_time=2023-06-23T00:00:00.000Z, confidence=null}]
+```
+
+
+### Deprecations
+
+In the transportation theme, we deprecated the `road` JSON column in the June release and removed it in the current release. We replaced the `road` JSON column with structured Parquet columns for road attributes.
+
+In April, we deprecated the admins theme and offered the divisions theme as a replacement. We removed admins in this release and are no longer supporting it. You can still access the admins data and schema in previous Overture releases.
+
+
+### Theme-specific updates
+
+:::info
+The base, buildings, divisions, and places themes are now in the General Availability (GA) phase. The transportation theme is in beta, and the addresses theme is in alpha.
+:::
+
+**Addresses**
+- added over 200 million addresses for 14 countries, pulling data from many [sources](https://docs.overturemaps.org/attribution/)
+
+
+**Base**
+
+- made incremental updates from OSM, based on Daylight v1.50
+
+**Buildings**
+
+- made regular updates to buildings, including adding the latest open data from OSM, Esri Community Maps, and Microsoft
+- removed `update_time` from top level buildings schema
+- added `update_time` to the sources structure
+- added `update_time` to the sources structure for building parts
+- capped `height` and `roof_height` at 850 meters and discarded values over that limit
+- added a test to check that building `min_height` is less than `height`
+- included building parts inside building relation outline even when part is not an explicit member
+- resolved issue with building and building_part polygons having identical geometries
+- added classification for bridge structures to schema
+- added `is_underground` to all buildings
+
+**Divisions**
+
+- added the `dependency` subtype to the division and division_area feature types
+- added the `microhood` subtype to the division feature type
+- made incremental improvements to the data
+
+**Places**
+
+- changed the schema to allow for NULL categories
+
+**Transportation**
+
+- removed deprecated road column
+- added rail segments (just geometries for now)
+- resolved most schema validation issues
+- added language tag filtering and normalizing
+- fixed missing LR values for `road_flags`
+- fixed bugs in vehicle constraint and max speed properties
+- made incremental improvements to the data
+
+
+### Attribution
+
+You'll find information about attribution and licensing [here](https://docs.overturemaps.org/attribution/).
