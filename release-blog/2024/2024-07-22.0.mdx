@@ -55,6 +55,10 @@ The types of feature changes in the changelog include:
 
 ### Breaking changes
 
+In the divisions theme, we changed the `boundary` feature type to `division_boundary`. Feature types in Overture must be distinct and unique across all themes, and `boundary` did not meet those conditions. We realize that changing the name of a feature type is a major change, and we do not anticipate doing this again without giving our users plenty of advance notice. 
+
+Also in the divisions theme, we changed the `divisions` property to `divisions_ids` to fix relationship modeling in the schema. The logic is that a property or nested sub-property that contains a foreign key reference to another feature by Overture ID must end in the suffix `_id`. More information about this change here: https://github.com/OvertureMaps/schema/pull/215
+
 We removed `update_time` from a top-level schema property to a property within the sources structure. For example, the Microsoft buildings `update_time` comes from Microsoft's imagery capture data:
 ```
 [{property=, dataset=Microsoft ML Buildings, record_id=709fc8cf0b55, update_time=2023-06-23T00:00:00.000Z, confidence=null}]
@@ -97,8 +101,14 @@ The base, buildings, divisions, and places themes are now in the General Availab
 
 **Divisions**
 
+:::warning
+**BREAKING CHANGES** 
+- changed the name of the `boundary` feature type to `division_boundary` 
+- changed the `divisions` property to `division_ids`
+:::
 - added the `dependency` subtype to the division and division_area feature types
 - added the `microhood` subtype to the division feature type
+- added to the division feature type a [`capital_of_divisions` property](https://github.com/OvertureMaps/schema/pull/225), an object that will refer to the division IDs of the countries, regions, counties, etc
 - made incremental improvements to the data
 
 **Places**
