@@ -42,6 +42,8 @@
 <li><code>unchanged</code>: The feature with this ID in this release matches the geometry and attributes of the feature with this ID in the previous release.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="breaking-changes">Breaking changes<a href="https://docs.overturemaps.org/release/latest/#breaking-changes" class="hash-link" aria-label="Direct link to Breaking changes" title="Direct link to Breaking changes">​</a></h3>
+<p>In the divisions theme, we changed the <code>boundary</code> feature type to <code>division_boundary</code>. Feature types in Overture must be distinct and unique across all themes, and <code>boundary</code> did not meet those conditions. We realize that changing the name of a feature type is a major change, and we do not anticipate doing this again without giving our users plenty of advance notice.</p>
+<p>Also in the divisions theme, we changed the <code>divisions</code> property to <code>divisions_ids</code> to fix relationship modeling in the schema. The logic is that a property or nested sub-property that contains a foreign key reference to another feature by Overture ID must end in the suffix <code>_id</code>. More information about this change here: <a href="https://github.com/OvertureMaps/schema/pull/215" target="_blank" rel="noopener noreferrer">https://github.com/OvertureMaps/schema/pull/215</a></p>
 <p>We removed <code>update_time</code> from a top-level schema property to a property within the sources structure. For example, the Microsoft buildings <code>update_time</code> comes from Microsoft's imagery capture data:</p>
 <div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[{property=, dataset=Microsoft ML Buildings, record_id=709fc8cf0b55, update_time=2023-06-23T00:00:00.000Z, confidence=null}]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="deprecations">Deprecations<a href="https://docs.overturemaps.org/release/latest/#deprecations" class="hash-link" aria-label="Direct link to Deprecations" title="Direct link to Deprecations">​</a></h3>
@@ -71,9 +73,14 @@
 <li>added <code>is_underground</code> to all buildings</li>
 </ul>
 <p><strong>Divisions</strong></p>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>warning</div><div class="admonitionContent_BuS1"><p><strong>BREAKING CHANGES</strong></p><ul>
+<li>changed the name of the <code>boundary</code> feature type to <code>division_boundary</code></li>
+<li>changed the <code>divisions</code> property to <code>division_ids</code></li>
+</ul></div></div>
 <ul>
 <li>added the <code>dependency</code> subtype to the division and division_area feature types</li>
 <li>added the <code>microhood</code> subtype to the division feature type</li>
+<li>added to the division feature type a <a href="https://github.com/OvertureMaps/schema/pull/225" target="_blank" rel="noopener noreferrer"><code>capital_of_divisions</code> property</a>, an object that will refer to the division IDs of the countries, regions, counties, etc</li>
 <li>made incremental improvements to the data</li>
 </ul>
 <p><strong>Places</strong></p>
