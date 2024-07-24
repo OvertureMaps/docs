@@ -2,6 +2,7 @@
 title: Global Entity Reference System (GERS)
 slug: /gers
 ---
+import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Understanding GERS
 
@@ -11,11 +12,10 @@ GERS provides a mechanism to match features across datasets. For example, multip
 
 ## What does an Overture ID look like?
 
-An Overture ID is 128 bits. In this example, you can see five unique IDs for building features from the June 2024 data release. [The IDs for the building feature type are registered to GERS](stability). 
+An Overture ID is 128 bits and 32 characters. In this example, you can see five unique IDs for building features from the July 2024 data release. [The IDs for the building feature type are registered to GERS](stability). 
 
 ```sql
-D SET s3_region='us-west-2';
-D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=buildings/type=buiding/*', filename=true, hive_partitioning=1) limit 5;
+D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1) limit 5;
 ┌──────────────────────────────────┐
 │                id                │
 │             varchar              │

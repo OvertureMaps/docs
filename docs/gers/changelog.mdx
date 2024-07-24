@@ -1,16 +1,52 @@
 ---
 title: GERS Changelog
 ---
+import QueryBuilder from '@site/src/components/queryBuilder';
+import changelog_buildings_churn from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_churn.sql';
+import changelog_buildings_feature_by_change_type from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_feature_by_change_type.sql';
+import changelog_buildings_join from '!!raw-loader!@site/src/queries/athena/changelog_buildings_join.sql';
 
-In the `2024-06-13-beta.0` release, Overture began publishing a GERS changelog to capture feature changes, via changes in Overture IDs, from one release to another. The GERS changelog is available as Parquet files &mdash; partitioned by theme, type, and `change_type` &mdash; at the following locations:
-```
-wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-06-13-beta.0
+With each data release, Overture generates a [GERS](../) changelog that captures changes in the data tied to the unique IDs for each feature. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors. 
 
-s3://overturemaps-us-west-2/changelog/2024-06-13-beta.0
-```
+The GERS changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations:
 
-Valid values for the `change_type` include:
-- added: Overture ID is new and was not in the previous release
-- removed: Overture ID is not in the current release and was in the previous release
-- data_changed: Overture ID is in the current release and was in the previous release and the feature's attributes or geometry have changed
-- unchanged: Overture ID is in the current release and was in the previous release, and the feature's attributes and geometry have not changed 
+| Provider | Location |
+| ------ | -------- |
+| Amazon S3 | `s3://overturemaps-us-west-2/changelog/` |
+| Microsoft Azure | `wasbs://changelog@overturemapswestus2.blob.core.windows.net/` |
+
+The latest path is: 
+<QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
+
+## Types of changes
+
+The types of changes in the changelog include:
+
+- **added**: the feature with this ID is new in the current release and was not present in the previous release
+- **removed**: the feature with this ID is not present in the current release but was present in the previous release
+- **data_changed**: the feature with this ID in the current release contains a change in geometry or properties from the feature with this ID that was in the previous release
+- **unchanged**: the feature with this ID in the current release matches the geometry and properties of the feature with this ID that was in the previous release
+
+## Querying the GERS changelog
+
+We can query the changelog with DuckDB to get a quick look at changes in data from the last release to the current release. In this example, we're grabbing ID, feature type, and change type for buildings in several towns across the [Amhara Region](https://en.wikipedia.org/wiki/Amhara_Region) in Ethiopia. 
+
+<QueryBuilder query={changelog_buildings_churn}></QueryBuilder>
+
+We can also get a count of building features by change type for our area of interest.
+
+<QueryBuilder query={changelog_buildings_feature_by_change_type}></QueryBuilder>
+
+Taking this one step further, this time using Athena to run our query, we can join the changelog and data via Overture ID to connect the change type and feature geometries and properties.  
+
+<QueryBuilder query={changelog_buildings_join}></QueryBuilder>
+
+Finally we can use the results of our query to visualize building features by change type and inspect the properties for each feature. The example below, created using [kepler.gl](https://kepler.gl/), shows buildings in [Finote Selam](https://en.wikipedia.org/wiki/Finote_Selam), a city in the Amhara Region of Ethiopia. The data is from Overture's `2024-06-13-beta.0` release, to which we added 100 million new buildings, many of them derived from satellite imagery by Microsoft. 
+
+
+![Buildings By Change Type](/img/gers/buildings-change-type-amhara-region.png)
+
+
+
+
+
