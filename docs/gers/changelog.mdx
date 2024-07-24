@@ -6,7 +6,7 @@ import changelog_buildings_churn from '!!raw-loader!@site/src/queries/duckdb/cha
 import changelog_buildings_feature_by_change_type from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_feature_by_change_type.sql';
 import changelog_buildings_join from '!!raw-loader!@site/src/queries/athena/changelog_buildings_join.sql';
 
-With each data release, Overture generates a [GERS](../) changelog that captures changes in the data tied to the unique IDs for each feature. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors. 
+With each data release, Overture generates a [GERS](../) changelog to capture changes in the data tied to the unique ID for each feature. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors. 
 
 The GERS changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations:
 
