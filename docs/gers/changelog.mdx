@@ -8,7 +8,7 @@ import changelog_buildings_join from '!!raw-loader!@site/src/queries/athena/chan
 
 With each data release, Overture generates a [GERS](../) changelog that captures changes in the data tied to the unique IDs for each feature. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors. 
 
-The GERS changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at following locations:
+The GERS changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations:
 
 | Provider | Location |
 | ------ | -------- |
@@ -22,14 +22,14 @@ The latest path is:
 
 The types of changes in the changelog include:
 
-- added: feature with this ID is new and was not present in the previous release
-- removed: feature with this ID was present in the previous release but not in this release.
-- data_changed: feature with this ID contains a change in geometry of properties from the feature with this ID in the previous release
-- unchanged: feature with this ID in this release matches the geometry and attributes of the feature with this ID in the previous release
+- 'added': the feature with this ID is new in the current release and was not present in the previous release
+- 'removed': the feature with this ID is not present in the current release but was present in the previous release
+- 'data_changed': the feature with this ID in the current release contains a change in geometry or properties from the feature with this ID that was in the previous release
+- 'unchanged': the feature with this ID in the current release matches the geometry and properties of the feature with this ID that was in the previous release
 
 ## Querying the GERS changelog
 
-We can query the changelog with DuckDB to get a quick look at changes in data from the last release to the current release. In this example, we're grabbing ID, feature type, and change type for buildings in several small cities across the [Amhara Region](https://en.wikipedia.org/wiki/Amhara_Region) in Ethiopia. 
+We can query the changelog with DuckDB to get a quick look at changes in data from the last release to the current release. In this example, we're grabbing ID, feature type, and change type for buildings in several towns across the [Amhara Region](https://en.wikipedia.org/wiki/Amhara_Region) in Ethiopia. 
 
 <QueryBuilder query={changelog_buildings_churn}></QueryBuilder>
 
