@@ -97,11 +97,14 @@ A full list of sources can be found [here](https://raw.githubusercontent.com/Ove
 
 # Data access and retrieval <a name="data_access_and_retrieval"></a>
 
-- Tk
+[This Overture doc](https://docs.overturemaps.org/getting-data/duckdb/#installation) describes the installation process in more detail.
 
 ## How to access the data <a name="how_to_access_the_data"></a>
 
-- Theme-specific AWS and Azure paths, link to getting data docs
+Documentation and install links for DuckDB, below:
+
+- Quick Install: https://duckdb.org/#quickinstall
+- Documentation: https://duckdb.org/docs/
 
 ## Authentication or authorization <a name="authentication_or_authorization"></a>
 
@@ -109,7 +112,102 @@ A full list of sources can be found [here](https://raw.githubusercontent.com/Ove
 
 ## Data retrieval examples <a name="data_retrieval_examples"></a>
 
-- SQL queries, Python scripts, other tools
+### SQL
+
+Using these simple queries, you can find the number of division entities and the number of entities per division type:
+Find the total number of divisions entities
+
+```
+SELECT count(*)
+FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=*/*', filename=true, hive_partitioning=1);
+```
+
+#### Find the total number of division type entities within the division theme
+
+SELECT count(*)
+FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division/*', filename=true, hive_partitioning=1);
+
+#### Find the total number of division_area type entities within the division theme
+
+```
+SELECT count(*)
+FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1);
+```
+
+#### Find the total number of boundary type entities within the division theme
+
+```
+SELECT count(*)
+FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=boundary/*', filename=true, hive_partitioning=1);
+```
+
+_Note: As of July 2024, the boundary type is now called division_boundary_
+
+In the divisions dataset, each entity is maintained using a "subtype" - you can find an enumerated list here. You can further iterate on the queries above to find the number of entities per divisions theme, or the number of subtype entities per country.
+
+#### List the number entities, per subtype in the division_area theme
+
+```
+SELECT count(*), subtype
+FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
+GROUP BY subtype;
+```
+
+#### List the number entities, per subtype in the division_area theme in the US, Mexico, and Canada
+
+```
+SELECT count(*), subtype
+FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
+WHERE country IN ('US','MX','CA')
+GROUP BY subtype;
+```
+
+#### View information about a specific feature (US / Mexico boundary) without using a bounding box
+
+```
+SELECT *
+FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=boundary/*', filename=true, hive_partitioning=1)
+WHERE id = '085db5bb7fffffff0173c9b945a8c25f';
+```
+
+#### Find the Overture record for a given OSM id (in this case, a relation)
+
+```
+SELECT *
+FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
+WHERE sources[1].record_id = 'R3766655';
+```
+
+#### View information about boundary features using a bounding box
+
+To create a bounding box, find the southwest-most latitude/longitude and northeast-most latitude/longitde of the area you're interested in. For The US / Mexico border area, that would look something like:
+
+    - Southwest-most point: 24.93478418, -119.13728323
+    - Northeast-most point: 33.43995480, -95.63020817
+
+Then, use these coordinates to develop the min and max values for your bounding box:
+
+```
+bbox.xmin > -119.13728323
+bbox.xmax < -95.63020817
+bbox.ymin > 24.93478418
+bbox.ymax < 33.43995480
+```
+
+Now, use these coordinates to construct your query. This example returns results for the country boundary between the US and Mexico:
+
+```
+SELECT *
+  FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=boundary/*', filename=true, hive_partitioning=1)
+  WHERE bbox.xmin > -119.13728323
+  AND bbox.xmax < -95.63020817
+  AND bbox.ymin > 24.93478418
+  AND bbox.ymax < 33.43995480
+  AND subtype = 'country'
+;
+```
+
+### Python
 
 
 
