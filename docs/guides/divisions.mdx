@@ -2,18 +2,219 @@
 title: Divisions
 ---
 
-## Overview
+# Overview
 
-The Overture Maps `divisions` theme includes features that represent human settlements in the real world, such as countries, regions, states, cities and towns.
+The Overture Maps `divisions` theme includes features that represent human settlements in the real world, such as countries, regions, states, cities, and even neighborhoods.
+
+You can download Overture's latest divisions release here: https://docs.overturemaps.org/release/latest/.
+
+## Purpose of the divisions
+
+Divisions data can be used for many mapping purposes, which can include, but are not limited to: reverse-geocoding, cartographic styling of boundaries, and place labels. 
 
 ## Divisions feature types
 
 - A `division` is a feature type that represents an official or non-official organization of people-- country, region, province, city, neighborhood, etc.-- as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature.
+
 - A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry.
+
 - A `boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water.
 
-## Schema reference
+## Table of Contents
+
+1.[Divisions description](divisions_description)
+	1.[Schema reference](schema_reference)
+	2.[Sources and licensing](sources_and_licensing)
+	3.[Conflation process](conflation_process)
+	4.[Pipeline migration to Overture](pipeline_migration_to_overture)
+	5.[Structure](structure)
+	6.[Data fields](data_fields)
+2.[Data access and retrieval](data_access_and_retrieval)
+	1.[How to access the data](how_to_access_the_data)
+	2.[Authentication or authorization:](authentication_or_authorization:)
+	3.[Data retrieval examples](data_retrieval_examples)
+3.[Data usage guidelines](data_usage_guidelines)
+	1.[Best practices](best_practices)
+	2.[Common use cases](common_use_cases)
+	3.[Limitations and caveats](limitations_and_caveats)
+	4.[Data quality and accuracy](data_quality_and_accuracy)
+4.[Data manipulation and analysis](data_manipulation_and_analysis)
+	1.[Basic](basic)
+	2.[Advanced](advanced)
+	3.[Tools and libraries](tools_and_libraries)
+5.[Data visualization](data_visualization)
+	1.[Visualization examples](visualization_examples)
+	2.[Tools for visualization](tools_for_visualization)
+6.[Appendix](appendix)
+	1.[Glossary](glossary)
+	2.[Additional resources](additional_resources)
+7.[Contact](contact)
+	1.[Support](support)
+	2.[Feedback](feedback)
+8.[Revision history](revision_history)
+	1.[Version Info](version_info)
+	2.[GERS Changelog](gers_changelog)
+
+
+
+# Divisions description <a name="divisions_description"></a>
+
+## Schema reference <a name="schema_reference"></a>
 
 - [Explore the schema reference for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
+
 - [Explore the schema reference for the `division` feature type](/schema/reference/divisions/division).
+
 - [Explore the schema reference for the `division_area` feature type](/schema/reference/divisions/division_area).
+
+## Sources and licensing <a name="sources_and_licensing"></a>
+
+As of the July 2024 release, Overture's divisions theme is comprised of data from the following sources:
+
+- [OpenStreetMap](https://openstreetmap.org/) ([ODbL-1.0 license terms]("https://www.openstreetmap.org/copyright"))
+- [geoBoundaries](https://geoboundaries.org/) ([CC BY 4.0 license terms]("https://www.geoboundaries.org/#tabs1-js"))
+
+A full list of sources can be found [here](https://raw.githubusercontent.com/OvertureMaps/tf-data-platform/dev/datasets.json?token=GHSAT0AAAAAACPDIQJR2Y3W3QSK5ZMBTNEAZVCZS3Q), in JSON format.
+
+## Conflation process <a name="conflation_process"></a>
+
+- Tk
+
+## Pipeline migration to Overture <a name="pipeline_migration_to_overture"></a>
+
+- Tk
+
+## Structure <a name="structure"></a>
+
+- Geojson schema
+- Delivered as geoparquet, related files
+
+## Data fields <a name="data_fields"></a>
+
+- Geoparquet schema table
+
+
+
+# Data access and retrieval <a name="data_access_and_retrieval"></a>
+
+- Tk
+
+## How to access the data <a name="how_to_access_the_data"></a>
+
+- Theme-specific AWS and Azure paths, link to getting data docs
+
+## Authentication or authorization: <a name="authentication_or_authorization:"></a>
+
+- Free and open data from Overture, third-party providers might require auth
+
+## Data retrieval examples <a name="data_retrieval_examples"></a>
+
+- SQL queries, Python scripts, other tools
+
+
+
+# Data usage guidelines <a name="data_usage_guidelines"></a>
+
+- Tk
+
+## Best practices <a name="best_practices"></a>
+
+- How to use the data effectively
+
+## Common use cases <a name="common_use_cases"></a>
+
+- Provide at least three use cases/scenarios
+
+## Limitations and caveats <a name="limitations_and_caveats"></a>
+
+- SLA?
+
+## Data quality and accuracy <a name="data_quality_and_accuracy"></a>
+
+ - coverage
+ - other metrics?
+
+
+
+# Data manipulation and analysis
+
+- Tk
+
+## Basic
+
+- Wrangling
+- Filtering
+- Sorting
+- Aggregating
+
+## Advanced
+
+- Cross-theme analysis
+- Matching
+- Comparing releases with GERS changelog
+
+## Tools and libraries
+
+- Custom and third-party
+- Notebooks
+- Pandas
+- Rapid
+
+
+
+# Data visualization <a name="data_visualization"></a>
+
+- Tk
+
+## Visualization examples <a name="visualization_examples"></a>
+
+- Maps
+- Graphs
+
+## Tools for visualization <a name="tools_for_visualization"></a>
+
+- Tk
+
+
+
+# Appendix <a name="appendix"></a>
+
+- Tk
+
+## Glossary <a name="glossary"></a>
+
+- technical terms or jargon
+
+## Additional resources <a name="additional_resources"></a>
+
+- Links to docs
+- Tutorials
+- Support channels
+
+
+
+# Contact <a name="contact"></a>
+
+## Support <a name="support"></a>
+
+- Get help
+- Report issues
+
+## Feedback <a name="feedback"></a>
+
+- GitHub discussions
+- GitHub issues
+- Other channels
+
+
+
+# Revision history <a name="revision_history"></a>
+
+- Tk
+
+## Version Info <a name="version_info"></a>
+
+- Release Notes
+- Version field
+
+## GERS Changelog <a name="gers_changelog"></a>
