@@ -42,19 +42,20 @@ export default function GlobalBuildingsMap() {
         sources: {
           buildings: {
             type: "vector",
-            url: "pmtiles://https://d32gfzcnkb85e2.cloudfront.net/2024-06-13-beta/buildings.pmtiles"
+            url: "pmtiles://https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/buildings.pmtiles"
+
           },
           transportation: {
             type: "vector",
-            url: "pmtiles://https://d32gfzcnkb85e2.cloudfront.net/2024-06-13-beta/transportation.pmtiles"
+            url: "pmtiles://https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/transportation.pmtiles"
           },
           divisions: {
             type: "vector",
-            url: "pmtiles://https://d32gfzcnkb85e2.cloudfront.net/2024-06-13-beta/divisions.pmtiles"
+            url: "pmtiles://https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/divisions.pmtiles"
           },
           base: {
             type: "vector",
-            url: "pmtiles://https://d32gfzcnkb85e2.cloudfront.net/2024-06-13-beta/base.pmtiles"
+            url: "pmtiles://https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/base.pmtiles"
           },
           // TODO: Determine best source for some sat imagery here?
           // 'satellite-bg': {
@@ -127,10 +128,10 @@ export default function GlobalBuildingsMap() {
           {
             "id": 'osm-buildings',
             "type": "fill-extrusion",
-            "minzoom":14, "maxzoom": 18,
+            "minzoom":10, "maxzoom": 18,
             "source": 'buildings',
             "source-layer": 'building',
-            "filter": ["in", "OpenStreetMap", ["get", "sources"]],
+            "filter": ["==", "OpenStreetMap", ["get", "@geometry_source"]],
             "paint": {
                 "fill-extrusion-color": "rgb(194,42,87)",
                 "fill-extrusion-opacity": 1,
@@ -146,10 +147,10 @@ export default function GlobalBuildingsMap() {
           {
             "id": 'esri-buildings',
             "type": "fill-extrusion",
-            "minzoom":14, "maxzoom": 18,
+            "minzoom":10, "maxzoom": 18,
             "source": 'buildings',
             "source-layer": 'building',
-            "filter": ["in", "Esri Community Maps", ["get", "sources"]],
+            "filter": ["==", "Esri Community Maps", ["get", "@geometry_source"]],
             "paint": {
                 "fill-extrusion-color": "rgb(4,151,188)",
                 "fill-extrusion-opacity": 1,
@@ -165,10 +166,10 @@ export default function GlobalBuildingsMap() {
           {
             "id": 'msft-buildings',
             "type": "fill-extrusion",
-            "minzoom":14, "maxzoom": 18,
+            "minzoom":10, "maxzoom": 18,
             "source": 'buildings',
             "source-layer": 'building',
-            "filter": ["in", "Microsoft ML Buildings", ["get", "sources"]],
+            "filter": ["==", "Microsoft ML Buildings", ["get", "@geometry_source"]],
             "paint": {
                 "fill-extrusion-color": "rgb(243,175,102)",
                 "fill-extrusion-opacity": 1,
@@ -184,10 +185,10 @@ export default function GlobalBuildingsMap() {
           {
             "id": 'google-buildings',
             "type": "fill-extrusion",
-            "minzoom":14, "maxzoom": 18,
+            "minzoom":10, "maxzoom": 18,
             "source": 'buildings',
             "source-layer": 'building',
-            "filter": ["in", "Google Open Buildings", ["get", "sources"]],
+            "filter": ["==", "Google Open Buildings", ["get", "@geometry_source"]],
             "paint": {
                 "fill-extrusion-color": "rgb(236,253,188)",
                 "fill-extrusion-opacity": 1,
