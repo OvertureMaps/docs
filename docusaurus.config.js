@@ -66,6 +66,11 @@ const config = {
                 test: /\.yaml$/,
                 use: 'raw-loader'
               },
+              {
+                resolve: {
+                  symlinks: false
+                }
+              }
             ],
           },
         };
