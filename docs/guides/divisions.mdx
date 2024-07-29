@@ -91,8 +91,42 @@ A full list of sources can be found [here](https://raw.githubusercontent.com/Ove
 
 ## Data fields <a name="data_fields"></a>
 
-- Geoparquet schema table
+As of the July 2024 divisions release, there are 25 unique fields in the divisions theme:
 
+```
+┌──────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│     column_name      │                                                     column_type                                                      │
+│       varchar        │                                                       varchar                                                        │
+├──────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ id                   │ VARCHAR                                                                                                              │
+│ geometry             │ BLOB                                                                                                                 │
+│ bbox                 │ STRUCT(xmin FLOAT, xmax FLOAT, ymin FLOAT, ymax FLOAT)                                                               │
+│ version              │ INTEGER                                                                                                              │
+│ update_time          │ VARCHAR                                                                                                              │
+│ sources              │ STRUCT(property VARCHAR, dataset VARCHAR, record_id VARCHAR, confidence DOUBLE)[]                                    │
+│ subtype              │ VARCHAR                                                                                                              │
+│ wikidata             │ VARCHAR                                                                                                              │
+│ population           │ INTEGER                                                                                                              │
+│ names                │ STRUCT("primary" VARCHAR, common MAP(VARCHAR, VARCHAR), rules STRUCT(variant VARCHAR, "language" VARCHAR, "value" …  │
+│ class                │ VARCHAR                                                                                                              │
+│ divisions            │ VARCHAR[]                                                                                                            │
+│ is_disputed          │ BOOLEAN                                                                                                              │
+│ perspectives         │ STRUCT("mode" VARCHAR, countries VARCHAR[])                                                                          │
+│ local_type           │ MAP(VARCHAR, VARCHAR)                                                                                                │
+│ country              │ VARCHAR                                                                                                              │
+│ region               │ VARCHAR                                                                                                              │
+│ hierarchies          │ STRUCT(division_id VARCHAR, subtype VARCHAR, "name" VARCHAR)[][]                                                     │
+│ parent_division_id   │ VARCHAR                                                                                                              │
+│ norms                │ STRUCT(driving_side VARCHAR)                                                                                         │
+│ capital_division_ids │ VARCHAR[]                                                                                                            │
+│ division_id          │ VARCHAR                                                                                                              │
+│ filename             │ VARCHAR                                                                                                              │
+│ theme                │ VARCHAR                                                                                                              │
+│ type                 │ VARCHAR                                                                                                              │
+├──────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 25 rows                                                                                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 
 # Data access and retrieval <a name="data_access_and_retrieval"></a>
