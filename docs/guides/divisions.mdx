@@ -29,10 +29,9 @@ Divisions data can be used for many mapping purposes, which can include, but are
 1. [Divisions description](#divisions_description)
 	1. [Schema reference](#schema_reference)
 	2. [Sources and licensing](#sources_and_licensing)
-	3. [Conflation process](#conflation_process)
-	4. [Pipeline migration to Overture](#pipeline_migration_to_overture)
-	5. [Structure](#structure)
-	6. [Data fields](#data_fields)
+	3. [Pipeline migration to Overture](#pipeline_migration_to_overture)
+	4. [Subtypes](#subtypes)
+	5. [Data fields](#data_fields)
 2. [Data access and retrieval](#data_access_and_retrieval)
 	1. [How to access the data](#how_to_access_the_data)
 	2. [Authentication or authorization](#authentication_or_authorization)
@@ -80,18 +79,28 @@ As of the July 2024 release, Overture's divisions theme is comprised of data fro
 
 A full list of sources can be found [here](https://raw.githubusercontent.com/OvertureMaps/tf-data-platform/dev/datasets.json?token=GHSAT0AAAAAACPDIQJR2Y3W3QSK5ZMBTNEAZVCZS3Q), in JSON format.
 
-## Conflation process <a name="conflation_process"></a>
-
-- Tk
-
 ## Pipeline migration to Overture <a name="pipeline_migration_to_overture"></a>
 
-- Tk
+- In late-2024, the Overture Maps Foundation is planning to migrate the conflation logic and pipeline code from member organizations to a public repository.
 
-## Structure <a name="structure"></a>
+## Subtypes <a name="subtypes"></a>
 
-- Geojson schema
-- Delivered as geoparquet, related files
+The subtype field is used to represent each entity's administrative level, from `country` down to `microhood`. Subtypes can be used to represent a place hierarchy within a country and give data consumers a standardized place definition for divisions. A list of subtypes and their descriptions, below:
+
+| Subtype  | Description | Example |
+| -------- | -------- | ------- |
+| country  | Largest unit of independent sovereignty.  | United States |
+| dependency  | A place that is not exactly a sub-region of a country but is dependent on a parent company for defence, passport control, subsidies, etc.  | Puerto Rico |
+| macroregion  | A bundle of regions. These exist mainly in Europe.  | Scotland; Île-de-France |
+| region  | States, provinces, regions. Largest sub-country administrative unit most countries, unless they have dependencies/macroregions.  | Alaska; Alberta |
+| macrocounty  | A bundle of counties. Again, these exist mainly in Europe.  | Inverness |
+| county  | Counties... Largest sub-region administrative unit in most countries, unless they have macrocounties.  | Kings County, NY |
+| localadmin  | A level of government available in some parts of the world that contains localities or populated places that themselves have no authority. Often but not exclusively found in Europe.  | Paris |
+| locality  | A populated place that may or may not have its own administrative authority. (It won't if it belongs to a localadmin.)  | Taipei |
+| borough  | A local government unit, below the locality placetype.  | Brooklyn, Queens, etc. |
+| macrohood  | A super-neighborhood that contains smaller divisions of type neighborhood.  | BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
+| neighborhood  | A neighborhood. Most neighborhoods will be just this, unless there's enough granular division to warrant introducing macrohood and/or microhood divisions.  | Cobble Hill |
+| microhood  | A mini-neighborhood that is contained within a division of type neighborhood.  | Gätjensort in Hamburg |
 
 ## Data fields <a name="data_fields"></a>
 
