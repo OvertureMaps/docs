@@ -82,7 +82,7 @@ A full list of sources can be found [here](https://raw.githubusercontent.com/Ove
 
 ## Pipeline migration to Overture <a name="pipeline_migration_to_overture"></a>
 
-- In late-2024, the Overture Maps Foundation is planning to migrate the conflation logic and pipeline code from member organizations to a public repository.
+In late-2024, the Overture Maps Foundation is planning to migrate the conflation logic and pipeline code from member organizations to a public repository.
 
 ## Subtypes <a name="subtypes"></a>
 
@@ -90,18 +90,18 @@ The subtype field is used to represent each entity's administrative level, from 
 
 | Subtype  | Description | Example |
 | -------- | -------- | ------- |
-| country  | Largest unit of independent sovereignty.  | United States |
-| dependency  | A place that is not exactly a sub-region of a country but is dependent on a parent company for defence, passport control, subsidies, etc.  | Puerto Rico |
-| macroregion  | A bundle of regions. These exist mainly in Europe.  | Scotland; Île-de-France |
-| region  | States, provinces, regions. Largest sub-country administrative unit most countries, unless they have dependencies/macroregions.  | Alaska; Alberta |
-| macrocounty  | A bundle of counties. Again, these exist mainly in Europe.  | Inverness |
-| county  | Counties... Largest sub-region administrative unit in most countries, unless they have macrocounties.  | Kings County, NY |
-| localadmin  | A level of government available in some parts of the world that contains localities or populated places that themselves have no authority. Often but not exclusively found in Europe.  | Paris |
-| locality  | A populated place that may or may not have its own administrative authority. (It won't if it belongs to a localadmin.)  | Taipei |
-| borough  | A local government unit, below the locality placetype.  | Brooklyn, Queens, etc. |
-| macrohood  | A super-neighborhood that contains smaller divisions of type neighborhood.  | BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
-| neighborhood  | A neighborhood. Most neighborhoods will be just this, unless there's enough granular division to warrant introducing macrohood and/or microhood divisions.  | Cobble Hill |
-| microhood  | A mini-neighborhood that is contained within a division of type neighborhood.  | Gätjensort in Hamburg |
+| **country** | Largest unit of independent sovereignty. | United States |
+| **dependency** | A place that is not exactly a sub-region of a country but is dependent on a parent company for defence, passport control, subsidies, etc. | Puerto Rico |
+| **macroregion** | A bundle of regions. These exist mainly in Europe. | Scotland; Île-de-France |
+| **region** | States, provinces, regions. Largest sub-country administrative unit most countries, unless they have dependencies/macroregions. | Alaska; Alberta |
+| **macrocounty** | A bundle of counties. Again, these exist mainly in Europe. | Inverness |
+| **county** | Counties... Largest sub-region administrative unit in most countries, unless they have macrocounties. | Kings County, NY |
+| **localadmin** | A level of government available in some parts of the world that contains localities or populated places that themselves have no authority. Often but not exclusively found in Europe. | Paris |
+| **locality** | A populated place that may or may not have its own administrative authority. (It won't if it belongs to a localadmin.) | Taipei |
+| **borough** | A local government unit, below the locality placetype. | Brooklyn, Queens, etc. |
+| **macrohood** | A super-neighborhood that contains smaller divisions of type neighborhood. | BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
+| **neighborhood** | A neighborhood. Most neighborhoods will be just this, unless there's enough granular division to warrant introducing macrohood and/or microhood divisions. | Cobble Hill |
+| **microhood** | A mini-neighborhood that is contained within a division of type neighborhood. | Gätjensort in Hamburg |
 
 ## Data fields <a name="data_fields"></a>
 
@@ -143,13 +143,31 @@ As of the July 2024 divisions release, there are 25 unique fields in the divisio
 ```
 
 
+
 # Data access and retrieval <a name="data_access_and_retrieval"></a>
 
-[This Overture doc](https://docs.overturemaps.org/getting-data/duckdb/#installation) describes the installation process in more detail.
+Overture's six data themes — including divisions — are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+
+| Provider | Location |
+| -------- | -------- |
+| Amazon S3 | s3://overturemaps-us-west-2/release/ |
+| Azure Blob Storage | https://overturemapswestus2.blob.core.windows.net/release/ |
+
+Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
+
+Athena (AWS), Synapse (Azure), DuckDB, Sedona, and the Python command-line tool can all be used to view, query, and export Overture data. You can find detailed walkthroughs for each method, below:
+
+- Athena (AWS): https://docs.overturemaps.org/getting-data/athena-aws/
+- Synapse (Azure): https://docs.overturemaps.org/getting-data/synapse-azure/
+- DuckDB: https://docs.overturemaps.org/getting-data/duckdb/
+- Sedona: https://docs.overturemaps.org/getting-data/sedona/
+- Python command-line tool: https://docs.overturemaps.org/getting-data/overturemaps-py/
+
+[This Overture doc](https://docs.overturemaps.org/getting-data/) describes the installation process in more detail.
 
 ## How to access the data <a name="how_to_access_the_data"></a>
 
-Documentation and install links for DuckDB, below:
+Documentation and installation links for DuckDB, below:
 
 - Quick Install: https://duckdb.org/#quickinstall
 - Documentation: https://duckdb.org/docs/
