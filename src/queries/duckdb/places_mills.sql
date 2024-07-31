@@ -8,8 +8,9 @@ COPY (
     names.primary as primary_name,
     confidence,
     addresses,
-    websites
+    websites,
+    geometry
 FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
 WHERE
     categories.primary IN ('flour_mill', 'rice_mill')
-) TO 'lithuania_places.parquet'
+) TO 'mills.parquet';

@@ -15,4 +15,4 @@ COPY (
 FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
 WHERE
     addresses[1].country = 'LT'
-) TO 'lithuania_places.parquet'
+) TO 'lithuania_places.parquet';

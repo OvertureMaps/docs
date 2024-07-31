@@ -8,8 +8,8 @@ COPY (
     *
 FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
 WHERE
--- Only select data with a confidence score about .95
+-- Only select data with a confidence score above .95
     confidence > .95
 -- Further filtering for data within Massachusetts to limit the size of this query
-    AND addresses[1].region = 'MA';
-) TO 'MA_high_confidence_places.parquet'
+    AND addresses[1].region = 'MA'
+) TO 'MA_high_confidence_places.parquet';

@@ -26,4 +26,4 @@ COPY (
     FROM buildings
     LEFT JOIN places on st_intersects(ST_GeomFromWKB(places.geometry), ST_GeomFromWKB(buildings.geometry))
     ORDER BY buildings.id
-) TO 'prague_places_in_buildings.parquet'
+) TO 'prague_places_in_buildings.parquet';
