@@ -22,57 +22,92 @@ The Overture Maps `divisions` theme includes features that represent human settl
 
 You can download Overture's latest divisions release here: https://docs.overturemaps.org/release/latest/.
 
-_Country boundaries with region boundaries, July release_
-
-## Purpose of the divisions
+## Purpose of Divisions
 
 Divisions data can be used for many mapping purposes, which can include, but are not limited to: reverse-geocoding, cartographic styling of boundaries, and place labels. 
 
-## Divisions feature types
+## Divisions Feature Types
 
 - A `division` is a feature type that represents an official or non-official organization of people-- country, region, province, city, neighborhood, etc.-- as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature.
 
+```
+┌──────────────┬──────────────┐
+│ count_star() │   subtype    │
+│    int64     │   varchar    │
+├──────────────┼──────────────┤
+│      3215202 │ locality     │
+│       771100 │ neighborhood │
+│       196451 │ microhood    │
+│        36974 │ county       │
+│        18469 │ localadmin   │
+│         3866 │ region       │
+│          272 │ country      │
+└──────────────┴──────────────┘
+```
+
 - A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry.
+
+```
+┌──────────────┬──────────────┐
+│ count_star() │   subtype    │
+│    int64     │   varchar    │
+├──────────────┼──────────────┤
+│       540557 │ locality     │
+│       385886 │ neighborhood │
+│        36973 │ county       │
+│        18470 │ localadmin   │
+│         3866 │ region       │
+│          272 │ country      │
+└──────────────┴──────────────┘
+```
 
 - A `boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water.
 
+```
+┌──────────────┬─────────┐
+│ count_star() │ subtype │
+│    int64     │ varchar │
+├──────────────┼─────────┤
+│        64107 │ county  │
+│         7116 │ region  │
+│          373 │ country │
+└──────────────┴─────────┘
+```
+
 ## Table of Contents
 
-1. [Divisions description](#divisions_description)
-	1. [Schema reference](#schema_reference)
-	2. [Sources and licensing](#sources_and_licensing)
-	3. [Pipeline migration to Overture](#pipeline_migration_to_overture)
+<details>
+	<summary>Divisions Description</summary>
+	1. [Schema Reference](#schema_reference)
+	2. [Sources and Licensing](#sources_and_licensing)
+	3. [Pipeline Migration to Overture](#pipeline_migration_to_overture)
 	4. [Subtypes](#subtypes)
-	5. [Data fields](#data_fields)
-2. [Data access and retrieval](#data_access_and_retrieval)
-	1. [Authentication or authorization](#authentication_or_authorization)
-	2. [Data retrieval examples](#data_retrieval_examples)
-3. [Data usage guidelines](#data_usage_guidelines)
-	1. [Best practices](#best_practices)
-	2. [Common use cases](#common_use_cases)
-	3. [Limitations and caveats](#limitations_and_caveats)
-	4. [Data quality and accuracy](#data_quality_and_accuracy)
-4. [Data manipulation and analysis](#data_manipulation_and_analysis)
-	1. [Basic](#basic)
-	2. [Advanced](#advanced)
-	3. [Tools and libraries](#tools_and_libraries)
-5. [Data visualization](#data_visualization)
-	1. [Visualization examples](#visualization_examples)
-	2. [Tools for visualization](#tools_for_visualization)
-6. [Appendix](#appendix)
-	1. [Glossary](#glossary)
-	2. [Additional resources](#additional_resources)
-7. [Contact](#contact)
+	5. [Data Fields](#data_fields)
+</details>
+
+<details>
+	<summary>Data Access and Retrieval</summary>
+	1. [Authentication or Authorization](#authentication_or_authorization)
+	2. [Data Retrieval Examples](#data_retrieval_examples)
+		1. [SQL](#sql)
+		2. [Python](#python)
+</details>
+
+<details>
+	<summary>Contact</summary>
 	1. [Feedback](#feedback)
 	2. [Discussions](#Discussions)
 	3. [Issues](#Issues)
-8. [Revision history](#revision_history)
+</details>
+
+<details>
+	<summary>Revision History</summary>
 	1. [Version Info](#version_info)
 	2. [GERS Changelog](#gers_changelog)
+</details>
 
 
-
-# Divisions description <a name="divisions_description"></a>
+# Divisions Description
 
 ## Schema reference <a name="schema_reference"></a>
 
@@ -82,7 +117,7 @@ Divisions data can be used for many mapping purposes, which can include, but are
 
 - [Explore the schema reference for the `division_area` feature type](/schema/reference/divisions/division_area).
 
-## Sources and licensing <a name="sources_and_licensing"></a>
+## Sources and Licensing <a name="sources_and_licensing"></a>
 
 As of the July 2024 release, Overture's divisions theme is comprised of data from the following sources:
 
@@ -91,14 +126,16 @@ As of the July 2024 release, Overture's divisions theme is comprised of data fro
 
 A full list of sources can be found [here](https://raw.githubusercontent.com/OvertureMaps/tf-data-platform/dev/datasets.json?token=GHSAT0AAAAAACPDIQJR2Y3W3QSK5ZMBTNEAZVCZS3Q), in JSON format.
 
-## Pipeline migration to Overture <a name="pipeline_migration_to_overture"></a>
+## Pipeline Migration to Overture <a name="pipeline_migration_to_overture"></a>
 
 In late-2024, the Overture Maps Foundation is planning to migrate the conflation logic and pipeline code from member organizations to a public repository.
 
 ## Subtypes <a name="subtypes"></a>
 
-The subtype field is used to represent each entity's administrative level, from `country` down to `microhood`. Subtypes can be used to represent a place hierarchy within a country and give data consumers a standardized place definition for divisions. A list of subtypes and their descriptions, below:
+Subtypes used to represent each entity's administrative level, from `country` down to `microhood`. Subtypes can be used to represent a place hierarchy within a country and give data consumers a standardized place definition for divisions. A list of subtypes and their descriptions, below:
 
+<details>
+	<summary>List of all existing division subtypes</summary>
 | Subtype  | Description | Example |
 | -------- | -------- | ------- |
 | **country** | Largest unit of independent sovereignty. | United States |
@@ -113,11 +150,14 @@ The subtype field is used to represent each entity's administrative level, from 
 | **macrohood** | A super-neighborhood that contains smaller divisions of type neighborhood. | BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
 | **neighborhood** | A neighborhood. Most neighborhoods will be just this, unless there's enough granular division to warrant introducing macrohood and/or microhood divisions. | Cobble Hill |
 | **microhood** | A mini-neighborhood that is contained within a division of type neighborhood. | Gätjensort in Hamburg |
+</details>
 
-## Data fields <a name="data_fields"></a>
+## Data Fields <a name="data_fields"></a>
 
 As of the July 2024 divisions release, there are 25 unique fields in the divisions theme:
 
+<details>
+	<summary>List of all existing data fields</summary>
 ```
 ┌──────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │     column_name      │                                                     column_type                                                      │
@@ -152,17 +192,18 @@ As of the July 2024 divisions release, there are 25 unique fields in the divisio
 │ 25 rows                                                                                                                                     │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+</details>
 
 
 
-# Data access and retrieval <a name="data_access_and_retrieval"></a>
+# Data Access and Retrieval
 
 Overture's six data themes — including divisions — are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
 
 | Provider | Location |
 | -------- | -------- |
-| Amazon S3 | s3://overturemaps-us-west-2/release/ |
-| Azure Blob Storage | https://overturemapswestus2.blob.core.windows.net/release/ |
+| Amazon S3 | `s3://overturemaps-us-west-2/release/` |
+| Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/` |
 
 Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
 
@@ -176,11 +217,11 @@ Athena (AWS), Synapse (Azure), DuckDB, Sedona, and the Python command-line tool 
 
 [This Overture doc](https://docs.overturemaps.org/getting-data/) describes the installation process in more detail.
 
-## Authentication or authorization <a name="authentication_or_authorization"></a>
+## Authentication or Authorization <a name="authentication_or_authorization"></a>
 
-## Data retrieval examples <a name="data_retrieval_examples"></a>
+## Data Retrieval Examples <a name="data_retrieval_examples"></a>
 
-### SQL
+### SQL <a name="sql"></a>
 
 Using these simple queries, you can find the number of division entities and the number of entities per division type:
 Find the total number of divisions entities
@@ -239,8 +280,8 @@ In the divisions dataset, each entity is maintained using a "subtype" - you can 
 
 To create a bounding box, find the southwest-most latitude/longitude and northeast-most latitude/longitde of the area you're interested in. For The US / Mexico border area, that would look something like:
 
-    - Southwest-most point: 24.93478418, -119.13728323
-    - Northeast-most point: 33.43995480, -95.63020817
+- Southwest-most point: 24.93478418, -119.13728323
+- Northeast-most point: 33.43995480, -95.63020817
 
 Then, use these coordinates to develop the min and max values for your bounding box:
 
@@ -257,7 +298,7 @@ Now, use these coordinates to construct your query. This example returns results
 <QueryBuilder query={BorderUSMX}></QueryBuilder>
 </div>
 
-### Python
+### Python <a name="python"></a>
 
 You can find Overture's official Python command-line tool here: https://github.com/OvertureMaps/overturemaps-py
 
@@ -277,44 +318,6 @@ Command-line options:
 - **--type/-t** (required): The Overture map data type to be downloaded. Examples of types are building for building footprints, place for POI places data, etc. Run overturemaps download --help for the complete list of allowed types
 
 This downloads data directly from Overture's S3 bucket without interacting with any other servers. By including bounding box extents on each row in the Overture distribution, the underlying Parquet readers use the Parquet summary statistics to download the minimum amount of data necessary to extract data from the desired region.
-
-
-
-# Data usage guidelines <a name="data_usage_guidelines"></a>
-
-## Best practices <a name="best_practices"></a>
-
-## Common use cases <a name="common_use_cases"></a>
-
-## Limitations and caveats <a name="limitations_and_caveats"></a>
-
-## Data quality and accuracy <a name="data_quality_and_accuracy"></a>
-
-
-
-# Data manipulation and analysis
-
-## Basic
-
-## Advanced
-
-## Tools and libraries
-
-
-
-# Data visualization <a name="data_visualization"></a>
-
-## Visualization examples <a name="visualization_examples"></a>
-
-## Tools for visualization <a name="tools_for_visualization"></a>
-
-
-
-# Appendix <a name="appendix"></a>
-
-## Glossary <a name="glossary"></a>
-
-## Additional resources <a name="additional_resources"></a>
 
 
 
@@ -350,7 +353,7 @@ Issues around Overture's divisions data should be filed in the Data repository.
 
 
 
-# Revision history <a name="revision_history"></a>
+# Revision History <a name="revision_history"></a>
 
 ## Version Info <a name="version_info"></a>
 

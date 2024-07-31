@@ -4,11 +4,11 @@ LOAD httpfs;
 SET s3_region='us-west-2';
 
 SELECT
-	count(*),
-	subtype
+  count(*),
+  subtype
 FROM
-	read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
+  read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
 WHERE
-	country IN ('US','MX','CA')
+  country IN ('US','MX','CA')
 GROUP BY
-	subtype;
+  subtype;
