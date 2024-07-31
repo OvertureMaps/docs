@@ -2,6 +2,20 @@
 title: Divisions
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+import CountsPerType from '!!raw-loader!@site/src/queries/duckdb/divisions_counts_per_type.sql';
+import DivCounts from '!!raw-loader!@site/src/queries/duckdb/divisions_division_counts.sql';
+import DivAreaCounts from '!!raw-loader!@site/src/queries/duckdb/divisions_division_area_counts.sql';
+import BoundaryCounts from '!!raw-loader!@site/src/queries/duckdb/divisions_boundary_counts.sql';
+import CountsPerEntity from '!!raw-loader!@site/src/queries/duckdb/divisions_counts_per_entity.sql';
+import SubTypeCountsUSMXCA from '!!raw-loader!@site/src/queries/duckdb/divisions_subtype_counts_specific_countries.sql';
+import SpecificFeature from '!!raw-loader!@site/src/queries/duckdb/divisions_query_specific_feature.sql';
+import OSMLookUp from '!!raw-loader!@site/src/queries/duckdb/divisions_lookup_osm.sql';
+import BorderUSMX from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
+
 # Overview
 
 The Overture Maps `divisions` theme includes features that represent human settlements in the real world, such as countries, regions, states, cities, and even neighborhoods.
@@ -173,29 +187,27 @@ Athena (AWS), Synapse (Azure), DuckDB, Sedona, and the Python command-line tool 
 Using these simple queries, you can find the number of division entities and the number of entities per division type:
 Find the total number of divisions entities
 
-```
-SELECT count(*)
-FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=*/*', filename=true, hive_partitioning=1);
-```
+<div>
+<QueryBuilder query={CountsPerType}></QueryBuilder>
+</div>
 
 #### Find the total number of division type entities within the division theme
 
-SELECT count(*)
-FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division/*', filename=true, hive_partitioning=1);
+<div>
+<QueryBuilder query={DivCounts}></QueryBuilder>
+</div>
 
 #### Find the total number of division_area type entities within the division theme
 
-```
-SELECT count(*)
-FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1);
-```
+<div>
+<QueryBuilder query={DivAreaCounts}></QueryBuilder>
+</div>
 
 #### Find the total number of boundary type entities within the division theme
 
-```
-SELECT count(*)
-FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=boundary/*', filename=true, hive_partitioning=1);
-```
+<div>
+<QueryBuilder query={BoundaryCounts}></QueryBuilder>
+</div>
 
 _Note: As of July 2024, the boundary type is now called division_boundary_
 
@@ -203,36 +215,27 @@ In the divisions dataset, each entity is maintained using a "subtype" - you can 
 
 #### List the number entities, per subtype in the division_area theme
 
-```
-SELECT count(*), subtype
-FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
-GROUP BY subtype;
-```
+<div>
+<QueryBuilder query={CountsPerEntity}></QueryBuilder>
+</div>
 
 #### List the number entities, per subtype in the division_area theme in the US, Mexico, and Canada
 
-```
-SELECT count(*), subtype
-FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
-WHERE country IN ('US','MX','CA')
-GROUP BY subtype;
-```
+<div>
+<QueryBuilder query={SubTypeCountsUSMXCA}></QueryBuilder>
+</div>
 
 #### View information about a specific feature (US / Mexico boundary) without using a bounding box
 
-```
-SELECT *
-FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=boundary/*', filename=true, hive_partitioning=1)
-WHERE id = '085db5bb7fffffff0173c9b945a8c25f';
-```
+<div>
+<QueryBuilder query={SpecificFeature}></QueryBuilder>
+</div>
 
 #### Find the Overture record for a given OSM id (in this case, a relation)
 
-```
-SELECT *
-FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
-WHERE sources[1].record_id = 'R3766655';
-```
+<div>
+<QueryBuilder query={OSMLookUp}></QueryBuilder>
+</div>
 
 #### View information about boundary features using a bounding box
 
@@ -252,16 +255,9 @@ bbox.ymax < 33.43995480
 
 Now, use these coordinates to construct your query. This example returns results for the country boundary between the US and Mexico:
 
-```
-SELECT *
-  FROM read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=boundary/*', filename=true, hive_partitioning=1)
-  WHERE bbox.xmin > -119.13728323
-  AND bbox.xmax < -95.63020817
-  AND bbox.ymin > 24.93478418
-  AND bbox.ymax < 33.43995480
-  AND subtype = 'country'
-;
-```
+<div>
+<QueryBuilder query={BorderUSMX}></QueryBuilder>
+</div>
 
 ### Python
 
