@@ -219,60 +219,59 @@ Athena (AWS), Synapse (Azure), DuckDB, Sedona, and the Python command-line tool 
 
 #### SQL <a name="sql"></a>
 
-Using these simple queries, you can find the number of division entities and the number of entities per division type:
-Find the total number of divisions entities
+Using these simple queries, you can find the number of division entities and the number of entities per division type.
 
-<div>
+##### Find Counts of Divisions Entities
+
+<Tabs>
+
+<TabItem value="total counts" label="total counts" default>
 <QueryBuilder query={CountsPerType}></QueryBuilder>
-</div>
+</TabItem>
 
-##### Find the total number of division type entities within the division theme
-
-<div>
+<TabItem value="division counts" label="division counts" default>
 <QueryBuilder query={DivCounts}></QueryBuilder>
-</div>
+</TabItem>
 
-##### Find the total number of division_area type entities within the division theme
-
-<div>
+<TabItem value="division_area counts" label="division_area counts" default>
 <QueryBuilder query={DivAreaCounts}></QueryBuilder>
-</div>
+</TabItem>
 
-##### Find the total number of boundary type entities within the division theme
-
-<div>
+<TabItem value="boundary counts" label="division_area counts" default>
 <QueryBuilder query={BoundaryCounts}></QueryBuilder>
-</div>
 
 _Note: As of July 2024, the boundary type is now called division_boundary_
 
 In the divisions dataset, each entity is maintained using a "subtype" - you can find an enumerated list here. You can further iterate on the queries above to find the number of entities per divisions theme, or the number of subtype entities per country.
+</TabItem>
+</Tabs>
 
-##### List the number entities, per subtype in the division_area theme
+
+##### Find Counts, Per Subtype, in a Single Query
 
 <div>
 <QueryBuilder query={CountsPerEntity}></QueryBuilder>
 </div>
 
-##### List the number entities, per subtype in the division_area theme in the US, Mexico, and Canada
+##### Find Counts, Per Subtype, in the division_area Theme in the US, Mexico, and Canada
 
 <div>
 <QueryBuilder query={SubTypeCountsUSMXCA}></QueryBuilder>
 </div>
 
-##### View information about a specific feature (US / Mexico boundary) without using a bounding box
+##### View Info For a Specific Feature (US / Mexico Boundary) Without a Bounding Box
 
 <div>
 <QueryBuilder query={SpecificFeature}></QueryBuilder>
 </div>
 
-##### Find the Overture record for a given OSM id (in this case, a relation)
+##### Find the Overture Entity, Given an OSM ID (Relation)
 
 <div>
 <QueryBuilder query={OSMLookUp}></QueryBuilder>
 </div>
 
-##### View information about boundary features using a bounding box
+##### View Info of boundary Entities With a Bounding Box
 
 To create a bounding box, find the southwest-most latitude/longitude and northeast-most latitude/longitde of the area you're interested in. For The US / Mexico border area, that would look something like:
 
