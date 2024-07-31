@@ -78,7 +78,7 @@ More information can be found at [Getting Overture Data](https://docs.overturema
 ### Retrieving the data
 
 #### Downloading the whole dataset
-To acquire the entire places dataset, the parquets can be directly downloaded from the S3 or Azure locations above but these alternate methods may be better depending on your usecase.
+To acquire the entire places dataset, the parquets can be directly downloaded from the S3 or Azure locations above but these alternate methods may be better depending on your use case.
 
 Keep in mind, the output will be a very large file.
 
@@ -121,7 +121,7 @@ overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=place -o 
 <TabItem value="DuckDB" label="DuckDB" default>
 First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
 
-Simply replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run query for a different area.
+Replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run the query for a different area.
 <QueryBuilder query={RomeQuery}></QueryBuilder>
 </TabItem>
 </Tabs>
@@ -130,7 +130,7 @@ Simply replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to
 
 ### Querying using attributes
 
-These examples use data attributes in the address, category, and confidence scores to filter the data in useful ways using DuckDB.
+These examples use data attributes in the address, category, and confidence scores columns to filter the data in useful ways using DuckDB.
 <Tabs>
 <TabItem value="Query by Address" label="Query by Address" default>
 The `address` column can be used to quickly filter data down to a particular political unit. This example uses the country key to get all the data with addresses in Lithuania. Region can be likewise used to extract data from smaller units such as US states.
@@ -150,7 +150,7 @@ Suppose you only want data that definitely exists and is accurate. We can use th
 
 ### Advanced Examples
 
-These examples present some use cases that combine the places data with other datasets.
+These examples present some use cases that combine places data with other datasets.
 
 <Tabs>
 <TabItem value="Conflate with OpenStreetMap" label="Conflate with OpenStreetMap" default>
