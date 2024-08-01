@@ -34,48 +34,12 @@ Divisions data can be used for many purposes, which can include, but are not lim
 | *Overture divisions data, styled by subtype: countries in purple, region boundaries as green lines.* | 
 
 
-## Table of Contents
-
-<details>
-	<summary>Dataset description</summary>
-	1. [Feature type descriptions](#feature_types)
-	2. [Subtype descriptions](#subtypes)
-	3. [Data columns](#data_fields)
-</details>
-
-<details>
-	<summary>Data access and retrieval</summary>
-	
-</details>
-
-<details>
-	<summary>Data usage guidelines</summary>
-</details>
-
-<details>
-	<summary>Data manipulation and analysis</summary>
-</details>
-
-<details>
-	<summary>Revision history</summary>
-	1. [Version info](#version_info)
-	2. [GERS changelog](#gers_changelog)
-</details>
-
-<details>
-	<summary>Support</summary>
-	1. [Feedback](#feedback)
-	2. [Discussions](#discussions)
-	3. [Issues](#issues)
-</details>
-
-
 ## Dataset description
 
 
-### Feature type descriptions <a name="feature_types"></a>
+### Feature type descriptions 
 
-- A `division` is a feature type that represents an official or non-official organization of people &mdash; country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature. We encourage you to also consult the [schema reference documentation for the `division` feature type](/schema/reference/divisions/division).
+- A `division` is a feature type that represents an official or non-official organization of people &mdash; country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `division` feature type](/schema/reference/divisions/division).
 
 
 ```
@@ -93,7 +57,7 @@ Divisions data can be used for many purposes, which can include, but are not lim
 └──────────────┴──────────────┘
 ```
 
-A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry. We encourage you to also consult the [schema reference documentation for the `division_area` feature type](/schema/reference/divisions/division_area).
+- A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry. We encourage you to consult the [schema reference documentation for the `division_area` feature type](/schema/reference/divisions/division_area).
 
 ```
 ┌──────────────┬──────────────┐
@@ -109,14 +73,7 @@ A `division_area` is a feature type that captures the shape of the land area, or
 └──────────────┴──────────────┘
 ```
 
-- A `division_boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `divison_boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. We encourage you to also consult the [schema reference documentation for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
-
-:::warning
-
-
-The `division_boundary` feature type was introduced in the July 2024 release. It replaced the `boundary` feature type.
-
-:::
+- A `division_boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `divison_boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. Please consult the [schema reference documentation for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
 
 
 ```
@@ -129,9 +86,14 @@ The `division_boundary` feature type was introduced in the July 2024 release. It
 │          373 │ country │
 └──────────────┴─────────┘
 ```
+:::warning
 
 
-### Subtype descriptions <a name="subtypes"></a>
+The `division_boundary` feature type was introduced in the July 2024 release. It replaced the `boundary` feature type.
+
+:::
+
+### Subtype descriptions 
 
 Subtypes can represent each feature's administrative level, from `country` down to `microhood`. Subtypes can also represent a place hierarchy within a country and offer a standardized place definition for divisions. See below for a list of subtypes and their descriptions in the divisions theme:
 
@@ -155,7 +117,7 @@ Subtypes can represent each feature's administrative level, from `country` down 
 </details>
 
 
-### Data columns <a name="data_fields"></a>
+### Data columns 
 
 As of the July 2024 release, there are 25 columns in the divisions GeoParquet files. Each column is a property in the data. 
 
@@ -298,27 +260,23 @@ Using these queries, you can get counts for each feature type in divisions.
 <TabItem value="division_boundary counts" label="division_boundary counts" default>
 <QueryBuilder query={BoundaryCounts}></QueryBuilder>
 
-<!---
-This doesn't seem like the right place for this block of text:
-In the divisions dataset, each feature is maintained using a `subtype`. You can find an enumerated list here. You can further iterate on the queries above to find the number of features per divisions theme, or the number of subtype features per country.-->
-
 </TabItem>
 
 </Tabs>
 
-### Find counts, per subtype, in a single query
+#### Find counts, per subtype, in a single query
 
 <div>
 <QueryBuilder query={CountsPerType}></QueryBuilder>
 </div>
 
-### Find counts, per subtype, in the `division_area` feature type in the US, Mexico, and Canada
+#### Find counts, per subtype, in the `division_area` feature type in the US, Mexico, and Canada
 
 <div>
 <QueryBuilder query={SubTypeCountsUSMXCA}></QueryBuilder>
 </div>
 
-### View info for a specific feature (US / Mexico Boundary) without a bounding box
+#### View info for a specific feature (US / Mexico Boundary) without a bounding box
 
 <div>
 <TabItem value="query using an Overture ID" label="query using an Overture ID" default>
@@ -327,7 +285,7 @@ In the divisions dataset, each feature is maintained using a `subtype`. You can 
 </TabItem>
 </div>
 
-### Find the corresponding Overture feature, given an OSM ID (Relation)
+#### Find the corresponding Overture feature, given an OSM ID (Relation)
 
 <div>
 
@@ -337,7 +295,7 @@ In the divisions dataset, each feature is maintained using a `subtype`. You can 
 </div>
 
 
-### View info of `division_boundary` feature types with a bounding box
+#### View info of `division_boundary` feature types with a bounding box
 
 To create a bounding box, find the southwest-most latitude/longitude and northeast-most latitude/longitde of the area you're interested in. For The US / Mexico border area, that would look something like:
 
@@ -360,13 +318,12 @@ Now, use these coordinates to construct your query. This example returns results
 </div>
 
 
-## Revision history <a name="revision_history"></a>
-
-### Version info <a name="version_info"></a>
+## Revision history 
+### Version info 
 
 You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
 
-### GERS changelog <a name="gers_changelog"></a>
+### GERS changelog 
 
 The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files — partitioned by theme, type, and change type — at the following locations on Azure and AWS.
 
@@ -381,7 +338,7 @@ The types of feature changes in the changelog include:
 
 ## Support
 
-### Feedback <a name="feedback"></a>
+### Feedback 
 
 You can find a list of Overture repositories [here](https://github.com/orgs/OvertureMaps/repositories).
 
@@ -389,7 +346,7 @@ Discussions are generally reserved for broader conversations around the division
 
 Issues are generally reserved for more specific concerns with specific entities in the dataset (geometry validation, missing entities, duplicate entities) or country-specific concerns.
 
-### Discussions <a name="discussions"></a>
+### Discussions 
 
 You can start and add to discussions in each of the public Overture repositories. Some examples:
 
@@ -399,7 +356,7 @@ You can start and add to discussions in each of the public Overture repositories
 
 Discussions around Overture's divisions data should be filed in the Data repository.
 
-### Issues <a name="issues"></a>
+### Issues 
 
 You can start and add to issues in each of the public Overture repositories, too. Some examples:
 
@@ -409,23 +366,5 @@ You can start and add to issues in each of the public Overture repositories, too
 
 Issues around Overture's divisions data should be filed in the data repository.
 
-## Revision history <a name="revision_history"></a>
-
-### Version information <a name="version_info"></a>
-
-You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
-
-### GERS changelog <a name="gers_changelog"></a>
-
-The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files — partitioned by theme, type, and change type — at the following locations on Azure and AWS.
-
-You can find the most recent GERS changelog [here](https://docs.overturemaps.org/release/latest/#global-entity-reference-system-gers-changelog).
-
-The types of feature changes in the changelog include:
-
-- `added`: Feature with this ID is new (was not present in the previous release).
-- `removed`: Feature with this ID was present in the previous release, but not this release.
-- `data_changed`: The feature with this ID contains a change in attributes (geometry or otherwise) from the feature with this ID in the previous release.
-- `unchanged`: The feature with this ID in this release matches the geometry and attributes of the feature with this ID in the previous release.
 
 
