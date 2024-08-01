@@ -11,6 +11,8 @@ export default function QueryBuilder(args){
 
     rendered_query = rendered_query.replace('__ATHENA_OVERTURE_RELEASE', 'v' + customFields.overtureRelease.replaceAll('.','_').replaceAll('-','_'))
 
+    rendered_query = rendered_query.replace('__PMTILES_OVERTURE_RELEASE', customFields.overtureRelease.split('.', 1))
+
     var lang = args.language || 'sql'
 
     return (

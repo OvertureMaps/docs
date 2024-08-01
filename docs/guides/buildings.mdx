@@ -11,7 +11,7 @@ import BuildingsMap from '@site/src/components/buildings-map';
 
 ## Overview
 
-The Overture Maps `buildings` theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). The theme includes two feature types:
+The Overture Maps buildings theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). The theme includes two feature types:
 
 - **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
 - **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
@@ -20,7 +20,7 @@ The Overture Maps `buildings` theme describes human-made structures with roofs o
 
 
 
-## Data Sources
+## Data sources
 
 <figure>
   <BuildingsMap></BuildingsMap>
@@ -58,7 +58,7 @@ Currently, the Overture buildings dataset is a combination of the following open
 ## Understanding the Parquet Files
 
 <details>
-        <summary>Attribute tables for the GeoParquet files in the buildings theme</summary>
+        <summary>Schema for the GeoParquet files in the buildings theme</summary>
         <div>
 <Tabs>
 <TabItem value="building" label="building" default>
