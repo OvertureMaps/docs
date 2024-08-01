@@ -16,19 +16,61 @@ import SpecificFeature from '!!raw-loader!@site/src/queries/duckdb/divisions_que
 import OSMLookUp from '!!raw-loader!@site/src/queries/duckdb/divisions_lookup_osm.sql';
 import BorderUSMX from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
 
-# Divisions
+## Overview
 
-The Overture Maps `divisions` theme includes features that represent human settlements in the real world, such as countries, regions, states, cities, and even neighborhoods.
+The Overture divisions theme has three feature types &mdash; `division`, `division_area`, and `division_boundary` &mdash; and contains more than 5.3 million point, line, and polygon representations of human settlements, such as such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. 
 
-You can download Overture's latest divisions release here: https://docs.overturemaps.org/release/latest/.
+There are many use cases for the Overture divisions datasets, including but not limited to: reverse-geocoding, cartographic styling of boundaries, place labeling, and point-in-polygon analysis. 
 
-### Purpose of Divisions
+| ![Exploring divsions data in NYC](/img/divisions/divisions-us.gif) | 
+|:--:| 
+| *Exploring divisions data in NYC using [Overture's Explore tool](https://explore.overturemaps.org/#10.35/40.802/-73.9407).* |
 
-Divisions data can be used for many mapping purposes, which can include, but are not limited to: reverse-geocoding, cartographic styling of boundaries, and place labels. 
+## Table of Contents
 
-### Divisions Feature Types
+<details>
+	<summary>Dataset description</summary>
+	1. [Feature type descriptions](#feature_types)
+	2. [Subtype descriptions](#subtypes)
+	3. [Data columns](#data_fields)
+</details>
 
-- A `division` is a feature type that represents an official or non-official organization of people - country, region, province, city, neighborhood, etc. - as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature.
+<details>
+	<summary>Data access and retrieval</summary>
+	1. [DuckDB](#duckdb)
+	2. [Python](#python_command-line_tool)
+</details>
+
+<details>
+	<summary>Revision history</summary>
+	1. [Version info](#version_info)
+	2. [GERS changelog](#gers_changelog)
+</details>
+
+<details>
+   <summary>Additional resources and information</summary>
+    1. [Schema reference](#schema_reference)
+	2. [Sources and licensing](#sources_and_licensing)
+	3. [Pipeline migration to Overture](#pipeline_migration_to_overture)
+</details>
+
+<details>
+	<summary>Support</summary>
+	1. [Feedback](#feedback)
+	2. [Discussions](#discussions)
+	3. [Issues](#issues)
+</details>
+
+
+
+
+
+## Dataset description
+
+
+### Feature type descriptions <a name="feature_types"></a>
+
+- A `division` is a feature type that represents an official or non-official organization of people &mdash; country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature.
 
 ```
 ┌──────────────┬──────────────┐
@@ -61,7 +103,7 @@ Divisions data can be used for many mapping purposes, which can include, but are
 └──────────────┴──────────────┘
 ```
 
-- A `boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water.
+- A `division_boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `divison_boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water.
 
 ```
 ┌──────────────┬─────────┐
@@ -73,66 +115,18 @@ Divisions data can be used for many mapping purposes, which can include, but are
 │          373 │ country │
 └──────────────┴─────────┘
 ```
+:::warning
 
-### Table of Contents
+The `division_boundary` feature type was introduced in the July 2024 release. It replaced the `boundary` feature type.
 
-<details>
-	<summary>Divisions Description</summary>
-	1. [Schema Reference](#schema_reference)
-	2. [Sources and Licensing](#sources_and_licensing)
-	3. [Pipeline Migration to Overture](#pipeline_migration_to_overture)
-	4. [Subtypes](#subtypes)
-	5. [Data Fields](#data_fields)
-</details>
+:::
+
+### Subtype descriptions <a name="subtypes"></a>
+
+Subtypes can represent each feature's administrative level, from `country` down to `microhood`. Subtypes can also represent a place hierarchy within a country and offer a standardized place definition for divisions. See below for a list of subtypes and their descriptions in the divisions theme:
 
 <details>
-	<summary>Data Access and Retrieval</summary>
-	1. [Data Retrieval Examples](#data_retrieval_examples)
-		1. [SQL](#sql)
-		2. [Python](#python)
-</details>
-
-<details>
-	<summary>Contact</summary>
-	1. [Feedback](#feedback)
-	2. [Discussions](#discussions)
-	3. [Issues](#issues)
-</details>
-
-<details>
-	<summary>Revision History</summary>
-	1. [Version Info](#version_info)
-	2. [GERS Changelog](#gers_changelog)
-</details>
-
-
-# Divisions Description
-
-### Schema reference <a name="schema_reference"></a>
-
-- [Explore the schema reference for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
-- [Explore the schema reference for the `division` feature type](/schema/reference/divisions/division).
-- [Explore the schema reference for the `division_area` feature type](/schema/reference/divisions/division_area).
-
-### Sources and Licensing <a name="sources_and_licensing"></a>
-
-As of the July 2024 release, Overture's divisions theme is comprised of data from the following sources:
-
-- [OpenStreetMap](https://openstreetmap.org/) ([ODbL-1.0 license terms]("https://www.openstreetmap.org/copyright"))
-- [geoBoundaries](https://geoboundaries.org/) ([CC BY 4.0 license terms]("https://www.geoboundaries.org/#tabs1-js"))
-
-A full list of sources can be found [here](https://raw.githubusercontent.com/OvertureMaps/tf-data-platform/dev/datasets.json?token=GHSAT0AAAAAACPDIQJR2Y3W3QSK5ZMBTNEAZVCZS3Q), in JSON format.
-
-### Pipeline Migration to Overture <a name="pipeline_migration_to_overture"></a>
-
-In late-2024, the Overture Maps Foundation is planning to migrate the conflation logic and pipeline code from member organizations to a public repository.
-
-### Subtypes <a name="subtypes"></a>
-
-Subtypes used to represent each entity's administrative level, from `country` down to `microhood`. Subtypes can be used to represent a place hierarchy within a country and give data consumers a standardized place definition for divisions. A list of subtypes and their descriptions, below:
-
-<details>
-	<summary>List of all existing division subtypes</summary>
+	<summary>List of all subtypes in the divisions theme</summary>
 | Subtype  | Description | Example |
 | -------- | -------- | ------- |
 | **country** | Largest unit of independent sovereignty. | United States |
@@ -149,12 +143,12 @@ Subtypes used to represent each entity's administrative level, from `country` do
 | **microhood** | A mini-neighborhood that is contained within a division of type neighborhood. | Gätjensort in Hamburg |
 </details>
 
-### Data Fields <a name="data_fields"></a>
+### Data columns <a name="data_fields"></a>
 
-As of the July 2024 divisions release, there are 25 unique fields in the divisions theme:
+As of the July 2024 release, there are 25 columns in the divisions GeoParquet files. Each column is a property in the data. 
 
 <details>
-	<summary>List of all existing data fields</summary>
+	<summary>List of all columns in the divisions GeoParquet files</summary>
 ```
 ┌──────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │     column_name      │                                                     column_type                                                      │
@@ -193,9 +187,9 @@ As of the July 2024 divisions release, there are 25 unique fields in the divisio
 
 
 
-# Data Access and Retrieval
+## Data access and retrieval
 
-Overture's six data themes — including divisions — are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+Overture's six data themes, including divisions, are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
 
 | Provider | Location |
 | -------- | -------- |
@@ -204,23 +198,13 @@ Overture's six data themes — including divisions — are freely available on b
 
 Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
 
-Athena (AWS), Synapse (Azure), DuckDB, Sedona, and the Python command-line tool can all be used to view, query, and export Overture data. You can find detailed walkthroughs for each method, below:
+[The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool.
 
-- **Athena (AWS)**: https://docs.overturemaps.org/getting-data/athena-aws/
-- **Synapse (Azure)**: https://docs.overturemaps.org/getting-data/synapse-azure/
-- **DuckDB**: https://docs.overturemaps.org/getting-data/duckdb/
-- **Sedona**: https://docs.overturemaps.org/getting-data/sedona/
-- **Python command-line tool**: https://docs.overturemaps.org/getting-data/overturemaps-py/
+### DuckDB <a name="duckdb"></a>
 
-[This Overture doc](https://docs.overturemaps.org/getting-data/) describes the installation process in more detail.
+Using these [DuckDB](https://duckdb.org/) queries, you can get feature counts for each feature type in divisions.
 
-### Data Retrieval Examples <a name="data_retrieval_examples"></a>
-
-#### SQL <a name="sql"></a>
-
-Using these simple queries, you can find the number of division entities and the number of entities per division type.
-
-##### Find Counts of Divisions Entities
+##### Find counts of divisions features
 
 <Tabs>
 
@@ -236,41 +220,42 @@ Using these simple queries, you can find the number of division entities and the
 <QueryBuilder query={DivAreaCounts}></QueryBuilder>
 </TabItem>
 
-<TabItem value="boundary counts" label="division_area counts" default>
+<TabItem value="division_boundary counts" label="division_boundary counts" default>
 <QueryBuilder query={BoundaryCounts}></QueryBuilder>
+<!---
+This doesn't seem like the right place for this block of text:
+In the divisions dataset, each feature is maintained using a `subtype`. You can find an enumerated list here. You can further iterate on the queries above to find the number of features per divisions theme, or the number of subtype features per country.-->
 
-_Note: As of July 2024, the boundary type is now called division_boundary_
-
-In the divisions dataset, each entity is maintained using a "subtype" - you can find an enumerated list here. You can further iterate on the queries above to find the number of entities per divisions theme, or the number of subtype entities per country.
 </TabItem>
 </Tabs>
 
 
-##### Find Counts, Per Subtype, in a Single Query
+
+##### Find counts, per subtype, in a single query
 
 <div>
 <QueryBuilder query={CountsPerEntity}></QueryBuilder>
 </div>
 
-##### Find Counts, Per Subtype, in the `division_area` Theme in the US, Mexico, and Canada
+##### Find counts, per subtype, in the `division_area` feature type in the US, Mexico, and Canada
 
 <div>
 <QueryBuilder query={SubTypeCountsUSMXCA}></QueryBuilder>
 </div>
 
-##### View Info For a Specific Entity (US / Mexico Boundary) Without a Bounding Box
+##### View info for a specific feature (US / Mexico Boundary) without a bounding box
 
 <div>
 <QueryBuilder query={SpecificFeature}></QueryBuilder>
 </div>
 
-##### Find the Corresponding Overture Entity, Given an OSM ID (Relation)
+##### Find the corresponding Overture feature, given an OSM ID (Relation)
 
 <div>
 <QueryBuilder query={OSMLookUp}></QueryBuilder>
 </div>
 
-##### View Info of `boundary` Entities With a Bounding Box
+##### View info of `division_boundary` feature types with a bounding box
 
 To create a bounding box, find the southwest-most latitude/longitude and northeast-most latitude/longitde of the area you're interested in. For The US / Mexico border area, that would look something like:
 
@@ -292,7 +277,7 @@ Now, use these coordinates to construct your query. This example returns results
 <QueryBuilder query={BorderUSMX}></QueryBuilder>
 </div>
 
-#### Python <a name="python"></a>
+### Python command-line tool<a name="#python_command-line_tool"></a>
 
 You can find Overture's official Python command-line tool [here](https://github.com/OvertureMaps/overturemaps-py).
 
@@ -313,9 +298,49 @@ Command-line options:
 
 This downloads data directly from Overture's S3 bucket without interacting with any other servers. By including bounding box extents on each row in the Overture distribution, the underlying Parquet readers use the Parquet summary statistics to download the minimum amount of data necessary to extract data from the desired region.
 
+## Additional resources and information 
+
+### Schema reference <a name="schema_reference"></a>
+
+- [Explore the schema reference for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
+- [Explore the schema reference for the `division` feature type](/schema/reference/divisions/division).
+- [Explore the schema reference for the `division_area` feature type](/schema/reference/divisions/division_area).
+
+### Sources and licensing <a name="sources_and_licensing"></a>
+
+As of the July 2024 release, Overture's divisions theme is comprised of data from the following sources:
+
+- [OpenStreetMap](https://openstreetmap.org/). License: [ODbL-1.0](https://www.openstreetmap.org/copyright).
+- [geoBoundaries](https://geoboundaries.org/). License: [CC BY 4.0](https://www.geoboundaries.org/#tabs1-js).
+
+You can find a full list of sources and additional licensing information on the [attribution page](https://docs.overturemaps.org/attribution/) in our documentation. 
+
+### Pipeline migration to Overture <a name="pipeline_migration_to_overture"></a>
+
+In late 2024, the Overture Maps Foundation is planning to migrate the conflation logic and pipeline code for divisions from Microsoft's internal infrastructure to Overture infrastructure.
 
 
-# Contact <a name="contact"></a>
+
+## Revision history <a name="revision_history"></a>
+
+### Version info <a name="version_info"></a>
+
+You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
+
+### GERS changelog <a name="gers_changelog"></a>
+
+The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files — partitioned by theme, type, and change type — at the following locations on Azure and AWS.
+
+You can find the most recent GERS changelog [here](https://docs.overturemaps.org/release/latest/#global-entity-reference-system-gers-changelog).
+
+The types of feature changes in the changelog include:
+
+- `added`: Feature with this ID is new (was not present in the previous release).
+- `removed`: Feature with this ID was present in the previous release, but not this release.
+- `data_changed`: The feature with this ID contains a change in attributes (geometry or otherwise) from the feature with this ID in the previous release.
+- `unchanged`: The feature with this ID in this release matches the geometry and attributes of the feature with this ID in the previous release.
+
+## Support
 
 ### Feedback <a name="feedback"></a>
 
@@ -346,23 +371,4 @@ You can start and add to issues in each of the public Overture repositories, too
 Issues around Overture's divisions data should be filed in the Data repository.
 
 
-
-# Revision History <a name="revision_history"></a>
-
-### Version Info <a name="version_info"></a>
-
-You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
-
-### GERS Changelog <a name="gers_changelog"></a>
-
-The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files — partitioned by theme, type, and change type — at the following locations on Azure and AWS.
-
-You can find the most recent GERS changelog [here](https://docs.overturemaps.org/release/latest/#global-entity-reference-system-gers-changelog).
-
-The types of feature changes in the changelog include:
-
-- `added`: Feature with this ID is new (was not present in the previous release).
-- `removed`: Feature with this ID was present in the previous release, but not this release.
-- `data_changed`: The feature with this ID contains a change in attributes (geometry or otherwise) from the feature with this ID in the previous release.
-- `unchanged`: The feature with this ID in this release matches the geometry and attributes of the feature with this ID in the previous release.
 
