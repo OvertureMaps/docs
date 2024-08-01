@@ -15,10 +15,13 @@ import OSMLookUp from '!!raw-loader!@site/src/queries/duckdb/divisions_lookup_os
 import BorderUSMX from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
 import CountsPerEntity from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
 import SubTypeCountsUSMXCA from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
+import DenmarkLocalityNeighborhood from '!!raw-loader!@site/src/queries/duckdb/divisions_denmark_locality_neighborhood.sql';
 
 ## Overview
 
-The Overture divisions theme has three feature types &mdash; `division`, `division_area`, and `division_boundary` &mdash; and contains more than 5.3 million point, line, and polygon representations of human settlements, such as such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. (See the [attribution page](https://docs.overturemaps.org/attribution/) for more information.) 
+The Overture divisions theme has three feature types: `division`, `division_area`, and `division_boundary`.
+
+There are more than 5.3 million point, line, and polygon representations of human settlements, such as such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. (See the [attribution page](https://docs.overturemaps.org/attribution/) for more information.) 
 
 Divisions data can be used for many purposes, which can include, but are not limited to:
 - reverse-geocoding
@@ -28,19 +31,15 @@ Divisions data can be used for many purposes, which can include, but are not lim
 - containment checks (e.g. point-in-polygon analysis)
 - choosing a geometry based on your use case
 
-
 | ![Overture divisions coverage - country and region boundaries](/img/divisions/divisions-admin0-admin1-coverage.png) | 
 |:--:| 
 | *Overture divisions data, styled by subtype: countries in purple, region boundaries as green lines.* | 
 
-
 ## Dataset description
-
 
 ### Feature type descriptions 
 
-- A `division` is a feature type that represents an official or non-official organization of people &mdash; country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `division` feature type](/schema/reference/divisions/division).
-
+A `division` is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `division` feature type](/schema/reference/divisions/division).
 
 ```
 ┌──────────────┬──────────────┐
@@ -57,7 +56,7 @@ Divisions data can be used for many purposes, which can include, but are not lim
 └──────────────┴──────────────┘
 ```
 
-- A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry. We encourage you to consult the [schema reference documentation for the `division_area` feature type](/schema/reference/divisions/division_area).
+A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry. We encourage you to consult the [schema reference documentation for the `division_area` feature type](/schema/reference/divisions/division_area).
 
 ```
 ┌──────────────┬──────────────┐
@@ -73,8 +72,7 @@ Divisions data can be used for many purposes, which can include, but are not lim
 └──────────────┴──────────────┘
 ```
 
-- A `division_boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `divison_boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. Please consult the [schema reference documentation for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
-
+A `division_boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `divison_boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. Please consult the [schema reference documentation for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
 
 ```
 ┌──────────────┬─────────┐
@@ -87,7 +85,6 @@ Divisions data can be used for many purposes, which can include, but are not lim
 └──────────────┴─────────┘
 ```
 :::warning
-
 
 The `division_boundary` feature type was introduced in the July 2024 release. It replaced the `boundary` feature type.
 
@@ -115,7 +112,6 @@ Subtypes can represent each feature's administrative level, from `country` down 
 | **neighborhood** | A neighborhood. Most neighborhoods will be just this, unless there's enough granular division to warrant introducing macrohood and/or microhood divisions. | Cobble Hill |
 | **microhood** | A mini-neighborhood that is contained within a division of type neighborhood. | Gätjensort in Hamburg |
 </details>
-
 
 ### Data columns 
 
@@ -159,7 +155,6 @@ As of the July 2024 release, there are 25 columns in the divisions GeoParquet fi
 ```
 </details>
 
-
 ## Data access and retrieval 
 
 Overture's six data themes, including divisions, are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
@@ -172,7 +167,6 @@ Overture's six data themes, including divisions, are freely available on both Am
 Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
 
 [The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for divisions.
-
 
 <Tabs>
 
@@ -211,6 +205,7 @@ We recommend querying and downloading only the Overture data you need.
 If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract divisions data.
 
 <Tabs>
+
 <TabItem value="Overture Maps Explorer" label="Overture Maps Explorer" default>
 To quickly view and download modest amounts of data, you can use the [Overture Maps Explorer website](https://explore.overturemaps.org/#15.07/41.89731/12.47626).
 
@@ -234,14 +229,33 @@ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=div
 </TabItem>
 
 <TabItem value="DuckDB" label="DuckDB" default>
-Example tk
+First, follow the [setup guide for DuckDB](/getting-data/duckdb/). DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area.
+
+To create a bounding box, find the southwest-most latitude/longitude and northeast-most latitude/longitde of the area you're interested in.
+
+For our query, the US / Mexico border area, those values would be:
+
+- **Southwest-most point**: 24.93478418, -119.13728323
+- **Northeast-most point**: 33.43995480, -95.63020817
+
+Then, we'll use those coordinates to develop the min and max values for our bounding box:
+
+```
+bbox.xmin > -119.13728323
+bbox.xmax < -95.63020817
+bbox.ymin > 24.93478418
+bbox.ymax < 33.43995480
+```
+
+Now, we'll use these coordinates to construct our query. This example returns results for the country boundary between the US and Mexico:
+<QueryBuilder query={BorderUSMX}></QueryBuilder>
 </TabItem>
 
 </Tabs>
 
-## Data manipulation and analysis 
+## Data manipulation and analysis
 
-Using these queries, you can get counts for each feature type in divisions. 
+Using these simple queries, you can find the number of division entities and the number of entities per division type.
 
 <Tabs>
 
@@ -257,66 +271,29 @@ Using these queries, you can get counts for each feature type in divisions.
 <QueryBuilder query={DivAreaCounts}></QueryBuilder>
 </TabItem>
 
-<TabItem value="division_boundary counts" label="division_boundary counts" default>
+<TabItem value="boundary counts" label="division_area counts" default>
 <QueryBuilder query={BoundaryCounts}></QueryBuilder>
-
 </TabItem>
 
 </Tabs>
 
-#### Find counts, per subtype, in a single query
+<Tabs>
 
-<div>
-<QueryBuilder query={CountsPerType}></QueryBuilder>
-</div>
-
-#### Find counts, per subtype, in the `division_area` feature type in the US, Mexico, and Canada
-
-<div>
-<QueryBuilder query={SubTypeCountsUSMXCA}></QueryBuilder>
-</div>
-
-#### View info for a specific feature (US / Mexico Boundary) without a bounding box
-
-<div>
 <TabItem value="query using an Overture ID" label="query using an Overture ID" default>
-
 <QueryBuilder query={SpecificFeature}></QueryBuilder>
 </TabItem>
-</div>
-
-#### Find the corresponding Overture feature, given an OSM ID (Relation)
-
-<div>
 
 <TabItem value="query using an OSM ID" label="query using an OSM ID" default>
 <QueryBuilder query={OSMLookUp}></QueryBuilder>
 </TabItem>
-</div>
 
+</Tabs>
 
-#### View info of `division_boundary` feature types with a bounding box
+#### Exporting locality and neighborhood divisions to a local shapefile
 
-To create a bounding box, find the southwest-most latitude/longitude and northeast-most latitude/longitde of the area you're interested in. For The US / Mexico border area, that would look something like:
+This query will return a subset of fields and the geometry for each locality and neighborhood division entity in Denmark.
 
-- **Southwest-most point**: 24.93478418, -119.13728323
-- **Northeast-most point**: 33.43995480, -95.63020817
-
-Then, use these coordinates to develop the min and max values for your bounding box:
-
-```
-bbox.xmin > -119.13728323
-bbox.xmax < -95.63020817
-bbox.ymin > 24.93478418
-bbox.ymax < 33.43995480
-```
-
-Now, use these coordinates to construct your query. This example returns results for the country boundary between the US and Mexico:
-
-<div>
-<QueryBuilder query={BorderUSMX}></QueryBuilder>
-</div>
-
+<QueryBuilder query={DenmarkLocalityNeighborhood}></QueryBuilder>
 
 ## Revision history 
 ### Version info 
@@ -365,6 +342,3 @@ You can start and add to issues in each of the public Overture repositories, too
 - **Tiles issues**: https://github.com/OvertureMaps/overture-tiles/issues
 
 Issues around Overture's divisions data should be filed in the data repository.
-
-
-
