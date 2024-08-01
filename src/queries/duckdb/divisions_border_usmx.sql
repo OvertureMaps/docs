@@ -6,7 +6,7 @@ SET s3_region='us-west-2';
 SELECT
   *
 FROM
-  read_parquet('s3://overturemaps-us-west-2/release/2024-06-13-beta.0/theme=divisions/type=boundary/*', filename=true, hive_partitioning=1)
+  read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=divisions/type=division_boundary/*', filename=true, hive_partitioning=1)
 WHERE
   bbox.xmin > -119.13728323
   AND bbox.xmax < -95.63020817
