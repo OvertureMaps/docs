@@ -97,7 +97,7 @@ Subtypes can represent each feature's administrative level, from `country` down 
 <details>
 	<summary>List of all subtypes in the divisions theme</summary>
 
-| Subtype  | Description | Example |
+| Subtype | Description | Example |
 | -------- | -------- | ------- |
 | **country** | Largest unit of independent sovereignty. | United States |
 | **dependency** | A place that is not exactly a sub-region of a country but is dependent on a parent company for defence, passport control, subsidies, etc. | Puerto Rico |
@@ -120,38 +120,33 @@ As of the July 2024 release, there are 25 columns in the divisions GeoParquet fi
 <details>
 	<summary>List of all columns in the divisions GeoParquet files</summary>
 ```
-┌──────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│     column_name      │                                                     column_type                                                      │
-│       varchar        │                                                       varchar                                                        │
-├──────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ id                   │ VARCHAR                                                                                                              │
-│ geometry             │ BLOB                                                                                                                 │
-│ bbox                 │ STRUCT(xmin FLOAT, xmax FLOAT, ymin FLOAT, ymax FLOAT)                                                               │
-│ version              │ INTEGER                                                                                                              │
-│ update_time          │ VARCHAR                                                                                                              │
-│ sources              │ STRUCT(property VARCHAR, dataset VARCHAR, record_id VARCHAR, confidence DOUBLE)[]                                    │
-│ subtype              │ VARCHAR                                                                                                              │
-│ wikidata             │ VARCHAR                                                                                                              │
-│ population           │ INTEGER                                                                                                              │
-│ names                │ STRUCT("primary" VARCHAR, common MAP(VARCHAR, VARCHAR), rules STRUCT(variant VARCHAR, "language" VARCHAR, "value" …  │
-│ class                │ VARCHAR                                                                                                              │
-│ divisions            │ VARCHAR[]                                                                                                            │
-│ is_disputed          │ BOOLEAN                                                                                                              │
-│ perspectives         │ STRUCT("mode" VARCHAR, countries VARCHAR[])                                                                          │
-│ local_type           │ MAP(VARCHAR, VARCHAR)                                                                                                │
-│ country              │ VARCHAR                                                                                                              │
-│ region               │ VARCHAR                                                                                                              │
-│ hierarchies          │ STRUCT(division_id VARCHAR, subtype VARCHAR, "name" VARCHAR)[][]                                                     │
-│ parent_division_id   │ VARCHAR                                                                                                              │
-│ norms                │ STRUCT(driving_side VARCHAR)                                                                                         │
-│ capital_division_ids │ VARCHAR[]                                                                                                            │
-│ division_id          │ VARCHAR                                                                                                              │
-│ filename             │ VARCHAR                                                                                                              │
-│ theme                │ VARCHAR                                                                                                              │
-│ type                 │ VARCHAR                                                                                                              │
-├──────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 25 rows                                                                                                                                     │
-└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+| Property Name | Type | Description |
+| -------- | -------- | ------- |
+| **id** | Varchar	Feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS.
+| **geometry** | Geography	Geometry for the administrative boundary
+| **bbox** | Variant	Area defined by two longitudes and two latitudes, where: Latitude is a decimal number between -90.0 and 90.0. Longitude is a decimal number between -180.0 and 180.0
+| **version** | Number	Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed
+| **update_time** | Varchar	Timestamp when the feature was last updated
+| **sources** | Variant	The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified
+| **subtype** | Varchar	Subtype of admin area
+| **wikidata** | Varchar	A wikidata ID if available, as found on https://www.wikidata.org/.
+| **population** | Number	Population in the locality.
+| **names** | Variant	The used name when referring to a feature. The first entry in the array of names must have a language of "local" making it the easiest, default name to use among all options
+| **class** | 
+| **divisions** | 
+| **is_disputed** | 
+| **perspectives** | 
+| **local_type** | 
+| **country** | Varchar	ISO 3166-1 alpha-2 country code.
+| **region** | Varchar	ISO-3166-2 Country subdivision code.
+| **hierarchies** | 
+| **parent_division_id** | 
+| **norms** | 
+| **capital_division_ids** | 
+| **division_id** | 
+| **filename** | 
+| **theme** | 
+| **type** | 
 ```
 </details>
 
