@@ -9,7 +9,7 @@ COPY(
        bbox.xmin as x,
        bbox.ymin as y,
        ST_GeomFromWKB(geometry) as geometry,
-       categories.main as main_category,
+       categories.primary as primary_category,
        sources[1].dataset AS primary_source,
        confidence
     FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=*/*', filename=true, hive_partitioning=1)

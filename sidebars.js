@@ -27,6 +27,8 @@ const sidebars = {
       },
       collapsed: true,
       items: [
+        'examples/pandas',
+        'examples/lonboard',
         'examples/kepler-gl',
         'examples/rapid-id',
         'examples/build-a-map',
