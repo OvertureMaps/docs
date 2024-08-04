@@ -5,24 +5,21 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-In this example, we'll demonstrate using using [Pandas](http://pandas.pydata.org/) and [GeoPandas](https://geopandas.org/en/stable/index.html) to handle and manipulate Overture data.
+In this example, we'll show you how to use [Pandas](http://pandas.pydata.org/) and [GeoPandas](https://geopandas.org/en/stable/index.html) to handle and manipulate Overture data.
 
 
 ## Requirements
-To run this example in a notebook, you'll need to install the following libraries and tools. The full notebook example is available here.
+You can view and download the complete notebook on Notebook Sharing Space.
 
-```
-Jupyter Notebook or Jupyter Lab
-Pandas
-GeoPandas
-Shapely
-DuckDB and DuckDB spatial
-jupysql (optional)
-duckdb-engine (optional)
-```
+To follow along, you'll need to have [JupyterLab or Jupyter Notebook](https://jupyter.org/) running and the following dependencies installed:
+- [Pandas](https://pandas.pydata.org/)
+- [GeoPandas](https://geopandas.org/en/stable/index.html)
+- [Shapely](https://shapely.readthedocs.io/en/stable/index.html) 
+- [DuckDB](https://duckdb.org/), [DuckDB spatial extension](https://duckdb.org/docs/extensions/spatial.html), and [DuckDB AWS extension](https://duckdb.org/docs/extensions/aws.html)
+- [JupySQL](https://jupysql.ploomber.io/en/latest/quick-start.html) (optional)
+- [duckdb-engine](https://github.com/Mause/duckdb_engine) (optional)
 
-First, let's import our toolkit. using [Pandas](http://pandas.pydata.org/), a Python package for in-memory data manipulation, and [GeoPandas](https://geopandas.org/en/stable/index.html), a Python library that extends Pandas to allow spatial operations on geometric types. 
- Shapely will help us handle the geometries, and DuckDB is the tool we'll use to fetch only the data we need from Overture's GeoParquet files stored in an S3 bucket.
+First, let's import our toolkit. We're using [Pandas](http://pandas.pydata.org/), a Python package for in-memory data manipulation, and [GeoPandas](https://geopandas.org/en/stable/index.html), a Python library that extends Pandas to allow spatial operations on geometric types. Shapely will help us handle the geometries, and DuckDB is the tool we'll use to fetch only the data we need from Overture's GeoParquet files stored in an S3 bucket.
 
 ```python
 # import our toolkit
@@ -31,21 +28,19 @@ import geopandas as gpd
 from shapely import wkt
 import duckdb
 ```
-
-Ne
+Next, we'll install and load DuckDB extensions to work with spatial data and connect to AWS.
 
 ```python
-# install and load DuckDB extensions to work with spatial data and AWS
 %sql INSTALL spatial;
 %sql INSTALL httpfs;
 %sql LOAD spatial;
 %sql LOAD httpfs;
 %sql SET s3_region='us-west-2'
 ```
+The DuckDB documentation offers tips and examples for [running DuckDB queries in Jupyter notebooks](https://duckdb.org/docs/guides/python/jupyter.html). 
 
 ```python 
-# No need to import duckdb_engine
-# jupysql will auto-detect the driver needed based on the connection string!
+# no need to import duckdb_engine, jupysql will auto-detect driver 
 # load (or reload) jupysql Jupyter extension to create SQL cells
 %reload_ext sql
 
@@ -57,6 +52,7 @@ Ne
 # set connection string
 %sql duckdb:///:memory: --alias duckdb-sqlalchemy
 ```
+
 Now we're going to extract county-level data for Pennsylvania from Overture's divisions theme. DuckDB allows up to pull a slice of Overture data from hundreds of gigabytes worth of data stored in GeoParquet files in the cloud.
 
 Note: the magic %%sql command turns a notebook cell into a SQL cell. We'll store our query results in a Pandas DataFrame.

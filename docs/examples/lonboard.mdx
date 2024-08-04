@@ -4,16 +4,14 @@ title: Overture + Lonboard
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-In this example, we'll show you how to extract, process, and visualize Overture data for an area of interest using [Lonboard](https://developmentseed.org/lonboard/latest/) and the [Overture Maps Python command-line tool](https://github.com/OvertureMaps/overturemaps-py). 
+In this example, we'll show you how to process and visualize Overture data in a Jupyter notebook using [Lonboard](https://developmentseed.org/lonboard/latest/). As in previous examples, we'll be using [GeoPandas](https://geopandas.org/en/stable/index.html) to handle the data. But instead of querying the data with DuckDB, we'll use the [Overture Python command-line tool](https://github.com/OvertureMaps/overturemaps-py), built with Lonboard integration in mind. 
 
-::: info
+:::info
 [Lonboard](https://developmentseed.org/lonboard/latest/) is a Python library that makes visualizing large map datasets in Jupyter notebooks fast and efficient. It's built on [GeoArrow](https://geoarrow.org/) and [GeoParquet](https://geoparquet.org/), and works seemlessly with Overture's GeoParquet files so that you don't have to slow things down by converting to GeoJSON.
 :::
 
-As in previous examples, we'll be using [GeoPandas](https://geopandas.org/en/stable/index.html) to handle the data. But instead of querying the data with DuckDB, we'll use the [Overture Python command-line tool](https://github.com/OvertureMaps/overturemaps-py), built with Lonboard integration in mind. 
+## Requirements
 
- You can view and download the complete notebook on [Notebook Sharing Space](https://notebooksharing.space/view/b63f6b3dda1da99c45caf53284fbc508aaae0a43480b43bb0316db636c5e6677).
- 
  To follow along, you'll need to have [JupyterLab or Jupyter Notebook](https://jupyter.org/) running and the following dependencies installed:
  - [lonboard](https://developmentseed.org/lonboard/latest/#install)
  - [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
@@ -21,6 +19,10 @@ As in previous examples, we'll be using [GeoPandas](https://geopandas.org/en/sta
  - [GeoPandas](https://geopandas.org/en/stable/index.html)
  - [Shapely](https://shapely.readthedocs.io/en/stable/index.html) 
 
+## Notebook example
+You can view and download the complete notebook example on [Notebook Sharing Space](https://notebooksharing.space/view/b63f6b3dda1da99c45caf53284fbc508aaae0a43480b43bb0316db636c5e6677). 
+
+First, let's import our toolkit. 
 
 ``` python
 import pandas as pd

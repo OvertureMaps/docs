@@ -11,11 +11,11 @@ const sidebars = {
       },
       collapsed: true,
       items: [
+        'getting-data/duckdb',
+        'getting-data/overturemaps-py',
         'getting-data/athena-aws',
         'getting-data/synapse-azure',
-        'getting-data/duckdb',
         'getting-data/sedona',
-        'getting-data/overturemaps-py',
       ]
     },
     {
@@ -60,9 +60,9 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        'gers/stability',
         'gers/changelog',
         'gers/gers-demonstrations',
+        'gers/stability',
       ]
     },
     'attribution'

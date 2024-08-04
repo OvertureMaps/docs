@@ -1,5 +1,5 @@
 ---
-title: Overture + PMTiles + Maplibre
+title: Overture + PMTiles + MapLibre
 ---
 
 import CodeBlock from '@theme/CodeBlock';
@@ -29,7 +29,7 @@ Overture data is released in the cloud-native format [GeoParquet](https://geopar
 <!-- Places  -->
 <TabItem value="places" label="Places" default>
 
-The places data theme represents business and points of interest in the real world. Read more about the places data schema in the [documentation](/docs/guides/places).
+The places data theme represents business and points of interest in the real world. Read more about the places data schema in the [documentation](https://docs.overturemaps.org/guides/places/).
 
 1. The following DuckDB query downloads places data within a specific bounding box and writes a `GeoJSON` file.
 
@@ -56,7 +56,7 @@ The places data theme represents business and points of interest in the real wor
 <!-- Placenames -->
 
 <TabItem value="placenames" label="Placenames" default>
-The [divisions theme](/docs/guides/divisions) contains named administrative units (countries, regions, counties, cities, etc.) and their boundaries. To add labels for populated places to the map, we query the divisions theme to get the primary name for each locality.
+The [divisions theme](https://docs.overturemaps.org/guides/divisions/) contains named administrative units (countries, regions, counties, cities, etc.) and their boundaries. To add labels for populated places to the map, we query the divisions theme to get the primary name for each locality.
 
 1. The following DuckDB queries downloads placenames from the divisions theme within the bounding box and saves it as `seattle_placenames.geojson`
 
@@ -234,7 +234,7 @@ Then, reference the tile archives with a relative path when initializing the map
     ...
 ```
 
-### Style the layers
+## Style the layers
 Each tab below contains the complete styles in the [Maplibre Style Spec](https://maplibre.org/maplibre-style-spec/) for the map on this page.
 
 <Tabs queryString="map-layer" >
