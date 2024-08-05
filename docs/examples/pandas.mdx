@@ -1,11 +1,12 @@
 ---
+description: we love the pandas
 title: Overture + Pandas
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-In this example, we'll show you how to use [Pandas](http://pandas.pydata.org/) and [GeoPandas](https://geopandas.org/en/stable/index.html) to handle and manipulate Overture data.
+In this example, we'll show you how to use [DuckDB](https://duckdb.org/), [Pandas](http://pandas.pydata.org/), and [GeoPandas](https://geopandas.org/en/stable/index.html) to extract and manipulate Overture data in a Jupyter notebook. 
 
 
 ## Requirements
@@ -15,11 +16,12 @@ To follow along, you'll need to have [JupyterLab or Jupyter Notebook](https://ju
 - [Pandas](https://pandas.pydata.org/)
 - [GeoPandas](https://geopandas.org/en/stable/index.html)
 - [Shapely](https://shapely.readthedocs.io/en/stable/index.html) 
-- [DuckDB](https://duckdb.org/), [DuckDB spatial extension](https://duckdb.org/docs/extensions/spatial.html), and [DuckDB AWS extension](https://duckdb.org/docs/extensions/aws.html)
+- [DuckDB](https://duckdb.org/), [DuckDB spatial extension](https://duckdb.org/docs/extensions/spatial.html), and [DuckDB AWS extension](https://duckdb.org/docs/extensions/aws.html) or [DuckDB azure extension](https://duckdb.org/docs/extensions/azure.html).
 - [JupySQL](https://jupysql.ploomber.io/en/latest/quick-start.html) (optional)
 - [duckdb-engine](https://github.com/Mause/duckdb_engine) (optional)
 
-First, let's import our toolkit. We're using [Pandas](http://pandas.pydata.org/), a Python package for in-memory data manipulation, and [GeoPandas](https://geopandas.org/en/stable/index.html), a Python library that extends Pandas to allow spatial operations on geometric types. Shapely will help us handle the geometries, and DuckDB is the tool we'll use to fetch only the data we need from Overture's GeoParquet files stored in an S3 bucket.
+## Notebook example
+First, let's import our toolkit. We're using a [Pandas](http://pandas.pydata.org/) DataFrame as an ideal structure for handling a "medium" amount of data and [GeoPandas](https://geopandas.org/en/stable/index.html) to extend Pandas for operations on geometric types. We also need Shapely to support the processing of our feature geometries. DuckDB allows us to fetch only the data we need from Overture's GeoParquet files stored in an S3 bucket.
 
 ```python
 # import our toolkit
@@ -28,7 +30,8 @@ import geopandas as gpd
 from shapely import wkt
 import duckdb
 ```
-Next, we'll install and load DuckDB extensions to work with spatial data and connect to AWS.
+
+Next, we'll install and load DuckDB extensions to work with spatial data and connect to AWS. (Or you can use the Azure extension to connect to the Overture data stores on Azure.)
 
 ```python
 %sql INSTALL spatial;
@@ -37,60 +40,70 @@ Next, we'll install and load DuckDB extensions to work with spatial data and con
 %sql LOAD httpfs;
 %sql SET s3_region='us-west-2'
 ```
-The DuckDB documentation offers tips and examples for [running DuckDB queries in Jupyter notebooks](https://duckdb.org/docs/guides/python/jupyter.html). 
+The DuckDB documentation offers tips and examples for [running DuckDB queries in Jupyter notebooks](https://duckdb.org/docs/guides/python/jupyter.html). In this example, we're using duckdb-engine and JupySQL. You can also connect to DuckDB natively. 
 
 ```python 
-# no need to import duckdb_engine, jupysql will auto-detect driver 
+# no need to import duckdb_engine, JupySQL will auto-detect driver 
 # load (or reload) jupysql Jupyter extension to create SQL cells
 %reload_ext sql
+```
 
-# configure cell output
+We can set the configurations on JupySQL to directly output data to Pandas and to simplify the output that is printed to the notebook.
+
+```python
 %config SqlMagic.autopandas = True
 %config SqlMagic.feedback = False
 %config SqlMagic.displaycon = False
-
-# set connection string
-%sql duckdb:///:memory: --alias duckdb-sqlalchemy
 ```
 
-Now we're going to extract county-level data for Pennsylvania from Overture's divisions theme. DuckDB allows up to pull a slice of Overture data from hundreds of gigabytes worth of data stored in GeoParquet files in the cloud.
-
-Note: the magic %%sql command turns a notebook cell into a SQL cell. We'll store our query results in a Pandas DataFrame.
+Connect JupySQL to DuckDB using a SQLAlchemy-style connection string.
 
 ```python
-%%sql overture_counties <<
+# DuckDB in-memory database
+%sql duckdb://
+```
+
+Now we're going to extract data from Overture's buildings theme for an area in Paris. DuckDB allows up to pull a slice of Overture data from hundreds of gigabytes worth of data stored in GeoParquet files in the cloud.
+
+Note: the magic %%sql command turns a notebook cell into a SQL cell. We'll store our query results in a Pandas DataFrame called overture_paris_buildings.
+
+```python
+%%sql overture_paris_buildings <<
 SELECT 
-    id,
-    division_id, 
+    id, 
     names.primary AS primary_name,
     ST_AsText(ST_GeomFromWKB(geometry)) as geometry 
 FROM 
-    read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
+    read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=buildings/type=*/*', filename=true, hive_partitioning=1)
 WHERE 
-    subtype = 'county'
-    AND country = 'US'
-    AND region = 'US-PA';
+    bbox.xmin >= 2.314842
+        and bbox.xmax <= 2.382215
+        and bbox.ymin >= 48.837503
+        and bbox.ymax <= 48.874546
 ```
 
-Before we move on, let's deal with the geometry we pulled out of Overture's GeoParquet file. Remember that geometry columns in GeoParquet are stored as well-known binary (WKB). In our query, we transformed that geometry into text, and now we need to turn it into a Shapely geometry to get it into our GeoDataFrame. Here's how we do that.
+Before we move on, let's deal with the geometry we pulled out of Overture's GeoParquet file. Geometry columns in GeoParquet are stored in a well-known binary (WKB) format. In the above query, we transformed that geometry into text, and now we need to turn it into a Shapely geometry to get it into our GeoDataFrame. Here's how we do that.
 
 ```python
-overture_counties['geometry'] = overture_counties['geometry'].apply(wkt.loads)
+overture_paris_buildings['geometry'] = overture_paris_buildings['geometry'].apply(wkt.loads)
 
 # dataframe to geodataframe, set crs
-overture_counties_gdf = gpd.GeoDataFrame(
-    overture_counties
+overture_paris_buildings_gdf = gpd.GeoDataFrame(
+    overture_paris_buildings
     , geometry='geometry', crs="EPSG:4326"
 )
 ```
-Voila! Pennsylvania counties. 
+Let's make a quick plot of the data. Voilà!
 
 ```python
-overture_counties_gdf.plot(facecolor="pink", edgecolor="red", lw=0.7)
+overture_paris_buildings_gdf.plot(facecolor="#fdae6b", edgecolor="#bdbdbd", lw=0.01)
 ```
+
+<img src="/img/examples/overture-buildings-pandas2.png" width="500"></img>
+
 
 ## Next steps
 
-- Want to skip the GeoJSON part and take advantage of using a fully binary pipeline to grab and work with Overture data? Check out our lonboard tutorial to speed things up and work with larger data. 
-- Want to make a map with the data? Check out our QGIS, kepler.gl, and PMTiles tutorials. 
+- Want to speed things up and work with larger extracts of Overture data? Check out our [Lonboard tutorial](../lonboard). 
+
 
