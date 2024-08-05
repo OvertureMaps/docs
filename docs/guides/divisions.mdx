@@ -128,7 +128,7 @@ Subtypes can represent each feature's administrative level, from `country` down 
 
 ### Data columns 
 
-As of the July 2024 release, there are 24 columns in the divisions GeoParquet files. Each column is a property in the data. 
+As of the July 2024 release, there are 25 columns in the divisions GeoParquet files. Each column is a property in the data. 
 
 <details>
 	<summary>List of all columns in the divisions GeoParquet files</summary>
@@ -146,6 +146,7 @@ As of the July 2024 release, there are 24 columns in the divisions GeoParquet fi
 | **population** | integer | Population of the division.
 | **names** | array | A primary name of the entity, and a set of optional name translations. Name translations are represented in key, value pairs, where the key is an ISO language code and the value is the translated name.
 | **class** | string | A value to represent whether an entity represents a `maritime` or `land` feature.
+| **division_ids** | list | A list of the two division IDs that share this division boundary.
 | **is_disputed** | boolean | Indicator if there are entities disputing this division boundary. Information about entities disputing this boundary should be included in perspectives property. This property should also be true if boundary between two entities is unclear and this is "best guess". So having it true and no perspectives gives map creators reason not to fully trust the boundary, but use it if they have no other.
 | **perspectives** | array | Political perspectives from which this division boundary is considered to be an accurate representation. If this property is absent, then this boundary is not known to be disputed from any political perspective. Consequently, there is only one boundary feature representing the entire real world entity. If this property is present, it means the boundary represents one of several alternative perspectives on the same real-world entity.
 | **local_type** | string | Local name for the subtype property, optionally localized. This property is localized using a standard Overture names structure.
@@ -153,7 +154,7 @@ As of the July 2024 release, there are 24 columns in the divisions GeoParquet fi
 | **region** | string | ISO 3166-2 principal subdivision code of the subdivision-like entity this division represents or belongs to. If the entity this division represents has a principal subdivision code, the region property contains it. If it does not, the region property contains the principal subdivision code of the first division encountered by traversing the parent_division_id chain to the root.
 | **hierarchies** | Array | Hierarchies in which this division participates.
 | **parent_division_id** | string | Division ID of this division's parent division. Not allowed for top-level divisions (countries) and required for all other divisions. The default parent division is the parent division as seen from the default political perspective, if there is one, and is otherwise chosen somewhat arbitrarily. The hierarchies property can be used to inspect the exhaustive list of parent divisions.
-| **norms** | object | Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases. If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed.
+| **norms** | list | Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases. If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed.
 | **capital_division_ids** | array | Division IDs of this division's capital divisions. If present, this property will refer to the division IDs of the capital cities, county seats, etc. of a division.
 | **division_id** | string | Division ID of the division this area belongs to.
 | **filename** | string | Name of the S3 file being queried.
