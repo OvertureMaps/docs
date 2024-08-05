@@ -41,6 +41,9 @@ Divisions data can be used for many purposes, which can include, but are not lim
 
 A `division` is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `division` feature type](/schema/reference/divisions/division).
 
+<details>
+	<summary>Counts, per subtype, of the division feature type</summary>
+
 ```
 ┌──────────────┬──────────────┐
 │ count_star() │   subtype    │
@@ -55,8 +58,12 @@ A `division` is a feature type that represents an official or non-official organ
 │          272 │ country      │
 └──────────────┴──────────────┘
 ```
+</details>
 
 A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry. We encourage you to consult the [schema reference documentation for the `division_area` feature type](/schema/reference/divisions/division_area).
+
+<details>
+	<summary>Counts, per subtype, of the division_area feature type</summary>
 
 ```
 ┌──────────────┬──────────────┐
@@ -71,8 +78,12 @@ A `division_area` is a feature type that captures the shape of the land area, or
 │          272 │ country      │
 └──────────────┴──────────────┘
 ```
+</details>
 
 A `division_boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `divison_boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. Please consult the [schema reference documentation for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
+
+<details>
+	<summary>Counts, per subtype, of the division_boundary feature type</summary>
 
 ```
 ┌──────────────┬─────────┐
@@ -84,6 +95,8 @@ A `division_boundary` is a feature type that represents a shared border between 
 │          373 │ country │
 └──────────────┴─────────┘
 ```
+</details>
+
 :::warning
 
 The `division_boundary` feature type was introduced in the July 2024 release. It replaced the `boundary` feature type.
@@ -115,39 +128,37 @@ Subtypes can represent each feature's administrative level, from `country` down 
 
 ### Data columns 
 
-As of the July 2024 release, there are 25 columns in the divisions GeoParquet files. Each column is a property in the data. 
+As of the July 2024 release, there are 24 columns in the divisions GeoParquet files. Each column is a property in the data. 
 
 <details>
 	<summary>List of all columns in the divisions GeoParquet files</summary>
-```
+
 | Property Name | Type | Description |
 | -------- | -------- | ------- |
-| **id** | Varchar	Feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS.
-| **geometry** | Geography	Geometry for the administrative boundary
-| **bbox** | Variant	Area defined by two longitudes and two latitudes, where: Latitude is a decimal number between -90.0 and 90.0. Longitude is a decimal number between -180.0 and 180.0
-| **version** | Number	Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed
-| **update_time** | Varchar	Timestamp when the feature was last updated
-| **sources** | Variant	The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified
-| **subtype** | Varchar	Subtype of admin area
-| **wikidata** | Varchar	A wikidata ID if available, as found on https://www.wikidata.org/.
-| **population** | Number	Population in the locality.
-| **names** | Variant	The used name when referring to a feature. The first entry in the array of names must have a language of "local" making it the easiest, default name to use among all options
-| **class** | 
-| **divisions** | 
-| **is_disputed** | 
-| **perspectives** | 
-| **local_type** | 
-| **country** | Varchar	ISO 3166-1 alpha-2 country code.
-| **region** | Varchar	ISO-3166-2 Country subdivision code.
-| **hierarchies** | 
-| **parent_division_id** | 
-| **norms** | 
-| **capital_division_ids** | 
-| **division_id** | 
-| **filename** | 
-| **theme** | 
-| **type** | 
-```
+| **id** |string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS.
+| **geometry** | blob | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString.
+| **bbox** | array | The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format.
+| **version** | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed.
+| **update_time** | string | Timestamp when the feature was last updated.
+| **sources** | array | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified.
+| **subtype** | string | Category of the division from a finite, hierarchical, ordered list of categories (e.g. country, region, locality, etc.) similar to a Who's on First placetype.
+| **wikidata** | string | A wikidata ID if available, as found on https://www.wikidata.org/.
+| **population** | integer | Population of the division.
+| **names** | array | A primary name of the entity, and a set of optional name translations. Name translations are represented in key, value pairs, where the key is an ISO language code and the value is the translated name.
+| **class** | string | A value to represent whether an entity represents a `maritime` or `land` feature.
+| **is_disputed** | boolean | Indicator if there are entities disputing this division boundary. Information about entities disputing this boundary should be included in perspectives property. This property should also be true if boundary between two entities is unclear and this is "best guess". So having it true and no perspectives gives map creators reason not to fully trust the boundary, but use it if they have no other.
+| **perspectives** | array | Political perspectives from which this division boundary is considered to be an accurate representation. If this property is absent, then this boundary is not known to be disputed from any political perspective. Consequently, there is only one boundary feature representing the entire real world entity. If this property is present, it means the boundary represents one of several alternative perspectives on the same real-world entity.
+| **local_type** | string | Local name for the subtype property, optionally localized. This property is localized using a standard Overture names structure.
+| **country** | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root.
+| **region** | string | ISO 3166-2 principal subdivision code of the subdivision-like entity this division represents or belongs to. If the entity this division represents has a principal subdivision code, the region property contains it. If it does not, the region property contains the principal subdivision code of the first division encountered by traversing the parent_division_id chain to the root.
+| **hierarchies** | Array | Hierarchies in which this division participates.
+| **parent_division_id** | string | Division ID of this division's parent division. Not allowed for top-level divisions (countries) and required for all other divisions. The default parent division is the parent division as seen from the default political perspective, if there is one, and is otherwise chosen somewhat arbitrarily. The hierarchies property can be used to inspect the exhaustive list of parent divisions.
+| **norms** | object | Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases. If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed.
+| **capital_division_ids** | array | Division IDs of this division's capital divisions. If present, this property will refer to the division IDs of the capital cities, county seats, etc. of a division.
+| **division_id** | string | Division ID of the division this area belongs to.
+| **filename** | string | Name of the S3 file being queried.
+| **theme** | string | Name of the Overture theme being queried.
+| **type** |  string | Name of the Overture feature type being queried.
 </details>
 
 ## Data access and retrieval 
@@ -224,25 +235,11 @@ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=div
 </TabItem>
 
 <TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/). DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area.
+First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
 
-To create a bounding box, find the southwest-most latitude/longitude and northeast-most latitude/longitde of the area you're interested in.
+DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area.
 
-For our query, the US / Mexico border area, those values would be:
-
-- **Southwest-most point**: 24.93478418, -119.13728323
-- **Northeast-most point**: 33.43995480, -95.63020817
-
-Then, we'll use those coordinates to develop the min and max values for our bounding box:
-
-```
-bbox.xmin > -119.13728323
-bbox.xmax < -95.63020817
-bbox.ymin > 24.93478418
-bbox.ymax < 33.43995480
-```
-
-Now, we'll use these coordinates to construct our query. This example returns results for the country boundary between the US and Mexico:
+This example returns results for the country boundary between the US and Mexico:
 <QueryBuilder query={BorderUSMX}></QueryBuilder>
 </TabItem>
 
@@ -294,19 +291,6 @@ This query will return a subset of fields and the geometry for each locality and
 ### Version info 
 
 You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
-
-### GERS changelog 
-
-The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files — partitioned by theme, type, and change type — at the following locations on Azure and AWS.
-
-You can find the most recent GERS changelog [here](https://docs.overturemaps.org/release/latest/#global-entity-reference-system-gers-changelog).
-
-The types of feature changes in the changelog include:
-
-- `added`: Feature with this ID is new (was not present in the previous release).
-- `removed`: Feature with this ID was present in the previous release, but not this release.
-- `data_changed`: The feature with this ID contains a change in attributes (geometry or otherwise) from the feature with this ID in the previous release.
-- `unchanged`: The feature with this ID in this release matches the geometry and attributes of the feature with this ID in the previous release.
 
 ## Support
 
