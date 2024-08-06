@@ -29,6 +29,7 @@ const sidebars = {
       items: [
         'examples/kepler-gl',
         'examples/rapid-id',
+        'examples/overture-tiles',
         'examples/build-a-map',
         'examples/QGIS',
       ]
