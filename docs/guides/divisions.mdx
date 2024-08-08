@@ -16,6 +16,7 @@ import BorderUSMX from '!!raw-loader!@site/src/queries/duckdb/divisions_border_u
 import CountsPerEntity from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
 import SubTypeCountsUSMXCA from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
 import DenmarkLocalityNeighborhood from '!!raw-loader!@site/src/queries/duckdb/divisions_denmark_locality_neighborhood.sql';
+import PhillyPlaces from '!!raw-loader!@site/src/queries/duckdb/divisions_philly_places.sql';
 
 ## Overview
 
@@ -286,7 +287,19 @@ Using these queries, you can get counts for each feature type in divisions.
 
 This query will return a subset of fields and the geometry for each locality and neighborhood division entity in Denmark.
 
+<details>
+	<summary>Query</summary>
 <QueryBuilder query={DenmarkLocalityNeighborhood}></QueryBuilder>
+</details>
+
+#### Exporting places data within Philadelphia to a local Parquet file
+
+This query will return Places theme data for any place within the locality of Philadelphia
+
+<details>
+	<summary>Query</summary>
+<QueryBuilder query={PhillyPlaces}></QueryBuilder>
+</details>
 
 ## Revision history 
 ### Version info 
