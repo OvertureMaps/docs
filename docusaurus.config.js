@@ -174,7 +174,7 @@ const config = {
             label: 'Community',
             position: 'left',
           },        {
-            type: 'localeDropdown', // 添加语言切换下拉菜单
+            type: 'localeDropdown', // switch language dropdown
             position: 'right',
           },
         ],

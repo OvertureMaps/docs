@@ -7,6 +7,7 @@ This repository uses [Docusaurus](https://docusaurus.io/) to publish the documen
 - `community/`: The community page that showcases Overture data being used in the wild.
 - `docs/`: The main documentation pages available at docs.overturemaps.org/. The sidebar for these pages is manually curated in the `sidebars.js` file.
 - `release-blog/`: Release notes for every Overture data release. The latest release is always available at https://docs.overturemaps.org/release/latest/
+- `i18n`: Location of translation files for various languages. Currently includes Traditional Chinese. For generating files in other languages, please refer to the [Docusaurus documentation](https://github.com/facebook/docusaurus).
 - Notice there is no `schema reference` folder. See below.
 
 
