@@ -1,0 +1,36 @@
+---
+title: Visualizing Places in Rapid
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+
+In this example, we will load Overture Maps places data into Rapid so that we can visualize and inspect the geometries and their properties.
+
+To open Rapid v2, navigate to [https://rapideditor.org/edit](https://rapideditor.org/edit).
+
+Zoom in using the + or - hotkeys, the mouse scroll wheel, etc. to an area where you want to see Overture places data.
+
+Click the 'Map Data' sidebar button or hit the 'F' hotkey. Then, click the three dots icon next to 'Custom Data'.
+
+![Map Data Panel in Rapid](/img/rapid/visualizing-places.png)
+
+You will see the Custom Data dialog. Paste this URL:
+
+ <QueryBuilder query="https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/__PMTILES_OVERTURE_RELEASE/places.pmtiles" language="text"></QueryBuilder>
+
+into the text input and hit 'OK'.
+
+Wait a few moments, and you should see some places data start to show up on the map. These places are clickable, and inspectable:
+
+![Rapid with Places Data Overlay](/img/rapid/rapid-places-data.png)
+
+Alternatively, Rapid can load the data automatically if the URL is formatted like this.
+
+ <QueryBuilder query="https://rapideditor.org/edit#data=https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/__PMTILES_OVERTURE_RELEASE/places.pmtiles" language="text"></QueryBuilder>
+
+
+

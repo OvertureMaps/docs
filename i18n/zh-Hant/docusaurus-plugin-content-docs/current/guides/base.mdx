@@ -1,0 +1,28 @@
+---
+title: Base
+---
+
+## Overview
+
+The Overture Maps `base` theme provides the land and water features that are necessary to render a complete basemap. These features are currently derived from the [Daylight Earth Tables](https://daylightmap.org/earth/) schema and include the [Daylight Coastlines](https://daylightmap.org/coastlines.html). The theme includes five feature types:
+
+- **`infrastructure`**: Infrastructure features such as communication towers and lines, piers, and bridges.
+- **`land`**: physical representations of land surfaces derived from the inverse of OSM Coastlines; translates natural tags from OpenStreetMap.
+- **`land_cover`**: derived from [ESA WorldCover](https://esa-worldcover.org/en), high-resolution optical Earth observation data.
+- **`land_use`**: classifications of the human use of a section of land; translates landuse tag from OpenStreetMap.
+- **`water`**: physical representations of inland and ocean marine surfaces; translates natural and waterway tags from OpenStreetMap.
+
+## Schema design choices
+
+- basic classification of features into `type`, `subtype` and `class` where appropriate.
+- parsing and normalization of common OSM tags, such as `height` and `ele`.
+- extraction of consistent OSM tags, such as `wikidata` to top-level properties.
+- direct pass-through of remaining relevant OSM tags.
+
+## Schema reference
+
+- [Explore the schema for the infrastructure feature type](/schema/reference/base/infrastructure).
+- [Explore the schema for the land feature type](/schema/reference/base/land).
+- [Explore the schema for the land cover feature type](/schema/reference/base/land_cover).
+- [Explore the schema for the land use feature type](/schema/reference/base/land_use).
+- [Explore the schema for the water feature type](/schema/reference/base/water).

@@ -46,7 +46,17 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en','zh-Hant'],
+    localeConfigs:{
+      'en': {
+        label: 'English',
+        direction: 'ltr',
+      },
+      'zh-Hant': {
+        label: '繁體中文', 
+        direction: 'ltr', 
+      }
+    }
   },
 
   themes: ["docusaurus-json-schema-plugin"],
@@ -163,7 +173,10 @@ const config = {
             to: 'community',
             label: 'Community',
             position: 'left',
-          }
+          },        {
+            type: 'localeDropdown', // 添加语言切换下拉菜单
+            position: 'right',
+          },
         ],
       },
       algolia: {

@@ -1,0 +1,30 @@
+{
+  "title": {
+    "message": "Overture Maps",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Overture Maps Foundation Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Docs": {
+    "message": "Docs",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.Schema Reference": {
+    "message": "Schema Reference",
+    "description": "Navbar item with label Schema Reference"
+  },
+  "item.label.Releases": {
+    "message": "Releases",
+    "description": "Navbar item with label Releases"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "Navbar item with label Blog"
+  },
+  "item.label.Community": {
+    "message": "Community",
+    "description": "Navbar item with label Community"
+  }
+}

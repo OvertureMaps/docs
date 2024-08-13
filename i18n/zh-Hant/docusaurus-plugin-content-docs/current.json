@@ -1,0 +1,62 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.Getting Overture Data": {
+    "message": "Getting Overture Data",
+    "description": "The label for category Getting Overture Data in sidebar docs"
+  },
+  "sidebar.docs.category.Examples": {
+    "message": "Examples",
+    "description": "The label for category Examples in sidebar docs"
+  },
+  "sidebar.docs.category.Guides": {
+    "message": "Guides",
+    "description": "The label for category Guides in sidebar docs"
+  },
+  "sidebar.docs.category.Global Entity Reference System": {
+    "message": "Global Entity Reference System",
+    "description": "The label for category Global Entity Reference System in sidebar docs"
+  },
+  "sidebar.schema.category.Concepts": {
+    "message": "Concepts",
+    "description": "The label for category Concepts in sidebar schema"
+  },
+  "sidebar.schema.category.Theme-based": {
+    "message": "Theme-based",
+    "description": "The label for category Theme-based in sidebar schema"
+  },
+  "sidebar.schema.category.Transportation": {
+    "message": "Transportation",
+    "description": "The label for category Transportation in sidebar schema"
+  },
+  "sidebar.schema.category.Reference": {
+    "message": "Reference",
+    "description": "The label for category Reference in sidebar schema"
+  },
+  "sidebar.schema.category.addresses": {
+    "message": "addresses",
+    "description": "The label for category addresses in sidebar schema"
+  },
+  "sidebar.schema.category.base": {
+    "message": "base",
+    "description": "The label for category base in sidebar schema"
+  },
+  "sidebar.schema.category.buildings": {
+    "message": "buildings",
+    "description": "The label for category buildings in sidebar schema"
+  },
+  "sidebar.schema.category.divisions": {
+    "message": "divisions",
+    "description": "The label for category divisions in sidebar schema"
+  },
+  "sidebar.schema.category.places": {
+    "message": "places",
+    "description": "The label for category places in sidebar schema"
+  },
+  "sidebar.schema.category.transportation": {
+    "message": "transportation",
+    "description": "The label for category transportation in sidebar schema"
+  }
+}

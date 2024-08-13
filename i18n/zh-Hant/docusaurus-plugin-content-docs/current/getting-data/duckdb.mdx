@@ -1,0 +1,50 @@
+---
+title: DuckDB
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import ConfidentMountains from '!!raw-loader!@site/src/queries/duckdb/confident_mountains.sql';
+import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
+import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level_geometries.sql';
+
+[DuckDB](https://duckdb.org/) is an analytics tool that allows you to query remote files and download only the data you want. 
+
+## Installation
+
+[Install DuckDB locally](https://duckdb.org/docs/installation/). You'll need extensions to work with spatial data in the cloud. Using the DuckDB CLI, do the following:
+
+1. `INSTALL SPATIAL;` to install the [duckdb_spatial](https://github.com/duckdblabs/duckdb_spatial) extension.
+2. `INSTALL httpfs;` or `INSTALL azure;` to read from either Amazon S3 ([httpfs](https://duckdb.org/docs/guides/import/s3_import.html)) or Microsoft Azure Blob Storage ([azure](https://duckdb.org/docs/extensions/azure)).
+
+## Example queries
+
+### Mountains
+This query selects POIs in the mountain category from the Overture places dataset and outputs them to a GeoJSON file.
+
+<QueryBuilder query={ConfidentMountains}></QueryBuilder>
+
+:::tip
+To write the data to a shapefile, replace the last two lines with:
+
+```sql
+    ) TO 'overture_places_mountains_gt90.shp'
+WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
+```
+:::
+
+### Buildings in Detroit
+
+This query pulls building geometries and selected attributes from the Overture buildings dataset for an area in Detroit.
+
+<QueryBuilder query={DetroitBuildings}></QueryBuilder>
+
+### County polygons
+
+This query grabs county-level geometries for Pennsylvania from the divisions dataset and outputs them to a GeoJSON file. 
+
+<QueryBuilder query={CountyGeometries}></QueryBuilder>
+
+
+

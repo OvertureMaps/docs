@@ -1,0 +1,15 @@
+---
+id: overture:transportation:segment:999
+type: Feature
+geometry:
+  type: LineString
+  coordinates: [[0, 0], [1, 1]]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: sidewalk
+  connector_ids: [fooConnector, barConnector]
+  road_surface:
+    - value: paved

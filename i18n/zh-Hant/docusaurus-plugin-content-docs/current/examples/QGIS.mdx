@@ -1,0 +1,87 @@
+---
+title: Overture Maps + QGIS
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import BoulderCoDuckDB from '!!raw-loader!@site/src/queries/duckdb/boulder_co_duckdb.sql';
+import BoulderCoDuckDBSpatial from '!!raw-loader!@site/src/queries/duckdb/boulder_co_duckdb_spatial.sql';
+
+In this example, we'll show you how to get Overture Maps data into [QGIS](https://www.qgis.org/), a powerful and popular open source geographic information system. QGIS can ingest almost every spatial data format, including [Parquet](https://parquet.apache.org/docs/) and [GeoParquet](https://geoparquet.org/). Once you get your data into QGIS, the sky's the limit for data analysis, data conflation, visualization and beautiful mapmaking.
+
+The trickiest part of this example is making sure you're installing a newer version of QGIS (with GDAL > 3.5) that can directly read `Parquet` and `GeoParquet` files. We'll walk you through the processs.
+
+<details>
+
+    <summary>Instructions: Install a version of QGIS with GDAL > 3.5 that can read `(geo)parquet`</summary>
+
+    <Tabs>
+        <TabItem value="mac" label="MacOS" default>
+            You can find the latest installers for Mac here: [github.com/opengisch/qgis-conda-builder/releases](https://github.com/opengisch/qgis-conda-builder/releases)
+
+            Additionally, the [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
+        </TabItem>
+
+        <TabItem value="windows" label="Windows" default>
+            Most distributions of QGIS for Windows have support for parquet.
+        </TabItem>
+
+        <TabItem value="linux" label="Linux" default>
+            The [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
+
+            Additionally, there is a Flatpak QGIS package that includes support for Parquet:
+
+            ```bash
+            flatpak install --user https://dl.flathub.org/build-repo/94031/org.qgis.qgis.flatpakref
+            ```
+        </TabItem>
+    </Tabs>
+</details>
+
+## 1. Download Overture Data
+
+<Tabs>
+    <TabItem value="DuckDB">
+
+        Using only the `bbox` parameters, we can efficiently retrieve all Overture data without processing any geometries. With SELECT `*`, we will simply download _all_ of the data in Overture across all themes and types. Note: if your query is interupted by a connection error, you might try running the following command first: `SET http_keep_alive=false;`.
+
+        <QueryBuilder query={BoulderCoDuckDB}></QueryBuilder>
+
+        Note that this query gathers data from all Overture themes with `theme=*/type=*/*`. The resulting file has _all_ of the columns and multiple geometry types.
+
+
+    </TabItem>
+
+    <TabItem value="DuckDB Spatial">
+
+        The `spatial` plugin allows DuckDB to read the geometry and convert the file to a common spatial format. This query will download all of the `road` subtypes of `segments` in the `transportation` theme to a _shapefile_.
+
+        <QueryBuilder query={BoulderCoDuckDBSpatial}></QueryBuilder>
+
+    </TabItem>
+
+    <TabItem value="Python">
+
+        The new [`overturemaps-py`](https://github.com/OvertureMaps/overturemaps-py) Python utility can download Overture data as both `geojson` and `geoparquet`. This example downloads buildlings around Boston.
+
+        ```bash
+        $ pip install overturemaps
+
+        $ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 \
+            -f geoparquet --type=building --output=boston.geoparquet
+        ```
+
+        Note: run `overturemaps download --help` for a full list of types and output formats.
+
+
+    </TabItem>
+
+</Tabs>
+
+
+## 2. Add the data to QGIS
+All of the data files we created in Step 1 are vector files that can be added as layers in QGIS. The easiest method is to drag-and-drop the file(s) directly into the map canvas.
+
+<!-- [Overture parquet files in QGIS](/img/qgis-parquet-drag-drop.gif) -->
+<img src='/img/qgis-parquet-drag-drop.gif' alt='Drag-n-drop parquet files in QGIS' width='65%'/>

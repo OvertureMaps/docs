@@ -1,0 +1,48 @@
+---
+title: Getting Overture Data
+---
+
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+Overture's six data themes &mdash; addresses, [base](/guides/base), [buildings](/guides/buildings), [divisions](/guides/divisions), [places](/guides/places), and [transportation](/guides/transportation) &mdash; are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations: 
+
+| Provider | Location |
+| ------ | -------- |
+| Amazon S3 | `s3://overturemaps-us-west-2/release/` |
+| Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/` |
+
+The latest release path is:
+<QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
+
+## GeoParquet
+
+Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).  
+
+## Accessing only the data you want (recommended)
+
+We _strongly recommend_ accessing the data in the cloud using the services available in AWS and Azure, where the data are stored, or by using a locally-installed query engine like [DuckDB](https://duckdb.org/). This allows you to download only the subset of data you want. You can also try Overture's experimental Python command-line tool to download data by feature type and area of interest. 
+
+- [Amazon Athena](athena-aws) (account required)
+- [Microsoft Synapse](synapse-azure) (account required)
+- [DuckDB](duckdb)
+- [Python command-line tool](overturemaps-py)
+
+## What if I want ALL the data?
+
+:::warning
+Are you sure? The total size of all the files is **~440 GB**.  
+:::
+
+It is possible to download the GeoParquet files directly from either Azure Blob Storage or Amazon S3. Here's how you can do it:
+
+After installing the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), you can download the files from S3 using the below command. Set `<DESTINATION>` to a local directory path to download the files, or to an `s3://` path you control to copy them into your S3 bucket.
+
+<QueryBuilder   query="aws s3 cp --region us-west-2 --no-sign-request --recursive s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/ <DESTINATION>"
+                language="text">
+</QueryBuilder>
+
+You can download the files from Azure Blob Storage using [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/) or the [AzCopy](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json#download-azcopy) command. An example `azcopy` command is given below.
+
+<QueryBuilder   query='azcopy copy "https://overturemapswestus2.dfs.core.windows.net/release/__OVERTURE_RELEASE/" "<<local directory path>>"  --recursive'
+                language="text">
+</QueryBuilder>

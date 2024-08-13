@@ -1,0 +1,19 @@
+---
+id: lanes-resolution-example-segment-2
+type: Feature
+geometry:
+  type: LineString
+  coordinates: # Oriented toward segment 1, due west.
+    - [-21.852776852103545, 22.079931368]
+    - [ -23.693418548, 22.079931368]
+properties:
+  theme: transportation
+  type: segment
+  version: 2
+  connector_ids: [lanes-resolution-example-connector]
+  subtype: road
+  class: motorway
+  lanes:
+    - value:  # A lane block rule containing one globally-applicable lane block.
+      - direction: forward
+      - direction: backward

@@ -1,0 +1,14 @@
+{
+  "title": {
+    "message": "Overture Maps Engineering",
+    "description": "The title for the blog used in SEO"
+  },
+  "description": {
+    "message": "Technical posts from the Overture Maps engineering team",
+    "description": "The description for the blog used in SEO"
+  },
+  "sidebar.title": {
+    "message": "Overture Maps Engineering Blog",
+    "description": "The label for the left sidebar"
+  }
+}
