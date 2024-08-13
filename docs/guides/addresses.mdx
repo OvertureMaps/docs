@@ -5,8 +5,7 @@ title: Addresses
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
-import ToParquet from '!!raw-loader!@site/src/queries/duckdb/divisions_to_parquet.sql';
-
+import ToParquet from '!!raw-loader!@site/src/queries/duckdb/addresses_to_parquet.sql';
 import AddressesCalgary from '!!raw-loader!@site/src/queries/duckdb/addresses_calgary.sql';
 import AddressCounts from '!!raw-loader!@site/src/queries/duckdb/addresses_counts.sql';
 import AddressesNZExport from '!!raw-loader!@site/src/queries/duckdb/addresses_nz_export.sql';
@@ -106,7 +105,28 @@ Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a co
 
 [The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for addresses.
 
+We recommend querying and downloading only the Overture data you need.
+If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract address data.
+
 <Tabs>
+
+<TabItem value="DuckDB" label="DuckDB" default>
+First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
+
+DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area.
+
+This example returns address data for Calgary, CA and the surrounding area:
+<QueryBuilder query={AddressesCalgary}></QueryBuilder>
+</TabItem>
+
+<TabItem value="Overture Maps Explorer" label="Overture Maps Explorer" default>
+To quickly view and download modest amounts of data, you can use the [Overture Maps Explorer website](https://explore.overturemaps.org/#15.07/41.89731/12.47626).
+
+To download data: Pan to the area you are interested in, turn off the other layers, then click `Download Visible`.
+
+This will download the area visible on your screen.
+
+</TabItem>
 
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
 You can find Overture's official Python command-line tool [here](https://github.com/OvertureMaps/overturemaps-py).
@@ -131,49 +151,7 @@ Command-line options:
 - **--type/-t** (required): The Overture map data type to be downloaded. Examples of types are building for building footprints, place for POI places data, etc. Run overturemaps download --help for the complete list of allowed types
 
 This downloads data directly from Overture's S3 bucket without interacting with any other servers. By including bounding box extents on each row in the Overture distribution, the underlying Parquet readers use the Parquet summary statistics to download the minimum amount of data necessary to extract data from the desired region.
-</TabItem>
 
-<TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
-<QueryBuilder query={ToParquet}></QueryBuilder>
-Note: Running this query will result in a ~6.4GB file.
-</TabItem>
-
-</Tabs>
-
-## Data usage guidelines 
-
-We recommend querying and downloading only the Overture data you need.
-If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract address data.
-
-<Tabs>
-
-<TabItem value="Overture Maps Explorer" label="Overture Maps Explorer" default>
-To quickly view and download modest amounts of data, you can use the [Overture Maps Explorer website](https://explore.overturemaps.org/#15.07/41.89731/12.47626).
-
-To download data: Pan to the area you are interested in, turn off the other layers, then click `Download Visible`.
-
-This will download the area visible on your screen.
-
-</TabItem>
-
-<TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
-First, follow the [setup guide for the Python Command-line Tool](/getting-data/overturemaps-py/).
-
-You can alter the `bbox` value to download a particular area.
-
-```
-overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=address -o boston.geojson
-``` 
-</TabItem>
-
-<TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
-
-DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area.
-
-This example returns address data for Calgary, CA and the surrounding area:
-<QueryBuilder query={AddressesCalgary}></QueryBuilder>
 </TabItem>
 
 </Tabs>
@@ -182,15 +160,25 @@ This example returns address data for Calgary, CA and the surrounding area:
 
 Using this query, you can get a count of addresses per country:
 
+<details>
+	<summary>Query</summary>
 <QueryBuilder query={AddressCounts}></QueryBuilder>
+
+</details>
 
 This query will create a shapefile of address data in New Zealand, with limited attributes:
 
+<details>
+	<summary>Query</summary>
 <QueryBuilder query={AddressesNZExport}></QueryBuilder>
+</details>
 
 This query will create a CSV file of address within the State of Utah, using the `divisions` theme data in a spatial query:
 
+<details>
+	<summary>Query</summary>
 <QueryBuilder query={UtahAddresses}></QueryBuilder>
+</details>
 
 ## Revision history 
 ### Version info 
