@@ -9,19 +9,20 @@ import ConfidentMountains from '!!raw-loader!@site/src/queries/duckdb/confident_
 import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
 import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level_geometries.sql';
 
-[DuckDB](https://duckdb.org/) is an analytics tool that allows you to query remote files and download only the data you want. 
+[DuckDB](https://duckdb.org/) 是一款分析工具，允許您查詢遠端文件並僅下載您所需的數據。
 
-## Installation
+## 安裝
 
-[Install DuckDB locally](https://duckdb.org/docs/installation/). You'll need extensions to work with spatial data in the cloud. Using the DuckDB CLI, do the following:
+[在本地安裝 DuckDB](https://duckdb.org/docs/installation/)。您將需要擴展功能來處理雲端的空間數據。使用 DuckDB CLI，請執行以下操作：
 
-1. `INSTALL SPATIAL;` to install the [duckdb_spatial](https://github.com/duckdblabs/duckdb_spatial) extension.
-2. `INSTALL httpfs;` or `INSTALL azure;` to read from either Amazon S3 ([httpfs](https://duckdb.org/docs/guides/import/s3_import.html)) or Microsoft Azure Blob Storage ([azure](https://duckdb.org/docs/extensions/azure)).
+1. `INSTALL SPATIAL;` 來安裝 [duckdb_spatial](https://github.com/duckdblabs/duckdb_spatial) 擴展。
+2. `INSTALL httpfs;` 或 `INSTALL azure;` 來從 Amazon S3 ([httpfs](https://duckdb.org/docs/guides/import/s3_import.html)) 或 Microsoft Azure Blob Storage ([azure](https://duckdb.org/docs/extensions/azure)) 讀取數據。
 
-## Example queries
+## 示例查詢
 
-### Mountains
-This query selects POIs in the mountain category from the Overture places dataset and outputs them to a GeoJSON file.
+### 山脈
+此查詢從 Overture 地點數據集中選擇山脈類別的 POI，並將其輸出到 GeoJSON 文件中。
+
 
 <QueryBuilder query={ConfidentMountains}></QueryBuilder>
 
@@ -34,17 +35,18 @@ WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
 ```
 :::
 
-### Buildings in Detroit
+### 在底特律的建築
 
-This query pulls building geometries and selected attributes from the Overture buildings dataset for an area in Detroit.
+此查詢從 Overture 建築數據集中提取底特律地區的建築幾何形狀和選定屬性。
 
 <QueryBuilder query={DetroitBuildings}></QueryBuilder>
 
-### County polygons
+### 縣級多邊形
 
-This query grabs county-level geometries for Pennsylvania from the divisions dataset and outputs them to a GeoJSON file. 
+此查詢從 divisions 數據集中抓取賓夕法尼亞州的縣級幾何形狀，並將其輸出到 GeoJSON 文件中。
 
 <QueryBuilder query={CountyGeometries}></QueryBuilder>
+
 
 
 
