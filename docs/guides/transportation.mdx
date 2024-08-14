@@ -83,14 +83,14 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 | class | VARCHAR | Captures the kind of road and its position in the road network hierarchy. |
 | names | STRUCT[] | Properties defining the names of a feature. |
 | connector_ids | VARCHAR[] | List of connector IDs identifying the connectors this segment is physically connected to. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
-| routes | STRUCT[] | Routes this segment belongs to |
-| access_restrictions | STRUCT[] | Rules governing access to this road segment or lane |
+| routes | STRUCT[] | Routes this segment belongs to. |
+| access_restrictions | STRUCT[] | Rules governing access to this road segment or lane. |
 | level_rules | STRUCT[] | Defines the Z-order, i.e. stacking order, of the road segment. |
-| prohibited_transition | STRUCT[] |  |
-| road_surface | STRUCT[] |  |
-| road_flags | STRUCT[] |  |
-| speed_limits | STRUCT[] |  |
-| width_rules | STRUCT[] |  |
+| prohibited_transitions | STRUCT[] | Defines where traveling from the segment to another is disallowed for navigation. This covers things situations prohibited turns or a transition from road to bike lane disallowing cars. |
+| road_surface | STRUCT[] | Defines the surface material on a road such as paved, asphalt, or unpaved. |
+| road_flags | STRUCT[] | Additional properties relevant to roads such as is_bridge or is_under_construction. |
+| speed_limits | STRUCT[] | Defines the speed limit of the road segment. |
+| width_rules | STRUCT[] | Defines the width of the road segment for rendering. |
 </TabItem>
 <TabItem value="connector" label="connector" default>
 | column_name | column_type | Description |
