@@ -8,8 +8,8 @@ COPY (
   -- Create a temp table with the state of Utah
   WITH utah AS (
     SELECT 
-      id as utah_id,
-      ST_GeomFromWKB(geometry) as utah_geom
+      id AS utah_id,
+      ST_GeomFromWKB(geometry) AS utah_geom
     FROM
       read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
     WHERE
@@ -20,7 +20,7 @@ COPY (
   addresses AS (
     SELECT
       *,
-      ST_GeomFromWKB(geometry) as geometry
+      ST_GeomFromWKB(geometry) AS geometry
     FROM
       read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=addresses/type=*/*', filename=true, hive_partitioning=1)
     INNER JOIN
