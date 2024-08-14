@@ -213,7 +213,7 @@ The `class` column can be used to pull out subsets of the road data. Similarly, 
 <QueryBuilder query={ParkingAisles}></QueryBuilder>
 </TabItem>
 <TabItem value="Query by routes" label="Query by routes" default>
-You might be interested in a network of roads, such as a US Interstate. These can be extracted using the routes column and either using the network and ref properties and/or the wikidata tag to identify the route.
+You might be interested in a network of roads, such as a US Interstate. These can be extracted using the `routes` column and either using the `network` and `ref` properties and/or the `wikidata` tag to identify the route.
 
 This example extracts all the roads that are part of US I-5. To get all US Interstates simply remove `AND routes[1].ref = '5'` from the query.
 <QueryBuilder query={Routes}></QueryBuilder>
