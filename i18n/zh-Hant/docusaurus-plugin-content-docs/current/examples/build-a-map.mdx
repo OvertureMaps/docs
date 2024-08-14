@@ -20,23 +20,23 @@ import SeattleWater from '!!raw-loader!@site/src/queries/duckdb/seattle_water_fo
 
 <Map></Map>
 
-### Step 1: Download only what you need
+### 步驟 1: 僅下載所需資料
 
-Overture Maps data is released in the cloud-native format [GeoParquet](https://geoparquet.org/). It is further partitioned by *theme* and *type*. Downloading the data through a tool like [DuckDB](https://duckdb.org/) can take advantage of these properties, giving the best performance. After downloading and converting the data to GeoJSON, we can use [tippecanoe](https://github.com/felt/tippecanoe) to create a [`PMTiles`](https://github.com/protomaps/PMTiles) archive for each theme.
+Overture Maps 資料以 cloud-native 格式 [GeoParquet](https://geoparquet.org/) 釋出。這些資料進一步按 *主題* 和 *類型* 進行分區。通過使用像 [DuckDB](https://duckdb.org/) 這樣的工具下載資料，可以充分利用這些特性，實現最佳性能。下載並將資料轉換為 GeoJSON 後，我們可以使用 [tippecanoe](https://github.com/felt/tippecanoe) 為每個主題創建 [`PMTiles`](https://github.com/protomaps/PMTiles) 存檔。
 
 <Tabs queryString="theme-data" >
 
 <!-- Places  -->
-<TabItem value="places" label="Places" default>
+<TabItem value="places" label="地點" default>
 
-The places data theme represents business and points of interest in the real world. Read more about the places data schema in the [documentation](/schema/reference/places/place).
+地點資料主題代表現實世界中的業務和興趣點。詳細了解地點資料架構，請參閱 [文檔](/schema/reference/places/place)。
 
-1. The following DuckDB query downloads places data within a specific bounding box and writes a `GeoJSON` file.
+1. 以下 DuckDB 查詢會下載特定邊界框內的地點資料並寫入 `GeoJSON` 檔案。
 
     <QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
+2. 接下來，使用 [tippecanoe](https://github.com/felt/tippecanoe) 從 `seattle_places.geojson` 創建 `pmtiles` 存檔。
 
-2. Next, create a `pmtiles` archive from `seattle_places.geojson` with [tippecanoe](https://github.com/felt/tippecanoe).
 
     ```bash
     tippecanoe -fo places.pmtiles -Z13 -z13 -l places seattle_places.geojson
@@ -56,13 +56,13 @@ The places data theme represents business and points of interest in the real wor
 <!-- Placenames -->
 
 <TabItem value="placenames" label="Placenames" default>
-The admins theme contains named localities and their administrative boundaries. To add labels for populated places to the map, we query the admins theme to get the primary name for each locality.
+管理員主題包含已命名的地方和其行政邊界。為了在地圖上添加人口密集地點的標籤，我們查詢管理員主題以獲取每個地方的主要名稱。
 
-1. The following DuckDB queries downloads placenames from the admins theme within the bounding box and saves it as `seattle_placenames.geojson`
+1. 以下 DuckDB 查詢會下載在 bounding box 內的地名資料並儲存為 `seattle_placenames.geojson`。
 
     <QueryBuilder query={SeattlePlacenames}></QueryBuilder>
 
-2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `seattle_placenames.geojson`
+2. 執行 [tippecanoe](https://github.com/felt/tippecanoe) 以從 `seattle_placenames.geojson` 生成 `pmtiles` 存檔。
 
     ```bash
     tippecanoe -fo placenames.pmtiles -Z5 -z10 -l placenames seattle_placenames.geojson
@@ -82,13 +82,14 @@ The admins theme contains named localities and their administrative boundaries. 
 
 <TabItem value="buildings" label="Buildings" default>
 
-Overture contains billions of buildings distirbuted across hundreds of geoparquet files.
+Overture 包含數十億棟建築，分佈在數百個 GeoParquet 檔案中。
 
-1. The following DuckDB query reads only the metadata of each file and then downloads *only* the buildings within our bounding box to a line-delimited `GeoJSONSeq` file.
+1. 以下 DuckDB 查詢僅讀取每個檔案的中繼資料，然後僅下載我們顯示邊界框內的建築資料到一個按行分隔的 `GeoJSONSeq` 檔案中。
 
     <QueryBuilder query={SeattleBuildings}></QueryBuilder>
 
-2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `seattle_buildings.geojsonseq`
+2. 執行 [tippecanoe](https://github.com/felt/tippecanoe) 從 `seattle_buildings.geojsonseq` 生成 `pmtiles` 存檔。
+
 
     ```bash
     tippecanoe -fo buildings.pmtiles -Z13 -z13 -l buildings -P seattle_buildings.geojsonseq
@@ -110,13 +111,13 @@ Overture contains billions of buildings distirbuted across hundreds of geoparque
 
 <TabItem value="roads" label="Roads" default>
 
-The Overture Maps transportation theme has two types: `connectors` and `segments`. Since we want to render the road lines, we will query for `type=segment`.
+Overture Maps 運輸主題有兩種類型：`connectors` 和 `segments`。由於我們想要渲染道路的線條，我們將查詢 `type=segment`。
 
-1. This DuckDB query downloads road segments from Overture to a `GeoJSONSeq` file.
+1. 這個 DuckDB 查詢會將道路段從 Overture 下載到 `GeoJSONSeq` 檔案中。
 
     <QueryBuilder query={SeattleRoads}></QueryBuilder>
 
-2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive from `seattle_roads.geojsonseq`
+2. 使用 [tippecanoe](https://github.com/felt/tippecanoe) 將 `seattle_roads.geojsonseq` 生成 `pmtiles` 檔案
 
     ```bash
     tippecanoe -fo roads.pmtiles -Z10 -B10 -z13 -l roads -P seattle_roads.geojsonseq
@@ -139,7 +140,7 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
 
 <TabItem value="base" label="Base (Land, Land Use & Water)" default>
 
-1. `land`, `land_use`, and `water` are the three types available in the `base` theme. We can use 3 separate queries to obtain the features and then we can combine them into a single pmtiles archive with different layers.
+1. `land`、`land_use` 和 `water` 是 `base` 主題中的三種類型。我們可以使用 3 個單獨的查詢來獲取這些特徵，然後將它們合併到一個具有不同圖層的 pmtiles 存檔中。
 
 
     <details>
@@ -165,7 +166,7 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
 
     </details>
 
-2. Run [tippecanoe](https://github.com/felt/tippecanoe) to produce a `pmtiles` archive with three `geojsonseq` file as input:
+2. 執行 [tippecanoe](https://github.com/felt/tippecanoe) 以使用三個 `geojsonseq` 檔案作為輸入來產生 `pmtiles` 存檔：
 
     ```bash
     tippecanoe -fo base.pmtiles -Z8 -z13 -P \
@@ -190,18 +191,18 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
 
 <hr />
 
-### Step 2: Creating a map with Maplibre + PMTiles
+### 步驟 2：使用 Maplibre + PMTiles 創建地圖
 
-At this point, we have created five PMTiles archives from the five Overture themes:
+目前，我們已經從五個 Overture 主題創建了五個 PMTiles 檔案：
 1. `places.pmtiles`
 2. `placenames.pmtiles`
 3. `buildings.pmtiles`
 4. `roads.pmtiles`
 5. `base.pmtiles`
 
-The map on this page combines a [react maplibre example](https://docs.maptiler.com/react/maplibre-gl-js/how-to-use-maplibre-gl-js/) with [PMTiles](https://codesandbox.io/s/black-dream-oycvf2?file=/src/App.js). You can [view the source](https://github.com/OvertureMaps/docs/blob/main/src/components/map.js) for the above map on github for a complete example using react, or, check out the [map based on July's release](https://labs.overturemaps.org/overture-with-daylight) for a non-react implementation of PMTiles.
+本頁的地圖結合了 [react maplibre 範例](https://docs.maptiler.com/react/maplibre-gl-js/how-to-use-maplibre-gl-js/) 和 [PMTiles](https://codesandbox.io/s/black-dream-oycvf2?file=/src/App.js)。您可以在 GitHub 上 [查看原始碼](https://github.com/OvertureMaps/docs/blob/main/src/components/map.js) 獲得完整的 react 示例，或到 [基於 7 月發佈的地圖](https://labs.overturemaps.org/overture-with-daylight) 查看非 react 的 PMTiles 實例。
 
-Using PMTiles with react requires adding the [PMtiles protocol](https://docs.protomaps.com/pmtiles/maplibre):
+使用 PMTiles 與 react 需要添加 [PMtiles protocol](https://docs.protomaps.com/pmtiles/maplibre)：
 
 ```javascript
 import maplibregl from 'maplibre-gl';
@@ -218,7 +219,7 @@ useEffect(() => {
   }
 }, []);
 ```
-Then, reference the tile archives with a relative path when initializing the map:
+然後，在初始化地圖時使用相對路徑引用圖磚存檔：
 
 ```javascript
   style: {
@@ -234,8 +235,8 @@ Then, reference the tile archives with a relative path when initializing the map
     ...
 ```
 
-### Step 3: Styling the layers
-Each tab below contains the complete styles in the [Maplibre Style Spec](https://maplibre.org/maplibre-style-spec/) for the map on this page.
+### 步驟 3：為圖層設置樣式
+下面的每個標籤依照 [Maplibre Style Spec](https://maplibre.org/maplibre-style-spec/) 包含了地圖的完整樣式，
 
 <Tabs queryString="map-layer" >
 <TabItem value="places" label="Places" default>

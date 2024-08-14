@@ -27,6 +27,6 @@ $ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=b
 - `--output/-o`（可選）：輸出檔案的位置。省略時，輸出將寫入 stdout。
 - `--type/-t`（必填）：要下載的 Overture 地圖資料類型。類型範例用於建立建築物面積、POI 的地點資料等。運行 overturemaps download --help 可得到允許類型的完整清單。
 
-這些資料不與其他服務器請求，而是直接從 Overture 的 S3 儲存貯體下載。通過在每列 Overture 分發中包括 bounding boxes 範圍，底層 Parquet 讀取器使用 Parquet 摘要統計訊息來下載所需區域資料所需要的最小資料量。
+這些資料不與其他伺服器請求資料，而是直接從 Overture 的 S3 儲存貯體下載。通過在每列 Overture 分發中包括 bounding boxes 範圍，底層 Parquet 讀取器使用 Parquet 摘要統計訊息來下載所需區域資料所需要的最小資料量。
 
 為了找到感興趣的 bounding boxes ，我們喜歡來自 [Klokantech](https://www.klokantech.com/) 的這個 [bounding box](https://boundingbox.klokantech.com/) 工具。選擇 CSV 格式，並將值複製到 `--bbox` 欄位中。
