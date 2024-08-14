@@ -124,11 +124,11 @@ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geoparquet --type=
 overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geoparquet --type=place -o boston/theme=places/type=place/0.geoparquet
 ```
 
-### Example: Places
+### 範例: 地點
 
-The default `places.sh` script includes all Overture properties to aid inspection. To slim down the tile sizes, you can remove all the primary name in the `@name` field.
+默認的 `places.sh` 腳本包括所有 Overture 屬性，以幫助檢查。如果想要減小圖磚大小，可以刪除 `@name` 欄位中的所有主要名稱。
 
-Modify [places.sh](https://github.com/OvertureMaps/overture-tiles/blob/main/scripts/2024-07-22/places.sh) for the release matching your Overture data:
+請修改 [places.sh](https://github.com/OvertureMaps/overture-tiles/blob/main/scripts/2024-07-22/places.sh) 以配合您的 Overture 資料公開版本：
 
 ```sql
   ...
@@ -143,15 +143,15 @@ Modify [places.sh](https://github.com/OvertureMaps/overture-tiles/blob/main/scri
 ./scripts/2024-07-22/places.sh boston boston_places.pmtiles
 ```
 
-Inspect the created `boston_places.pmtiles` on [pmtiles.io](https://pmtiles.io) to see the slimmed-down properties:
+檢查在 [pmtiles.io](https://pmtiles.io) 上創建的 `boston_places.pmtiles` 以查看簡化過的屬性：
 
-![customized places tileset](/img/overture-tiles-customize-places.png)
+![自訂地點圖磚](/img/overture-tiles-customize-places.png)
 
-### Example: Buildings
+### 範例：建築
 
-To reduce the size of tiles, the default Buildings script includes all properties only at zoom 13. Your own application may need this data at a lower zoom level.
+為了減少圖磚的大小，預設的建築腳本僅在縮放級別 13 上包含所有屬性。您的應用程式可能需要在更低的縮放級別上獲取這些資料。
 
-Modify [`profile/Buildings.java`](https://github.com/OvertureMaps/overture-tiles/blob/main/profiles/Buildings.java) to populate all Overture properties on zoom 12 instead of zoom 13:
+請修改 [`profile/Buildings.java`](https://github.com/OvertureMaps/overture-tiles/blob/main/profiles/Buildings.java) 以便在縮放級別 12 上填充所有 Overture 屬性，而不是在縮放級別 13 上：
 
 ```java
 ...
@@ -163,6 +163,6 @@ OvertureProfile.addFullTags(source, polygon, 12);
 java -cp planetiler.jar profiles/Buildings.java --data=boston
 ```
 
-Inspect the created `data/buildings.pmtiles` on [pmtiles.io](https://pmtiles.io) to see the additional properties on zoom level 12:
+檢查在 [pmtiles.io](https://pmtiles.io) 上創建的 `data/buildings.pmtiles` 以查看在縮放級別 12 上的額外屬性：
 
-![customized buildings tileset](/img/overture-tiles-customize-buildings.png)
+![自訂建築圖磚](/img/overture-tiles-customize-buildings.png)

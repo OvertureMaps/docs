@@ -6,26 +6,28 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 import HyderabadBuildingsAthena from '!!raw-loader!@site/src/queries/athena/hyderabad_buildings.sql';
 import HyderabadBuildingsDuckDB from '!!raw-loader!@site/src/queries/duckdb/hyderabad_buildings.sql';
 
-In this example, we'll query the Overture Maps buildings theme and download data for a specified bounding box. Then we'll load the data into [kepler.gl](https://kepler.gl/demo), an open-source tool for working with large map datasets, and visualize the buildings data by data source: [OpenStreetMap](https://wiki.openstreetmap.org/wiki/Key:building), [Microsoft ML Building Footprints](https://github.com/microsoft/GlobalMLBuildingFootprints), and [Google Open Buildings](https://sites.research.google/open-buildings/).
+在這個範例中，我們將查詢 Overture Maps 的建築主題並下載指定 bounding box 的資料。然後，我們會將資料載入到 [kepler.gl](https://kepler.gl/demo) 中，這是一個開源工具，用於處理大型地圖資料集，並按資料來源可視化建築資料： [OpenStreetMap](https://wiki.openstreetmap.org/wiki/Key:building)、[Microsoft ML Building Footprints](https://github.com/microsoft/GlobalMLBuildingFootprints) 和 [Google Open Buildings](https://sites.research.google/open-buildings/)。
 
-Requirements: you'll need an AWS account and access to an S3 bucket if you want to use Athena. If you're using DuckDB (we recommend 0.10.0), you'll need to install and load the spatial and S3 or Azure extensions. You do not need an account on kepler.gl.
+最低要求：如果您想使用 Athena，您需要一個 AWS 帳戶和對 S3 儲存貯體的訪問權限。如果您使用 DuckDB（我們推薦版本 0.10.0），則需要安裝和加載空間和 S3 或 Azure 擴展。您不需要在 kepler.gl 上擁有帳戶。
 
-## Query the data in AWS Athena
+## 在 AWS Athena 中查詢資料
 
-Follow the [instructions for running the set-up queries](/getting-data/athena-aws) in Amazon Athena. Then you can run this in the Athena query console:
+按照 [在 Amazon Athena 中執行設定查詢的說明](/getting-data/athena-aws)。然後可以在 Athena query console 中執行以下查詢：
 
 <QueryBuilder query={HyderabadBuildingsAthena}></QueryBuilder>
 
-This outputs around 106,000 buildings in a table view that you can download as a CSV file.
+這會輸出大約 106,000 座建築的表格視圖，可以將其下載為 CSV 檔案。
 
-## Query the data using DuckDB
-Here's a similar query in DuckDB's flavor of SQL that outputs a GeoJSON file.
+## 使用 DuckDB 查詢資料
+
+這是一個在 DuckDB SQL 版本中的類似查詢，它會輸出 GeoJSON 檔案。
 
 <QueryBuilder query={HyderabadBuildingsDuckDB}></QueryBuilder>
 
-## Explore the data in kepler.gl
-Drag and drop the CSV or GeoJSON file into [kepler.gl](https://kepler.gl/demo). Style the feature layer by choosing different colors based on the `primary_source` field. Then you can explore the data sources that Overture Maps conflated to create the buildings theme.
+## 在 kepler.gl 中探索資料
 
-![kepler.gl example](/img/kepler-overture-hyderabad.png)
+將 CSV 或 GeoJSON 檔案拖放到 [kepler.gl](https://kepler.gl/demo) 中。根據 `primary_source` 欄位選擇不同顏色來設定特徵圖層樣式。然後，您可以探索 Overture Maps 合併創建建築主題的資料來源。
+
+![kepler.gl 範例](/img/kepler-overture-hyderabad.png)
 
 ![kepler.gl gif](/img/kepler_overture_buildings_hyderabad.gif)

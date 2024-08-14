@@ -1,5 +1,5 @@
 ---
-title: Visualizing Places in Rapid
+title: 在 Rapid 中可視化的地點
 ---
 
 import CodeBlock from '@theme/CodeBlock';
@@ -7,30 +7,26 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
+在此範例中，我們將 Overture Maps 地點資料載入 Rapid，以便可視化和檢查幾何形狀及其屬性。
 
-In this example, we will load Overture Maps places data into Rapid so that we can visualize and inspect the geometries and their properties.
+要打開 Rapid v2，請前往 [https://rapideditor.org/edit](https://rapideditor.org/edit)。
 
-To open Rapid v2, navigate to [https://rapideditor.org/edit](https://rapideditor.org/edit).
+使用 + 或 - 快捷鍵、滑鼠滾輪等功能，縮放到您想查看 Overture 地點資料的區域。
 
-Zoom in using the + or - hotkeys, the mouse scroll wheel, etc. to an area where you want to see Overture places data.
+點擊側邊欄中的 '地圖圖資' 按鈕或按 'F' 快捷鍵。然後，點擊 '自訂地圖資料' 旁邊的三個點圖示。
 
-Click the 'Map Data' sidebar button or hit the 'F' hotkey. Then, click the three dots icon next to 'Custom Data'.
+![Rapid 中的地圖資料 面板](/img/rapid/visualizing-places.png)
 
-![Map Data Panel in Rapid](/img/rapid/visualizing-places.png)
-
-You will see the Custom Data dialog. Paste this URL:
+在自訂地圖資料設定中。將以下 URL 複製到輸入框中：
 
  <QueryBuilder query="https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/__PMTILES_OVERTURE_RELEASE/places.pmtiles" language="text"></QueryBuilder>
 
-into the text input and hit 'OK'.
+然後點擊 'OK'。
 
-Wait a few moments, and you should see some places data start to show up on the map. These places are clickable, and inspectable:
+等待一下子後會看到地圖上開始顯示一些地點資料。這些地點是可點擊和可檢查的：
 
-![Rapid with Places Data Overlay](/img/rapid/rapid-places-data.png)
+![Rapid 顯示地點資料 疊加](/img/rapid/rapid-places-data.png)
 
-Alternatively, Rapid can load the data automatically if the URL is formatted like this.
+另外，如果 URL 格式如下，Rapid 可以自動載入資料 。
 
  <QueryBuilder query="https://rapideditor.org/edit#data=https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/__PMTILES_OVERTURE_RELEASE/places.pmtiles" language="text"></QueryBuilder>
-
-
-
