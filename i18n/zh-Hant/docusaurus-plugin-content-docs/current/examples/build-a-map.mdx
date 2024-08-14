@@ -1,5 +1,5 @@
 ---
-title: Building an Overture Map
+title: 建立 Overture 地圖
 ---
 
 import CodeBlock from '@theme/CodeBlock';
@@ -20,7 +20,7 @@ import SeattleWater from '!!raw-loader!@site/src/queries/duckdb/seattle_water_fo
 
 <Map></Map>
 
-### 步驟 1: 僅下載所需資料
+### 步驟 1: 下載所需的資料
 
 Overture Maps 資料以 cloud-native 格式 [GeoParquet](https://geoparquet.org/) 釋出。這些資料進一步按 *主題* 和 *類型* 進行分區。通過使用像 [DuckDB](https://duckdb.org/) 這樣的工具下載資料，可以充分利用這些特性，實現最佳性能。下載並將資料轉換為 GeoJSON 後，我們可以使用 [tippecanoe](https://github.com/felt/tippecanoe) 為每個主題創建 [`PMTiles`](https://github.com/protomaps/PMTiles) 存檔。
 
