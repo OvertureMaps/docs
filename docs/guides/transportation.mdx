@@ -4,7 +4,7 @@ title: Transportation
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
-import ConnectorBBOX from '!!raw-loader!@site/src/queries/duckdb/connector_bbox.sql';
+import SegmentBBOX from '!!raw-loader!@site/src/queries/duckdb/segment_bbox.sql';
 import ParkingAisles from '!!raw-loader!@site/src/queries/duckdb/transportation_parking.sql';
 import Routes from '!!raw-loader!@site/src/queries/duckdb/transportation_routes.sql';
 import SpeedLimits from '!!raw-loader!@site/src/queries/athena/transportation_speed_limits.sql';
@@ -81,8 +81,11 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 | sources | STRUCT[] | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
 | subtype | VARCHAR | The broad category of transportation segment. |
 | class | VARCHAR | Captures the kind of road and its position in the road network hierarchy. |
+| subclass | VARCHAR | Specifies the usage of a length of road. |
+| subclass_rules | STRUCT[] | Defines the portion of a road that the subclass applies to. |
 | names | STRUCT[] | Properties defining the names of a feature. |
-| connector_ids | VARCHAR[] | List of connector IDs identifying the connectors this segment is physically connected to. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
+| connector_ids | VARCHAR[] | Deprecated: List of connector IDs identifying the connectors this segment is physically connected to. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
+| connectors | STRUCT[] | Array of connector IDs identifying the connectors this segment is physically connected to linearly referenced with their location. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
 | routes | STRUCT[] | Routes this segment belongs to. |
 | access_restrictions | STRUCT[] | Rules governing access to this road segment or lane. |
 | level_rules | STRUCT[] | Defines the Z-order, i.e. stacking order, of the road segment. |
@@ -91,6 +94,7 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 | road_flags | STRUCT[] | Additional properties relevant to roads such as is_bridge or is_under_construction. |
 | speed_limits | STRUCT[] | Defines the speed limit of the road segment. |
 | width_rules | STRUCT[] | Defines the width of the road segment for rendering. |
+| destinations | STRUCT[] | Describes the transitions from one segment to another on the way to a specified location. This data is primarily used for routing. |
 </TabItem>
 <TabItem value="connector" label="connector" default>
 | column_name | column_type | Description |
@@ -178,7 +182,7 @@ First, follow the [setup guide for the Python Command-line Tool](/getting-data/o
 
 Set type to either `segment` or `connector` and simply alter the `bbox` value to download a particular area.
 ```
-overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=segment -o rome_connectors.geojson
+overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=segment -o rome_segments.geojson
 ``` 
 </TabItem>
 <TabItem value="DuckDB" label="DuckDB" default>
@@ -187,7 +191,7 @@ First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
 Set the parquet link to either the **connector** or **segment** url depending on your needs.
 
 Replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run the query for a different area.
-<QueryBuilder query={ConnectorBBOX}></QueryBuilder>
+<QueryBuilder query={SegmentBBOX}></QueryBuilder>
 </TabItem>
 </Tabs>
 

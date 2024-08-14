@@ -11,4 +11,4 @@ WHERE
     bbox.xmin > 12.46 AND bbox.xmax < 12.48 AND
     bbox.ymin > 41.89 AND bbox.ymax < 41.91
 )
-TO 'rome_connectors.parquet';
+TO 'rome_segments.parquet';

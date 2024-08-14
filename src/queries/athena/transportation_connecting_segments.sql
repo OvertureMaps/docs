@@ -7,9 +7,9 @@ WITH input AS (
         AND id = '08628d5437ffffff0473ffc36df547db'
 )
 SELECT *,
-    st_geomfrombinary(geometry) AS geometry
+    ST_GEOMFROMBINARY(geometry) AS geometry
 FROM __ATHENA_OVERTURE_RELEASE,
     input
 WHERE type = 'segment'
     AND id != input_id
-    AND contains(connector_ids, input.connector_id)
+    AND CONTAINS(connector_ids, input.connector_id)
