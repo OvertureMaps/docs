@@ -236,7 +236,7 @@ This example selects all the segments that that connect to the example id.
 |:--:| 
 | *Conceptual diagram of the splitter tool output. The numbers follwing 1234@ represent start_lr and end_lr values.* | 
 
-The [transportation-spitter tool](https://github.com/OvertureMaps/transportation-splitter) transforms Overture road data into simpler sub segments. It will divide features at each connector point and at each change of a [scoped based property](/schema/concepts/scoping-rules/). Depending on your needs and map stack, the resulting dataset may be easier to manipulate than the original Overture data as each segment will only have connections at either end and have one set of properties for its entire length.
+The [transportation-spitter tool](https://github.com/OvertureMaps/transportation-splitter) transforms Overture road data into simpler sub segments. It will optionally divide features at each connector point and at each change of a [scoped based property](/schema/concepts/scoping-rules/), depending on configuration. Depending on your needs and map stack, the resulting dataset may be easier to manipulate than the original Overture data as each segment will only have connections at either end and have one set of properties for its entire length.
 
 Since a GERS ID will no longer be unique with this output, the resulting data will have two additional columns: `start_lr` and `end_lr` which are linear references describing which section of the orginal feature this new segment comes from.
 
