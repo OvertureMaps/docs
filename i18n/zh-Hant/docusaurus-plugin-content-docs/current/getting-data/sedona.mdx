@@ -8,15 +8,15 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 
 ## Python + Spatial SQL
-[Sedona](https://sedona.apache.org/) is a cluster computing system for spatial data. You can get a single-node Sedona Docker image from [Apache Software Foundation DockerHub](https://hub.docker.com/r/apache/sedona) or install Sedona to Databricks, AWS EMR and Snowflake using [Wherobots](https://www.wherobots.ai/demo).
+[Sedona](https://sedona.apache.org/) 是一個用於空間數據的叢集計算系統。您可以從 [Apache Software Foundation DockerHub](https://hub.docker.com/r/apache/sedona) 獲取 single-node Sedona Docker 映像檔，或使用 [Wherobots](https://www.wherobots.ai/demo) 將 Sedona 安裝到 Databricks、AWS EMR 和 Snowflake。
 
-To get started with the single-node docker image, run:
+要開始使用 single-node Docker 映像檔，請執行：
 ```bash
 docker pull apache/sedona
 docker run -p 8888:8888 apache/sedona:latest
 ```
 
-A Jupyter Lab and notebook examples will then be available at [localhost:8888](http://localhost:8888/). The following Python + Spatial SQL code reads the Places dataset and runs a spatial filter query on it.
+然後可以在 localhost:8888 看到 Jupyter Lab 和 notebook 範例。以下是 Python + Sedona SQL 程式，讀取 Places 數據集並對其執行空間過濾查詢
 
 ```python
 from sedona.spark import *
@@ -28,4 +28,4 @@ df = sedona.read.format("geoparquet").load("s3a://overturemaps-us-west-2/release
 df.filter("ST_Contains(ST_GeomFromWKT('POLYGON((-122.48 47.43,-122.20 47.75,-121.92 47.37,-122.48 47.43))'), geometry) = true").show()
 ```
 
-For more examples from wherobots, check out their Overture-related [Notebook examples](https://github.com/wherobots/OvertureMaps).
+有關更多 wherobots 的範例，請查看他們與 Overture 相關的 [範例](https://github.com/wherobots/OvertureMaps).

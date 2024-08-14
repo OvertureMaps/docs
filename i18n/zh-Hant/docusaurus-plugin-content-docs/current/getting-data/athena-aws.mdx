@@ -7,31 +7,31 @@ import AthenaSelectExample from '!!raw-loader!@site/src/queries/athena/0_select_
 import CreateAthenaTable from '!!raw-loader!@site/src/queries/athena/0_create_external_table.sql';
 import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.sql';
 
-:::danger
+:::caution
 
 翻譯文檔的作者不是非常熟悉 AWS，相關名詞不是非常準確，還請搭配原文謹慎使用
 
 :::
-您可以按照以下步驟直接在 AWS 中訪問和查詢 Overture 數據。注意：您需要創建一個帳戶才能使用 [Athena](https://aws.amazon.com/athena/) 和其他 AWS 服務。
+按照以下步驟直接在 AWS 中訪問和查詢 Overture 資料。注意：需要創建一個帳戶才能使用 [Athena](https://aws.amazon.com/athena/) 和其他 AWS 服務。
 
 :::tip
-   Overture 的 S3 存儲桶位於 us-west-2 AWS 區域，因此使用 `us-west-2` 以獲得最佳性能。
+   Overture 的 S3 儲存貯體位於 us-west-2 AWS 區域，因此使用 `us-west-2` 以獲得最佳效能。
 :::
 
 
-## 1. 添加 Overture 作為數據來源
+## 1. 添加 Overture 作為資料來源
 
-按照 [這些說明](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html) 將 Overture 作為跨帳戶數據來源添加。Catalog ID 為 `913550007193`。
+按照 [這裡的說明](https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue-cross-account.html) 將 Overture 作為跨帳戶資料來源添加。Catalog ID 為 `913550007193`。
 
   <details>
-        <summary>AWS Glue 數據目錄</summary>
+        <summary>AWS Glue 資料目錄</summary>
         <div>
             ![AWS Glue Catalog](/img/getting-data/aws-glue-data-catalog-values.png)
         </div>
     </details>
 
 
-根據您的 AWS 用戶帳戶/角色所擁有的權限，您可能需要明確啟用對 Overture 目錄的訪問。您可以通過 [添加新的 IAM 策略](https://console.aws.amazon.com/iam/home?#/policies?type=customer) &mdash; 我們建議將其命名為 `OvertureGlueCatalogAccess` &mdash; 並設置以下權限來實現：
+根據 AWS 用戶帳戶/角色所擁有的權限，可能需要明確啟用對 Overture 目錄的訪問。可以通過 [添加新的 IAM 策略](https://console.aws.amazon.com/iam/home?#/policies?type=customer) &mdash; 建議將其命名為 `OvertureGlueCatalogAccess` &mdash; 並設定以下權限：
 
 <details>
   <summary>IAM policy for Overture Glue Data Catalog access</summary>
@@ -63,7 +63,7 @@ import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.
 
 ## 2. 檢查 release tables
 
-現在，每個發佈版本都可以在 `overture` 數據來源中的 `release` 數據庫下作為表格查看（注意表名開頭的 `v`）。每次新發佈時，`overture` 數據目錄將會更新一個新的表格。
+現在，每個發佈版本都可以在 `overture` 資料來源中的 `release` 資料庫下作為表格查看（注意表名開頭的 `v`）。每次新發佈時，`overture` 資料目錄將會更新一個新的表格。
 
  <details>
         <summary>Overture Maps release tables</summary>
@@ -73,13 +73,13 @@ import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.
     </details>
 
 
-## 3. 從發佈表中訪問數據
+## 3. 從 release table 中存取資料
 
-您可以這樣訪問特定發佈版本中的 Overture 數據：
+您可以這樣訪問特定發佈版本中的 Overture 資料：
 
     <QueryBuilder query={AthenaSelectExample}></QueryBuilder>
 
- 這是一個示例查詢，用於獲取大約 25,000 個西雅圖的地點：
+ 這是一個範例查詢，用於獲取大約 25,000 個西雅圖的地點：
 
     <QueryBuilder query={SeattlePlaces}></QueryBuilder>
 
@@ -89,7 +89,7 @@ import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.
 
 ### 使用 DDL 直接添加表
 
-如果您更願意在自己的數據目錄中創建表，您可以在 Athena 查詢控制台中運行完整的 DDL 查詢。這將在您的 AWS 帳戶數據目錄中創建表格，直接指向托管在 Overture 的 S3 存儲桶上的數據。
+如果您更願意在自己的資料目錄中創建表，您可以在 Athena 查詢控制台中運行完整的 DDL 查詢。這將在您的 AWS 帳戶資料目錄中創建表格，直接指向托管在 Overture 的 S3 儲存貯體上的資料。
 
 <details>
     <summary>DDL query statement</summary>
@@ -98,11 +98,11 @@ import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.
     </div>
 </details>
 
-在您運行設置查詢後，您可以通過運行 `MSCK REPAIR TABLE overture` 或從表格選項菜單中選擇「加載分區」來加載分區。
+在運行 set-up 查詢後，可以通過執行 `MSCK REPAIR TABLE overture` 或從表格選項選單中選擇「Load Partitions」來加載分區。
 
-### 在您的數據目錄設置中添加策略
+### 在您的資料目錄設定中添加策略
 
-如果您想與其他用戶和帳戶共享此目錄，您需要添加一個策略以啟用跨帳戶 Glue 目錄訪問。為此，請導航到 [數據目錄設置](https://console.aws.amazon.com/glue/home#/v2/security/settings)，並添加一個類似於以下內容的目錄策略：
+如果您想與其他用戶和帳戶共用此目錄，需要添加一個策略以啟用跨帳戶 Glue 目錄訪問。為此，請到 [資料目錄設定](https://console.aws.amazon.com/glue/home#/v2/security/settings)，並添加一個類似於以下內容的目錄策略：
 
 
 <details>
