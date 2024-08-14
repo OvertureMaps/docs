@@ -213,7 +213,7 @@ The `class` column can be used to pull out subsets of the road data. Similarly, 
 <QueryBuilder query={ParkingAisles}></QueryBuilder>
 </TabItem>
 <TabItem value="Query by routes" label="Query by routes" default>
-You might be interested in a network of roads, such as a US Interstate. These can be extracted using the `routes` column and either using the `network` and `ref` properties and/or the `wikidata` tag to identify the route.
+You might be interested in a network of roads, such as a US Interstate. These can be extracted using the `routes` column and either using the `network` and `ref` properties and/or the `wikidata` column to identify the route.
 
 This example extracts all the roads that are part of US I-5. To get all US Interstates simply remove `AND routes[1].ref = '5'` from the query.
 <QueryBuilder query={Routes}></QueryBuilder>
@@ -257,12 +257,12 @@ To help visualize this process better, here is a real world example of a residen
 <TabItem value="OpenStreetMap" label="OpenStreetMap" default>
 | ![OpenStreetMap Splitter Example](/img/transportation/splitter_osm.png) |
 |:--:| 
-| In OpenStreetMap, this residential road is represented by two different features with the same tags with feature 1 having an additional restricted access tag. |
+| In OpenStreetMap this residential road is represented by two different features with the same tags with feature 1 having an additional restricted access tag. |
 </TabItem>
 <TabItem value="Overture" label="Overture" default>
 | ![Overture Splitter Example](/img/transportation/splitter_overture.png) |
 |:--:| 
-| In Overture, the two segments have been combined into one feature and the restricted access tag has been stored as this linear reference in **access_restrictions**: 
+| In Overture the two segments have been combined into one feature and the restricted access tag has been stored as this linear reference in **access_restrictions**: 
 `[{'access_type': allowed, 'when': {'during': NULL, 'heading': NULL, 'using': NULL, 'recognized': [as_private], 'mode': NULL, 'vehicle': NULL}, 'between': [0.521962729, 1.0]}]` | 
 </TabItem>
 <TabItem value="Transportation Splitter" label="Transportation Splitter" default>
