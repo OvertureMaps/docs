@@ -113,35 +113,42 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 Transportation segments are divided into three subtypes: **rail**, **water**, and **road**. The road subtype is then further divided into a variety of different classes based on usage captured in the table below.
 
 <details>
-    <summary>Class names and feature counts</summary>
+    <summary>Class and subclass feature counts</summary>
 <div>
 <Tabs>
 <TabItem value="classes" label="classes" default>
-| subtype | class | Feature count, July 2024 release |
-|---|---|---|
-| rail |  | 1,891,720 |
-| road | alley | 1,507,160 |
-| road | bridleway | 94,519 |
-| road | crosswalk | 1,736,678 |
-| road | cycleway | 1,213,800 |
-| road | driveway | 14,722,896 |
-| road | footway | 14,149,673 |
-| road | living_street | 2,960,512 |
-| road | motorway | 1,047,400 |
-| road | parking_aisle | 5,860,995 |
-| road | path | 12,487,665 |
-| road | pedestrian | 445,687 |
-| road | primary | 6,917,142 |
-| road | residential | 123,084,186 |
-| road | secondary | 10,719,092 |
-| road | sidewalk | 2,786,910 |
-| road | steps | 1,643,010 |
-| road | tertiary | 19,288,033 |
-| road | track | 23,592,666 |
-| road | trunk | 3,843,984 |
-| road | unclassified | 28,552,184 |
-| road | unknown | 31,725,341 |
-| water |  | 27,169 |
+| subtype | class | subclass | Feature count, August 2024 release |
+|---|---|---|---|
+| rail |  |  | 1894140 |
+| road | bridleway |  | 94649 |
+| road | cycleway | cycle_crossing | 44280 |
+| road | cycleway |  | 1174065 |
+| road | footway | crosswalk | 1756875 |
+| road | footway | sidewalk | 2810219 |
+| road | footway |  | 14203339 |
+| road | living_street |  | 2999247 |
+| road | motorway | link | 623142 |
+| road | motorway |  | 423706 |
+| road | path |  | 12531561 |
+| road | pedestrian |  | 446128 |
+| road | primary | link | 466752 |
+| road | primary |  | 6460325 |
+| road | residential |  | 123137670 |
+| road | secondary | link | 364836 |
+| road | secondary |  | 10362384 |
+| road | service | alley | 1512815 |
+| road | service | driveway | 14792664 |
+| road | service | parking_aisle | 5877422 |
+| road | service |  | 31361555 |
+| road | steps |  | 1649650 |
+| road | tertiary | link | 277297 |
+| road | tertiary |  | 19033943 |
+| road | track |  | 23639360 |
+| road | trunk | link | 530490 |
+| road | trunk |  | 3321652 |
+| road | unclassified |  | 28555304 |
+| road | unknown |  | 398522 |
+| water |  |  | 27198 |
 </TabItem>
 </Tabs>
 </div>
