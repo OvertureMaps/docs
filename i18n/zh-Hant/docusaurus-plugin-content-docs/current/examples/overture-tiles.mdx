@@ -1,122 +1,121 @@
 ---
-title: Creating Tiles
+title: 建立圖磚
 ---
 
-Overture is primarily distributed in the [GeoParquet format](/getting-data/#geoparquet). While GeoParquet is a compact format, **tiles** are essential for creating pannable, zoomable slippy maps for display on the web.
+Overture 主要以 [GeoParquet 格式](/getting-data/#geoparquet) 發佈。雖然 GeoParquet 是一種緊湊的格式，但**圖磚**對於創建可平移、可縮放的 slippy 地圖以供網頁顯示至關重要。
 
-* Data is broken into **equal-sized square chunks** (tiles), to load only the visible data.
-* Tiles are arranged in a pyramid by level of detail, enabling **zoomed-out overviews.**
+* 資料被分解成**等尺寸的方形塊**（圖磚），以便只載入可見的資料。
+* 圖磚按照詳細程度排列成金字塔，以實現**縮小的預覽。**
 
+## GitHub 上的 overture-tiles
 
-## overture-tiles on GitHub
-
-The [overture-tiles GitHub repository](http://github.com/overtureMaps/overture-tiles) contains scripts and programs to generate tilesets from Overture data. These tilesets are designed for an "X-ray" visualization like at **[explore.overturemaps.org](https://explore.overturemaps.org)** to aid in inspecting geometry and properties. **They are not designed to be a production-ready cartographic basemap.**
+[overture-tiles GitHub 儲存庫](http://github.com/overtureMaps/overture-tiles) 包含了從 Overture 資料生成圖磚集的腳本和程式。這些圖磚集設計用於像在 [explore.overturemaps.org](https://explore.overturemaps.org) 進行的 "X-ray" 視覺化，以協助檢查幾何和屬性。**它們並不設計為一個可用於生產的製圖底圖。**
 
 ![explore.overturemaps.org](/img/overture-tiles-header.png)
 
-Each Overture theme is stored as a separate [PMTiles](https://github.com/protomaps/PMTiles) archive.
+每個 Overture 主題都作為單獨的 [PMTiles](https://github.com/protomaps/PMTiles) 存檔儲存。
 
-The individual tiles contain geometry and tags in the open [MVT](https://github.com/mapbox/vector-tile-spec) vector tile format.
+單個圖磚包含在開放的 [MVT](https://github.com/mapbox/vector-tile-spec) 矢量圖磚格式中的幾何和標籤。
 
-## Accessing Tiles
+## 存取圖磚
 
-Overture Tiles are generated with each release. The current beta distribution of tiles are at this url:
+Overture 圖磚在每次發行時生成。目前的測試版圖磚發佈於以下網址：
 
-`s3://overturemaps-tiles-us-west-2-beta/RELEASE/THEME.pmtiles`
+s3://overturemaps-tiles-us-west-2-beta/RELEASE/THEME.pmtiles
 
-These public S3 URLs can also be accessed via HTTP:
+這些公共 S3 URL 也可以通過 HTTP 訪問：
 
-`https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/RELEASE/THEME.pmtiles`
+https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/RELEASE/THEME.pmtiles
 
-### Viewing Tiles
+### 查看圖磚
 
-Local and remote HTTP URLs can be previewed at [pmtiles.io](https://pmtiles.io).
+本地和遠端 HTTP URL 可以在 [pmtiles.io](https://pmtiles.io) 預覽。
 
-[View 2024-07-22/places.pmtiles on pmtiles.io](https://pmtiles.io/?url=https%3A%2F%2Foverturemaps-tiles-us-west-2-beta.s3.amazonaws.com%2F2024-07-22%2Fplaces.pmtiles)
+[在 pmtiles.io 上查看 2024-07-22/places.pmtiles](https://pmtiles.io/?url=https%3A%2F%2Foverturemaps-tiles-us-west-2-beta.s3.amazonaws.com%2F2024-07-22%2Fplaces.pmtiles)
 
-### Area Extracts
 
-To create a new tileset for only part of the world, use the `extract` command of the [`pmtiles` CLI](https://github.com/protomaps/go-pmtiles).
+### 區域取樣
 
-To get all `buildings` tiles around Ghent, Belgium:
+要為世界的某個部分創建新的圖磚集，請使用 [`pmtiles` CLI](https://github.com/protomaps/go-pmtiles) 的 `extract` 指令。
+
+要獲取比利時根特周圍的所有 `建築物` 圖磚：
 
 ```
 pmtiles extract https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/buildings.pmtiles ghent.pmtiles --bbox=3.660507,51.004250,3.784790,51.065996
 ```
 
-## On AWS
+## 在 AWS 上
 
-The `overture-tiles` scripts can be automated with [AWS Batch](https://docs.aws.amazon.com/batch/), which generates the largest global tilesets in ~90 minutes using `c7gd.16xlarge` Ec2 instances on demand. Costs incurred include on-demand instances and S3 storage + transaction costs.
+`overture-tiles` 腳本可以與 [AWS Batch](https://docs.aws.amazon.com/batch/) 一起自動化，使用 `c7gd.16xlarge` 型號的 EC2 實例按需生成全球最大圖磚集，大約需要 90 分鐘。產生的費用包括按需實例、S3 存儲和交易成本。
 
-### Prerequisites
+### 需要事先設定的環境
 
 * [AWS CLI](https://docs.aws.amazon.com/cli/)
 * [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) `npm install -g aws-cdk`
-* Docker Desktop
+* Docker 桌面版
 
-### Setup
+### 設定
 
-1. Modify `bin/overture-tiles-cdk.ts`, specifying a different S3 bucket name.
+1. 修改 `bin/overture-tiles-cdk.ts`，指定不同的 S3 儲存貯體名稱。
 
-2. From the `overture-tiles-cdk` repository:
+2. 從 `overture-tiles-cdk` 儲存庫運行：
 
 ```
 npm run cdk bootstrap
 npm run cdk deploy
 ```
 
-3. Authenticate your Docker client with the provisioned AWS Elastic Container Registry (ECR) in the web console. Use **View Push Commands** to build the `Dockerfile` in the `overture-tiles` repository and push to ECR:
+3. 在網頁控制台中使用 AWS 彈性容器註冊表 (ECR) 認證 Docker 客戶端。使用 **View Push Commands** 生成 `overture-tiles` 儲存庫中的 `Dockerfile`，並推送至 ECR：
 
 ![explore.overturemaps.org](/img/overture-tiles-view-push-commands.png)
 
-4. Submit jobs from the [AWS Batch](https://console.aws.amazon.com/batch/home#jobs) console. 
+4. 從 [AWS Batch](https://console.aws.amazon.com/batch/home#jobs) console 提交作業。
 
 ![explore.overturemaps.org](/img/overture-tiles-job-definitions.png)
 
-  * Select from the available **Job Definitions**. Each Definition is associated with a version and theme from an Overture release.
+  * 選擇可用的 **Job Definitions** 。每個定義與 Overture 發布版本中的一個版本和主題相關聯。
 
-  * Select the **OvertureTilesQueue** as the Job queue.
+  * 選擇 **OvertureTilesQueue** 作為工作佇列。
 
-  * Once the job is complete, the tileset will be available at `s3://BUCKET_NAME/RELEASE/THEME.pmtiles`.
+  * 工作完成後，可在 `s3://BUCKET_NAME/RELEASE/THEME.pmtiles`拿到圖磚集。
 
-## On Your Workstation
+## 在本地工作站
 
-### Requirements
+### 環境需求
 
-* a Java Runtime Environment, version 22+, to build the `addresses`, `base`, `buildings` and `transportation` themes, along with `planetiler.jar` from [onthegomap/planetiler Releases](https://github.com/onthegomap/planetiler/releases).
-* the [felt/tippecanoe](https://github.com/felt/tippecanoe?tab=readme-ov-file#installation) tool and the [DuckDB CLI](https://duckdb.org/docs/installation/) for other themes.
-* the [aws CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) for downloading Overture data.
+* Java Runtime Environment 版本 22+，用於生成 `addresses`、`base`、`buildings` 和 `transportation` 主題，以及來自 [onthegomap/planetiler Releases](https://github.com/onthegomap/planetiler/releases) 的 `planetiler.jar`。
+* [felt/tippecanoe](https://github.com/felt/tippecanoe?tab=readme-ov-file#installation) 工具和 [DuckDB CLI](https://duckdb.org/docs/installation/) 用於其他主題。
+* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) 用於下載 Overture 資料。
 
 ### Scripts
 
-* Copy the Overture Parquet dataset to your local machine
-  [using these docs](https://github.com/OvertureMaps/data/blob/main/README.md#how-to-access-overture-maps-data). If you want to only run on a small sample of data, you can use only the first `.parquet` file instead of all in the directory.
+* 使用 [這些文檔](https://github.com/OvertureMaps/data/blob/main/README.md#how-to-access-overture-maps-data) 將 Overture Parquet 資料集複製到您的本地機器。如果您只想運行一個小樣本資料，可以僅使用目錄中的第一個 `.parquet` 文件，而不是全部。
 
-* for the `base`, `buildings` and `transportation` themes, generate the tileset with java:
+* 對於 `base`、`buildings` 和 `transportation` 主題，使用 Java 生成圖磚集：
 
 ```sh
 # --data indicates where your Overture data is (overture/theme=base/...)
 java -cp planetiler.jar profiles/Base.java --data=overture
 ```
 
-The above command outputs `base.pmtiles` in the `data` dir.
+上述命令會在 `data` 目錄中輸出 `base.pmtiles`。
 
-* for other themes, run the theme script in `themes/`:
+* 對於其他主題，運行 `themes/` 中的主題腳本：
 
 ```sh
 scripts/2024-07-22/places.sh overture places.pmtiles
 ```
 
-This reads from Overture data in `overture` and writes `places.pmtiles`.
+這個命令從 `overture` 讀取 Overture 數據，並將結果寫進 `places.pmtiles`。
 
-## Customization
+## 自訂
 
-The tilesets accompanying Overture releases are primarily for powering explore.overturemaps.org. For your own application, you may want to:
+Overture 發布的圖磚集主要用於 explore.overturemaps.org。對於您自己的應用，您可能希望：
 
-* Limit or modify the properties of each feature, to reduce the tile sizes.
-* Change what features or properties are included at generalized lower zoom levels.
+* 限制或修改每個特徵的屬性，以減少圖磚大小。
+* 更改在較低縮放級別中包含的特徵或屬性。
 
-In these examples we'll work with a small area extract of Boston in the `boston/` folder, but all tiling methods can scale to the full dataset.
+在這些範例中，在`boston/`文件夾中處理波士頓的一個小區域提取，但所有平鋪方法都可以延伸到完整資料集。
 
 ```sh
 mkdir -p boston/theme=buildings/type=building
