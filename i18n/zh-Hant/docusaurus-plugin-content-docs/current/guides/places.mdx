@@ -58,7 +58,7 @@ Overture places 主題有一個特徵類型，稱為 `place`，包含超過 5300
 | phones | VARCHAR[] | 地點的電話號碼。 |
 | brand | STRUCT | 地點的品牌。擁有多個品牌的位置被建模為多個獨立的地點，每個地點都有自己的品牌。 |
 | addresses | STRUCT | 地點的地址。 |
-
+</TabItem>
 </Tabs>
 </div>
 </details>
@@ -104,58 +104,58 @@ overturemaps download -f geoparquet --type=place -o places.geoparquet
 這樣將下載您螢幕上可見的區域。
 </TabItem>
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
-First, follow the [setup guide for the Python Command-line Tool](/getting-data/overturemaps-py/).
+首先，請按照 [Python Command-line Tool的安裝指南](/getting-data/overturemaps-py/) 進行設定。
 
-Simply alter the `bbox` value to download a particular area.
+只需更改 `bbox` 值以下載特定區域。
 ```
 overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=place -o rome.geojson
 ``` 
 </TabItem>
 <TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
+首先，請按照 [DuckDB 的安裝指南](/getting-data/duckdb/) 進行設定。
 
-Replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run the query for a different area.
+用新的 bounding box 替換 `bbox.xmin` 和 `bbox.ymin` 值，以針對不同區域運行查詢。
 <QueryBuilder query={RomeQuery}></QueryBuilder>
 </TabItem>
 </Tabs>
 
-## Data manipulation and analysis
+## 資料操作與分析
 
-### Querying by properties
+### 按屬性查詢
 
-These examples use data properties in the address, category, and confidence scores columns to filter the data in useful ways using DuckDB.
+這些示例使用地址、類別和信心分數列中的資料屬性，以便通過 DuckDB 以有用的方式過濾資料。
 <Tabs>
-<TabItem value="Query by address" label="Query by address" default>
-The `address` column can be used to quickly filter data down to a particular political unit. This example uses the country key to get all the data with addresses in Lithuania. Region can be likewise used to extract data from smaller units such as US states.
+<TabItem value="Query by address" label="按地址查詢" default>
+`address` 列可用於快速過濾資料到特定的政治單位。這個例子使用國家鍵來獲取所有在立陶宛的地址資料。區域也可以用來從較小的單位（例如美國州）中提取資料。
 <QueryBuilder query={LithuaniaQuery}></QueryBuilder>
 </TabItem>
-<TabItem value="Query by category" label="Query by category" default>
-For filtering data by a particular type of place we can use the `categories` column. In this example we'll extract all the places with categories of `rice_mill` or `flour_mill`
+<TabItem value="Query by category" label="按類別查詢" default>
+要按特定類型的地點過濾資料，我們可以使用 `categories` 列。在這個例子中，我們將提取所有類別為 `rice_mill` 或 `flour_mill` 的地點。
 
-The full category list is available [here](https://github.com/OvertureMaps/schema/blob/main/task-force-docs/places/overture_categories.csv).
+完整的類別列表可以在 [這裡](https://github.com/OvertureMaps/schema/blob/main/task-force-docs/places/overture_categories.csv) 找到。
 <QueryBuilder query={MillQuery}></QueryBuilder>
 </TabItem>
 <TabItem value="Query by confidence score" label="Query by confidence score" default>
-Suppose you only want data that definitely exists and is accurate. We can use the `confidence` score to filter out data below a certain threshold to remove any suspect data.
+假設您只想要確定存在且準確的資料。我們可以使用 `confidence` 分數來過濾低於某個閾值的資料，以排除任何可疑資料。
 <QueryBuilder query={ConfidenceQuery}></QueryBuilder>
 </TabItem>
 </Tabs>
 
-### Advanced examples
+### 進階範例
 
-These examples present some use cases that combine places data with other datasets.
+這些範例展示了一些將地點資料與其他資料集結合的使用案例。
 
 <Tabs>
-<TabItem value="Conflate with OpenStreetMap" label="Conflate with OpenStreetMap" default>
-Overture Places can be a valuable source for conflating with or enhancing your own existing dataset. 
+<TabItem value="Conflate with OpenStreetMap" label="與 OpenStreetMap 結合" default>
+Overture Places 可以作為一個有價值的來源，用於與您現有的資料集進行結合或增強。
 
-In this example, suppose we want to use OpenStreetMap POIs for a project but would like to fill in any missing attributes such as addresses or phone numbers with Overture Place data.
+在這個例子中，假設我們希望使用 OpenStreetMap 的 POI 進行一個項目，但希望用 Overture Places 的資料填補任何缺失的屬性，如地址或電話號碼。
 
-Using some basic matching logic, we can join these two datasets together to create a more robust final product. By also joining the GERS ID to our output dataset we could easily keep our now conflated dataset synced with future Overture releases with a simple join.
+通過一些基本的匹配邏輯，我們可以將這兩個資料集連接在一起，以創建一個更全面的最終產品。通過將 GERS ID 也連接到我們的輸出資料集，我們可以輕鬆地將現在合併的資料集與未來的 Overture 發行版本保持同步。
 
-To run this example yourself, an Oregon PBF can be obtained from [Geofabrik](https://download.geofabrik.de/north-america/us/oregon.html).
+要自己運行此範例，可以從 [Geofabrik](https://download.geofabrik.de/north-america/us/oregon.html) 獲取 Oregon 的 PBF 檔案。
 
-Note: Joining data with a CDLA Permissive 2.0 license to OSM is permitted but the resulting data may need to carry the Open Database License (ODbL) if it is a derivative database.  Please see the [OSM Collective Database Guideline](https://osmfoundation.org/wiki/Licence/Community_Guidelines/Collective_Database_Guideline_Guideline) for information on this topic.
+注意：將具有 CDLA Permissive 2.0 許可證的資料與 OSM 進行結合是被允許的，但結果資料可能需要遵循 Open Database License (ODbL) 如果它是一個衍生資料庫。請參閱 [OSM Collective Database Guideline](https://osmfoundation.org/wiki/Licence/Community_Guidelines/Collective_Database_Guideline_Guideline) 瞭解更多訊息。
 <details>
     <summary>Query</summary>
 <div>
@@ -164,9 +164,9 @@ Note: Joining data with a CDLA Permissive 2.0 license to OSM is permitted but th
 </details>
 </TabItem>
 <TabItem value="Find building addresses" label="Find building addresses" default>
-Suppose you are interested in having address data attached to buildings. The [Overture addresses](/schema/reference/addresses/address/) theme might be a good place to check, but let's assume it does not cover the area you are interested in.
+如果您想要將地址資料附加到建築物上。可以查看 [Overture addresses](/schema/reference/addresses/address/) 主題，但我們先假設它沒有涵蓋您要找的區域。
 
-The places theme has wide coverage and many of the place point features have addresses associated with them. Using an intersect we can find places that fall inside buildings and then join the place's address to the building polygon.
+places 主題具有廣泛的覆蓋範圍，許多地點點位特徵都有關聯的地址。通過使用交集，我們可以找到落在建築物內的地點，然後將地點的地址連接到建築物多邊形上。
 <details>
     <summary>Query</summary>
 <div>
@@ -176,10 +176,9 @@ The places theme has wide coverage and many of the place point features have add
 </TabItem>
 </Tabs>
 
-## Tools and libraries
+## 套件和工具
 
 ### Rapid
-Rapid, an OpenStreetMap editor, is capable of displaying places data as a reference layer by following the guide [here](/examples/rapid-id/).
+Rapid 是一個 OpenStreetMap 編輯器，能夠通過參考 [此處的指南](/examples/rapid-id/) 顯示地點資料作為參考圖層。
 
-The license is compatible with OSM and this data can be used for mapping.
-
+該授權與 OSM 兼容，這些資料可用於製作地圖。

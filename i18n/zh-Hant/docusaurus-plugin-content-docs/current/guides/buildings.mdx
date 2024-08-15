@@ -9,12 +9,12 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 import BuildingsMap from '@site/src/components/buildings-map';
 
-## Overview
+## 概要
 
-The Overture Maps buildings theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). The theme includes two feature types:
+Overture Maps 的建築主題描述了擁有屋頂或內部空間的人工建築，這些建築在某個地方是永久性或半永久性存在的（來源： [OSM 建築定義](https://wiki.openstreetmap.org/wiki/Key:building)）。該主題包括兩種特徵類型：
 
-- **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
-- **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
+- **`building`**: 最基本的建築特徵形式。幾何形狀預期為建築物的最外層足跡—如果從衛星/航空影像追蹤，則為屋頂印跡。建築物有一個布林屬性 `has_parts`，描述是否存在任何相關的建築部分。
+- **`building_part`**: 建築物的一個部分。建築部分可能與建築物具有相同的屬性。建築部分通過 `building_id` 與父建築物相關聯。
 
 
 
