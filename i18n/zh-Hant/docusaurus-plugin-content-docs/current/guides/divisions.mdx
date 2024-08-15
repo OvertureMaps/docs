@@ -210,27 +210,26 @@ Command-line 選項:
 
 ## 資料使用指南
 
-We recommend querying and downloading only the Overture data you need.
-If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract divisions data.
+我們建議只查詢和下載您需要的 Overture 資料。如果您對特定的地理區域感興趣，有幾種選擇可以使用簡單的 bounding box 來提取 divisions 資料。
 
 <Tabs>
 
 <TabItem value="Overture Maps Explorer" label="Overture Maps Explorer" default>
-To quickly view and download modest amounts of data, you can use the [Overture Maps Explorer website](https://explore.overturemaps.org/#15.07/41.89731/12.47626).
+要快速查看和下載適量資料，您可以使用 [Overture Maps Explorer 網站](https://explore.overturemaps.org/#15.07/41.89731/12.47626)。
 
-To download data: Pan to the area you are interested in, turn off the other layers, then click `Download Visible`.
+要下載資料：移動到您感興趣的區域，關閉其他圖層，然後點擊 `Download Visible`。
 
-This will download the area visible on your screen.
+這將下載您螢幕上可見的區域。
 
 | ![Exploring divsions data in NYC](/img/divisions/divisions-us.gif) | 
 |:--:| 
-| *Exploring divisions data in NYC using [Overture's Explore tool](https://explore.overturemaps.org/#10.35/40.802/-73.9407).* |
+| *使用 [Overture 的 Explore 工具](https://explore.overturemaps.org/#10.35/40.802/-73.9407) 探索紐約市的 divisions 資料。* |
 </TabItem>
 
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
-First, follow the [setup guide for the Python Command-line Tool](/getting-data/overturemaps-py/).
+首先，請參閱 [Python Command-line Tool的設定指南](/getting-data/overturemaps-py/)。 
 
-You can alter the `bbox` value to download a particular area.
+您可以更改 `bbox` 值來下載特定區域的資料。
 
 ```
 overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=divisions -o boston.geojson
@@ -238,19 +237,19 @@ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=div
 </TabItem>
 
 <TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
+首先，請參閱 [DuckDB 的設定指南](/getting-data/duckdb/)。 
 
-DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area.
+DuckDB 允許您在查詢中傳遞 bounding box 以選擇指定地理區域中的特徵。
 
-This example returns results for the country boundary between the US and Mexico:
+以下範例返回美國與墨西哥之間的國界邊界：
 <QueryBuilder query={BorderUSMX}></QueryBuilder>
 </TabItem>
 
 </Tabs>
 
-## Data manipulation and analysis
+## 資料處理與分析
 
-Using these queries, you can get counts for each feature type in divisions.
+使用這些查詢，您可以獲得 divisions 中每種類型特徵的數量。
 
 <Tabs>
 
@@ -284,55 +283,55 @@ Using these queries, you can get counts for each feature type in divisions.
 
 </Tabs>
 
-#### Exporting locality and neighborhood divisions to a local shapefile
+#### 將 locality 和 neighborhood 分區導出到本地 shapefile
 
-This query will return a subset of fields and the geometry for each locality and neighborhood division entity in Denmark.
+此查詢將返回丹麥的每個 locality 和 neighborhood 分區實體的欄位子集和幾何圖形。
 
 <details>
-	<summary>Query</summary>
+	<summary>查詢</summary>
 <QueryBuilder query={DenmarkLocalityNeighborhood}></QueryBuilder>
 </details>
 
-#### Exporting places data within Philadelphia to a local Parquet file
+#### 將費城內的地點資料導出到本地 Parquet 檔案
 
-This query will return Places theme data for any place within the locality of Philadelphia
+此查詢將返回費城 locality 中的 Places 主題資料
 
 <details>
-	<summary>Query</summary>
+	<summary>查詢</summary>
 <QueryBuilder query={PhillyPlaces}></QueryBuilder>
 </details>
 
-## Revision history 
-### Version info 
+## 修訂歷史
+### 版本訊息
 
-You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
+您可以在 [此處](https://docs.overturemaps.org/release/latest/) 找到最新的版本說明。
 
-## Support
+## 支援
 
-### Feedback 
+### 回饋
 
-You can find a list of Overture repositories [here](https://github.com/orgs/OvertureMaps/repositories).
+您可以在 [此處](https://github.com/orgs/OvertureMaps/repositories) 找到 Overture 的所有儲存庫。
 
-Discussions are generally reserved for broader conversations around the divisions project as a whole (supporting a new workflow, adding a dataset, null attributes).
+Discussions 一般用於有關 divisions 項目的更廣泛對話（支援新的工作流程，添加資料集，處理空值屬性）。
 
-Issues are generally reserved for more specific concerns with specific entities in the dataset (geometry validation, missing entities, duplicate entities) or country-specific concerns.
+Issues 通常針對資料集中的特定實體（幾何驗證，缺失實體，重複實體）或特定國家的問題。
 
 ### Discussions 
 
-You can start and add to discussions in each of the public Overture repositories. Some examples:
+您可以在每個公開的 Overture 儲存庫中開始和添加討論。以下是一些例子：
 
-- **General Overture Discussions**: https://github.com/orgs/OvertureMaps/discussions
-- **Data Discussions**: https://github.com/OvertureMaps/data/discussions
-- **Schema Discussions**: https://github.com/OvertureMaps/schema/discussions
+- **一般 Overture 討論**: https://github.com/orgs/OvertureMaps/discussions
+- **資料討論**: https://github.com/OvertureMaps/data/discussions
+- **架構討論**: https://github.com/OvertureMaps/schema/discussions
 
-Discussions around Overture's divisions data should be filed in the Data repository.
+有關 Overture 的 divisions 資料的討論應該在 Data 儲存庫中進行。
 
 ### Issues 
 
-You can start and add to issues in each of the public Overture repositories, too. Some examples:
+您也可以在每個公開的 Overture 儲存庫中開始和添加問題。以下是一些例子：
 
-- **Data Issues**: https://github.com/OvertureMaps/data/issues
-- **Schema Issues**: https://github.com/OvertureMaps/schema/issues
-- **Tiles issues**: https://github.com/OvertureMaps/overture-tiles/issues
+- **資料問題**: https://github.com/OvertureMaps/data/issues
+- **架構問題**: https://github.com/OvertureMaps/schema/issues
+- **圖磚問題**: https://github.com/OvertureMaps/overture-tiles/issues
 
-Issues around Overture's divisions data should be filed in the data repository.
+有關 Overture 的 divisions 資料的問題應該在 Data 儲存庫中提出。
