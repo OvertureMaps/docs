@@ -43,6 +43,7 @@ const sidebars = {
       },
       collapsed: true,
       items: [
+        'guides/addresses',
         'guides/base',
         'guides/buildings',
         'guides/divisions',
