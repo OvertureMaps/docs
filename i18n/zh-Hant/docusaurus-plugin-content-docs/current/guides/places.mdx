@@ -1,5 +1,5 @@
 ﻿---
-title: Places
+title: 地點
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -48,7 +48,7 @@ Overture places 主題有一個特徵類型，稱為 `place`，包含超過 5300
 | geometry | BLOB | 地點位置的點表示。地點的幾何形狀必須是 GeoJSON schema 定義的點。 |
 | bbox | STRUCT | 由兩個經度和兩個緯度定義的區域：緯度為 -90.0 到 90.0 之間的十進制數；經度為 -180.0 到 180.0 之間的十進制數。 |
 | version | INTEGER | 特徵的版本號，在每次 Overture 版本更新中，當該特徵的幾何形狀或屬性發生變化時，版本號會遞增。 |
-| sources | STRUCT | 給定特徵屬性的源訊息數組，每個條目都是一個源對象，列出了 JSON 指針符號表示的屬性和該特定值來源的資料集。所有特徵必須有一個根級別的源，這是默認源，如果未指定特定屬性的源，則使用此默認源。 |
+| sources | STRUCT | 給定特徵屬性的源訊息數組，每個條目都是一個源對象，列出了 JSON 指標符號表示的屬性和該特定值來源的資料集。所有特徵必須有一個根級別的源，這是默認源，如果未指定特定屬性的源，則使用此默認源。 |
 | names | STRUCT | 定義特徵名稱的屬性。 |
 | categories | STRUCT | 地點的類別。完整列表可在 GitHub 上找到：https://github.com/OvertureMaps/schema/blob/main/task-force-docs/places/overture_categories.csv |
 | confidence | DOUBLE | 地點存在的信心程度。數值範圍是 0 到 1 之間。0 表示我們確定該地點不存在（或不再存在）。1 表示我們確定該地點存在。如果沒有任何值，代表我們還沒有任何可信的訊息。 |
@@ -114,7 +114,7 @@ overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=place -o 
 <TabItem value="DuckDB" label="DuckDB" default>
 首先，請按照 [DuckDB 的安裝指南](/getting-data/duckdb/) 進行設定。
 
-用新的 bounding box 替換 `bbox.xmin` 和 `bbox.ymin` 值，以針對不同區域運行查詢。
+用新的 bounding box 替換 `bbox.xmin` 和 `bbox.ymin` 值，以針對不同區域執行查詢。
 <QueryBuilder query={RomeQuery}></QueryBuilder>
 </TabItem>
 </Tabs>
@@ -123,7 +123,7 @@ overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=place -o 
 
 ### 按屬性查詢
 
-這些示例使用地址、類別和信心分數列中的資料屬性，以便通過 DuckDB 以有用的方式過濾資料。
+這些範例使用地址、類別和信心分數列中的資料屬性，以便通過 DuckDB 以有用的方式過濾資料。
 <Tabs>
 <TabItem value="Query by address" label="按地址查詢" default>
 `address` 列可用於快速過濾資料到特定的政治單位。這個例子使用國家鍵來獲取所有在立陶宛的地址資料。區域也可以用來從較小的單位（例如美國州）中提取資料。
@@ -153,7 +153,7 @@ Overture Places 可以作為一個有價值的來源，用於與您現有的資�
 
 通過一些基本的匹配邏輯，我們可以將這兩個資料集連接在一起，以創建一個更全面的最終產品。通過將 GERS ID 也連接到我們的輸出資料集，我們可以輕鬆地將現在合併的資料集與未來的 Overture 發行版本保持同步。
 
-要自己運行此範例，可以從 [Geofabrik](https://download.geofabrik.de/north-america/us/oregon.html) 獲取 Oregon 的 PBF 檔案。
+要自己執行此範例，可以從 [Geofabrik](https://download.geofabrik.de/north-america/us/oregon.html) 獲取 Oregon 的 PBF 檔案。
 
 注意：將具有 CDLA Permissive 2.0 許可證的資料與 OSM 進行結合是被允許的，但結果資料可能需要遵循 Open Database License (ODbL) 如果它是一個衍生資料庫。請參閱 [OSM Collective Database Guideline](https://osmfoundation.org/wiki/Licence/Community_Guidelines/Collective_Database_Guideline_Guideline) 瞭解更多訊息。
 <details>
