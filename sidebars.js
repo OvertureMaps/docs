@@ -31,6 +31,7 @@ const sidebars = {
         'examples/lonboard',
         'examples/kepler-gl',
         'examples/rapid-id',
+        'examples/overture-tiles',
         'examples/build-a-map',
         'examples/QGIS',
       ]
@@ -44,6 +45,7 @@ const sidebars = {
       },
       collapsed: true,
       items: [
+        'guides/addresses',
         'guides/base',
         'guides/buildings',
         'guides/divisions',
