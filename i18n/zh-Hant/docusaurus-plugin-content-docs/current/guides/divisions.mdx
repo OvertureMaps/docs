@@ -1,5 +1,5 @@
----
-title: Divisions
+﻿---
+title: 分區
 ---
 
 import Tabs from '@theme/Tabs';
@@ -18,32 +18,32 @@ import SubTypeCountsUSMXCA from '!!raw-loader!@site/src/queries/duckdb/divisions
 import DenmarkLocalityNeighborhood from '!!raw-loader!@site/src/queries/duckdb/divisions_denmark_locality_neighborhood.sql';
 import PhillyPlaces from '!!raw-loader!@site/src/queries/duckdb/divisions_philly_places.sql';
 
-## Overview
+## 概要
 
-The Overture divisions theme has three feature types: `division`, `division_area`, and `division_boundary`.
+Overture Divisions 主題包含三種類型的特徵：`division`、`division_area` 和 `division_boundary`。
 
-There are more than 5.3 million point, line, and polygon representations of human settlements, such as such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. (See the [attribution page](https://docs.overturemaps.org/attribution/) for more information.) 
+此主題涵蓋超過 530 萬個點、線和多邊形的表現形式，這些表現形式包括國家、地區、州、市甚至鄰里。該主題來自 [OpenStreetMap](https://www.openstreetmap.org/) 資料和 [geoBoundaries](https://www.geoboundaries.org/) 資料的融合，並根據 [ODbL](https://opendatacommons.org/licenses/odbl/) 授權協定提供。（更多訊息請參見 [致謝頁面](https://docs.overturemaps.org/attribution/)。）
 
-Divisions data can be used for many purposes, which can include, but are not limited to:
-- reverse-geocoding
-- cartographic styling and map rendering
-- place labels
-- choropleth rendering
-- containment checks (e.g. point-in-polygon analysis)
-- choosing a geometry based on your use case
+Divisions資料可以用於許多目的，包括但不限於：
+- 反向地理編碼
+- 地圖樣式設定和渲染
+- 地點標籤
+- 色階渲染
+- 包含檢查（例如點在多邊形分析）
+- 根據使用情境選擇幾何形狀
 
 | ![Overture divisions coverage - country and region boundaries](/img/divisions/divisions-admin0-admin1-coverage.png) | 
 |:--:| 
-| *Overture divisions data, styled by subtype: countries in purple, region boundaries as green lines.* | 
+| *Overture Divisions資料，按子類型設定樣式：國家用紫色標識，地區邊界用綠色線條表示。* | 
 
-## Dataset description
+## 資料集描述
 
-### Feature type descriptions 
+### 特徵類型描述 
 
-A `division` is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `division` feature type](/schema/reference/divisions/division).
+`division` 是一種類型的特徵，代表官方或非官方的人員組織：國家、地區、省、市、鄰里等——從給定的政治視角來看。它具有 `Point` 幾何形狀，提供了與該特徵最常關聯的位置的大致位置。我們鼓勵您參閱 [`division` 特徵類型的 schema 參考文檔](/schema/reference/divisions/division)。
 
 <details>
-	<summary>Counts, per subtype, of the division feature type</summary>
+	<summary>每個子類型的 division 特徵類型數量</summary>
 
 ```
 ┌──────────────┬──────────────┐
@@ -59,12 +59,10 @@ A `division` is a feature type that represents an official or non-official organ
 │          272 │ country      │
 └──────────────┴──────────────┘
 ```
-</details>
-
-A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry. We encourage you to consult the [schema reference documentation for the `division_area` feature type](/schema/reference/divisions/division_area).
+`division_area` 是一種類型的特徵，用於捕捉屬於 `division` 特徵的土地面積或土地和領海（海洋）的形狀。它具有 `Polygon` 或 `MultiPolygon` 幾何形狀。我們建議您參閱 [`division_area` 特徵類型的 schema 參考文檔](/schema/reference/divisions/division_area)。
 
 <details>
-	<summary>Counts, per subtype, of the division_area feature type</summary>
+	<summary>每個子類型的 division_area 特徵類型數量</summary>
 
 ```
 ┌──────────────┬──────────────┐
@@ -81,10 +79,10 @@ A `division_area` is a feature type that captures the shape of the land area, or
 ```
 </details>
 
-A `division_boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `divison_boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. Please consult the [schema reference documentation for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
+`division_boundary` 是一種類型的特徵，表示兩個 `division` 特徵之間的共享邊界。它具有 `LineString` 幾何形狀。`division_boundary` 的幾何形狀要麼完全是非海洋的，要麼完全是海洋的。海洋邊界是非海洋邊界進入水域的延伸。請參閱 [`division_boundary` 特徵類型的 schema 參考文檔](/schema/reference/divisions/division_boundary)。
 
 <details>
-	<summary>Counts, per subtype, of the division_boundary feature type</summary>
+	<summary>每個子類型的 division_boundary 特徵類型數量</summary>
 
 ```
 ┌──────────────┬─────────┐
@@ -100,39 +98,39 @@ A `division_boundary` is a feature type that represents a shared border between 
 
 :::warning
 
-The `division_boundary` feature type was introduced in the July 2024 release. It replaced the `boundary` feature type.
+`division_boundary`特徵類型在 2024 年 7 月的版本中引入。它取代了 `boundary` 特徵類型。
 
 :::
 
 ### Subtype descriptions 
 
-Subtypes can represent each feature's administrative level, from `country` down to `microhood`. Subtypes can also represent a place hierarchy within a country and offer a standardized place definition for divisions. See below for a list of subtypes and their descriptions in the divisions theme:
+子類型可以表示每個特徵的行政級別，從 `country` 到 `microhood`。子類型還可以代表國家內的地點層級，並為 Divisions 提供標準化的地點定義。以下是 Divisions 主題中所有子類型的列表及其描述：
 
 <details>
-	<summary>List of all subtypes in the divisions theme</summary>
+	<summary>divisions 主題中的所有子類型</summary>
 
-| Subtype | Description | Example |
-| -------- | -------- | ------- |
-| **country** | Largest unit of independent sovereignty. | United States |
-| **dependency** | A place that is not exactly a sub-region of a country but is dependent on a parent company for defence, passport control, subsidies, etc. | Puerto Rico |
-| **macroregion** | A bundle of regions. These exist mainly in Europe. | Scotland; Île-de-France |
-| **region** | States, provinces, regions. Largest sub-country administrative unit most countries, unless they have dependencies/macroregions. | Alaska; Alberta |
-| **macrocounty** | A bundle of counties. Again, these exist mainly in Europe. | Inverness |
-| **county** | Counties... Largest sub-region administrative unit in most countries, unless they have macrocounties. | Kings County, NY |
-| **localadmin** | A level of government available in some parts of the world that contains localities or populated places that themselves have no authority. Often but not exclusively found in Europe. | Paris |
-| **locality** | A populated place that may or may not have its own administrative authority. (It won't if it belongs to a localadmin.) | Taipei |
-| **borough** | A local government unit, below the locality placetype. | Brooklyn, Queens, etc. |
-| **macrohood** | A super-neighborhood that contains smaller divisions of type neighborhood. | BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
-| **neighborhood** | A neighborhood. Most neighborhoods will be just this, unless there's enough granular division to warrant introducing macrohood and/or microhood divisions. | Cobble Hill |
-| **microhood** | A mini-neighborhood that is contained within a division of type neighborhood. | Gätjensort in Hamburg |
+| 子類型          | 描述                                                                                   | 範例                       |
+| --------------- | -------------------------------------------------------------------------------------- | -------------------------- |
+| **country**     | 最大的獨立主權單位。                                                                   | United States              |
+| **dependency**  | 不完全是國家的子區域，但在國防、護照管控、社會津貼等方面依賴母國的地點。                 | 波多黎各自由邦 Puerto Rico                |
+| **macroregion** | 多個地區的集合。這些主要存在於歐洲。                                                   | Scotland; Île-de-France    |
+| **region**      | 州、省、地區。大多數國家中最大的子國家行政單位，除非它們有dependencies/macroregions。            | Alaska; Alberta            |
+| **macrocounty** | 多個縣的集合。這些主要也存在於歐洲。                                               | Inverness                  |
+| **county**      | 縣，大多數國家中最大的地方行政單位，除非它們有更大的縣級。                                 | Kings County, NY           |
+| **localadmin**  | 在世界某些地區提供的一級政府，包含沒有自身權力的地區或人口稠密地區。通常但不僅限於歐洲。| Paris                      |
+| **locality**    | 可能有或可能沒有自身行政權力的人口聚居地。(如果屬於地方管理區，則沒有。)               | Taipei                     |
+| **borough**     | 地方性政府單位，低於 locality 類型。                                                         | Brooklyn, Queens, etc.     |
+| **macrohood**   | 包含更小的鄰里類型分區的區域。                                                     | BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
+| **neighborhood**| 一個社區。大多數社區都屬於此類型，除非有足夠細微的劃分以區分 macrohood 和/或 microhood。     | Cobble Hill                |
+| **microhood**   | 包含在社區類型分區內的小型社區。                                                       | Gätjensort in Hamburg      |
 </details>
 
-### Data columns 
+### 資料欄位
 
-As of the July 2024 release, there are 25 columns in the divisions GeoParquet files. Each column is a property in the data. 
+截至2024年7月版本，Divisions GeoParquet 檔案中共有25個欄位。每個欄位都是資料中的一個屬性。
 
 <details>
-	<summary>List of all columns in the divisions GeoParquet files</summary>
+	<summary>Divisions GeoParquet 檔案中的所有欄位清單</summary>
 
 | Property Name | Type | Description |
 | -------- | -------- | ------- |
