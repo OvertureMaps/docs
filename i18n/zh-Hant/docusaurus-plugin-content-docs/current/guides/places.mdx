@@ -1,4 +1,4 @@
----
+﻿---
 title: Places
 ---
 import Tabs from '@theme/Tabs';
@@ -14,17 +14,17 @@ import PlacesInBuildingsQuery from '!!raw-loader!@site/src/queries/duckdb/places
 
 :::note
 
-本指南專注於 Overture places **數據** &mdash; 其內容、範圍、屬性和使用案例。若要解更多關於 Overture places **架構** 的相關資料，請參見 [架構參考文檔](/schema/reference/places/place)。
+本指南專注於 Overture places **資料** &mdash; 其內容、範圍、屬性和使用案例。若要解更多關於 Overture places **架構** 的相關資料，請參見 [架構參考文檔](/schema/reference/places/place)。
 
 :::
 
 ## 概要
 
-Overture places 主題有一個特徵類型，稱為 `place`，包含超過 5300 萬個真實世界實體的點表示：學校、商業、醫院、宗教組織、地標、山峰等。該主題源於 Meta 和 Microsoft 數據的合併，並在 [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) 授權下提供。
+Overture places 主題有一個特徵類型，稱為 `place`，包含超過 5300 萬個真實世界實體的點表示：學校、商業、醫院、宗教組織、地標、山峰等。該主題源於 Meta 和 Microsoft 資料的合併，並在 [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) 授權下提供。
 
 | ![Overture places 主題覆蓋範圍](/img/places/places-coverage.png) | 
 |:--:| 
-| *Overture places 數據，按數據來源樣式：Meta 用紫色，Microsoft 用橙色。* | 
+| *Overture places 資料，按資料來源樣式：Meta 用紫色，Microsoft 用橙色。* | 
 
 | 主要來源 |  特徵數量（2024 年 7 月版本） |
 | -------------------------- | --------------------- |
@@ -33,74 +33,75 @@ Overture places 主題有一個特徵類型，稱為 `place`，包含超過 5300
 
 
 
-## Dataset description
+## 資料集描述
 
-All Overture data, including places data, is distributed as GeoParquet, a column-based data structure. Below you'll find a table with column-by-column descriptions of the properties in the place feature type. Of particular interest to users is the categories property; we offer a complete list of available categories [here](https://github.com/OvertureMaps/schema/blob/main/task-force-docs/places/overture_categories.csv).
+所有 Overture 資料，包括地點資料，都以 GeoParquet 格式分發，這是一種基於 column-based 的資料結構。以下是地點特徵類型的屬性表。特別是 `categories` 屬性；我們提供了可用類別的完整列表 [在這裡](https://github.com/OvertureMaps/schema/blob/main/task-force-docs/places/overture_categories.csv)。
 
 <details>
-    <summary>Schema for GeoParquet files in the places theme</summary>
+    <summary>地點主題中 GeoParquet 檔案的架構</summary>
 <div>
 <Tabs>
 <TabItem value="places" label="places" default>
-| column | type | description |
+| 欄位 | 類型 | 描述 |
 |---|---|---|
-| id | VARCHAR | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | BLOB | The point representation of the Place's location. Place's geometry which MUST be a Point as defined by GeoJSON schema. |
-| bbox | STRUCT | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version | INTEGER | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources | STRUCT | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
-| names | STRUCT | Properties defining the names of a feature. |
-| categories | STRUCT | The categories of the place. Complete list is available on GitHub: https://github.com/OvertureMaps/schema/blob/main/task-force-docs/places/overture_categories.csv |
-| confidence | DOUBLE | The confidence of the existence of the place. It's a number between 0 and 1. 0 means that we're sure that the place doesn't exist (anymore). 1 means that we're sure that the place exists. If there's no value for the confidence, it means that we don't have any confidence information. |
-| websites | VARCHAR[] | The websites of the place. |
-| socials | VARCHAR[] | The social media URLs of the place. |
-| emails | VARCHAR[] | The email addresses of the place. |
-| phones | VARCHAR[] | The phone numbers of the place. |
-| brand | STRUCT | The brand of the place. A location with multiple brands is modeled as multiple separate places, each with its own brand. |
-| addresses | STRUCT | The addresses of the place. |
-</TabItem>
+| id | VARCHAR | 特徵 ID。如果該特徵代表的是 GERS（全球實體參考系統）的一部分，則此 ID 可能與 GERS 關聯。 |
+| geometry | BLOB | 地點位置的點表示。地點的幾何形狀必須是 GeoJSON schema 定義的點。 |
+| bbox | STRUCT | 由兩個經度和兩個緯度定義的區域：緯度為 -90.0 到 90.0 之間的十進制數；經度為 -180.0 到 180.0 之間的十進制數。 |
+| version | INTEGER | 特徵的版本號，在每次 Overture 版本更新中，當該特徵的幾何形狀或屬性發生變化時，版本號會遞增。 |
+| sources | STRUCT | 給定特徵屬性的源訊息數組，每個條目都是一個源對象，列出了 JSON 指針符號表示的屬性和該特定值來源的資料集。所有特徵必須有一個根級別的源，這是默認源，如果未指定特定屬性的源，則使用此默認源。 |
+| names | STRUCT | 定義特徵名稱的屬性。 |
+| categories | STRUCT | 地點的類別。完整列表可在 GitHub 上找到：https://github.com/OvertureMaps/schema/blob/main/task-force-docs/places/overture_categories.csv |
+| confidence | DOUBLE | 地點存在的信心程度。數值範圍是 0 到 1 之間。0 表示我們確定該地點不存在（或不再存在）。1 表示我們確定該地點存在。如果沒有任何值，代表我們還沒有任何可信的訊息。 |
+| websites | VARCHAR[] | 地點的網站。 |
+| socials | VARCHAR[] | 地點的社交媒體 URL。 |
+| emails | VARCHAR[] | 地點的電子郵件地址。 |
+| phones | VARCHAR[] | 地點的電話號碼。 |
+| brand | STRUCT | 地點的品牌。擁有多個品牌的位置被建模為多個獨立的地點，每個地點都有自己的品牌。 |
+| addresses | STRUCT | 地點的地址。 |
+
 </Tabs>
 </div>
 </details>
 
 
-## Data access and retrieval
+## 資料的存取和檢索
 
-The latest places data can be obtained from AWS or Azure as GeoParquet files at the following locations. 
-| Provider | Location |
+最新的地點資料可以從 AWS 或 Azure 獲取，格式為 GeoParquet，位於以下位置：
+| 提供商 | 位置 |
 | ------ | -------- |
-| Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/" language="text"></QueryBuilder>|
+| Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/" language="text"></QueryBuilder> |
 | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/" language="text"></QueryBuilder> |
 
-More information can be found in the [Getting Overture Data](https://docs.overturemaps.org/getting-data/) section of this documentation. You can download the entire dataset directly from the S3 or Azure locations above. Warning: the output will be a very large file.
-Depending on your use case, these methods might be more practical for you:
+更多訊息可以在本文檔的 [獲取 Overture 資料](https://docs.overturemaps.org/getting-data/) 部分找到。您可以直接從上述 S3 或 Azure 位置下載整個資料集。警告：輸出將是一個非常大的檔案。
+
+根據您的使用情況，以下方法可能更實用：
 
 <Tabs>
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
-First, follow the [setup guide for the Python Command-line Tool](/getting-data/overturemaps-py/).
+首先，請遵循 [Python Command-line Tool 的設定指南](/getting-data/overturemaps-py/)。
 
 ```
 overturemaps download -f geoparquet --type=place -o places.geoparquet
 ``` 
 </TabItem>
 <TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
+首先，請遵循 [DuckDB 的設定指南](/getting-data/duckdb/)。
 
 <QueryBuilder query={PlacesQuery}></QueryBuilder>
 </TabItem>
 </Tabs>
 
-## Data usage guidelines
+## 資料使用指南
 
-We recommend downloading only the Overture data you need. If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract places data and output a GeoJSON file.
+我們建議僅下載您需要的 Overture 資料。如果您對特定的地理區域感興趣，有幾種選擇可以使用簡單的 bounding box 來提取地點資料並輸出 GeoJSON 檔案。
 
 <Tabs>
 <TabItem value="Overture Maps Explorer" label="Overture Maps Explorer" default>
-To quickly view and download modest amounts of data, you can use the [Overture Maps Explorer website](https://explore.overturemaps.org/#15.07/41.89731/12.47626).
+要快速查看和下載適量的資料，您可以使用 [Overture Maps Explorer 網站](https://explore.overturemaps.org/#15.07/41.89731/12.47626)。
 
-To download data: Pan to the area you are interested in, turn off the other layers, then click `Download Visible`.
+要下載資料：移動到您感興趣的區域，關閉其他圖層，然後點擊 `Download Visible`。
 
-This will download the area visible on your screen.
+這樣將下載您螢幕上可見的區域。
 </TabItem>
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
 First, follow the [setup guide for the Python Command-line Tool](/getting-data/overturemaps-py/).
@@ -181,3 +182,4 @@ The places theme has wide coverage and many of the place point features have add
 Rapid, an OpenStreetMap editor, is capable of displaying places data as a reference layer by following the guide [here](/examples/rapid-id/).
 
 The license is compatible with OSM and this data can be used for mapping.
+
