@@ -162,51 +162,51 @@ Divisions資料可以用於許多目的，包括但不限於：
 註1：美國著名喜劇，內容是兩人在談論一支棒球隊的成員，由於棒球隊成員的名字很特別，兩人的對話可以同時被解釋為問句和答句，使得談話的雙方發生諸多誤會。在這裡這個術語用來描述一種層級化的分類系統，其中「placetype」指的是地理或行政區域的類型。這種系統按照層級結構進行分類，從較大的區域（如國家）到較小的區域（如街區），幫助清晰地描述和區分不同的地區。
 </details>
 
-## Data access and retrieval 
+## 資料訪問與檢索
 
-Overture's six data themes, including divisions, are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+Overture 的六個資料主題，包括分區，均可在以下位置免費獲取：
 
-| Provider | Location |
-| -------- | -------- |
-| Amazon S3 | `s3://overturemaps-us-west-2/release/` |
+| 提供者          | 位置                                                        |
+|-----------------|-------------------------------------------------------------|
+| Amazon S3       | `s3://overturemaps-us-west-2/release/`                       |
 | Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/` |
 
-Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
+Overture 以 [GeoParquet](https://geoparquet.org/) 格式分發其資料集，這是一種列導向的空間資料格式，是 [Apache Parquet](https://parquet.apache.org/) 的向後兼容擴展。Parquet（和 GeoParquet）針對“雲原生”查詢進行了優化，這意味著您可以使用許多開發者友好的工具來高效地提取雲端托管資料的列“塊”。我們鼓勵對 GeoParquet 不熟悉的使用者參閱 [這個指南](https://guide.cloudnativegeo.org/geoparquet/)。
 
-[The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for divisions.
+[本檔案的獲取資料部分](https://docs.overturemaps.org/getting-data/) 提供了使用幾種工具訪問 Overture 資料的說明，包括 DuckDB 和 Overture 的 Python Command-line Tool。請參見下方的分區範例。
 
 <Tabs>
 
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
-You can find Overture's official Python command-line tool [here](https://github.com/OvertureMaps/overturemaps-py).
+您可以在 [這裡](https://github.com/OvertureMaps/overturemaps-py) 找到 Overture 的官方 Python Command-line Tool。
 
-This tool helps to download Overture data within a region of interest and converts it to a few different file formats. In this example, a bounding box is passed to obtain all divisions data around Boston, MA:
+此工具有助於下載感興趣區域內的 Overture 資料，並將其轉換為幾種不同的檔案格式。在此範例中，傳遞一個 bounding box 以獲取波士頓，MA 周圍的所有分區資料：
 
 ```
 overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=divisions -o boston.geojson
 ```
 
-Right now there is only one option to the overturemaps utility: download. It will download Overture Maps data with an optional bounding box into the specified file format. When specifying a bounding box, only the minimum data is transferred. The result is streamed out and can handle arbitrarily large bounding boxes.
+目前，overturemaps 工具只有一個選項：download。它會下載 Overture Maps 資料，並根據選定的 bounding box 轉換為指定的檔案格式。指定 bounding box 時，只會傳輸最少量的資料。這讓輸出串流可以處理幾乎無限大的 bounding boxes 。
 
-Command-line options:
+Command-line 選項:
 
-- **--bbox** (optional): west, south, east, north longitude and latitude coordinates. When omitted the entire dataset for the specified type will be downloaded
-- **-f** (required: one of "geojson", "geojsonseq", "geoparquet"): output format
-- **--output/-o** (optional): Location of output file. When omitted output will be written to stdout.
-- **--type/-t** (required): The Overture map data type to be downloaded. Examples of types are building for building footprints, place for POI places data, etc. Run overturemaps download --help for the complete list of allowed types
+- **--bbox**（可選）：東、西、南、北的經緯度坐標。如果省略，則會下載指定類型的整個資料集
+- **-f**（必需：選擇 "geojson"、"geojsonseq"、"geoparquet" 之一）：輸出格式
+- **--output/-o**（可選）：輸出檔案的位置。如果省略，則輸出將寫入 stdout。
+- **--type/-t**（必需）：要下載的 Overture 地圖資料類型。類型範例包括 building（建築足跡）、place（POI 地點資料）等。執行 overturemaps download --help 以獲取允許類型的完整列表
 
-This downloads data directly from Overture's S3 bucket without interacting with any other servers. By including bounding box extents on each row in the Overture distribution, the underlying Parquet readers use the Parquet summary statistics to download the minimum amount of data necessary to extract data from the desired region.
+這會直接從 Overture 的 S3 儲存貯體下載資料，而不向其他伺服器請求資料。通過在每行 Overture 分發中包含 bounding box 範圍，底層的 Parquet 閱讀器使用 Parquet 摘要統計資料來下載提取所需區域資料所需的最少資料量。
 </TabItem>
 
 <TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
+首先，請參閱 [DuckDB 的設定指南](/getting-data/duckdb/)。
 <QueryBuilder query={ToParquet}></QueryBuilder>
-Note: Running this query will result in a ~6.4GB file.
+注意：執行此查詢將產生約 6.4GB 的檔案。
 </TabItem>
 
 </Tabs>
 
-## Data usage guidelines 
+## 資料使用指南
 
 We recommend querying and downloading only the Overture data you need.
 If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract divisions data.
