@@ -1,55 +1,40 @@
----
-title: Transportation
+﻿---
+title: 交通運輸
 ---
 
-## Overview
+## 概要
 
 import DocCardList from '@theme/DocCardList';
 
-Overture Maps transportation theme is the collection of features and attributes that describe the infrastructure and conventions of how people and objects travel around the world. Transportation data includes highways, footways, cycleways, railways, ferry routes, and public transportation.
+Overture Maps 交通運輸主題是一組描述全球交通基礎設施和出行規範的特徵和屬性。交通資料包括高速公路、人行道、腳踏車道、鐵路、郵輪路線和大眾運輸。
 
-## Use cases
+## 使用案例
 
-You might use Overture Maps transportation data and schema for:
+您可以將 Overture Maps 交通資料和結構用於：
 
-- **mapping:** rendering a map of connected roads and paths.
-- **routing:** calculating optimal routes from place to place.
-- **navigation:** generating granular instructions on the maneuvers needed to
-  follow a route.
-- **analytics:** transportation-related analysis including traffic safety
-  analysis and disaster planning.
-- **geocoding:** getting the coordinates of street intersections (geocodes) or
-  the street intersection near specific coordinates (reverse geocodes).
+- **地圖繪製：** 渲染連接道路和路徑的地圖。
+- **路由規劃：** 計算從一個地方到另一個地方的最佳路徑。
+- **導航：** 生成遵循路線所需的詳細指令。
+- **分析：** 包括交通安全分析和災害規劃在內的交通相關分析。
+- **地理編碼：** 獲取街道交叉口的坐標（地理編碼）或特定坐標附近的街道交叉口（反向地理編碼）。
 
-## Key concepts
+## 核心概念
 
-- **Shape and connectivity.** The transportation theme schema captures the shape
-and connectivity of the transportation network using `segment` and `connector`
-features. The schema design allows the segmentation process to promote shape
-stability and ultimately feature ID stability. Read more on the [shape and connectivity](/schema/concepts/by-theme/transportation/shape-connectivity) page.
+- **形狀和連通性。** 交通運輸主題結構捕捉交通網路的形狀和連通性，使用 `segment` 和 `connector` 特徵。結構設計允許分段過程促進形狀穩定性，最終促進特徵 ID 的穩定性。請在 [形狀和連通性](/schema/concepts/by-theme/transportation/shape-connectivity) 頁面上閱讀更多訊息。
 
-- **Scoped and rule-based properties.** The `transportation` theme schema allows property values to be specified for granular scopes at the sub-feature level. For example:
-  - a speed limit on a road segment might be scoped to apply only to part of the
-  road geometry using _geometric scoping_.
-  - the directionality of a segment, controlling the direction or directions in
-  which traffic can flow along the segment geometry, may be specified to change
-  at different times of day using _temporal scoping_.
-  - the categories of people and vehicles who are allowed to travel on a segment
-  can be controlled using _subjective scoping_.
-  - a real-world attribute that varies under changing environmental conditions can
-  be modeled using _environmental scoping_.
+- **範圍和基於規則的屬性。** `transportation` 主題結構允許為細粒度範圍在子特徵級別指定屬性值。例如：
+  - 道路段上的速度限制可能範圍限定於道路幾何的一部分，使用 _幾何範圍限定_。
+  - 段的方向性，控制交通可以沿著段幾何流動的方向，可能會根據一天中的不同時間進行變更，使用 _時間範圍限定_。
+  - 允許在段上旅行的人員和車輛的類別可以使用 _主觀範圍限定_ 進行控制。
+  - 隨著環境條件變化而變化的實際屬性可以使用 _環境範圍限定_ 進行建模。
 
-Read more about these concepts on the [scoped and rule-based properties](/schema/concepts/scoping-rules) page.
+  在 [範圍和基於規則的屬性](/schema/concepts/scoping-rules) 頁面上閱讀更多這些概念的訊息。
 
-- **Roads.** The `transportation` theme schema models any kind of road, street or
-path, including dedicated walking and cycling paths, as `road` segments. Roads
-are currently the most developed part of the `transportation` schema. Read more about roads on the [roads](/schema/concepts/by-theme/transportation/roads) page.
+- **道路。** `transportation` 主題結構將任何類型的道路、街道或路徑，包括專用步行和自行車路徑，建模為 `road` 段。道路目前是 `transportation` 結構中最發展的部分。請在 [道路](/schema/concepts/by-theme/transportation/roads) 頁面上閱讀更多有關道路的訊息。
 
-- **Travel modes.** The `transportation` theme supports a fuzzy concept called
-travel mode which can be used as a way of controlling the scope of scoped
-and rule-based properties. Read more about the travel modes concept and how travel modes interact with other scoping properties on the [travel modes](/schema/concepts/by-theme/transportation/travel-modes) page.
+- **旅行結構。** `transportation` 主題支援一種模糊概念稱為旅行結構，可以用作控制範圍和基於規則的屬性的方式。請在 [旅行結構](/schema/concepts/by-theme/transportation/travel-modes) 頁面上閱讀更多有關旅行結構概念及其如何與其他範圍屬性互動的訊息。
 
-## Schema reference
+## 結構參考
 
-- [Explore the schema for the segment feature type](/schema/reference/transportation/segment)
-- [Explore the schema for the connector feature type](/schema/reference/transportation/connector)
+- [探索段特徵類型的結構](/schema/reference/transportation/segment)
+- [探索連接器特徵類型的結構](/schema/reference/transportation/connector)
