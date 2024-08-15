@@ -132,33 +132,34 @@ Divisions資料可以用於許多目的，包括但不限於：
 <details>
 	<summary>Divisions GeoParquet 檔案中的所有欄位清單</summary>
 
-| Property Name | Type | Description |
-| -------- | -------- | ------- |
-| **id** |string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS.
-| **geometry** | blob | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString.
-| **bbox** | array | The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format.
-| **version** | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed.
-| **update_time** | string | Timestamp when the feature was last updated.
-| **sources** | array | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified.
-| **subtype** | string | Category of the division from a finite, hierarchical, ordered list of categories (e.g. country, region, locality, etc.) similar to a Who's on First placetype.
-| **wikidata** | string | A wikidata ID if available, as found on https://www.wikidata.org/.
-| **population** | integer | Population of the division.
-| **names** | array | A primary name of the entity, and a set of optional name translations. Name translations are represented in key, value pairs, where the key is an ISO language code and the value is the translated name.
-| **class** | string | A value to represent whether an entity represents a `maritime` or `land` feature.
-| **division_ids** | list | A list of the two division IDs that share this division boundary.
-| **is_disputed** | boolean | Indicator if there are entities disputing this division boundary. Information about entities disputing this boundary should be included in perspectives property. This property should also be true if boundary between two entities is unclear and this is "best guess". So having it true and no perspectives gives map creators reason not to fully trust the boundary, but use it if they have no other.
-| **perspectives** | array | Political perspectives from which this division boundary is considered to be an accurate representation. If this property is absent, then this boundary is not known to be disputed from any political perspective. Consequently, there is only one boundary feature representing the entire real world entity. If this property is present, it means the boundary represents one of several alternative perspectives on the same real-world entity.
-| **local_type** | string | Local name for the subtype property, optionally localized. This property is localized using a standard Overture names structure.
-| **country** | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root.
-| **region** | string | ISO 3166-2 principal subdivision code of the subdivision-like entity this division represents or belongs to. If the entity this division represents has a principal subdivision code, the region property contains it. If it does not, the region property contains the principal subdivision code of the first division encountered by traversing the parent_division_id chain to the root.
-| **hierarchies** | Array | Hierarchies in which this division participates.
-| **parent_division_id** | string | Division ID of this division's parent division. Not allowed for top-level divisions (countries) and required for all other divisions. The default parent division is the parent division as seen from the default political perspective, if there is one, and is otherwise chosen somewhat arbitrarily. The hierarchies property can be used to inspect the exhaustive list of parent divisions.
-| **norms** | list | Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases. If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed.
-| **capital_division_ids** | array | Division IDs of this division's capital divisions. If present, this property will refer to the division IDs of the capital cities, county seats, etc. of a division.
-| **division_id** | string | Division ID of the division this area belongs to.
-| **filename** | string | Name of the S3 file being queried.
-| **theme** | string | Name of the Overture theme being queried.
-| **type** |  string | Name of the Overture feature type being queried.
+| 屬性名稱              | 類型      | 描述                                                                                 |
+|-----------------------|-----------|--------------------------------------------------------------------------------------|
+| **id**                | 字串      | 特徵 ID。如果特徵代表的是 GERS 的一部分，則這可能是與 Global Entity Reference System (GERS) 相關的 ID。 |
+| **geometry**          | blob      | 實體幾何的 WKB 表示——一個 Point、Polygon、MultiPolygon 或 LineString。              |
+| **bbox**              | 陣列      | 實體幾何的 bounding box ，以浮點數表示，格式為 `xmin, xmax, ymin, ymax`。                     |
+| **version**           | 整數      | 特徵的版本號，在每次 Overture 更新中，特徵的幾何或屬性改變時會增加。              |
+| **update_time**       | 字串      | 特徵最後更新的時間戳記。                                                                 |
+| **sources**           | 陣列      | 特徵屬性的來源資訊陣列，每個條目是一個來源對象，列出屬性的 JSON 指標表示法以及該特定值來源的資料集。 |
+| **subtype**           | 字串      | 從有限的、分層的、排序的類別列表中選擇的分區類別（例如，country、region、locality 等），類似於 Who's on First*註1 的地點類型。 |
+| **wikidata**          | 字串      | 如果有，則為 wikidata ID，見於 https://www.wikidata.org/。                          |
+| **population**        | 整數      | 分區的人口數量。                                                                     |
+| **names**             | 陣列      | 實體的主要名稱，以及一組可選的名稱翻譯。名稱翻譯以鍵值對形式表示，其中鍵為 ISO 語言代碼，值為翻譯後的名稱。 |
+| **class**             | 字串      | 表示實體是 `maritime` 還是 `land` 特徵的值。                                          |
+| **division_ids**      | 列表      | 共享此分區邊界的兩個區域 ID 的列表。                                                   |
+| **is_disputed**       | 布林值    | 是否有實體爭議此分區邊界的指標。如果有實體爭議此邊界的訊息應包含在 perspectives 屬性中。如果邊界不清楚且這是“最佳猜測”，此屬性也應為真。這樣即使它為真且沒有 perspectives，也會給地圖創作者理由不完全信任邊界，但在沒有其他選擇的情況下使用它。 |
+| **perspectives**      | 陣列      | 從哪些政治觀點來看此分區邊界被認為是準確的表示。如果此屬性缺失，則表示這個邊界在任何政治觀點下都不被認為存在爭議。因此，只有一個邊界特徵代表整個現實世界實體。如果此屬性存在，則意味著邊界代表的是同一現實世界實體的幾種替代觀點之一。 |
+| **local_type**        | 字串      | 子類型屬性的本地名稱，可選地本地化。此屬性使用標準的 Overture 名稱結構進行本地化。       |
+| **country**           | 字串      | 此分區代表或屬於的國家或國家類似實體的 ISO 3166-1 alpha-2 國家代碼。如果此分區代表的實體有國家代碼，則 country 屬性包含該代碼。如果沒有，country 屬性包含從 parent_division_id 鏈到根的第一個分區的國家代碼。 |
+| **region**            | 字串      | 此分區代表或屬於的分區類似實體的 ISO 3166-2 主要子分區代碼。如果此分區代表的實體有主要子分區代碼，則 region 屬性包含該代碼。如果沒有，region 屬性包含從 parent_division_id 鏈到根的第一個分區的主要子分區代碼。 |
+| **hierarchies**       | 陣列      | 此分區參與的層級結構。                                                                 |
+| **parent_division_id** | 字串    | 此分區的父區域ID。不允許用於頂級分區（國家），對於所有其他分區是必需的。默認的父分區是從默認政治觀點看見的父分區（如果有），否則選擇某種程度上隨意。可以使用 hierarchies 屬性來檢查父分區的完整列表。 |
+| **norms**             | 列表      | 收集有關分區內的地方規範和規則的訊息，這些訊息對映射和地圖相關的用例通常很有用。如果分區缺少 norms 屬性或 norms 屬性的所需子屬性，但至少有一個祖先分區具有 norms 屬性和所需的子屬性，則可以假定從最近的祖先分區獲得值。 |
+| **capital_division_ids** | 陣列  | 此分區的首都區域ID。如果存在，此屬性將指向首都城市、縣城等的區域ID。                   |
+| **division_id**       | 字串      | 此區域所屬的區域ID。                                                                 |
+| **filename**          | 字串      | 被查詢的 S3 檔案名稱。                                                               |
+| **theme**             | 字串      | 查詢的 Overture 主題名稱。                                                           |
+| **type**              | 字串      | 查詢的 Overture 特徵類型名稱。                                                       |
+註1：美國著名喜劇，內容是兩人在談論一支棒球隊的成員，由於棒球隊成員的名字很特別，兩人的對話可以同時被解釋為問句和答句，使得談話的雙方發生諸多誤會。在這裡這個術語用來描述一種層級化的分類系統，其中「placetype」指的是地理或行政區域的類型。這種系統按照層級結構進行分類，從較大的區域（如國家）到較小的區域（如街區），幫助清晰地描述和區分不同的地區。
 </details>
 
 ## Data access and retrieval 
