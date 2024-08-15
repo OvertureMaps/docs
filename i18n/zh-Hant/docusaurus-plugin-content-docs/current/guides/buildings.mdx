@@ -1,4 +1,4 @@
----
+﻿---
 title: Buildings
 ---
 import Tabs from '@theme/Tabs';
@@ -20,7 +20,7 @@ Overture Maps 的建築主題描述了擁有屋頂或內部空間的人工建築
 
 
 
-## Data sources
+## 資料來源
 
 <figure>
   <BuildingsMap></BuildingsMap>
@@ -43,79 +43,79 @@ Overture Maps 的建築主題描述了擁有屋頂或內部空間的人工建築
   </figcaption>
 </figure>
 
-Above is a visualization of San Diego, USA where multiple datasets are conflated. Notice how Esri and OSM buildings appear in big blocks while the Google and Microsoft buildings appear to mix together. This is a product of our conflation process that prioritizes community contributed data first and then "fills in" the rest of the map with the best ML data available.
+上述是美國聖地牙哥的視覺化圖像，其中多個資料集被融合在一起。注意，Esri 和 OSM 的建築物顯示為大區塊，而 Google 和 Microsoft 的建築物則混合在一起。這是我們融合過程的結果，該過程首先優先考慮社群貢獻的資料，然後使用最好的機器學習資料“填充”其餘部分的地圖。
 
-Currently, the Overture buildings dataset is a combination of the following open building datasets:
+目前，Overture 建築資料集是以下開放建築資料集的組合：
 
-| Source                     |  Type                 | Conflation <br /> Priority | Count    |
-| -------------------------- | --------------------- | -------------------------- | ----------- |
-| [OpenStreetMap](//osm.org) | Community-contributed | 1                          |~600 Million  |
-| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2| ~14 Million |
-| [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&gt;90% precision) | 3|~400 Million |
-| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) |ML-derived roofprints  | 4|~600 Million |
-| [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&lt;90% precision) | 5|~700 Million |
+| 來源                                    | 類型                                    | 融合 <br /> 優先級 | 數量           |
+| --------------------------------------- | -------------------------------------- | ---------------- | -------------- |
+| [OpenStreetMap](//osm.org)              | 社群貢獻                               | 1                | 約 6 億        |
+| [Esri Community Maps](https://communitymaps.arcgis.com/home) | 社群貢獻                               | 2                | 約 1400 萬     |
+| [Google Open Buildings](https://sites.research.google/open-buildings/) | 機器學習衍生屋頂印跡<br />（>90% 精確度） | 3                | 約 4 億        |
+| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) | 機器學習衍生屋頂印跡                     | 4                | 約 6 億        |
+| [Google Open Buildings](https://sites.research.google/open-buildings/) | 機器學習衍生屋頂印跡<br />（<90% 精確度） | 5                | 約 7 億        |
 
-## Understanding the Parquet Files
+## 理解 Parquet 檔案
 
 <details>
-        <summary>Schema for the GeoParquet files in the buildings theme</summary>
+        <summary>建築主題中的 GeoParquet 檔案架構</summary>
         <div>
 <Tabs>
 <TabItem value="building" label="building" default>
 
-| column           | type    | description |
-| ---------------- | ------- | ------------ |
-| id               | varchar | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry         | blob    |  A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
-| bbox             | struct  | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| sources          | struct  | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
-| subtype          | varchar | A broad category of the building type and purpose. |
-| names            | struct  | The name associated with the feature. The first entry in the array of names must have a "local" language. |
-| class            | varchar | Further delineation of the building's built purpose. |
-| level            | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
-| has_parts        | boolean | Flag indicating whether the building has parts. |
-| height           | double  | Height of the building or part in meters. The height is the distance from the lowest point to the highest point. |
-| num_floors       | integer | Number of above-ground floors of the building or part. |
-| min_height       | double  | The height of the bottom part of building in meters. Used if a building or part of building starts above the ground level. |
-| min_floor        | integer | The "start" floor of a building or building part. Indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach ground level. |
-| facade_color     | varchar | The color (name or color triplet) of the facade of a building or building part in hexadecimal. |
-| facade_material  | varchar | The outer surface material of building facade. |
-| roof_material    | varchar | The outermost material of the roof. |
-| roof_shape       | varchar | The shape of the roof. |
-| roof_direction   | double  | Bearing of the roof ridge line. |
-| roof_orientation | varchar | Orientation of the roof shape relative to the footprint shape. Either "along" or "across." |
-| roof_color       | varchar |  The color (name or color triplet) of the roof of a building or building part in hexadecimal. |
+| 名稱              | 型別    | 描述                                                                 |
+| ----------------- | ------- | -------------------------------------------------------------------- |
+| id                | varchar | 可能與全球實體參考系統（GERS）相關的特徵 ID，僅在特徵代表 GERS 的實體時適用。 |
+| geometry          | blob    | 建築物的幾何形狀定義為其足跡或屋頂印跡（如果從航空/衛星影像追蹤）。必須為 GeoJSON schema 定義的 Polygon。 |
+| bbox              | struct  | 由兩個經度和兩個緯度定義的區域：緯度為 -90.0 到 90.0 之間的小數數字；經度為 -180.0 到 180.0 之間的小數數字。 |
+| sources           | struct  | 給定特徵屬性的來源訊息數組。每個來源對象列出屬性在 JSON Pointer 記法中的位置以及該特定值來自的資料集。 |
+| subtype           | varchar | 建築類型和用途的廣泛類別。                                               |
+| names             | struct  | 與特徵相關的名稱。名稱數組中的第一個條目必須具有“本地”語言。                  |
+| class             | varchar | 建築物建設目的的進一步劃分。                                               |
+| level             | integer | 建築特徵的 Z-order，即堆疊順序。Z-order 為 0 表示地面層。                         |
+| has_parts         | boolean | 標誌，指示建築物是否具有部分。                                              |
+| height            | double  | 建築物或部分的高度（米）。高度為從最低點到最高點的距離。                        |
+| num_floors        | integer | 建築物或部分的地上樓層數。                                                   |
+| min_height        | double  | 建築物底部部分的高度（米）。如果建築物或部分建築物從地面層以上開始，則使用此值。         |
+| min_floor         | integer | 建築物或建築部分的“起始”樓層。指示建築物或部分“漂浮”在地面層以上，通常是因為它是更大建築的一部分，其中某些部分達到地面層。 |
+| facade_color      | varchar | 建築物或建築部分的外立面顏色（名稱或RGB色碼）以十六進制表示。                    |
+| facade_material   | varchar | 建築外立面的外部表面材料。                                                   |
+| roof_material     | varchar | 屋頂的最外層材料。                                                           |
+| roof_shape        | varchar | 屋頂的形狀。                                                               |
+| roof_direction    | double  | 屋頂脊線的方位。                                                             |
+| roof_orientation  | varchar | 屋頂形狀相對於足跡形狀的方向。可以是“沿著”或“橫向”。                              |
+| roof_color        | varchar | 建築物或建築部分的屋頂顏色（名稱或RGB色碼）以十六進制表示。                    |
 
 </TabItem>
 <TabItem value="building_part" label="building_part" default>
-| column           | type    | description |
-| ---------------- | ------- | ------------ |
-| id               | varchar | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry         | blob    |  A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
-| bbox             | struct  | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| sources          | struct  | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
-| names            | struct  | The name associated with the feature. The first entry in the array of names must have a "local" language. |
-| class            | varchar | Further delineation of the building's built purpose. |
-| level            | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
-| height           | double  | Height of the building or part in meters. The height is the distance from the lowest point to the highest point. |
-| num_floors       | integer | Number of above-ground floors of the building or part. |
-| min_height       | double  | The height of the bottom part of building in meters. Used if a building or part of building starts above the ground level. |
-| min_floor        | integer | The "start" floor of a building or building part. Indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach ground level. |
-| facade_color     | varchar | The color (name or color triplet) of the facade of a building or building part in hexadecimal. |
-| facade_material  | varchar | The outer surface material of building facade. |
-| roof_material    | varchar | The outermost material of the roof. |
-| roof_shape       | varchar | The shape of the roof. |
-| roof_direction   | double  | Bearing of the roof ridge line. |
-| roof_orientation | varchar | Orientation of the roof shape relative to the footprint shape. Either "along" or "across." |
-| roof_color       | varchar |  The color (name or color triplet) of the roof of a building or building part in hexadecimal. |
-| building_id      | varchar | The building ID to which this part belongs.|
+| 名稱              | 型別    | 描述                                                                 |
+| ----------------- | ------- | -------------------------------------------------------------------- |
+| id                | varchar | 可能與全球實體參考系統（GERS）相關的特徵 ID，僅在特徵代表 GERS 的實體時適用。 |
+| geometry          | blob    | 建築物的幾何形狀定義為其足跡或屋頂印跡（如果從航空/衛星影像追蹤）。必須為 GeoJSON schema 定義的 Polygon。 |
+| bbox              | struct  | 由兩個經度和兩個緯度定義的區域：緯度為 -90.0 到 90.0 之間的小數數字；經度為 -180.0 到 180.0 之間的小數數字。 |
+| sources           | struct  | 給定特徵屬性的來源訊息數組。每個來源對象列出屬性在 JSON Pointer 記法中的位置以及該特定值來自的資料集。 |
+| names             | struct  | 與特徵相關的名稱。名稱數組中的第一個條目必須具有“本地”語言。                  |
+| class             | varchar | 建築物建設目的的進一步劃分。                                               |
+| level             | integer | 建築特徵的 Z-order，即堆疊順序。Z-order 為 0 表示地面層。                         |
+| height            | double  | 建築物或部分的高度（米）。高度為從最低點到最高點的距離。                        |
+| num_floors        | integer | 建築物或部分的地上樓層數。                                                   |
+| min_height        | double  | 建築物底部部分的高度（米）。如果建築物或部分建築物從地面層以上開始，則使用此值。         |
+| min_floor         | integer | 建築物或建築部分的“起始”樓層。指示建築物或部分“漂浮”在地面層以上，通常是因為它是更大建築的一部分，其中某些部分達到地面層。 |
+| facade_color      | varchar | 建築物或建築部分的外立面顏色（名稱或RGB色碼）以十六進制表示。                    |
+| facade_material   | varchar | 建築外立面的外部表面材料。                                                   |
+| roof_material     | varchar | 屋頂的最外層材料。                                                           |
+| roof_shape        | varchar | 屋頂的形狀。                                                               |
+| roof_direction    | double  | 屋頂脊線的方位。                                                             |
+| roof_orientation  | varchar | 屋頂形狀相對於足跡形狀的方向。可以是“沿著”或“橫向”。                              |
+| roof_color        | varchar | 建築物或建築部分的屋頂顏色（名稱或RGB色碼）以十六進制表示。                    |
+| building_id       | varchar | 該部分所屬的建築物 ID。                                                     |
 
 </TabItem>
 </Tabs>
 </div>
 </details>
 
-## Schema reference
+## 參考
 
 - [Explore the schema reference for the building feature type](/schema/reference/buildings/building).
 - [Explore the schema reference for the building part feature type](/schema/reference/buildings/building_part).
