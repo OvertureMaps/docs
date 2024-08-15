@@ -5,18 +5,18 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 Last month we released [v1.0.0 of the Overture schema and “general availability” versions of four themes](https://overturemaps.org/overture-maps-foundation-releases-general-availability-of-its-open-maps-datasets/): 
-base, buildings, divisions, and places. Our [addresses theme](https://overturemaps.org/introducing-overture-maps-address-theme/) launched in alpha with 200 million addresses 
+base, buildings, divisions, and places. Our [addresses theme](https://docs.overturemaps.org/guides/addresses/) launched in alpha with 200 million addresses 
 for 14 countries; we anticipate adding more address data each month, country by country, starting with 
 Switzerland in the August release. 
 
-The transportation theme remains in beta and we expect to make significant changes over the next couple 
-months. This blog post will focus on three key improvements to the transportation schema in the August 
-release, which will be available next week. 
+The [transportation theme](https://docs.overturemaps.org/guides/transportation/) remains in beta and we expect to make significant changes over the next couple 
+months. In this post, we're giving you a preview of three key improvements to the transportation schema in the August 
+release, **which will be available next week**. 
 
 ## Transportation schema changes
 The schema changes we plan to implement over the next few releases will better support routing and map 
 display use cases, and make it easier for our users to integrate Overture transportation data into their 
-pipelines and products. These are necessary improvements before we can achieve our goal of a GA release in October. 
+pipelines and products. These improvements are necessary if we are to achieve our goal of a GA release in October. 
 Here are the steps we're taking in the August release to move us toward that goal.
 
 ### Subclasses
@@ -148,5 +148,5 @@ destinations:
 ## Transportation splitter tool
 Recently we made our [transportation splitter tool](https://github.com/OvertureMaps/transportation-splitter)
 available in a public GitHub repository. The tool is an experimental PySpark script and Jupyter notebook that offers 
-multiple ways to split Overture’s transportation features into smaller and simpler segments. Please 
+multiple ways to split Overture’s transportation features into smaller and simpler segments. Our new transportation guide includes [examples of how to use the tool](https://docs.overturemaps.org/guides/transportation/#transportation-splitter). Please 
 take it for a test drive and [let us know](https://github.com/OvertureMaps/transportation-splitter/issues) what you think! 
