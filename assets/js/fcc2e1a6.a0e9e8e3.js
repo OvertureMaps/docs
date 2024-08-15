@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[9698],{5087:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Technical posts from the Overture Maps engineering team","blogTitle":"Overture Maps Engineering"}}')}}]);
