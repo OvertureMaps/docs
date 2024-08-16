@@ -4,19 +4,19 @@
     "description": "The label for version current"
   },
   "sidebar.docs.category.Getting Overture Data": {
-    "message": "Getting Overture Data",
+    "message": "請求 Overture 資料",
     "description": "The label for category Getting Overture Data in sidebar docs"
   },
   "sidebar.docs.category.Examples": {
-    "message": "Examples",
+    "message": "範例",
     "description": "The label for category Examples in sidebar docs"
   },
   "sidebar.docs.category.Guides": {
-    "message": "Guides",
+    "message": "使用者指南",
     "description": "The label for category Guides in sidebar docs"
   },
   "sidebar.docs.category.Global Entity Reference System": {
-    "message": "Global Entity Reference System",
+    "message": "全球實體參考系統 (GERS)",
     "description": "The label for category Global Entity Reference System in sidebar docs"
   },
   "sidebar.schema.category.Concepts": {
