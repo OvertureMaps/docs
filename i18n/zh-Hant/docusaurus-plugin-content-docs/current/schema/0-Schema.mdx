@@ -1,5 +1,5 @@
 ﻿---
-title: Overture Schema
+title: Overture 的架構
 slug: /schema
 
 # This page is available at docs.overturemaps.org/schema
@@ -14,7 +14,7 @@ import yamlLoad from "@site/src/components/yamlLoad"
 import EmpireStateBuilding from "!!raw-loader!@site/docs/_examples/buildings/empire-state-building.json";
 import MainDefs from "!!raw-loader!@site/docs/_schema/defs.yaml";
 
-Overture 資料由三個組件構成：模式、資料模型和全球實體參考系統（[GERS](https://docs.overturemaps.org/gers/)）。模式描述資料的結構並制定適用於這些資料的約束條件。資料模型規定了存在的 Features 類型、它們的幾何形狀、 Features 之間的關係以及它們具有的屬性。GERS 是一個結構化、編碼和匹配 Overture 資料的共享通用參考框架。
+Overture 資料由三個組件構成：架構、資料模型和全球實體參考系統（[GERS](https://docs.overturemaps.org/gers/)）。架構描述資料的結構並制定適用於這些資料的約束條件。資料模型規定了存在的 Features 類型、它們的幾何形狀、 Features 之間的關係以及它們具有的屬性。GERS 是一個結構化、編碼和匹配 Overture 資料的共享通用參考框架。
 
 <!-- 你可以在這裡看到這三個組件的描述，以帝國大廈為例：
 
@@ -22,7 +22,7 @@ Overture 資料由三個組件構成：模式、資料模型和全球實體參�
 
 ## GeoJSON 心智模型
 
-Overture 模式由 [JSON schema](https://json-schema.org/) 定義，並使用 [GeoJSON](https://geojson.org/) 作為標準的地理空間格式。GeoJSON 為我們提供了一個心智模型和語言，用於在模式中表達資料結構。Overture 模式支援以下幾何類型：Point、LineString、Polygon、MultiPoint、MultiLineString 和 MultiPolygon。幾何對象及其屬合稱為 Features 。
+Overture 架構由 [JSON schema](https://json-schema.org/) 定義，並使用 [GeoJSON](https://geojson.org/) 作為標準的地理空間格式。GeoJSON 為我們提供了一個心智模型和語言，用於在架構中表達資料結構。Overture 架構支援以下幾何類型：Point、LineString、Polygon、MultiPoint、MultiLineString 和 MultiPolygon。幾何對象及其屬合稱為 Features 。
 
 ## Features
 
@@ -34,49 +34,49 @@ Overture 中的所有 Features 都有稱為 Overture ID 的唯一 ID。對於某
 
 GERS 還提供了一種機制來合併資料集，通過 Overture ID 匹配一個或多個 Features 。例如，來自兩個不同資料集的兩個多邊形 Features ，每個多邊形代表紐約市的帝國大廈的基礎，若這兩個 Features 都參考相同的 GERS 中的 Overture ID，就可以輕鬆配對。
 
-## Schema characteristics
+## 架構 Features 
 
-### Core schema properties
+### 核心架構屬性
 
-Every feature in Overture has a core set of properties that are described in the schema. Overture features:
+Overture 中的每個 Features 都有一組核心屬性 Overture Features，它們 ：
 
-- have a type
-- have a geometry, where the type of geometry is constrained by the feature type
-- are strongly-typed, _i.e._ the feature type constrains the geometry and properties
-- have properties, which may include a core set of "flat" properties and additional properties with a nested structure
-- have an ID property which is globally unique within the ID-space of the entire Overture data distribution version. For some feature types, the ID is registered with GERS
-- may have custom user extension properties
+- 具有型別
+- 具有幾何形狀，其中幾何類型受到 Features 類型的約束
+- 為強類型，即 Features 類型約束了幾何形狀和屬性
+- 具有屬性，其中可能包括一組核心的「平面」屬性和具有嵌套結構的附加屬性
+- 具有 ID 屬性，該屬性在整個 Overture 資料分發版本的 ID 空間中是全局唯一的。對於某些 Features 類型，ID 已註冊於 GERS
+- 可能具有自定義使用者擴充套件屬性
 
-### Schema notation conventions
+### 架構表示法慣例
 
-- snake case is used for all property names, string enumeration members, and string-valued enumeration equivalents
-- boolean properties have a prefix verb "is" or "has" in a way that grammatically makes sense
+- 所有屬性名稱、字串、列舉型態、和字串列舉型態等均使用蛇形命名法（snake case）
+- 布林屬性使用前綴動詞 "is" 或 "has"，以符合語法
       e.g.
   - `has_street_lights=true`
   - `is_accessible=false`
 
-### Measurements
+### 度量衡
 
-Measurements of real-world objects and features follow [The International System of Units (SI)](https://www.bipm.org/en/publications/si-brochure): heights, widths, lengths, etc. In the Overture schema, these values are provided as scalar numeric value without units such as feet or meters. Overture does this to maximize consistency and predictability.
+實際物體和 Features 的測量遵循 [國際單位制 (SI)](https://www.bipm.org/en/publications/si-brochure)：高度、寬度、長度等。在 Overture 架構中，這些值以標量數值提供，沒有如英尺或米等單位。Overture 這樣做是為了最大化一致性和可預測性。
 
-Quantities specified in regulatory rules, norms and customs follow local specifications wherever possible. In the schema, these values are provided as two-element arrays where the first element is the scalar numeric value and the second value is the units. Overture uses local units of measurement -- feet in the United States and meters in the EU, for example. The exact unit is confirmed in the specification of the property but is not repeated in the data.
+在法規規則、標準和習俗中指定的數量盡可能遵循當地規範。在架構中，這些值以兩元素數組提供，其中第一個元素是標量數值，第二個元素是單位。Overture 使用當地的測量單位——例如，美國使用英尺，歐盟使用米。具體的單位在屬性規範中確認，但在資料中不會重複。
 
-### Relations
+### 關係
 
-Low-cardinality directed relations are stored as ID references on the source feature.
+低基數的定向關係以 ID 引用的形式存儲在源 Features 中。
 
-### Regulations and restrictions
+### 法規和限制
 
 All quantities that relate to posted or ordnance regulations and restrictions are expressed in the same units as used in the regulation. The unit is explicitly included with the property in the data.
 
-### Opening hours and validity periods
+### 開放時間和有效期限
 
-Opening hours and the time frame during which time dependent properties are applicable are indicated following the [OSM Opening Hours specification](https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification).
+開放時間和時間依賴屬性適用的時間範圍按照 [OSM 開放時間規範](https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification) 標示。
 
-### Extensions
+### 擴充套件
 
-Overture allows for add hoc extensions beyond what is described in the schema. All extensions are prefixed with `ext_`. Extensions can be provided at the theme level, the type level, or the property level.
+Overture 允許在架構所描述的範圍之外進行即時擴充套件。所有擴充套件都以 `ext_` 為前綴。擴充套件可以在主題層級、類型層級或屬性層級提供。
 
-## Data formats
+## 資料格式
 
-While Overture describes data using a GeoJSON mental model, it distributes data as [GeoParquet](https://geoparquet.org/), a column-oriented format that is ideally suited for large geospatial datasets. This documentation includes many examples of how to work with data stored in GeoParquet files.
+雖然 Overture 使用 GeoJSON 心智模型來描述資料，但它以 [GeoParquet](https://geoparquet.org/) 格式分發資料，這是一種列式格式，特別適合大型地理空間資料集。本檔案包含了許多如何處理存儲於 GeoParquet 檔案中的資料的範例。
