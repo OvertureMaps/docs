@@ -16,30 +16,20 @@ import ExampleSubjectiveStatusScoping from '!!raw-loader!@site/docs/_examples/tr
 import ExampleSubjectiveVehicleAttributesScoping from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/subjective-vehicle-attributes-scoping.yaml';
 import ExampleLanesAbsoluteForm from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/lanes-absolute-form.yaml';
 
-## Scoped and rule-based properties
+## Scoped 和 rule-based 屬性
 
-In the real world, many facts and rules affecting entities have
-only a partial application, meaning they don't apply everywhere, or
-they don't apply at all times, or to everyone, or to all sets of
-external conditions. For example, access restrictions on a road segment
-might not apply to all people or all kinds of vehicles, or they might
-vary according to the day of the week. <!-- add another example that is not transportation focused -->
+在現實世界中，許多影響實體的事實和規則具有部分適用性，意味著它們不是在所有地方都適用，或者不是在所有時間、所有人群或所有外部條件下都適用。例如，某段道路的通行限制可能不適用於所有人或所有類型的車輛，或者可能會根據星期幾而有所變化。<!-- 加入另一個非交通的例子 -->
 
-The Overture schema uses two related concepts to capture the partial application of facts and rules: scoped values and rule-based properties.
+Overture schema 使用兩個相關概念來捕捉事實和規則的通例：Scoped  和 rule-based 屬性。
 
-### Scoped values and scoping properties
+### Scoped values 和 scoping properties
 
-A *scoped* value is a value which only applies within a limited scope.
-Most scoped values are rules in the rule lists of
-[rule-based properties](#rules-and-rule-based-properties). However,
-scoped values also exist outside of rule-based properties. For
-example, a signpost property belonging to a road segment might be
-geometrically scoped to its position along the road.
+*Scoped* 值是僅在有限範圍內適用的值。大多數 Scoped 值是 [rule-based 屬性](#rules-and-rule-based-properties) 中規則列表的一部分。然而，Scoped 值也存在於 rule-based properties 之外。例如，屬於道路段的標示屬性可能會幾何範圍限定於沿道路的位置。
 
-The scope in which a scoped value applies is controlled by one or more
-special child properties of the value known as *scoping* properties.
+Scoped 值適用的範圍由一個或多個稱為 *scoping* properties 的特殊子屬性控制。
 
-#### Geometric scoping (linear referencing)
+#### 幾何範圍限定 (線性引用)
+
 
 <Tabs>
   <TabItem value="description" label="Description" default>
