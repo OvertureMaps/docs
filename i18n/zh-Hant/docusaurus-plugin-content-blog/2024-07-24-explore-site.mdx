@@ -1,8 +1,8 @@
 ﻿---
-title: 探索 Overture 數據，不需要 SQL
+title: 不需要 SQL 就可以探索 Overture 資料
 ---
 
-Overture 推出了新的基於瀏覽器的工具，為用戶提供了無需代碼即可與我們數據互動的選項。Explore 網站現在是開始使用 Overture 的最快途徑，不需要 SQL：[https://explore.overturemaps.org](https://explore.overturemaps.org/#13.01/39.95692/-75.15583)
+Overture 推出了新的基於瀏覽器的工具，為使用者提供了無需代碼即可與我們資料互動的選項。Explore 網站現在是開始使用 Overture 的最快途徑，不需要 SQL：[https://explore.overturemaps.org](https://explore.overturemaps.org/#13.01/39.95692/-75.15583)
 
 | ![探索費城](/img/blog/explore-philadelphia2.gif) | 
 |:--:| 
@@ -10,15 +10,15 @@ Overture 推出了新的基於瀏覽器的工具，為用戶提供了無需代�
 
 ## 這不是地圖 
 
-Explore 工具看起來可能像是地圖，但我們更願意將其視為一種 X 光數據檢查器。我們放棄了製作製圖決策，而是選擇一次性顯示 Overture 的所有主題：地址、基礎數據、建築、區域、地點和交通。我們的用戶有不同的視角和目標，我們希望提供盡可能多的信息。我們還希望激發您的好奇心，並激勵您對 Overture 數據提出新的問題。
+Explore 工具看起來可能像是地圖，但我們更願意將其視為一種 X 光資料檢查器。我們放棄了製作製圖決策，而是選擇一次性顯示 Overture 的所有主題：地址、基礎資料、建築、區域、地點和交通。我們的使用者有不同的視角和目標，我們希望提供盡可能多的訊息。我們還希望激發您的好奇心，並激勵您對 Overture 資料提出新的問題。
 
-一次性看到所有數據可能會讓人感到有些不知所措。我們建議放大到您感興趣的區域，懸停在地圖左上角的圖層圖標上，並切換數據主題的顯示與隱藏。您可以點擊個別地圖功能，例如著名的 ["Lion Crushing a Serpent"](https://youtu.be/rTl2ewUc6bA?feature=shared) 雕像，以檢查其屬性。想要下載數據嗎？在 Explore 網站的右上角，您可以點擊“下載可見”按鈕，以生成包含瀏覽器中所有可見數據的 GeoJSON 文件。
+一次性看到所有資料可能會讓人感到有些不知所措。我們建議放大到您感興趣的區域，懸停在地圖左上角的圖層圖標上，並切換資料主題的顯示與隱藏。您可以點擊個別地圖功能，例如著名的 ["Lion Crushing a Serpent"](https://youtu.be/rTl2ewUc6bA?feature=shared) 雕像，以檢查其屬性。想要下載資料嗎？在 Explore 網站的右上角，您可以點擊“下載可見”按鈕，以生成包含瀏覽器中所有可見資料的 GeoJSON 檔案。
 
 
-The [Explore site](https://explore.overturemaps.org/#13.01/39.95692/-75.15583) is currently in beta, and your feedback will inform the features we add in the coming months. If you have questions about the data, or if you want to report a problem with data quality or a glitch in the website, please click on the bug icon and [file an issue on GitHub](https://github.com/OvertureMaps/io-site/issues). (Note: we are actively working on fixing known issues with the downloaded data.)
+[Explore 網站](https://explore.overturemaps.org/#13.01/39.95692/-75.15583) 目前處於測試階段，您的反饋將幫助我們在未來幾個月內添加更多功能。如果您對資料有任何疑問，或想報告資料質量問題或網站故障，請點擊錯誤圖標並[在 GitHub 上提交問題](https://github.com/OvertureMaps/io-site/issues)。（注意：我們正在積極解決已知的下載資料問題。）
 
-## Build with us
+## 與我們一起開發
 
-This project grew out of the diverse experiences and skill sets of the engineers working on Overture. We’re using [WebAssembly](https://webassembly.org/) and Rust, specifically [geoarrow-rs](https://geoarrow.org/geoarrow-rs/), to query and download [Overture’s GeoParquet files](https://docs.overturemaps.org/getting-data/). The front end is React and [Maplibre](https://maplibre.org/), and we’re generating [PMTiles](https://docs.protomaps.com/pmtiles/) to visualize the data. It’s a serverless site, using all cloud-native data storage formats. We also plan to make [PMTiles available with each Overture release](https://github.com/OvertureMaps/overture-tiles). Special thanks to Kyle Barron from [Development Seed](https://developmentseed.org/) and Brandon Liu from [Protomaps](https://protomaps.com/) for collaborating with Overture's Developer Advocacy team on this project. 
+該項目源自參與 Overture 開發的工程師們豐富的經驗和技能。我們使用 [WebAssembly](https://webassembly.org/) 和 Rust，特別是使用 [geoarrow-rs](https://geoarrow.org/geoarrow-rs/) 查詢和下載 [Overture 的 GeoParquet 檔案](https://docs.overturemaps.org/getting-data/)。前端使用 React 和 [Maplibre](https://maplibre.org/)，我們產生 [PMTiles](https://docs.protomaps.com/pmtiles/) 來視覺化資料。這是一個無伺服器網站，使用 cloud-native  存儲格式。我們還計劃在每次 Overture 發佈時提供 [PMTiles](https://github.com/OvertureMaps/overture-tiles)。特別感謝來自 [Development Seed](https://developmentseed.org/) 的 Kyle Barron 和來自 [Protomaps](https://protomaps.com/) 的 Brandon Liu，與 Overture 的開發者宣傳團隊合作開始了這個項目。
 
-[Explore is open source](https://github.com/OvertureMaps/io-site), under an MIT license, and we welcome contributions from the Overture community. Our goal is to give you the basic building blocks for creating your own tools around Overture data. Let us know what you make and we’ll happily share it on our [community projects page](https://docs.overturemaps.org/community/). 
+[Explore 是開源的](https://github.com/OvertureMaps/io-site)，基於 MIT 許可，我們歡迎 Overture 社區的貢獻。我們的目標是為您提供構建圍繞 Overture 資料的工具的基本構建模組。告訴我們您的創作，我們將樂於在我們的[社區項目頁面](https://docs.overturemaps.org/community/)上分享。

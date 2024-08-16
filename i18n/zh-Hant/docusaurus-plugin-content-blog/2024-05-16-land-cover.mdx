@@ -1,14 +1,14 @@
----
+﻿---
 title: Land cover is live
 ---
 
 ![land cover gif](/img/blog/lc.gif)
 
-## Mapmakers rejoice! 
+## 製圖師們的福音！
 
-The [May release](https://docs.overturemaps.org/release/latest) of Overture Maps includes new high-resolution land cover data *and* new cartographic schema properties.
+[Overture Maps 的 5 月發佈](https://docs.overturemaps.org/release/latest) 包括了新的高解析度土地覆蓋資料*以及*新的製圖架構屬性。
 
-Our `land_cover` layer is vectorized data derived from the [European Space Agency’s 2020 WorldCover (10m) rasters](https://esa-worldcover.org/en). It's similar to the land cover layer in the [Daylight](https://daylightmap.org/2023/10/11/landcover.html) map distribution, but Overture Maps added higher-resolution data (zoom level 15) with more detail and land cover classes. You'll find 10 subtypes in the new data: snow, forest, urban, grass, crop, barren, wetland, moss, mangrove, and shrub. 
+我們的 `land_cover` 圖層是從[歐洲太空總署 2020 年 WorldCover (10m) 光柵資料](https://esa-worldcover.org/en)衍生的向量資料。它類似於 [Daylight](https://daylightmap.org/2023/10/11/landcover.html) 地圖分發中的土地覆蓋層，但 Overture Maps 添加了更高解析度的資料（縮放級別 15），提供了更多細節和土地覆蓋類別。新的資料中包含 10 種子類型：雪地、森林、城市、草地、農作物、荒漠、濕地、苔蘚、紅樹林和灌木。
 
 Our May release also includes [schema properties](https://docs.overturemaps.org/schema/reference/base/land_cover/) that offer cartographic "hints" for optimal use of Overture Maps data in mapmaking. We added `min_zoom` and `max_zoom` to define the recommended zooms for each resolution of land cover, using the common “slippy maps” zoom level specification. This is a first step toward improving the user experience for mapmakers. We plan to expand these properties in future releases of Overture Maps data.
 
