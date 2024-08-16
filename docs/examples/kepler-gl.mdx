@@ -9,10 +9,10 @@ import HyderabadBuildingsDuckDB from '!!raw-loader!@site/src/queries/duckdb/hyde
 
 In this example, we'll query the Overture buildings theme and download data for a specified bounding box. Then we'll load the data into [kepler.gl](https://kepler.gl/demo), an open-source tool for working with large map datasets, and visualize the buildings data by data source: [OpenStreetMap](https://wiki.openstreetmap.org/wiki/Key:building), [Microsoft ML Building Footprints](https://github.com/microsoft/GlobalMLBuildingFootprints), [Esri Community Maps](https://communitymaps.arcgis.com/home), and [Google Open Buildings](https://sites.research.google/open-buildings/).
 
-Requirements: you'll need an AWS account and access to an S3 bucket if you want to use Athena. If you're using DuckDB, you'll need to install and load the spatial and S3 or Azure extensions. You do not need an account on kepler.gl.
+Requirements: You'll need to install and load the spatial and S3 or Azure extensions for DuckDB. You do not need an account on kepler.gl.
 
 ## Get only the data you need
-We can use DuckDB to query Overture data to get buildings for our area of interest, in this case a bounding box with Hyderabad, India. 
+We can use DuckDB to query Overture data to get buildings for our area of interest, in this case a bounding box with Hyderabad, India.
 
 <QueryBuilder query={HyderabadBuildingsDuckDB}></QueryBuilder>
 
