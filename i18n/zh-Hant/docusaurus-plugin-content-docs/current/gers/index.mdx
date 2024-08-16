@@ -1,16 +1,16 @@
----
-title: Global Entity Reference System (GERS)
+﻿---
+title: 全球實體參考系統 (GERS)
 slug: /gers
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-## Understanding GERS
+## 了解 GERS
 
-The Global Entity Reference System (GERS) is a framework for structuring, encoding, and matching map data to a shared universal reference. All features in Overture have a unique ID, and for some feature types those unique IDs, called Overture IDs or GERS IDs, are registered to GERS and are intended to be [stable](stability). GERS provides a mechanism to match features across datasets, track data stability, and detect errors in the data.
+全球實體參考系統 (GERS) 是一個用於結構化、編碼和匹配地圖資料的框架，旨在提供一個共享的通用參考。所有 Overture 特徵都有一個唯一的 ID，對於某些特徵類型，這些唯一 ID 稱為 Overture ID 或 GERS ID，這些 ID 會註冊到 GERS 並預期為 [穩定](stability) 的。GERS 提供了一種跨資料集匹配特徵、跟踪資料穩定性以及檢測資料錯誤的機制。
 
-## What does an Overture ID look like?
+## Overture ID 是什麼樣的？
 
-Unique IDs in Overture are 128 bits and 32 characters. Below you can inspect the unique IDs for five building features in Overture's latest release. The property appears as `id` in the schema.
+Overture 中的唯一 ID 是 128 位和 32 個字符。您可以在下方查看 Overture 最新發布中的五個建築特徵的唯一 ID。該屬性在架構中顯示為 `id`。
 
 ```sql
 D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1) limit 5;
@@ -28,19 +28,20 @@ D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/
 └──────────────────────────────────┘
 ```
 
-## Stability and traceability
+## 穩定性和可追溯性
 
-Unique IDs registered to GERS are intended to be [stable](stability) &mdash; within a reasonable tolerance of error &mdash; across multiple Overture releases. When stability is not possible, we will attempt to provide traceability in a [GERS changelog](changelog). For example:
+註冊到 GERS 的唯一 ID 旨在在多個 Overture 發布版本中保持 [穩定](stability) &mdash; 在合理的錯誤容忍範圍內。當穩定性無法保證時，我們將嘗試在 [GERS 更新日誌](changelog) 中提供可追溯性。例如：
 
-- a single road segment is bisected by a new road and becomes two road segments: 1 unique ID → 2 new unique IDs;
-- a large building footprint is determined to be four smaller buildings when a higher resolution dataset becomes available: 1 unique ID → 4 new unique ID;
-- a building is shifted 10 meters to the west when higher resolution imagery is made available: the unique ID is preserved for that feature.
+- 一個單一的道路段被一條新路分割並變成兩個道路段：1 個唯一 ID → 2 個新唯一 ID；
+- 當獲得更高分辨率的資料集時，一個大型建築物足跡被確定為四個較小的建築物：1 個唯一 ID → 4 個新唯一 ID；
+- 當更高分辨率的影像可用時，建築物向西移動了 10 米：該功能的唯一 ID 得以保留。
 
-## Using GERS
+## 使用 GERS
 
-Here are two general mechanisms for using GERS:
+這裡有兩種使用 GERS 的通用機制：
 
-1. **Associating data.** You can independently associate your own data or third-party data to Overture data. If features in your dataset match features in an Overture dataset, you can assign existing Overture IDs to the matched features. Your data is now GERS-enabled data, ready to be associated via Overture ID to any other GERS-enabled dataset in the Overture ecosystem.
-2. **Contributing data.** If an organization contributes data to the Overture Maps Foundation, our engineering team will match the features in that dataset to features in Overture. Matched features may be assigned an existing Overture ID, and we may generate new Overture IDs for new features. 
- 
-You'll find theme-specific examples in the [GERS demonstrations](gers-demonstrations) section of this documentation. 
+1. **關聯資料。** 您可以獨立地將自己的資料或第三方資料與 Overture 資料相關聯。如果您的資料集中與 Overture 資料集中的功能匹配，您可以將現有的 Overture ID 分配給匹配的功能。現在，您的資料已啟用 GERS，可以通過 Overture ID 與 Overture 生態系統中的任何其他啟用 GERS 的資料集相關聯。
+   
+2. **貢獻資料。** 如果一個組織向 Overture Maps Foundation 提供資料，我們的工程團隊將會將該資料集中的功能與 Overture 中的功能進行匹配。匹配的功能可能會被分配一個現有的 Overture ID，我們也可能會為新功能生成新的 Overture ID。
+
+您可以在本檔案的 [GERS 示範](gers-demonstrations) 部分中找到主題特定的範例。
