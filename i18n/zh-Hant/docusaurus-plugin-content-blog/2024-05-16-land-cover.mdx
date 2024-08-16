@@ -1,30 +1,30 @@
 ﻿---
-title: Land cover is live
+title: 土地植被狀況即時更新
 ---
 
 ![land cover gif](/img/blog/lc.gif)
 
 ## 製圖師們的福音！
 
-[Overture Maps 的 5 月發佈](https://docs.overturemaps.org/release/latest) 包括了新的高解析度土地覆蓋資料*以及*新的製圖架構屬性。
+[Overture Maps 的 5 月發佈](https://docs.overturemaps.org/release/latest) 包括了新的高解析度土地植被資料*以及*新的製圖架構屬性。
 
-我們的 `land_cover` 圖層是從[歐洲太空總署 2020 年 WorldCover (10m) 光柵資料](https://esa-worldcover.org/en)衍生的向量資料。它類似於 [Daylight](https://daylightmap.org/2023/10/11/landcover.html) 地圖分發中的土地覆蓋層，但 Overture Maps 添加了更高解析度的資料（縮放級別 15），提供了更多細節和土地覆蓋類別。新的資料中包含 10 種子類型：雪地、森林、城市、草地、農作物、荒漠、濕地、苔蘚、紅樹林和灌木。
+我們的 `land_cover` 圖層是從[歐洲太空總署 2020 年 WorldCover (10m) 光柵資料](https://esa-worldcover.org/en)衍生的向量資料。它類似於 [Daylight](https://daylightmap.org/2023/10/11/landcover.html) 地圖分發中的土地植被層，但 Overture Maps 添加了更高解析度的資料（縮放級別 15），提供了更多細節和土地植被類別。新的資料中包含 10 種子類型：雪地、森林、城市、草地、農作物、荒漠、濕地、苔蘚、紅樹林和灌木。
 
-Our May release also includes [schema properties](https://docs.overturemaps.org/schema/reference/base/land_cover/) that offer cartographic "hints" for optimal use of Overture Maps data in mapmaking. We added `min_zoom` and `max_zoom` to define the recommended zooms for each resolution of land cover, using the common “slippy maps” zoom level specification. This is a first step toward improving the user experience for mapmakers. We plan to expand these properties in future releases of Overture Maps data.
+我們的 5 月發佈還包括了[架構屬性](https://docs.overturemaps.org/schema/reference/base/land_cover/)，為製圖時最佳使用 Overture Maps 資料提供製圖“提示”。我們添加了 `min_zoom` 和 `max_zoom`，以使用常見的“滑動地圖”縮放級別規範來定義每個解析度土地植被的推薦縮放級別。這是改善製圖師使用者體驗的第一步，我們計劃在未來的 Overture Maps 資料發佈中擴展這些屬性。
 
-## Exploring land cover
+## 探索土地植被
 
-In the notebook example below, we'll show you how to extract, process, and visualize land cover data for an area of interest using [lonboard](https://developmentseed.org/lonboard/latest/) and the [Overture Maps Python command-line tool](https://github.com/OvertureMaps/overturemaps-py). We recommend that you consult [this example](https://developmentseed.org/lonboard/latest/examples/overture-maps/ ) in the lonboard docs to better understand the methods used here. You can view and download the complete notebook on [Notebook Sharing Space](https://notebooksharing.space/view/b63f6b3dda1da99c45caf53284fbc508aaae0a43480b43bb0316db636c5e6677).
-
+在下面的範例中，將展示如何使用 [lonboard](https://developmentseed.org/lonboard/latest/) 和 [Overture Maps Python Command-line Tool](https://github.com/OvertureMaps/overturemaps-py) 提取、處理和視覺化感興趣區域的土地植被資料。我們建議您查閱 lonboard 文檔中的[這個範例](https://developmentseed.org/lonboard/latest/examples/overture-maps/)，以更好地理解此處使用的方法。您可以在 [Notebook Sharing Space](https://notebooksharing.space/view/b63f6b3dda1da99c45caf53284fbc508aaae0a43480b43bb0316db636c5e6677) 查看和下載完整的 Jupyter Notebook。
 
 ![land cover](/img/blog/notebook-overture-lc.png)
 
- To follow along, you'll need to have [JupyterLab or Jupyter Notebook](https://jupyter.org/) running and the following dependencies installed:
- - [lonboard](https://developmentseed.org/lonboard/latest/#install)
- - [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
- - [pandas](https://pandas.pydata.org/)
- - [GeoPandas](https://geopandas.org/en/stable/index.html)
- - [Shapely](https://shapely.readthedocs.io/en/stable/index.html) 
+要跟隨這些步驟，您需要執行 [JupyterLab 或 Jupyter Notebook](https://jupyter.org/) 並安裝以下必要套件：
+- [lonboard](https://developmentseed.org/lonboard/latest/#install)
+- [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
+- [pandas](https://pandas.pydata.org/)
+- [GeoPandas](https://geopandas.org/en/stable/index.html)
+- [Shapely](https://shapely.readthedocs.io/en/stable/index.html) 
+
 
 
 ``` python

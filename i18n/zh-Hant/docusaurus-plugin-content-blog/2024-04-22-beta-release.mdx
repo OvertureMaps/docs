@@ -1,14 +1,14 @@
----
+﻿---
 title: Exploring our beta release
 description: Highlights from Overture Maps beta release
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Last week Overture Maps [announced the beta release](https://overturemaps.org/overture-maps-foundation-releases-beta-of-its-first-open-map-dataset/) of our schema and data. After months of hard work and steady improvements, we are nearing production-level stability. In a series of posts over the next few weeks -- starting with this one -- we’ll unpack the highlights and improvements you'll see in this release and beyond. 
+上週，Overture Maps [宣布了我們的模式和資料的測試版釋出](https://overturemaps.org/overture-maps-foundation-releases-beta-of-its-first-open-map-dataset/)。經過數月的努力和穩定改進，我們即將達到生產級穩定性。在接下來的幾週內，我們將發佈一系列文章——從這篇開始——深入介紹此次釋出中的亮點和改進。
 
-## Making geospatial fast
-The first thing you'll notice is how much faster you can [pull Overture Maps data out of the cloud](https://docs.overturemaps.org/getting-data/locally/). We made this possible by working closely with open-source collaborators on the repartitioning and [spatial optimization](https://cloudnativegeo.org/blog/2024/03/coming-soon-geoparquet-1.1/) of our GeoParquet files. Meanwhile, our friends at DuckDB, one of our favorite SQL tools, [added a feature](https://github.com/duckdb/duckdb/pull/10314) that improves the performance of queries with bounding boxes.
+## 加快地理空間處理
+你會首先注意到，我們 [從雲端提取 Overture Maps 資料的速度變得更快](https://docs.overturemaps.org/getting-data/locally/)。我們通過與開源協作者密切合作，對我們的 GeoParquet 檔案進行了再分區和 [空間優化](https://cloudnativegeo.org/blog/2024/03/coming-soon-geoparquet-1.1/)。同時，我們的朋友 DuckDB，這是我們最喜愛的 SQL 工具之一，[新增了一個功能](https://github.com/duckdb/duckdb/pull/10314)，提升了帶 bounding box 查詢的效能。
 
 <details>
 
@@ -50,12 +50,12 @@ The first thing you'll notice is how much faster you can [pull Overture Maps dat
     </Tabs>
 </details>
 
-We're continuing to make things faster and easier for users. Along with the folks at Development Seed, an [Overture Maps Foundation member](https://overturemaps.org/about/members/), we're [building special tools for Overture Maps data on top of lonboard](https://developmentseed.org/lonboard/latest/examples/overture-maps/), their Python library for visualizing large geospatial datasets in Jupyter. And recently our friends at Wherobots [took a comprehensive look](https://wherobots.com/overture-maps-data-cloud-native-geoparquet-apache-sedona/) at how our use of GeoParquet makes querying and analyzing our data with Apache Sedona very efficient. 
+我們正在與 Development Seed 的成員一起繼續為使用者提供更快更簡便的體驗，Development Seed也是 [Overture Maps Foundation 的成員](https://overturemaps.org/about/members/)，我們正在 [基於 lonboard](https://developmentseed.org/lonboard/latest/examples/overture-maps/) 開發針對 Overture Maps 資料的特殊工具，這是他們用於在 Jupyter 中視覺化大型地理空間資料集的 Python 含式庫。最近，我們的朋友 Wherobots [全面了解了](https://wherobots.com/overture-maps-data-cloud-native-geoparquet-apache-sedona/) 我們如何使用 GeoParquet 使得 Apache Sedona 查詢和分析資料變得非常高效。
 
-As you can see, we're moving forward with the community to iterate on data, software, and specifications with the shared goal of making geospatial **_fast_**.
+正如你所見，我們正在與社群一起推進，對資料、軟體和規範進行迭代，並以提升地理空間 **_速度_** 為共同目標。
 
-## Easier-to-use schema
-Another highlight of the beta release is the transition to an easier-to-use schema for our administrative boundary data. We first [explored this idea](https://github.com/OvertureMaps/schema/discussions/117) with the Overture Maps community in February, and after two short months of work, the [new divisions schema and data](https://docs.overturemaps.org/guides/divisions/) are ready to go. Here's a query to `divisions` that grabs geometries for all the countries in the world:
+## 更易用的模式
+測試版釋出的另一個亮點是轉向更易用的行政邊界資料模式。我們在二月份首先 [與 Overture Maps 社群探討了這個想法](https://github.com/OvertureMaps/schema/discussions/117)，經過短短兩個月的工作， [新的分區模式和資料](https://docs.overturemaps.org/guides/divisions/) 現已準備就緒。以下是查詢 `divisions` 的一個例子，該查詢抓取了全球所有國家的幾何訊息：
 
 ```
 SELECT *
