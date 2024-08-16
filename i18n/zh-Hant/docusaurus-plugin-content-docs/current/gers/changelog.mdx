@@ -1,52 +1,46 @@
----
-title: GERS Changelog
+﻿---
+title: GERS 更新日誌
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 import changelog_buildings_churn from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_churn.sql';
 import changelog_buildings_feature_by_change_type from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_feature_by_change_type.sql';
 import changelog_buildings_join from '!!raw-loader!@site/src/queries/athena/changelog_buildings_join.sql';
 
-With each data release, Overture generates a [GERS](../) changelog to capture changes in the data tied to the unique ID for each feature. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors. 
+每次資料發布時，Overture 生成一個 [GERS](../) 更新日誌，以捕獲與每個功能的唯一 ID 相關的資料變化。此訊息可用於指導資料匹配決策，更好地理解資料穩定性並幫助檢測資料錯誤。
 
-The GERS changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations:
+GERS 更新日誌可作為 Parquet 檔案提供——按主題、類型和變更類型分區——位於以下位置：
 
-| Provider | Location |
+| 供應商 | 位置 |
 | ------ | -------- |
 | Amazon S3 | `s3://overturemaps-us-west-2/changelog/` |
 | Microsoft Azure | `wasbs://changelog@overturemapswestus2.blob.core.windows.net/` |
 
-The latest path is: 
+最新路徑為：
 <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
 
-## Types of changes
+## 變更類型
 
-The types of changes in the changelog include:
+更新日誌中的變更類型包括：
 
-- **added**: the feature with this ID is new in the current release and was not present in the previous release
-- **removed**: the feature with this ID is not present in the current release but was present in the previous release
-- **data_changed**: the feature with this ID in the current release contains a change in geometry or properties from the feature with this ID that was in the previous release
-- **unchanged**: the feature with this ID in the current release matches the geometry and properties of the feature with this ID that was in the previous release
+- **added**：當前版本中此 ID 的功能是新的，之前版本中不存在
+- **removed**：當前版本中此 ID 的功能不存在，但在之前版本中存在
+- **data_changed**：當前版本中此 ID 的功能的幾何或屬性相較於之前版本中的 ID 發生了更改
+- **unchanged**：當前版本中此 ID 的功能的幾何和屬性與之前版本中 ID 的功能相匹配
 
-## Querying the GERS changelog
+## 查詢 GERS 更新日誌
 
-We can query the changelog with DuckDB to get a quick look at changes in data from the last release to the current release. In this example, we're grabbing ID, feature type, and change type for buildings in several towns across the [Amhara Region](https://en.wikipedia.org/wiki/Amhara_Region) in Ethiopia. 
+使用 DuckDB 查詢更新日誌，以快速查看從上次發布到當前發布的資料變更。在此範例中，我們獲取了埃塞俄比亞 [阿姆哈拉州](https://en.wikipedia.org/wiki/Amhara_Region) 幾個城鎮的建築物的 ID、功能類型和變更類型。
 
 <QueryBuilder query={changelog_buildings_churn}></QueryBuilder>
 
-We can also get a count of building features by change type for our area of interest.
+還可以獲取感興趣的區域中按變更類型分類的建築功能數量。
 
 <QueryBuilder query={changelog_buildings_feature_by_change_type}></QueryBuilder>
 
-Taking this one step further, this time using Athena to run our query, we can join the changelog and data via Overture ID to connect the change type and feature geometries and properties.  
+進一步以 Athena 執行查詢，我們可以通過 Overture ID 連接更新日誌和資料，以關聯變更類型與功能的幾何和屬性。
 
 <QueryBuilder query={changelog_buildings_join}></QueryBuilder>
 
-Finally we can use the results of our query to visualize building features by change type and inspect the properties for each feature. The example below, created using [kepler.gl](https://kepler.gl/), shows buildings in [Finote Selam](https://en.wikipedia.org/wiki/Finote_Selam), a city in the Amhara Region of Ethiopia. The data is from Overture's `2024-06-13-beta.0` release, to which we added 100 million new buildings, many of them derived from satellite imagery by Microsoft. 
+最後，我們可以使用查詢結果按變更類型視覺化建築功能，並檢查每個功能的屬性。以下範例使用 [kepler.gl](https://kepler.gl/) 創建，顯示了埃塞俄比亞阿姆哈拉州城市 [Finote Selam](https://en.wikipedia.org/wiki/Finote_Selam) 的建築。資料來自 Overture 的 `2024-06-13-beta.0` 版本，我們增加了 1 億棟新建築，其中許多是由微軟從衛星圖像中衍生的。
 
-
-![Buildings By Change Type](/img/gers/buildings-change-type-amhara-region.png)
-
-
-
-
-
+![按變更類型分類的建築](/img/gers/buildings-change-type-amhara-region.png)

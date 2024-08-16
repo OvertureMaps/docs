@@ -1,4 +1,4 @@
----
+﻿---
 title: DuckDB
 ---
 
@@ -9,19 +9,19 @@ import ConfidentMountains from '!!raw-loader!@site/src/queries/duckdb/confident_
 import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
 import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level_geometries.sql';
 
-[DuckDB](https://duckdb.org/) 是一款分析工具，允許您查詢遠端文件並僅下載您所需的數據。
+[DuckDB](https://duckdb.org/) 是一款分析工具，允許您查詢遠端檔案並僅下載您所需的資料。
 
 ## 安裝
 
-[在本地安裝 DuckDB](https://duckdb.org/docs/installation/)。您將需要擴充套件功能來處理雲端的空間數據。使用 DuckDB CLI，請執行以下操作：
+[在本地安裝 DuckDB](https://duckdb.org/docs/installation/)。您將需要擴充套件功能來處理雲端的空間資料。使用 DuckDB CLI，請執行以下操作：
 
 1. `INSTALL SPATIAL;` 來安裝 [duckdb_spatial](https://github.com/duckdblabs/duckdb_spatial) 擴充套件。
-2. `INSTALL httpfs;` 或 `INSTALL azure;` 來從 Amazon S3 ([httpfs](https://duckdb.org/docs/guides/import/s3_import.html)) 或 Microsoft Azure Blob Storage ([azure](https://duckdb.org/docs/extensions/azure)) 讀取數據。
+2. `INSTALL httpfs;` 或 `INSTALL azure;` 來從 Amazon S3 ([httpfs](https://duckdb.org/docs/guides/import/s3_import.html)) 或 Microsoft Azure Blob Storage ([azure](https://duckdb.org/docs/extensions/azure)) 讀取資料。
 
 ## 範例查詢
 
 ### 山脈
-此查詢從 Overture 地點數據集中選擇山脈類別的 POI，並將其輸出到 GeoJSON 中。
+此查詢從 Overture 地點資料集中選擇山脈類別的 POI，並將其輸出到 GeoJSON 中。
 
 
 <QueryBuilder query={ConfidentMountains}></QueryBuilder>
@@ -37,13 +37,13 @@ WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
 
 ### 在底特律的建築
 
-此查詢從 Overture 建築數據集中抓底特律地區的建築幾何形狀和選定屬性。
+此查詢從 Overture 建築資料集中抓底特律地區的建築幾何形狀和選定屬性。
 
 <QueryBuilder query={DetroitBuildings}></QueryBuilder>
 
 ### 行政區輪廓
 
-此查詢從 divisions 數據集中抓賓夕法尼亞州的縣的幾何形狀，並將其輸出到 GeoJSON 中。
+此查詢從 divisions 資料集中抓賓夕法尼亞州的縣的幾何形狀，並將其輸出到 GeoJSON 中。
 
 <QueryBuilder query={CountyGeometries}></QueryBuilder>
 

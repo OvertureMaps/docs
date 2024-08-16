@@ -1,4 +1,4 @@
----
+﻿---
 title: 請求 Overture 資料
 ---
 
@@ -35,7 +35,7 @@ _強烈建議_ 使用 AWS 和 Azure 上可用的服務來獲得雲端資料，�
 
 可以直接從 Azure Blob Storage 或 Amazon S3 下載 GeoParquet。以下是操作步驟：
 
-在安裝 [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) 之後，您可以使用以下指令從 S3 下載檔案。將 `<DESTINATION>` 設置為本地目錄路徑來下載檔案，或設置為您控制的 `s3://` 路徑來將檔案複製到您的 S3 存儲桶中。
+在安裝 [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) 之後，您可以使用以下指令從 S3 下載檔案。將 `<DESTINATION>` 設定為本地目錄路徑來下載檔案，或設定為您控制的 `s3://` 路徑來將檔案複製到您的 S3 儲存貯體中。
 
 <QueryBuilder   query="aws s3 cp --region us-west-2 --no-sign-request --recursive s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/ <DESTINATION>"
                 language="text">

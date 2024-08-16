@@ -1,4 +1,4 @@
----
+﻿---
 title: Sedona
 ---
 
@@ -8,7 +8,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 
 ## Python + Spatial SQL
-[Sedona](https://sedona.apache.org/) 是一個用於空間數據的叢集計算系統。您可以從 [Apache Software Foundation DockerHub](https://hub.docker.com/r/apache/sedona) 獲取 single-node Sedona Docker 映像檔，或使用 [Wherobots](https://www.wherobots.ai/demo) 將 Sedona 安裝到 Databricks、AWS EMR 和 Snowflake。
+[Sedona](https://sedona.apache.org/) 是一個用於空間資料的叢集計算系統。您可以從 [Apache Software Foundation DockerHub](https://hub.docker.com/r/apache/sedona) 下載 single-node Sedona Docker 映像檔，或使用 [Wherobots](https://www.wherobots.ai/demo) 將 Sedona 安裝到 Databricks、AWS EMR 和 Snowflake。
 
 要開始使用 single-node Docker 映像檔，請執行：
 ```bash
@@ -16,7 +16,7 @@ docker pull apache/sedona
 docker run -p 8888:8888 apache/sedona:latest
 ```
 
-然後可以在 localhost:8888 看到 Jupyter Lab 和 notebook 範例。以下是 Python + Sedona SQL 程式，讀取 Places 數據集並對其執行空間過濾查詢
+然後可以在 localhost:8888 看到 Jupyter Lab 和 notebook 範例。以下是 Python + Sedona SQL 程式，讀取 Places 資料集並對其執行空間過濾查詢
 
 ```python
 from sedona.spark import *

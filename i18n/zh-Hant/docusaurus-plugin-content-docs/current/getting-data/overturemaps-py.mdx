@@ -1,4 +1,4 @@
----
+﻿---
 title: Python Command-line Tool
 ---
 
@@ -25,7 +25,7 @@ $ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=b
 - `--bbox`（可選）：西、南、東、北經緯度坐標。省略時將下載指定類型的整個資料集。
 - `-f`（必填：其中之一「geojson」、「geojsonseq」、「geoparquet」）：輸出格式。
 - `--output/-o`（可選）：輸出檔案的位置。省略時，輸出將寫入 stdout。
-- `--type/-t`（必填）：要下載的 Overture 地圖資料類型。類型範例用於建立建築物面積、POI 的地點資料等。運行 overturemaps download --help 可得到允許類型的完整清單。
+- `--type/-t`（必填）：要下載的 Overture 地圖資料類型。類型範例用於建立建築物面積、POI 的地點資料等。執行 overturemaps download --help 可得到允許類型的完整清單。
 
 這些資料不與其他伺服器請求資料，而是直接從 Overture 的 S3 儲存貯體下載。通過在每列 Overture 分發中包括 bounding boxes 範圍，底層 Parquet 讀取器使用 Parquet 摘要統計訊息來下載所需區域資料所需要的最小資料量。
 
