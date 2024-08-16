@@ -1,4 +1,4 @@
----
+﻿---
 title: Overture Schema
 slug: /schema
 
@@ -14,26 +14,25 @@ import yamlLoad from "@site/src/components/yamlLoad"
 import EmpireStateBuilding from "!!raw-loader!@site/docs/_examples/buildings/empire-state-building.json";
 import MainDefs from "!!raw-loader!@site/docs/_schema/defs.yaml";
 
-Overture data is structured by three components: the schema, the data model, and the Global Entity Reference System ([GERS](https://docs.overturemaps.org/gers/)). The schema describes the shape of the data and devises the constraints applied to that data. The data model specifies what types of features exist, their geometries, how the features relate to each other, and what kind of properties they have. GERS is a framework for structuring, encoding, and matching Overture data to a shared universal reference.
+Overture 資料由三個組件構成：模式、資料模型和全球實體參考系統（[GERS](https://docs.overturemaps.org/gers/)）。模式描述資料的結構並制定適用於這些資料的約束條件。資料模型規定了存在的 Features 類型、它們的幾何形狀、 Features 之間的關係以及它們具有的屬性。GERS 是一個結構化、編碼和匹配 Overture 資料的共享通用參考框架。
 
-
-<!-- You can see all three components in this description of one feature, the Empire State Building:
+<!-- 你可以在這裡看到這三個組件的描述，以帝國大廈為例：
 
  <CodeBlock language="json">{ EmpireStateBuilding }</CodeBlock> -->
 
-## GeoJSON mental model
+## GeoJSON 心智模型
 
- The Overture schema is defined by the [JSON schema](https://json-schema.org/), and [GeoJSON](https://geojson.org/) is used as the canonical geospatial format. GeoJSON provides us with a mental model and language to express data constructions in the schema. The Overture schema supports the following geometry types: Point, LineString, Polygon, MultiPoint, MultiLineString, and MultiPolygon. Together geometric objects and their properties are called features.
+Overture 模式由 [JSON schema](https://json-schema.org/) 定義，並使用 [GeoJSON](https://geojson.org/) 作為標準的地理空間格式。GeoJSON 為我們提供了一個心智模型和語言，用於在模式中表達資料結構。Overture 模式支援以下幾何類型：Point、LineString、Polygon、MultiPoint、MultiLineString 和 MultiPolygon。幾何對象及其屬合稱為 Features 。
 
-## Features represent entities
+## Features
 
-Overture uses the [simple feature model](https://www.ogc.org/standard/sfa/) specified by the Open Geospatial Consortium to describe each feature. Features in Overture represent entities in the real world. An entity is a physical thing or concept: a segment of road, a city boundary, a building, or a park. In most cases it's helpful to think of an entity and a feature as the same thing, but in practice it can be more complicated. An entity could be represented by multiple features in a geospatial dataset, and a feature in a dataset might be a representation of multiple entities. For example, a school building and its entrances and exits might be considered a single entity in the real world but could be represented as multiple features in an Overture dataset, each feature with a unique ID.
+Overture 使用 [簡單 Features 模型](https://www.ogc.org/standard/sfa/) 來描述每個 Features 。Overture 中的 Features 代表現實世界中的實體。實體是物理事物或概念：一段道路、一個城市邊界、一棟建築或一個公園。在大多數情況下，將實體和 Features 視為相同的事物是有幫助的，但在實際狀況中可能會更複雜。實體可能會由地理空間資料集中的多個 Features 表示，而資料集中的一個 Features 可能代表多個實體。例如，一所學校建築及其進出口可能在現實世界中被視為一個實體，但在 Overture 資料集中可能會被表示為多個 Features ，每個 Features 都有一個獨一無二的 ID。
 
-## Global Entity Reference System (GERS)
+## 全球實體參考系統 (GERS)
 
-All features in Overture have unique IDs called Overture IDs. For some feature types, the Overture ID is registered to GERS. This means a feature can be tracked from one Overture data release to another, and any changes to that feature can be encoded in a GERS changelog.
+Overture 中的所有 Features 都有稱為 Overture ID 的唯一 ID。對於某些 Features 類型，Overture ID 被註冊到 GERS。這意味著 Features 可以從一個 Overture 資料版本追蹤到另一個版本，對該 Features 的任何變更都可以編碼到 GERS 變更記錄中。
 
-GERS also provides a mechanism to conflate datasets, matching one or more features via Overture IDs. For example, two polygon features from two different datasets, each polygon representing the footprint of the Empire State Building in New York City, can be easily matched if both features reference the same Overture ID in GERS.
+GERS 還提供了一種機制來合併資料集，通過 Overture ID 匹配一個或多個 Features 。例如，來自兩個不同資料集的兩個多邊形 Features ，每個多邊形代表紐約市的帝國大廈的基礎，若這兩個 Features 都參考相同的 GERS 中的 Overture ID，就可以輕鬆配對。
 
 ## Schema characteristics
 

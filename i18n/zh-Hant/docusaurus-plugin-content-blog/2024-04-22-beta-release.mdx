@@ -63,7 +63,7 @@ SELECT *
 WHERE subtype = 'country';
 ```
  
- You can see that the `divisions` query above is much simpler than a comparable query to `admins`:
+您可以注意到 `divisions` 查詢比對 `admins` 的相應查詢要簡單得多：
 
 
 ```
@@ -80,12 +80,11 @@ WITH admins AS (
 
 ```    
 
-We plan to [deprecate admins](https://docs.overturemaps.org/release-notes/) by the July release. In the meantime, both `admins` and `divisions` will be available to users. 
+我們計劃在七月的版本中 [棄用 admins](https://docs.overturemaps.org/release-notes/)。在此期間，`admins` 和 `divisions` 將同時提供給使用者使用。
 
-## Bridges, islands, waterfalls, and more!
-We added more rich detail to our `base` layer in this release, including an `infrastructure` type with familiar features from [Facebook’s Daylight map distribution](https://daylightmap.org/). We also added new subtypes and classes for the `land`, `land_use`, and `water` feature types. You'll find a comprehensive listing of the subtypes and classes for each feature type in our [schema reference docs](https://docs.overturemaps.org/schema/reference/base/infrastructure). Ready to make your own map? We have a [tutorial to help you get started](https://docs.overturemaps.org/examples/build-a-map/#13/47.6/-122.33/0/45).
-  
-## Stay tuned for more highlights
-We'll be back soon with more posts that explore our path from the beta release to production. In the meantime, we invite you to [get started with our data](https://docs.overturemaps.org/getting-data/) and share with us your [comments and feedback](https://github.com/OvertureMaps/data/discussions). 
+## 橋樑、島嶼、瀑布等等！
+在此次釋出中，我們在 `base` 層中增加了更多豐富的細節，包括來自 [Facebook Daylight 地圖分發](https://daylightmap.org/) 的熟悉特徵的 `infrastructure` 類型。我們還為 `land`、`land_use` 和 `water` 特徵類型新增了子類型和類別。你可以在我們的 [模式參考文檔](https://docs.overturemaps.org/schema/reference/base/infrastructure) 中找到每個特徵類型的子類型和類別的詳細列表。準備好製作自己的地圖了嗎？我們有一個 [教學幫助你入門](https://docs.overturemaps.org/examples/build-a-map/#13/47.6/-122.33/0/45)。
 
+## 請繼續關注更多焦點
+我們不久後就會再發佈更多從測試版釋出到生產過程中的文章。在這段時間，我們邀請你 [開始使用我們的資料](https://docs.overturemaps.org/getting-data/) 並與我們分享你的 [評論和意見](https://github.com/OvertureMaps/data/discussions)。
 
