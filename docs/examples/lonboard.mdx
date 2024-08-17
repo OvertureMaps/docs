@@ -11,66 +11,63 @@ In this example, we'll walk through three ways to fetch, process, and visualize 
 
     <summary>
     **Installation requirements**
-    
+
     </summary>
 To follow along with these examples, you should have [JupyterLab or Jupyter Notebook](https://jupyter.org/) running and the following dependencies installed:
 
- - [Lonboard](https://developmentseed.org/lonboard/latest/#install)
- - [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
- - [GeoPandas](https://geopandas.org/en/stable/index.html)
- - [Pandas](https://pandas.pydata.org/)
- - [Shapely](https://shapely.readthedocs.io/en/stable/)
- 
+- [Lonboard](https://developmentseed.org/lonboard/latest/#install)
+- [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
+- [GeoPandas](https://geopandas.org/en/stable/index.html)
+- [Pandas](https://pandas.pydata.org/)
+- [Shapely](https://shapely.readthedocs.io/en/stable/)
 
 </details>
 
-The examples below are available in [the notebooks directory](https://docs.overturemaps.org/) in our docs repository on GitHub.
+The examples below are available in [the notebooks directory](//github.com/OvertureMaps/docs/tree/main/static/notebooks) in our docs repository on GitHub.
 
 ## Examples
 
-In the first and simplest example, we'll use the [record_batch_reader](https://github.com/OvertureMaps/overturemaps-py/blob/e9632d4d2481a472a22dfd2d0a47ec9798ced9ef/overturemaps/core.py#L17) method in the overturemaps-py library to load Overture GeoParquet data directly into a PyArrow table. Then we'll use lonboard's built-in visualization tools to create an interactive map.  
+In the first and simplest example, we'll use the [record_batch_reader](https://github.com/OvertureMaps/overturemaps-py/blob/e9632d4d2481a472a22dfd2d0a47ec9798ced9ef/overturemaps/core.py#L17) method in the overturemaps-py library to load Overture GeoParquet data directly into a PyArrow table. Then we'll use lonboard's built-in visualization tools to create an interactive map.
 
+### GeoArrow
 
-### GeoArrow 
+ First, let's import our toolkit.
 
- First, let's import our toolkit. 
-
-``` python
-import overturemaps 
+```python
+import overturemaps
 from lonboard import Map, PathLayer
 ```
 
-Next we'll get a bounding box for our area of interest. 
+Next we'll get a bounding box for our area of interest.
 
-``` python
+```python
 # specify bounding box in Milan
 bbox = 1.9402,48.7091,2.7784,49.0599
 ```
 
 The `record_batch_reader` function accepts an Overture feature type and a bounding box as arguments. Let's grab some road data for Milan.
 
-
-``` python
+```python
 # need feature type and bounding box as arguments
 table = overturemaps.record_batch_reader("segment", bbox).read_all()
 table = table.combine_chunks()
 ```
 
-We can inspect shape of the data.  
+We can inspect shape of the data.
 
-```
+```python
 table.shape
 ```
- 
-We can also dig into the complexity of the Overture transportation schema.  
 
-```
+We can also dig into the complexity of the Overture transportation schema.
+
+```python
 table.schema
 ```
 
-Lonboard includes many built-in tools for visualizing map data. Here we're using [PathLayer](https://developmentseed.org/lonboard/latest/api/layers/path-layer/) to render the segment features. Then we can set parameters for our interactive map display. 
+Lonboard includes many built-in tools for visualizing map data. Here we're using [PathLayer](https://developmentseed.org/lonboard/latest/api/layers/path-layer/) to render the segment features. Then we can set parameters for our interactive map display.
 
-```
+```python
 layer = PathLayer(
     table=table.select(["id", "geometry", "subtype", "class", "names"]),
     get_color=[200, 0, 200],
@@ -84,19 +81,18 @@ view_state = {
 }
 m = Map(layer, view_state=view_state)
 m
-``` 
+```
 
 ![roads in Milan](/img/examples/road-network-milan.png)
-
 
 ### GeoDataFrame (the long way)
 
 In the second example, we'll add a few steps in the notebook to convert the PyArrow table to a GeoPandas GeoDataFrame. Getting the data into a GeoDataFrame can also require a bigger toolkit, depending on which methods we use. Here's our expanded toolkit:
 
-``` python
-import overturemaps 
+```python
+import overturemaps
 import pandas
-import geopandas
+import geopandas as gpd
 from shapely import wkb
 from lonboard import Map, PolygonLayer
 ```
@@ -123,13 +119,13 @@ Converting the table to a Pandas DataFrame is straightforward.
 df = table.to_pandas()
 ```
 
-But we need an extra step to create the GeoDataFrame. Specifically we need to convert to the geometry to a [Shapely geometry](https://shapely.readthedocs.io/en/stable/geometry.html) as we load into a GeoDataFrame. 
+But we need an extra step to create the GeoDataFrame. Specifically we need to convert to the geometry to a [Shapely geometry](https://shapely.readthedocs.io/en/stable/geometry.html) as we load into a GeoDataFrame.
 
 ``` python
 # DataFrame to GeoDataFrame, set crs
 gdf = gpd.GeoDataFrame(
-    df, 
-    geometry=df['geometry'].apply(wkb.loads), 
+    df,
+    geometry=df['geometry'].apply(wkb.loads),
     crs="EPSG:4326"
 )
 ```
@@ -153,11 +149,12 @@ view_state = {
 m = Map(layer, view_state=view_state)
 m
 ```
+
 ![buildings in Milan](/img/examples/buildings-milan.png)
 
 ### GeoDataFrame (the direct way)
 
-In the last example, we'll use the [`geodataframe` method](https://github.com/OvertureMaps/overturemaps-py/blob/e9632d4d2481a472a22dfd2d0a47ec9798ced9ef/overturemaps/core.py#L51) in the overturemaps-py library to pull Overture data directly into a GeoDataFrame. This method handles all the conversions internally, making our lives easier and our notebooks cleaner. 
+In the last example, we'll use the [`geodataframe` method](https://github.com/OvertureMaps/overturemaps-py/blob/e9632d4d2481a472a22dfd2d0a47ec9798ced9ef/overturemaps/core.py#L51) in the overturemaps-py library to pull Overture data directly into a GeoDataFrame. This method handles all the conversions internally, making our lives easier and our notebooks cleaner.
 
 :::note
 Until the `0.9.0` release of overturemaps-py is available, you'll need to follow these steps to use the `geodataframe` method: clone [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py) and navigate into the directory; run `pip install -e .` in a new virtual environment to install the version with latest features; install the rest of the dependencies necessary for this example.
@@ -167,7 +164,7 @@ Here's the toolkit:
 
 ```python
 import geopandas
-from overturemaps import core 
+from overturemaps import core
 from lonboard import Map, ScatterplotLayer
 ```
 
@@ -177,16 +174,18 @@ Once again, we'll use the bounding box in Milan.
 # specify bounding box
 bbox = 9.106105, 45.427315, 9.263542, 45.5164
 ```
+
 Direct to GeoDataFrame using the `geodataframe` method!
 
 ```python
 # read in Overture place feature type, direct to geodataframe
 gdf = core.geodataframe("place", bbox=bbox)
 ```
+
 Use [ScatterplotLayer](https://developmentseed.org/lonboard/latest/api/layers/scatterplot-layer/) to render the point data and create an interactive map display in the notebook.
 
 ```python
-# create map layer 
+# create map layer
 layer = ScatterplotLayer.from_geopandas(
     gdf,
     get_fill_color=[0, 128, 128],
@@ -202,10 +201,10 @@ view_state = {
 m = Map(layer)
 m
 ```
+
 ![places in Milan](/img/examples/places-milan.png)
 
 ## Next steps
+
 - For a more complex example with Lonboard and Overture data, head over to the [Lonboard docs](https://developmentseed.org/lonboard/latest/examples/overture-maps/).
-- Check out the example with land cover data and Lonboard on our engineering [blog](https://docs.overturemaps.org/blog/2024/05/16/land-cover/). 
-
-
+- Check out the example with land cover data and Lonboard on our engineering [blog](https://docs.overturemaps.org/blog/2024/05/16/land-cover/).
