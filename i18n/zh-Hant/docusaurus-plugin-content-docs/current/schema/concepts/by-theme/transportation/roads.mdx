@@ -120,25 +120,11 @@ is known.
 
 路段上的轉彎限制限制了從該段到其他 [實體連接](#physical-connectivity) 段的過渡。
 
-Every road segment has an implied set of allowed transitions
-defined by its [access restrictions](#access-restrictions) as well as
-local rules, norms, and customs. An example of a transition restriction
-implied by an access restriction, if the segment can only be used along the `forward` [heading](/schema/concepts/by-theme/transportation/shape-connectivity#heading), then it is implied that no transitions are allowed to any connected segments if travelling
-along the `backward` heading. An example of a transition restriction
-implied by a local rule or norm would be a blanket prohibition on
-U-turns in a given jurisdiction. (The Overture transportation schema
-does not specify these local rules, norms, and customs, which are left
-to the specific application to resolve.)
+每條路段都有一組隱含的允許轉換，這些轉換由其 [通行限制](#access-restrictions) 以及當地規則、規範和習俗定義。如果一個段落僅能沿著 `forward` [方向](#heading) 使用，那麼沿著 `backward` 方向行駛時，則隱含著不允許轉換到任何連接的段落。由當地規則或規範隱含的轉換限制的例子可能是對某個司法區域內的掉頭禁令。（Overture 運輸模式並未規定這些當地規則、規範和習俗，這些由具體應用來解決。）
 
-Overture takes a permissive-by-default approach to transition
-restrictions. By default, all implied transitions are allowed. The
-set of allowed transitions may be reduced by adding explicit transition
-restrictions in the `prohibited_transitions` property.
+Overture 採取默認允許的過渡限制方式。默認情況下，所有隱含的轉換都是允許的。可以通過在 `prohibited_transitions` 屬性中添加明確的轉換限制來縮減允許的轉換集。
 
-Turn restrictions come in two flavors: simple and via: a simple turn
-restriction allows a simple regulation to be stated, such as "No right
-turn onto Elm Street"; a via restriction covers more elaborate cases
-where the sequence of maneuvers is important.
+轉彎限制分為兩種類型：簡單轉彎限制和通過轉彎限制。簡單轉彎限制允許描述簡單的規定，例如「禁止右轉進入楓樹街」；而通過轉彎限制則涵蓋了更為複雜的情況，其中操作的順序是重要的。
 
 <Tabs>
   <TabItem value="simple" label="Simple restriction." default>
@@ -157,7 +143,7 @@ where the sequence of maneuvers is important.
 
 <figcaption>
 
-*Prohibited right turn from "source" to "target" segment at connector 2.*
+*禁止從 "source" 轉到 "target" 段落的右轉，發生在連接器 2 上。*
 
 </figcaption>
 
@@ -175,9 +161,7 @@ where the sequence of maneuvers is important.
 <details>
 <summary>Connector 1</summary>
 
-*This connector is not an important part of the example, since it does
-not participate in the turn restriction, but it is included to bring
-real-world context to the example.*
+*這個連接器在例子中並不是重要的一部分，因為它不參與轉向限制，但它被包括在內以提供真實世界的背景。*
 
 <CodeBlock language="yaml">{ ExampleTurnRestriction1Connector1 }</CodeBlock>
 </details>
@@ -185,9 +169,7 @@ real-world context to the example.*
 <details>
 <summary>Exit segment</summary>
 
-*This segment is not an important part of the example, since all implied
-transitions are allowed on it. We include it to bring real-world context
-to the example.*
+*這個段落在例子中不是重要的一部分，因為所有暗示的轉換在此段落上都是允許的。我們包括它是為了提供真實世界的背景。*
 
 <CodeBlock language="yaml">{ ExampleTurnRestriction1Exit }</CodeBlock>
 
@@ -196,8 +178,7 @@ to the example.*
 <details>
 <summary>Connector 2</summary>
 
-*The right turn from the source segment (`forward` heading) to the
-target segment (`forward` heading) is prohibited at this connector.*
+*從源段落（`forward` 方向）到目標段落（`forward` 方向）的右轉在這個連接點被禁止。*
 
 <CodeBlock language="yaml">{ ExampleTurnRestriction1Connector2 }</CodeBlock>
 </details>
@@ -205,9 +186,7 @@ target segment (`forward` heading) is prohibited at this connector.*
 <details>
 <summary>Target segment</summary>
 
-*Traffic heading `forward` on the source segment may not enter this
-segment heading `forward`, i.e. the right turn from the source segment
-to this segment is prohibited.*
+*在源段落上向 `forward` 方向行駛的車輛不得進入此段落的 `forward` 方向，即從源段落到此段落的右轉被禁止。*
 
 <CodeBlock language="yaml">{ ExampleTurnRestriction1Target }</CodeBlock>
 </details>
@@ -285,26 +264,15 @@ to this segment is prohibited.*
   </TabItem>
 </Tabs>
 
-### Speed limits
+### 速度限制
 
-Speed limits restrict the speed at which travel is permitted on a road.
-Typically speed limits specify maximum allowed speeds, but the
-Overture also allows minimum speed limits to be set and variable speed
-corridors to be indicated.
+速度限制規定了在道路上允許的最高行駛速度。通常，速度限制指定了最大允許速度，但 Overture 也允許設置最低速度限制和指示變速走廊。
 
-Every road segment has an implied speed limit or set of speed limits
-defined by its [road class](#road-class) and local rules, norms, and
-customs. Note: as with access and turn restrictions, the Overture
-transportation schema does not attempt to specify these implied speed
-limits.
+每條道路段都有一個隱含的速度限制或一組速度限制，這些限制由其 [道路類別](#road-class) 以及當地規則、慣例和習俗定義。注意：與通行限制和轉向限制類似，Overture 交通模式並未嘗試指定這些隱含的速度限制。
 
-The implied speed limits may be configured for the whole road segment by
-providing an explicit value for the property
-`speed_limits`. Note: granular speed limits can also be
-specified at the level of individual [lanes](#lanes), as explained
-elsewhere.
+可以通過為 `speed_limits` 屬性提供明確的值來配置整條道路段的速度限制。注意：細化的速度限制也可以在個別 [車道](#lanes) 層級上指定，如其他地方所述。
 
-As with access restrictions and turn restrictions, speed limits can be specified using [rules](/schema/concepts/scoping-rules#rules-and-rule-based-properties).
+與通行限制和轉向限制一樣，速度限制也可以使用 [規則](#rules-and-rule-based-properties) 進行指定。
 
 <Tabs>
   <TabItem value="speedLimitSimple" label="Simple speed limit" default>
