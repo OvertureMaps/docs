@@ -1,5 +1,6 @@
 ---
 title: Divisions
+description: Administrative Boundaries from Countries to neighborhoods
 ---
 
 import Tabs from '@theme/Tabs';
@@ -22,7 +23,7 @@ import PhillyPlaces from '!!raw-loader!@site/src/queries/duckdb/divisions_philly
 
 The Overture divisions theme has three feature types: `division`, `division_area`, and `division_boundary`.
 
-There are more than 5.3 million point, line, and polygon representations of human settlements, such as such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. (See the [attribution page](https://docs.overturemaps.org/attribution/) for more information.) 
+There are more than 5.3 million point, line, and polygon representations of human settlements, such as such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. (See the [attribution page](https://docs.overturemaps.org/attribution/) for more information.)
 
 Divisions data can be used for many purposes, which can include, but are not limited to:
 - reverse-geocoding
@@ -32,13 +33,13 @@ Divisions data can be used for many purposes, which can include, but are not lim
 - containment checks (e.g. point-in-polygon analysis)
 - choosing a geometry based on your use case
 
-| ![Overture divisions coverage - country and region boundaries](/img/divisions/divisions-admin0-admin1-coverage.png) | 
-|:--:| 
-| *Overture divisions data, styled by subtype: countries in purple, region boundaries as green lines.* | 
+| ![Overture divisions coverage - country and region boundaries](/img/divisions/divisions-admin0-admin1-coverage.png) |
+|:--:|
+| *Overture divisions data, styled by subtype: countries in purple, region boundaries as green lines.* |
 
 ## Dataset description
 
-### Feature type descriptions 
+### Feature type descriptions
 
 A `division` is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `division` feature type](/schema/reference/divisions/division).
 
@@ -104,7 +105,7 @@ The `division_boundary` feature type was introduced in the July 2024 release. It
 
 :::
 
-### Subtype descriptions 
+### Subtype descriptions
 
 Subtypes can represent each feature's administrative level, from `country` down to `microhood`. Subtypes can also represent a place hierarchy within a country and offer a standardized place definition for divisions. See below for a list of subtypes and their descriptions in the divisions theme:
 
@@ -127,9 +128,9 @@ Subtypes can represent each feature's administrative level, from `country` down 
 | **microhood** | A mini-neighborhood that is contained within a division of type neighborhood. | Gätjensort in Hamburg |
 </details>
 
-### Data columns 
+### Data columns
 
-As of the July 2024 release, there are 25 columns in the divisions GeoParquet files. Each column is a property in the data. 
+As of the July 2024 release, there are 25 columns in the divisions GeoParquet files. Each column is a property in the data.
 
 <details>
 	<summary>List of all columns in the divisions GeoParquet files</summary>
@@ -163,7 +164,7 @@ As of the July 2024 release, there are 25 columns in the divisions GeoParquet fi
 | **type** |  string | Name of the Overture feature type being queried.
 </details>
 
-## Data access and retrieval 
+## Data access and retrieval
 
 Overture's six data themes, including divisions, are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
 
@@ -207,7 +208,7 @@ Note: Running this query will result in a ~6.4GB file.
 
 </Tabs>
 
-## Data usage guidelines 
+## Data usage guidelines
 
 We recommend querying and downloading only the Overture data you need.
 If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract divisions data.
@@ -221,8 +222,8 @@ To download data: Pan to the area you are interested in, turn off the other laye
 
 This will download the area visible on your screen.
 
-| ![Exploring divsions data in NYC](/img/divisions/divisions-us.gif) | 
-|:--:| 
+| ![Exploring divsions data in NYC](/img/divisions/divisions-us.gif) |
+|:--:|
 | *Exploring divisions data in NYC using [Overture's Explore tool](https://explore.overturemaps.org/#10.35/40.802/-73.9407).* |
 </TabItem>
 
@@ -233,7 +234,7 @@ You can alter the `bbox` value to download a particular area.
 
 ```
 overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=divisions -o boston.geojson
-``` 
+```
 </TabItem>
 
 <TabItem value="DuckDB" label="DuckDB" default>
@@ -301,14 +302,14 @@ This query will return Places theme data for any place within the locality of Ph
 <QueryBuilder query={PhillyPlaces}></QueryBuilder>
 </details>
 
-## Revision history 
-### Version info 
+## Revision history
+### Version info
 
 You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
 
 ## Support
 
-### Feedback 
+### Feedback
 
 You can find a list of Overture repositories [here](https://github.com/orgs/OvertureMaps/repositories).
 
@@ -316,7 +317,7 @@ Discussions are generally reserved for broader conversations around the division
 
 Issues are generally reserved for more specific concerns with specific entities in the dataset (geometry validation, missing entities, duplicate entities) or country-specific concerns.
 
-### Discussions 
+### Discussions
 
 You can start and add to discussions in each of the public Overture repositories. Some examples:
 
@@ -326,7 +327,7 @@ You can start and add to discussions in each of the public Overture repositories
 
 Discussions around Overture's divisions data should be filed in the Data repository.
 
-### Issues 
+### Issues
 
 You can start and add to issues in each of the public Overture repositories, too. Some examples:
 

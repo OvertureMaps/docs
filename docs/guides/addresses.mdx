@@ -1,5 +1,6 @@
 ---
 title: Addresses
+description: Global address points
 ---
 
 import Tabs from '@theme/Tabs';
@@ -28,13 +29,13 @@ Address data can be used for a variety of purposes, which can include:
 - **Normalization**: Adhering to standard and consistent forms of address components.
 - **Validation and Verification**: Confirming an address exists within a known list of addresses.
 
-| ![Overture address coverage](/img/addresses/address-coverage.png) | 
-|:--:| 
-| *Overture address data, styled by country: countries with address coverage in color.* | 
+| ![Overture address coverage](/img/addresses/address-coverage.png) |
+|:--:|
+| *Overture address data, styled by country: countries with address coverage in color.* |
 
 ## Dataset description
 
-### Feature type descriptions 
+### Feature type descriptions
 
 An `address` is a feature type that represents a physical place through a series of attributes: street number, street name, unit, address_levels, postalcode and/or country. They also have a `Point` geometry, which provides an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `address` feature type](/schema/reference/addresses/address).
 
@@ -58,9 +59,9 @@ An `address` is a feature type that represents a physical place through a series
 | LU | 164,415
 </details>
 
-### Data columns 
+### Data columns
 
-As of the July 2024 release, there are 14 columns in the addresses GeoParquet files. Each column is a property in the data. 
+As of the July 2024 release, there are 14 columns in the addresses GeoParquet files. Each column is a property in the data.
 
 <details>
 	<summary>List of all columns in the addresses GeoParquet files</summary>
@@ -83,7 +84,7 @@ As of the July 2024 release, there are 14 columns in the addresses GeoParquet fi
 | **type** |  string | Name of the Overture feature type being queried.
 </details>
 
-## Data access and retrieval 
+## Data access and retrieval
 
 Overture's data themes, including addresses, are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
 
@@ -171,14 +172,14 @@ This query will create a CSV file of address within the State of Utah, using the
 <QueryBuilder query={UtahAddresses}></QueryBuilder>
 </details>
 
-## Revision history 
-### Version info 
+## Revision history
+### Version info
 
 You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
 
 ## Support
 
-### Feedback 
+### Feedback
 
 You can find a list of Overture repositories [here](https://github.com/orgs/OvertureMaps/repositories).
 
@@ -186,7 +187,7 @@ Discussions are generally reserved for broader conversations around the addresse
 
 Issues are generally reserved for more specific concerns with specific entities in the dataset (geometry validation, missing entities, duplicate entities) or country-specific concerns.
 
-### Discussions 
+### Discussions
 
 You can start and add to discussions in each of the public Overture repositories. Some examples:
 
@@ -196,7 +197,7 @@ You can start and add to discussions in each of the public Overture repositories
 
 Discussions around Overture's address data should be filed in the Data repository.
 
-### Issues 
+### Issues
 
 You can start and add to issues in each of the public Overture repositories, too. Some examples:
 
