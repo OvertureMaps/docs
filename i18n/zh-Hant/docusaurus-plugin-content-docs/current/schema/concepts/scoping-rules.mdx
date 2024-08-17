@@ -174,14 +174,14 @@ Overture 交通模式架構支援以下主觀因素：
 <Tabs>
   <TabItem value="description" label="說明" default>
 
-使用目的範圍限制將父值的範圍限制為僅在用戶以列出的目的之一使用該功能時適用。這種範圍限制在需要確保人們正在進行如交付或作為業務客戶等活動時非常常見。
+使用目的範圍限制將父值的範圍限制為僅在使用者以列出的目的之一使用該功能時適用。這種範圍限制在需要確保人們正在進行如交付或作為業務客戶等活動時非常常見。
 
 `when: { using: [...] }` 屬性構造將使用目的範圍限制應用於父值。
 
   </TabItem>
-  <TabItem value="example" label="示例" default>
+  <TabItem value="example" label="範例" default>
 
-以下示例顯示了一段代表酒店車道的道路段，其中不允許通行（僅允許酒店客戶使用或作為最終目的地）：
+以下範例顯示了一段代表酒店車道的道路段，其中不允許通行（僅允許酒店客戶使用或作為最終目的地）：
 
 <CodeBlock language="yaml">{ ExampleSubjectiveUsagePurposeScoping }</CodeBlock>
 
@@ -193,14 +193,14 @@ Overture 交通模式架構支援以下主觀因素：
 <Tabs>
   <TabItem value="description" label="說明" default>
 
-狀態範圍限制將父值的範圍限制為僅在用戶擁有某種認可的狀態或是某個認可群體的成員時適用。這種類型的範圍限制在確保某人或某物具有某種認可的特徵時非常有用，例如持有許可證或是企業的員工或學校的學生。
+狀態範圍限制將父值的範圍限制為僅在使用者擁有某種認可的狀態或是某個認可群體的成員時適用。這種類型的範圍限制在確保某人或某物具有某種認可的 Features 時非常有用，例如持有許可證或是企業的員工或學校的學生。
 
 `when: { recognized: [...] }` 屬性構造將狀態範圍限制應用於父值。
 
   </TabItem>
-  <TabItem value="example" label="示例" default>
+  <TabItem value="example" label="範例" default>
 
-以下示例顯示了一段建模為私人公寓大樓車道的道路段，該車道對公眾封閉，但允許經過私下授權的人員使用，例如公寓單位的擁有者：
+以下範例顯示了一段建模為私人公寓大樓車道的道路段，該車道對公眾封閉，但允許經過私下授權的人員使用，例如公寓單位的擁有者：
 
 <CodeBlock language="yaml">{ ExampleSubjectiveStatusScoping }</CodeBlock>
 
@@ -237,39 +237,23 @@ Overture 交通模式架構支援以下主觀因素：
 
 <!--
 
-TODO: Environmental scoping is omitted from the documentation for the
-      time being, since we have not yet implemented the `conditions`
-      property documented in: https://wiki.overturemaps.org/x/PAcG.
-      See also: https://github.com/OvertureMaps/schema-wg/issues/146.
+TODO: 環境範圍限制目前從檔案中省略，因為我們尚未實現文檔中記載的 `conditions` 屬性：https://wiki.overturemaps.org/x/PAcG。
+另請參見：https://github.com/OvertureMaps/schema-wg/issues/146。
 
-### Environmental scoping
+### 環境範圍限制
 
 -->
 
-## Rules and rule-based properties
+## 規則和基於規則的屬性
 
-A *rule-based* property is a property whose value in a given situation is
-determined by evaluating a list of rules against the facts applicable to that
-situation. Each individual rule in the list of rules is itself a scoped value,
-a scoped value, and the assessment of which rule applies to a given set of facts
-is done by the rule evaluation algorithm.
+*基於規則的* 屬性是指其值在特定情況下由一組規則的評估結果決定的屬性。規則列表中的每個個別規則本身都是一個範圍限制值，而對於特定事實套件適用哪條規則的評估由規則評估算法進行。
 
-### Absolute form
 
-There are cases when specifying a property value using rules makes sense, and
-cases where doing so is unnecessarily complicated because the real-world entity
-being modeled has a single unchanging state which is the same in all fact
-situations. In these cases, most rule-based properties support a simpler
-absolute form without a list of rules.
+### 絕對形式
 
-Consider the following two examples of road segments. On the left is a section
-from a simple two-lane bidirectional city street in which there is always one
-lane of traffic flowing in each direction. On the right is a section from a
-one-way city street in which two of the lanes are only available for driving at
-certain times of the day, being reserved for parking at other times. In the
-example on the left, the lane list is specified absolutely; while in the example
-on the right, it is given as a list of [temporally-scoped](#temporal-scoping-opening-hours)
-lane rules.
+在某些情況下，使用規則來指定屬性值是有意義的，而在某些情況下，這樣做則會使事情複雜化，因為被建模的現實世界實體具有單一且不變的狀態，這種狀態在所有事實情況下都是相同的。在這些情況下，大多數基於規則的屬性支援一種更簡單的絕對形式，無需規則列表。
+
+考慮以下兩個道路段的例子。左側是一條簡單的雙向城市街道，在這條街道上，無論何時都有一條車道在每個方向上通行。右側是一條單行城市街道，其中兩條車道僅在一天中的特定時間可供行駛，其餘時間則保留用於停車。在左側的例子中，車道列表是絕對指定的；而在右側的例子中，則作為一組[時間範圍限制](#temporal-scoping-opening-hours)的車道規則給出。
 
 <div style={{ width: "49.5%", float: "left" }}>
 
@@ -352,24 +336,12 @@ properties:
 
 <div style={{ clear: "both" }}/>
 
-### Rule evaluation algorithm
+### 規則評估算法
 
-Given a rule-based property, the actual value of the property in a given fact
-pattern is determined by a three-step process: first, all matching rules are
-identified; second, the single determining rule is chosen if possible; lastly,
-if there is no applicable rule, an appropriate default value may be assumed.
+給定一個基於規則的屬性，在特定事實模式下，該屬性的實際值是通過以下三個步驟過程來確定的：首先，識別所有匹配的規則；其次，選擇單一確定規則（如果可能）；最後，如果沒有適用的規則，則可以假設一個適當的默認值。
 
-1. **Matching rules.** For a given rule and a given set of facts, the rule
-   *matches* the facts if the scope of the rule contains all the facts, *i.e.*
-   the facts fit within all of the scoping properties expressed in the rule. The
-   matching criteria for a rule can be thought of as the logical AND of all the
-   scoping properties expressed in the rule.
-2. **Determining rule.** For a given rule-based property and a given set of
-   facts, *at most* one rule can *determine* the property value. If only one
-   rule matches, that rules determines the property value. If more than one rule
-   matches, the last matching rule in the list determines the value. (This is
-   similar to how OpenStreetMap [conditional restrictions](https://wiki.openstreetmap.org/wiki/Conditional_restrictions)
-   evaluated.) Therefore it is important to write more general rules before more
-   specific ones in a rule list.
-3. **Fallback to default.** If there are no matching rules, an appropriate
-   default value may apply, depending on the property being evaluated.
+1. **匹配規則。** 對於給定的規則和一組事實，如果該規則的範圍包含所有事實，即這些事實符合規則中表達的所有範圍屬性，則該規則與這些事實「匹配」。規則的匹配標準可以看作是規則中表達的所有範圍屬性的邏輯與運算（AND）。
+
+2. **確定規則。** 對於給定的基於規則的屬性和一組事實，最多只有一個規則可以「確定」屬性值。如果只有一個規則匹配，該規則確定屬性值。如果有多個規則匹配，則列表中最後一個匹配的規則確定該值。（這類似於 OpenStreetMap [條件限制](https://wiki.openstreetmap.org/wiki/Conditional_restrictions) 的評估方式。）因此，將更一般的規則寫在規則列表的前面是很重要的。
+
+3. **回到默認值。** 如果沒有匹配的規則，則根據所評估的屬性，可能會應用一個適當的默認值。

@@ -1,15 +1,15 @@
 ---
-title: Transportation
+title: 運輸
 ---
-## Overview
-The Overture transportation theme is the collection of features and properties that describe the infrastructure and conventions of how people and objects travel around the world. Transportation data includes highways, footways, cycleways, railways, ferry routes, and public transportation.
+## 概述
+Overture 運輸主題是描述人們和物體如何在全球範圍內旅行的基礎設施和約定的特徵與屬性的集合。運輸數據包括高速公路、人行道、自行車道、鐵路、渡輪路線和公共交通。
 
-## Feature types
-The transportation theme has two feature types.
-- `segment` is a feature type with LineString geometry that represents the center-line of a path that a person or object may travel. Segment properties describe both the physical attributes (e.g. road surface and width) and non-physical attributes (e.g. access restriction rules) of that path
-- `connector` is a feature type with Point geometry that defines the topology of the transportation network by representing the physical connection between two or more segments. Apart from their Point geometry and the core properties required for all Overture features, connectors do not have any other properties
+## 特徵類型
+運輸主題有兩種類型的特徵。
+- `segment` 是一種類型為 LineString 的特徵，代表人或物體可能旅行的路徑的中心線。Segment 屬性描述了該路徑的物理屬性（如路面和寬度）以及非物理屬性（如通行限制規則）。
+- `connector` 是一種類型為 Point 的特徵，通過表示兩個或多個段之間的物理連接來定義運輸網絡的拓撲。除了它們的 Point 幾何形狀和所有 Overture 特徵所需的核心屬性外，連接器沒有其他屬性。
 
-## Theme concepts
+## 主題概念
 - **[Roads:](/schema/concepts/by-theme/transportation/roads)** the transportation theme schema models any kind of road, street or
 path, including dedicated walking and cycling paths, as `road` segments Roads are currently the most developed part of the transportation schema. 
 - **[Scoped and rule-based properties:](/schema/concepts/scoping-rules)** the transportation theme schema allows property values to be specified for granular scopes at the sub-feature level. For example:
