@@ -294,46 +294,24 @@ Overture 採取默認允許的過渡限制方式。默認情況下，所有隱�
   </TabItem>
 </Tabs>
 
-## Lanes
+## 車道
 
-A road may optionally carry a `lanes` property which, if present, contains
-a list of rules that can be used to resolve the applicable traffic lane block
-for the road. A lane block is a list of lane objects. Each lane object in the
-block describes the physical structure and properties applicable to one the
-road's traffic lanes at a granularity sufficient to support the navigation use
-case. Note that the `lanes` property applies to traffic lanes, not to
-parking lanes.
+一條道路可以選擇性地擁有 `lanes` 屬性，如果存在，則包含一個規則列表，用於解析適用的交通 lane block 。 lane block 是一個車道對象的列表。 lane block 中的每個車道對象描述了適用於該道路的交通車道的物理結構和屬性，並具有足夠的細節以支持導航用例。請注意，`lanes` 屬性適用於交通車道，而不是停車車道。
 
-### Use cases for lanes
+### 車道的使用案例
 
-Many transportation use cases can be solved either entirely or in large part without examining the lane
-structure of the road network. For example, optimal route calculation
-can be entirely solved without lane-level information, as can most 2D
-map rendering problems. Lane information is most interesting for
-granular turn-by-turn or maneuver-by-maneuver navigation applications.
+許多交通使用案例可以完全或大部分地解決而無需檢查道路網絡的車道結構。例如，最佳路徑計算可以完全在沒有車道級信息的情況下解決，大多數 2D 地圖渲染問題也是如此。車道信息對於細化的逐轉或逐步導航應用最為有用。
 
-### Default lane structure
+### 預設車道結構
 
-If the `lanes` property is omitted from a road segment, reasonable
-default values should be assumed based on `class` and the
-road-level [access restrictions](#access-restrictions). For example, for
-a stock two-way road segment of class `primary` with no heading-scoped
-access restrictions, a reasonable assumption is two lanes, one
-`forward` and one `backward`.
+如果從道路段中省略 `lanes` 屬性，則應根據 `class` 和道路級別的 [通行限制](#access-restrictions) 假設合理的預設值。例如，對於沒有朝向範圍限制的 `primary` 類別的雙向道路段，合理的假設是兩條車道，一條 `forward` 和一條 `backward`。
 
-### Lane numbering
+### 車道編號
 
-The number of lanes at a given place and time on a road segment is equal to
-the length of the lanes list within the resolved lane block.
+在給定的地方和時間，道路段上的車道數量等於解析後的 lane block 中車道列表的長度。
 
-Each entry in the resolved lanes list represents one lane on the road.
-Order is important. The list captures the lanes in left-to-right order
-as they would be observed by a person standing on the physical road being modeled, facing in the [direction](/schema/concepts/by-theme/transportation/shape-connectivity#directionality)
-of the segment geometry. The leftmost lane has index `0`; the rightmost
-lane, assuming there are N total lanes, has index N-1. The example
-below illustrates how lane numbering works with example two-lane
-segments oriented in the north, west, east, and south directions,
-respectively.
+解析後車道列表中的每個條目表示道路上的一條車道。順序很重要。該列表按從左到右的順序捕獲車道，就像一個站在正在建模的實際道路上的人面對該段幾何形狀的 [方向](/schema/concepts/by-theme/transportation/shape-connectivity#directionality) 一樣。最左邊的車道編號為 `0`；最右邊的車道（假設有 N 條車道）編號為 N-1。以下示例展示了如何在北、南、西、東方向上排列的雙車道段中進行車道編號。
+
 
 <figure>
 
@@ -410,23 +388,22 @@ respectively.
 
 </figure>
 
-### Lane directionality
+### 車道方向
 
-Each lane within a segment has a directionality, documenting which
-travel directions are allowed within the lane, with reference to the [orientation of the segment](/schema/concepts/by-theme/transportation/shape-connectivity#start-end-and-orientation). Lane directionality is specified by the lane object's `directionality`
-property. The allowed values are:
+每條車道都有一個方向性，記錄了在車道內允許的行進方向，參考於 [路段方向性](/schema/concepts/by-theme/transportation/shape-connectivity#start-end-and-orientation)。車道方向性由車道對象的 `directionality` 屬性指定。允許的值包括：
 
 <figure>
 
 <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
 
-| Directionality | Meaning |
+| 方向性        | 意義                                             |
 |-|-|
-| `forward` | Travel is only allowed along the `forward` heading. |
-| `backward` | Travel is only allowed along the `backward` heading. |
-| `both_ways` | Travel is allowed both `forward` and `backward` at the same time. |
-| `alternating` | Travel is one-way and changes between `forward` and `backward` constantly. |
-| `reversible` | Travel is one-way and changes between `forward` and `backward` infrequently. |
+| `forward`     | 僅允許沿 `forward` 方向行駛。                    |
+| `backward`    | 僅允許沿 `backward` 方向行駛。                   |
+| `both_ways`   | 同時允許 `forward` 和 `backward` 方向行駛。     |
+| `alternating` | 單行方向，並在 `forward` 和 `backward` 之間不斷變化。 |
+| `reversible`  | 單行方向，並在 `forward` 和 `backward` 之間偶爾變化。 |
+
 
 </div>
 
