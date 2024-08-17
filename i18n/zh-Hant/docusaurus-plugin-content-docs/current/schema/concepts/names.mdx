@@ -1,5 +1,5 @@
 ---
-title: Names
+title: 名稱
 ---
 
 import JSONSchemaViewer from "@theme/JSONSchemaViewer";
@@ -9,14 +9,14 @@ import MainDefs from "!!raw-loader!@site/docs/_schema/defs.yaml";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Named entities in Overture share a common schema.
+在 Overture 中，具名實體共用一個通用的模式。
 
 <JSONSchemaViewer
   schema={ yamlLoad(MainDefs) }
   resolverOptions={ generateResolverOptions( {yamlBasePath: '/', jsonPointer:"#/$defs/propertyContainers/namesContainer/properties/names" })}/>
 
 ## `primary`
-If a feature has a name, expect `names` to have at least one property: `primary`. This will always be populated with the localized name of a feature.
+如果一個特徵有名稱，`names` 中至少應該有一個屬性：`primary`。這將始終包含該特徵的本地化名稱。
 
 ```yaml
 id: 08b2aa845a18afff02009f7c732067c5
@@ -26,7 +26,7 @@ names:
 
 ## `common`
 
-Common name variations are translations of a name.
+Common name 是名稱的翻譯。
 
 ```yaml
 id: 08b2aa845a18afff02009f7c732067c5
@@ -61,9 +61,9 @@ names:
 ```
 
 ## `rules`
-Additional names variations such as _official_, _alternate_, or _short_ exist as `rules`.
+額外的名稱變體，例如 _official_, _alternate_, or _short_ 以 `rules` 形式存在。
 
-Rules can also have `side` and `geometric` range scoping. Read more about [scoping rules here](/schema/concepts/scoping-rules).
+規則也可以具有 `side` 和 `geometric` 範圍限定。了解更多關於 [範圍限定規則的內容](/schema/concepts/scoping-rules)。
 
 ```yaml
 id: 08b2aa845a18afff02009f7c732067c5
@@ -76,13 +76,13 @@ names:
       side: null
 ```
 
-## Languages
+## 語言
 
-Languages in the Overture Maps schema are identified by [IETF BCP-47 language tags](https://en.wikipedia.org/wiki/IETF_language_tag); the same tag scheme is used for `common` map entries and `language` values in rules.
+Overture Maps 模式中的語言由 [IETF BCP-47 語言標籤](https://en.wikipedia.org/wiki/IETF_language_tag) 標識；相同的標籤方案用於 `common` 地圖條目和規則中的 `language` 值。
 
-This pattern recognizes BCP-47 language tags at the lexical or syntactic level. It verifies that candidate tags follow the grammar described in the [RFC](https://datatracker.ietf.org/doc/html/rfc5646), but not that they are validly registered tag in [IANA's language subtag registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry).
+此模式在詞彙或語法層面上識別 BCP-47 語言標籤。它驗證候選標籤是否遵循 [RFC](https://datatracker.ietf.org/doc/html/rfc5646) 中描述的語法，但不檢查它們是否在 [IANA 的語言子標籤登記冊](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) 中有效註冊。
 
-In the regular expression, `'(:?'` indicates a non-capturing group, and all the top-level or non-nested groups represent top-level components of `langtag` referenced in the syntax section of [https://www.rfc-editor.org/rfc/bcp/bcp47.txt](https://www.rfc-editor.org/rfc/bcp/bcp47.txt). In particular, the top-level groups in left-to-right order represent:
+在正則表達式中，`'(:?'` 表示 non-capturing group，所有頂層或非嵌套組表示 `langtag` 的頂層組件，這些組件在 [https://www.rfc-editor.org/rfc/bcp/bcp47.txt](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) 的語法部分中被引用。具體而言，從左到右的頂層組分別表示：
 
 ```
 1. language

@@ -34,20 +34,12 @@ Scoped 值適用的範圍由一個或多個稱為 *scoping* properties 的特殊
 <Tabs>
   <TabItem value="description" label="Description" default>
 
-The geometric scoping properties `at` and `between` limit the scope of their parent value to a position or range of positions, respectively, along a segment's geometry. When the parent value is a rule object, the rule only matches the position or range of positions specified in the `at` or `between` property.
+幾何範圍限定屬性 `at` 和 `between` 分別將其父值的範圍限制為沿著段的幾何形狀的位置或位置範圍。當父值是一個規則對象時，該規則僅匹配 `at` 或 `between` 屬性中指定的位置或位置範圍。
 
-The value of the `at` property is a single real number `a` where `0` &le; `a`
-&le; `1`. It represents a discrete position along the segment's geometry. The
-value of the `between` property is a pair of numbers `[a, b]` where `0` &le;
-`a` &lt; `b` &le; `1`. It represents a range of positions along the segment's
-geometry. The numbers `a` and `b` are interpreted as percentage displacements
-along the parent segment's geometry starting from the start of the segment.
-(*The terms "start" and "end" are explained in
-[Shape and connectivity](https://docs.overturemaps.org/guides/transportation/shape-connectivity).*) 
+`at` 屬性的值是一個單一實數 `a`，其中 `0` &le; `a` &le; `1`。它表示段的幾何形狀上的一個離散位置。`between` 屬性的值是一對數字 `[a, b]`，其中 `0` &le; `a` &lt; `b` &le; `1`。它表示段的幾何形狀上的一個位置範圍。數字 `a` 和 `b` 被解釋為沿著父段幾何形狀的百分比位移，從段的起點開始。 (*“起點”和“終點”這些術語在 [形狀和連接](https://docs.overturemaps.org/guides/transportation/shape-connectivity) 中進行了解釋。*)
 
-So, for example, the scoping property `"at": 0.15` scopes its parent value
-to the position on the segment that is displaced 15% of the segment length from
-the start.
+
+例如，範圍限定屬性 `"at": 0.15` 將其父值限定為段上從起點開始偏移了段長度的 15% 的位置。
 
 <div style={{textAlign: 'center'}}>
 
@@ -65,7 +57,7 @@ the start.
 
 <div style={{textAlign: 'center'}}>
 
-*The position along the segment geometry described by `"at": 0.15`.*
+*由 `"at": 0.15` 描述的段幾何形狀上的位置。*
 
 </div>
 
@@ -74,9 +66,7 @@ the start.
 
 </div>
 
-The scoping property `"between": [0.35, 0.75]` scopes its parent value to the
-range of positions on the segment beginning at 35% and extending to 75% of the
-segment length from the start.
+範圍限定屬性 `"between": [0.35, 0.75]` 將其父值限定為段上從起點開始偏移了段長度的 35% 到 75% 之間的範圍位置。
 
 <div style={{textAlign: 'center'}}>
 
@@ -106,8 +96,7 @@ segment length from the start.
   </TabItem>
   <TabItem value="example" label="Example" default>
 
-The example below shows a road segment whose speed limit is defined by
-two geometrically-scoped speed limit rules:
+下面的範例顯示了一個道路段，其速度限制由兩個幾何範圍限定的速度限制規則定義：
 
 <CodeBlock language="yaml">{ ExampleGeometricScoping }</CodeBlock>
 
