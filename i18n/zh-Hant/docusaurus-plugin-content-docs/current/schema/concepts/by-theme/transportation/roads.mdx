@@ -29,11 +29,11 @@ import ExampleTurnRestriction2Via from '!!raw-loader!@site/docs/_examples/transp
 import ExampleTurnRestriction2Connector1 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-connector1.yaml';
 import ExampleTurnRestriction2Connector2 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-connector2.yaml';
 
-在 Overture 運輸主題中，道路是指任何類型的道路、街道或路徑，包括專用的步行或自行車道，但不包括鐵路。道路段構成了大部分地面運輸段。道路使用 [segment](/schema/reference/transportation/segment)  Features 來建模，並將 `subtype` 屬性值設定為 `road`。
+在 Overture 運輸主題中，道路是指任何類型的道路、街道或路徑，包括專用的步行或自行車道，但不包括鐵路。路段構成了大部分地面運輸段。道路使用 [segment](/schema/reference/transportation/segment)  Features 來建模，並將 `subtype` 屬性值設定為 `road`。
 
 ## 幾何形狀和粒度
 
-道路段的幾何形狀是道路的表示，通常近似於所建模道路段的實際中心線。道路段支援以不同粒度建模道路網路。例如，一個道路段可以表示：
+路段的幾何形狀是道路的表示，通常近似於所建模路段的實際中心線。路段支援以不同粒度建模道路網路。例如，一個路段可以表示：
 
 - 包括所有車道和人行道的雙向車道
 - 獨立的人行道
@@ -48,63 +48,47 @@ import ExampleTurnRestriction2Connector2 from '!!raw-loader!@site/docs/_examples
 
 ### 道路類別
 
-道路的 `class` 屬性指定了其一般用途和在交通網路中的相對重要性。`class` 屬性還有助於建立合理的預設值。例如，`sidewalk` 類別意味著該段的預設 [通行限制](#access-restrictions) 允許 `foot`（步行）這一旅行模式的通行，並禁止所有其他旅行模式的通行。與許多道路段屬性不同，道路段的 `class` 屬性不支援 [幾何範圍限定](#geometric-scoping-linear-referencing)（線性參考）。因此，當現實世界的道路在某個線性範圍內發生類別變化（例如，從次級道路變為住宅道路）時，Overture 運輸 [分段](#segmentation) 算法將會生成一個段分割。
+道路的 `class` 屬性指定了其一般用途和在交通網路中的相對重要性。`class` 屬性還有助於建立合理的預設值。例如，`sidewalk` 類別意味著該段的預設 [通行限制](#access-restrictions) 允許 `foot`（步行）這一旅行模式的通行，並禁止所有其他旅行模式的通行。與許多路段屬性不同，路段的 `class` 屬性不支援 [幾何範圍限定](#geometric-scoping-linear-referencing)（線性參考）。因此，當現實世界的道路在某個線性範圍內發生類別變化（例如，從次級道路變為住宅道路）時，Overture 運輸 [分段](#segmentation) 算法將會生成一個段分割。
 
 Every road segment has a class. If the `class` property is missing
 from a road segment, the default value `unknown` is assumed. The unknown
 road class is meant to be a temporary value until a more specific class
 is known.
-
+每個路段都有一個類別。如果路段中缺少 `class` 屬性，則假定使用預設值 `unknown`（未知）。未知道路類是直到有更具體的類別訊息前暫時的值。
 <!--
  TODO: What's the difference between "unknown" and "unclassified"?
          https://github.com/OvertureMaps/schema-wg/issues/152
 -->
 
-Like many aspects of Overture transportation schema,
-the `class` tag is heavily inspired by OpenStreetMap. In this
-case, it is similar to, but not the same as, OSM's `highway=*` tag.
-
+與 Overeture 運輸 schema 的許多方面一樣，`class` 標籤受到了 OpenStreetMap 的啟發。在這種情況下，它類似於但不完全相同於 OSM 的 `highway=*` 標籤。
 ### Surface
 
-The `road_surface` property of a road indicates its physical surface. If
-omitted, a reasonable default value should be assumed based on the
-`class`.
+### 表面
 
-Like many road segment properties, the `road_surface` property supports [geometric scoping](/schema/concepts/scoping-rules#geometric-scoping-linear-referencing) (linear referencing). Consequently, the effective road surface may vary
-along different sub-ranges of a road segment's geometry.
+道路的 `road_surface` 屬性指示其物理表面。如果被省略，則應根據 `class` 假定一個合理的預設值。
 
-### Flags
+與許多路段屬性一樣，`road_surface` 屬性支援 [幾何範圍限定](#geometric-scoping-linear-referencing)（線性參考）。因此，有效的道路表面可能會在路段幾何形狀的不同子範圍內變化。
 
-The `road_flags` property of a segment is a set of named flag values
-indicating the presence or absence of simple physical characteristics.
+### 標誌
 
-For example, a road segment with
-`road_flags = [is_link, is_under_construction]` is a link segment that is
-physically under construction.
+路段的 `road_flags` 屬性是一組命名的標誌值，指示簡單物理 Features 的存在或缺失。
 
-Like many road segment properties, the `road_flags` property supports [geometric scoping](/schema/concepts/scoping-rules#geometric-scoping-linear-referencing). Consequently, the applicable road flags may vary along different sub-ranges of a road segment's geometry.
+例如，具有 `road_flags = [is_link, is_under_construction]` 的路段是連接段且正在施工中。
 
-## Restrictions
+與許多路段屬性一樣，`road_flags` 屬性支援 [幾何範圍限定](#geometric-scoping-linear-referencing)（線性參考）。因此，適用的道路標誌可能會在路段幾何形狀的不同子範圍內變化。
 
-### Access restrictions
+## 限制
 
-Access restrictions on a road segment specify who is allowed to use the
-road, and under what circumstances.
+### 訪問限制
 
-Every road segment has an *implied* set of access restrictions defined
-by its [road class](#road-class) and local rules, norms, and customs.
-(The Overture transportation schema does not specify these implied
-access restrictions, which are left to the specific application to
-resolve.)
+路段上的訪問限制指定了誰被允許使用該道路，以及在什麼情況下可以使用。
 
-The implied access restrictions may be modified for the road segment as
-a whole by providing an explicit value for the property
-`access_restrictions`. (Access restrictions may also be specified
-at the level of individual [lanes](#lanes), as explained elsewhere.)
+每個路段都有一組*隱含的*訪問限制，由其 [道路類別](#road-class) 和當地規則、規範和習俗定義。
+（Overture 運輸 schema 不指定這些隱含的訪問限制，這由具體應用程序來解決。）
 
-It is technically possible to specify a blanket access grant or refusal
-of access applying to everyone and everything; but where, as is typical,
-a more precise outcome is needed, one or more [rules](/schema/concepts/scoping-rules#rules-and-rule-based-properties) will be used to specify access restrictions. As with all rule-based properties, if no rule matches the specific facts, then the default restrictions for the road class govern.
+隱含的訪問限制可以通過為屬性 `access_restrictions` 提供明確值來對整個路段進行修改。（訪問限制也可以在單個 [車道](#lanes) 層級上進行指定，具體見其他說明。）
+
+在技術上，可以指定適用於所有人和所有事物的全面訪問授予或拒絕；但如同典型情況下，更精確的結果是需要的，則會使用一個或多個 [規則](#rules-and-rule-based-properties) 來指定訪問限制。與所有基於規則的屬性一樣，如果沒有規則符合具體事實，則由道路類別的預設限制來管理。
 
 <Tabs>
   <TabItem value="blanketDenial" label="Blanket denial of access." default>
@@ -132,10 +116,9 @@ a more precise outcome is needed, one or more [rules](/schema/concepts/scoping-r
   </TabItem>
 </Tabs>
 
-### Turn restrictions
+### 轉彎限制
 
-Turn restrictions on a road segment limit the transitions which are
-allowed from that segment into other [physically connected](/schema/concepts/by-theme/transportation/shape-connectivity#physical-connectivity) segments.
+路段上的轉彎限制限制了從該段到其他 [實體連接](#physical-connectivity) 段的過渡。
 
 Every road segment has an implied set of allowed transitions
 defined by its [access restrictions](#access-restrictions) as well as
@@ -232,9 +215,7 @@ to this segment is prohibited.*
 <details>
 <summary>Connector 3</summary>
 
-*This connector is not an important part of the example, since it does
-not participate in the turn restriction, but it is included to bring
-real-world context to the example.*
+*此連接器在範例中並不重要，因為它不參與轉彎限制，但它被包含在內以提供實際情境。*
 
 <CodeBlock language="yaml">{ ExampleTurnRestriction1Connector3 }</CodeBlock>
 </details>
