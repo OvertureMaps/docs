@@ -1,4 +1,4 @@
----
+﻿---
 title: Scoping rules
 ---
 
@@ -103,25 +103,22 @@ Scoped 值適用的範圍由一個或多個稱為 *scoping* properties 的特殊
   </TabItem>
 </Tabs>
 
-#### Temporal scoping (opening hours)
+#### 時間範圍限定（營業時間）
 
 <Tabs>
   <TabItem value="description" label="Description" default>
 
-The temporal, or time-based, scoping construct `when: { during: "..." }` limits
-the scope of its parent value to one or more recurring time ranges. When the
-parent value is a rule object, the rule only matches the time range or time
-ranges specified in the `during` property.
+時間範圍限定結構 `when: { during: "..." }` 將其父值的範圍限制為一個或多個重複的時間區間。當父值是規則對象時，該規則僅匹配 `during` 屬性中指定的時間區間或時間區間集合。
 
-The `during` property must contain a string expressed in the OpenStreetMap
-[opening hours specification](https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification).
+`during` 屬性必須包含一個以 OpenStreetMap [營業時間規範](https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification) 表達的字串。
+
+
+`during` 屬性必須包含一個以 OpenStreetMap [開放時間規範](https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification) 表達的字串。
 
   </TabItem>
-  <TabItem value="example" label="Example" default>
+  <TabItem value="example" label="範例" default>
 
-The example below shows a road segment with a temporally-scoped access
-restriction rule. The rule states that non-bus travellers are prohibited
-from access to the segment on weekdays between 3PM and 6PM.
+下面的範例顯示了一個具有時間範圍限定的道路段。該規則指出，非公車旅客在平日的下午3點到6點之間禁止進入該段道路。
 
 <CodeBlock language="yaml">{ ExampleTemporalScoping }</CodeBlock>
 
@@ -130,56 +127,42 @@ from access to the segment on weekdays between 3PM and 6PM.
 
 <!-- TODO: Document side scoping here. -->
 
-#### Subjective scoping
+#### 主觀範圍限定
 
-Subjective scoping means that the scope of a property can be constrained based
-on subjective factors like *who* or *what* is travelling on the transportation
-network, or *how* they are doing it.
+主觀範圍限定意味著屬性的範圍可以根據主觀因素來限制，例如*誰*或*什麼*正在使用交通網路，或*如何*使用。
 
-The Overture transportation schema supports the following subjective factors:
+Overture 交通模式架構支援以下主觀因素：
 
-1. [Travel mode](#travel-mode-scoping)
-1. [Heading](#heading)
-1. [Purpose of use](#purpose-of-use-scoping)
-1. [Status or membership in a recognized group](#status-scoping-membership-in-a-recognized-group)
-1. [Vehicle attributes](#vehicle-attributes-scoping)
+1. [旅行模式](#travel-mode-scoping)
+1. [行進方向](#heading)
+1. [使用目的](#purpose-of-use-scoping)
+1. [在已認可群體中的狀態或成員資格](#status-scoping-membership-in-a-recognized-group)
+1. [車輛屬性](#vehicle-attributes-scoping)
 
-The sub-headings below explain each of these subjective factors in greater
-detail.
+下面的小標題將更詳細地解釋這些主觀因素。
 
-#### Travel-mode scoping
+#### 旅行模式範圍限定
 
-A travel mode is a way of moving about the transportation network, for
-example driving in a motor vehicle, or, more specifically, driving in a
-high-occupancy vehicle.
+旅行模式是指在交通網路中移動的方式，例如駕駛汽車，或更具體地說，駕駛高乘載量的車輛。
 
-The property construct `when: { mode: [...] }` limits the scope its
-parent value to apply only to people or things travelling using the
-listed travel modes.
+屬性構造 `when: { mode: [...] }` 將其父值的範圍限制為僅適用於使用列出旅行模式的人或物體。
 
-To dive deeper into this topic, see the page on [travel modes](https://docs.overturemaps.org/guides/transportation/travel-modes).
+要深入了解此主題，請參閱 [旅行模式](https://docs.overturemaps.org/guides/transportation/travel-modes) 頁面。
 
-#### Heading
+#### 方向範圍限定
 
 <Tabs>
   <TabItem value="description" label="Description" default>
 
-Heading scoping limits the the scope of a parent value to apply only
-when the traveller is proceeding along the segment geometry in the named
-direction, either `forward` or `backward`. (*The directions `forward`
-and `backward` are defined on the [shape and connectivity](https://docs.overturemaps.org/guides/transportation/shape-connectivity) page.*)
+方向範圍限定將父值的範圍限制為僅在旅行者沿著段幾何形狀向指定方向（`forward` 或 `backward`）行進時適用。 (*方向 `forward` 和 `backward` 的定義見於 [形狀和連接性](https://docs.overturemaps.org/guides/transportation/shape-connectivity) 頁面。*)
 
-The property construct `when: { heading: forward|backward }` applies
-heading scoping to a parent value.
+屬性構造 `when: { heading: forward|backward }` 將方向範圍限定應用於父值。
 
 
   </TabItem>
   <TabItem value="example" label="Example" default>
 
-The example below shows a road segment with multiple heading-scoped
-access restriction rules. The rules allow all standard travel modes for
-the segment class to travel in the forward direction, but only allow
-buses to travel in the backward direction.
+下面的例子顯示了一個擁有多個方向範圍限定的道路段。這些規則允許所有標準旅行模式在段的正向方向上行駛，但僅允許巴士在反向方向上行駛。
 
 <CodeBlock language="yaml">{ ExampleSubjectiveHeadingScoping }</CodeBlock>
   </TabItem>
