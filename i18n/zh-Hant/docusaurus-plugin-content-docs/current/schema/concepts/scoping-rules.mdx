@@ -24,22 +24,22 @@ Overture schema 使用兩個相關概念來捕捉事實和規則的通例：Scop
 
 ### Scoped values 和 scoping properties
 
-*Scoped* 值是僅在有限範圍內適用的值。大多數 Scoped 值是 [rule-based 屬性](#rules-and-rule-based-properties) 中規則列表的一部分。然而，Scoped 值也存在於 rule-based properties 之外。例如，屬於道路段的標示屬性可能會幾何範圍限定於沿道路的位置。
+*Scoped* 值是僅在有限範圍內適用的值。大多數 Scoped 值是 [rule-based 屬性](#rules-and-rule-based-properties) 中規則列表的一部分。然而，Scoped 值也存在於 rule-based properties 之外。例如，屬於道路段的標示屬性可能會幾何範圍限制於沿道路的位置。
 
 Scoped 值適用的範圍由一個或多個稱為 *scoping* properties 的特殊子屬性控制。
 
-#### 幾何範圍限定 (線性引用)
+#### 幾何範圍限制 (線性引用)
 
 
 <Tabs>
   <TabItem value="description" label="Description" default>
 
-幾何範圍限定屬性 `at` 和 `between` 分別將其父值的範圍限制為沿著段的幾何形狀的位置或位置範圍。當父值是一個規則對象時，該規則僅匹配 `at` 或 `between` 屬性中指定的位置或位置範圍。
+幾何範圍限制屬性 `at` 和 `between` 分別將其父值的範圍限制為沿著段的幾何形狀的位置或位置範圍。當父值是一個規則對象時，該規則僅匹配 `at` 或 `between` 屬性中指定的位置或位置範圍。
 
 `at` 屬性的值是一個單一實數 `a`，其中 `0` &le; `a` &le; `1`。它表示段的幾何形狀上的一個離散位置。`between` 屬性的值是一對數字 `[a, b]`，其中 `0` &le; `a` &lt; `b` &le; `1`。它表示段的幾何形狀上的一個位置範圍。數字 `a` 和 `b` 被解釋為沿著父段幾何形狀的百分比位移，從段的起點開始。 (*“起點”和“終點”這些術語在 [形狀和連接](https://docs.overturemaps.org/guides/transportation/shape-connectivity) 中進行了解釋。*)
 
 
-例如，範圍限定屬性 `"at": 0.15` 將其父值限定為段上從起點開始偏移了段長度的 15% 的位置。
+例如，範圍限制屬性 `"at": 0.15` 將其父值限制為段上從起點開始偏移了段長度的 15% 的位置。
 
 <div style={{textAlign: 'center'}}>
 
@@ -66,7 +66,7 @@ Scoped 值適用的範圍由一個或多個稱為 *scoping* properties 的特殊
 
 </div>
 
-範圍限定屬性 `"between": [0.35, 0.75]` 將其父值限定為段上從起點開始偏移了段長度的 35% 到 75% 之間的範圍位置。
+範圍限制屬性 `"between": [0.35, 0.75]` 將其父值限制為段上從起點開始偏移了段長度的 35% 到 75% 之間的範圍位置。
 
 <div style={{textAlign: 'center'}}>
 
@@ -96,19 +96,19 @@ Scoped 值適用的範圍由一個或多個稱為 *scoping* properties 的特殊
   </TabItem>
   <TabItem value="example" label="Example" default>
 
-下面的範例顯示了一個道路段，其速度限制由兩個幾何範圍限定的速度限制規則定義：
+下面的範例顯示了一個道路段，其速度限制由兩個幾何範圍限制的速度限制規則定義：
 
 <CodeBlock language="yaml">{ ExampleGeometricScoping }</CodeBlock>
 
   </TabItem>
 </Tabs>
 
-#### 時間範圍限定（營業時間）
+#### 時間範圍限制（營業時間）
 
 <Tabs>
   <TabItem value="description" label="Description" default>
 
-時間範圍限定結構 `when: { during: "..." }` 將其父值的範圍限制為一個或多個重複的時間區間。當父值是規則對象時，該規則僅匹配 `during` 屬性中指定的時間區間或時間區間集合。
+時間範圍限制結構 `when: { during: "..." }` 將其父值的範圍限制為一個或多個重複的時間區間。當父值是規則對象時，該規則僅匹配 `during` 屬性中指定的時間區間或時間區間集合。
 
 `during` 屬性必須包含一個以 OpenStreetMap [營業時間規範](https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification) 表達的字串。
 
@@ -118,7 +118,7 @@ Scoped 值適用的範圍由一個或多個稱為 *scoping* properties 的特殊
   </TabItem>
   <TabItem value="example" label="範例" default>
 
-下面的範例顯示了一個具有時間範圍限定的道路段。該規則指出，非公車旅客在平日的下午3點到6點之間禁止進入該段道路。
+下面的範例顯示了一個具有時間範圍限制的道路段。該規則指出，非公車旅客在平日的下午3點到6點之間禁止進入該段道路。
 
 <CodeBlock language="yaml">{ ExampleTemporalScoping }</CodeBlock>
 
@@ -127,9 +127,9 @@ Scoped 值適用的範圍由一個或多個稱為 *scoping* properties 的特殊
 
 <!-- TODO: Document side scoping here. -->
 
-#### 主觀範圍限定
+#### 主觀範圍限制
 
-主觀範圍限定意味著屬性的範圍可以根據主觀因素來限制，例如*誰*或*什麼*正在使用交通網路，或*如何*使用。
+主觀範圍限制意味著屬性的範圍可以根據主觀因素來限制，例如*誰*或*什麼*正在使用交通網路，或*如何*使用。
 
 Overture 交通模式架構支援以下主觀因素：
 
@@ -141,7 +141,7 @@ Overture 交通模式架構支援以下主觀因素：
 
 下面的小標題將更詳細地解釋這些主觀因素。
 
-#### 旅行模式範圍限定
+#### 旅行模式範圍限制
 
 旅行模式是指在交通網路中移動的方式，例如駕駛汽車，或更具體地說，駕駛高乘載量的車輛。
 
@@ -149,94 +149,82 @@ Overture 交通模式架構支援以下主觀因素：
 
 要深入了解此主題，請參閱 [旅行模式](https://docs.overturemaps.org/guides/transportation/travel-modes) 頁面。
 
-#### 方向範圍限定
+#### 方向範圍限制
 
 <Tabs>
   <TabItem value="description" label="Description" default>
 
-方向範圍限定將父值的範圍限制為僅在旅行者沿著段幾何形狀向指定方向（`forward` 或 `backward`）行進時適用。 (*方向 `forward` 和 `backward` 的定義見於 [形狀和連接性](https://docs.overturemaps.org/guides/transportation/shape-connectivity) 頁面。*)
+方向範圍限制將父值的範圍限制為僅在旅行者沿著段幾何形狀向指定方向（`forward` 或 `backward`）行進時適用。 (*方向 `forward` 和 `backward` 的定義見於 [形狀和連接性](https://docs.overturemaps.org/guides/transportation/shape-connectivity) 頁面。*)
 
-屬性構造 `when: { heading: forward|backward }` 將方向範圍限定應用於父值。
+屬性構造 `when: { heading: forward|backward }` 將方向範圍限制應用於父值。
 
 
   </TabItem>
   <TabItem value="example" label="Example" default>
 
-下面的例子顯示了一個擁有多個方向範圍限定的道路段。這些規則允許所有標準旅行模式在段的正向方向上行駛，但僅允許巴士在反向方向上行駛。
+下面的例子顯示了一個擁有多個方向範圍限制的道路段。這些規則允許所有標準旅行模式在段的正向方向上行駛，但僅允許巴士在反向方向上行駛。
 
 <CodeBlock language="yaml">{ ExampleSubjectiveHeadingScoping }</CodeBlock>
   </TabItem>
 </Tabs>
 
 
-#### Purpose of use scoping
+#### 使用目的範圍限制
 
 <Tabs>
-  <TabItem value="description" label="Description" default>
+  <TabItem value="description" label="說明" default>
 
-Usage purpose scoping limits the scope of a parent value to apply only
-when the user is using the feature for one of the listed purposes. This
-type of scoping is common when it matters that a person is in the
-process of doing something like making a delivery or acting as the
-customer of a business.
+使用目的範圍限制將父值的範圍限制為僅在用戶以列出的目的之一使用該功能時適用。這種範圍限制在需要確保人們正在進行如交付或作為業務客戶等活動時非常常見。
 
-The property construct `when: { using: [...] }` applies usage purpose
-scoping to a parent value.
+`when: { using: [...] }` 屬性構造將使用目的範圍限制應用於父值。
 
   </TabItem>
-  <TabItem value="example" label="Example" default>
+  <TabItem value="example" label="示例" default>
 
-The example below shows a road segment representing a hotel driveway
-where through traffic is not permitted (only usage by hotel customers
-or as a final destination is allowed):
+以下示例顯示了一段代表酒店車道的道路段，其中不允許通行（僅允許酒店客戶使用或作為最終目的地）：
 
 <CodeBlock language="yaml">{ ExampleSubjectiveUsagePurposeScoping }</CodeBlock>
 
   </TabItem>
 </Tabs>
 
-#### Status scoping (membership in a recognized group)
+#### 狀態範圍限制（會員資格）
 
 <Tabs>
-  <TabItem value="description" label="Description" default>
+  <TabItem value="description" label="說明" default>
 
-Status scoping limits the scope of a parent value to apply only when the
-user has a certain recognized status or is a member of a recognized
-group. This type of scoping is useful when it matters whether a person
-or thing has a recognized characteristic, such as holding a permit or
-being an employee of a business or student at an academic institution.
+狀態範圍限制將父值的範圍限制為僅在用戶擁有某種認可的狀態或是某個認可群體的成員時適用。這種類型的範圍限制在確保某人或某物具有某種認可的特徵時非常有用，例如持有許可證或是企業的員工或學校的學生。
 
-The property construct `when: { recognized: [...] }` applies status
-scoping to a parent value.
+`when: { recognized: [...] }` 屬性構造將狀態範圍限制應用於父值。
 
   </TabItem>
-  <TabItem value="example" label="Example" default>
+  <TabItem value="example" label="示例" default>
 
-The example below shows a road segment modeling a private condominium
-tower driveway where access is denied to the general public, but allowed
-to privately-authorized individuals, such as condo unit owners:
+以下示例顯示了一段建模為私人公寓大樓車道的道路段，該車道對公眾封閉，但允許經過私下授權的人員使用，例如公寓單位的擁有者：
 
 <CodeBlock language="yaml">{ ExampleSubjectiveStatusScoping }</CodeBlock>
 
   </TabItem>
 </Tabs>
 
-#### Vehicle attributes scoping
+<CodeBlock language="yaml">{ ExampleSubjectiveStatusScoping }</CodeBlock>
+
+  </TabItem>
+</Tabs>
+
+#### 車輛屬性範圍限制
 
 <Tabs>
-  <TabItem value="description" label="Description" default>
+  <TabItem value="description" label="說明" default>
 
-Vehicle attribute scoping limits the scope of a parent value to apply
-only when the vehicle in use meets certain criteria.
+車輛屬性範圍限制將父值的範圍限制為僅在使用的車輛符合某些標準時適用。
 
-The property construct `when: { vehicle: [{ dimension: ..., comparison: ..., value: ... }] }` applies vehicle
-attributes scoping to a parent value.
+`when: { vehicle: [{ dimension: ..., comparison: ..., value: ... }] }` 屬性構造將車輛屬性範圍限制應用於父值。
 
-Note that vehicle attribute scoping can overlap to some degree with
-[travel mode scoping](#travel-mode-scoping). For example, some access
-rules may be scoped to the travel mode "heavy goods vehicle", while
-another equivalent access rule could be scoped to the vehicle attribute
-"gross vehicle weight".
+  </TabItem>
+</Tabs>
+
+請注意，車輛屬性範圍限制在某種程度上可能會與 [旅行模式範圍限制](#travel-mode-scoping) 重疊。例如，某些通行規則可能以「重型貨車」作為範圍限制，而另一個等效的通行規則則可能以「總車輛重量」作為範圍限制。
 
   </TabItem>
   <TabItem value="example" label="Example" default>
