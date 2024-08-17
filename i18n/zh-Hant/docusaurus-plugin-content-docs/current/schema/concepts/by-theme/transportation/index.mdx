@@ -1,29 +1,24 @@
----
+﻿---
 title: 運輸
 ---
-## 概述
-Overture 運輸主題是描述人們和物體如何在全球範圍內旅行的基礎設施和約定的特徵與屬性的集合。運輸數據包括高速公路、人行道、自行車道、鐵路、渡輪路線和公共交通。
+## 概要
+Overture 運輸主題是描述人們和物體如何在全球範圍內旅行的基礎設施和約定的 Features 與屬性的集合。運輸資料包括高速公路、人行道、自行車道、鐵路、渡輪路線和公共交通。
 
-## 特徵類型
-運輸主題有兩種類型的特徵。
-- `segment` 是一種類型為 LineString 的特徵，代表人或物體可能旅行的路徑的中心線。Segment 屬性描述了該路徑的物理屬性（如路面和寬度）以及非物理屬性（如通行限制規則）。
-- `connector` 是一種類型為 Point 的特徵，通過表示兩個或多個段之間的物理連接來定義運輸網絡的拓撲。除了它們的 Point 幾何形狀和所有 Overture 特徵所需的核心屬性外，連接器沒有其他屬性。
+##  Features 類型
+運輸主題有兩種類型的 Features 。
+- `segment` 是一種類型為 LineString 的 Features ，代表人或物體可能旅行的路徑的中心線。Segment 屬性描述了該路徑的物理屬性（如路面和寬度）以及非物理屬性（如通行限制規則）。
+- `connector` 是一種類型為 Point 的 Features ，通過表示兩個或多個段之間的物理連接來定義運輸網路的拓撲。除了它們的 Point 幾何形狀和所有 Overture  Features 所需的核心屬性外，連接器沒有其他屬性。
 
 ## 主題概念
-- **[Roads:](/schema/concepts/by-theme/transportation/roads)** the transportation theme schema models any kind of road, street or
-path, including dedicated walking and cycling paths, as `road` segments Roads are currently the most developed part of the transportation schema. 
-- **[Scoped and rule-based properties:](/schema/concepts/scoping-rules)** the transportation theme schema allows property values to be specified for granular scopes at the sub-feature level. For example:
-  - a speed limit on a road segment might be scoped to apply only to part of the road geometry using _geometric scoping_
-  - the directionality of a segment, controlling the direction or directions in which traffic can flow along the segment geometry, may be specified to change at different times of day using _temporal scoping_.
-  - the categories of people and vehicles who are allowed to travel on a segment can be controlled using _subjective scoping_
-  - a real world property that varies under changing environmental conditions can be modeled using _environmental scoping_
-- **[Shape and connectivity:](/schema/concepts/by-theme/transportation/shape-connectivity)** the transportation theme schema captures the shape
-and connectivity of the transportation network using `segment` and `connector` features. The schema design allows the segmentation process to promote shape stability and ultimately feature ID stability 
-- **[Travel modes:](/schema/concepts/by-theme/transportation/travel-modes)** the transportation theme supports a fuzzy concept called
-travel mode which can be used as a way of controlling scoped
-and rule-based properties 
+- **[道路:](/schema/concepts/by-theme/transportation/roads)** 運輸主題模式建模任何類型的道路、街道或路徑，包括專用步行和自行車路徑，作為 `road` 段。目前，道路是運輸模式中最成熟的部分。
+- **[範圍和基於規則的屬性:](/schema/concepts/scoping-rules)** 運輸主題模式允許在子 Features 級別為細粒度範圍指定屬性值。例如：
+  - 道路段上的速度限制可能僅適用於道路幾何的一部分，使用 _幾何範圍_。
+  - 段的方向性，控制沿段幾何方向流動的交通方向，可能會在不同的時間使用 _時間範圍_ 來指定變化。
+  - 允許在段上旅行的人員和車輛類別可以使用 _主觀範圍_ 進行控制。
+  - 隨著環境條件變化而變化的現實屬性可以使用 _環境範圍_ 來建模。
+- **[形狀和連接:](/schema/concepts/by-theme/transportation/shape-connectivity)** 運輸主題模式通過 `segment` 和 `connector`  Features 捕捉運輸網路的形狀和連接。模式設計允許分段過程促進形狀穩定性，最終促進 Features  ID 穩定性。
+- **[旅行模式:](/schema/concepts/by-theme/transportation/travel-modes)** 運輸主題支援一個模糊的概念，稱為旅行模式，可以用作控制範圍和基於規則的屬性的一種方式。
 
-
-## Schema reference
-- [Connector feature type](/schema/reference/transportation/connector)
-- [Segment feature type](/schema/reference/transportation/segment)
+## 架構參考 
+- [Connector  Features 類型](/schema/reference/transportation/connector)
+- [Segment  Features 類型](/schema/reference/transportation/segment)
