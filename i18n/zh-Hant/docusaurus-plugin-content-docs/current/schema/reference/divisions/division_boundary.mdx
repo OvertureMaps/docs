@@ -13,9 +13,9 @@ import divisions_disputed_boundary_example_both from '!!raw-loader!@site/docs/_e
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Division boundary
+# Division Boundary
 
-A division boundary is a border between [divisions](/schema/reference/divisions/division).
+Division boundary 是 [division](/schema/reference/divisions/division) 之間的邊界。
 
 <table>
   <tbody>
@@ -35,17 +35,13 @@ A division boundary is a border between [divisions](/schema/reference/divisions/
 </table>
 
 
-A division boundary is typically an officially-defined border
-between two [divisions](/schema/reference/divisions/division). In light of
-geopolitical issues, some boundaries represent standalone
-disputed or treaty lines and therefore do not coincide with the border
-of a division.
+Division boundary 是通常由官方定義的兩個 [division](/schema/reference/divisions/division) 之間的邊界。考慮到地緣政治問題，一些邊界代表獨立的爭議線或條約線，因此不一定與 division 的邊界重合。
 
-## Subtypes
+## 子類型
 
-While the schema for the divisions theme contains an comprehensive list of subtypes, only a subset are available in the data today.
+雖然 divisions 主題的 schema 包含了全面的子類型列表，但目前數據中僅提供了部分子類型。
 
-Currently, the following subtypes are available in the `division_boundary` feature type:
+目前，`division_boundary` 特徵類型中可用的子類型如下：
 
 - `country`
 - `region`
@@ -63,8 +59,7 @@ Currently, the following subtypes are available in the `division_boundary` featu
     </table>
 
 
-A country is the largest unit of independent sovereignty. The border of a country, if known, is given by [divsion boundary](/schema/reference/divisions/division_boundary) features. Example: United States
-
+country 是最大的獨立主權單位。國家的邊界由 [division boundary](/schema/reference/divisions/division_boundary) 特徵表示。例如：美國
   </TabItem>
 
   <TabItem value="region" label="region">
@@ -77,7 +72,7 @@ A country is the largest unit of independent sovereignty. The border of a countr
       </tbody>
     </table>
 
-A region is the largest administrative unit within most countries and a first-level administrative subdivision. Example: Alberta
+region 是大多數國家中的最大行政單位，並且是第一級行政區劃。例如：阿爾伯塔省
   </TabItem>
 
   <TabItem value="county" label="county" default>
@@ -91,13 +86,14 @@ A region is the largest administrative unit within most countries and a first-le
     </table>
 
 
-A county is a second-level administrative subdivision. Example: Kings County, NY
+county 是一種第二級行政區。例如：紐約的金斯縣
+
   </TabItem>
 
 </Tabs>
 
 
-## Schema
+## 架構
 
 <Tabs>
   <TabItem value="browsable" label="Browsable" default>
@@ -108,7 +104,7 @@ A county is a second-level administrative subdivision. Example: Kings County, NY
   </TabItem>
 </Tabs>
 
-## Examples
+## 範例
 
 <Tabs>
   <TabItem value="1" label="boundary" default>

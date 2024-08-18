@@ -16,9 +16,9 @@ import division_example_dependency from '!!raw-loader!@site/docs/_examples/divis
 import division_example_population from '!!raw-loader!@site/docs/_examples/divisions/division/population.yaml';
 import division_example_perspectives from '!!raw-loader!@site/docs/_examples/divisions/division/perspectives.yaml';
 
-# Division
+# division
 
-A division is a recognized official or non-official organization of people as seen from a given political perspective.
+division 是一個從特定政治角度來看被承認的官方或非官方的組織。
 
 
 <table>
@@ -38,11 +38,11 @@ A division is a recognized official or non-official organization of people as se
   </tbody>
 </table>
 
-## Subtypes
+## 子類型
 
-While the schema for the divisions theme contains an comprehensive list of subtypes, only a subset are available in the data today.
+雖然 divisions 主題的 schema 包含了一個全面的子類型列表，但目前只有一部分子類型可用於資料中。
 
-Currently, the following subtypes are available in the `division` feature type:
+目前，在 `division` 特徵類型中提供了以下子類型：
 
 - `country`
 - `dependency`
@@ -65,7 +65,7 @@ Currently, the following subtypes are available in the `division` feature type:
     </table>
 
 
-A country is the largest unit of independent sovereignty. The border of a country, if known, is given by [division boundary](/schema/reference/divisions/division_boundary) features. Example: United States
+一個國家是最大獨立主權的單位。如果已知，國家的邊界由[division boundary](/schema/reference/divisions/division_boundary)特徵表示。例如：美國
 
   </TabItem>
 <TabItem value="dependency" label="dependency" default>
@@ -79,8 +79,7 @@ A country is the largest unit of independent sovereignty. The border of a countr
     </table>
 
 
- A dependency is a place that is not exactly a sub-region of a country but is dependent on a parent country for defense, passport control, etc. Example: Puerto Rico
-
+依屬地是一個地點，它不完全屬於一個國家的次區域，但在國防、護照管制等方面依賴於母國。例如：波多黎各
   </TabItem>
 
 
@@ -93,8 +92,7 @@ A country is the largest unit of independent sovereignty. The border of a countr
       </tr>
       </tbody>
     </table>
-
-A region is the largest administrative unit within most countries and a first-level administrative subdivision. Example: Alberta
+region 是大多數國家中最大的行政單位，也是第一級的行政分區。例如：艾伯塔省
   </TabItem>
 
   <TabItem value="county" label="county" default>
@@ -107,8 +105,7 @@ A region is the largest administrative unit within most countries and a first-le
       </tbody>
     </table>
 
-
-A county is a second-level administrative subdivision. Example: Kings County, NY
+county 是第二級行政區劃。例子：紐約市的金斯縣
   </TabItem>
 
   <TabItem value="localadmin" label="localadmin" default>
@@ -122,7 +119,7 @@ A county is a second-level administrative subdivision. Example: Kings County, NY
     </table>
 
 
-Localadmin is a level of government in some parts of the world that contains localities or populated places that themselves have no authority. Often but not exclusively found in Europe. Localadmin is a third-level administrative subdivision. Example: [Paris](https://spelunker.whosonfirst.org/id/1159322569/)
+Localadmin 是某些地區的政府層級，其中包含沒有自己管理權限的地方或人口聚集地。通常但不僅限於歐洲地區。Localadmin 是第三級行政區。例子：[巴黎](https://spelunker.whosonfirst.org/id/1159322569/)
   </TabItem>
 
   <TabItem value="locality" label="locality" default>
@@ -136,7 +133,7 @@ Localadmin is a level of government in some parts of the world that contains loc
     </table>
 
 
-A locality is a populated place that may or may not have its own administrative authority. (It won't if it belongs to a localadmin.) Locality may be a third-level administrative subdivision. Example: Taipei
+Locality 是一個有人居住的地方，可能具有或不具有自己的行政權限（如果它屬於 localadmin，則不具有行政權）。Locality 可能是第三級行政區。例子：台北
   </TabItem>
 
     <TabItem value="neighborhood" label="neighborhood" default>
@@ -150,7 +147,7 @@ A locality is a populated place that may or may not have its own administrative 
     </table>
 
 
-A neighborhood is a geographically localized community within a city, town, suburb or rural area, sometimes consisting of a single street and the buildings lining it. Example: Cobble Hill
+Neighborhood 是位於城市、城鎮、郊區或農村地區的地理區域化社區，有時包括一條街道及其兩側的建築物。例子：Cobble Hill
   </TabItem>
 
 <TabItem value="microhood" label="microhood" default>
@@ -164,12 +161,12 @@ A neighborhood is a geographically localized community within a city, town, subu
     </table>
 
 
-A microhood is a mini-neighborhood that is contained within a neighborhood. Example: Gätjensort in Hamburg
+Microhood 是一個包含在更大 Neighborhood 內的小型社區。例子：Hamburg 的 Gätjensort
   </TabItem>  
 </Tabs>
 
 
-## Schema
+## 架構
 
 <Tabs>
   <TabItem value="browsable" label="Browsable" default>
@@ -180,7 +177,7 @@ A microhood is a mini-neighborhood that is contained within a neighborhood. Exam
   </TabItem>
 </Tabs>
 
-## Examples
+## 範例
 
 <Tabs>
   <TabItem value="country" label="country" default>

@@ -14,9 +14,7 @@ import division_area_example_region_land from '!!raw-loader!@site/docs/_examples
 import division_area_example_country_maritime from '!!raw-loader!@site/docs/_examples/divisions/division_area/country_maritime.yaml';
 
 
-# Division area
-
-A division area is a polygon that represents the land or maritime area associated with a [division](/schema/reference/divisions/division).
+Division area 是表示與[division](/schema/reference/divisions/division)相關的土地或海域的多邊形。
 
 
 <table>
@@ -38,9 +36,9 @@ A division area is a polygon that represents the land or maritime area associate
 
 ## Subtypes
 
-While the schema for the divisions theme contains an comprehensive list of subtypes, only a subset are available in the data today.
+儘管區劃主題的架構包含了全面的子類型列表，但目前數據中僅有部分子類型可用。
 
-Currently, the following subtypes are available in the `division_area` feature type:
+目前，在 `division_area` 特徵類型中可用的子類型有：
 
 - `country`
 - `dependency`
@@ -62,8 +60,7 @@ Currently, the following subtypes are available in the `division_area` feature t
     </table>
 
 
-A country is the largest unit of independent sovereignty. The border of a country, if known, is given by [divsion boundary](/schema/reference/divisions/division_boundary) features. Example: United States
-
+一個國家是獨立主權的最大單位。國家的邊界（如果已知）由 [divsion boundary](/schema/reference/divisions/division_boundary) 特徵表示。例如：美國
   </TabItem>
 
   <TabItem value="dependency" label="dependency" default>
@@ -77,7 +74,7 @@ A country is the largest unit of independent sovereignty. The border of a countr
     </table>
 
 
- A dependency is a place that is not exactly a sub-region of a country but is dependent on a parent country for defense, passport control, etc. Example: Puerto Rico
+dependency 是一個不是一個國家的子區域的地方，但依賴於母國進行國防、護照控制等。例子：波多黎各
 
   </TabItem>
 
@@ -91,7 +88,8 @@ A country is the largest unit of independent sovereignty. The border of a countr
       </tbody>
     </table>
 
-A region is the largest administrative unit within most countries and a first-level administrative subdivision. Example: Alberta
+region 是大多數國家內最大的行政單位，並且是第一級行政區。例子：阿爾伯塔
+
   </TabItem>
 
   <TabItem value="county" label="county" default>
@@ -105,7 +103,7 @@ A region is the largest administrative unit within most countries and a first-le
     </table>
 
 
-A county is a second-level administrative subdivision. Example: Kings County, NY
+county 是一種第二級行政區。例如：紐約的金斯縣
   </TabItem>
 
   <TabItem value="localadmin" label="localadmin" default>
@@ -119,7 +117,7 @@ A county is a second-level administrative subdivision. Example: Kings County, NY
     </table>
 
 
-Localadmin is a level of government in some parts of the world that contains localities or populated places that themselves have no authority. Often but not exclusively found in Europe. Localadmin is a third-level administrative subdivision. Example: [Paris](https://spelunker.whosonfirst.org/id/1159322569/)
+Localadmin 是世界某些地區的政府層級，包含沒有自己管理權限的地方或有人居住的地點。這種層級常見於歐洲，但並不僅限於此。地方行政區是第三級行政區。例子：[巴黎](https://spelunker.whosonfirst.org)
   </TabItem>
 
   <TabItem value="locality" label="locality" default>
@@ -133,7 +131,7 @@ Localadmin is a level of government in some parts of the world that contains loc
     </table>
 
 
-A locality is a populated place that may or may not have its own administrative authority. (It won't if it belongs to a localadmin.) Locality may be a third-level administrative subdivision. Example: Taipei
+Locality是指有人居住的地點，可能擁有或不擁有自己的行政權限。（如果它屬於地方行政區，那麼就沒有自己的管理權限。）地方可能是第三級行政區。例子：台北
   </TabItem>
 
     <TabItem value="neighborhood" label="neighborhood" default>
@@ -146,15 +144,14 @@ A locality is a populated place that may or may not have its own administrative 
       </tbody>
     </table>
 
-
-A neighborhood is a geographically localized community within a city, town, suburb or rural area, sometimes consisting of a single street and the buildings lining it. Example: Cobble Hill
+Neighborhood 是指位於城市、城鎮、郊區或鄉村地區的地理化社區，有時可能僅由一條街道及其沿街的建築物組成。例子：Cobble Hill
   </TabItem>
 </Tabs>
 
 
 
 
-## Schema
+## 架構
 
 <Tabs>
   <TabItem value="browsable" label="Browsable" default>
@@ -165,7 +162,7 @@ A neighborhood is a geographically localized community within a city, town, subu
   </TabItem>
 </Tabs>
 
-## Examples
+## 例子
 
 <Tabs>
   <TabItem value="country_land" label="country, land class" default>
