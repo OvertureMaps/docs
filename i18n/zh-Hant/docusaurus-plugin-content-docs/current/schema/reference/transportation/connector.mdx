@@ -11,9 +11,9 @@ import ConnectorExample from '!!raw-loader!@site/docs/_examples/transportation/d
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Connector
+# 連接器
 
-Connectors create physical connections between [segments](/schema/reference/transportation/segment).
+連接器在 [Segment](/schema/reference/transportation/segment) 之間創建物理連接。
 
 <table>
   <tbody>
@@ -32,15 +32,12 @@ Connectors create physical connections between [segments](/schema/reference/tran
   </tbody>
 </table>
 
-Connectors help define the topology of the transportation network by
-defining points of physical connection between two or more
-[segments](/schema/reference/transportation/segment).
+連接器通過定義兩個或多個[ Segment ](/schema/reference/transportation/segment)之間的物理連接點，幫助確定交通網絡的拓撲結構。
 
-Apart from their point geometry and the core properties required for all
-Overture features, connectors do not have any other
-properties.
+除了它們的點幾何和所有 Overture 特性所需的核心屬性外，連接器沒有其他屬性。
 
-## Schema
+## 架構
+
 
 <Tabs>
   <TabItem value="browsable" label="Browsable" default>
@@ -51,6 +48,6 @@ properties.
   </TabItem>
 </Tabs>
 
-## Example
+## 範例
 
 <CodeBlock language="json">{ JSON.stringify(yamlLoad(ConnectorExample), null, 2) }</CodeBlock>

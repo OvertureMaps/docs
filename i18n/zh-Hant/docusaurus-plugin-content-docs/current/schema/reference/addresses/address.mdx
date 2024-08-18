@@ -1,32 +1,29 @@
----
+﻿---
 title: address
 ---
 
 import CodeBlock from '@theme/CodeBlock';
-import JSONSchemaViewer from "@theme/JSONSchemaViewer";
+import JSON架構Viewer from "@theme/JSON架構Viewer";
 import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
 import yamlLoad from "@site/src/components/yamlLoad"
-import AddressSchema from "!!raw-loader!@site/docs/_schema/addresses/address.yaml";
+import Address架構 from "!!raw-loader!@site/docs/_架構/addresses/address.yaml";
 
-import AddressExample from "!!raw-loader!@site/docs/_examples/addresses/address.yaml";
+import AddressExample from "!!raw-loader!@site/docs/_範例/addresses/address.yaml";
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Address
+#  address 
 
-The Overture Address type is a compilation of open address datasets usually
-published by local authorized sources. In our initial release, we use the datasets
-that are collected and distributed by [OpenAdddresses](https://openaddresses.io).
+Overture  address 類型是由當地授權來源通常發佈的公開 address 資料集的彙編。在我們的初始版本中，我們使用了由 [OpenAddresses](https://openaddresses.io) 收集和分發的資料集。
 
-The initial schema for addresses is fairly simple and is expected to expand into
-more complex addressing schemes.
+ address 的初始架構相當簡單，預期將擴展到更複雜的 address 方案。
 
-## Feature types
-The address theme has a single feature type.
-- `address` is a point feature type representing a single address point.
+##  Features 類型
+ address 主題只有一種 Features 類型。
+- `address` 是一個點 Features 類型，表示單個 address 點。
 
-## Theme concepts
+## 主題概念
 
 
 <table>
@@ -49,18 +46,18 @@ The address theme has a single feature type.
 </table>
 
 
-## Schema
+## 架構
 
 <Tabs>
   <TabItem value="browsable" label="Browsable" default>
-    <JSONSchemaViewer schema={ yamlLoad(AddressSchema) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/addresses'})}/>
+    <JSON架構Viewer 架構={ yamlLoad(Address架構) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/addresses'})}/>
   </TabItem>
   <TabItem value="yaml" label="YAML" default>
-    <CodeBlock language="jsx">{AddressSchema}</CodeBlock>
+    <CodeBlock language="jsx">{Address架構}</CodeBlock>
   </TabItem>
 </Tabs>
 
-## Examples
+## 範例
 
 <Tabs>
   <TabItem value="1" label="Address Example" default>
