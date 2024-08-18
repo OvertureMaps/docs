@@ -1,4 +1,5 @@
 # Overture Documentation
+[![](https://img.shields.io/badge/-中文翻譯-000000?style=for-the-badge&logo=github&logoColor=ffffff)](./static/README/README_zh.md)
 
 This repository uses [Docusaurus](https://docusaurus.io/) to publish the documentation pages seen at [docs.overturemaps.org](https://docs.overturemaps.org)
 
