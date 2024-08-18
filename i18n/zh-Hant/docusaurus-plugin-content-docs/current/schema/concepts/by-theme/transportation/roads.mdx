@@ -266,13 +266,13 @@ Overture 採取默認允許的過渡限制方式。默認情況下，所有隱�
 
 ### 速度限制
 
-速度限制規定了在道路上允許的最高行駛速度。通常，速度限制指定了最大允許速度，但 Overture 也允許設置最低速度限制和指示變速走廊。
+速度限制規定了在道路上允許的最高行駛速度。通常，速度限制指定了最大允許速度，但 Overture 也允許設定最低速度限制和指示變速走廊。
 
-每條道路段都有一個隱含的速度限制或一組速度限制，這些限制由其 [道路類別](#road-class) 以及當地規則、慣例和習俗定義。注意：與通行限制和轉向限制類似，Overture 交通模式並未嘗試指定這些隱含的速度限制。
+每條路段都有一個隱含的速度限制或一組速度限制，這些限制由其 [道路類別](#road-class) 以及當地規則、慣例和習俗定義。注意：與通行限制和轉向限制類似，Overture 交通模式並未嘗試指定這些隱含的速度限制。
 
-可以通過為 `speed_limits` 屬性提供明確的值來配置整條道路段的速度限制。注意：細化的速度限制也可以在個別 [車道](#lanes) 層級上指定，如其他地方所述。
+可以通過為 `speed_limits` 屬性提供明確的值來配置整條路段的速度限制。注意：細化的速度限制也可以在個別 [車道](#lanes) 層級上指定，如其他地方所述。
 
-與通行限制和轉向限制一樣，速度限制也可以使用 [規則](#rules-and-rule-based-properties) 進行指定。
+與通行限制和轉向限制一樣，速度限制也可以使用 [規則](/schema/concepts/scoping-rules#rules-and-rule-based-properties) 進行指定。
 
 <Tabs>
   <TabItem value="speedLimitSimple" label="Simple speed limit" default>
@@ -296,21 +296,21 @@ Overture 採取默認允許的過渡限制方式。默認情況下，所有隱�
 
 ## 車道
 
-一條道路可以選擇性地擁有 `lanes` 屬性，如果存在，則包含一個規則列表，用於解析適用的交通 lane block 。 lane block 是一個車道對象的列表。 lane block 中的每個車道對象描述了適用於該道路的交通車道的物理結構和屬性，並具有足夠的細節以支持導航用例。請注意，`lanes` 屬性適用於交通車道，而不是停車車道。
+一條道路可以選擇性地擁有 `lanes` 屬性，如果存在，則包含一個規則列表，用於解析適用的交通 lane block 。 lane block 是一個車道對象的列表。 lane block 中的每個車道對象描述了適用於該道路的交通車道的物理結構和屬性，並具有足夠的細節以支援導航用例。請注意，`lanes` 屬性適用於交通車道，而不是停車車道。
 
 ### 車道的使用案例
 
-許多交通使用案例可以完全或大部分地解決而無需檢查道路網絡的車道結構。例如，最佳路徑計算可以完全在沒有車道級信息的情況下解決，大多數 2D 地圖渲染問題也是如此。車道信息對於細化的逐轉或逐步導航應用最為有用。
+許多交通使用案例可以完全或大部分地解決而無需檢查道路網路的車道結構。例如，最佳路徑計算可以完全在沒有車道級訊息的情況下解決，大多數 2D 地圖渲染問題也是如此。車道訊息對於細化的逐轉或逐步導航應用最為有用。
 
 ### 預設車道結構
 
-如果從道路段中省略 `lanes` 屬性，則應根據 `class` 和道路級別的 [通行限制](#access-restrictions) 假設合理的預設值。例如，對於沒有朝向範圍限制的 `primary` 類別的雙向道路段，合理的假設是兩條車道，一條 `forward` 和一條 `backward`。
+如果從路段中省略 `lanes` 屬性，則應根據 `class` 和道路級別的 [通行限制](#access-restrictions) 假設合理的預設值。例如，對於沒有朝向範圍限制的 `primary` 類別的雙向路段，合理的假設是兩條車道，一條 `forward` 和一條 `backward`。
 
 ### 車道編號
 
-在給定的地方和時間，道路段上的車道數量等於解析後的 lane block 中車道列表的長度。
+在給定的地方和時間，路段上的車道數量等於解析後的 lane block 中車道列表的長度。
 
-解析後車道列表中的每個條目表示道路上的一條車道。順序很重要。該列表按從左到右的順序捕獲車道，就像一個站在正在建模的實際道路上的人面對該段幾何形狀的 [方向](/schema/concepts/by-theme/transportation/shape-connectivity#directionality) 一樣。最左邊的車道編號為 `0`；最右邊的車道（假設有 N 條車道）編號為 N-1。以下示例展示了如何在北、南、西、東方向上排列的雙車道段中進行車道編號。
+解析後車道列表中的每個條目表示道路上的一條車道。順序很重要。該列表按從左到右的順序捕獲車道，就像一個站在正在建模的實際道路上的人面對該段幾何形狀的 [方向](/schema/concepts/by-theme/transportation/shape-connectivity#directionality) 一樣。最左邊的車道編號為 `0`；最右邊的車道（假設有 N 條車道）編號為 N-1。以下範例展示了如何在北、南、西、東方向上排列的雙車道段中進行車道編號。
 
 
 <figure>
@@ -418,74 +418,43 @@ Overture 採取默認允許的過渡限制方式。默認情況下，所有隱�
 </figcaption>
 </figure>
 
-The `directionality` property is a mandatory property for lanes, and is
-the only mandatory property.
+### 車道方向性
 
-When the allowed travel heading changes based on a regular schedule,
-the appropriate "definite" directionalities (`forward`, `backward`, and
-`both_ways`) should be used along with [temporal scoping](/schema/concepts/scoping-rules#temporal-scoping-opening-hours) at the lane block level.
+`directionality` 屬性是車道的必填屬性，也是唯一的必填屬性。
 
-When the allowed travel heading changes based on unpredictable local
-factors, such that allowed heading at any given time can only be known
-by an observer actually present at the real-world location, the
-appropriate indefinite directionality (`alternating` or `reversible`)
-should be used.
+當允許的行駛方向根據固定的時間表變化時，應使用適當的「確定性」方向性 (`forward`、`backward` 和 `both_ways`)，並在車道區塊層級配合 [時間範圍限定](#temporal-scoping-opening-hours)。
 
-### Lane restrictions
+當允許的行駛方向根據不可預測的地方因素變化，以至於在任何給定時間內的允許方向只能由實際在現場的觀察者知道時，應使用適當的「不確定性」方向性 (`alternating` 或 `reversible`)。
 
-Like the segment a whole, each lane within a lane block can have its own
-restrictions, for example [access restrictions](#access-restrictions),
-[turn restrictions](#turn-restrictions) and
-[speed limits](#speed-limits).
+### 車道限制
 
-Lane-level restrictions reuse the same concepts as segment-level
-restrictions and are typically phrased in the same way, except that the
-restriction is stipulated on an individual lane object rather than for
-the segment's `road` property as a whole.
+與段相同，每條車道內的限制也可以有自己的限制，例如 [進入限制](#access-restrictions)、[轉彎限制](#turn-restrictions) 和 [速度限制](#speed-limits)。
 
-### Lane connectivity
+車道層級的限制重用與段層級限制相同的概念，並通常以相同的方式表述，只不過限制是針對單個車道對象，而不是針對整個段的 `road` 屬性。
 
-Lane connectivity refers to the maneuvers available to navigate from the
-lane the traveller is currently occupying to a connected lane within the
-next lane block in the traveller's current travel direction. Lane
-connectivity is a necessary element for granular turn-by-turn
-navigation instructions.
+### 車道連通性
 
-The Overture transportation schema does not currently support lane
-connectivity, but it is something we are actively working on and hoping
-to release soon.
+車道連通性指的是從旅行者目前所佔用的車道到下一個車道區塊中連接車道的可用操作。車道連通性是詳細的逐步導航指令所必需的元素。
 
-### Resolving the applicable lane block
+Overture 運輸模式目前尚未支援車道連通性，但我們正在積極開發這一功能，並希望很快能夠推出。
 
-The traffic lane structure of a road segment can be different at different
-points along the segment, or at different times of the day, or both.
-Consequently, instead of having a static lane block, road segments carry a list of lane block [rules](/schema/concepts/scoping-rules#rules-and-rule-based-properties)
-in the optional `lanes`  property.
 
-- A rule may be scoped [geometrically](/schema/concepts/scoping-rules#geometric-scoping-linear-referencing),
-which allows linear referencing to be used to specify the portion of the
-segment geometry where the lane block exists.
-- A rule may also be scoped [temporally](/schema/concepts/scoping-rules#temporal-scoping-opening-hours), which allows the time of day that the lane block exists to be specified. Temporal scoping is useful for modeling cases like lanes which are used
-for parking at off hours and traffic during peak hours. In such a case,
-the lane block rule would be scoped to peak hours.
+### 解決適用的車道區塊
 
-As with all rule-based properties in the Overture schema, the [rule evaluation algorithm](/schema/concepts/scoping-rules#rule-evaluation-algorithm) must be applied to determine which lane block rule, if any, is
-applicable at a given place and time along the road segment. Once the
-determining rule for a certain scope is known, its rule block defines
-the lane structure within that scope.
+路段的交通車道結構可能在段的不同位置、不同時間點或兩者之間有所不同。因此，路段攜帶了一個可選的 `lanes` 屬性，其中包含車道區塊 [規則](#rules-and-rule-based-properties) 的列表，而不是靜態的車道區塊。
 
-The example below illustrates lane block resolution for two connected
-segments.
+- 規則可以進行 [幾何範圍限定](#geometric-scoping-linear-referencing)，這允許使用線性參考來指定車道區塊存在的段幾何部分。
+- 規則也可以進行 [時間範圍限定](#temporal-scoping-opening-hours)，這允許指定車道區塊存在的時間。時間範圍限定對於建模在非高峰時段用於停車而在高峰時段用於交通的車道特別有用。在這種情況下，車道區塊規則將被範圍限定到高峰時段。
 
-- The blue shaded, or southwesterly, segment is [oriented](/schema/concepts/by-theme/transportation/shape-connectivity#directionality) toward the north-east. It has two geometrically-scoped lane block rules:
-    - The first rule, applying to the first two thirds of the
-      segment's length, establishes three lanes: one going
-      `backward` (SW), and two `forward` (NE).
-    - The second rule, applying to the last third of the segment,
-      establishes two lanes, one in either direction.
-- The green shaded, or northeasterly, segment is oriented due west. It
-  has a single static lane block that applies to the whole segment
-  geometry at all times.
+與 Overture 模式中的所有基於規則的屬性一樣，必須應用 [規則評估算法](#rule-evaluation-algorithm) 來確定在路段的特定位置和時間點適用的車道區塊規則。一旦知道了某個範圍的確定規則，其規則區塊定義了該範圍內的車道結構。
+
+下面的範例展示了連接的兩個段的車道區塊解析過程。
+
+
+- 藍色陰影的或西南向的路段是 [定向的](/schema/concepts/by-theme/transportation/shape-connectivity#directionality) 向東北方向。它有兩條幾何範圍的車道區塊規則：
+    - 第一條規則適用於路段長度的前二分之一，設立三條車道：一條向後行駛（西南），兩條向前行駛（東北）。
+    - 第二條規則適用於路段的最後三分之一，設立兩條車道，分別向兩個方向。
+- 綠色陰影的或東北向的路段定向向西。它有一個靜態的車道區塊，適用於整個路段幾何形狀。
 
 <Tabs>
   <TabItem value="diagram" label="Diagram" default>
