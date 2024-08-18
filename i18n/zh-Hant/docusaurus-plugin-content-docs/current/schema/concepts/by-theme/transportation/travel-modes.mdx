@@ -1,4 +1,4 @@
----
+﻿---
 title: 旅行模式
 ---
 
@@ -7,15 +7,15 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 在現實世界中，旅行模式可以直觀地理解為從點 A 到點 B 的方式。旅行模式可以包括非車輛模式（步行）、車輛模式（自行車或汽車），以及偶爾更具體的細節，例如被分類為高乘載車輛或重型貨車的汽車。
 
-在 Overture 運輸主題模式中，這種現實世界的直觀理解轉化為以下定義：旅行模式是指一個人或物品可以使用 [段落](/schema/reference/transportation/segment) 特徵的被認可模式。
+在 Overture 運輸主題模式中，這種現實世界的直觀理解轉化為以下定義：旅行模式是指一個人或物品可以使用 [段落](/schema/reference/transportation/segment)  Features 的被認可模式。
 
 ## 理解旅行模式
 
 ### 隱含的旅行模式
 
-每個段落都有一組*隱含*的旅行模式，這些模式被允許使用該段落。對於 [道路](/schema/concepts/by-theme/transportation/roads) 段落來說，這組隱含模式源自 [道路類別](/schema/concepts/by-theme/transportation/roads#road-class)，以及該道路段落所在位置的地方規則、規範和習俗。
+每個段落都有一組*隱含*的旅行模式，這些模式被允許使用該段落。對於 [道路](/schema/concepts/by-theme/transportation/roads) 段落來說，這組隱含模式源自 [道路類別](/schema/concepts/by-theme/transportation/roads#road-class)，以及該路段落所在位置的地方規則、規範和習俗。
 
-由於這組隱含模式取決於地區或司法管轄區，並且可能會隨時間而變化，Overture 運輸模式並未嘗試指定隱含模式。當這種詳細信息對於應用程序的正常運作很重要時，由具體應用程序來解決隱含模式。注意：一個準確的路由引擎可能需要這些信息，而 2D 地圖渲染或地理編碼器則可能不需要。
+由於這組隱含模式取決於地區或司法管轄區，並且可能會隨時間而變化，Overture 運輸模式並未嘗試指定隱含模式。當這種詳細訊息對於應用程序的正常運作很重要時，由具體應用程序來解決隱含模式。注意：一個準確的路由引擎可能需要這些訊息，而 2D 地圖渲染或地理編碼器則可能不需要。
 
 ### 一般定義
 
@@ -30,69 +30,44 @@ Overture 的認可旅行模式以一般術語定義，這些術語廣泛適用�
 
 ### 什麼時候認可旅行模式？
 
-當旅行模式成為 [`mode`](https://github.com/OvertureMaps/schema/blob/5f82f1d6a916031cb32730e1fac7e1a353f10c60/schema/transportation/segment.yaml#L103) 列舉的一部分時，Overture 運輸模式會認可它。這個列舉在模式的早期版本中相對較小，只包含在各司法管轄區和時間上普遍適用的旅行模式。隨著模式的開發進展，這個列表已經擴展，並將隨著世界的變化和新信息的出現而繼續擴大。
+當旅行模式成為 [`mode`](https://github.com/OvertureMaps/schema/blob/5f82f1d6a916031cb32730e1fac7e1a353f10c60/schema/transportation/segment.yaml#L103) 列舉的一部分時，Overture 運輸模式會認可它。這個列舉在模式的早期版本中相對較小，只包含在各司法管轄區和時間上普遍適用的旅行模式。隨著模式的開發進展，這個列表已經擴展，並將隨著世界的變化和新訊息的出現而繼續擴大。
 
-Our criteria for recognizing a proposed new travel mode are:
+我們認可擬議的新交通模式的標準如下：
 
-- the proposed new travel mode should represent a generally-accepted
-   concept meaning that the concept exists in many places with roughly
-   the same definition.
-- the proposed new travel mode should be referred to with well-known
-   sign iconography or sign text in those jurisdictions where the
-   concept exists; and this iconography or sign text is preferably
-   somewhat consistent across many jurisdictions and over time.
-- it must be possible to give a relatively precise definition to the
-   proposed new travel mode and explain how it differs from, or
-   *intersects* with, other similar travel modes which are already
-   recognized in the Overture schema.
-- the proposed new travel mode should preferably not be trivially
-   expressible using another existing [scoping property](/schema/concepts/scoping-rules#scoped-values-and-scoping-properties).(*An example of such a trivially-expressible concept might be a three-axle vehicle which is more appropriately phrased as `vehicle: [{dimension: axle_count, comparison: equal_to, value: 3}]`.*)
-- the proposed new travel mode must be supported by existing data in at
-   least one of Overture's upstream data sources.
+- 擬議的新交通模式應該代表一個普遍接受的概念，意味著該概念在許多地方存在，且定義大致相同。
+- 擬議的新交通模式應該在存在該概念的司法管轄區中以知名的標誌圖示或標誌文字來表達；且這些圖示或文字最好在許多司法管轄區和時間上保持一致。
+- 必須能夠對擬議的新交通模式給出相對精確的定義，並解釋它如何與已在Overture schema中認可的其他類似交通模式有所不同或*交疊*。
+- 擬議的新交通模式最好不要能夠簡單地使用其他現有的[範疇屬性](/schema/concepts/scoping-rules#scoped-values-and-scoping-properties)來表達。（*一個此類簡單表達的概念的例子可能是一輛三軸車，這樣的表達更適合用 `vehicle: [{dimension: axle_count, comparison: equal_to, value: 3}]` 來描述。*）
+- 擬議的新交通模式必須有至少一個Overture的上游資料來源支援的現有資料。
 
-There is a risk that the above-described approach will be too slow to
-adapt to our users' needs in a vast, ever-changing world. One possible
-avenue to mitigate this risk is supporting [custom extensions](#should-we-support-extension-travel-modes) to the built-in list of recognized travel modes.
+上述描述的方法有可能過於緩慢，無法適應我們使用者在龐大且不斷變化的世界中的需求。為了減少這一風險，一個可能應對方法是支援對內建認可交通模式列表的[自訂擴充套件](#should-we-support-extension-travel-modes)。
 
-## Travel mode schema
+## 交通模式架構
 
-### Scoping to travel modes
+### 交通模式的範疇
 
-Travel modes can be used to change the scope of scoped and rule-based
-properties within the schema. For example, they can affect the scope of access restrictions, turn restrictions, or speed limits on [road](/schema/concepts/by-theme/transportation/roads) segments. Since travel modes are expressed via scoping properties, we recommend you read the section on [scoped and rule-based properties](/schema/concepts/scoping-rules) before proceeding further.
+交通模式可以用來改變架構內範疇和規則基於屬性的範疇。例如，它們可以影響[道路](/schema/concepts/by-theme/transportation/roads)段的通行限制、轉彎限制或速度限制的範疇。由於交通模式是通過範疇屬性來表達的，因此我們建議您在繼續之前閱讀[範疇和規則基於屬性](/schema/concepts/scoping-rules)的部分。
 
-#### Travel mode scoping: `mode`
+#### 交通模式範疇：`mode`
 
-The scoping property `mode` controls whether a given scoped property
-applies when a given travel mode is being used for traveling along a
-road segment.
+範疇屬性 `mode` 控制在沿著路段旅行時，是否適用給定的範疇屬性。
 
-If `mode` is provided, it must be a non-empty array of string values
-identifying travel modes, and is interpreted as a set. Values must be
-unique, but order is not important.
+如果提供了 `mode`，它必須是一個非空的字串值數組，用於識別交通模式，並被解釋為一組。值必須是唯一的，但順序不重要。
 
-#### Vehicle attribute scoping: `vehicle`
+#### 車輛屬性範疇：`vehicle`
 
-Because travel modes are an fuzzy concept, there are inevitably areas
-of overlap between with the more precise, but more limited, `vehicle`
-scoping property which is used for [vehicle attributes scoping](/schema/concepts/scoping-rules#vehicle-attributes-scoping). Where there is potential overlap, the method of scoping used in Overture data releases will depend on how the upstream data source has expressed the equivalent concept. Where there is choice, it is preferable to select the scoping method that most accurately reflects the intention expressed on local signage.
+由於交通模式是一個模糊的概念，與更精確但更有限的 `vehicle` 範疇屬性不可避免地存在重疊區域，`vehicle` 用於[車輛屬性範疇](/schema/concepts/scoping-rules#vehicle-attributes-scoping)。當存在潛在重疊時，Overture資料發布中使用的範疇方法將取決於上游資料來源如何表達等效概念。在有選擇的情況下，最好選擇最準確反映當地標誌意圖的範疇方法。
 
-#### Similar scoping properties: `using` and `recognized`
+#### 類似的範疇屬性：`using` 和 `recognized`
 
-The scoping properties `using` and `recognized` express concepts that
-are meant to be orthogonal to (completely separate from) travel modes.
+範疇屬性 `using` 和 `recognized` 表達的是與交通模式完全獨立的概念。
 
-- The `using` property indicates [purpose of use](/schema/concepts/scoping-rules#purpose-of-use-scoping) scoping, which relates to the purpose for which the person or thing travelling is using a given segment of the transportation network. Travel modes should ideally not embed a purpose of use.
-- The `recognized` property indicates [status scoping](/schema/concepts/scoping-rules#status-scoping-membership-in-a-recognized-group), which relates to a recognized status given to the person or thing traveling, where the recognized status is distinct from the mode of travel itself. Travel modes should ideally not embed a status.
+- `using` 屬性表示[使用目的](/schema/concepts/scoping-rules#purpose-of-use-scoping)範疇，這與旅行者使用交通網路的特定段的目的有關。理想情況下，交通模式不應該嵌入使用目的。
+- `recognized` 屬性表示[狀態範疇](/schema/concepts/scoping-rules#status-scoping-membership-in-a-recognized-group)，這與旅行者的認可狀態有關，其中認可狀態與旅行模式本身是不同的。理想情況下，交通模式不應該嵌入狀態。
 
-### The travel modes taxonomy
+### 交通模式分類法
 
-Travel modes in Overture form a shallow taxonomy. Some travel modes are
-more general, while others are more specific, and a more general travel
-mode may contain a more specific one. For example, the general travel
-mode `vehicle` contains the more specific mode `motor_vehicle`. The
-taxonomy supported in our draft schema `v0.8.0` can be visualized in the
-diagram below.
+Overture中的交通模式形成了一個淺層分類法。某些交通模式較為通用，而其他模式則更具體，一個更通用的交通模式可能包含一個更具體的模式。例如，通用交通模式 `vehicle` 包含了更具體的模式 `motor_vehicle`。我們草案架構 `v0.8.0` 支援的分類法可以在下面的圖示中視覺化。
 
 <figure>
 
@@ -120,24 +95,17 @@ diagram below.
 
 </figure>
 
-As many of the above travel modes draw on the body of knowledge
-accumulated in relation to OpenStreetMap
-[transport mode access restrictions](https://wiki.openstreetmap.org/wiki/Key:access#Transport_mode_restrictions),
-Overture Maps would like acknowledge a intellectual debt to the OSM community in
-relation to travel modes as well as to other aspects of the transportation schema.
+由於許多上述交通模式借鑒了與 OpenStreetMap [交通模式訪問限制](https://wiki.openstreetmap.org/wiki/Key:access#Transport_mode_restrictions) 相關的知識體系，Overture Maps 希望對 OSM 社群在交通模式及其他交通架構方面表達我們的感謝。
 
-## Open questions
+## 開放性問題
 
-This section discusses some open questions we are debating internally with
-regard to travel modes. We would love [your feedback](https://github.com/OvertureMaps/schema/discussions) on these questions and any others you may have.
+本節討論一些關於交通模式的內部辯論問題。我們非常樂意聽取 [您的回饋](https://github.com/OvertureMaps/schema/discussions) 以及您可能有的其他問題。
 
-### Minimum required travel modes
+### 最低必要的交通模式
 
-We're not yet certain on the minimum set of recognized travel modes is
-that will make the Overture transportation schema as usable as possible
-to as broad an audience as possible. What do you think we are missing?
+我們還不確定最低所需的交通模式集合是什麼，這將使 Overture 交通架構對盡可能廣泛的受眾變得更加可用。您認為我們還缺少什麼？
 
-### Should we support extension travel modes?
+### 我們是否應該支援擴展交通模式？
 
 <!--
 TODO: This open question relates to the feature request
@@ -147,23 +115,14 @@ TODO: This open question relates to the feature request
       on what happens with that feature request.
 -->
 
-We live in a time of rapid technological and regulatory change in
-the transportation space. No matter how quickly we extend the travel modes in the Overture Maps schema it will always be behind the real world with regard to some technologies, customs, or local rules.
+我們生活在一個交通領域技術和法規快速變革的時代。無論我們多麼迅速地擴展 Overture Maps 架構中的旅行模式，
+它在某些技術、習俗或地方規則方面總會落後於現實世界。支援處於前沿工作的使用者的一種方法是允許自定義擴展旅行
+模式列表。如果我們這樣做與特性擴展屬性的工作方式一致，我們可以，例如，允許以 `ext_*` 
+開頭的旅行模式名稱在架構驗證規則中被忽略。
 
-One way to support users working at the cutting edge is to allow custom extensions to
-the list of travel modes. If we did this consistently with how extension
-properties <!-- TODO: This should be a link to a heading in the main
-schema documentation, but that heading needs to be written first. -->
-work for features, we could, for example, allow travel mode names with
-the `ext_*` to be ignored by the schema validation rules.
+### 內部一致性
 
-### Internal consistency
+在[此文檔的另一部分](#vehicle-attribute-scoping-vehicle)中，我們提到旅行模式和車輛屬性範圍這一模糊概念之間存在重疊。我們知道這種重疊是有限但不可避免的。
 
-In [another section of this documentation](#vehicle-attribute-scoping-vehicle), we alluded to an overlap between the fuzzy concept of travel modes and vehicle attribute
-scoping. We're aware of this overlap and view it as limited but inevitable.
-
-Our intention is to reduce or eliminate the overlap between travel modes and the other [similar scoping properties](#similar-scoping-properties-using-and-recognized)
-(`using` and `recognized`). One area where we may have been unsuccessful
-is the `emergency` travel mode in the [current taxonomy](#the-travel-modes-taxonomy).
-Arguably, `emergency` should be removed from the taxonomy, and an
-`as_emergency_responder` should be included in the status values enumeration for the `recognized` property.
+我們的目標是減少或消除旅行模式與其他[類似範圍屬性](#similar-scoping-properties-using-and-recognized)（`using` 和 `recognized`）之間的重疊。 
+其中一個可能不太成功的地方是[當前分類法](#the-travel-modes-taxonomy)中的 `emergency` 旅行模式。可以說，`emergency` 應該從分類法中刪除，並且應將 `as_emergency_responder` 包含在 `recognized` 屬性的狀態值枚舉中。
