@@ -315,16 +315,11 @@ Overture 運輸模式的一個關鍵 Features 是段落能夠支援在其幾何�
 
 </div>
 
-### Loops
+### 環路
 
-Although it is technically possible to use the Overture schema to express a
-segment forming a connected loop, such loops are considered invalid and will
-never be produced by the segmentation algorithm.
+雖然技術上可以使用 Overture 模式來表達形成連接環路的段落，但這些環路被認為是無效的，並且分段算法永遠不會生成這樣的環路。
 
-An illegal loop where one of a segment connects to the other end can be
-corrected by splitting the segment and introducing a second connector to
-maintain physical connectivity. An illegal self-crossing loop of degree *N*
-can be corrected by splitting the segment into N pieces.
+一個非法環路，其中一個段落連接到另一端，可以通過切割段落並引入第二個連接器來保持物理連接來進行修正。對於非法的自交環路，度數為 *N*，可以通過將段落切割成 N 個部分來進行修正。
 
 <div style={{ width: "49.5%", float: "left", textAlign: "center" }}>
 

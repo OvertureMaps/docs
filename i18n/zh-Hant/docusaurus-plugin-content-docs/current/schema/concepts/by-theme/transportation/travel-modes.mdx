@@ -1,64 +1,36 @@
 ---
-title: Travel modes
+title: 旅行模式
 ---
 
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-In the real world, a travel mode can be thought of intuitively as a way
-of getting from point A to point B. Travel modes can include non-vehicle
-modes (foot), vehicle modes (a bicycle or motor vehicle), and
-occasionally more granular details, e.g. a motor vehicle classified as a high occupancy vehicle or a heavy goods vehicle.
+在現實世界中，旅行模式可以直觀地理解為從點 A 到點 B 的方式。旅行模式可以包括非車輛模式（步行）、車輛模式（自行車或汽車），以及偶爾更具體的細節，例如被分類為高乘載車輛或重型貨車的汽車。
 
-Within the Overture transportation theme schema model, this real world
-intuition translates to the following definition: a travel mode is a
-recognized mode by which a person or thing may use a [segment](/schema/reference/transportation/segment) feature.
+在 Overture 運輸主題模式中，這種現實世界的直觀理解轉化為以下定義：旅行模式是指一個人或物品可以使用 [段落](/schema/reference/transportation/segment) 特徵的被認可模式。
 
-## Understanding travel modes
+## 理解旅行模式
 
-### Implied travel modes
+### 隱含的旅行模式
 
-Every segment has an *implied* set of travel modes that are allowed to use the segment. For [road](/schema/concepts/by-theme/transportation/roads) segments, this implied set derives
-from the [road class](/schema/concepts/by-theme/transportation/roads#road-class), as well as local rules, norms, and customs operative where the road segment is situated.
+每個段落都有一組*隱含*的旅行模式，這些模式被允許使用該段落。對於 [道路](/schema/concepts/by-theme/transportation/roads) 段落來說，這組隱含模式源自 [道路類別](/schema/concepts/by-theme/transportation/roads#road-class)，以及該道路段落所在位置的地方規則、規範和習俗。
 
-Since this implied set depends on locality or jurisdiction, and is
-susceptible of varying over time, the Overture transportation schema
-does not try to specify the implied set. Resolution of the implied set
-is done by the specific application in the case where this level of
-detail is important for its proper functioning. Note: an accurate routing
-engine may need this information, whereas a 2D map render or a geocoder
-likely do not.
+由於這組隱含模式取決於地區或司法管轄區，並且可能會隨時間而變化，Overture 運輸模式並未嘗試指定隱含模式。當這種詳細信息對於應用程序的正常運作很重要時，由具體應用程序來解決隱含模式。注意：一個準確的路由引擎可能需要這些信息，而 2D 地圖渲染或地理編碼器則可能不需要。
 
-### General definitions
+### 一般定義
 
-Overture's recognized travel modes are defined in general terms that are
-broadly applicable, for example `hov` is a high-occupancy vehicle and
-`hgv` is a heavy goods vehicle. In most jurisdictions, these general
-terms map to a concept that is in use within the jurisdiction, even
-though the local name for the concept may vary, for example one
-jurisdiction may say heavy goods vehicle and another may say
-large goods vehicle.
+Overture 的認可旅行模式以一般術語定義，這些術語廣泛適用，例如 `hov` 是高乘載車輛，`hgv` 是重型貨車。在大多數司法管轄區，這些通用術語對應到該地區使用的概念，即使該概念的當地名稱可能有所不同，例如一個地區可能稱為重型貨車，而另一個地區可能稱為大型貨車。
 
-Despite being broadly applicable, travel modes may have different
-definitions in different places and at different times.
+儘管廣泛適用，旅行模式在不同地區和不同時間可能有不同的定義。
 
-- in one jurisdiction, an `hgv` might mean any vehicle with a gross
-  vehicle weight in excess of 3.5 tonnes (3,500 kg). In another place,
-  an `hgv` might have a gross vehicle weight of at least 10,001 lbs.
-- in one jurisdiction, an `hov` might require a minimum of 2 passengers
-  while in another place it might have a higher minimum passenger count,
-  or include battery-electric vehicles, or exclude certain classes of
-  vehicle or usage.
+- 在一個地區，`hgv` 可能指的是總重超過 3.5 噸（3,500 公斤）的任何車輛。在另一個地方，`hgv` 可能具有至少 10,001 磅的總重。
+- 在一個地區，`hov` 可能要求至少有 2 名乘客，而在另一個地方，它可能有更高的最低乘客數，或包括電池電動車，或排除某些車輛或用途類別。
 
-As a consequence of the variance in definition across place and time,
-Overture gives only general definitions for travel modes, leaving
-precise definition to those applications that require them.
+由於在地區和時間上的定義變化，Overture 僅提供旅行模式的一般定義，將精確定義留給那些需要它的應用程序。
 
-### When is a travel mode recognized?
+### 什麼時候認可旅行模式？
 
-A travel mode is recognized by the Overture transportation schema when
-it becomes part of the [`mode`](https://github.com/OvertureMaps/schema/blob/5f82f1d6a916031cb32730e1fac7e1a353f10c60/schema/transportation/segment.yaml#L103)
-enumeration. This enumeration in early versions of the schema was relatively small and contained only travel modes that are generally-applicable both across jurisdictions and over time. As development of the schema has progressed, this list has grown and will to continue to expand as the world changes and new information arises.
+當旅行模式成為 [`mode`](https://github.com/OvertureMaps/schema/blob/5f82f1d6a916031cb32730e1fac7e1a353f10c60/schema/transportation/segment.yaml#L103) 列舉的一部分時，Overture 運輸模式會認可它。這個列舉在模式的早期版本中相對較小，只包含在各司法管轄區和時間上普遍適用的旅行模式。隨著模式的開發進展，這個列表已經擴展，並將隨著世界的變化和新信息的出現而繼續擴大。
 
 Our criteria for recognizing a proposed new travel mode are:
 
