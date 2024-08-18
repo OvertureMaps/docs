@@ -1,15 +1,13 @@
 ---
-title: Shape and connectivity
+title: 形狀與連接性
 ---
 
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-# Shape and connectivity
+# 形狀與連接性
 
-The Overture transportation theme captures the physical shape and connectivity
-of the transportation network through the interaction of the theme's two feature
-types: segments and connectors.
+Overture 運輸主題通過主題中的兩種要素類型：段落和連接器之間的互動，捕捉運輸網絡的物理形狀和連接性。
 
 
 <div style={{textAlign: 'center'}}>
@@ -33,63 +31,36 @@ types: segments and connectors.
 
 </div>
 
-## Connectors
+## 連接器
 
-The [connector](/schema/reference/transportation/connector) feature type carries point geometry which describes a location where a physical connection between two or more segments occurs (or may occur in the
-future).
+[連接器](/schema/reference/transportation/connector)要素類型攜帶點幾何，描述了兩個或多個段落之間發生（或未來可能發生）物理連接的位置。
 
-Connectors have no properties apart from geometry and standard Overture
-feature properties. All other aspects of the transportation theme are
-modeled on segments.
+連接器除了幾何和標準的Overture要素屬性之外，沒有其他屬性。運輸主題的所有其他方面都建模於段落。
 
 <!--
- The statement that connectors have no other properties is technically
- false since as of 2023-06-15, they have a `level` property which should
- probably be removed: https://github.com/OvertureMaps/schema-wg/issues/138
+ 技術上來說，連接器沒有其他屬性的說法是不正確的，因為截至2023-06-15，它們有一個 `level` 屬性，可能應該被移除：https://github.com/OvertureMaps/schema-wg/issues/138
 -->
 
-## Segments
+## 段落
 
-The [segment](/schema/reference/transportation/segment) feature type carries `LineString` geometry which describes the physical shape of a section of the transportation network. A segment may represent an entity with a
-tangible real-world existence, such as a paved road; or it may represent
-an intangible entity, such as a ferry route, which has a well-known
-shape but no observable presence in the real world.
+[段落](/schema/reference/transportation/segment)要素類型攜帶`LineString`幾何，描述了運輸網絡中一部分的物理形狀。段落可以代表具有真實存在的實體，例如鋪設的道路；也可以代表無形的實體，例如渡輪路線，它有一個眾所周知的形狀，但在現實世界中沒有可觀察的存在。
 
-### Physical connectivity
+### 物理連接性
 
-Two or more segments are physically connected at a given connector if
-each segment's connectors property contains a reference to the
-connector.
+如果每個段落的連接器屬性包含對連接器的引用，則兩個或多個段落在給定的連接器處物理連接。
 
-The connector geometry's coordinates should preferably be contained
-within the segment geometry's coordinates, in which case the connector
-coordinates define the point of physical connection. This constraint
-will always be met by official Overture data releases. Where this is not
-possible, the point of physical connection is the closest point to the
-connector coordinates which intersects the segment geometry.
+連接器幾何的座標應該盡可能包含在段落幾何的座標內，在這種情況下，連接器座標定義了物理連接點。官方的Overture數據發布將始終滿足此約束。如果無法滿足，則物理連接點是與連接器座標相交的段落幾何上最近的點。
 
-Conversely, two segments are not physically connected if their
-connectors properties do not reference a shared connector, even if
-their geometries overlap or even share a coordinate in common.
+相反，如果兩個段落的連接器屬性未引用共享連接器，即使它們的幾何形狀重疊或共享公共座標，它們也不會被物理連接。
 
-Travel from a point on one segment to a point on another
-physically-connected segment is allowed, unless limited by an explicit
-restriction such as an access or turn restriction.
+允許從一個段落上的點到另一個物理連接段落上的點的旅行，除非受到明確限制，如進入或轉向限制。
 
-All segments in official Overture transportation data releases have a
-minimum of two connectors, one at each end of the geometry, even if
-those endpoint connectors are not attached to any other segment. This is
-not a mandatory minimum and is not enforced by the schema. It is done
-to allow new segments to connect into the existing network without
-needing to change the properties of existing segments.
+官方的Overture運輸數據發布中的所有段落至少有兩個連接器，一個在幾何形狀的每端，即使這些端點連接器未附加到其他段落上。這不是強制性最低要求，也不由模式強制執行。這樣做是為了讓新段落能夠連接到現有網絡中，而不需要更改現有段落的屬性。
 
-### Start, end, and orientation
+### 開始、結束和方向
 
-The first coordinate in a segment's geometry is the start of the
-segment and the last coordinate is the end. A segment is oriented
-away from the start and toward the end. The examples below show two
-segment geometries with identical coordinates, oriented in opposite
-directions.
+段落幾何的第一個座標是段落的開始，最後一個座標是結束。段落的方向是從開始指向結束。以下示例顯示了兩個具有相同座標的段落幾何，方向相反。
+
 
 <div style={{ width: "49.5%", float: "left" }}>
 
@@ -168,12 +139,9 @@ coordinates:
 <div style={{ clear: "both" }}/>
 
 
-### Heading
+### 方向
 
-Travel along a segment's geometry can follow one of two possible
-headings: forward or backward. The forward heading proceeds
-toward the end of the segment; while the backward heading proceeds
-back toward the start of the segment.
+沿著段落的幾何形狀旅行可以遵循兩個可能的方向：前進或後退。前進方向是朝向段落的結束；而後退方向是朝向段落的開始。
 
 <div style={{textAlign: 'center'}}>
 
@@ -204,19 +172,13 @@ back toward the start of the segment.
 -->
 
 
-🚧 We are developing a segment-level directionality concept similar to [lane directionality](/schema/concepts/by-theme/transportation/roads#lane-directionality) to indicate what travel headings are allowed or prohibited along the segment. This effort is
-ongoing, so please check back soon.
+🚧 我們正在開發一種段落級的方向性概念，類似於 [車道方向性](/schema/concepts/by-theme/transportation/roads#lane-directionality)，以指示段落上允許或禁止的旅行方向。這項工作正在進行中，請稍後再查看。
 
-### Sub-types
+### 子類型
 
-Segment features have a `subtype` property whose value gives more
-specific information about the segment's role within the transportation
-network.
+段落要素有一個 `subtype` 屬性，其值提供有關段落在運輸網絡中角色的更具體信息。
 
-The `subtype` property may be one of `road`, `rail`, or `water` but
-only `road` is currently well defined. A `road` segment models any kind
-of road, street, or trail, including a dedicated path for walking,
-cycling and similar activities. For more information about `road` segments, see the page on [roads](/schema/concepts/by-theme/transportation/roads).
+`subtype` 屬性可能是 `road`、`rail` 或 `water` 其中之一，但目前只有 `road` 定義得較為清楚。`road` 段落模型任何類型的道路、街道或小徑，包括專用的步行、騎行等活動的路徑。欲了解有關 `road` 段落的更多信息，請參見 [道路](/schema/concepts/by-theme/transportation/roads) 頁面。
 
 ### Level (Z-order)
 
