@@ -3,12 +3,12 @@ title: address
 ---
 
 import CodeBlock from '@theme/CodeBlock';
-import JSON架構Viewer from "@theme/JSON架構Viewer";
+import JSONSchemaViewer from "@theme/JSONSchemaViewer";
 import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
 import yamlLoad from "@site/src/components/yamlLoad"
-import Address架構 from "!!raw-loader!@site/docs/_架構/addresses/address.yaml";
+import AddressSchema from "!!raw-loader!@site/docs/_Schema/addresses/address.yaml";
 
-import AddressExample from "!!raw-loader!@site/docs/_範例/addresses/address.yaml";
+import AddressExample from "!!raw-loader!@site/docs/_Examples/addresses/address.yaml";
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -50,10 +50,10 @@ Overture  address 類型是由當地授權來源通常發佈的公開 address �
 
 <Tabs>
   <TabItem value="browsable" label="Browsable" default>
-    <JSON架構Viewer 架構={ yamlLoad(Address架構) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/addresses'})}/>
+    <JSONSchemaViewer Schema={ yamlLoad(AddressSchema) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/addresses'})}/>
   </TabItem>
   <TabItem value="yaml" label="YAML" default>
-    <CodeBlock language="jsx">{Address架構}</CodeBlock>
+    <CodeBlock language="jsx">{AddressSchema}</CodeBlock>
   </TabItem>
 </Tabs>
 

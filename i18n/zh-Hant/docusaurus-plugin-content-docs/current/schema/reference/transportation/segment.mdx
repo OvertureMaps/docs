@@ -45,7 +45,7 @@ Segment 是人或物體可以行走的路徑。
 
  Segment 的幾何形狀代表人或物體可能行走的路徑中心線。 Segment 屬性描述了該路徑的物理屬性（例如路面和寬度）以及非物理屬性（例如通行限制規則）。
 
-如果兩個 Segment 的 `connector` 屬性都引用了共同的[連接器](/schema/reference/transportation/connector)，則它們在物理上是連接的。在這種情況下，兩個 Segment 的幾何形狀都必須包含該共同連接器的坐標。 Segment 之間的物理連接表示在沒有屬性限制（如轉彎限制）的情況下，可能可以從一個 Segment 通行到另一個連接點。反之，即使兩個 Segment 的幾何形狀相交，但如果它們沒有共享共同的連接器，則它們不被視為物理上連接的。
+如果兩個 Segment 的 `connector` 屬性都引用了共同的[ Connector ](/schema/reference/transportation/connector)，則它們在物理上是連接的。在這種情況下，兩個 Segment 的幾何形狀都必須包含該共同 Connector 的坐標。 Segment 之間的物理連接表示在沒有屬性限制（如轉彎限制）的情況下，可能可以從一個 Segment 通行到另一個連接點。反之，即使兩個 Segment 的幾何形狀相交，但如果它們沒有共享共同的 Connector ，則它們不被視為物理上連接的。
 
 ## 子類型
 

@@ -20,12 +20,15 @@ Overture 架構倉庫 [github/overturemaps/schema](https://github.com/overturema
 
 
 ## 開發
-Docusaurus 需要 node。
+Docusaurus 需要 node.JS。
 首先，安裝所需的套件：
 ```
 $ npm install
 ```
-
+build
+```
+$ npm run docusaurus build
+```
 然後在本地啟動伺服器：
 ```
 $ npm run start
