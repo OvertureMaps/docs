@@ -1,4 +1,4 @@
----
+﻿---
 title: 形狀與連接性
 ---
 
@@ -7,7 +7,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # 形狀與連接性
 
-Overture 運輸主題通過主題中的兩種要素類型：段落和連接器之間的互動，捕捉運輸網絡的物理形狀和連接性。
+Overture 運輸主題通過主題中的兩種要素類型：段落和連接器之間的互動，捕捉運輸網路的物理形狀和連接性。
 
 
 <div style={{textAlign: 'center'}}>
@@ -43,23 +43,23 @@ Overture 運輸主題通過主題中的兩種要素類型：段落和連接器�
 
 ## 段落
 
-[段落](/schema/reference/transportation/segment)要素類型攜帶`LineString`幾何，描述了運輸網絡中一部分的物理形狀。段落可以代表具有真實存在的實體，例如鋪設的道路；也可以代表無形的實體，例如渡輪路線，它有一個眾所周知的形狀，但在現實世界中沒有可觀察的存在。
+[段落](/schema/reference/transportation/segment)要素類型攜帶`LineString`幾何，描述了運輸網路中一部分的物理形狀。段落可以代表具有真實存在的實體，例如鋪設的道路；也可以代表無形的實體，例如渡輪路線，它有一個眾所周知的形狀，但在現實世界中沒有可觀察的存在。
 
 ### 物理連接性
 
 如果每個段落的連接器屬性包含對連接器的引用，則兩個或多個段落在給定的連接器處物理連接。
 
-連接器幾何的座標應該盡可能包含在段落幾何的座標內，在這種情況下，連接器座標定義了物理連接點。官方的Overture數據發布將始終滿足此約束。如果無法滿足，則物理連接點是與連接器座標相交的段落幾何上最近的點。
+連接器幾何的座標應該盡可能包含在段落幾何的座標內，在這種情況下，連接器座標定義了物理連接點。官方的Overture資料發布將始終滿足此約束。如果無法滿足，則物理連接點是與連接器座標相交的段落幾何上最近的點。
 
 相反，如果兩個段落的連接器屬性未引用共享連接器，即使它們的幾何形狀重疊或共享公共座標，它們也不會被物理連接。
 
 允許從一個段落上的點到另一個物理連接段落上的點的旅行，除非受到明確限制，如進入或轉向限制。
 
-官方的Overture運輸數據發布中的所有段落至少有兩個連接器，一個在幾何形狀的每端，即使這些端點連接器未附加到其他段落上。這不是強制性最低要求，也不由模式強制執行。這樣做是為了讓新段落能夠連接到現有網絡中，而不需要更改現有段落的屬性。
+官方的Overture運輸資料發布中的所有段落至少有兩個連接器，一個在幾何形狀的每端，即使這些端點連接器未附加到其他段落上。這不是強制性最低要求，也不由模式強制執行。這樣做是為了讓新段落能夠連接到現有網路中，而不需要更改現有段落的屬性。
 
 ### 開始、結束和方向
 
-段落幾何的第一個座標是段落的開始，最後一個座標是結束。段落的方向是從開始指向結束。以下示例顯示了兩個具有相同座標的段落幾何，方向相反。
+段落幾何的第一個座標是段落的開始，最後一個座標是結束。段落的方向是從開始指向結束。以下範例顯示了兩個具有相同座標的段落幾何，方向相反。
 
 
 <div style={{ width: "49.5%", float: "left" }}>
@@ -176,23 +176,15 @@ coordinates:
 
 ### 子類型
 
-段落要素有一個 `subtype` 屬性，其值提供有關段落在運輸網絡中角色的更具體信息。
+段落要素有一個 `subtype` 屬性，其值提供有關段落在運輸網路中角色的更具體訊息。
 
-`subtype` 屬性可能是 `road`、`rail` 或 `water` 其中之一，但目前只有 `road` 定義得較為清楚。`road` 段落模型任何類型的道路、街道或小徑，包括專用的步行、騎行等活動的路徑。欲了解有關 `road` 段落的更多信息，請參見 [道路](/schema/concepts/by-theme/transportation/roads) 頁面。
+`subtype` 屬性可能是 `road`、`rail` 或 `water` 其中之一，但目前只有 `road` 定義得較為清楚。`road` 段落模型任何類型的道路、街道或小徑，包括專用的步行、騎行等活動的路徑。欲了解有關 `road` 段落的更多訊息，請參見 [道路](/schema/concepts/by-theme/transportation/roads) 頁面。
 
-### Level (Z-order)
+### 層級（Z-排序）
 
-Segment geometry is two-dimensional. In the real, 3D, world, however the
-entities represented by segments can be above or below each other, as
-may happen with tunnels, bridges, overpasses, and stacked multi-level
-highway interchanges. To accurately render top-down 2D maps, it is
-important to know the relative stacking order, or Z-order, of segments.
+段落幾何是二維的。然而，在現實的三維世界中，段落所代表的實體可能會彼此上下重疊，例如隧道、橋樑、高架橋和疊層多級高速公路交匯處。為了準確渲染自上而下的二維地圖，了解段落的相對堆疊順序或 Z-排序是重要的。
 
-Segment Z-order is given by the `level` property. A `level` value of
-`0` indicates visual level, with positive numbers indicating above
-visual level, negative numbers indicating below visual level, and in
-general, a lesser number indicating a lower position in the stacking
-order than a greater number.
+段落的 Z-排序由 `level` 屬性給出。`level` 值為 `0` 表示視覺層級，正數表示在視覺層級之上，負數表示在視覺層級之下，通常，較小的數字表示在堆疊順序中的位置低於較大的數字。
 
 <div style={{textAlign: 'center'}}>
 
@@ -215,10 +207,7 @@ order than a greater number.
 
 </div>
 
-Note that two segments with different `level` values may be physically
-connected, since `level` is an approximation for rendering and is not
-meant be a precise indication of elevation at different points along the
-segment. Connectors do not have a `level`.
+請注意，兩個具有不同 `level` 值的段落可能會彼此物理連接，因為 `level` 是渲染的近似值，不是段落不同點的精確高度指示。連接器沒有 `level` 屬性。
 
 <!--
 TODO: The statement that "Connectors do not have a `level`" is not
@@ -227,58 +216,35 @@ TODO: The statement that "Connectors do not have a `level`" is not
       address the issue and delete this TODO comment afterward.
 -->
 
-## Segmentation
+## 分段
 
-The term segmentation describes the process of converting upstream source data
-into Overture transportation shape and connectivity data modeled as segments and
-connectors.
+「分段」這個術語描述了將上游源資料轉換為 Overture 運輸形狀和連接資料的過程，這些資料以段落和連接器的形式建模。
 
-### Shape stability
+### 形狀穩定性
 
-A primary goal of Overture's segmentation process is to promote stability of
-segment shape across Overture data releases. For example, if a certain
-real-world stretch of Main Street is represented by a single segment with
-particular geometry in release 1, we will strive to avoid slicing the exact same
-geometry up into two, three, or four segments in release 2.
+Overture 分段過程的一個主要目標是促進段落形狀在 Overture 資料發布中的穩定性。例如，如果在版本 1 中某個現實世界的 Main Street 段落由一個具有特定幾何形狀的段落表示，我們會努力避免在版本 2 中將相同的幾何形狀切割成兩個、三個或四個段落。
 
-Note that aiming for segment shape stability categorically does not mean that
-Overture aims for a stable transportation dataset. On the contrary, we aim to
-continuously improve data accuracy and coverage, and expect the transportation
-network dataset to constantly evolve and grow as a result. Our goal is simply
-to minimize unnecessary, semantically meaningless, changes in how the geometry
-is sliced into segments across data releases.
+請注意，追求段落形狀穩定性絕對不意味著 Overture 旨在維持穩定的運輸資料集。相反，我們旨在持續改進資料的準確性和覆蓋範圍，並預期運輸網路資料集會因此不斷演變和增長。我們的目標只是最小化在資料發布中幾何形狀切割為段落的方式上的不必要的、語義上無意義的變化。
 
-Several features of the transportation theme schema were designed to allow the
-segmentation process to achieve its segment stability goal. These features
-include:
+運輸主題模式的幾個 Features 被設計為允許分段過程實現其段落穩定性目標。這些 Features 包括：
 
-- [interior connectors](#interior-connectors).
-- [geometrically scoped](#geometric-scoping) segment properties.
+- [內部連接器](#interior-connectors)。
+- [幾何範圍](#geometric-scoping)的段落屬性。
 
 <!---
 TODO: Once we have some usable comparative metrics for ID stability, we should
       add a sub-heading under segmentation, with a table of the data.
 --->
 
-### Overture ID stability
+### Overture ID 穩定性
 
-Overture pursues shape stability to improve the ability to assess whether two segments from different points in time (or from different upstream data
-sources) represent the same real world entity. Overture's success at this assessment directly feeds into the stability and precision of [Overture IDs](https://docs.overturemaps.org/gers) assigned to segments. In turn, higher Overture ID stability and precision makes transportation theme data more useful for conflation.
+Overture 追求形狀穩定性，以提高評估來自不同時間點（或來自不同上游資料源）的兩個段落是否表示相同現實世界實體的能力。Overture 在這方面的成功直接影響到分配給段落的 [Overture IDs](https://docs.overturemaps.org/gers) 的穩定性和精確性。反過來，較高的 Overture ID 穩定性和精確性使運輸主題資料在合併時更加有用。
 
-### Interior connectors
+### 內部連接器
 
-A key feature of the Overture transportation schema which enables shape
-stability is the ability of segments to support connectors at interior positions
-along their geometry, not only at their endpoints. The ability to add internal
-connectors prevents the segmentation process from having to blindly follow every
-split or join introduced in upstream source data.
+Overture 運輸模式的一個關鍵 Features 是段落能夠支援在其幾何形狀內部位置的連接器，而不僅僅是在其端點。能夠添加內部連接器防止分段過程必須盲目跟隨上游源資料中引入的每個切割或合併。
 
-For example, imagine a square city block bordered by road on all four sides has
-been mapped in the source data, but a back alley dividing the block along the
-east-west axis has not. If the back alley is subsequently mapped in the source
-data, the Overture segmentation process can connect to the transportation
-network without having to subdivide any existing segments by simply introducing
-internal connectors on the north-south road segments bordering the block to the east and west. As a result, the [Overture IDs](https://docs.overturemaps.org/gers) of the north-south road segments remain as they were and no data needs to be re-conflated.
+假設一個四面圍繞道路的方形城市街區已經在源資料中映射，但沿東西方向分割街區的後巷尚未映射。如果後巷隨後在源資料中被映射，Overture 分段過程可以連接到運輸網路，而不需要通過簡單地在街區東西側的南北方向路段上引入內部連接器來細分任何現有段落。因此，南北方向路段的 [Overture IDs](https://docs.overturemaps.org/gers) 保持不變，且無需重新合併資料。
 
 <figure>
 
@@ -320,23 +286,13 @@ internal connectors on the north-south road segments bordering the block to the 
 
 </figure>
 
-Note that in the above example, an official Overture data release would insert
-coordinates in the middle of the north-south segments, if they did not already
-exist, because Overture data releases will always ensure that every segment's
-geometry includes all of its connectors. From a computer's perspective, this is
-a very minor alteration of the segment's shape.
+請注意，在上述範例中，官方的 Overture 資料發布會在南北方向段落的中間插入座標（如果它們尚不存在），因為 Overture 資料發布將始終確保每個段落的幾何形狀包括所有連接器。從計算機的角度來看，這是對段落形狀的非常輕微的修改。
 
-### Geometric scoping
+### 幾何範圍
 
-Many segment properties may include a linear reference so that they apply only
-to a part of the segment geometry. We refer to these linearly-referenced
-property values as being geometrically scoped and discuss geometric scoping at greater length in the page on [scoped properties](/schema/concepts/scoping-rules).
+許多段落屬性可能包含線性參考，使其僅適用於段落幾何的一部分。我們將這些線性參考的屬性值稱為幾何範圍，並在 [範圍屬性](/schema/concepts/scoping-rules) 頁面中對幾何範圍進行更詳細的討論。
 
-Geometric scoping allows the segmentation algorithm to avoid introducing
-segment splits simply because a certain property has different values along
-different parts of the geometry. Like interior connectors, geometrically-scoped
-properties enable the segmentation process to make decisions that promote shape
-stability, ultimately resulting in more precise and stable [Overture IDs](https://docs.overturemaps.org/gers) and less churn in conflated data.
+幾何範圍允許分段算法避免僅因為某個屬性在幾何形狀的不同部分具有不同值而引入段落分割。像內部連接器一樣，幾何範圍屬性使分段過程能夠做出促進形狀穩定性的決策，最終導致更精確和穩定的 [Overture IDs](https://docs.overturemaps.org/gers) 和更少的資料變動。
 
 <div style={{textAlign: 'center'}}>
 
