@@ -48,7 +48,17 @@ You can find more information about [using the GERS Changelog in our documentati
 
 ### Breaking changes
 
-Add transportation breaking changes here
+Changes were made to the transportation theme in this release to better support a variety of routing use cases. A summary of those changes, below:
+
+- we added a new `subclass` property that refines the descriptions of segments by:
+  - clearly specifying the usage of a length of road and using linear referencing, instead of further segmentation, to pinpoint a change in how the road is used 
+  - properly classifying information from OpenStreetMap
+
+- to better support routing use cases, we added to the segment feature type a new property called `connectors:` an array of IDs with pre-computed linear reference values that explicitly link segment geometry with connector coordinates. This new property – a replacement for the existing `connector_ids` property – will reduce complexity and improve accuracy as we calculate the intersections between segments and connectors.
+
+- we added a `destinations` property to the segment feature type. This property describes the transitions from one segment to another on the way to a specified location
+
+You can read more about these changes on the developer blog.
 
 
 ### Deprecations
@@ -63,30 +73,32 @@ The base, buildings, divisions, and places themes are in GA. The transportation 
 :::
 
 **Addresses**
-- Switzerland
+
+- 3.15M new address features were added in Switzerland.
+- addresses in 15 countries are now available.
 
 **Base**
 
-
+- made incremental changes to improve the accuracy and quality of the dataset
 
 **Buildings**
 
+- removed 60M buildings over water and transportation segments.
 
 **Divisions**
 
-- Georgia bug fix
-
+- added 12 features at the region subtype in the country of Georgia.
 
 **Places**
 
-
+- made incremental changes to improve the accuracy and quality of the dataset
 
 **Transportation**
 
-- subclass
-- connectors
-- destinations
-more info on developer blog 
+- we added a new [`subclass` property](https://github.com/OvertureMaps/schema/pull/180) that refines the descriptions of segments.
+- to better support routing use cases, we added to the segment feature type a new property called `connectors:`, replacing the  existing `connector_ids` property.
+- we added a `destinations` property to the segment feature type.
+- our transportation splitter tool was made available in [a public GitHub repository](https://github.com/OvertureMaps/transportation-splitter).
 
 ### Attribution
 
