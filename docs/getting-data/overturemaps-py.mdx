@@ -1,8 +1,8 @@
 ---
 title: Python Command-line Tool
 ---
- 
-Overture's Python command-line tool helps you download data within a region of interest and converts it to several common geospatial file formats. [This example](/blog/2024/05/16/land-cover/) shows how to use the tool to download Overture's land cover data in a Jupyter notebook. 
+
+Overture's Python command-line tool helps you download data within a region of interest and converts it to several common geospatial file formats. [This example](/blog/2024/05/16/land-cover/) shows how to use the tool to download Overture's land cover data in a Jupyter notebook.
 
 :::note
  This project is experimental and likely to change. See the [overturemaps-py repository](https://github.com/OvertureMaps/overturemaps-py) for timely updates.
@@ -19,7 +19,7 @@ $ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=b
 ```
 
 ## Usage
-**download** 
+**download**
 
 Right now there is only one option to the overturemaps utility: download. It will download Overture Maps data with an optional bounding box into the specified file format. When specifying a bounding box, only the minimum data is transferred. The result is streamed out and can handle arbitrarily large bounding boxes.
 
@@ -33,3 +33,13 @@ Command-line options:
 This downloads data directly from Overture's S3 bucket without interacting with any other servers. By including bounding box extents on each row in the Overture distribution, the underlying Parquet readers use the Parquet summary statistics to download the minimum amount of data necessary to extract data from the desired region.
 
 To help find bounding boxes of interest, we like this [bounding box](https://boundingbox.klokantech.com/) tool from [Klokantech](https://www.klokantech.com/). Choose the CSV format and copy the value directly into the `--bbox` field.
+
+## Next steps
+
+- Contribute to overturemaps-py.
+- Visualize your data in QGIS or kepler.
+- Make a map.
+- Consult one of our [guides](/guides/) to learn more about the data and see examples of more advanced queries.
+- Check out our Made by the Overture Community page.
+- Dig into the [Overture schema](//docs.overturemaps.org/schema/).
+- Talk to us on GitHub!

@@ -1,5 +1,6 @@
 ---
 title: Places
+description: 53M places and points of interest around the world
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -14,7 +15,7 @@ import PlacesInBuildingsQuery from '!!raw-loader!@site/src/queries/duckdb/places
 
 :::note
 
-This guide is focused on the Overture places **data** &mdash; its content, scope, properties, and use cases. Please see the [schema reference documentation](/schema/reference/places/place) for more information on the Overture places **schema**.
+This guide is focused on the Overture places **data**—its content, scope, properties, and use cases. Please see the [schema reference documentation](/schema/reference/places/place) for more information on the Overture places **schema**.
 
 :::
 
@@ -22,10 +23,10 @@ This guide is focused on the Overture places **data** &mdash; its content, scope
 
 The Overture places theme has one feature type, called `place`, and contains more than 53 million point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. The theme is derived from a conflation of Meta and Microsoft data and is available under a [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) license.
 
-| ![Overture places theme coverage](/img/places/places-coverage.png) | 
-|:--:| 
-| *Overture places data, styled by data source: purple for Meta, orange for Microsoft.* | 
- 
+| ![Overture places theme coverage](/img/places/places-coverage.png) |
+|:--:|
+| *Overture places data, styled by data source: purple for Meta, orange for Microsoft.* |
+
 | Primary source |  Feature count, July 2024 release |
 | -------------------------- | --------------------- |
 | Meta | ~48 million |
@@ -66,7 +67,7 @@ All Overture data, including places data, is distributed as GeoParquet, a column
 
 ## Data access and retrieval
 
-The latest places data can be obtained from AWS or Azure as GeoParquet files at the following locations. 
+The latest places data can be obtained from AWS or Azure as GeoParquet files at the following locations.
 | Provider | Location |
 | ------ | -------- |
 | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/" language="text"></QueryBuilder>|
@@ -81,7 +82,7 @@ First, follow the [setup guide for the Python Command-line Tool](/getting-data/o
 
 ```
 overturemaps download -f geoparquet --type=place -o places.geoparquet
-``` 
+```
 </TabItem>
 <TabItem value="DuckDB" label="DuckDB" default>
 First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
@@ -108,7 +109,7 @@ First, follow the [setup guide for the Python Command-line Tool](/getting-data/o
 Simply alter the `bbox` value to download a particular area.
 ```
 overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=place -o rome.geojson
-``` 
+```
 </TabItem>
 <TabItem value="DuckDB" label="DuckDB" default>
 First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
@@ -146,7 +147,7 @@ These examples present some use cases that combine places data with other datase
 
 <Tabs>
 <TabItem value="Conflate with OpenStreetMap" label="Conflate with OpenStreetMap" default>
-Overture Places can be a valuable source for conflating with or enhancing your own existing dataset. 
+Overture Places can be a valuable source for conflating with or enhancing your own existing dataset.
 
 In this example, suppose we want to use OpenStreetMap POIs for a project but would like to fill in any missing attributes such as addresses or phone numbers with Overture Place data.
 

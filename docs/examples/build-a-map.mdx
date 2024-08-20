@@ -1,5 +1,6 @@
 ---
-title: Building an Overture Map
+description: create your own map
+title: Overture + Maplibre
 ---
 
 import CodeBlock from '@theme/CodeBlock';
@@ -20,16 +21,16 @@ import SeattleWater from '!!raw-loader!@site/src/queries/duckdb/seattle_water_fo
 
 <Map></Map>
 
-### Step 1: Download only what you need
+## Download and process only the data you need
 
-Overture Maps data is released in the cloud-native format [GeoParquet](https://geoparquet.org/). It is further partitioned by *theme* and *type*. Downloading the data through a tool like [DuckDB](https://duckdb.org/) can take advantage of these properties, giving the best performance. After downloading and converting the data to GeoJSON, we can use [tippecanoe](https://github.com/felt/tippecanoe) to create a [`PMTiles`](https://github.com/protomaps/PMTiles) archive for each theme.
+Overture data is released in the cloud-native format [GeoParquet](https://geoparquet.org/). It is further partitioned by *theme* and *type*. Downloading the data through a tool like [DuckDB](https://duckdb.org/) can take advantage of these properties, giving the best performance. After downloading and converting the data to GeoJSON, we can use [tippecanoe](https://github.com/felt/tippecanoe) to create a [`PMTiles`](https://github.com/protomaps/PMTiles) archive for each theme.
 
 <Tabs queryString="theme-data" >
 
 <!-- Places  -->
 <TabItem value="places" label="Places" default>
 
-The places data theme represents business and points of interest in the real world. Read more about the places data schema in the [documentation](/schema/reference/places/place).
+The places data theme represents business and points of interest in the real world. Read more about the places data schema in the [documentation](https://docs.overturemaps.org/guides/places/).
 
 1. The following DuckDB query downloads places data within a specific bounding box and writes a `GeoJSON` file.
 
@@ -56,9 +57,9 @@ The places data theme represents business and points of interest in the real wor
 <!-- Placenames -->
 
 <TabItem value="placenames" label="Placenames" default>
-The admins theme contains named localities and their administrative boundaries. To add labels for populated places to the map, we query the admins theme to get the primary name for each locality.
+The [divisions theme](https://docs.overturemaps.org/guides/divisions/) contains named administrative units (countries, regions, counties, cities, etc.) and their boundaries. To add labels for populated places to the map, we query the divisions theme to get the primary name for each locality.
 
-1. The following DuckDB queries downloads placenames from the admins theme within the bounding box and saves it as `seattle_placenames.geojson`
+1. The following DuckDB queries downloads placenames from the divisions theme within the bounding box and saves it as `seattle_placenames.geojson`
 
     <QueryBuilder query={SeattlePlacenames}></QueryBuilder>
 
@@ -82,7 +83,7 @@ The admins theme contains named localities and their administrative boundaries. 
 
 <TabItem value="buildings" label="Buildings" default>
 
-Overture contains billions of buildings distirbuted across hundreds of geoparquet files.
+Overture contains billions of buildings distributed across hundreds of GeoParquet files.
 
 1. The following DuckDB query reads only the metadata of each file and then downloads *only* the buildings within our bounding box to a line-delimited `GeoJSONSeq` file.
 
@@ -110,7 +111,7 @@ Overture contains billions of buildings distirbuted across hundreds of geoparque
 
 <TabItem value="roads" label="Roads" default>
 
-The Overture Maps transportation theme has two types: `connectors` and `segments`. Since we want to render the road lines, we will query for `type=segment`.
+The Overture transportation theme has two types: `connectors` and `segments`. To extract and render the road lines, we will query for `type=segment`.
 
 1. This DuckDB query downloads road segments from Overture to a `GeoJSONSeq` file.
 
@@ -139,7 +140,7 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
 
 <TabItem value="base" label="Base (Land, Land Use & Water)" default>
 
-1. `land`, `land_use`, and `water` are the three types available in the `base` theme. We can use 3 separate queries to obtain the features and then we can combine them into a single pmtiles archive with different layers.
+1. The base theme contains five feature types: `infrastructure`, `land`,`land_cover`, `land_use`, and `water`. For this map, we want only the land, land use, and water features. We'll run three separate queries to obtain to obtain those features and combine them into a single pmtiles archive with different layers.
 
 
     <details>
@@ -190,9 +191,9 @@ The Overture Maps transportation theme has two types: `connectors` and `segments
 
 <hr />
 
-### Step 2: Creating a map with Maplibre + PMTiles
+## Create your map with Maplibre + PMTiles
 
-At this point, we have created five PMTiles archives from the five Overture themes:
+At this point, we have created five PMTiles archives from five of the Overture themes:
 1. `places.pmtiles`
 2. `placenames.pmtiles`
 3. `buildings.pmtiles`
@@ -234,7 +235,7 @@ Then, reference the tile archives with a relative path when initializing the map
     ...
 ```
 
-### Step 3: Styling the layers
+## Style the layers
 Each tab below contains the complete styles in the [Maplibre Style Spec](https://maplibre.org/maplibre-style-spec/) for the map on this page.
 
 <Tabs queryString="map-layer" >
