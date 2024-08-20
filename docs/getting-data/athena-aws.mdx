@@ -7,10 +7,10 @@ import AthenaSelectExample from '!!raw-loader!@site/src/queries/athena/0_select_
 import CreateAthenaTable from '!!raw-loader!@site/src/queries/athena/0_create_external_table.sql';
 import SeattlePlaces from '!!raw-loader!@site/src/queries/athena/seattle_places.sql';
 
-You can follow the steps belows to access and query Overture data directly in AWS. Note: you will need to create an account to use [Athena](https://aws.amazon.com/athena/) and other AWS services. 
+You can follow the steps belows to access and query Overture data directly in AWS. Note: you will need to create an account to use [Athena](https://aws.amazon.com/athena/) and other AWS services.
 
-:::tip
-   Overture's S3 bucket is located in the us-west-2 AWS region, so use `us-west-2` for best performance.
+:::info
+   Overture's S3 bucket is located in the us-west-2 AWS region, so you will need to set your region to `us-west-2`.
 :::
 
 
@@ -94,7 +94,7 @@ If you prefer to create the table in your own data catalog, you can run the comp
 </details>
 
 After you run the set-up query, you can load the partitions by running `MSCK REPAIR TABLE overture` or choosing "Load Partitions" from the table options menu.
- 
+
 
 ### Add a policy in your data catalog settings
 
@@ -129,6 +129,3 @@ If you want to share this catalog with other users and accounts, you'll need to 
 </div>
 </details>
 -->
-
-
-
