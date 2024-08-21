@@ -38,7 +38,7 @@ for richer and more detailed map displays with Overture data.
 
 Here's how class, subclasses, and flags are modeled in the [Overture schema](https://github.com/OvertureMaps/schema/blob/main/schema/transportation/segment.yaml):
 
-```
+```yaml
 class: footway
 subclass_rules:
   - value: sidewalk
@@ -73,7 +73,7 @@ property &mdash; will reduce complexity and improve accuracy as we calculate the
 Here are examples from the Overture schema comparing the new and deprecated features:
 <Tabs>
 <TabItem value="connectors" label="new connectors property" default>
-```
+```yaml
 id: overture:transportation:segment:123
 type: Feature
 geometry:
@@ -97,7 +97,7 @@ properties:
 ```
 </TabItem>
 <TabItem value="connector_ids" label="deprecated connector_ids property" default>
-```
+```yaml
 id: overture:transportation:segment:123
 type: Feature
 geometry:
@@ -131,21 +131,21 @@ capture and model navigation data from many different sources.
 
 Here's an example of how highway sign information in the picture above is modeled in the `destinations` schema:
 
-```
+```yaml
 destinations:
-    - when:
-      heading: forward
-      from_connector_id: 08f274370d59a8840436ff3bad31c60e
-      to_connector_id: 08f274370d59a8840436ff3bad31c60e
-      to_segment_id: 08a274370d59ffff043fff3b802d7aa5
-      final_heading: forward
-      labels:
-       - value: Green Bay
-        type: unknown
-       - value: I 43 North
-        type: route_ref
-      symbols:
-       - NULL
+  - when:
+    heading: forward
+    from_connector_id: 08f274370d59a8840436ff3bad31c60e
+    to_connector_id: 08f274370d59a8840436ff3bad31c60e
+    to_segment_id: 08a274370d59ffff043fff3b802d7aa5
+    final_heading: forward
+    labels:
+     - value: Green Bay
+      type: unknown
+     - value: I 43 North
+      type: route_ref
+    symbols:
+     - NULL
 ```
 
 ## Transportation splitter tool
