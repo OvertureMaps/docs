@@ -99,6 +99,8 @@ The base, buildings, divisions, and places themes are in GA. The transportation 
 - to better support routing use cases, we added to the segment feature type a new property called `connectors:`, replacing the  existing `connector_ids` property.
 - we added a `destinations` property to the segment feature type.
 - our transportation splitter tool was made available in [a public GitHub repository](https://github.com/OvertureMaps/transportation-splitter).
+- fixed a bug that caused segments to be missing sources or other attributes, affecting ~100K segments.
+- fixed name filtering to avoid including names with an invalid BCP-47 tag.
 
 ### Attribution
 
