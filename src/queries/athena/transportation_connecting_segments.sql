@@ -2,7 +2,7 @@ WITH input AS (
     SELECT id AS input_id,
         connector_id
     FROM __ATHENA_OVERTURE_RELEASE
-        CROSS JOIN UNNEST(connector_ids) AS t(connector_id)
+        CROSS JOIN UNNEST(connectors) AS t(connector)
     WHERE type = 'segment'
         AND id = '08628d5437ffffff0473ffc36df547db'
 )
@@ -12,4 +12,4 @@ FROM __ATHENA_OVERTURE_RELEASE,
     input
 WHERE type = 'segment'
     AND id != input_id
-    AND CONTAINS(connector_ids, input.connector_id)
+    AND ANY_MATCH(connectors, connector -> connector.connector_id = input.connector_id)
