@@ -1,6 +1,6 @@
 ---
 title: Divisions
-description: Administrative Boundaries from Countries to neighborhoods
+description: Administrative Boundaries from countries to neighborhoods
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,7 +23,7 @@ import PhillyPlaces from '!!raw-loader!@site/src/queries/duckdb/divisions_philly
 
 The Overture divisions theme has three feature types: `division`, `division_area`, and `division_boundary`.
 
-There are more than 5.3 million point, line, and polygon representations of human settlements, such as such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. (See the [attribution page](https://docs.overturemaps.org/attribution/) for more information.)
+There are more than 5.3 million point, line, and polygon representations of human settlements, such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. (See the [attribution page](https://docs.overturemaps.org/attribution/) for more information.)
 
 Divisions data can be used for many purposes, which can include, but are not limited to:
 - reverse-geocoding
@@ -43,61 +43,9 @@ Divisions data can be used for many purposes, which can include, but are not lim
 
 A `division` is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a `Point` geometry which gives an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `division` feature type](/schema/reference/divisions/division).
 
-<details>
-	<summary>Counts, per subtype, of the division feature type</summary>
-
-```
-┌──────────────┬──────────────┐
-│ count_star() │   subtype    │
-│    int64     │   varchar    │
-├──────────────┼──────────────┤
-│      3215202 │ locality     │
-│       771100 │ neighborhood │
-│       196451 │ microhood    │
-│        36974 │ county       │
-│        18469 │ localadmin   │
-│         3866 │ region       │
-│          272 │ country      │
-└──────────────┴──────────────┘
-```
-</details>
-
 A `division_area` is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a `division` feature. It has a `Polygon` or `MultiPolygon` geometry. We encourage you to consult the [schema reference documentation for the `division_area` feature type](/schema/reference/divisions/division_area).
 
-<details>
-	<summary>Counts, per subtype, of the division_area feature type</summary>
-
-```
-┌──────────────┬──────────────┐
-│ count_star() │   subtype    │
-│    int64     │   varchar    │
-├──────────────┼──────────────┤
-│       540557 │ locality     │
-│       385886 │ neighborhood │
-│        36973 │ county       │
-│        18470 │ localadmin   │
-│         3866 │ region       │
-│          272 │ country      │
-└──────────────┴──────────────┘
-```
-</details>
-
 A `division_boundary` is a feature type that represents a shared border between two `division` features. It has a `LineString` geometry. The geometry of a `divison_boundary` is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. Please consult the [schema reference documentation for the `division_boundary` feature type](/schema/reference/divisions/division_boundary).
-
-<details>
-	<summary>Counts, per subtype, of the division_boundary feature type</summary>
-
-```
-┌──────────────┬─────────┐
-│ count_star() │ subtype │
-│    int64     │ varchar │
-├──────────────┼─────────┤
-│        64107 │ county  │
-│         7116 │ region  │
-│          373 │ country │
-└──────────────┴─────────┘
-```
-</details>
 
 :::warning
 
@@ -130,10 +78,10 @@ Subtypes can represent each feature's administrative level, from `country` down 
 
 ### Data columns
 
-As of the July 2024 release, there are 25 columns in the divisions GeoParquet files. Each column is a property in the data.
+The addresses GeoParquet file contains the following properties:
 
 <details>
-	<summary>List of all columns in the divisions GeoParquet files</summary>
+    <summary>Schema for the GeoParquet files in the divisions theme</summary>
 
 | Property Name | Type | Description |
 | -------- | -------- | ------- |

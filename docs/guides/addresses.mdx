@@ -16,7 +16,7 @@ import UtahAddresses from '!!raw-loader!@site/src/queries/duckdb/addresses_utah.
 
 _Note: This theme is currently in Alpha and we anticipate significant changes over the next several releases. We invite the Overture community to test the addresses schema and data and offer feedback via the [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repos._
 
-Overture maintains just over 202 million address point entities. The address theme is derived from a variety of sources, mostly distributed through [OpenAddresses](https://openaddresses.io/).
+Overture maintains just over 205 million address point entities. The address theme is derived from a variety of sources, mostly distributed through [OpenAddresses](https://openaddresses.io/).
 
 For licensing information, please see the [attribution page](https://docs.overturemaps.org/attribution/).
 
@@ -51,20 +51,21 @@ An `address` is a feature type that represents a physical place through a series
 | NL | 9,750,341
 | CO | 7,786,046
 | PT | 5,911,139
-| DK | 3,918,869
+| DK | 3,920,253
+| CH | 3,147,964
 | AT | 2,492,155
-| NZ | 2,348,842
-| EE | 2,211,770
+| NZ | 2,351,461
+| EE | 2,210,423
 | LT | 1,036,251
 | LU | 164,415
 </details>
 
 ### Data columns
 
-As of the July 2024 release, there are 14 columns in the addresses GeoParquet files. Each column is a property in the data.
+The addresses GeoParquet file contains the following properties:
 
 <details>
-	<summary>List of all columns in the addresses GeoParquet files</summary>
+    <summary>Schema for the GeoParquet files in the addresses theme</summary>
 
 | Property Name | Type | Description |
 | -------- | -------- | ------- |
