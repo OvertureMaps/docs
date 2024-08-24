@@ -78,6 +78,14 @@ npm run cdk deploy
 
   * Select the **OvertureTilesQueue** as the Job queue.
 
+  * Input the **Command** as a JSON list: `["2024-07-22.0","my-bucket","addresses"]`
+
+    * The first item is the release version, including minor version: `2024-07-22.0`
+
+    * The second item is the target bucket: `my-bucket`
+
+    * The third item is the theme: `addresses`
+
   * Once the job is complete, the tileset will be available at `s3://BUCKET_NAME/RELEASE/THEME.pmtiles`.
 
 ## On Your Workstation
