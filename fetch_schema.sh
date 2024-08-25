@@ -20,7 +20,7 @@ mkdir -p docs/_schema && cp -R schema/schema/* docs/_schema/
 
 echo "Copying Schema Pages"
 rm -rf docs/schema
-mkdir -p docs/schema/ && cp -R schema/docusaurus/docs/schema/* docs/schema/
+mkdir -p docs/schema/ && cp -R schema/docs/schema/* docs/schema/
 
 echo "Removing schema repo"
 rm -rf schema/
