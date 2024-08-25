@@ -1,0 +1,166 @@
+---
+title: segment
+---
+
+
+import CodeBlock from '@theme/CodeBlock';
+import JSONSchemaViewer from "@theme/JSONSchemaViewer";
+import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
+import yamlLoad from "@site/src/components/yamlLoad"
+import SegmentSchema from '!!raw-loader!@site/docs/_schema/transportation/segment.yaml';
+import ExampleSimpleRoad from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/simple-road.yaml';
+import ExampleLanes from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/lanes-hov.yaml';
+import ExampleAccessRestriction from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/access-restriction.yaml';
+import ExampleTurnRestrictionSource from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-source.yaml';
+import ExampleTurnRestrictionTarget from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-target.yaml';
+import ExampleTurnRestrictionVia from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-via.yaml';
+import ExampleTurnRestrictionConnector1 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-connector1.yaml';
+import ExampleTurnRestrictionConnector2 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-connector2.yaml';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+
+# Segment 
+
+Segment 是人或物體可以行走的路徑。
+
+<table>
+  <tbody>
+  <tr>
+    <th>Geometry Type</th>
+    <td><code>LineString</code></td>
+  </tr>
+  <tr>
+    <th>Theme</th>
+    <td><code>transportation</code></td>
+  </tr>
+  <tr>
+    <th>Type</th>
+    <td><code>segment</code></td>
+  </tr>
+  </tbody>
+</table>
+
+ Segment 的幾何形狀代表人或物體可能行走的路徑中心線。 Segment 屬性描述了該路徑的物理屬性（例如路面和寬度）以及非物理屬性（例如通行限制規則）。
+
+如果兩個 Segment 的 `connector` 屬性都引用了共同的[ Connector ](/schema/reference/transportation/connector)，則它們在物理上是連接的。在這種情況下，兩個 Segment 的幾何形狀都必須包含該共同 Connector 的坐標。 Segment 之間的物理連接表示在沒有屬性限制（如轉彎限制）的情況下，可能可以從一個 Segment 通行到另一個連接點。反之，即使兩個 Segment 的幾何形狀相交，但如果它們沒有共享共同的 Connector ，則它們不被視為物理上連接的。
+
+## 子類型
+
+ Segment 可以有以下三種可能的子類型。
+
+<Tabs>
+  <TabItem value="road" label="道路" default>
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>road</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+`road`  Segment 代表任何類型的道路、街道或小徑的一部分，包括專用的步行或騎行道，但不包括鐵路。
+
+
+<!-- TODO: Determine where these pages land and update these links at that point.  -->
+<!-- To learn the core concepts of roads, see the
+[Roads](/themes/transportation/roads) section of the
+[transportation](/themes/transportation) theme concepts page. -->
+
+  </TabItem>
+  <TabItem value="rail" label="Railway">
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>rail</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+The schema for `rail` segments is under development.
+  </TabItem>
+  <TabItem value="water" label="Waterway">
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>water</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+The schema for `water` segments is under development.
+  </TabItem>
+</Tabs>
+
+## Schema
+
+<Tabs>
+  <TabItem value="browsable" label="Browsable" default>
+    <JSONSchemaViewer schema={ yamlLoad(SegmentSchema) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/transportation'})}/>
+  </TabItem>
+  <TabItem value="yaml" label="YAML" default>
+    <CodeBlock language="jsx">{SegmentSchema}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+## Examples
+
+<Tabs>
+  <TabItem value="simple-road" label="Simple Road" default>
+    <CodeBlock language="json">{ JSON.stringify(yamlLoad(ExampleSimpleRoad), null, 2) }</CodeBlock>
+  </TabItem>
+
+  <TabItem value="lanes" label="Lanes" default>
+      <CodeBlock language="json">{ JSON.stringify(yamlLoad(ExampleLanes), null, 2) }</CodeBlock>
+  </TabItem>
+
+  <TabItem value="accessRestrictions" label="Access Restrictions" default>
+    <CodeBlock language="json">{ JSON.stringify(yamlLoad(ExampleAccessRestriction), null, 2) }</CodeBlock>
+  </TabItem>
+
+  <TabItem value="turnRestrictions" label="Turn Restrictions" default>
+  此範例說明了跨越三個連接 Segment 的複雜 `via` 類型轉彎限制。當沿著 `source`  Segment 前進時，不允許通過 `via`  Segment 轉向 `target`  Segment 。
+
+<div style={{textAlign: 'center'}}>
+
+<ThemedImage
+  alt='Diagram of the `via` transition from source to destination segment'
+  sources={{
+    light: useBaseUrl('/img/transportation/turn-restriction-02-light.png'),
+    dark: useBaseUrl('/img/transportation/turn-restriction-02-dark.png'),
+  }}
+/>
+
+</div>
+
+<details open>
+<summary>Source segment</summary>
+<CodeBlock language="json">{ JSON.stringify(yamlLoad(ExampleTurnRestrictionSource), null, 2) }</CodeBlock>
+</details>
+
+<details>
+<summary>Connector 1</summary>
+<CodeBlock language="json">{ JSON.stringify(yamlLoad(ExampleTurnRestrictionConnector1), null, 2) }</CodeBlock>
+</details>
+
+<details>
+<summary>Via segment</summary>
+<CodeBlock language="json">{ JSON.stringify(yamlLoad(ExampleTurnRestrictionVia), null, 2) }</CodeBlock>
+</details>
+
+<details>
+<summary>Connector 2</summary>
+<CodeBlock language="json">{ JSON.stringify(yamlLoad(ExampleTurnRestrictionConnector2), null, 2) }</CodeBlock>
+</details>
+
+<details>
+<summary>Target segment</summary>
+<CodeBlock language="json">{ JSON.stringify(yamlLoad(ExampleTurnRestrictionTarget), null, 2) }</CodeBlock>
+</details>
+  </TabItem>
+</Tabs>

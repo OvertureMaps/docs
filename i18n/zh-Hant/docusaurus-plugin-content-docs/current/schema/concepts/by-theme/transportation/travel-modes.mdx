@@ -1,0 +1,128 @@
+﻿---
+title: 旅行模式
+---
+
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+在現實世界中，旅行模式可以直觀地理解為從點 A 到點 B 的方式。旅行模式可以包括非車輛模式（步行）、車輛模式（自行車或汽車），以及偶爾更具體的細節，例如被分類為高乘載車輛或重型貨車的汽車。
+
+在 Overture 運輸主題模式中，這種現實世界的直觀理解轉化為以下定義：旅行模式是指一個人或物品可以使用 [段落](/schema/reference/transportation/segment)  Features 的被認可模式。
+
+## 理解旅行模式
+
+### 隱含的旅行模式
+
+每個段落都有一組*隱含*的旅行模式，這些模式被允許使用該段落。對於 [道路](/schema/concepts/by-theme/transportation/roads) 段落來說，這組隱含模式源自 [道路類別](/schema/concepts/by-theme/transportation/roads#road-class)，以及該路段落所在位置的地方規則、規範和習俗。
+
+由於這組隱含模式取決於地區或司法管轄區，並且可能會隨時間而變化，Overture 運輸模式並未嘗試指定隱含模式。當這種詳細訊息對於應用程序的正常運作很重要時，由具體應用程序來解決隱含模式。注意：一個準確的路由引擎可能需要這些訊息，而 2D 地圖渲染或地理編碼器則可能不需要。
+
+### 一般定義
+
+Overture 的認可旅行模式以一般術語定義，這些術語廣泛適用，例如 `hov` 是高乘載車輛，`hgv` 是重型貨車。在大多數司法管轄區，這些通用術語對應到該地區使用的概念，即使該概念的當地名稱可能有所不同，例如一個地區可能稱為重型貨車，而另一個地區可能稱為大型貨車。
+
+儘管廣泛適用，旅行模式在不同地區和不同時間可能有不同的定義。
+
+- 在一個地區，`hgv` 可能指的是總重超過 3.5 噸（3,500 公斤）的任何車輛。在另一個地方，`hgv` 可能具有至少 10,001 磅的總重。
+- 在一個地區，`hov` 可能要求至少有 2 名乘客，而在另一個地方，它可能有更高的最低乘客數，或包括電池電動車，或排除某些車輛或用途類別。
+
+由於在地區和時間上的定義變化，Overture 僅提供旅行模式的一般定義，將精確定義留給那些需要它的應用程序。
+
+### 什麼時候認可旅行模式？
+
+當旅行模式成為 [`mode`](https://github.com/OvertureMaps/schema/blob/5f82f1d6a916031cb32730e1fac7e1a353f10c60/schema/transportation/segment.yaml#L103) 列舉的一部分時，Overture 運輸模式會認可它。這個列舉在模式的早期版本中相對較小，只包含在各司法管轄區和時間上普遍適用的旅行模式。隨著模式的開發進展，這個列表已經擴展，並將隨著世界的變化和新訊息的出現而繼續擴大。
+
+我們認可擬議的新交通模式的標準如下：
+
+- 擬議的新交通模式應該代表一個普遍接受的概念，意味著該概念在許多地方存在，且定義大致相同。
+- 擬議的新交通模式應該在存在該概念的司法管轄區中以知名的標誌圖示或標誌文字來表達；且這些圖示或文字最好在許多司法管轄區和時間上保持一致。
+- 必須能夠對擬議的新交通模式給出相對精確的定義，並解釋它如何與已在Overture schema中認可的其他類似交通模式有所不同或*交疊*。
+- 擬議的新交通模式最好不要能夠簡單地使用其他現有的[範疇屬性](/schema/concepts/scoping-rules#scoped-values-and-scoping-properties)來表達。（*一個此類簡單表達的概念的例子可能是一輛三軸車，這樣的表達更適合用 `vehicle: [{dimension: axle_count, comparison: equal_to, value: 3}]` 來描述。*）
+- 擬議的新交通模式必須有至少一個Overture的上游資料來源支援的現有資料。
+
+上述描述的方法有可能過於緩慢，無法適應我們使用者在龐大且不斷變化的世界中的需求。為了減少這一風險，一個可能應對方法是支援對內建認可交通模式列表的[自訂擴充套件](#should-we-support-extension-travel-modes)。
+
+## 交通模式架構
+
+### 交通模式的範疇
+
+交通模式可以用來改變架構內範疇和規則基於屬性的範疇。例如，它們可以影響[道路](/schema/concepts/by-theme/transportation/roads)段的通行限制、轉彎限制或速度限制的範疇。由於交通模式是通過範疇屬性來表達的，因此我們建議您在繼續之前閱讀[範疇和規則基於屬性](/schema/concepts/scoping-rules)的部分。
+
+#### 交通模式範疇：`mode`
+
+範疇屬性 `mode` 控制在沿著路段旅行時，是否適用給定的範疇屬性。
+
+如果提供了 `mode`，它必須是一個非空的字串值數組，用於識別交通模式，並被解釋為一組。值必須是唯一的，但順序不重要。
+
+#### 車輛屬性範疇：`vehicle`
+
+由於交通模式是一個模糊的概念，與更精確但更有限的 `vehicle` 範疇屬性不可避免地存在重疊區域，`vehicle` 用於[車輛屬性範疇](/schema/concepts/scoping-rules#vehicle-attributes-scoping)。當存在潛在重疊時，Overture資料發布中使用的範疇方法將取決於上游資料來源如何表達等效概念。在有選擇的情況下，最好選擇最準確反映當地標誌意圖的範疇方法。
+
+#### 類似的範疇屬性：`using` 和 `recognized`
+
+範疇屬性 `using` 和 `recognized` 表達的是與交通模式完全獨立的概念。
+
+- `using` 屬性表示[使用目的](/schema/concepts/scoping-rules#purpose-of-use-scoping)範疇，這與旅行者使用交通網路的特定段的目的有關。理想情況下，交通模式不應該嵌入使用目的。
+- `recognized` 屬性表示[狀態範疇](/schema/concepts/scoping-rules#status-scoping-membership-in-a-recognized-group)，這與旅行者的認可狀態有關，其中認可狀態與旅行模式本身是不同的。理想情況下，交通模式不應該嵌入狀態。
+
+### 交通模式分類法
+
+Overture中的交通模式形成了一個淺層分類法。某些交通模式較為通用，而其他模式則更具體，一個更通用的交通模式可能包含一個更具體的模式。例如，通用交通模式 `vehicle` 包含了更具體的模式 `motor_vehicle`。我們草案架構 `v0.8.0` 支援的分類法可以在下面的圖示中視覺化。
+
+<figure>
+
+<div style={{textAlign: 'center'}}>
+
+<ThemedImage
+  alt="Overture travel modes taxonomy"
+  sources={{
+    light: useBaseUrl('/img/transportation/travel-modes-light.png'),
+    dark: useBaseUrl('/img/transportation/travel-modes-dark.png'),
+  }}
+/>
+
+</div>
+
+<figcaption>
+
+<div style={{ textAlign: "center" }}>
+
+*The Overture travel modes taxonomy.*
+
+</div>
+
+</figcaption>
+
+</figure>
+
+由於許多上述交通模式借鑒了與 OpenStreetMap [交通模式訪問限制](https://wiki.openstreetmap.org/wiki/Key:access#Transport_mode_restrictions) 相關的知識體系，Overture Maps 希望對 OSM 社群在交通模式及其他交通架構方面表達我們的感謝。
+
+## 開放性問題
+
+本節討論一些關於交通模式的內部辯論問題。我們非常樂意聽取 [您的回饋](https://github.com/OvertureMaps/schema/discussions) 以及您可能有的其他問題。
+
+### 最低必要的交通模式
+
+我們還不確定最低所需的交通模式集合是什麼，這將使 Overture 交通架構對盡可能廣泛的受眾變得更加可用。您認為我們還缺少什麼？
+
+### 我們是否應該支援擴展交通模式？
+
+<!--
+TODO: This open question relates to the feature request
+      https://github.com/OvertureMaps/schema-wg/issues/157.
+
+      We should update or delete the content of this documentation based
+      on what happens with that feature request.
+-->
+
+我們生活在一個交通領域技術和法規快速變革的時代。無論我們多麼迅速地擴展 Overture Maps 架構中的旅行模式，
+它在某些技術、習俗或地方規則方面總會落後於現實世界。支援處於前沿工作的使用者的一種方法是允許自定義擴展旅行
+模式列表。如果我們這樣做與特性擴展屬性的工作方式一致，我們可以，例如，允許以 `ext_*` 
+開頭的旅行模式名稱在架構驗證規則中被忽略。
+
+### 內部一致性
+
+在[此文檔的另一部分](#vehicle-attribute-scoping-vehicle)中，我們提到旅行模式和車輛屬性範圍這一模糊概念之間存在重疊。我們知道這種重疊是有限但不可避免的。
+
+我們的目標是減少或消除旅行模式與其他[類似範圍屬性](#similar-scoping-properties-using-and-recognized)（`using` 和 `recognized`）之間的重疊。 
+其中一個可能不太成功的地方是[當前分類法](#the-travel-modes-taxonomy)中的 `emergency` 旅行模式。可以說，`emergency` 應該從分類法中刪除，並且應將 `as_emergency_responder` 包含在 `recognized` 屬性的狀態值枚舉中。

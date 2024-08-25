@@ -1,0 +1,33 @@
+﻿---
+title: Concepts
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import yamlLoad from "@site/src/components/yamlLoad"
+import JSONSchemaViewer from "@theme/JSONSchemaViewer";
+import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
+import MainDefs from "!!raw-loader!@site/docs/_schema/defs.yaml";
+
+
+所有 Overture  Features 都共享一組通用的頂層屬性。每個 Overture 資料主題都有自己核心的屬性，定義該主題內的 Features 類型。例如，`place`  Features 類型除了必須包含一個名稱屬性和一個類別屬性外，還包括下列通用的 Overture 屬性。
+
+## 共同屬性
+<JSONSchemaViewer
+  schema={ yamlLoad(MainDefs) }
+  resolverOptions={ generateResolverOptions( {yamlBasePath: '/', jsonPointer:"#/$defs/propertyContainers/overtureFeaturePropertiesContainer" })}/>
+
+<!-- Below is an example of how you can reference just 1 property within the properties container -->
+<!-- <JSONSchemaViewer
+  schema={ yamlLoad(MainDefs) }
+  resolverOptions={ generateResolverOptions( {yamlBasePath: '/', jsonPointer:"#/$defs/propertyContainers/overtureFeaturePropertiesContainer/properties/sources" })}/> -->
+
+
+## 跨主題的複雜屬性
+
+一些跨主題使用的 Features 屬性是複雜的，需要進一步解釋。
+
+- **[名稱](/schema/concepts/names)**：在適用的情況下，複雜屬性如名稱在所有主題中始終使用相同的模式
+- **[範疇和規則基屬性](/schema/concepts/scoping-rules)**：範疇屬性縮小其父屬性的範圍，僅適用於父屬性的特定實例；規則基屬性是一個規則數組，規則是包含至少一個範疇屬性的對象
+- **[製圖](/schema/concepts/cartography)**：製圖屬性是一組可選的「提示」，用於顯示 Overture 資料在地圖上的方式

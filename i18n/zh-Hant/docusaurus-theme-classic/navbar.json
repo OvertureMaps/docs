@@ -1,0 +1,30 @@
+{
+  "title": {
+    "message": "Overture Maps",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Overture Maps 基金會 logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Docs": {
+    "message": "文檔",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.Schema Reference": {
+    "message": "架構參考",
+    "description": "Navbar item with label Schema Reference"
+  },
+  "item.label.Releases": {
+    "message": "Releases",
+    "description": "Navbar item with label Releases"
+  },
+  "item.label.Blog": {
+    "message": "部落格",
+    "description": "Navbar item with label Blog"
+  },
+  "item.label.Community": {
+    "message": "社群",
+    "description": "Navbar item with label Community"
+  }
+}

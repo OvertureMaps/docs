@@ -1,0 +1,410 @@
+﻿---
+title: 形狀與連接性
+---
+
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# 形狀與連接性
+
+Overture 運輸主題通過主題中的兩種要素類型：段落和 Connector 之間的互動，捕捉運輸網路的物理形狀和連接性。
+
+
+<div style={{textAlign: 'center'}}>
+
+<figure>
+
+<ThemedImage
+  alt="Three segments physically joined by a connector"
+  sources={{
+    light: useBaseUrl('/img/transportation/network-light.png'),
+    dark: useBaseUrl('/img/transportation/network-dark.png'),
+  }}
+/>
+
+<figcaption>
+
+*A connector physically joining three segments.*
+
+</figcaption>
+</figure>
+
+</div>
+
+##  Connector 
+
+[ Connector ](/schema/reference/transportation/connector)要素類型攜帶點幾何，描述了兩個或多個段落之間發生（或未來可能發生）物理連接的位置。
+
+ Connector 除了幾何和標準的Overture要素屬性之外，沒有其他屬性。運輸主題的所有其他方面都建模於段落。
+
+<!--
+ 技術上來說， Connector 沒有其他屬性的說法是不正確的，因為截至2023-06-15，它們有一個 `level` 屬性，可能應該被移除：https://github.com/OvertureMaps/schema-wg/issues/138
+-->
+
+## 段落
+
+[段落](/schema/reference/transportation/segment)要素類型攜帶`LineString`幾何，描述了運輸網路中一部分的物理形狀。段落可以代表具有真實存在的實體，例如鋪設的道路；也可以代表無形的實體，例如渡輪路線，它有一個眾所周知的形狀，但在現實世界中沒有可觀察的存在。
+
+### 物理連接性
+
+如果每個段落的 Connector 屬性包含對 Connector 的引用，則兩個或多個段落在給定的 Connector 處物理連接。
+
+ Connector 幾何的座標應該盡可能包含在段落幾何的座標內，在這種情況下， Connector 座標定義了物理連接點。官方的Overture資料發布將始終滿足此約束。如果無法滿足，則物理連接點是與 Connector 座標相交的段落幾何上最近的點。
+
+相反，如果兩個段落的 Connector 屬性未引用共享 Connector ，即使它們的幾何形狀重疊或共享公共座標，它們也不會被物理連接。
+
+允許從一個段落上的點到另一個物理連接段落上的點的旅行，除非受到明確限制，如進入或轉向限制。
+
+官方的Overture運輸資料發布中的所有段落至少有兩個 Connector ，一個在幾何形狀的每端，即使這些端點 Connector 未附加到其他段落上。這不是強制性最低要求，也不由模式強制執行。這樣做是為了讓新段落能夠連接到現有網路中，而不需要更改現有段落的屬性。
+
+### 開始、結束和方向
+
+段落幾何的第一個座標是段落的開始，最後一個座標是結束。段落的方向是從開始指向結束。以下範例顯示了兩個具有相同座標的段落幾何，方向相反。
+
+
+<div style={{ width: "49.5%", float: "left" }}>
+
+<figure>
+
+```yaml
+type: LineString
+coordinates:
+  - [1, 0]   # Start
+  - [0, 0]
+  - [-1, 0]  # End
+```
+
+<div style={{textAlign: 'center'}}>
+
+<ThemedImage
+  alt="West-oriented segment geometry"
+  sources={{
+    light: useBaseUrl('/img/transportation/oriented-west-light.svg'),
+    dark: useBaseUrl('/img/transportation/oriented-west-dark.svg'),
+  }}
+/>
+
+</div>
+
+<figcaption>
+
+<div style={{textAlign: 'center'}}>
+
+*This segment geometry is oriented due west.*
+
+</div>
+
+</figcaption>
+</figure>
+
+</div>
+
+<div style={{ width: "49.5%", float: "right" }}>
+
+<figure>
+
+```yaml
+type: LineString
+coordinates:
+  - [-1, 0]  # Start
+  - [0, 0]
+  - [1, 0]   # End
+```
+
+<div style={{textAlign: 'center'}}>
+
+<ThemedImage
+  alt="East-oriented segment geometry"
+  sources={{
+    light: useBaseUrl('/img/transportation/oriented-east-light.svg'),
+    dark: useBaseUrl('/img/transportation/oriented-east-dark.svg'),
+  }}
+/>
+
+</div>
+
+<figcaption>
+
+<div style={{textAlign: 'center'}}>
+
+*This segment geometry is oriented due east.*
+
+</div>
+
+</figcaption>
+</figure>
+
+</div>
+
+<div style={{ clear: "both" }}/>
+
+
+### 方向
+
+沿著段落的幾何形狀旅行可以遵循兩個可能的方向：前進或後退。前進方向是朝向段落的結束；而後退方向是朝向段落的開始。
+
+<div style={{textAlign: 'center'}}>
+
+<figure>
+
+<ThemedImage
+  alt="Travel heading along a segment oriented due east."
+  sources={{
+    light: useBaseUrl('/img/transportation/heading-light.svg'),
+    dark: useBaseUrl('/img/transportation/heading-dark.svg'),
+  }}
+/>
+
+<figcaption>
+
+*Travel heading along a segment.*
+
+</figcaption>
+</figure>
+
+</div>
+
+### Directionality
+
+<!-- TODO: Update this section to align with:
+
+          https://github.com/OvertureMaps/schema-wg/issues/134
+-->
+
+
+🚧 我們正在開發一種段落級的方向性概念，類似於 [車道方向性](/schema/concepts/by-theme/transportation/roads#lane-directionality)，以指示段落上允許或禁止的旅行方向。這項工作正在進行中，請稍後再查看。
+
+### 子類型
+
+段落要素有一個 `subtype` 屬性，其值提供有關段落在運輸網路中角色的更具體訊息。
+
+`subtype` 屬性可能是 `road`、`rail` 或 `water` 其中之一，但目前只有 `road` 定義得較為清楚。`road` 段落模型任何類型的道路、街道或小徑，包括專用的步行、騎行等活動的路徑。欲了解有關 `road` 段落的更多訊息，請參見 [道路](/schema/concepts/by-theme/transportation/roads) 頁面。
+
+### 層級（Z-排序）
+
+段落幾何是二維的。然而，在現實的三維世界中，段落所代表的實體可能會彼此上下重疊，例如隧道、橋樑、高架橋和疊層多級高速公路交匯處。為了準確渲染自上而下的二維地圖，了解段落的相對堆疊順序或 Z-排序是重要的。
+
+段落的 Z-排序由 `level` 屬性給出。`level` 值為 `0` 表示視覺層級，正數表示在視覺層級之上，負數表示在視覺層級之下，通常，較小的數字表示在堆疊順序中的位置低於較大的數字。
+
+<div style={{textAlign: 'center'}}>
+
+<figure>
+
+<ThemedImage
+  alt="Level 0 segments stacked above level -1 segments."
+  sources={{
+    light: useBaseUrl('/img/transportation/level-light.png'),
+    dark: useBaseUrl('/img/transportation/level-dark.png'),
+  }}
+/>
+
+<figcaption>
+
+*Ground level segments stacking above tunnel segments.*
+
+</figcaption>
+</figure>
+
+</div>
+
+請注意，兩個具有不同 `level` 值的段落可能會彼此物理連接，因為 `level` 是渲染的近似值，不是段落不同點的精確高度指示。 Connector 沒有 `level` 屬性。
+
+<!--
+TODO: The statement that "Connectors do not have a `level`" is not
+      accurate as of 2023-06-15, but we have an open issue to fix this:
+      https://github.com/OvertureMaps/schema-wg/issues/138. We should
+      address the issue and delete this TODO comment afterward.
+-->
+
+## 分段
+
+「分段」這個術語描述了將上游源資料轉換為 Overture 運輸形狀和連接資料的過程，這些資料以段落和 Connector 的形式建模。
+
+### 形狀穩定性
+
+Overture 分段過程的一個主要目標是促進段落形狀在 Overture 資料發布中的穩定性。例如，如果在版本 1 中某個現實世界的 Main Street 段落由一個具有特定幾何形狀的段落表示，我們會努力避免在版本 2 中將相同的幾何形狀切割成兩個、三個或四個段落。
+
+請注意，追求段落形狀穩定性絕對不意味著 Overture 旨在維持穩定的運輸資料集。相反，我們旨在持續改進資料的準確性和覆蓋範圍，並預期運輸網路資料集會因此不斷演變和增長。我們的目標只是最小化在資料發布中幾何形狀切割為段落的方式上的不必要的、語義上無意義的變化。
+
+運輸主題模式的幾個 Features 被設計為允許分段過程實現其段落穩定性目標。這些 Features 包括：
+
+- [內部 Connector ](#interior-connectors)。
+- [幾何範圍](#geometric-scoping)的段落屬性。
+
+<!---
+TODO: Once we have some usable comparative metrics for ID stability, we should
+      add a sub-heading under segmentation, with a table of the data.
+--->
+
+### Overture ID 穩定性
+
+Overture 追求形狀穩定性，以提高評估來自不同時間點（或來自不同上游資料源）的兩個段落是否表示相同現實世界實體的能力。Overture 在這方面的成功直接影響到分配給段落的 [Overture IDs](https://docs.overturemaps.org/gers) 的穩定性和精確性。反過來，較高的 Overture ID 穩定性和精確性使運輸主題資料在合併時更加有用。
+
+### 內部 Connector 
+
+Overture 運輸模式的一個關鍵 Features 是段落能夠支援在其幾何形狀內部位置的 Connector ，而不僅僅是在其端點。能夠添加內部 Connector 防止分段過程必須盲目跟隨上游源資料中引入的每個切割或合併。
+
+假設一個四面圍繞道路的方形城市街區已經在源資料中映射，但沿東西方向分割街區的後巷尚未映射。如果後巷隨後在源資料中被映射，Overture 分段過程可以連接到運輸網路，而不需要通過簡單地在街區東西側的南北方向路段上引入內部 Connector 來細分任何現有段落。因此，南北方向路段的 [Overture IDs](https://docs.overturemaps.org/gers) 保持不變，且無需重新合併資料。
+
+<figure>
+
+<div style={{ width: "50%", float: "left" , textAlign: "center" }}>
+
+<ThemedImage
+  alt="A city block without with back alley omitted."
+  sources={{
+    light: useBaseUrl('/img/transportation/interior-connectors-before-light.png'),
+    dark: useBaseUrl('/img/transportation/interior-connectors-before-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{ width: "50%", float: "right", textAlign: "center" }}>
+
+<ThemedImage
+  alt="A city block after adding a new back alley segment."
+  sources={{
+    light: useBaseUrl('/img/transportation/interior-connectors-after-light.png'),
+    dark: useBaseUrl('/img/transportation/interior-connectors-after-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{ clear: "both" }}/>
+
+<figcaption>
+
+<div style={{textAlign: 'center'}}>
+
+*A square city block bordered by four roads before (left) and after (right) mapping the back alley using internal connectors.*
+
+</div>
+
+</figcaption>
+
+</figure>
+
+請注意，在上述範例中，官方的 Overture 資料發布會在南北方向段落的中間插入座標（如果它們尚不存在），因為 Overture 資料發布將始終確保每個段落的幾何形狀包括所有 Connector 。從計算機的角度來看，這是對段落形狀的非常輕微的修改。
+
+### 幾何範圍
+
+許多段落屬性可能包含線性參考，使其僅適用於段落幾何的一部分。我們將這些線性參考的屬性值稱為幾何範圍，並在 [範圍屬性](/schema/concepts/scoping-rules) 頁面中對幾何範圍進行更詳細的討論。
+
+幾何範圍允許分段算法避免僅因為某個屬性在幾何形狀的不同部分具有不同值而引入段落分割。像內部 Connector 一樣，幾何範圍屬性使分段過程能夠做出促進形狀穩定性的決策，最終導致更精確和穩定的 [Overture IDs](https://docs.overturemaps.org/gers) 和更少的資料變動。
+
+<div style={{textAlign: 'center'}}>
+
+<figure>
+
+<ThemedImage
+  alt="A single segment with a geometrically-scoped speed limit"
+  sources={{
+    light: useBaseUrl('/img/transportation/geometrically-scoped-speed-limit-light.png'),
+    dark: useBaseUrl('/img/transportation/geometrically-scoped-speed-limit-dark.png'),
+  }}
+/>
+
+<figcaption>
+
+*A single segment with multiple geometrically-scoped speed limit values.*
+
+</figcaption>
+</figure>
+
+</div>
+
+### 環路
+
+雖然技術上可以使用 Overture 模式來表達形成連接環路的段落，但這些環路被認為是無效的，並且分段算法永遠不會生成這樣的環路。
+
+一個非法環路，其中一個段落連接到另一端，可以通過切割段落並引入第二個 Connector 來保持物理連接來進行修正。對於非法的自交環路，度數為 *N*，可以通過將段落切割成 N 個部分來進行修正。
+
+<div style={{ width: "49.5%", float: "left", textAlign: "center" }}>
+
+<figure>
+
+<div style={{width: "50%", float: "left"}}>
+
+<ThemedImage
+  alt="Illegal circular loop."
+  sources={{
+    light: useBaseUrl('/img/transportation/circle-looped-light.png'),
+    dark: useBaseUrl('/img/transportation/circle-looped-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{width: "50%", float: "left"}}>
+
+<ThemedImage
+  alt="One possible correction for illegal circular loop."
+  sources={{
+    light: useBaseUrl('/img/transportation/circle-unlooped-light.png'),
+    dark: useBaseUrl('/img/transportation/circle-unlooped-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{clear: "both"}}/>
+
+<figcaption>
+
+<div style={{textAlign: 'center'}}>
+
+*An illegal loop connected at its endpoints (left) and a possible correction (right).*
+
+</div>
+
+</figcaption>
+</figure>
+
+</div>
+
+<div style={{ width: "49.5%", float: "right", textAlign: "center" }}>
+
+<figure>
+
+<div style={{width: "50%", float: "left"}}>
+
+<ThemedImage
+  alt="Illegal self-crossing loop."
+  sources={{
+    light: useBaseUrl('/img/transportation/crossing-looped-light.png'),
+    dark: useBaseUrl('/img/transportation/crossing-looped-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{width: "50%", float: "left"}}>
+
+<ThemedImage
+  alt="One possible correction to self-crossing loop."
+  sources={{
+    light: useBaseUrl('/img/transportation/crossing-unlooped-light.png'),
+    dark: useBaseUrl('/img/transportation/crossing-unlooped-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{clear: "both"}}/>
+
+<figcaption>
+
+<div style={{textAlign: 'center'}}>
+
+*An illegal self-crossing loop (left) and a possible correction (right).*
+
+</div>
+
+</figcaption>
+</figure>
+
+</div>
+
+<div style={{ clear: "both" }}/>

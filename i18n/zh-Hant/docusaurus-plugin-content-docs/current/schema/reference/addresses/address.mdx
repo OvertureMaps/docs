@@ -1,0 +1,66 @@
+﻿---
+title: address
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import JSONSchemaViewer from "@theme/JSONSchemaViewer";
+import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
+import yamlLoad from "@site/src/components/yamlLoad"
+import AddressSchema from "!!raw-loader!@site/docs/_Schema/addresses/address.yaml";
+
+import AddressExample from "!!raw-loader!@site/docs/_Examples/addresses/address.yaml";
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+#  address 
+
+Overture  address 類型是由當地授權來源通常發佈的公開 address 資料集的彙編。在我們的初始版本中，我們使用了由 [OpenAddresses](https://openaddresses.io) 收集和分發的資料集。
+
+ address 的初始架構相當簡單，預期將擴展到更複雜的 address 方案。
+
+##  Features 類型
+ address 主題只有一種 Features 類型。
+- `address` 是一個點 Features 類型，表示單個 address 點。
+
+## 主題概念
+
+
+<table>
+  <tbody>
+  <tr>
+    <th>Geometry Type</th>
+    <td>
+      <code>Point</code>
+    </td>
+  </tr>
+  <tr>
+    <th>Theme</th>
+    <td><code>addresses</code></td>
+  </tr>
+  <tr>
+    <th>Type</th>
+    <td><code>address</code></td>
+  </tr>
+  </tbody>
+</table>
+
+
+## 架構
+
+<Tabs>
+  <TabItem value="browsable" label="Browsable" default>
+    <JSONSchemaViewer Schema={ yamlLoad(AddressSchema) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/addresses'})}/>
+  </TabItem>
+  <TabItem value="yaml" label="YAML" default>
+    <CodeBlock language="jsx">{AddressSchema}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+## 範例
+
+<Tabs>
+  <TabItem value="1" label="Address Example" default>
+    <CodeBlock language="json">{ JSON.stringify(yamlLoad(AddressExample), null, 2) }</CodeBlock>
+  </TabItem>
+</Tabs>

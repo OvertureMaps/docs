@@ -1,0 +1,177 @@
+---
+title: division_area
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import JSONSchemaViewer from "@theme/JSONSchemaViewer";
+import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
+import yamlLoad from "@site/src/components/yamlLoad"
+import divisions_division_area_schema from '!!raw-loader!@site/docs/_schema/divisions/division_area.yaml';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import division_area_example_country_land from '!!raw-loader!@site/docs/_examples/divisions/division_area/country_land.yaml';
+import division_area_example_region_land from '!!raw-loader!@site/docs/_examples/divisions/division_area/region_land.yaml';
+import division_area_example_country_maritime from '!!raw-loader!@site/docs/_examples/divisions/division_area/country_maritime.yaml';
+
+
+Division area 是表示與[division](/schema/reference/divisions/division)相關的土地或海域的多邊形。
+
+
+<table>
+  <tbody>
+  <tr>
+    <th>Geometry Type</th>
+    <td><code>Polygon</code> or <code>MultiPolygon</code></td>
+  </tr>
+  <tr>
+    <th>Theme</th>
+    <td><code>divisions</code></td>
+  </tr>
+  <tr>
+    <th>Type</th>
+    <td><code>division_area</code></td>
+  </tr>
+  </tbody>
+</table>
+
+## Subtypes
+
+儘管區劃主題的架構包含了全面的子類型列表，但目前數據中僅有部分子類型可用。
+
+目前，在 `division_area` 特徵類型中可用的子類型有：
+
+- `country`
+- `dependency`
+- `region`
+- `county`
+- `localadmin`
+- `locality`
+- `neighborhood`
+
+<Tabs>
+  <TabItem value="country" label="country" default>
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>country</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+
+一個國家是獨立主權的最大單位。國家的邊界（如果已知）由 [divsion boundary](/schema/reference/divisions/division_boundary) 特徵表示。例如：美國
+  </TabItem>
+
+  <TabItem value="dependency" label="dependency" default>
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>dependency</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+
+dependency 是一個不是一個國家的子區域的地方，但依賴於母國進行國防、護照控制等。例子：波多黎各
+
+  </TabItem>
+
+  <TabItem value="region" label="region">
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>region</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+region 是大多數國家內最大的行政單位，並且是第一級行政區。例子：阿爾伯塔
+
+  </TabItem>
+
+  <TabItem value="county" label="county" default>
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>county</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+
+county 是一種第二級行政區。例如：紐約的金斯縣
+  </TabItem>
+
+  <TabItem value="localadmin" label="localadmin" default>
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>localadmin</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+
+Localadmin 是世界某些地區的政府層級，包含沒有自己管理權限的地方或有人居住的地點。這種層級常見於歐洲，但並不僅限於此。地方行政區是第三級行政區。例子：[巴黎](https://spelunker.whosonfirst.org)
+  </TabItem>
+
+  <TabItem value="locality" label="locality" default>
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>locality</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+
+Locality是指有人居住的地點，可能擁有或不擁有自己的行政權限。（如果它屬於地方行政區，那麼就沒有自己的管理權限。）地方可能是第三級行政區。例子：台北
+  </TabItem>
+
+    <TabItem value="neighborhood" label="neighborhood" default>
+    <table>
+      <tbody>
+      <tr>
+        <th><code>subtype</code></th>
+        <td><code>neighborhood</code></td>
+      </tr>
+      </tbody>
+    </table>
+
+Neighborhood 是指位於城市、城鎮、郊區或鄉村地區的地理化社區，有時可能僅由一條街道及其沿街的建築物組成。例子：Cobble Hill
+  </TabItem>
+</Tabs>
+
+
+
+
+## 架構
+
+<Tabs>
+  <TabItem value="browsable" label="Browsable" default>
+    <JSONSchemaViewer schema={ yamlLoad(divisions_division_area_schema) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/divisions'})}/>
+  </TabItem>
+  <TabItem value="yaml" label="YAML" default>
+    <CodeBlock language="jsx">{divisions_division_area_schema}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+## 例子
+
+<Tabs>
+  <TabItem value="country_land" label="country, land class" default>
+    <CodeBlock language="json">{ JSON.stringify(yamlLoad(division_area_example_country_land), null, 2) }</CodeBlock>
+  </TabItem>
+  <TabItem value="country_maritime" label="country, maritime class" default>
+    <CodeBlock language="json">{ JSON.stringify(yamlLoad(division_area_example_country_maritime), null, 2) }</CodeBlock>
+  </TabItem>
+   <TabItem value="region_land" label="region, land class" default>
+    <CodeBlock language="json">{ JSON.stringify(yamlLoad(division_area_example_region_land), null, 2) }</CodeBlock>
+  </TabItem>
+</Tabs>

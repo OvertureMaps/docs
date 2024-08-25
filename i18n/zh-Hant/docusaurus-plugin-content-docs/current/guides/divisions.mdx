@@ -1,0 +1,337 @@
+﻿---
+title: 分區
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import ToParquet from '!!raw-loader!@site/src/queries/duckdb/divisions_to_parquet.sql';
+import CountsPerType from '!!raw-loader!@site/src/queries/duckdb/divisions_counts_per_type.sql';
+import DivCounts from '!!raw-loader!@site/src/queries/duckdb/divisions_division_counts.sql';
+import DivAreaCounts from '!!raw-loader!@site/src/queries/duckdb/divisions_division_area_counts.sql';
+import BoundaryCounts from '!!raw-loader!@site/src/queries/duckdb/divisions_boundary_counts.sql';
+import SpecificFeature from '!!raw-loader!@site/src/queries/duckdb/divisions_query_specific_feature.sql';
+import OSMLookUp from '!!raw-loader!@site/src/queries/duckdb/divisions_lookup_osm.sql';
+import BorderUSMX from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
+import CountsPerEntity from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
+import SubTypeCountsUSMXCA from '!!raw-loader!@site/src/queries/duckdb/divisions_border_usmx.sql';
+import DenmarkLocalityNeighborhood from '!!raw-loader!@site/src/queries/duckdb/divisions_denmark_locality_neighborhood.sql';
+import PhillyPlaces from '!!raw-loader!@site/src/queries/duckdb/divisions_philly_places.sql';
+
+## 概要
+
+Overture Divisions 主題包含三種類型的特徵：`division`、`division_area` 和 `division_boundary`。
+
+此主題涵蓋超過 530 萬個點、線和多邊形的表現形式，這些表現形式包括國家、地區、州、市甚至鄰里。該主題來自 [OpenStreetMap](https://www.openstreetmap.org/) 資料和 [geoBoundaries](https://www.geoboundaries.org/) 資料的融合，並根據 [ODbL](https://opendatacommons.org/licenses/odbl/) 授權協定提供。（更多訊息請參見 [致謝頁面](https://docs.overturemaps.org/attribution/)。）
+
+Divisions資料可以用於許多目的，包括但不限於：
+- 反向地理編碼
+- 地圖樣式設定和渲染
+- 地點標籤
+- 色階渲染
+- 包含檢查（例如點在多邊形分析）
+- 根據使用情境選擇幾何形狀
+
+| ![Overture divisions coverage - country and region boundaries](/img/divisions/divisions-admin0-admin1-coverage.png) | 
+|:--:| 
+| *Overture Divisions資料，按子類型設定樣式：國家用紫色標識，地區邊界用綠色線條表示。* | 
+
+## 資料集描述
+
+### 特徵類型描述 
+
+`division` 是一種類型的特徵，代表官方或非官方的人員組織：國家、地區、省、市、鄰里等——從給定的政治視角來看。它具有 `Point` 幾何形狀，提供了與該特徵最常關聯的位置的大致位置。我們鼓勵您參閱 [`division` 特徵類型的 schema 參考文檔](/schema/reference/divisions/division)。
+
+<details>
+	<summary>每個子類型的 division 特徵類型數量</summary>
+
+```
+┌──────────────┬──────────────┐
+│ count_star() │   subtype    │
+│    int64     │   varchar    │
+├──────────────┼──────────────┤
+│      3215202 │ locality     │
+│       771100 │ neighborhood │
+│       196451 │ microhood    │
+│        36974 │ county       │
+│        18469 │ localadmin   │
+│         3866 │ region       │
+│          272 │ country      │
+└──────────────┴──────────────┘
+```
+</details>
+
+`division_area` 是一種類型的特徵，用於捕捉屬於 `division` 特徵的土地面積或土地和領海（海洋）的形狀。它具有 `Polygon` 或 `MultiPolygon` 幾何形狀。我們建議您參閱 [`division_area` 特徵類型的 schema 參考文檔](/schema/reference/divisions/division_area)。
+
+<details>
+	<summary>每個子類型的 division_area 特徵類型數量</summary>
+
+```
+┌──────────────┬──────────────┐
+│ count_star() │   subtype    │
+│    int64     │   varchar    │
+├──────────────┼──────────────┤
+│       540557 │ locality     │
+│       385886 │ neighborhood │
+│        36973 │ county       │
+│        18470 │ localadmin   │
+│         3866 │ region       │
+│          272 │ country      │
+└──────────────┴──────────────┘
+```
+</details>
+
+`division_boundary` 是一種類型的特徵，表示兩個 `division` 特徵之間的共享邊界。它具有 `LineString` 幾何形狀。`division_boundary` 的幾何形狀要麼完全是非海洋的，要麼完全是海洋的。海洋邊界是非海洋邊界進入水域的延伸。請參閱 [`division_boundary` 特徵類型的 schema 參考文檔](/schema/reference/divisions/division_boundary)。
+
+<details>
+	<summary>每個子類型的 division_boundary 特徵類型數量</summary>
+
+```
+┌──────────────┬─────────┐
+│ count_star() │ subtype │
+│    int64     │ varchar │
+├──────────────┼─────────┤
+│        64107 │ county  │
+│         7116 │ region  │
+│          373 │ country │
+└──────────────┴─────────┘
+```
+</details>
+
+:::warning
+
+`division_boundary`特徵類型在 2024 年 7 月的版本中引入。它取代了 `boundary` 特徵類型。
+
+:::
+
+### Subtype descriptions 
+
+子類型可以表示每個特徵的行政級別，從 `country` 到 `microhood`。子類型還可以代表國家內的地點層級，並為 Divisions 提供標準化的地點定義。以下是 Divisions 主題中所有子類型的列表及其描述：
+
+<details>
+	<summary>divisions 主題中的所有子類型</summary>
+
+| 子類型          | 描述                                                                                   | 範例                       |
+| --------------- | -------------------------------------------------------------------------------------- | -------------------------- |
+| **country**     | 最大的獨立主權單位。                                                                   | United States              |
+| **dependency**  | 不完全是國家的子區域，但在國防、護照管控、社會津貼等方面依賴母國的地點。                 | 波多黎各自由邦 Puerto Rico                |
+| **macroregion** | 多個地區的集合。這些主要存在於歐洲。                                                   | Scotland; Île-de-France    |
+| **region**      | 州、省、地區。大多數國家中最大的子國家行政單位，除非它們有dependencies/macroregions。            | Alaska; Alberta            |
+| **macrocounty** | 多個縣的集合。這些主要也存在於歐洲。                                               | Inverness                  |
+| **county**      | 縣，大多數國家中最大的地方行政單位，除非它們有更大的縣級。                                 | Kings County, NY           |
+| **localadmin**  | 在世界某些地區提供的一級政府，包含沒有自身權力的地區或人口稠密地區。通常但不僅限於歐洲。| Paris                      |
+| **locality**    | 可能有或可能沒有自身行政權力的人口聚居地。(如果屬於地方管理區，則沒有。)               | Taipei                     |
+| **borough**     | 地方性政府單位，低於 locality 類型。                                                         | Brooklyn, Queens, etc.     |
+| **macrohood**   | 包含更小的鄰里類型分區的區域。                                                     | BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
+| **neighborhood**| 一個社區。大多數社區都屬於此類型，除非有足夠細微的劃分以區分 macrohood 和/或 microhood。     | Cobble Hill                |
+| **microhood**   | 包含在社區類型分區內的小型社區。                                                       | Gätjensort in Hamburg      |
+</details>
+
+### 資料欄位
+
+截至2024年7月版本，Divisions GeoParquet 檔案中共有25個欄位。每個欄位都是資料中的一個屬性。
+
+<details>
+	<summary>Divisions GeoParquet 檔案中的所有欄位清單</summary>
+
+| 屬性名稱              | 類型      | 描述                                                                                 |
+|-----------------------|-----------|--------------------------------------------------------------------------------------|
+| **id**                | 字串      | 特徵 ID。如果特徵代表的是 GERS 的一部分，則這可能是與 Global Entity Reference System (GERS) 相關的 ID。 |
+| **geometry**          | blob      | 實體幾何的 WKB 表示——一個 Point、Polygon、MultiPolygon 或 LineString。              |
+| **bbox**              | 陣列      | 實體幾何的 bounding box ，以浮點數表示，格式為 `xmin, xmax, ymin, ymax`。                     |
+| **version**           | 整數      | 特徵的版本號，在每次 Overture 更新中，特徵的幾何或屬性改變時會增加。              |
+| **update_time**       | 字串      | 特徵最後更新的時間戳記。                                                                 |
+| **sources**           | 陣列      | 特徵屬性的來源資訊陣列，每個條目是一個來源對象，列出屬性的 JSON 指標表示法以及該特定值來源的資料集。 |
+| **subtype**           | 字串      | 從有限的、分層的、排序的類別列表中選擇的分區類別（例如，country、region、locality 等），類似於 Who's on First*註1 的地點類型。 |
+| **wikidata**          | 字串      | 如果有，則為 wikidata ID，見於 https://www.wikidata.org/。                          |
+| **population**        | 整數      | 分區的人口數量。                                                                     |
+| **names**             | 陣列      | 實體的主要名稱，以及一組可選的名稱翻譯。名稱翻譯以鍵值對形式表示，其中鍵為 ISO 語言代碼，值為翻譯後的名稱。 |
+| **class**             | 字串      | 表示實體是 `maritime` 還是 `land` 特徵的值。                                          |
+| **division_ids**      | 列表      | 共享此分區邊界的兩個區域 ID 的列表。                                                   |
+| **is_disputed**       | 布林值    | 是否有實體爭議此分區邊界的指標。如果有實體爭議此邊界的訊息應包含在 perspectives 屬性中。如果邊界不清楚且這是“最佳猜測”，此屬性也應為真。這樣即使它為真且沒有 perspectives，也會給地圖創作者理由不完全信任邊界，但在沒有其他選擇的情況下使用它。 |
+| **perspectives**      | 陣列      | 從哪些政治觀點來看此分區邊界被認為是準確的表示。如果此屬性缺失，則表示這個邊界在任何政治觀點下都不被認為存在爭議。因此，只有一個邊界特徵代表整個現實世界實體。如果此屬性存在，則意味著邊界代表的是同一現實世界實體的幾種替代觀點之一。 |
+| **local_type**        | 字串      | 子類型屬性的本地名稱，可選地本地化。此屬性使用標準的 Overture 名稱結構進行本地化。       |
+| **country**           | 字串      | 此分區代表或屬於的國家或國家類似實體的 ISO 3166-1 alpha-2 國家代碼。如果此分區代表的實體有國家代碼，則 country 屬性包含該代碼。如果沒有，country 屬性包含從 parent_division_id 鏈到根的第一個分區的國家代碼。 |
+| **region**            | 字串      | 此分區代表或屬於的分區類似實體的 ISO 3166-2 主要子分區代碼。如果此分區代表的實體有主要子分區代碼，則 region 屬性包含該代碼。如果沒有，region 屬性包含從 parent_division_id 鏈到根的第一個分區的主要子分區代碼。 |
+| **hierarchies**       | 陣列      | 此分區參與的層級結構。                                                                 |
+| **parent_division_id** | 字串    | 此分區的父區域ID。不允許用於頂級分區（國家），對於所有其他分區是必需的。默認的父分區是從默認政治觀點看見的父分區（如果有），否則選擇某種程度上隨意。可以使用 hierarchies 屬性來檢查父分區的完整列表。 |
+| **norms**             | 列表      | 收集有關分區內的地方規範和規則的訊息，這些訊息對映射和地圖相關的用例通常很有用。如果分區缺少 norms 屬性或 norms 屬性的所需子屬性，但至少有一個祖先分區具有 norms 屬性和所需的子屬性，則可以假定從最近的祖先分區獲得值。 |
+| **capital_division_ids** | 陣列  | 此分區的首都區域ID。如果存在，此屬性將指向首都城市、縣城等的區域ID。                   |
+| **division_id**       | 字串      | 此區域所屬的區域ID。                                                                 |
+| **filename**          | 字串      | 被查詢的 S3 檔案名稱。                                                               |
+| **theme**             | 字串      | 查詢的 Overture 主題名稱。                                                           |
+| **type**              | 字串      | 查詢的 Overture 特徵類型名稱。                                                       |
+註1：美國著名喜劇，內容是兩人在談論一支棒球隊的成員，由於棒球隊成員的名字很特別，兩人的對話可以同時被解釋為問句和答句，使得談話的雙方發生諸多誤會。在這裡這個術語用來描述一種層級化的分類系統，其中「placetype」指的是地理或行政區域的類型。這種系統按照層級結構進行分類，從較大的區域（如國家）到較小的區域（如街區），幫助清晰地描述和區分不同的地區。
+</details>
+
+## 資料訪問與檢索
+
+Overture 的六個資料主題，包括分區，均可在以下位置免費獲取：
+
+| 提供者          | 位置                                                        |
+|-----------------|-------------------------------------------------------------|
+| Amazon S3       | `s3://overturemaps-us-west-2/release/`                       |
+| Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/` |
+
+Overture 以 [GeoParquet](https://geoparquet.org/) 格式分發其資料集，這是一種列導向的空間資料格式，是 [Apache Parquet](https://parquet.apache.org/) 的向後兼容擴展。Parquet（和 GeoParquet）針對“雲原生”查詢進行了優化，這意味著您可以使用許多開發者友好的工具來高效地提取雲端托管資料的列“塊”。我們鼓勵對 GeoParquet 不熟悉的使用者參閱 [這個指南](https://guide.cloudnativegeo.org/geoparquet/)。
+
+[本檔案的獲取資料部分](https://docs.overturemaps.org/getting-data/) 提供了使用幾種工具訪問 Overture 資料的說明，包括 DuckDB 和 Overture 的 Python Command-line Tool。請參見下方的分區範例。
+
+<Tabs>
+
+<TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
+您可以在 [這裡](https://github.com/OvertureMaps/overturemaps-py) 找到 Overture 的官方 Python Command-line Tool。
+
+此工具有助於下載感興趣區域內的 Overture 資料，並將其轉換為幾種不同的檔案格式。在此範例中，傳遞一個 bounding box 以獲取波士頓，MA 周圍的所有分區資料：
+
+```
+overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=divisions -o boston.geojson
+```
+
+目前，overturemaps 工具只有一個選項：download。它會下載 Overture Maps 資料，並根據選定的 bounding box 轉換為指定的檔案格式。指定 bounding box 時，只會傳輸最少量的資料。這讓輸出串流可以處理幾乎無限大的 bounding boxes 。
+
+Command-line 選項:
+
+- **--bbox**（可選）：東、西、南、北的經緯度坐標。如果省略，則會下載指定類型的整個資料集
+- **-f**（必需：選擇 "geojson"、"geojsonseq"、"geoparquet" 之一）：輸出格式
+- **--output/-o**（可選）：輸出檔案的位置。如果省略，則輸出將寫入 stdout。
+- **--type/-t**（必需）：要下載的 Overture 地圖資料類型。類型範例包括 building（建築足跡）、place（POI 地點資料）等。執行 overturemaps download --help 以獲取允許類型的完整列表
+
+這會直接從 Overture 的 S3 儲存貯體下載資料，而不向其他伺服器請求資料。通過在每行 Overture 分發中包含 bounding box 範圍，底層的 Parquet 閱讀器使用 Parquet 摘要統計資料來下載提取所需區域資料所需的最少資料量。
+</TabItem>
+
+<TabItem value="DuckDB" label="DuckDB" default>
+首先，請參閱 [DuckDB 的設定指南](/getting-data/duckdb/)。
+<QueryBuilder query={ToParquet}></QueryBuilder>
+注意：執行此查詢將產生約 6.4GB 的檔案。
+</TabItem>
+
+</Tabs>
+
+## 資料使用指南
+
+我們建議只查詢和下載您需要的 Overture 資料。如果您對特定的地理區域感興趣，有幾種選擇可以使用簡單的 bounding box 來提取 divisions 資料。
+
+<Tabs>
+
+<TabItem value="Overture Maps Explorer" label="Overture Maps Explorer" default>
+要快速查看和下載適量資料，您可以使用 [Overture Maps Explorer 網站](https://explore.overturemaps.org/#15.07/41.89731/12.47626)。
+
+要下載資料：移動到您感興趣的區域，關閉其他圖層，然後點擊 `Download Visible`。
+
+這將下載您螢幕上可見的區域。
+
+| ![Exploring divsions data in NYC](/img/divisions/divisions-us.gif) | 
+|:--:| 
+| *使用 [Overture 的 Explore 工具](https://explore.overturemaps.org/#10.35/40.802/-73.9407) 探索紐約市的 divisions 資料。* |
+</TabItem>
+
+<TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
+首先，請參閱 [Python Command-line Tool的設定指南](/getting-data/overturemaps-py/)。 
+
+您可以更改 `bbox` 值來下載特定區域的資料。
+
+```
+overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=divisions -o boston.geojson
+``` 
+</TabItem>
+
+<TabItem value="DuckDB" label="DuckDB" default>
+首先，請參閱 [DuckDB 的設定指南](/getting-data/duckdb/)。 
+
+DuckDB 允許您在查詢中傳遞 bounding box 以選擇指定地理區域中的特徵。
+
+以下範例返回美國與墨西哥之間的國界邊界：
+<QueryBuilder query={BorderUSMX}></QueryBuilder>
+</TabItem>
+
+</Tabs>
+
+## 資料處理與分析
+
+使用這些查詢，您可以獲得 divisions 中每種類型特徵的數量。
+
+<Tabs>
+
+<TabItem value="total counts" label="total counts" default>
+<QueryBuilder query={CountsPerType}></QueryBuilder>
+</TabItem>
+
+<TabItem value="division counts" label="division counts" default>
+<QueryBuilder query={DivCounts}></QueryBuilder>
+</TabItem>
+
+<TabItem value="division_area counts" label="division_area counts" default>
+<QueryBuilder query={DivAreaCounts}></QueryBuilder>
+</TabItem>
+
+<TabItem value="division_boundary counts" label="division_boundary counts" default>
+<QueryBuilder query={BoundaryCounts}></QueryBuilder>
+</TabItem>
+
+</Tabs>
+
+<Tabs>
+
+<TabItem value="query using an Overture ID" label="query using an Overture ID" default>
+<QueryBuilder query={SpecificFeature}></QueryBuilder>
+</TabItem>
+
+<TabItem value="query using an OSM ID" label="query using an OSM ID" default>
+<QueryBuilder query={OSMLookUp}></QueryBuilder>
+</TabItem>
+
+</Tabs>
+
+#### 將 locality 和 neighborhood 分區導出到本地 shapefile
+
+此查詢將返回丹麥的每個 locality 和 neighborhood 分區實體的欄位子集和幾何圖形。
+
+<details>
+	<summary>查詢</summary>
+<QueryBuilder query={DenmarkLocalityNeighborhood}></QueryBuilder>
+</details>
+
+#### 將費城內的地點資料導出到本地 Parquet 檔案
+
+此查詢將返回費城 locality 中的 Places 主題資料
+
+<details>
+	<summary>查詢</summary>
+<QueryBuilder query={PhillyPlaces}></QueryBuilder>
+</details>
+
+## 修訂歷史
+### 版本訊息
+
+您可以在 [此處](https://docs.overturemaps.org/release/latest/) 找到最新的版本說明。
+
+## 支援
+
+### 回饋
+
+您可以在 [此處](https://github.com/orgs/OvertureMaps/repositories) 找到 Overture 的所有儲存庫。
+
+Discussions 一般用於有關 divisions 項目的更廣泛對話（支援新的工作流程，添加資料集，處理空值屬性）。
+
+Issues 通常針對資料集中的特定實體（幾何驗證，缺失實體，重複實體）或特定國家的問題。
+
+### Discussions 
+
+您可以在每個公開的 Overture 儲存庫中開始和添加討論。以下是一些例子：
+
+- **一般 Overture 討論**: https://github.com/orgs/OvertureMaps/discussions
+- **資料討論**: https://github.com/OvertureMaps/data/discussions
+- **架構討論**: https://github.com/OvertureMaps/schema/discussions
+
+有關 Overture 的 divisions 資料的討論應該在 Data 儲存庫中進行。
+
+### Issues 
+
+您也可以在每個公開的 Overture 儲存庫中開始和添加問題。以下是一些例子：
+
+- **資料問題**: https://github.com/OvertureMaps/data/issues
+- **架構問題**: https://github.com/OvertureMaps/schema/issues
+- **圖磚問題**: https://github.com/OvertureMaps/overture-tiles/issues
+
+有關 Overture 的 divisions 資料的問題應該在 Data 儲存庫中提出。

@@ -1,0 +1,90 @@
+﻿---
+title: 探索我們的公開測試版
+description: Highlights from Overture Maps beta release
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+上週，Overture Maps [宣布了我們的模式和資料的測試版釋出](https://overturemaps.org/overture-maps-foundation-releases-beta-of-its-first-open-map-dataset/)。經過數月的努力和穩定改進，我們即將達到生產級穩定性。在接下來的幾週內，我們將發佈一系列文章——從這篇開始——深入介紹此次釋出中的亮點和改進。
+
+## 加快地理空間處理
+你會首先注意到，我們 [從雲端提取 Overture Maps 資料的速度變得更快](https://docs.overturemaps.org/getting-data/locally/)。我們通過與開源協作者密切合作，對我們的 GeoParquet 檔案進行了再分區和 [空間優化](https://cloudnativegeo.org/blog/2024/03/coming-soon-geoparquet-1.1/)。同時，我們的朋友 DuckDB，這是我們最喜愛的 SQL 工具之一，[新增了一個功能](https://github.com/duckdb/duckdb/pull/10314)，提升了帶 bounding box 查詢的效能。
+
+<details>
+
+<summary>Query speeds have improved significantly from our February release to the April beta release. This example compares DuckDB queries for buildings in Philadelphia. [See here for more information about our performance testing](https://github.com/opengeospatial/geoparquet/discussions/188#discussioncomment-8909348).</summary>
+
+    <Tabs>
+        <TabItem value="february" label="2024-02-15-alpha.0 release" default>
+            ```
+            SELECT 
+            *
+            FROM 
+                read_parquet('s3://overturemaps-us-west-2/release/2024-02-15-alpha.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
+            WHERE 
+                bbox.minx > -75.60154
+                AND bbox.maxx < -74.955763
+                AND bbox.miny > 39.867004
+                AND bbox.maxy < 40.137992;
+            ```
+            820,915 buildings   
+            ~120s
+        </TabItem>
+
+    
+        <TabItem value="april" label="2024-04-16-beta.0 release" default>
+            ```
+            SELECT 
+            *
+            FROM   
+                read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
+            WHERE 
+                bbox.xmin > -75.60154
+                AND bbox.xmax < -74.955763
+                AND bbox.ymin > 39.867004
+                AND bbox.ymax < 40.137992
+            ```
+            852,487 buildings    
+            ~25s
+        </TabItem>
+    </Tabs>
+</details>
+
+我們正在與 Development Seed 的成員一起繼續為使用者提供更快更簡便的體驗，Development Seed也是 [Overture Maps Foundation 的成員](https://overturemaps.org/about/members/)，我們正在 [基於 lonboard](https://developmentseed.org/lonboard/latest/examples/overture-maps/) 開發針對 Overture Maps 資料的特殊工具，這是他們用於在 Jupyter 中視覺化大型地理空間資料集的 Python 含式庫。最近，我們的朋友 Wherobots [全面了解了](https://wherobots.com/overture-maps-data-cloud-native-geoparquet-apache-sedona/) 我們如何使用 GeoParquet 使得 Apache Sedona 查詢和分析資料變得非常高效。
+
+正如你所見，我們正在與社群一起推進，對資料、軟體和規範進行迭代，並以提升地理空間 **_速度_** 為共同目標。
+
+## 更易用的模式
+測試版釋出的另一個亮點是轉向更易用的行政邊界資料模式。我們在二月份首先 [與 Overture Maps 社群探討了這個想法](https://github.com/OvertureMaps/schema/discussions/117)，經過短短兩個月的工作， [新的分區模式和資料](https://docs.overturemaps.org/guides/divisions/) 現已準備就緒。以下是查詢 `divisions` 的一個例子，該查詢抓取了全球所有國家的幾何訊息：
+
+```
+SELECT *
+   FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
+WHERE subtype = 'country';
+```
+ 
+您可以注意到 `divisions` 查詢比對 `admins` 的相應查詢要簡單得多：
+
+
+```
+WITH admins AS (
+    SELECT *
+    FROM read_parquet('s3://overturemaps-us-west-2/release/2024-04-16-beta.0/theme=admins/type=*/*', filename=true, hive_partitioning=1)
+  )
+
+  SELECT *
+    FROM admins country_locality
+    JOIN admins country_area
+      ON country_area.locality_id = country_locality.id
+   WHERE country_locality.locality_type = 'country';
+
+```    
+
+我們計劃在七月的版本中 [棄用 admins](https://docs.overturemaps.org/release-notes/)。在此期間，`admins` 和 `divisions` 將同時提供給使用者使用。
+
+## 橋樑、島嶼、瀑布等等！
+在此次釋出中，我們在 `base` 層中增加了更多豐富的細節，包括來自 [Facebook Daylight 地圖分發](https://daylightmap.org/) 的熟悉特徵的 `infrastructure` 類型。我們還為 `land`、`land_use` 和 `water` 特徵類型新增了子類型和類別。你可以在我們的 [模式參考文檔](https://docs.overturemaps.org/schema/reference/base/infrastructure) 中找到每個特徵類型的子類型和類別的詳細列表。準備好製作自己的地圖了嗎？我們有一個 [教學幫助你入門](https://docs.overturemaps.org/examples/build-a-map/#13/47.6/-122.33/0/45)。
+
+## 請繼續關注更多焦點
+我們不久後就會再發佈更多從測試版釋出到生產過程中的文章。在這段時間，我們邀請你 [開始使用我們的資料](https://docs.overturemaps.org/getting-data/) 並與我們分享你的 [評論和意見](https://github.com/OvertureMaps/data/discussions)。
+

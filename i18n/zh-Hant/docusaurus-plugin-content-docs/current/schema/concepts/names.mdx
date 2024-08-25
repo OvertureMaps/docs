@@ -1,0 +1,93 @@
+﻿---
+title: Names
+---
+
+import JSONSchemaViewer from "@theme/JSONSchemaViewer";
+import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
+import yamlLoad from "@site/src/components/yamlLoad"
+import MainDefs from "!!raw-loader!@site/docs/_schema/defs.yaml";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+在 Overture 中，Names 實體共用一個通用的架構。
+
+<JSONSchemaViewer
+  schema={ yamlLoad(MainDefs) }
+  resolverOptions={ generateResolverOptions( {yamlBasePath: '/', jsonPointer:"#/$defs/propertyContainers/namesContainer/properties/names" })}/>
+
+## `primary`
+如果一個 Features 有名稱，`names` 中至少應該有一個屬性：`primary`。這將始終包含該 Features 的本地化名稱。
+
+```yaml
+id: 08b2aa845a18afff02009f7c732067c5
+names:
+  primary: The White House
+```
+
+## `common`
+
+Common name 是名稱的翻譯。
+
+```yaml
+id: 08b2aa845a18afff02009f7c732067c5
+names:
+  common:
+    de: Weißes Haus
+    hi: व्हाइट हाउस
+    fi: Valkoinen talo
+    ru: Белый дом
+    pt: Casa Branca
+    lt: Baltieji Rūmai
+    hr: Bijela kuća
+    fr: Maison Blanche
+    hu: Fehér Ház
+    br: Ti Gwenn
+    si: ධවල මන්දිරය
+    uk: Білий дім
+    sk: Biely dom
+    sv: Vita huset
+    ko: 백악관
+    en: White House
+    ku: Qesra Spî
+    it: Casa Bianca
+    es: Casa Blanca
+    zh: 白宫
+    cs: Bílý dům
+    ja: ホワイトハウス
+    fa: کاخ سفید
+    ro: Casa Albă
+    nl: Witte Huis
+    tr: Beyaz Saray
+```
+
+## `rules`
+額外的名稱變體，例如 _official_, _alternate_, or _short_ 以 `rules` 形式存在。
+
+規則也可以具有 `side` 和 `geometric` 範圍限定。了解更多關於 [範圍限定規則的內容](/schema/concepts/scoping-rules)。
+
+```yaml
+id: 08b2aa845a18afff02009f7c732067c5
+names:
+  rules:
+    - variant: alternate
+      language: hr
+      value: Bila kuća
+      between: null
+      side: null
+```
+
+## 語言
+
+Overture Maps 模式中的語言由 [IETF BCP-47 語言標籤](https://en.wikipedia.org/wiki/IETF_language_tag) 標識；相同的標籤方案用於 `common` 地圖條目和規則中的 `language` 值。
+
+此模式在詞彙或語法層面上識別 BCP-47 語言標籤。它驗證候選標籤是否遵循 [RFC](https://datatracker.ietf.org/doc/html/rfc5646) 中描述的語法，但不檢查它們是否在 [IANA 的語言子標籤登記冊](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) 中有效註冊。
+
+在正則表達式中，`'(:?'` 表示 non-capturing group，所有頂層或非嵌套組表示 `langtag` 的頂層組件，這些組件在 [https://www.rfc-editor.org/rfc/bcp/bcp47.txt](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) 的語法部分中被引用。具體而言，從左到右的頂層組分別表示：
+
+```
+1. language
+2. ["-" script]
+3. ["-" region]
+4. *("-" variant)
+5. *("-" extension)
+```

@@ -1,0 +1,505 @@
+﻿---
+title: 道路
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ExampleAccessRestrictionsBlanketDeny from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/access-restriction-01-blanket.yaml';
+import ExampleAccessRestrictionPrivateAccessWithDeliveries from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/access-restriction-02-private-with-deliveries.yaml';
+import ExampleAccessRestrictionMotorVehiclesDestinationOnly from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/access-restriction-03-motor-vehicles-destination-only.yaml';
+import ExampleAccessRestrictionAxleLimit from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/access-restriction-04-axle-limit.yaml';
+import ExampleSpeedLimitsSimple from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/speed-limits-01-simple.yaml';
+import ExampleSpeedLimitsDirectional from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/speed-limits-02-directional.yaml';
+import ExampleSpeedLimitsVariableMax from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/speed-limits-03-variable-max.yaml';
+import ExampleLanesResolutionConnector from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/lanes-resolution-connector.yaml';
+import ExampleLanesResolutionSegment01 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/lanes-resolution-segment-01.yaml';
+import ExampleLanesResolutionSegment02 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/lanes-resolution-segment-02.yaml';
+import ExampleTurnRestriction1Source from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-01-source.yaml';
+import ExampleTurnRestriction1Target from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-01-target.yaml';
+import ExampleTurnRestriction1Exit from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-01-exit.yaml';
+import ExampleTurnRestriction1Connector1 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-01-connector1.yaml';
+import ExampleTurnRestriction1Connector2 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-01-connector2.yaml';
+import ExampleTurnRestriction1Connector3 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-01-connector3.yaml';
+import ExampleTurnRestriction2Source from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-source.yaml';
+import ExampleTurnRestriction2Target from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-target.yaml';
+import ExampleTurnRestriction2Via from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-via.yaml';
+import ExampleTurnRestriction2Connector1 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-connector1.yaml';
+import ExampleTurnRestriction2Connector2 from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/turn-restriction-02-connector2.yaml';
+
+在 Overture 運輸主題中，道路是指任何類型的道路、街道或路徑，包括專用的步行或自行車道，但不包括鐵路。路段構成了大部分地面運輸段。道路使用 [segment](/schema/reference/transportation/segment)  Features 來建模，並將 `subtype` 屬性值設定為 `road`。
+
+## 幾何形狀和粒度
+
+路段的幾何形狀是道路的表示，通常近似於所建模路段的實際中心線。路段支援以不同粒度建模道路網路。例如，一個路段可以表示：
+
+- 包括所有車道和人行道的雙向車道
+- 獨立的人行道
+- 單向街道或雙車道的單一方向
+- 自行車道或多車道高速公路的單一部分
+- 專用的自行車道
+- 步道
+
+## Basic properties
+
+## 基本屬性
+
+### 道路類別
+
+道路的 `class` 屬性指定了其一般用途和在交通網路中的相對重要性。`class` 屬性還有助於建立合理的預設值。例如，`sidewalk` 類別意味著該段的預設 [通行限制](#access-restrictions) 允許 `foot`（步行）這一旅行模式的通行，並禁止所有其他旅行模式的通行。與許多路段屬性不同，路段的 `class` 屬性不支援 [幾何範圍限定](#geometric-scoping-linear-referencing)（線性參考）。因此，當現實世界的道路在某個線性範圍內發生類別變化（例如，從次級道路變為住宅道路）時，Overture 運輸 [分段](#segmentation) 算法將會生成一個段分割。
+
+Every road segment has a class. If the `class` property is missing
+from a road segment, the default value `unknown` is assumed. The unknown
+road class is meant to be a temporary value until a more specific class
+is known.
+每個路段都有一個類別。如果路段中缺少 `class` 屬性，則假定使用預設值 `unknown`（未知）。未知道路類是直到有更具體的類別訊息前暫時的值。
+<!--
+ TODO: What's the difference between "unknown" and "unclassified"?
+         https://github.com/OvertureMaps/schema-wg/issues/152
+-->
+
+與 Overeture 運輸 schema 的許多方面一樣，`class` 標籤受到了 OpenStreetMap 的啟發。在這種情況下，它類似於但不完全相同於 OSM 的 `highway=*` 標籤。
+### Surface
+
+### 表面
+
+道路的 `road_surface` 屬性指示其物理表面。如果被省略，則應根據 `class` 假定一個合理的預設值。
+
+與許多路段屬性一樣，`road_surface` 屬性支援 [幾何範圍限定](#geometric-scoping-linear-referencing)（線性參考）。因此，有效的道路表面可能會在路段幾何形狀的不同子範圍內變化。
+
+### 標誌
+
+路段的 `road_flags` 屬性是一組命名的標誌值，指示簡單物理 Features 的存在或缺失。
+
+例如，具有 `road_flags = [is_link, is_under_construction]` 的路段是連接段且正在施工中。
+
+與許多路段屬性一樣，`road_flags` 屬性支援 [幾何範圍限定](#geometric-scoping-linear-referencing)（線性參考）。因此，適用的道路標誌可能會在路段幾何形狀的不同子範圍內變化。
+
+## 限制
+
+### 訪問限制
+
+路段上的訪問限制指定了誰被允許使用該道路，以及在什麼情況下可以使用。
+
+每個路段都有一組*隱含的*訪問限制，由其 [道路類別](#road-class) 和當地規則、規範和習俗定義。
+（Overture 運輸 schema 不指定這些隱含的訪問限制，這由具體應用程序來解決。）
+
+隱含的訪問限制可以通過為屬性 `access_restrictions` 提供明確值來對整個路段進行修改。（訪問限制也可以在單個 [車道](#lanes) 層級上進行指定，具體見其他說明。）
+
+在技術上，可以指定適用於所有人和所有事物的全面訪問授予或拒絕；但如同典型情況下，更精確的結果是需要的，則會使用一個或多個 [規則](#rules-and-rule-based-properties) 來指定訪問限制。與所有基於規則的屬性一樣，如果沒有規則符合具體事實，則由道路類別的預設限制來管理。
+
+<Tabs>
+  <TabItem value="blanketDenial" label="Blanket denial of access." default>
+
+<CodeBlock language="yaml">{ ExampleAccessRestrictionsBlanketDeny }</CodeBlock>
+
+  </TabItem>
+
+  <TabItem value="businessHoursDelivery" label="Private access, deliveries OK during business hours." default>
+
+<CodeBlock language="yaml">{ ExampleAccessRestrictionPrivateAccessWithDeliveries }</CodeBlock>
+
+  </TabItem>
+
+  <TabItem value="noMotorVehiclesExceptDestination" label="No motor vehicles except to destination." default>
+
+<CodeBlock language="yaml">{ ExampleAccessRestrictionMotorVehiclesDestinationOnly }</CodeBlock>
+
+  </TabItem>
+
+  <TabItem value="noNorthboundTrucks" label="No trucks with &ge; 5 axles." default>
+
+<CodeBlock language="yaml">{ ExampleAccessRestrictionAxleLimit }</CodeBlock>
+
+  </TabItem>
+</Tabs>
+
+### 轉彎限制
+
+路段上的轉彎限制限制了從該段到其他 [實體連接](#physical-connectivity) 段的過渡。
+
+每條路段都有一組隱含的允許轉換，這些轉換由其 [通行限制](#access-restrictions) 以及當地規則、規範和習俗定義。如果一個段落僅能沿著 `forward` [方向](#heading) 使用，那麼沿著 `backward` 方向行駛時，則隱含著不允許轉換到任何連接的段落。由當地規則或規範隱含的轉換限制的例子可能是對某個司法區域內的掉頭禁令。（Overture 運輸模式並未規定這些當地規則、規範和習俗，這些由具體應用來解決。）
+
+Overture 採取默認允許的過渡限制方式。默認情況下，所有隱含的轉換都是允許的。可以通過在 `prohibited_transitions` 屬性中添加明確的轉換限制來縮減允許的轉換集。
+
+轉彎限制分為兩種類型：簡單轉彎限制和通過轉彎限制。簡單轉彎限制允許描述簡單的規定，例如「禁止右轉進入楓樹街」；而通過轉彎限制則涵蓋了更為複雜的情況，其中操作的順序是重要的。
+
+<Tabs>
+  <TabItem value="simple" label="Simple restriction." default>
+
+<div style={{ width: "40.5%", float: "left" }}>
+
+<figure>
+
+<ThemedImage
+  alt="A simple transition restriction prohibiting a right turn."
+  sources={{
+    light: useBaseUrl('/img/transportation/turn-restriction-01-light.png'),
+    dark: useBaseUrl('/img/transportation/turn-restriction-01-dark.png'),
+  }}
+/>
+
+<figcaption>
+
+*禁止從 "source" 轉到 "target" 段落的右轉，發生在 Connector  2 上。*
+
+</figcaption>
+
+</figure>
+
+</div>
+
+<div style={{ width: "59.5%", float: "right" }}>
+
+<details>
+<summary>Source segment</summary>
+<CodeBlock language="yaml">{ ExampleTurnRestriction1Source }</CodeBlock>
+</details>
+
+<details>
+<summary>Connector 1</summary>
+
+*這個 Connector 在例子中並不是重要的一部分，因為它不參與轉向限制，但它被包括在內以提供真實世界的背景。*
+
+<CodeBlock language="yaml">{ ExampleTurnRestriction1Connector1 }</CodeBlock>
+</details>
+
+<details>
+<summary>Exit segment</summary>
+
+*這個段落在例子中不是重要的一部分，因為所有暗示的轉換在此段落上都是允許的。我們包括它是為了提供真實世界的背景。*
+
+<CodeBlock language="yaml">{ ExampleTurnRestriction1Exit }</CodeBlock>
+
+</details>
+
+<details>
+<summary>Connector 2</summary>
+
+*從源段落（`forward` 方向）到目標段落（`forward` 方向）的右轉在這個連接點被禁止。*
+
+<CodeBlock language="yaml">{ ExampleTurnRestriction1Connector2 }</CodeBlock>
+</details>
+
+<details>
+<summary>Target segment</summary>
+
+*在源段落上向 `forward` 方向行駛的車輛不得進入此段落的 `forward` 方向，即從源段落到此段落的右轉被禁止。*
+
+<CodeBlock language="yaml">{ ExampleTurnRestriction1Target }</CodeBlock>
+</details>
+
+<details>
+<summary>Connector 3</summary>
+
+*此 Connector 在範例中並不重要，因為它不參與轉彎限制，但它被包含在內以提供實際情境。*
+
+<CodeBlock language="yaml">{ ExampleTurnRestriction1Connector3 }</CodeBlock>
+</details>
+
+
+</div>
+
+<div style={{ clear: "both" }}/>
+
+  </TabItem>
+
+  <TabItem value="via" label="Via restriction" default>
+
+<div style={{ width: "40.5%", float: "left" }}>
+
+<figure>
+
+<ThemedImage
+  alt="A via restriction."
+  sources={{
+    light: useBaseUrl('/img/transportation/turn-restriction-02-light.png'),
+    dark: useBaseUrl('/img/transportation/turn-restriction-02-dark.png'),
+  }}
+/>
+
+<figcaption>
+
+*Prohibited transition from "source" to "target" through `via` segment.*
+
+</figcaption>
+
+</figure>
+
+</div>
+
+<div style={{ width: "59.5%", float: "right" }}>
+
+<details>
+<summary>Source segment</summary>
+<CodeBlock language="yaml">{ ExampleTurnRestriction2Source }</CodeBlock>
+</details>
+
+<details>
+<summary>Connector 1</summary>
+<CodeBlock language="yaml">{ ExampleTurnRestriction2Connector1 }</CodeBlock>
+</details>
+
+<details>
+<summary>Via segment</summary>
+<CodeBlock language="yaml">{ ExampleTurnRestriction2Via }</CodeBlock>
+</details>
+
+<details>
+<summary>Connector 2</summary>
+<CodeBlock language="yaml">{ ExampleTurnRestriction2Connector2 }</CodeBlock>
+</details>
+
+<details>
+<summary>Target segment</summary>
+<CodeBlock language="yaml">{ ExampleTurnRestriction2Target }</CodeBlock>
+</details>
+
+</div>
+
+<div style={{ clear: "both" }}/>
+
+  </TabItem>
+</Tabs>
+
+### 速度限制
+
+速度限制規定了在道路上允許的最高行駛速度。通常，速度限制指定了最大允許速度，但 Overture 也允許設定最低速度限制和指示變速走廊。
+
+每條路段都有一個隱含的速度限制或一組速度限制，這些限制由其 [道路類別](#road-class) 以及當地規則、慣例和習俗定義。注意：與通行限制和轉向限制類似，Overture 交通模式並未嘗試指定這些隱含的速度限制。
+
+可以通過為 `speed_limits` 屬性提供明確的值來配置整條路段的速度限制。注意：細化的速度限制也可以在個別 [車道](#lanes) 層級上指定，如其他地方所述。
+
+與通行限制和轉向限制一樣，速度限制也可以使用 [規則](/schema/concepts/scoping-rules#rules-and-rule-based-properties) 進行指定。
+
+<Tabs>
+  <TabItem value="speedLimitSimple" label="Simple speed limit" default>
+
+<CodeBlock language="yaml">{ ExampleSpeedLimitsSimple }</CodeBlock>
+
+  </TabItem>
+
+  <TabItem value="speedLimitDirectional" label="Different speed limit for northbound trucks" default>
+
+<CodeBlock language="yaml">{ ExampleSpeedLimitsDirectional }</CodeBlock>
+
+  </TabItem>
+
+  <TabItem value="speedLimitVariable" label="Variable speed corridor" default>
+
+<CodeBlock language="yaml">{ ExampleSpeedLimitsVariableMax }</CodeBlock>
+
+  </TabItem>
+</Tabs>
+
+## 車道
+
+一條道路可以選擇性地擁有 `lanes` 屬性，如果存在，則包含一個規則列表，用於解析適用的交通 lane block 。 lane block 是一個車道對象的列表。 lane block 中的每個車道對象描述了適用於該道路的交通車道的物理結構和屬性，並具有足夠的細節以支援導航用例。請注意，`lanes` 屬性適用於交通車道，而不是停車車道。
+
+### 車道的使用案例
+
+許多交通使用案例可以完全或大部分地解決而無需檢查道路網路的車道結構。例如，最佳路徑計算可以完全在沒有車道級訊息的情況下解決，大多數 2D 地圖渲染問題也是如此。車道訊息對於細化的逐轉或逐步導航應用最為有用。
+
+### 預設車道結構
+
+如果從路段中省略 `lanes` 屬性，則應根據 `class` 和道路級別的 [通行限制](#access-restrictions) 假設合理的預設值。例如，對於沒有朝向範圍限制的 `primary` 類別的雙向路段，合理的假設是兩條車道，一條 `forward` 和一條 `backward`。
+
+### 車道編號
+
+在給定的地方和時間，路段上的車道數量等於解析後的 lane block 中車道列表的長度。
+
+解析後車道列表中的每個條目表示道路上的一條車道。順序很重要。該列表按從左到右的順序捕獲車道，就像一個站在正在建模的實際道路上的人面對該段幾何形狀的 [方向](/schema/concepts/by-theme/transportation/shape-connectivity#directionality) 一樣。最左邊的車道編號為 `0`；最右邊的車道（假設有 N 條車道）編號為 N-1。以下範例展示了如何在北、南、西、東方向上排列的雙車道段中進行車道編號。
+
+
+<figure>
+
+<div style={{ display: "flex", alignItems: "center" }}>
+
+<div style={{ width: "27%", float: "left", textAlign: "center" }}>
+
+<ThemedImage
+  alt='West-oriented road segment with two lanes.'
+  sources={{
+    light: useBaseUrl('/img/transportation/lane-number-01-west-light.png'),
+    dark: useBaseUrl('/img/transportation/lane-number-01-west-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{ width: "10px", float: "left" }}/>
+
+<div style={{ width: "23%", float: "left", textAlign: "center" }}>
+
+<ThemedImage
+  alt='North-oriented road segment with two lanes.'
+  sources={{
+    light: useBaseUrl('/img/transportation/lane-number-02-north-light.png'),
+    dark: useBaseUrl('/img/transportation/lane-number-02-north-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{ width: "10px", float: "left" }}/>
+
+<div style={{ width: "27%", float: "left", textAlign: "center" }}>
+
+<ThemedImage
+  alt='East-oriented road segment with two lanes.'
+  sources={{
+    light: useBaseUrl('/img/transportation/lane-number-03-east-light.png'),
+    dark: useBaseUrl('/img/transportation/lane-number-03-east-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{ width: "10px", float: "left" }}/>
+
+<div style={{ width: "23%", float: "left", textAlign: "center" }}>
+
+<ThemedImage
+  alt='South-oriented road segment with two lanes.'
+  sources={{
+    light: useBaseUrl('/img/transportation/lane-number-04-south-light.png'),
+    dark: useBaseUrl('/img/transportation/lane-number-04-south-dark.png'),
+  }}
+/>
+
+</div>
+
+<div style={{ clear: "both" }}/>
+
+</div>
+
+
+<figcaption>
+
+<div style={{textAlign: 'center'}}>
+
+*How lanes are numbered for examples segments with geometry directions due west, north, east, and south.*
+
+</div>
+
+</figcaption>
+
+</figure>
+
+### 車道方向
+
+每條車道都有一個方向性，記錄了在車道內允許的行進方向，參考於 [路段方向性](/schema/concepts/by-theme/transportation/shape-connectivity#start-end-and-orientation)。車道方向性由車道對象的 `directionality` 屬性指定。允許的值包括：
+
+<figure>
+
+<div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+
+| 方向性        | 意義                                             |
+|-|-|
+| `forward`     | 僅允許沿 `forward` 方向行駛。                    |
+| `backward`    | 僅允許沿 `backward` 方向行駛。                   |
+| `both_ways`   | 同時允許 `forward` 和 `backward` 方向行駛。     |
+| `alternating` | 單行方向，並在 `forward` 和 `backward` 之間不斷變化。 |
+| `reversible`  | 單行方向，並在 `forward` 和 `backward` 之間偶爾變化。 |
+
+
+</div>
+
+<figcaption>
+
+<div style={{textAlign: 'center'}}>
+
+*Allowed values for lane `directionality`.*
+
+</div>
+
+</figcaption>
+</figure>
+
+### 車道方向性
+
+`directionality` 屬性是車道的必填屬性，也是唯一的必填屬性。
+
+當允許的行駛方向根據固定的時間表變化時，應使用適當的「確定性」方向性 (`forward`、`backward` 和 `both_ways`)，並在車道區塊層級配合 [時間範圍限定](#temporal-scoping-opening-hours)。
+
+當允許的行駛方向根據不可預測的地方因素變化，以至於在任何給定時間內的允許方向只能由實際在現場的觀察者知道時，應使用適當的「不確定性」方向性 (`alternating` 或 `reversible`)。
+
+### 車道限制
+
+與段相同，每條車道內的限制也可以有自己的限制，例如 [進入限制](#access-restrictions)、[轉彎限制](#turn-restrictions) 和 [速度限制](#speed-limits)。
+
+車道層級的限制重用與段層級限制相同的概念，並通常以相同的方式表述，只不過限制是針對單個車道對象，而不是針對整個段的 `road` 屬性。
+
+### 車道連通性
+
+車道連通性指的是從旅行者目前所佔用的車道到下一個車道區塊中連接車道的可用操作。車道連通性是詳細的逐步導航指令所必需的元素。
+
+Overture 運輸模式目前尚未支援車道連通性，但我們正在積極開發這一功能，並希望很快能夠推出。
+
+
+### 解決適用的車道區塊
+
+路段的交通車道結構可能在段的不同位置、不同時間點或兩者之間有所不同。因此，路段攜帶了一個可選的 `lanes` 屬性，其中包含車道區塊 [規則](#rules-and-rule-based-properties) 的列表，而不是靜態的車道區塊。
+
+- 規則可以進行 [幾何範圍限定](#geometric-scoping-linear-referencing)，這允許使用線性參考來指定車道區塊存在的段幾何部分。
+- 規則也可以進行 [時間範圍限定](#temporal-scoping-opening-hours)，這允許指定車道區塊存在的時間。時間範圍限定對於建模在非高峰時段用於停車而在高峰時段用於交通的車道特別有用。在這種情況下，車道區塊規則將被範圍限定到高峰時段。
+
+與 Overture 模式中的所有基於規則的屬性一樣，必須應用 [規則評估算法](#rule-evaluation-algorithm) 來確定在路段的特定位置和時間點適用的車道區塊規則。一旦知道了某個範圍的確定規則，其規則區塊定義了該範圍內的車道結構。
+
+下面的範例展示了連接的兩個段的車道區塊解析過程。
+
+
+- 藍色陰影的或西南向的路段是 [定向的](/schema/concepts/by-theme/transportation/shape-connectivity#directionality) 向東北方向。它有兩條幾何範圍的車道區塊規則：
+    - 第一條規則適用於路段長度的前二分之一，設立三條車道：一條向後行駛（西南），兩條向前行駛（東北）。
+    - 第二條規則適用於路段的最後三分之一，設立兩條車道，分別向兩個方向。
+- 綠色陰影的或東北向的路段定向向西。它有一個靜態的車道區塊，適用於整個路段幾何形狀。
+
+<Tabs>
+  <TabItem value="diagram" label="Diagram" default>
+
+<div style={{ textAlign: "center" }}>
+
+<figure>
+
+<ThemedImage
+  alt='A segment with two geometrically-scoped lane blocks connected to a segment oriented in the opposite direction.'
+  sources={{
+    light: useBaseUrl('/img/transportation/lane-blocks-light.png'),
+    dark: useBaseUrl('/img/transportation/lane-blocks-dark.png'),
+  }}
+/>
+
+<figcaption>
+
+*A segment with two [geometrically-scoped](/schema/concepts/scoping-rules#geometric-scoping-linear-referencing) lane blocks connected to a segment oriented in the opposite direction.*
+
+</figcaption>
+
+</figure>
+
+</div>
+
+  </TabItem>
+
+  <TabItem value="segment1" label="Segment 1 Data">
+
+<CodeBlock language="yaml">{ ExampleLanesResolutionSegment01 }</CodeBlock>
+
+  </TabItem>
+
+  <TabItem value="connector" label="Connector Data">
+
+<CodeBlock language="yaml">{ ExampleLanesResolutionConnector }</CodeBlock>
+
+  </TabItem>
+
+
+  <TabItem value="segment2" label="Segment 2 Data">
+
+<CodeBlock language="yaml">{ ExampleLanesResolutionSegment02 }</CodeBlock>
+
+  </TabItem>
+
+</Tabs>

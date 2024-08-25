@@ -1,0 +1,22 @@
+﻿---
+title: 製圖學
+---
+
+Cartographic suggestions
+===
+
+import JSONSchemaViewer from "@theme/JSONSchemaViewer";
+import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
+import yamlLoad from "@site/src/components/yamlLoad"
+import MainDefs from "!!raw-loader!@site/docs/_schema/defs.yaml";
+
+
+製圖學屬性提供了關於在特定縮放級別顯示 Overture  Features 的建議，並使用排序順序來正確地在地圖上層疊 Features 。例如，**land_cover**  Features 類型提供了兩個顯示詳細級別，這些級別在 schema 中由 `min_zoom` 和 `max_zoom` 指定。
+
+
+<JSONSchemaViewer
+  schema={ yamlLoad(MainDefs) }
+  resolverOptions={ generateResolverOptions( {yamlBasePath: '/', jsonPointer:"#/$defs/propertyContainers/cartographyContainer/properties/cartography" })}/>
+
+
+

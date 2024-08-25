@@ -1,0 +1,32 @@
+﻿---
+title: Python Command-line Tool
+---
+
+Overture 的 Python Command-line Tool 可以下載感興趣區域內的資料，並將其轉換為多種常見的地理空間檔案格式。[此範例](/blog/2024/05/16/land-cover/) 展示了如何在 Jupyter notebook 中使用該工具下載 Overture 的土地覆蓋資料。
+
+:::note
+此條目還在實驗階段，可能會有所變化。請參閱 [overturemaps-py 存儲庫](https://github.com/OvertureMaps/overturemaps-py) 或英文版文檔以得到及時更新。
+:::
+
+## 安裝
+`pip install overturemaps`
+
+## 開始使用
+將特定 bounding boxes 的建築物面積下載為 GeoJSON，並命名為「boston.geojson」。
+
+$ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=building -o boston.geojson
+## 用法
+**download**
+
+目前 overturemaps 實用程式只有一個選項：download。它將 Overture Maps 資料下載到指定的檔案格式中，並且可以選擇 bounding boxes 。在指定 bounding boxes 時，僅傳輸最小資料。這讓輸出串流可以處理幾乎無限大的 bounding boxes 。
+
+指令選項：
+
+- `--bbox`（可選）：西、南、東、北經緯度坐標。省略時將下載指定類型的整個資料集。
+- `-f`（必填：其中之一「geojson」、「geojsonseq」、「geoparquet」）：輸出格式。
+- `--output/-o`（可選）：輸出檔案的位置。省略時，輸出將寫入 stdout。
+- `--type/-t`（必填）：要下載的 Overture 地圖資料類型。類型範例用於建立建築物面積、POI 的地點資料等。執行 overturemaps download --help 可得到允許類型的完整清單。
+
+這些資料不與其他伺服器請求資料，而是直接從 Overture 的 S3 儲存貯體下載。通過在每列 Overture 分發中包括 bounding boxes 範圍，底層 Parquet 讀取器使用 Parquet 摘要統計訊息來下載所需區域資料所需要的最小資料量。
+
+為了找到感興趣的 bounding boxes ，我們喜歡來自 [Klokantech](https://www.klokantech.com/) 的這個 [bounding box](https://boundingbox.klokantech.com/) 工具。選擇 CSV 格式，並將值複製到 `--bbox` 欄位中。

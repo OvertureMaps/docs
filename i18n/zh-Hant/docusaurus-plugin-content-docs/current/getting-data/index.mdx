@@ -1,0 +1,48 @@
+﻿---
+title: 請求 Overture 資料
+---
+
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+Overture 的六個資料主題 &mdash; 地址, [base](/guides/base), [建築物](/guides/buildings), [區域](/guides/divisions), [地點](/guides/places), 以及 [交通](/guides/transportation) &mdash; 可以在 Amazon S3 和 Microsoft Azure Blob Storage 這兩個位置免費獲取：
+
+| 提供者 | 位置 |
+| ------ | -------- |
+| Amazon S3 | `s3://overturemaps-us-west-2/release/` |
+| Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/` |
+
+最新的發布路徑為：
+<QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
+
+## GeoParquet
+
+Overture 以 [GeoParquet](https://geoparquet.org/) 格式分發其資料集，這是一種 column-oriented 的空間資料格式，是 [Apache Parquet](https://parquet.apache.org/) 的向後兼容擴充套件。Parquet (和 GeoParquet) 對 "cloud-native" 查詢進行了改良，這代表可以使用許多開發者友好的工具來有效地獲取雲端托管資料的 column "chunks"。如果對 GeoParquet 不熟悉，可以參考 [這篇指南](https://guide.cloudnativegeo.org/geoparquet/)。
+
+## 僅請求需要的資料（建議選項）
+
+_強烈建議_ 使用 AWS 和 Azure 上可用的服務來獲得雲端資料，或者使用像 [DuckDB](https://duckdb.org/) 這樣的本地安裝查詢引擎。這樣可以讓您只下載所需的資料集。也可以使用 Overture 的實驗性 Python command-line tool 來按功能類型和感興趣區域下載資料。
+
+- [Amazon Athena](athena-aws)（需要有帳號）
+- [Microsoft Synapse](synapse-azure)（需要有帳號）
+- [DuckDB](duckdb)
+- [Python command-line tool](overturemaps-py)
+
+## 如果我想要所有的資料怎麼辦？
+
+:::warning
+確定嗎？所有檔案的總大小為 **~440 GB**。
+:::
+
+可以直接從 Azure Blob Storage 或 Amazon S3 下載 GeoParquet。以下是操作步驟：
+
+在安裝 [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) 之後，您可以使用以下指令從 S3 下載檔案。將 `<DESTINATION>` 設定為本地目錄路徑來下載檔案，或設定為您控制的 `s3://` 路徑來將檔案複製到您的 S3 儲存貯體中。
+
+<QueryBuilder   query="aws s3 cp --region us-west-2 --no-sign-request --recursive s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/ <DESTINATION>"
+                language="text">
+</QueryBuilder>
+
+使用 [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/) 或 [AzCopy](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json#download-azcopy) 指令從 Azure Blob Storage 下載檔案。下面是一個 `azcopy` 指令範例。
+
+<QueryBuilder   query='azcopy copy "https://overturemapswestus2.dfs.core.windows.net/release/__OVERTURE_RELEASE/" "<<local directory path>>"  --recursive'
+                language="text">
+</QueryBuilder>

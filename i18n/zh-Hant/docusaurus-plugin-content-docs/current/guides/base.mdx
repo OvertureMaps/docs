@@ -1,0 +1,28 @@
+---
+title: 入門
+---
+
+## 概要
+
+Overture Maps 的 `base` 主題提供了渲染完整底圖所需的土地和水域特徵。這些特徵目前來源於 [Daylight Earth Tables](https://daylightmap.org/earth/) 架構，包括 [Daylight Coastlines](https://daylightmap.org/coastlines.html)。該主題包含五種類型的特徵：
+
+- **`infrastructure`**: 基礎設施是基地台和纜線、碼頭、橋樑這類的設施。
+- **`land`**: 從 OSM 海岸線逆推出的陸地表面的標示；轉換成 OpenStreetMap 的自然標籤。
+- **`land_cover`**: 來自 [ESA WorldCover](https://esa-worldcover.org/en) 的高解析度光學地球觀測資料。
+- **`land_use`**: 人類對土地的使用分類；轉換 OpenStreetMap 的 landuse 標籤。
+- **`water`**: 陸地和海洋水面物理特徵；轉換 OpenStreetMap 的自然和水道標籤。
+
+## 架構設計選擇
+
+- 基本的特徵分類為 `type`、`subtype` 和 `class`，視情況而定。
+- 解析和標準化常見的 OSM 標籤，如 `height` 和 `ele`。
+- 提取一致的 OSM 標籤，如 `wikidata`，作為頂層屬性。
+- 直接通過其餘相關的 OSM 標籤。
+
+## 架構參考
+
+- [探索基礎設施特徵類型的架構](/schema/reference/base/infrastructure)。
+- [探索土地特徵類型的架構](/schema/reference/base/land)。
+- [探索土地覆蓋特徵類型的架構](/schema/reference/base/land_cover)。
+- [探索土地使用特徵類型的架構](/schema/reference/base/land_use)。
+- [探索水域特徵類型的架構](/schema/reference/base/water)。

@@ -1,0 +1,53 @@
+---
+title: connector
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import JSONSchemaViewer from "@theme/JSONSchemaViewer";
+import generateResolverOptions from "@site/src/components/shared-libs/generateResolverOptions"
+import yamlLoad from "@site/src/components/yamlLoad"
+import ConnectorSchema from '!!raw-loader!@site/docs/_schema/transportation/connector.yaml';
+import ConnectorExample from '!!raw-loader!@site/docs/_examples/transportation/docusaurus/connector.yaml';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Connector 
+
+Connector 在 [Segment](/schema/reference/transportation/segment) 之間創建物理連接。
+
+<table>
+  <tbody>
+  <tr>
+    <th>Geometry Type</th>
+    <td><code>Point</code></td>
+  </tr>
+  <tr>
+    <th>Theme</th>
+    <td><code>transportation</code></td>
+  </tr>
+  <tr>
+    <th>Type</th>
+    <td><code>connector</code></td>
+  </tr>
+  </tbody>
+</table>
+
+Connector 通過定義兩個或多個[ Segment ](/schema/reference/transportation/segment)之間的物理連接點，幫助確定交通網絡的拓撲結構。
+
+除了它們的點幾何和所有 Overture 特性所需的核心屬性外，Connector 沒有其他屬性。
+
+## 架構
+
+
+<Tabs>
+  <TabItem value="browsable" label="Browsable" default>
+    <JSONSchemaViewer schema={ yamlLoad(ConnectorSchema) } resolverOptions={ generateResolverOptions({remote: true, yamlBasePath: '/transportation'})}/>
+  </TabItem>
+  <TabItem value="yaml" label="YAML" default>
+    <CodeBlock language="jsx">{ConnectorSchema}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+## 範例
+
+<CodeBlock language="json">{ JSON.stringify(yamlLoad(ConnectorExample), null, 2) }</CodeBlock>

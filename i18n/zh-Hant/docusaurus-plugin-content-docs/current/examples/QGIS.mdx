@@ -1,0 +1,89 @@
+---
+title: Overture Maps + QGIS
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import BoulderCoDuckDB from '!!raw-loader!@site/src/queries/duckdb/boulder_co_duckdb.sql';
+import BoulderCoDuckDBSpatial from '!!raw-loader!@site/src/queries/duckdb/boulder_co_duckdb_spatial.sql';
+
+在這個範例中，將會示範將 Overture Maps 資料匯入 [QGIS](https://www.qgis.org/)，這是一個功能強大且受歡迎的開源地理訊息系統（GIS）。QGIS 可以處理幾乎所有的空間資料格式，包括 [Parquet](https://parquet.apache.org/docs/) 和 [GeoParquet](https://geoparquet.org/)。一旦將資料導入 QGIS，您可以進行資料分析、資料合併、可視化以及美麗的製圖工作。
+
+這個範例中最棘手的部分是確保您安裝的是較新版本的 QGIS（GDAL > 3.5），它能直接讀取 `Parquet` 和 `GeoParquet` 檔案。我們將引導您完成這個過程。
+
+<details>
+
+    <summary>說明：安裝 GDAL 版本大於 3.5 的 QGIS 以支援存取 `(geo)parquet`。</summary>
+
+    <Tabs>
+        <TabItem value="mac" label="MacOS" default>
+            可以在這裡找到最新的 Mac 安裝程式：[github.com/opengisch/qgis-conda-builder/releases](https://github.com/opengisch/qgis-conda-builder/releases)
+
+            [conda 套件](https://anaconda.org/conda-forge/qgis) 的 QGIS 也支援 Parquet 格式。
+
+        </TabItem>
+
+        <TabItem value="windows" label="Windows" default>
+            大多數 Windows 版本的 QGIS 都支援 Parquet 格式。
+        </TabItem>
+
+        <TabItem value="linux" label="Linux" default>
+            QGIS 的 [conda 套件](https://anaconda.org/conda-forge/qgis) 支援 Parquet 格式。
+
+            還有一個包含 Parquet 支援的 Flatpak QGIS 套件：
+
+            ```bash
+            flatpak install --user https://dl.flathub.org/build-repo/94031/org.qgis.qgis.flatpakref
+            ```
+        </TabItem>
+    </Tabs>
+</details>
+
+## 1. 下載 Overture 的資料
+
+<Tabs>
+    <TabItem value="DuckDB">
+
+        僅使用 `bbox` 參數，我們可以不用處理任何幾何資料，有效地搜尋所有 Overture 資料。使用 `SELECT *`，簡單的下載 Overture 中所有主題和類型的 _所有_ 資料。注意：如果查詢被連接錯誤中斷，可以先嘗試執行以下指令：`SET http_keep_alive=false;`。
+
+        <QueryBuilder query={BoulderCoDuckDB}></QueryBuilder>
+
+        注意，此查詢從所有 Overture 主題中收集資料，查詢條件為 `theme=*/type=*/*`。結果檔案包含 _所有_ 列和多種幾何類型。
+
+
+
+    </TabItem>
+
+    <TabItem value="DuckDB Spatial">
+
+        `spatial` 擴充套件可以讓 DuckDB 讀取幾何圖形並將檔案轉換為通用的空間格式。這個查詢將會把 `transportation` 主題中的所有 `segments` 子類型的 `road` 下載到一個 _shapefile_ 檔案中。
+
+        <QueryBuilder query={BoulderCoDuckDBSpatial}></QueryBuilder>
+
+    </TabItem>
+
+    <TabItem value="Python">
+
+       新的 [`overturemaps-py`](https://github.com/OvertureMaps/overturemaps-py) Python 工具可以將 Overture 資料下載為 `geojson` 和 `geoparquet` 格式。這個範例下載了波士頓周圍的建築資料。
+
+        ```bash
+        $ pip install overturemaps
+
+        $ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 \
+            -f geoparquet --type=building --output=boston.geoparquet
+        ```
+
+        注意：執行 `overturemaps download --help` 以輸出完整的類型和輸出格式列表。
+
+
+    </TabItem>
+
+</Tabs>
+
+
+## 2. 將資料添加到 QGIS
+我們在步驟 1 中創建的所有資料檔案都是向量檔案，可以作為圖層添加到 QGIS 中。最簡單的方法是將檔案直接拖放到地圖畫布上。
+
+<!-- [Overture parquet files in QGIS](/img/qgis-parquet-drag-drop.gif) -->
+<img src='/img/qgis-parquet-drag-drop.gif' alt='Drag-n-drop parquet files in QGIS' width='65%'/>

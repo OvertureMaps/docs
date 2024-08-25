@@ -1,0 +1,14 @@
+﻿---
+title: Synapse (Azure)
+---
+
+import QueryBuilder from '@site/src/components/queryBuilder';
+import MicrosoftSynapseExample from '!!raw-loader!@site/src/queries/synapse/seattle_places.sql';
+
+您需要創建一個帳戶才能使用 [Synapse](https://azure.microsoft.com/en-us/products/synapse-analytics/) 和其他 Microsoft Azure 服務。
+
+在您的 Azure 帳戶中，創建一個 [Synapse 工作區](https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)。然後，您可以執行此範例查詢來得到西雅圖的地點：
+
+<QueryBuilder query={MicrosoftSynapseExample}></QueryBuilder>
+
+更多訊息請參考 Microsoft Learn 上的 ["使用無伺服器 SQL pool 查詢檔案"](https://learn.microsoft.com/en-us/training/modules/query-data-lake-using-azure-synapse-serverless-sql-pools/3-query-files)。

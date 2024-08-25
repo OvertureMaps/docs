@@ -1,0 +1,113 @@
+﻿---
+title: 土地植被狀況即時更新
+---
+
+![land cover gif](/img/blog/lc.gif)
+
+## 製圖師們的福音！
+
+[Overture Maps 的 5 月發佈](https://docs.overturemaps.org/release/latest) 包括了新的高解析度土地植被資料*以及*新的製圖架構屬性。
+
+我們的 `land_cover` 圖層是從[歐洲太空總署 2020 年 WorldCover (10m) 光柵資料](https://esa-worldcover.org/en)衍生的向量資料。它類似於 [Daylight](https://daylightmap.org/2023/10/11/landcover.html) 地圖分發中的土地植被層，但 Overture Maps 添加了更高解析度的資料（縮放級別 15），提供了更多細節和土地植被類別。新的資料中包含 10 種子類型：雪地、森林、城市、草地、農作物、荒漠、濕地、苔蘚、紅樹林和灌木。
+
+我們的 5 月發佈還包括了[架構屬性](https://docs.overturemaps.org/schema/reference/base/land_cover/)，為製圖時最佳使用 Overture Maps 資料提供製圖“提示”。我們添加了 `min_zoom` 和 `max_zoom`，以使用常見的“滑動地圖”縮放級別規範來定義每個解析度土地植被的推薦縮放級別。這是改善製圖師使用者體驗的第一步，我們計劃在未來的 Overture Maps 資料發佈中擴展這些屬性。
+
+## 探索土地植被
+
+在下面的範例中，將展示如何使用 [lonboard](https://developmentseed.org/lonboard/latest/) 和 [Overture Maps Python Command-line Tool](https://github.com/OvertureMaps/overturemaps-py) 提取、處理和視覺化感興趣區域的土地植被資料。我們建議您查閱 lonboard 文檔中的[這個範例](https://developmentseed.org/lonboard/latest/examples/overture-maps/)，以更好地理解此處使用的方法。您可以在 [Notebook Sharing Space](https://notebooksharing.space/view/b63f6b3dda1da99c45caf53284fbc508aaae0a43480b43bb0316db636c5e6677) 查看和下載完整的 Jupyter Notebook。
+
+![land cover](/img/blog/notebook-overture-lc.png)
+
+要跟隨這些步驟，您需要執行 [JupyterLab 或 Jupyter Notebook](https://jupyter.org/) 並安裝以下必要套件：
+- [lonboard](https://developmentseed.org/lonboard/latest/#install)
+- [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
+- [pandas](https://pandas.pydata.org/)
+- [GeoPandas](https://geopandas.org/en/stable/index.html)
+- [Shapely](https://shapely.readthedocs.io/en/stable/index.html) 
+
+
+
+``` python
+import pandas as pd
+import geopandas as gpd
+import overturemaps 
+from shapely import wkb
+from lonboard import Map, PolygonLayer
+from lonboard.colormap import apply_categorical_cmap
+```
+
+``` python
+# specify bounding box
+bbox =  -78.6429, 39.463, -73.7806, 41.6242
+```
+
+``` python
+# read in Overture Maps land_cover data type
+table = overturemaps.record_batch_reader("land_cover", bbox).read_all()
+table = table.combine_chunks()
+```
+
+``` python
+# convert to dataframe
+df = table.to_pandas()
+```
+
+``` python
+# filter for higher resolution land_cover features
+df_h = df[df.cartography.apply(lambda x: x['min_zoom'] == 8)]
+```
+
+``` python
+# create color map for land_cover subtypes, loosely based on natural-color palette: https://www.shadedrelief.com/shelton/c.html
+color_map = {
+    "urban": [167, 162, 186],
+    "forest": [134, 178, 137],
+    "barren": [245, 237, 213],
+    "shrub": [239, 218, 182],
+    "grass": [254, 239, 173],
+    "crop": [222, 223, 154],
+    "wetland": [158, 207, 195], 
+    "mangrove": [83, 171, 128],
+    "moss": [250, 230, 160],
+    "snow": [255, 255, 255],  
+}
+```
+
+``` python
+# apply color map to land_cover subtypes
+colors = apply_categorical_cmap(df_h.subtype, color_map)
+```
+
+``` python
+# dataframe to geodataframe, set crs
+gdf = gpd.GeoDataFrame(
+    df_h, 
+    geometry=df_h['geometry'].apply(wkb.loads), 
+    crs="EPSG:4326"
+)
+```
+
+``` python
+# create map layer 
+layer = PolygonLayer.from_geopandas(
+    gdf= gdf[['id','subtype', 'cartography', 'geometry']].reset_index(drop=True),
+    get_fill_color=colors,
+    get_line_color=colors,
+)
+```
+
+``` python
+#render map
+view_state = {
+    "longitude": -76.2,
+    "latitude": 39.6,
+    "zoom": 8,
+    "pitch": 65,
+    "bearing": 5,
+}
+m = Map(layer, view_state=view_state)
+m
+```
+
+
+

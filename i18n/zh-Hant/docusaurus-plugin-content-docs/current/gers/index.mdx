@@ -1,0 +1,47 @@
+﻿---
+title: 全球實體參考系統 (GERS)
+slug: /gers
+---
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## 了解 GERS
+
+全球實體參考系統 (GERS) 是一個用於結構化、編碼和匹配地圖資料的框架，旨在提供一個共享的通用參考。所有 Overture 特徵都有一個唯一的 ID，對於某些特徵類型，這些唯一 ID 稱為 Overture ID 或 GERS ID，這些 ID 會註冊到 GERS 並預期為 [穩定](stability) 的。GERS 提供了一種跨資料集匹配特徵、跟踪資料穩定性以及檢測資料錯誤的機制。
+
+## Overture ID 是什麼樣的？
+
+Overture 中的唯一 ID 是 128 位和 32 個字符。您可以在下方查看 Overture 最新發布中的五個建築特徵的唯一 ID。該屬性在架構中顯示為 `id`。
+
+```sql
+D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1) limit 5;
+┌──────────────────────────────────┐
+│                id                │
+│             varchar              │
+├──────────────────────────────────┤
+│ 08bf2a40219b0fff0200c394dae731bd │
+│ 08bf35ad6a05afff0200e90ab3b011fa │
+│ 08bf35ad6a058fff020009945ce09d65 │
+│ 08bf35ad6a04efff02006264a736fc56 │
+│ 08bf35ad6a04afff0200cf5e511a3f1b │
+├──────────────────────────────────┤
+│             5 rows               │
+└──────────────────────────────────┘
+```
+
+## 穩定性和可追溯性
+
+註冊到 GERS 的唯一 ID 旨在在多個 Overture 發布版本中保持 [穩定](stability) &mdash; 在合理的錯誤容忍範圍內。當穩定性無法保證時，我們將嘗試在 [GERS 更新日誌](changelog) 中提供可追溯性。例如：
+
+- 一個單一的道路段被一條新路分割並變成兩個道路段：1 個唯一 ID → 2 個新唯一 ID；
+- 當獲得更高分辨率的資料集時，一個大型建築物足跡被確定為四個較小的建築物：1 個唯一 ID → 4 個新唯一 ID；
+- 當更高分辨率的影像可用時，建築物向西移動了 10 米：該功能的唯一 ID 得以保留。
+
+## 使用 GERS
+
+這裡有兩種使用 GERS 的通用機制：
+
+1. **關聯資料。** 您可以獨立地將自己的資料或第三方資料與 Overture 資料相關聯。如果您的資料集中與 Overture 資料集中的功能匹配，您可以將現有的 Overture ID 分配給匹配的功能。現在，您的資料已啟用 GERS，可以通過 Overture ID 與 Overture 生態系統中的任何其他啟用 GERS 的資料集相關聯。
+   
+2. **貢獻資料。** 如果一個組織向 Overture Maps Foundation 提供資料，我們的工程團隊將會將該資料集中的功能與 Overture 中的功能進行匹配。匹配的功能可能會被分配一個現有的 Overture ID，我們也可能會為新功能生成新的 Overture ID。
+
+您可以在本檔案的 [GERS 示範](gers-demonstrations) 部分中找到主題特定的範例。
