@@ -8,6 +8,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 import Peaks from '!!raw-loader!@site/src/queries/duckdb/mountain_peaks.sql';
 import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
 import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level_geometries.sql';
+import NewYorkPizza from '!!raw-loader!@site/src/queries/duckdb/new_york_pizza.sql';
 
 [DuckDB](https://duckdb.org/) is an analytics tool that allows you to query remote files and download only the data you want.
 
@@ -20,7 +21,16 @@ import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level
 
 ## Downloading Overture Data
 
+These SQL queries will access Overture data in the cloud and download only the attributes that you request.
+
 <Tabs queryString="query">
+
+<TabItem value="Places" label="Places">
+
+New York Pizza
+<QueryBuilder query={NewYorkPizza}></QueryBuilder>
+</TabItem>
+
 <TabItem value="Buildings" label="Buildings">
 
 This query accesses Overture buildings data hosted on Azure to download named buildings around Detroit, Michigan.
