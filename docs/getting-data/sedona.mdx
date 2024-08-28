@@ -5,7 +5,6 @@ title: Sedona / Spark
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
-import SedonaSetup from '!!raw-loader!@site/src/queries/partials/sedona_setup.py';
 
 As a series of GeoParquet files, Overture data is already optimized for distributed computing environments. The following example shows you how to work with Overture data in [Sedona](https://sedona.apache.org/), a cluster computing system for spatial data.
 
@@ -24,14 +23,29 @@ A Jupyter Lab and notebook examples is now available in your browser at [localho
 
 Create a new Python notebook with the following first cell:
 
-<QueryBuilder query={SedonaSetup} lang="python"></QueryBuilder>
+```python
+from sedona.spark import *
 
-This will initialize your PySpark/Sedona environment and point it to the latest Overture data. Sedona knows the format is GeoParquet, so we can take full advantage of spatial queries.
+config = SedonaContext.builder().config(
+    "fs.s3a.aws.credentials.provider",
+    "org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider"
+    ).getOrCreate()
+sedona = SedonaContext.create(config)
+```
+
+After initializing your PySpark/Sedona environment, you can load theme data directly from S3. The following examples leverage Sedona's understanding of GeoParquet, so we can take full advantage of spatial queries:
+
+<Tabs>
+<TabItem value="places" label="Places">
+
+<QueryBuilder query={`places = sedona.read.format("geoparquet").load(
+    "s3a://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/")`} lang="python">
+</QueryBuilder>
 
 For example, to find all of the places in Seattle, you can apply a spatial filter with the bounding box for Seattle:
 
 ```python
-df.filter("""ST_Contains(
+places.filter("""ST_Contains(
     ST_GeomFromWKT('POLYGON((-122.459681 47.734124, -122.224433 47.734124, -122.224433 47.481002, -122.459681 47.481002, -122.459681 47.734124))'),
     geometry)""").limit(100).show()
 ```
@@ -39,11 +53,45 @@ df.filter("""ST_Contains(
 Or, find all of the places within 1km of the Space Needle with the following query:
 
 ```python
-df.filter("""ST_DistanceSpheroid(
+places.filter("""ST_DistanceSpheroid(
     ST_GeomFromWKT('POINT(-122.3493 47.6204)'),
     geometry) < 1000
 """)
 ```
+
+
+</TabItem>
+
+<TabItem value="buildings" label="Buildings">
+
+<QueryBuilder query={`df = sedona.read.format("geoparquet").load(
+    "s3a://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/")`} lang="python">
+</QueryBuilder>
+
+
+</TabItem>
+
+<TabItem value="divisions" label="Divisions">
+
+<QueryBuilder query={`df = sedona.read.format("geoparquet").load(
+    "s3a://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=divisions/type=division_area/")`} lang="python">
+</QueryBuilder>
+
+
+</TabItem>
+
+<TabItem value="transportation" label="Transportation">
+
+<QueryBuilder query={`df = sedona.read.format("geoparquet").load(
+    "s3a://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=transportation/type=segment/")`} lang="python">
+</QueryBuilder>
+
+
+</TabItem>
+
+
+</Tabs>
+
 
 :::tip
 These are just examples to show you how to interface with Overture data in Sedona. Running this code locally on a single-node docker image will not see any performance benefits — but when deployed to the cloud, you can operate on the entire
