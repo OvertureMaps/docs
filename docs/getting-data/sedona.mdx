@@ -35,7 +35,7 @@ sedona = SedonaContext.create(config)
 
 After initializing your PySpark/Sedona environment, you can load theme data directly from S3. The following examples leverage Sedona's understanding of GeoParquet, so we can take full advantage of spatial queries:
 
-<Tabs>
+<Tabs queryString="theme">
 <TabItem value="places" label="Places">
 
 <QueryBuilder query={`places = sedona.read.format("geoparquet").load(
@@ -64,7 +64,7 @@ places.filter("""ST_DistanceSpheroid(
 
 <TabItem value="buildings" label="Buildings">
 
-<QueryBuilder query={`df = sedona.read.format("geoparquet").load(
+<QueryBuilder query={`buildings = sedona.read.format("geoparquet").load(
     "s3a://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/")`} lang="python">
 </QueryBuilder>
 
@@ -73,7 +73,7 @@ places.filter("""ST_DistanceSpheroid(
 
 <TabItem value="divisions" label="Divisions">
 
-<QueryBuilder query={`df = sedona.read.format("geoparquet").load(
+<QueryBuilder query={`divisions = sedona.read.format("geoparquet").load(
     "s3a://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=divisions/type=division_area/")`} lang="python">
 </QueryBuilder>
 
@@ -82,19 +82,19 @@ places.filter("""ST_DistanceSpheroid(
 
 <TabItem value="transportation" label="Transportation">
 
-<QueryBuilder query={`df = sedona.read.format("geoparquet").load(
+<QueryBuilder query={`roads = sedona.read.format("geoparquet").load(
     "s3a://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=transportation/type=segment/")`} lang="python">
 </QueryBuilder>
 
 
 </TabItem>
-
-
 </Tabs>
+
+---
 
 
 :::tip
-These are just examples to show you how to interface with Overture data in Sedona. Running this code locally on a single-node docker image will not see any performance benefits — but when deployed to the cloud, you can operate on the entire
+These are just examples to show you how to interface with Overture data in Sedona. Running locally on a single-node docker image doesn't offer any performance benefits, but when deployed in a distributed cloud environment, you can operate on the entire Overture dataset.
 :::
 
 
