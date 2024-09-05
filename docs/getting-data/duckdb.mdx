@@ -5,50 +5,105 @@ title: DuckDB
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
-import ConfidentMountains from '!!raw-loader!@site/src/queries/duckdb/confident_mountains.sql';
+import Peaks from '!!raw-loader!@site/src/queries/duckdb/mountain_peaks.sql';
 import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
 import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level_geometries.sql';
+import NewYorkPizza from '!!raw-loader!@site/src/queries/duckdb/new_york_pizza.sql';
+import ParisRoads from '!!raw-loader!@site/src/queries/duckdb/paris_roads.sql';
 
-[DuckDB](https://duckdb.org/) is an analytics tool that allows you to query remote files and download only the data you want. 
+[DuckDB](https://duckdb.org/) is powerful analytics tool that allows you to query remote files and download only the data you want.
 
 ## Installation
 
-[Install DuckDB locally](https://duckdb.org/docs/installation/). You'll need extensions to work with spatial data in the cloud. Using the DuckDB CLI, do the following:
+[Install DuckDB](https://duckdb.org/docs/installation/). You'll need extensions to work with spatial data in the cloud. Run the following commands in the DuckDB command line:
 
 1. `INSTALL SPATIAL;` to install the [duckdb_spatial](https://github.com/duckdblabs/duckdb_spatial) extension.
 2. `INSTALL httpfs;` or `INSTALL azure;` to read from either Amazon S3 ([httpfs](https://duckdb.org/docs/guides/import/s3_import.html)) or Microsoft Azure Blob Storage ([azure](https://duckdb.org/docs/extensions/azure)).
 
-## Example queries
+## Downloading Overture Data
 
-### Mountains
-This query selects POIs in the mountain category from the Overture places dataset and outputs them to a GeoJSON file.
+These SQL queries will access Overture data in the cloud and download only the attributes that you request.
 
-<QueryBuilder query={ConfidentMountains}></QueryBuilder>
+<Tabs queryString="query">
 
-:::tip
-To write the data to a shapefile, replace the last two lines with:
+<TabItem value="Places" label="Places">
 
-```sql
-    ) TO 'overture_places_mountains_gt90.shp'
-WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
-```
-:::
+Download all pizza restaurants in New York City as a `GeoJSON` file.
 
-### Buildings in Detroit
+<QueryBuilder query={NewYorkPizza}></QueryBuilder>
 
-This query pulls building geometries and selected attributes from the Overture buildings dataset for an area in Detroit.
+See the [places schema](/schema/reference/places/place) to learn more about each attribute or the [common schema concepts](/schema/concepts/names/) to better understand `names.primary` from `names.common`.
+</TabItem>
+
+<TabItem value="Buildings" label="Buildings">
+
+Access Overture buildings data hosted on Azure to download named buildings around Detroit, Michigan. Saves as newline-delimited GeoJSON.
 
 <QueryBuilder query={DetroitBuildings}></QueryBuilder>
+</TabItem>
 
-### County polygons
+<TabItem value="Roads" label="Roads">
 
-This query grabs county-level geometries for Pennsylvania from the divisions dataset and outputs them to a GeoJSON file. 
+Download roads in Paris around the _Arc de Triomphe_ and save as GeoJSON.
+
+<QueryBuilder query={ParisRoads}></QueryBuilder>
+</TabItem>
+
+<TabItem value="Mountains" label="Mountains">
+
+Download mountain peaks in Oregon, USA from the base theme, convert the elevation attribute to feet, and save the result as a GeoJSON file.
+
+<QueryBuilder query={Peaks}></QueryBuilder>
+
+</TabItem>
+
+<TabItem value="Counties" label="Counties">
+
+County-level geometries for Pennsylvania from the divisions theme and outputs a GeoPackage.
 
 <QueryBuilder query={CountyGeometries}></QueryBuilder>
 
+</TabItem>
+
+<TabItem value="geoparquet" label="As GeoParquet (Experimental)">
+
+The [_Nightly build (bleeding edge)_](https://duckdb.org/docs/installation/?version=main) of DuckDB includes support for [reading and writing GeoParquet](https://github.com/duckdb/duckdb/pull/12503). For example, using at least DuckDB v1.0.1-dev4917, you can run the following query:
+```sql
+COPY(
+    SELECT
+      *
+    FROM read_parquet('s3://overturemaps-us-west-2/release/2024-08-20.0/theme=places/type=place/*', filename=true, hive_partitioning=1)
+    LIMIT 100000
+) TO 'places.parquet';
+```
+
+DuckDB recognizes the input as geoparquet and will automatically cast the _geometry_ column to a `GEOMETRY` type.
+The `COPY` command writes a parquet file of 100,000 places named `places.parquet` with the appropriate geoparquet metadata.
+
+</TabItem>
+</Tabs>
+
+---
+
+:::tip
+To download the data as `shapefile`, replace the last line of any of the above queries:
+
+```sql
+) TO 'overture_data.shp' WITH (FORMAT GDAL, DRIVER 'ESRI Shapefile');
+```
+
+or as a `geopackage`:
+
+```sql
+) TO 'overture_data.gpkg' WITH (FORMAT GDAL, DRIVER 'GeoPackage');
+```
+
+The DuckDB Spatial extension supports more than [50 geospatial file formats](https://duckdb.org/docs/extensions/spatial.html#st_read--read-spatial-data-from-files).
+:::
+
+
 ## Next steps
 
-Visualize the data in QGIS or kepler. 
-Make a map.
-Consult one of our guides to learn more about the data and for mroe advanced queries. 
-
+- Visualize the data in [QGIS](/examples/QGIS) or [kepler.gl](/examples/kepler-gl).
+- [Make an interactive map](/examples/build-a-map).
+- Consult one of our [Data Guides](/guides/) to learn more about the data and for more advanced queries.
