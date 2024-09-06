@@ -25,6 +25,8 @@ Overture Tiles are generated with each release. The current beta distribution of
 
 `s3://overturemaps-tiles-us-west-2-beta/RELEASE/THEME.pmtiles`
 
+Where `RELEASE` has the data minor version trimmed, e.g. `2024-08-20`, instead of `2024-08-20.0`.
+
 These public S3 URLs can also be accessed via HTTP:
 
 `https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/RELEASE/THEME.pmtiles`
@@ -33,7 +35,7 @@ These public S3 URLs can also be accessed via HTTP:
 
 Local and remote HTTP URLs can be previewed at [pmtiles.io](https://pmtiles.io).
 
-[View 2024-07-22/places.pmtiles on pmtiles.io](https://pmtiles.io/?url=https%3A%2F%2Foverturemaps-tiles-us-west-2-beta.s3.amazonaws.com%2F2024-07-22%2Fplaces.pmtiles)
+[View 2024-08-20/places.pmtiles on pmtiles.io](https://pmtiles.io/?url=https%3A%2F%2Foverturemaps-tiles-us-west-2-beta.s3.amazonaws.com%2F2024-08-20%2Fplaces.pmtiles)
 
 ### Area Extracts
 
@@ -42,7 +44,7 @@ To create a new tileset for only part of the world, use the `extract` command of
 To get all `buildings` tiles around Ghent, Belgium:
 
 ```
-pmtiles extract https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/buildings.pmtiles ghent.pmtiles --bbox=3.660507,51.004250,3.784790,51.065996
+pmtiles extract https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-08-20/buildings.pmtiles ghent.pmtiles --bbox=3.660507,51.004250,3.784790,51.065996
 ```
 
 ## On AWS
@@ -78,7 +80,15 @@ npm run cdk deploy
 
   * Select the **OvertureTilesQueue** as the Job queue.
 
-  * Once the job is complete, the tileset will be available at `s3://BUCKET_NAME/RELEASE/THEME.pmtiles`.
+  * Input the **Command** as a JSON list: `["2024-08-20.0","my-bucket","addresses"]`
+
+    * The first item is the release version, including minor version: `2024-08-20.0`
+
+    * The second item is the target bucket: `my-bucket`
+
+    * The third item is the theme: `addresses`
+
+  * Once the job is complete, the tileset will be available at `s3://BUCKET_NAME/RELEASE/THEME.pmtiles`, e.g. `s3://mybucket/2024-08-20/addresses.pmtiles`
 
 ## On Your Workstation
 
@@ -105,7 +115,7 @@ The above command outputs `base.pmtiles` in the `data` dir.
 * for other themes, run the theme script in `themes/`:
 
 ```sh
-scripts/2024-07-22/places.sh overture places.pmtiles
+scripts/2024-08-20/places.sh overture places.pmtiles
 ```
 
 This reads from Overture data in `overture` and writes `places.pmtiles`.
