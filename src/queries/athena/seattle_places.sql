@@ -7,9 +7,6 @@ SELECT id,
        ST_GeomFromBinary(geometry) AS geometry
 FROM
     overture.release.__ATHENA_OVERTURE_RELEASE
-WHERE theme='places'
-    AND type='place'
-    AND bbox.xmin > -122.44
-        AND bbox.xmax < -122.25
-        AND bbox.ymin > 47.56
-        AND bbox.ymax < 47.71
+WHERE type='place'
+    AND bbox.xmin BETWEEN -122.44 AND -122.25
+    AND bbox.ymin BETWEEN 47.56 AND 47.71
