@@ -89,7 +89,6 @@ The addresses GeoParquet file contains the following properties:
 | **geometry** | blob | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString.
 | **bbox** | array | The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format.
 | **version** | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed.
-| **update_time** | string | Timestamp when the feature was last updated.
 | **sources** | array | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified.
 | **subtype** | string | Category of the division from a finite, hierarchical, ordered list of categories (e.g. country, region, locality, etc.) similar to a Who's on First placetype.
 | **wikidata** | string | A wikidata ID if available, as found on https://www.wikidata.org/.
@@ -106,6 +105,7 @@ The addresses GeoParquet file contains the following properties:
 | **parent_division_id** | string | Division ID of this division's parent division. Not allowed for top-level divisions (countries) and required for all other divisions. The default parent division is the parent division as seen from the default political perspective, if there is one, and is otherwise chosen somewhat arbitrarily. The hierarchies property can be used to inspect the exhaustive list of parent divisions.
 | **norms** | list | Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases. If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed.
 | **capital_division_ids** | array | Division IDs of this division's capital divisions. If present, this property will refer to the division IDs of the capital cities, county seats, etc. of a division.
+| **capital_of_divisions** | list | Division ID of the division that this feature is the capital of. If present, this property will refer to the division IDs of a parent county, region, country, etc.
 | **division_id** | string | Division ID of the division this area belongs to.
 | **filename** | string | Name of the S3 file being queried.
 | **theme** | string | Name of the Overture theme being queried.
