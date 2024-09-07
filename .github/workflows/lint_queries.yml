@@ -6,6 +6,7 @@
       pull_request:
         paths:
           - 'src/queries/'
+      workflow_dispatch:
 
     permissions:
       id-token: write
