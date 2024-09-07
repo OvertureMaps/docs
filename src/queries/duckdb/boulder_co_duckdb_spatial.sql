@@ -1,6 +1,6 @@
-LOAD spatial;
-LOAD httpfs;
--- Roads
+LOAD spatial; --noqa
+LOAD httpfs;  --noqa
+
 COPY (
     SELECT
         names.primary AS name,

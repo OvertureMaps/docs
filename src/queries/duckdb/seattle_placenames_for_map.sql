@@ -1,5 +1,5 @@
-LOAD spatial;
-LOAD azure;
+LOAD spatial; -- noqa
+LOAD azure;  -- noqa
 -- Access the data on Microsoft Azure in this example
 SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=overturemapswestus2;AccountKey=;EndpointSuffix=core.windows.net';
 COPY (

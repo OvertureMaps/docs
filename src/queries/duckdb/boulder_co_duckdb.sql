@@ -1,4 +1,4 @@
-LOAD httpfs;
+LOAD httpfs;   --noqa
 COPY(
     SELECT
         *

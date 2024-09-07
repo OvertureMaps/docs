@@ -1,5 +1,6 @@
-LOAD spatial;
-LOAD httpfs;
+LOAD spatial; -- noqa
+LOAD httpfs;  -- noqa
+
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
