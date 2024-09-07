@@ -1,5 +1,5 @@
-LOAD spatial;
-LOAD httpfs;
+LOAD spatial; -- noqa
+LOAD httpfs;  -- noqa
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
@@ -7,7 +7,7 @@ COPY (
     SELECT
        id,
        version,
-    -- We are casting these columns to JSON in order to ensure compatibility with our GeoJSON output. 
+    -- We are casting these columns to JSON in order to ensure compatibility with our GeoJSON output.
     -- These conversions may be not necessary for other output formats.
        CAST(names AS JSON) AS names,
        CAST(categories AS JSON) AS categories,

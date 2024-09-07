@@ -3,18 +3,27 @@ description: explore Overture data in Kepler.gl
 title: Overture + Kepler.gl
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 import HyderabadBuildingsAthena from '!!raw-loader!@site/src/queries/athena/hyderabad_buildings.sql';
 import HyderabadBuildingsDuckDB from '!!raw-loader!@site/src/queries/duckdb/hyderabad_buildings.sql';
 
 In this example, we'll query the Overture buildings theme and download data for a specified bounding box. Then we'll load the data into [kepler.gl](https://kepler.gl/demo), an open-source tool for working with large map datasets, and visualize the buildings data by data source: [OpenStreetMap](https://wiki.openstreetmap.org/wiki/Key:building), [Microsoft ML Building Footprints](https://github.com/microsoft/GlobalMLBuildingFootprints), [Esri Community Maps](https://communitymaps.arcgis.com/home), and [Google Open Buildings](https://sites.research.google/open-buildings/).
 
-Requirements: You'll need to install and load the spatial and S3 or Azure extensions for DuckDB. You do not need an account on kepler.gl.
+Requirements: Install DuckDB or log into AWS to access Athena. You do not need an account on kepler.gl.
 
 ## Get only the data you need
-We can use DuckDB to query Overture data to get buildings for our area of interest, in this case a bounding box with Hyderabad, India.
+Using DuckDB or Athena, query Overture data to get buildings for our area of interest, in this case a bounding box with Hyderabad, India.
 
-<QueryBuilder query={HyderabadBuildingsDuckDB}></QueryBuilder>
+<Tabs queryString="engine">
+    <TabItem value="duckdb" label="DuckDB">
+        <QueryBuilder query={HyderabadBuildingsDuckDB}></QueryBuilder>
+    </TabItem>
+    <TabItem value="athena" label="Athena">
+        <QueryBuilder query={HyderabadBuildingsAthena}></QueryBuilder>
+    </TabItem>
+</Tabs>
 
 ## Explore the data in Kepler.gl
 Drag and drop the GeoJSON file into [kepler.gl](https://kepler.gl/demo). Style the feature layer by choosing different colors based on the `primary_source` field. Then you can explore the multiple data sources that Overture has conflated to create the buildings theme.

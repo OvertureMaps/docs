@@ -1,5 +1,5 @@
-LOAD spatial;
-LOAD httpfs;
+LOAD spatial; -- noqa
+LOAD httpfs;  -- noqa
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
@@ -73,7 +73,7 @@ COPY (
         overture.email,
         ST_AsWKB(st_point(osm.lon, osm.lat)) AS geometry
     FROM osm
--- To join the data, we'll first match features that have the same OR similar names 
+-- To join the data, we'll first match features that have the same OR similar names
         LEFT JOIN overture ON (
             osm.name = overture."names.primary"
             OR osm.name ilike concat('%', overture."names.primary", '%')

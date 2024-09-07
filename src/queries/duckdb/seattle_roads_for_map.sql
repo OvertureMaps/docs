@@ -1,5 +1,6 @@
-LOAD spatial;
-LOAD httpfs;
+LOAD spatial; -- noqa
+LOAD httpfs;  -- noqa
+
 COPY (
     SELECT
         level,

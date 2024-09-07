@@ -1,5 +1,5 @@
-INSTALL spatial;
-LOAD spatial;
+INSTALL spatial;                  -- noqa
+LOAD spatial;                     -- noqa
 
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
@@ -7,7 +7,7 @@ SET s3_region='us-west-2';
 COPY (
   -- Create a temp table with the state of Utah
   WITH utah AS (
-    SELECT 
+    SELECT
       id AS utah_id,
       ST_GeomFromWKB(geometry) AS utah_geom
     FROM

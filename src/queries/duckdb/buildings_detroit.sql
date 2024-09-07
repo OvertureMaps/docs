@@ -1,5 +1,5 @@
-LOAD spatial;
-LOAD azure;
+LOAD spatial; --noqa
+LOAD azure;   --noqa
 SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=overturemapswestus2;AccountKey=;EndpointSuffix=core.windows.net';
 
 COPY(
@@ -12,4 +12,5 @@ COPY(
   WHERE names.primary IS NOT NULL
   AND bbox.xmin BETWEEN -84.36 AND -82.42
   AND bbox.ymin BETWEEN 41.71 AND 43.33
+  LIMIT 100
 ) TO 'detroit_buildings.geojsonseq' WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq');
