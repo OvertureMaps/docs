@@ -4,8 +4,8 @@ SELECT
     release.sources [ 1 ].dataset AS primary_source,
     change_type,
     ST_GEOMFROMBINARY(geometry) AS geometry
-FROM v2024_08_20_0 AS release
-    INNER JOIN changelog_v2024_07_22_0 AS changelog ON release.id = changelog.id
+FROM __ATHENA_OVERTURE_RELEASE AS release
+    INNER JOIN __ATHENA_CHANGESET_RELEASE AS changelog ON release.id = changelog.id
 WHERE release.theme = 'buildings'
     AND release.bbox.xmin > 37.165914
     AND release.bbox.xmax < 37.902271
