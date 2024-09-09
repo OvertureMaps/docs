@@ -4,43 +4,44 @@ slug: /gers
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-## Understanding GERS
+## Unique IDs
 
-The Global Entity Reference System (GERS) is a framework for structuring, encoding, and matching map data to a shared universal reference. All features in Overture have a unique ID, and for some feature types those unique IDs, called Overture IDs or GERS IDs, are registered to GERS and are intended to be [stable](stability). GERS provides a mechanism to match features across datasets, track data stability, and detect errors in the data.
+Every feature in Overture is assigned a unique ID that is 32 characters and 128 bits. For some feature types, like `building` that unique ID is intended to be stable, release after release. 
 
-## What does an Overture ID look like?
+Let's track two buildings in Berlin from Overture's [October 2023 alpha release](release/2023-10-19-alpha.0/) to now.
 
-Unique IDs in Overture are 128 bits and 32 characters. Below you can inspect the unique IDs for five building features in Overture's latest release. The property appears as `id` in the schema.
+#### Reichstag buiding
+| Overture release | `id` |
+|------|----------|
+| `2023-10-19-alpha.0` | `0881f1d4887fffff02ffffff7384db11` |
+| `2023-11-14-alpha.0` | `08b1f1d488708fff0200bf6d40c1cf8f` |
+| `2024-08-20.0` | `08b1f1d488708fff0200bf6d40c1cf8f` |
 
-```sql
-D SELECT id FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=buildings/type=building/*', filename=true, hive_partitioning=1) limit 5;
-┌──────────────────────────────────┐
-│                id                │
-│             varchar              │
-├──────────────────────────────────┤
-│ 08bf2a40219b0fff0200c394dae731bd │
-│ 08bf35ad6a05afff0200e90ab3b011fa │
-│ 08bf35ad6a058fff020009945ce09d65 │
-│ 08bf35ad6a04efff02006264a736fc56 │
-│ 08bf35ad6a04afff0200cf5e511a3f1b │
-├──────────────────────────────────┤
-│             5 rows               │
-└──────────────────────────────────┘
-```
+#### Brandenburg gate
+| Overture release| `id` |
+|------|----------|
+| `2023-10-19-alpha.0` | `0881f1d4887fffff02ffffff7e214e74` |
+| `2023-11-14-alpha.0`  | `08b1f1d488601fff020081deb18baf14` |
+| `2023-12-14-alpha.0` | `08b1f1d488601fff02002aee6ba961a4` |
+| `2024-08-20.0`| `08b1f1d488601fff02002aee6ba961a4` |
 
-## Stability and traceability
+## Understand GERS
 
-Unique IDs registered to GERS are intended to be [stable](stability) &mdash; within a reasonable tolerance of error &mdash; across multiple Overture releases. When stability is not possible, we will attempt to provide traceability in a [GERS changelog](changelog). For example:
+The Global Entity Reference System (GERS) is Overture's framework for using unique IDs to structure, encode, and match map data. GERS makes it possible to:
 
-- a single road segment is bisected by a new road and becomes two road segments: 1 unique ID → 2 new unique IDs;
-- a large building footprint is determined to be four smaller buildings when a higher resolution dataset becomes available: 1 unique ID → 4 new unique ID;
-- a building is shifted 10 meters to the west when higher resolution imagery is made available: the unique ID is preserved for that feature.
+- [track the stability](stability) of features in Overture datasets
+- [associate third-party data](gers-demonstrations) to features in Overture datasets
+- [match features](gers-demonstrations) across Overture datasets and third-party datasets
+- [detect changes and improvements](changelog) in Overture data from one release to another
 
 ## Using GERS
 
-Here are two general mechanisms for using GERS:
+We envision the Overture community using GERS in these two general ways:
 
-1. **Associating data.** You can independently associate your own data or third-party data to Overture data. If features in your dataset match features in an Overture dataset, you can assign existing Overture IDs to the matched features. Your data is now GERS-enabled data, ready to be associated via Overture ID to any other GERS-enabled dataset in the Overture ecosystem.
-2. **Contributing data.** If an organization contributes data to the Overture Maps Foundation, our engineering team will match the features in that dataset to features in Overture. Matched features may be assigned an existing Overture ID, and we may generate new Overture IDs for new features. 
+### Associating data
+You can independently associate your own data (or another third-party dataset) with Overture data. This could mean associating real-time traffic data to Overture road segments, insurance data to Overture buildings, or restaurant reviews to features in Overture's places dataset. When this third-party data is matched to an Overture feature, it picks up the GERS ID assigned to that feature and is now "GERS-enabled data" that is ready to be associated via ID to any other GERS-enabled dataset in the Overture ecosystem.
+
+### Contributing data
+If your organization contributes data to the Overture Maps Foundation, our engineering team will match the features in your dataset to features in Overture. Matched features may be assigned an existing GERS ID, and we may generate new IDs for new features. 
  
 You'll find theme-specific examples in the [GERS demonstrations](gers-demonstrations) section of this documentation. 

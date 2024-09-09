@@ -4,18 +4,36 @@ slug: /
 title: Introduction
 ---
 
-Welcome! In this documentation, you'll find [detailed instructions](getting-data) for accessing and handling Overture's large datasets, [reference material](https://docs.overturemaps.org/schema/) to better understand the Overture schema, and [hands-on examples](examples) to help you start exploring and building. Want to see what the Overture community has been making? Check out the [community projects](community) section of our documentation.
+Welcome! Overture provides free and open map data normalized to a [common schema](schema). Our [six data "themes"](guides) &mdash; [addresses](guides/addresses), [buildings](guides(buildings), [base](guides/base), [divisions](guides/divisions), [places](guides/places), and [transportation](guides/transportation) &mdash; contain more than 3.7 billion features and will continue to expand in size and scale. We use many sources to build our datasets, including OpenStreetMap, Meta, Microsoft, Esri, OpenAddresses, and [many more](attribution). 
+
+In this documentation, you'll find [instructions](getting-data) for accessing and handling Overture's large datasets, [reference material](//docs.overturemaps.org/schema/) to help you understand the Overture schema, comprehensive [guides](guides) to working with the many themes and types of Overture data, and [hands-on examples](examples) using data wrangling, analysis, and visualization tools you know and love. Want to see what our community has been building? Check out the [community projects](community) section of our documentation for inspiration.
 
 ## Overture data 
-Overture provides free and open map data normalized to a common schema. Our six data "themes" contain more than 3.7 billion features and ~600GB of data and will continue to expand in size and scale. We are currently focused on building the following datasets, organized by theme and type: 
+We [release](release) our data monthly as [cloud-native GeoParquet](https://guide.cloudnativegeo.org/geoparquet/) files, partitioned by theme and type. Each data theme contains one or more feature types, mapped in this way:
 
-- [addresses](guides/addresses)
-- [base: water, land, land use, infrastructure, land cover](guides/base)
-- [buildings](guides/buildings)
-- [divisions](guides/divisions)
-- [places](guides/places)
-- [transportation](guides/transportation)
+```json
+type_theme_map = {
+    "address": "addresses",
+    "building": "buildings",
+    "building_part": "buildings",
+    "division": "divisions",
+    "division_area": "divisions",
+    "division_boundary": "divisions",
+    "place": "places",
+    "segment": "transportation",
+    "connector": "transportation",
+    "infrastructure": "base",
+    "land": "base",
+    "land_cover": "base",
+    "land_use": "base",
+    "water": "base"
+}
+``` 
 
+You'll find the GeoParquet column definitions for each feature type in our data [guides](guides). 
+
+## Overture schema
+Although we release our data as GeoParquet, the Overture schema is defined by the [JSON](https://json-schema.org/) schema, and [GeoJSON](https://geojson.org/) is used as the canonical geospatial format. GeoJSON provides us with a mental model and language to express data constructions in the [schema](https://schema.overturemaps.org/schema.yaml). In our [schema reference docs](//docs.overturemaps.org/schema/reference), we describe key schema concepts for each theme and definitions and examples for each feature type. 
 
 ## Vision
 
