@@ -5,7 +5,8 @@ SELECT
     change_type,
     ST_GEOMFROMBINARY(geometry) AS geometry
 FROM __ATHENA_OVERTURE_RELEASE AS release
-    INNER JOIN __ATHENA_CHANGESET_RELEASE AS changelog ON release.id = changelog.id
+    INNER JOIN __ATHENA_CHANGESET_RELEASE AS changelog
+        ON release.id = changelog.id
 WHERE release.theme = 'buildings'
     AND release.bbox.xmin > 37.165914
     AND release.bbox.xmax < 37.902271
