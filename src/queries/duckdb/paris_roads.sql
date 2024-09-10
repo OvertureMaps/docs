@@ -1,5 +1,4 @@
 LOAD spatial; -- noqa
-LOAD httpfs;  -- noqa
 
 SET s3_region='us-west-2';
 
@@ -8,7 +7,7 @@ COPY(
        id,
        names.primary as name,
        class,
-       ST_GeomFromWKB(geometry) as geometry -- GDAL understands this to be the geometry
+       geometry   -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=transportation/type=segment/*', filename=true, hive_partitioning=1)
     WHERE bbox.xmin > 2.276
       AND bbox.ymin > 48.865

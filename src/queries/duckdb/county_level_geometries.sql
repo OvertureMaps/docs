@@ -1,5 +1,4 @@
 LOAD spatial; -- noqa
-LOAD httpfs;  -- noqa
 SET s3_region='us-west-2';
 
 COPY(
