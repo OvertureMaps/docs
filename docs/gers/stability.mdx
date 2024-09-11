@@ -2,9 +2,17 @@
 title: Stability by Feature Type
 ---
 
-All features in Overture have a unique ID, and for some feature types those unique IDs, called Overture IDs, are registered to the Global Entity Reference System (GERS). Overture IDs registered to GERS are intended to be stable &mdash; within a reasonable tolerance of error &mdash; across multiple Overture releases. When stability is not possible, we will attempt to provide traceability in a [GERS changelog](../changelog).
+## Stability and traceability
 
-| Theme | Type | Stable Overture ID |
+Depending on the feature type, unique IDs registered to GERS are intended to be stable &mdash; within a reasonable tolerance of error &mdash; across multiple Overture releases. When stability is not possible, we will attempt to provide traceability in a [GERS changelog](../changelog). For example:
+
+- a single road segment is bisected by a new road and becomes two road segments: 1 unique ID → 2 new unique IDs;
+- a large building footprint is determined to be four smaller buildings when a higher resolution dataset becomes available: 1 unique ID → 4 new unique ID;
+- a building is shifted 10 meters to the west when higher resolution imagery is made available: the unique ID is preserved for that feature.
+
+The table below indicates which Overture feature types are intended to be stable from release to release.
+
+| Theme | Type | Stable ID |
 |-------|------|-----------|
 | addresses | address | No |
 | base | infrastructure | No |
@@ -15,8 +23,8 @@ All features in Overture have a unique ID, and for some feature types those uniq
 | buildings | building | Yes |
 | buildings | building_part | No |
 | divisions | division | Yes |
-| divisions | division_area | Yes |
-| divisions | boundary | No |
+| divisions | division_area | No |
+| divisions | division_boundary | No |
 | places | place | Yes |
 | transportation | segment | Yes |
 | transportation | connector | Yes |

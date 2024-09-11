@@ -3,8 +3,8 @@
 
 const {themes} = require('prism-react-renderer');
 
-const lightCodeTheme = themes.github;
-const darkCodeTheme = themes.dracula;
+const lightCodeTheme = themes.nightOwlLight;
+const darkCodeTheme = themes.nightOwl;
 
 const defaultUrl = 'https://docs.overturemaps.org';
 const defaultBaseUrl = '/';
@@ -163,7 +163,13 @@ const config = {
             to: 'community',
             label: 'Community',
             position: 'left',
-          }
+          },
+          {
+            to: 'https://github.com/OvertureMaps/docs',
+            position: 'right',
+            target: '_blank',
+            className: 'github-link',
+          },
         ],
       },
       algolia: {

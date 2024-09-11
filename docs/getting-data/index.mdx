@@ -11,26 +11,28 @@ Overture's six data themes &mdash; [addresses](/guides/addresses), [base](/guide
 | Amazon S3 | `s3://overturemaps-us-west-2/release/ <RELEASE>` |
 | Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/ <RELEASE>` |
 
-The where the latest `<RELEASE>` is:
+We release data monthly. The latest `<RELEASE>` is:
 <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
 
 ## GeoParquet
 
-Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
+Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/). Our [data guides](/guides) include the GeoParquet column descriptions for each feature type.
 
-## Accessing only the data you want (recommended)
+## Getting a small to medium amount of data (recommended)
 
-We _strongly recommend_ accessing the data in the cloud using the services available in AWS and Azure, where the data are stored, or by using a locally-installed query engine like [DuckDB](https://duckdb.org/). This allows you to download only the subset of data you want. You can also try Overture's experimental Python command-line tool to download data by feature type and area of interest.
+If you're new to Overture data, we _strongly recommend_ starting with small to medium amounts of data. You can access the data using the services available in AWS and Azure, where the data are stored, or by using a locally-installed query engine like [DuckDB](https://duckdb.org/). This allows you to download only the subset of data you want. You can also try Overture's experimental Python command-line tool to download data by feature type and area of interest. Or you can visually inspect all of Overture's data themes using our [Explore tool](https://explore.overturemaps.org/).
 
+- [DuckDB](duckdb)
+- [Overture's Python command-line tool](overturemaps-py)
+- [Overture's Explore tool](https://explore.overturemaps.org/)
 - [Amazon Athena](athena-aws) (account required)
 - [Microsoft Synapse](synapse-azure) (account required)
-- [DuckDB](duckdb)
-- [Python command-line tool](overturemaps-py)
+
 
 ## What if I want ALL the data?
 
 :::warning
-Are you sure? The total size of all the files is **~440 GB**.
+Are you sure? Each Overture GeoParquet file is ~1MB and the total size of all the GeoParquet files is **~600 GB**.
 :::
 
 It is possible to download the GeoParquet files directly from either Azure Blob Storage or Amazon S3. Here's how you can do it:
