@@ -1,5 +1,4 @@
 LOAD spatial; -- noqa
-LOAD azure;   -- noqa
 
 -- Access the data on Microsoft Azure in this example
 SET azure_storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=overturemapswestus2;AccountKey=;EndpointSuffix=core.windows.net';
@@ -8,7 +7,7 @@ COPY (
         names.primary as name,
         height,
         level,
-        ST_GeomFromWKB(geometry) as geometry
+        geometry
     FROM read_parquet('azure://release/__OVERTURE_RELEASE/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
     WHERE bbox.xmin > -122.68 AND bbox.xmax < -121.98
     AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
