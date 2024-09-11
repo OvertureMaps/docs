@@ -52,14 +52,6 @@ In this example, we'll show you how to get Overture Maps data into [QGIS](https:
 
     </TabItem>
 
-    <TabItem value="DuckDB Spatial">
-
-        The `spatial` plugin allows DuckDB to read the geometry and convert the file to a common spatial format. This query will download all of the `road` subtypes of `segments` in the `transportation` theme to a _shapefile_.
-
-        <QueryBuilder query={BoulderCoDuckDBSpatial}></QueryBuilder>
-
-    </TabItem>
-
     <TabItem value="Python">
 
         The new [`overturemaps-py`](https://github.com/OvertureMaps/overturemaps-py) Python utility can download Overture data as both `geojson` and `geoparquet`. This example downloads buildlings around Boston.
@@ -84,7 +76,3 @@ All of the data files we created in the previous step are vector files that can 
 
 <!-- [Overture parquet files in QGIS](/img/qgis-parquet-drag-drop.gif) -->
 <img src='/img/examples/qgis-parquet-drag-drop.gif' alt='Drag-n-drop parquet files in QGIS' width='65%'/>
-
-
-
-

@@ -96,7 +96,7 @@ To download the data as `shapefile`, replace the last line of any of the above q
 or as a `geopackage`:
 
 ```sql
-) TO 'overture_data.gpkg' WITH (FORMAT GDAL, DRIVER 'GeoPackage');
+) TO 'overture_data.gpkg' WITH (FORMAT GDAL, DRIVER 'GPKG');
 ```
 
 The DuckDB Spatial extension supports more than [50 geospatial file formats](https://duckdb.org/docs/extensions/spatial.html#st_read--read-spatial-data-from-files).
