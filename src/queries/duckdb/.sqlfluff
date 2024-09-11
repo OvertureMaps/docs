@@ -2,3 +2,5 @@
 
 verbose = 0
 dialect = duckdb
+
+exclude_rules = ambiguous.column_count, references.from, layout.long_lines, references.special_chars
