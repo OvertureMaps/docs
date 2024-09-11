@@ -6,7 +6,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Unique IDs
 
-Every feature in Overture is assigned a unique ID of 32 characters and 128 bits. For some feature types, that ID is intended to be [stable](stability), release after release. For example, after the [July 2024 "General Availability" (GA) release](/release/2024-07-22.0/), an ID assigned to a `building` feature will not change, even if the building's properties change, including updates to its geometry. 
+Every Overture feature is assigned a unique ID of 32 characters and 128 bits. For most features types, the ID is intended to be [stable](stability). This means an ID assigned to a `building` feature, for example, won't change even if the building's properties change, including changes to its geometry. 
 
 Let's examine the IDs for two iconic buildings in Berlin.
 
@@ -19,14 +19,14 @@ Let's examine the IDs for two iconic buildings in Berlin.
 #### [Brandenburg Gate](https://en.wikipedia.org/wiki/Brandenburg_Gate)
 | Overture release | `id` | `change_type` |
 |------|----------|------|
-| `2024-07-22.0`| `08b1f1d488601fff02002aee6ba961a4`| `data_added` |
-| `latest` | `08b1f1d488601fff02002aee6ba961a4`| `data_added` |
+| `2024-07-22.0`| `08b1f1d488601fff02002aee6ba961a4`| `data_changed` |
+| `latest` | `08b1f1d488601fff02002aee6ba961a4`| `data_changed` |
 
-For both buildings, we can see the IDs are the same from the [GA release](/release/2024-07-22.0/) to the [latest release](/release). Because the building IDs are stable and unique, we can query the [changelog](changelog) by ID to detect changes in the features. The properties associated with both buildings were updated -- which often means improvements to the data -- in the GA release and the latest release. 
+The IDs are stable from the July 2024 [GA release](/release/2024-07-22.0/) to the [latest release](/release), and will be stable over subsequent releases. Stable IDs make it possible to query the [changelog](changelog) to detect changes to the feature data by ID. The `change_type` logged for the two buildings in Berlin is `data_changed`, which usually indicates improvements to the data. 
 
 ## Understand GERS
 
-The unique, stable IDs assigned at the feature level form the basis of Overture's Global Entity Reference System (GERS). GERS is a mechanism for structuring, encoding, and matching map data that allows you to:
+Stable, unique feature IDs form the basis of Overture's Global Entity Reference System (GERS). GERS is a mechanism for structuring, encoding, and matching map data that allows you to:
 
 - [track the stability](stability) of features in Overture datasets by GERS ID
 - [match features](gers-demonstrations) across an Overture dataset and a third-party dataset and assign GERS IDs to the matched features
