@@ -1,10 +1,11 @@
-SELECT id,
-       names,
-       addresses,
-       categories,
-       confidence,
-       sources,
-       ST_GeomFromBinary(geometry) AS geometry
+SELECT
+    id,
+    names,
+    addresses,
+    categories,
+    confidence,
+    sources,
+    ST_GEOMFROMBINARY(geometry) AS geometry
 FROM
     overture.release.__ATHENA_OVERTURE_RELEASE
 WHERE type='place'

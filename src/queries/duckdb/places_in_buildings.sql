@@ -1,5 +1,5 @@
-LOAD spatial;
-LOAD httpfs;
+LOAD spatial; -- noqa
+LOAD httpfs;  -- noqa
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
@@ -7,7 +7,7 @@ COPY (
     -- First query places with address data in the area we are interested in
     WITH places AS
         (
-        SELECT * 
+        SELECT *
         FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=places/*/*')
         WHERE bbox.xmin BETWEEN 14.38 AND 14.44
         AND bbox.ymin BETWEEN 50.07 AND 50.11
@@ -16,7 +16,7 @@ COPY (
     -- Then get buildings in the same area
     buildings as
         (
-        SELECT * 
+        SELECT *
         FROM read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=buildings/type=building/*')
         WHERE bbox.xmin > 14.38 AND bbox.xmax < 14.44
         AND bbox.ymin > 50.07 AND bbox.ymax < 50.11

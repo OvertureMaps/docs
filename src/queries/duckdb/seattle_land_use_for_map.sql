@@ -1,12 +1,12 @@
-LOAD spatial;
-LOAD httpfs;
+LOAD spatial; -- noqa
+
 COPY (
     SELECT
         subtype,
         class,
         names.primary AS name,
         surface,
-        ST_GeomFromWKB(geometry) as geometry
+        geometry
     FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=land_use/*')
     WHERE
         bbox.xmin > -122.68 AND bbox.xmax < -121.98

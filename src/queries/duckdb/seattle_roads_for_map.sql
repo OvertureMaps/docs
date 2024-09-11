@@ -1,11 +1,11 @@
-LOAD spatial;
-LOAD httpfs;
+LOAD spatial; -- noqa
+
 COPY (
     SELECT
         level,
         names.primary AS name,
-        JSON_EXTRACT_STRING(road, '$.class') AS class,
-        ST_GeomFromWKB(geometry) as geometry
+        class,
+        geometry as geometry
     FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=transportation/type=segment/*')
     WHERE
         subtype = 'road'

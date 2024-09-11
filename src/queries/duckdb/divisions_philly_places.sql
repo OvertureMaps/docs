@@ -1,5 +1,5 @@
-INSTALL spatial;
-LOAD spatial;
+LOAD spatial; -- noqa
+LOAD httpfs;  -- noqa
 
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
@@ -7,7 +7,7 @@ SET s3_region='us-west-2';
 COPY (
   -- Create a temp table with the locality of Philadelphia
   WITH philly AS (
-    SELECT 
+    SELECT
       id as philly_id,
       names.primary as philly_name,
       ST_GeomFromWKB(geometry) as philly_geom

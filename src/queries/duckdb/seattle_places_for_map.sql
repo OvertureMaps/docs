@@ -1,5 +1,4 @@
-LOAD spatial;
-LOAD httpfs;
+LOAD spatial; -- noqa
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
@@ -8,7 +7,7 @@ COPY (
         names.primary AS name,
         categories.primary as category,
         ROUND(confidence,2) as confidence,
-        ST_GeomFromWKB(geometry) as geometry
+        geometry as geometry
 FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
 WHERE
     -- Point geometry doesn't require looking at both min and max:

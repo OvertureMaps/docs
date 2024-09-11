@@ -3,8 +3,8 @@ SELECT
     theme,
     class,
     sources[1].dataset AS primary_source,
-    names.primary AS primary_name,
-    ST_GeomFromBinary(geometry) AS geometry
+    names."primary" AS primary_name,
+    ST_GEOMFROMBINARY(geometry) AS geometry
 FROM overture.release.__ATHENA_OVERTURE_RELEASE
 WHERE theme='buildings'
     AND type='building'
