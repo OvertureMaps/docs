@@ -1,22 +1,23 @@
 ---
 title: 2024-08-20.0
-slug: latest
+slug: 2024-08-20.0
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
+## Overview
 
 **Overture's `2024-08-20.0` data release is now available.** The base, buildings, divisions, and places themes are stable, which means the only changes this month are data improvements and bug fixes. The transportation theme remains in beta and we have made several significant changes to the schema in this release. The addresses theme is in alpha.
 
 The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
 
-##### Microsoft Azure:
+#### Microsoft Azure:
 ```
 wasbs://release@overturemapswestus2.blob.core.windows.net/2024-08-20.0
 ```
 
-##### Amazon S3:
+#### Amazon S3:
 ```
 s3://overturemaps-us-west-2/release/2024-08-20.0
 ```
@@ -30,23 +31,7 @@ You can access the datasets by following the process outlined [here](https://doc
 - [Explore site](https://github.com/OvertureMaps/io-site)
 
 
-
-### Global Entity Reference System (GERS) changelog
-
-The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files - partitioned by theme, type, and change type - at the following locations on Azure and AWS:
-
-```
-wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-08-20.0
-```
-```
-s3://overturemaps-us-west-2/changelog/2024-08-20.0
-```
-
-You can find more information about [using the GERS Changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
-
-
-
-### Breaking changes
+## Breaking changes
 
 Changes were made to the transportation theme in this release to better support a variety of routing use cases. A summary of those changes, below:
 
@@ -61,39 +46,39 @@ Changes were made to the transportation theme in this release to better support 
 You can read more about these changes on the [engineering blog](https://docs.overturemaps.org/blog/2024/08/15/preview-august-release/).
 
 
-### Deprecations
+## Deprecations
 
 In this release, we deprecated the `connector_ids` property in the transportation schema and plan to remove it by the October release. It will be replaced by the new `connectors` property, introduced in the schema this month.
 
 
-### Theme-specific updates
+## Theme-specific updates
 
 :::info
 The base, buildings, divisions, and places themes are in GA. The transportation theme is in beta, and the addresses theme is in alpha.
 :::
 
-**Addresses**
+### Addresses
 
 - 3.15M new address features were added in Switzerland.
 - addresses in 15 countries are now available.
 
-**Base**
+### Base
 
 - made incremental changes to improve the accuracy and quality of the dataset. Built from [Daylight v1.52](https://daylightmap.org/2024/08/12/daylight-v152-released.html)
 
-**Buildings**
+### Buildings
 
 - removed 60M buildings over water and transportation segments.
 
-**Divisions**
+### Divisions
 
 - added 12 features at the region subtype in the country of Georgia.
 
-**Places**
+### Places
 
 - made incremental changes to improve the accuracy and quality of the dataset
 
-**Transportation**
+### Transportation
 
 - we added a new [`subclass` property](https://github.com/OvertureMaps/schema/pull/180) that refines the descriptions of segments.
 - to better support routing use cases, we added to the segment feature type a new property called `connectors`, replacing the  existing `connector_ids` property.
@@ -102,6 +87,24 @@ The base, buildings, divisions, and places themes are in GA. The transportation 
 - fixed a bug that caused segments to be missing sources or other attributes, affecting ~100K segments.
 - fixed name filtering to avoid including names with an invalid BCP-47 tag.
 
-### Attribution
+## Global Entity Reference System (GERS) changelog
+
+The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files - partitioned by theme, type, and change type - at the following locations on Azure and AWS:
+
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-08-20.0
+```
+```
+s3://overturemaps-us-west-2/changelog/2024-08-20.0
+```
+
+You can find more information about [using the GERS Changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
+
+
+## Schema Changelog
+
+There are no schema changes this month, other than minor improvements to the schema documentation. The schema changelog is [here](https://github.com/OvertureMaps/schema/releases). 
+
+## Attribution
 
 You'll find information about attribution and licensing [here](https://docs.overturemaps.org/attribution/).
