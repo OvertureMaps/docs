@@ -9,11 +9,13 @@ import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
 
-In this example, we will load Overture places data into Rapid so that we can visualize and inspect the geometries and their properties.
+## Places
+
+In this example, we will load Overture Places data into Rapid so that we can visualize and inspect the geometries and their properties.
 
 To open Rapid v2, navigate to [https://rapideditor.org/edit](https://rapideditor.org/edit).
 
-Zoom in using the + or - hotkeys, the mouse scroll wheel, etc. to an area where you want to see Overture places data.
+Zoom in using the + or - hotkeys, the mouse scroll wheel, etc. to an area where you want to see Overture Places data.
 
 Click the 'Map Data' sidebar button or hit the 'F' hotkey. Then, click the three dots icon next to 'Custom Data'.
 
@@ -33,7 +35,10 @@ Alternatively, Rapid can load the data automatically if the URL is formatted lik
 
  <QueryBuilder query="https://rapideditor.org/edit#data=https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/__PMTILES_OVERTURE_RELEASE/places.pmtiles" language="text"></QueryBuilder>
 
+## Buildings
 
+Rapid can also load polygon or line features in addition to point features.
 
+ <QueryBuilder query="https://rapideditor.org/edit#data=https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/__PMTILES_OVERTURE_RELEASE/buildings.pmtiles" language="text"></QueryBuilder>
 
-
+![Rapid with Buildings Data Overlay](/img/rapid/rapid-buildings-data.png)
