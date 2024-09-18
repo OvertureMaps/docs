@@ -1,0 +1,98 @@
+---
+title: 2024-09-18.0
+slug: latest
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2024-09-18.0` release of Overture data is now available.**  We are still on `v.1.1.0` of the Overture schema, as we did not cut a new schema version with this data release. The base, buildings, divisions, and places themes are stable, which means the only changes to these themes are data improvements and bug fixes. We added new road data from TomTom, mostly in Saudi Arabia, to the transportation theme (beta). To the addresses theme (alpha) we added new data for Finland and Chile, and we replaced NAD-sourced address features in New York City with addresses from NYC Open Data. 
+
+The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
+
+#### Microsoft Azure:
+```
+wasbs://release@overturemapswestus2.blob.core.windows.net/2024-09-18.0
+```
+
+#### Amazon S3:
+```
+s3://overturemaps-us-west-2/release/2024-09-18.0
+```
+
+You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage users to report bugs and provide feedback on the data, schema, and GERS on one of our Overture GitHub repositories:
+
+- [Schema](https://github.com/OvertureMaps/schema)
+- [Data](https://github.com/OvertureMaps/data)
+- [Docs](https://github.com/OvertureMaps/docs)
+- [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py)
+- [Explore site](https://github.com/OvertureMaps/io-site)
+
+
+## Breaking changes
+
+There are no breaking changes this month. 
+
+## Deprecations
+
+In the `2024-08-20.0` release notes, we announced the deprecation of the `connector_ids` property in the transportation schema. We plan to remove that property by the October release. It has been replaced by the new `connectors` property, introduced in the schema last month.
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, and places themes are in GA. The transportation theme is in beta, and the addresses theme is in alpha.
+:::
+
+### Addresses
+
+- added 3,897,449 new addresses in Finland
+- added 4,042,071 new addresses in Chile
+- completed “cut and replace” work in NYC, which entailed removing NAD-sourced address features and replacing them with addresses from NYC Open Data
+
+### Base
+
+- made incremental changes to improve the accuracy and quality of the dataset 
+
+### Buildings
+
+- made incremental changes to improve the accuracy and quality of the dataset
+
+### Divisions
+
+- rolled back to the August version of the `divisions` data because a bug fix in the latest version caused a regression in `local_type` property coverage
+
+### Places
+
+- made incremental changes to improve the accuracy and quality of the dataset
+
+### Transportation
+
+- added more than 1000km of non-OSM road segments from TomTom. The new data is mostly in Saudi Arabia, where we previously identified a coverage gap
+- added OSM source version and update time for all applicable features
+- added more precise length calculation for linearly referenced values
+- removed invalid `connector_id` segment references
+- increased precision on `connectors` at LR value
+
+## Global Entity Reference System (GERS) changelog
+
+The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files - partitioned by theme, type, and change type - at the following locations on Azure and AWS:
+
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-09-18.0
+```
+```
+s3://overturemaps-us-west-2/changelog/2024-09-18.0
+```
+
+You can find more information about [using the GERS Changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
+
+## Schema Changelog
+
+There are no schema changes this month, other than minor improvements to the schema documentation. The schema changelog is [here](https://github.com/OvertureMaps/schema/releases). 
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
