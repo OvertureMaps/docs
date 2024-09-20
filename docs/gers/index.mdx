@@ -11,7 +11,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Structure of a GERS ID
 
-GERS IDs are 32 characters and 128 bits. For most features types, the GERS ID is intended to be [stable](stability) across [Overture releases](/releases). This means a GERS ID assigned to a `building` feature, for example, won't change even if the building's properties change, including changes to its geometry.
+GERS IDs are 32 characters and 128 bits. For most features types, the GERS ID is intended to be [stable](stability) across [Overture releases](/release). This means a GERS ID assigned to a `building` feature, for example, won't change even if the building's properties change, including changes to its geometry.
 
 Let's examine the GERS IDs for two iconic buildings in Berlin.
 
@@ -33,7 +33,7 @@ The GERS IDs are stable from the July 2024 [GA release](/release/2024-07-22.0/) 
 
 :::warning
 
-As many users have noticed, the GERS IDs in some Overture datasets contain an [H3 index](https://h3geo.org). Going forward, Overture cannot guarantee that a feature with an H3 component to its GERS ID will be permanently located in the expected H3 cell. As we cannot support H3-dependent pipelines, we encourage you to use `bbox` instead. 
+Many users have noticed that in some Overture datasets the GERS IDs contain an [H3 index](https://h3geo.org). As a reminder, Overture does **not** guarantee that a feature with an H3 index in its GERS ID will be permanently located in the expected H3 cell. We encourage you to use `bbox` for data sharding and association. 
 :::
 
 ## Using GERS
