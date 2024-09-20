@@ -9,7 +9,7 @@ COPY (
   WITH utah AS (
     SELECT
       id AS utah_id,
-      ST_GeomFromWKB(geometry) AS utah_geom
+      geometry AS utah_geom -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM
       read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
     WHERE
@@ -20,12 +20,12 @@ COPY (
   addresses AS (
     SELECT
       *,
-      ST_GeomFromWKB(geometry) AS geometry
+      geometry AS geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM
       read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=addresses/type=*/*', filename=true, hive_partitioning=1)
     INNER JOIN
       utah
-    ON ST_WITHIN(ST_GeomFromWKB(geometry), utah.utah_geom)
+    ON (geometry, utah.utah_geom)
     WHERE
       country = 'US'
   )

@@ -7,7 +7,7 @@ COPY (
         height,
         names.primary AS primary_name,
         sources[1].dataset AS primary_source,
-        geometry
+        geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=*/*', hive_partitioning=1)
     WHERE
         bbox.xmin > 78.4194

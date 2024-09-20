@@ -36,7 +36,7 @@ COPY (
             addresses[1].postcode AS postcode,
             addresses[1].region AS region,
             addresses[1].country AS country,
-            ST_GeomFromWKB(geometry) AS geometry
+            geometry AS geometry  -- DuckDB v.1.1.0 will autoload this as a `geometry` type
         FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
         WHERE region = 'OR'
             AND country = 'US'
@@ -44,8 +44,8 @@ COPY (
     )
 -- Now that we have our input data we will join them together.
     SELECT
-        -- With the GERS id joined to the final result this dataset can be quickly synced to future Overture releases
-        overture.id AS GERS_id,
+        -- With the GERS ID joined to the final result this dataset can be quickly synced to future Overture releases
+        overture.id AS GERS_ID,
         osm.name,
         -- Using CASE statements, we'll favor OSM data when it is present but use Overture data wherever there are gaps
         CASE
@@ -71,7 +71,7 @@ COPY (
         END AS phone,
         overture.social,
         overture.email,
-        ST_AsWKB(st_point(osm.lon, osm.lat)) AS geometry
+        st_point(osm.lon, osm.lat) AS geometry
     FROM osm
 -- To join the data, we'll first match features that have the same OR similar names
         LEFT JOIN overture ON (

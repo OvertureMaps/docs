@@ -6,7 +6,7 @@ COPY(
     id,
     names.primary as primary_name,
     height,
-    geometry
+    geometry   -- DuckDB v.1.1.0 will autoload this as a `geometry` type
   FROM read_parquet('azure://release/__OVERTURE_RELEASE/theme=buildings/type=building/*', filename=true, hive_partitioning=1)
   WHERE names.primary IS NOT NULL
   AND bbox.xmin BETWEEN -84.36 AND -82.42
