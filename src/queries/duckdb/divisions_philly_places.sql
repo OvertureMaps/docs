@@ -10,7 +10,7 @@ COPY (
     SELECT
       id AS philly_id,
       names.primary AS philly_name,
-      philly_geom -- DuckDB v.1.1.0 will autoload this as a `geometry` type
+      geometry AS philly_geom -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM
       read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=divisions/type=division_area/*', filename=true, hive_partitioning=1)
     WHERE
@@ -26,12 +26,12 @@ COPY (
       names.primary AS name,
       categories.primary AS category,
       ROUND(confidence,2) AS confidence,
-      geometry AS geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
+      geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM
       read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=*/*', filename=true, hive_partitioning=1)
     INNER JOIN
       philly
-    ON (geometry, philly.philly_geom)
+    ON ST_WITHIN(geometry, philly.philly_geom)
   )
 
   -- Export the places selection to a Parquet file

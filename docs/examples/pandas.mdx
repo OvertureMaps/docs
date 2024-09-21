@@ -6,7 +6,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-In this example, we'll show you how to use [DuckDB](https://duckdb.org/) and [Pandas](http://pandas.pydata.org/) to extract and manipulate Overture data in a Jupyter notebook. We're using a Pandas DataFrame as an ideal structure for handling a "medium" amount of data and [GeoPandas](https://geopandas.org/en/stable/index.html) to extend Pandas for operations on geometric types. We also need the [Shapely](https://shapely.readthedocs.io/en/stable/index.html) to support the processing of our feature geometries. DuckDB allows us to fetch only the data we need from Overture's GeoParquet files stored on Microsoft Azure or AWS S3.
+In this example, we'll show you how to use [DuckDB](https://duckdb.org/) and [Pandas](http://pandas.pydata.org/) to extract and manipulate Overture data in a Jupyter notebook. We're using a Pandas DataFrame as an ideal structure for handling a small to medium amount of data and [GeoPandas](https://geopandas.org/en/stable/index.html) to extend Pandas for operations on geometric types. DuckDB allows us to fetch only the data we need from Overture's GeoParquet files stored on Microsoft Azure or AWS S3.
 
 <details>
 
@@ -18,17 +18,12 @@ To follow along with these examples, you should have [JupyterLab or Jupyter Note
 
 - [Pandas](https://pandas.pydata.org/)
 - [GeoPandas](https://geopandas.org/en/stable/index.html)
-- [Shapely](https://shapely.readthedocs.io/en/stable/index.html) 
 - [DuckDB](https://duckdb.org/), [DuckDB spatial extension](https://duckdb.org/docs/extensions/spatial.html), and [DuckDB AWS extension](https://duckdb.org/docs/extensions/aws.html) or [DuckDB azure extension](https://duckdb.org/docs/extensions/azure.html).
 - [JupySQL](https://jupysql.ploomber.io/en/latest/quick-start.html) (optional)
 - [duckdb-engine](https://github.com/Mause/duckdb_engine) (optional)
  
 </details>
 A executable version of this notebook is available on [Notebook Sharing Space](https://notebooksharing.space/view/1d0d72d24ed82d22a8101377ca811ab7365b6a67dac98f3add034719c44b537f#displayOptions=). More examples are available in [the notebooks directory](https://docs.overturemaps.org/) in our docs repository on GitHub.
-
-:::note
-_20 Sept 2024_ This example only works with DuckDB 1.0.0. We have not yet updated it to accomodate the breaking changes in [DuckDB 1.1.0](https://github.com/duckdb/duckdb/releases). 
-:::
 
 ## Example
 
@@ -38,8 +33,20 @@ Let's start by importing our toolkit.
 # import our toolkit
 import pandas as pd
 import geopandas as gpd
-from shapely import wkt
 import duckdb
+```
+
+```python 
+# no need to import duckdb_engine, JupySQL will auto-detect driver 
+# load (or reload) jupysql Jupyter extension to create SQL cells
+%reload_ext sql
+```
+
+The DuckDB documentation offers tips and examples for [running DuckDB queries in Jupyter notebooks](https://duckdb.org/docs/guides/python/jupyter.html). In this example, we're using duckdb-engine and JupySQL. You can also connect to DuckDB natively.
+
+```python
+# DuckDB in-memory database
+%sql duckdb://
 ```
 
 Next, we'll install and load DuckDB extensions to work with spatial data and connect to AWS. (Or you can use the Azure extension to connect to the Overture data stores on Azure.)
@@ -51,26 +58,12 @@ Next, we'll install and load DuckDB extensions to work with spatial data and con
 %sql LOAD httpfs;
 %sql SET s3_region='us-west-2'
 ```
-The DuckDB documentation offers tips and examples for [running DuckDB queries in Jupyter notebooks](https://duckdb.org/docs/guides/python/jupyter.html). In this example, we're using duckdb-engine and JupySQL. You can also connect to DuckDB natively. 
-
-```python 
-# no need to import duckdb_engine, JupySQL will auto-detect driver 
-# load (or reload) jupysql Jupyter extension to create SQL cells
-%reload_ext sql
-```
-We can set the configurations on JupySQL to directly output data to Pandas and to simplify the output that is printed to the notebook.
+ We can set the configurations on JupySQL to directly output data to Pandas and to simplify the output that is printed to the notebook.
 
 ```python
 %config SqlMagic.autopandas = True
 %config SqlMagic.feedback = False
 %config SqlMagic.displaycon = False
-```
-
-Connect JupySQL to DuckDB using a SQLAlchemy-style connection string.
-
-```python
-# DuckDB in-memory database
-%sql duckdb://
 ```
 
 Now we're going to extract data from Overture's base theme for an area along the Gulf Coast. The magic %%sql command turns the notebook cell into a SQL cell and allows us to dump our query results in a Pandas DataFrame. Note: this query takes about a minute run.
@@ -80,9 +73,9 @@ Now we're going to extract data from Overture's base theme for an area along the
 SELECT 
     id, 
     names.primary AS primary_name,
-    geometry as geometry 
+    ST_AsText(geometry) as geometry
 FROM 
-    read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=base/type=water/*', filename=true, hive_partitioning=1)
+    read_parquet('s3://overturemaps-us-west-2/release/2024-09-18.0/theme=base/type=water/*', filename=true, hive_partitioning=1)
 WHERE 
     bbox.xmin >= -91.3994
         and bbox.xmax <= -89.3864
@@ -90,11 +83,9 @@ WHERE
         and bbox.ymax <= 30.5161
 ```
 
-Before we move on, let's deal with the geometry we pulled out of Overture's GeoParquet file. Geometry columns in GeoParquet are stored in binary format. In the above query, we transformed that geometry into text, and now we need to turn it into a Shapely geometry to get it into our GeoDataFrame. Here's how we do that.
+DuckDB 1.1.0 is able to interpret the geometry stored as a binary object in the GeoParquet file as a Shapely `geometry` type. 
 
 ```python
-gulf_water['geometry'] = gulf_water['geometry'].apply(wkt.loads)
-
 # dataframe to geodataframe, set crs
 gulf_water_gdf = gpd.GeoDataFrame(
     gulf_water

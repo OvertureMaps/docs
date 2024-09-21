@@ -20,12 +20,12 @@ COPY (
   addresses AS (
     SELECT
       *,
-      geometry AS geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
+      geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM
       read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=addresses/type=*/*', filename=true, hive_partitioning=1)
     INNER JOIN
       utah
-    ON (geometry, utah.utah_geom)
+    ON ST_WITHIN(geometry, utah.utah_geom)
     WHERE
       country = 'US'
   )
