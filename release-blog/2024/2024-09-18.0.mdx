@@ -10,7 +10,12 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 **The `2024-09-18.0` release of Overture data is now available.**  We are still on `v.1.1.0` of the Overture schema, as we did not cut a new schema version with this data release. The base, buildings, divisions, and places themes are stable, which means the only changes to these themes are data improvements and bug fixes. We added new road data from TomTom, mostly in Saudi Arabia, to the transportation theme (beta). To the addresses theme (alpha) we added new data for Finland and Chile, and we replaced NAD-sourced address features in New York City with addresses from NYC Open Data. 
 
-The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
+:::note
+Overture's GeoParquet files are now released according to the [GeoParquet v1.1.0 specification](https://geoparquet.org/releases/v1.1.0/), with the `covering` metadata included.
+:::
+
+The datasets are available as GeoParquet files stored on both AWS and Azure. 
+The release paths are:
 
 #### Microsoft Azure:
 ```

@@ -85,9 +85,9 @@ m
 
 ![roads in Milan](/img/examples/road-network-milan.png)
 
-### GeoDataFrame (the long way)
+### GeoPandas 
 
-In the second example, we'll add a few steps in the notebook to convert the PyArrow table to a GeoPandas GeoDataFrame. Getting the data into a GeoDataFrame can also require a bigger toolkit, depending on which methods we use. Here's our expanded toolkit:
+In the second example, we'll add a few steps in the notebook to convert the PyArrow table to a GeoPandas GeoDataFrame. Getting the data into a GeoDataFrame requires a few more tools, depending on which methods we use. Here's our expanded toolkit:
 
 ```python
 import overturemaps
@@ -152,13 +152,10 @@ m
 
 ![buildings in Milan](/img/examples/buildings-milan.png)
 
-### GeoDataFrame (the direct way)
+### `geodataframe` method in overturemaps-py
 
-In the last example, we'll use the [`geodataframe` method](https://github.com/OvertureMaps/overturemaps-py/blob/e9632d4d2481a472a22dfd2d0a47ec9798ced9ef/overturemaps/core.py#L51) in the overturemaps-py library to pull Overture data directly into a GeoDataFrame. This method handles all the conversions internally, making our lives easier and our notebooks cleaner.
+In the last example, we'll use the [`geodataframe` method](https://github.com/OvertureMaps/overturemaps-py/blob/main/overturemaps/core.py#L51) in the overturemaps-py library to pull Overture data directly into a GeoDataFrame. This method handles all the conversions internally, making our lives easier and our notebooks cleaner.
 
-:::note
-Until the `0.9.0` release of overturemaps-py is available, you'll need to follow these steps to use the `geodataframe` method: clone [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py) and navigate into the directory; run `pip install -e .` in a new virtual environment to install the version with latest features; install the rest of the dependencies necessary for this example.
-:::
 
 Here's the toolkit:
 

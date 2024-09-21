@@ -4,7 +4,7 @@ COPY (
         subtype,
         class,
         names.primary AS name,
-        geometry
+        geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=water/*')
     WHERE
         subtype in ('ocean', 'lake', 'pond', 'reservoir', 'river', 'stream', 'water', 'canal')

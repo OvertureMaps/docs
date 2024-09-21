@@ -6,7 +6,7 @@ COPY(
     SELECT
        id,
        names.primary as primary_name,
-       ST_GeomFromWKB(geometry) as geometry,
+       geometry,    -- DuckDB v.1.1.0 will autoload this as a `geometry` type
        categories.primary as primary_category,
        sources[1].dataset AS primary_source,
        confidence
