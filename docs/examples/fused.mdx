@@ -8,9 +8,9 @@ In these examples, we'll see ways to load and transform Overture data using Fuse
 
 ### Join Overture Buildings and NSI
 
-This example shows how to join the Overture Buildings dataset with the [National Structures Inventory (NSI)](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/technical-documentation). The NSI API provides point data on buildings in the U.S. relevant to hazard analyses. Joining the NSI data with Overture Buildings can enrich the buildings dataset with additional metadata.
+This example shows how to join the Overture Buildings dataset with the [National Structures Inventory (NSI)](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/technical-documentation). The NSI API provides point data on buildings in the U.S. that are relevant to hazard analyses. Joining the NSI data with Overture Buildings can enrich the buildings dataset with additional metadata.
 
-We'll be loading Overture Buildings data using the Fused User Defined Function which is explained in [this](/getting-data/fused/) section of the docs.
+We'll be loading Overture Buildings data using the Fused User Defined Function explained in [this](/getting-data/fused/) section of the docs.
 
 First import Fused.
 
@@ -35,7 +35,7 @@ gdf_overture = fused.run(
 )
 ```
 
-To get the NSI data, we make a request to the [NSI API](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/api-reference-guide), defining the area using a GeoJSON. After receiving the response, we convert it into a GeoDataFrame.
+To get the NSI data, we call the [NSI API](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/api-reference-guide), defining the area using a GeoJSON. After receiving the response, we convert it into a GeoDataFrame.
 
 ```python
 import requests
@@ -101,9 +101,9 @@ Now we can run the UDF for an area specified with a bounding box.
 fused.run(udf, bbox=[-122.349, 37.781, -122.341, 37.818]) 
 ```
 
-By encapsulating the code into a UDF, a workflow or client application can dynamically pass the bbox to run and return the data to perform the join on the fly through an application.
+By encapsulating the code into a UDF, a workflow or client application can dynamically pass the `bbox` to run and return the data to perform the join on the fly through an application.
 
-A simple way to try this for yourself is to use [the Fused UDF Builder](https://www.fused.io/workbench/catalog/Overture_Nsi-dd89972c-ce30-4544-ba0f-81fc09f5bbef).
+A simple way to try this is to use [the Fused UDF Builder](https://www.fused.io/workbench/catalog/Overture_Nsi-dd89972c-ce30-4544-ba0f-81fc09f5bbef).
 
 ## Next steps
 
