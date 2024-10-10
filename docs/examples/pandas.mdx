@@ -34,6 +34,7 @@ Let's start by importing our toolkit.
 import pandas as pd
 import geopandas as gpd
 import duckdb
+from shapely import wkt
 ```
 
 ```python 
@@ -88,8 +89,9 @@ DuckDB 1.1.0 is able to interpret the geometry stored as a binary object in the 
 ```python
 # dataframe to geodataframe, set crs
 gulf_water_gdf = gpd.GeoDataFrame(
-    gulf_water
-    , geometry='geometry', crs="EPSG:4326"
+    gulf_water,
+    geometry=gulf_water['geometry'].apply(wkt.loads),
+    crs="EPSG:4326"
 )
 ```
 Let's work with just the water polygons and lines, not the points.
