@@ -11,7 +11,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Load data with the Overture UDF
 
-The Overture UDF loads data from GeoParquet files of the Overture Dataset [hosted at Source Cooperative](https://beta.source.coop/repositories/fused/overture/description/). You can view its source code in this [GitHub repo](https://github.com/fusedio/udfs/blob/main/public/Overture_Maps_Example/Overture_Maps_Example.py).
+The Overture UDF loads data from GeoParquet files of the Overture Dataset [hosted at Source Cooperative](https://beta.source.coop/repositories/fused/overture/description/). You can view the source code of the Fused Uder Defined Function we will run on this [GitHub repo](https://github.com/fusedio/udfs/blob/main/public/Overture_Maps_Example/Overture_Maps_Example.py).
 
 
 ### Install Fused
@@ -23,7 +23,7 @@ pip install fused
 ```
 
 ### Run the Overture UDF
-You run the UDF with `fused.run`. Specify the area to load data with the `bbox` parameter. The UDF also provides optional parameters to select specific Overture releases, datasets, and columns - giving you flexibility to fetch only the data you need.
+You run the [UDF](https://github.com/fusedio/udfs/blob/main/public/Overture_Maps_Example/Overture_Maps_Example.py) with `fused.run` (see more about `fused.run` on the [Fused docs](https://docs.fused.io/core-concepts/run/#fusedrun)). Specify the area to load data with the `bbox` parameter. The UDF also provides optional parameters to select specific Overture releases, datasets, and columns - giving you flexibility to fetch only the data you need.
 
 
 <Tabs queryString="fused-run">
