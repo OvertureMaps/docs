@@ -2,7 +2,7 @@
 title: Overture + Fused
 ---
 
-In these examples we'll see ways to load and transform Overture data using Fused. The Fused Python library allows you to call predefined UDFs to load and process data into your Python environment. 
+In these examples, we'll see ways to load and transform Overture data using Fused. The Fused Python library allows you to call predefined UDFs to load and process data into your Python environment.
 
 ## Examples
 
@@ -10,9 +10,7 @@ In these examples we'll see ways to load and transform Overture data using Fused
 
 This example shows how to join the Overture Buildings dataset with the [National Structures Inventory (NSI)](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/technical-documentation). The NSI API provides point data on buildings in the U.S. relevant to hazard analyses. Joining the NSI data with Overture Buildings can enrich the buildings dataset with additional metadata.
 
-We'll be loading Overture Buildings data using the Fused User Defined Function which is explained in [this](/getting-data/fused/) section of the docs. 
-
-
+We'll be loading Overture Buildings data using the Fused User Defined Function which is explained in [this](/getting-data/fused/) section of the docs.
 
 First import Fused.
 
@@ -67,10 +65,9 @@ gdf_overture.sjoin(gdf_nsi)
 
 ### Create a Fused User Defined Function (UDF)
 
-We can encapsulate the above code into a UDF that can be referenced and reused in other workflows. 
+We can encapsulate the above code into a UDF that can be referenced and reused in other workflows.
 
 In this code, the `@fused.udf` decorator indicates that the function is a UDF. The function defines the area of interest using the `bbox` parameter, which is typed as `fused.types.TileGDF` so Fused automatically converts it into a GeoDataFrame.
-
 
 ```python
 import fused
@@ -98,19 +95,17 @@ def udf(bbox: fused.types.TileGDF):
     return gdf_overture.sjoin(gdf_nsi)
 ```
 
-
-Now we can run the UDF for an area specified with a bounding box. 
+Now we can run the UDF for an area specified with a bounding box.
 
 ```python
 fused.run(udf, bbox=[-122.349, 37.781, -122.341, 37.818]) 
 ```
 
-
 By encapsulating the code into a UDF, a workflow or client application can dynamically pass the bbox to run and return the data to perform the join on the fly through an application.
 
 A simple way to try this for yourself is to use [the Fused UDF Builder](https://www.fused.io/workbench/catalog/Overture_Nsi-dd89972c-ce30-4544-ba0f-81fc09f5bbef).
 
-
 ## Next steps
+
 - Check out an example of the [Overture + NSI UDF](https://www.fused.io/workbench/catalog/Overture_Nsi-dd89972c-ce30-4544-ba0f-81fc09f5bbef) on the Fused UDF Builder.
 - Browse the [Fused UDF Catalog](https://www.fused.io/workbench/catalog) to find other examples of reusable code.
