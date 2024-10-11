@@ -13,6 +13,7 @@ const sidebars = {
       items: [
         'getting-data/duckdb',
         'getting-data/overturemaps-py',
+        'getting-data/fused',
         'getting-data/athena-aws',
         'getting-data/synapse-azure',
         'getting-data/sedona',
@@ -29,6 +30,7 @@ const sidebars = {
       items: [
         'examples/pandas',
         'examples/lonboard',
+        'examples/fused',
         'examples/kepler-gl',
         'examples/rapid-id',
         'examples/overture-tiles',
