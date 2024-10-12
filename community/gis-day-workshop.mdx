@@ -2,7 +2,7 @@
 title: Overture Maps Workshop
 ---
 
-Querying the Planet: Leveraging GeoParquet to work with global scale open geospatial data locally and in the cloud.
+Querying the Planet: Leveraging GeoParquet to work with global scale open geospatial data locally and in the cloud
 ===
 
 > Consisting of open data from OpenStreetMap, Meta, Esri, Microsoft, Google, and more, Overture Maps data is conflated and converted to a consistent schema before being distributed as geoparquet files in the cloud. This workshop will explore the advantages of GeoParquet and cloud-native geospatial technologies for researchers working with the data both locally and in the cloud.
@@ -18,23 +18,22 @@ Querying the Planet: Leveraging GeoParquet to work with global scale open geospa
 | [DuckDB spatial functions](https://duckdb.org/docs/extensions/spatial/functions) | A list of spatial functions available in the DuckDB spatial extension |
 | [DuckDB H3 extension](https://community-extensions.duckdb.org/extensions/h3.html) | Documentation of the DuckDB h3 extension |
 
-### Workshop Prerequisites:
+### Prerequisites
+
 _If you do not want to install DuckDB locally, you can sign up for MotherDuck, a cloud-based DuckDB, however, you will not be able to use the `COPY TO` commands nor the `h3` extension._
 
 1. [Install DuckDB](https://duckdb.org/docs/installation/?version=stable&environment=cli&platform=macos&download_method=package_manager) version >= 1.1.1
 2. A GIS environment of your choice:
    1. Both QGIS and Esri ArcMap or similar should work. To load geoparquet directly into QGIS, you will need a [version of QGIS with the latest GDAL](https://docs.overturemaps.org/examples/QGIS/).
-   2. Most of this workshop can be visualized with [kepler.gl](kepler.gl)
-
+   2. Most of this workshop can be visualized with [kepler.gl](//kepler.gl)
 
 _**Tip**: When launching DuckDB, specify a persistent DB, such as `duckdb my_db.duckdb`. This way if you create tables, you can access them later._
 
+## 1. Places
 
-## Part 1. Places
+First, we'll query for places in a particular location. Places have _point_ geometries, so they are a simple first feature type to work with.
 
-### Step 1: Query for places in a particular location:
-
-1. Obtain a bounding box of interest https://boundingbox.klokantech.com/ is a great tool for creating a bounding box. Specifically, it lets you copy the coordinates in the following format (DublinCore) which is very human-readable. Here is one for the old city in Nürnberg:
+1. Obtain a bounding box of interest <https://boundingbox.klokantech.com/> is a great tool for creating a bounding box. Specifically, it lets you copy the coordinates in the following format (DublinCore) which is very human-readable. Here is one for the old city in Nürnberg:
 
     ```python
     west_limit=11.069371
@@ -43,7 +42,7 @@ _**Tip**: When launching DuckDB, specify a persistent DB, such as `duckdb my_db.
     north_limit=49.461126
     ```
 
-    (I recommend a smaller bounding box, like just a small city or neighborhood for now so you're not working with a lot of data in the example).
+    (a smaller bounding box, like a small city or neighborhood is recommended for now so you're not working with a lot of data in the example).
 
 2. A basic places query looks like this:
 
@@ -55,20 +54,33 @@ _**Tip**: When launching DuckDB, specify a persistent DB, such as `duckdb my_db.
         geometry
     FROM read_parquet('s3://overturemaps-us-west-2/release/2024-09-18.0/theme=places/type=place/*', filename=true, hive_partitioning=1)
     WHERE
-        bbox.xmin BETWEEN X AND X
-        AND bbox.ymin BETWEEN Y AND Y
+        bbox.xmin BETWEEN X_MINIMUM AND X_MAXIMUM
+        AND bbox.ymin BETWEEN Y_MINIMUM AND Y_MAXIMUM
     LIMIT 10;
     ```
 
     Consult the [places schema](https://docs.overturemaps.org/schema/reference/places/place/) to learn more about which columns can be accessed and their data types.
 
-3. Update the query with the proper values in the `WHERE` clause for `X` and `Y` from your bounding box. Remember, east/west = longitude = X and north/south = latitude = Y.
+3. Update the above query with the proper values in the `WHERE` clause for `X_MINIMUM`, `X_MAXIMUM`, `Y_MINIMUM`, and `Y_MAXIMUM` from your bounding box. Remember, east/west = longitude = X and north/south = latitude = Y.
 
-4. Paste your query into DuckDB and run it.
-
-You should see something similar to this:
+4. Paste your query into DuckDB and run it. After running it, you should see something similar to this:
 
 ```
+% duckdb mydb.dbb
+v1.1.1 af39bd0dcf
+Enter ".help" for usage hints.
+D SELECT
+      id,
+      names.primary as name,
+      confidence,
+      geometry
+  FROM read_parquet('s3://overturemaps-us-west-2/release/2024-09-18.0/theme=places/type=place/*', filename=true, hive_partitioning=1)
+  WHERE
+      bbox.xmin BETWEEN 11.069371 AND 11.090204
+      AND bbox.ymin BETWEEN 49.451761 AND 49.461126
+  LIMIT 10;
+
+100% ▕████████████████████████████████████████████████████████████▏
  ┌─────────┬─────────────────────────────────┬──────────┬───────────────────────────────┐
  │    id   │              name               │confidence│           geometry            │
  │ varchar │             varchar             │  double  │           geometry            │
@@ -90,7 +102,7 @@ You should see something similar to this:
 
 Notice the type of the geometry column is `geometry`. DuckDB recognizes the geo metadata in the source parquet files and automatically converts the column to a geometry type.
 
-### Step 2: Use DuckDB `spatial` extension to convert to common spatial data formats.
+Next, we'll use DuckDB `spatial` to convert to more common spatial data formats.
 
 1. Ensure the `spatial` extension is installed:  `install spatial;`.
 2. Load the spatial extension with `load spatial;`
@@ -103,7 +115,7 @@ Notice the type of the geometry column is `geometry`. DuckDB recognizes the geo 
     ) TO 'old_city_places.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON')
     ```
 
-4. Now open that GeoJSON file in your preferred GIS environment to inspect the attributes (fastest to drag-n-drop into kepler.gl)
+4. Now open the resulting GeoJSON file in your preferred GIS environment to inspect the attributes (fastest to drag-n-drop into kepler.gl)
 
 5. **(Optional):** Download all of the places for a larger region and save them in a table to be accessed later with a `CTAS` command:
 
@@ -123,7 +135,6 @@ Notice the type of the geometry column is `geometry`. DuckDB recognizes the geo 
 
     Now we can reference places in Germany without pulling any more data from Overture (_faster!_).
 
-
     You can create a parquet file of places to use locally with the `COPY TO` command:
 
     ```sql
@@ -139,9 +150,9 @@ Notice the type of the geometry column is `geometry`. DuckDB recognizes the geo 
 
     This will write a geoparquet file to your computer. Recent versions of QGIS can also read GeoParquet. See [these instructions if you're stuck](https://docs.overturemaps.org/examples/QGIS/).
 
-    Additionally, you can access this file at any time with `FROM read_parquet('germany.parquet')`
+    You can access this file at any time from DuckDB: `FROM read_parquet('germany.parquet')`
 
-## Part 2: Divisions
+## 2. Divisions
 
 1. Let's create a table with Country boundaries that we can reference later. In Overture, administrative boundaries are known as divisions:
 
@@ -161,6 +172,7 @@ Notice the type of the geometry column is `geometry`. DuckDB recognizes the geo 
     This might take some time, depending on your internet connection speed, but in the end, you should high resolution boundaries from OpenStreetMap for 234 countries.
 
 2. We can export that file as parquet with the `COPY TO` command again:
+
     ```sql
     COPY(
         SELECT
@@ -191,16 +203,42 @@ Notice the type of the geometry column is `geometry`. DuckDB recognizes the geo 
     ) TO 'germany_places.parquet';
     ```
 
-## Part 3: H3
+3. To download places for any other countries, we can do a combination of reading from our local countries boundary file and the Overture data on s3:
+
+    ```sql
+    load spatial;
+    COPY(
+        SELECT
+            id,
+            confidence,
+            names.primary as name,
+            categories.primary as category,
+            geometry
+    FROM read_parquet('s3://overturemaps-us-west-2/release/2024-09-18.0/theme=places/type=place/*', filename=true, hive_partitioning=1)
+    WHERE ST_CONTAINS(
+        (
+            SELECT ST_SIMPLIFY(border, 0.01)
+            FROM read_parquet('countries.parquet')
+            WHERE name_en = 'Spain'
+        ),
+        geometry
+        )
+    ) TO 'places_es.parquet';
+    ```
+
+### H3 Extension
+
 We can do spatial analysis with the [h3 grid system](https://h3geo.org/), available in duckdb via the h3 plugin:
 
 1. Install the extension:
+
     ```sql
     install h3 from community;
     load h3;
     ```
 
 2. Density of places per h3 cell:
+
     ```sql
     COPY(
         SELECT
@@ -213,8 +251,8 @@ We can do spatial analysis with the [h3 grid system](https://h3geo.org/), availa
 
     Now drag-n-drop h3.csv directly into kepler.gl, which will turn the h3 index into a polygon automatically:
 
-
 3. Just to demonstrate the power of this extension, let's find all of the h3 polyons that cover our country boundarie:
+
     ```sql
     load h3;
     COPY(
@@ -232,8 +270,7 @@ We can do spatial analysis with the [h3 grid system](https://h3geo.org/), availa
 
     You now have a file that maps h3 cell to Country name that you can join other h3-aggregated data to for per-Country analysis.
 
-
-## Part 4:  Buildings
+## 3. Buildings
 
 1. Overture contains more than 2B building footprints. Fetching them all to our local machine is not very valuable. However, we can interact with their metadata in the cloud:
 
@@ -286,11 +323,12 @@ We can do spatial analysis with the [h3 grid system](https://h3geo.org/), availa
     ) TO 'building_density_h3_res8.csv';
     ```
 
+## 4. Transportation
 
-## Part 5: Transportation Theme
 The transportation theme has 2 types of data, connectors and segments.
 
 1. Get started by looking at the segments in Paris:
+
     ```sql
     COPY(
         SELECT
@@ -336,10 +374,12 @@ The transportation theme has 2 types of data, connectors and segments.
     ) TO 'connectors_h3.csv';
     ```
 
-## Part 6: Base
+## 5. Base
+
 What is the base theme? Consult the documention here: docs.overturemaps.org/guides/base/
 
 1. Download all of the peaks in Europe:
+
     ```sql
     SET s3_region='us-west-2';
 
@@ -359,6 +399,7 @@ What is the base theme? Consult the documention here: docs.overturemaps.org/guid
     ```
 
 2. We can build an h3-gridded DEM for European high points from this file:
+
     ```sql
         COPY(
             SELECT
@@ -374,10 +415,14 @@ What is the base theme? Consult the documention here: docs.overturemaps.org/guid
         ) TO 'peaks_h3.csv';
     ```
 
-What other types of features from OSM are you interested in exploring? The logic for how features convert from OSM to Overture is here: https://docs.overturemaps.org/schema/concepts/by-theme/base/
-
+What other types of features from OSM are you interested in exploring? The logic for how features convert from OSM to Overture is here: <https://docs.overturemaps.org/schema/concepts/by-theme/base/>
 
 ## Next Steps
-Overture keeps a list of projects from the community. Many of these are great tutorials on working with Overture data: https://docs.overturemaps.org/community/.
 
-For further inspiration, this blog post uses AI for places data conflation: https://www.dbreunig.com/2024/09/27/conflating-overture-points-of-interests-with-duckdb-ollama-and-more.html
+Overture keeps a list of projects from the community. Many of these are great tutorials on working with Overture data: <https://docs.overturemaps.org/community/>.
+
+For further inspiration, this blog post uses AI for places data conflation: <https://www.dbreunig.com/2024/09/27/conflating-overture-points-of-interests-with-duckdb-ollama-and-more.html>
+
+Notes:
+
+1. This is an extension of the workshop hosted at the [Geospatial Worlds – Geodata, Code & Society](https://www.geographie.nat.fau.de/digitale-geographien-2024/) on October 1, 2024_.
