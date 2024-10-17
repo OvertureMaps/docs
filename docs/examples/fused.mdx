@@ -8,44 +8,48 @@ In these examples, we'll see ways to load and transform Overture data using Fuse
 
 ### Join Overture Buildings and NSI
 
-This example shows how to join the Overture Buildings dataset with the [National Structures Inventory (NSI)](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/technical-documentation). The NSI API provides point data on buildings in the U.S. that are relevant to hazard analyses. Joining the NSI data with Overture Buildings can enrich the buildings dataset with additional metadata.
+This example shows how to join the Overture Buildings dataset with the [National Structures Inventory (NSI)](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/technical-documentation) dataset. The NSI API provides point data on buildings in the U.S. that are relevant to hazard analyses. Joining the NSI data with Overture Buildings can be used to enrich Overture Building features with additional metadata.
 
 We'll be loading Overture Buildings data using the Fused User Defined Function explained in [this](/getting-data/fused/) section of the docs.
 
-First import Fused.
+First we import Fused.
 
 ```python
 import fused
 ```
 
-Now we can define a bounding box of our area of interest. We'll use it to load data for both datasets for the same area.
+Now we can define a `GeoDataFrame` with a bounding box of our area of interest. We'll use it to load data for the same area of each dataset. 
 
 ```python
-bbox = [-122.349, 37.781, -122.341, 37.818]
+import fused
+import geopandas as gpd
+import shapely
+
+bbox = gpd.GeoDataFrame(
+    geometry=[shapely.box(-73.9847, 40.7666, -73.9810, 40.7694)], 
+    crs=4326
+)
 ```
 
-We can use `fused.run` to run the predefined Overture UDF that loads Overture Buildings data for the given `bbox` area and Overture `theme` specified by the `overture_type` parameter.
+We use `fused.run` to run the predefined Overture UDF that loads Overture Buildings data for the given `bbox` area. We specify the Overture `theme` with the `overture_type` parameter, and a subset of columns to fetch with the `use_columns` parameter.
 
 ```python
 gdf_overture = fused.run(
     "UDF_Overture_Maps_Example", 
     bbox=bbox, 
     overture_type='building', 
-    use_columns=['geometry', 'names', 'source']
+    use_columns=['geometry', 'names', 'sources']
 )
 ```
 
-To get the NSI data, we call the [NSI API](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/api-reference-guide), defining the area using a GeoJSON. After receiving the response, we convert it into a GeoDataFrame.
+To get the NSI data, we call the [NSI API](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/api-reference-guide), defining the area using a GeoJSON derived from the `bbox` `GeoDataFrame`. After receiving the response, we convert it into a `GeoDataFrame`.
 
 ```python
 import requests
 import json
 
-# Create a GeoDataFrame with the bounding box
-bbox = gpd.GeoDataFrame({"geometry": [box(*bbox)]}, crs="EPSG:4326")
-
 # Convert to GeoJSON
-bbox_geojson = json.loads(bbox[['geometry']].to_json())
+bbox_geojson = json.loads(bbox.to_json())
 
 # Make a request to the NSI API
 response = requests.post(
@@ -60,29 +64,29 @@ gdf_nsi = gpd.GeoDataFrame.from_features(response.json()["features"])
 Now we can join the Overture and NSI data using a spatial join.
 
 ```python
-gdf_overture.sjoin(gdf_nsi)
+gdf_overture.sjoin(gdf_nsi, how='inner', predicate='intersects')
 ```
 
 ### Create a Fused User Defined Function (UDF)
 
 We can encapsulate the above code into a UDF that can be referenced and reused in other workflows.
 
-In this code, the `@fused.udf` decorator indicates that the function is a UDF. The function defines the area of interest using the `bbox` parameter, which is typed as `fused.types.TileGDF` so Fused automatically converts it into a GeoDataFrame.
+In this code, the `@fused.udf` decorator indicates that the function is a UDF. The function defines the area of interest using the `bbox` parameter. Note how the UDF imports are included in the function body.
 
 ```python
 import fused
 
 @fused.udf
-def udf(bbox: fused.types.TileGDF):
+def udf(bbox):
+    import json
     import geopandas as gpd
     import requests
-    import json
 
     # 1. Load Overture Buildings
     gdf_overture = fused.run("UDF_Overture_Maps_Example", bbox=bbox, overture_type='building')
 
     # 2. Load NSI from API
-    bbox_geojson = json.loads(bbox[['geometry']].to_json())
+    bbox_geojson = json.loads(bbox.to_json())
     response = requests.post(
         url="https://nsi.sec.usace.army.mil/nsiapi/structures?fmt=fc",
         json=bbox_geojson,
@@ -92,20 +96,19 @@ def udf(bbox: fused.types.TileGDF):
     gdf_nsi = gpd.GeoDataFrame.from_features(response.json()["features"])
 
     # 4. Join Overture and NSI
-    return gdf_overture.sjoin(gdf_nsi)
+    return gdf_overture.sjoin(gdf_nsi, how='inner', predicate='intersects')
 ```
 
-Now we can run the UDF for an area specified with a bounding box.
+Now we can run the UDF for an area specified by the bounding box.
 
 ```python
-fused.run(udf, bbox=[-122.349, 37.781, -122.341, 37.818]) 
+fused.run(udf, bbox=bbox) 
 ```
 
-By encapsulating the code into a UDF, a workflow or client application can dynamically pass the `bbox` to run and return the data to perform the join on the fly through an application.
-
-A simple way to try this is to use [the Fused UDF Builder](https://www.fused.io/workbench/catalog/Overture_Nsi-dd89972c-ce30-4544-ba0f-81fc09f5bbef).
+By encapsulating the code into a UDF, a workflow or client application can dynamically pass different areas of interest to the `bbox` parameter to run the UDF and return its output table. A simple way to try this is to run a UDF equivalent to the one we just created in the [Fused UDF Builder](https://www.fused.io/workbench/catalog/Overture_Nsi-dd89972c-ce30-4544-ba0f-81fc09f5bbef) which renders the UDF outputs on a map.
 
 ## Next steps
 
+- Explore [Fused Overture UDF](https://www.fused.io/workbench/catalog/Overture_Maps_Example-64071fb8-2c96-4015-adb9-596c3bac6787) on the Fused UDF Builder.
 - Check out an example of the [Overture + NSI UDF](https://www.fused.io/workbench/catalog/Overture_Nsi-dd89972c-ce30-4544-ba0f-81fc09f5bbef) on the Fused UDF Builder.
-- Browse the [Fused UDF Catalog](https://www.fused.io/workbench/catalog) to find other examples of reusable code.
+- Browse the [Fused UDF Catalog](https://www.fused.io/workbench/catalog) to find other examples of reusable UDFs.

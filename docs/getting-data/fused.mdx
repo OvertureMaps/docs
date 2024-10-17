@@ -7,71 +7,66 @@ import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
 
-[Fused](https://www.fused.io/) is a cloud analytics platform to process data with [User Defined Functions](https://docs.fused.io/core-concepts/write/) (UDFs). UDFs are reusable Python functions that can be invoked from anywhere. The Fused Overture UDF enables you to quickly load Overture data, perform operations like joins with other datasets, visualize results directly in your browser, and integrate smoothly with various tools.
+[Fused](https://www.fused.io/) is a cloud analytics platform to process data with [User Defined Functions](https://docs.fused.io/core-concepts/write/) (UDFs). UDFs are reusable Python functions that can be invoked from anywhere. The Fused Overture UDF enables you to quickly load Overture data, perform operations like joins with other datasets, visualize results directly on your browser, and integrate smoothly with data tools.
 
 ## Load data with the Overture UDF
 
-The Overture UDF loads data from GeoParquet files of the Overture Dataset [hosted at Source Cooperative](https://beta.source.coop/repositories/fused/overture/description/). You can view the source code of the Fused Uder Defined Function we will run on this [GitHub repo](https://github.com/fusedio/udfs/blob/main/public/Overture_Maps_Example/Overture_Maps_Example.py).
+The Overture UDF loads data from GeoParquet files of the Overture Dataset [hosted at Source Cooperative](https://beta.source.coop/repositories/fused/overture/description/). You can view the source code of the Fused Uder Defined Function we will run in this [GitHub repo](https://github.com/fusedio/udfs/blob/main/public/Overture_Maps_Example/Overture_Maps_Example.py).
 
 
 ### Install Fused
 
-Install the [Fused Python library](https://pypi.org/project/fused/) with pip. 
+We install the [Fused Python library](https://pypi.org/project/fused/) with pip. 
 
 ```python
-pip install fused
+pip install fused>=1.10.0
+```
+
+### Define the area of interest
+
+We specify the area for the UDF to download data by passing a `GeoDataFrame` to the `bbox` parameter.
+
+```python
+import fused
+import geopandas as gpd
+import shapely
+
+bbox = gpd.GeoDataFrame(
+    geometry=[shapely.box(-73.9847, 40.7666, -73.9810, 40.7694)], 
+    crs=4326
+)
 ```
 
 ### Run the Overture UDF
-You run the [UDF](https://github.com/fusedio/udfs/blob/main/public/Overture_Maps_Example/Overture_Maps_Example.py) with `fused.run` (see more about `fused.run` on the [Fused docs](https://docs.fused.io/core-concepts/run/#fusedrun)). Specify the area to load data with the `bbox` parameter. The UDF also provides optional parameters to select specific Overture releases, datasets, and columns - giving you flexibility to fetch only the data you need.
+We may run the [Fused Overture UDF](https://github.com/fusedio/udfs/blob/main/public/Overture_Maps_Example/Overture_Maps_Example.py) with `fused.run` (see more about `fused.run` on the [Fused docs](https://docs.fused.io/core-concepts/run/#fusedrun)). We specify the area to load data with the `bbox` parameter. The UDF also provides optional parameters to select specific Overture releases, datasets, and columns - giving you flexibility to fetch only the data you need.
 
 
 <Tabs queryString="fused-run">
     <TabItem value="buildings" label="Buildings">
-        <QueryBuilder query={`
-import fused
-
-fused.run('UDF_Overture_Maps_Example', bbox=[-122.349, 37.781, -122.341, 37.818], overture_type='building') 
-        `}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='building') `}></QueryBuilder>
     </TabItem>
     <TabItem value="water" label="Water">
-        <QueryBuilder query={`
-import fused
-
-fused.run('UDF_Overture_Maps_Example', bbox=[-122.349, 37.781, -122.341, 37.818], overture_type='water') 
-        `}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='water')`}></QueryBuilder>
     </TabItem>
     <TabItem value="divisions" label="Divisions">
-        <QueryBuilder query={`
-import fused
-
-fused.run('UDF_Overture_Maps_Example', bbox=[-122.349, 37.781, -122.341, 37.818], overture_type='division_boundary')
-fused.run('UDF_Overture_Maps_Example', bbox=[-122.349, 37.781, -122.341, 37.818], overture_type='division')
-fused.run('UDF_Overture_Maps_Example', bbox=[-122.349, 37.781, -122.341, 37.818], overture_type='division_area')
-        `}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='division_boundary')
+fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='division')
+fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='division_area')`}></QueryBuilder>
     </TabItem>
     <TabItem value="segments-connectors" label="Segments & Connectors">
-        <QueryBuilder query={`
-import fused
-
-fused.run('UDF_Overture_Maps_Example', bbox=[-122.349, 37.781, -122.341, 37.818], overture_type='segment')
-fused.run('UDF_Overture_Maps_Example', bbox=[-122.349, 37.781, -122.341, 37.818], overture_type='connector')
-        `}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='segment')
+fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='connector')`}></QueryBuilder>
     </TabItem>
     <TabItem value="landuse" label="Land Use">
-        <QueryBuilder query={`
-import fused
-
-fused.run('UDF_Overture_Maps_Example', bbox=[-122.349, 37.781, -122.341, 37.818], overture_type='land_use')
-        `}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='land_use')`}></QueryBuilder>
     </TabItem>
 </Tabs>
 
 
 
 ## Next steps
-- Visualize the data in [Fused UDF Editor](https://www.fused.io/workbench/catalog/Overture_Maps_Example-64071fb8-2c96-4015-adb9-596c3bac6787)
-- [Join Overture data](/examples/fused/) with other datasets
+- Visualize Overture datasets interactively in the [Fused UDF Editor](https://www.fused.io/workbench/catalog/Overture_Maps_Example-64071fb8-2c96-4015-adb9-596c3bac6787)
+- See an [example](/examples/fused/) of how to join Overture with other datasets
 
 
 
