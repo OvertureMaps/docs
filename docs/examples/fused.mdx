@@ -31,7 +31,7 @@ bbox = gpd.GeoDataFrame(
 )
 ```
 
-We use `fused.run` to run the predefined Overture UDF that loads Overture Buildings data for the given `bbox` area. We specify the Overture `theme` with the `overture_type` parameter, and a subset of columns to fetch with the `use_columns` parameter.
+We use `fused.run` to run the predefined Overture UDF that loads Overture Buildings data for the given `bbox` area. We may specify the Overture `theme` with the `overture_type` parameter, and a subset of columns to fetch with the `use_columns` parameter.
 
 ```python
 gdf_overture = fused.run(
