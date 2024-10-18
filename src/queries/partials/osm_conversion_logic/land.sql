@@ -47,7 +47,7 @@ CASE
     WHEN element_at(tags,'landcover') IN ('trees') THEN ROW('forest', 'forest')
     WHEN element_at(tags,'landuse') IN ('forest') THEN ROW('forest','forest')
 
-    -- Single trees tree rows
+    -- Single trees / tree rows
     WHEN element_at(tags,'natural') IN ('tree') THEN ROW('tree','tree')
     WHEN element_at(tags,'natural') IN ('tree_row') THEN ROW('tree','tree_row')
 
