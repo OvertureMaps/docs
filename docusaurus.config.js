@@ -81,8 +81,8 @@ const config = {
       {
         id: 'release-blog',
         blogSidebarTitle: 'Releases',
-        blogTitle: "Overture Release Notes and Changelog",
-        blogDescription: "Overture Maps Release Notes and Changelog",
+        blogTitle: "Overture Release Notes and Schema Changelog",
+        blogDescription: "Overture Maps Release Notes and Schema Changelog",
         showReadingTime: false,
         postsPerPage: 1,
         blogSidebarCount: 'ALL',
@@ -112,9 +112,9 @@ const config = {
           showLastUpdateTime: true,
         },
         blog: {
-          blogTitle: 'Overture Maps Engineering',
-          blogDescription: 'Technical posts from the Overture Maps engineering team',
-          blogSidebarTitle: 'Overture Maps Engineering Blog',
+          blogTitle: 'Overture Maps Data Blog',
+          blogDescription: 'What's new and cool in our data, from the Overture Maps engineering team',
+          blogSidebarTitle: 'Overture Maps Data Blog',
           blogSidebarCount: 'ALL',
         },
         theme: {
