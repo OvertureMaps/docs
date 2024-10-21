@@ -113,7 +113,7 @@ const config = {
         },
         blog: {
           blogTitle: 'Overture Maps Data Blog',
-          blogDescription: 'What's new and cool in our data, from the Overture Maps engineering team',
+          blogDescription: 'Data stories from the Overture Maps engineering team',
           blogSidebarTitle: 'Overture Maps Data Blog',
           blogSidebarCount: 'ALL',
         },
