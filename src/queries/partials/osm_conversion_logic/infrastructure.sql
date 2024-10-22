@@ -1,34 +1,69 @@
 CASE
-    -- Transit
-    WHEN element_at(tags,'railway') IN ('station','halt') THEN ROW('transit', 'railway_' || element_at(tags,'railway'))
+    -- Railways / Subways
+    WHEN element_at(tags,'railway') IN ('station','halt') THEN CASE
 
+        -- Railway Specific
+        WHEN element_at(tags,'station') <> 'subway' AND element_at(tags, 'subway') <> 'yes' THEN ROW('transit', 'railway_station')
+        
+        -- Multimodal stations
+        ELSE ROW('transit', 'railway_' || element_at(tags,'railway'))
+    END
+
+    -- Ferry Terminals
+    WHEN element_at(tags,'amenity') = 'ferry_terminal' OR (
+            element_at(tags,'public_transport') = 'stop_position' AND element_at(tags,'ferry') = 'yes' 
+        ) THEN ROW('transit','ferry_terminal')
+
+    -- Transit Stops
     WHEN element_at(tags,'highway') = 'bus_stop' THEN ROW('transit', 'bus_stop')
     WHEN element_at(tags,'route') = 'bus' THEN ROW('transit', 'bus_route')
     WHEN element_at(tags,'amenity') = 'bus_station' THEN ROW('transit', 'bus_station')
-
-    WHEN element_at(tags,'amenity') = 'ferry_terminal' THEN ROW('transit','ferry_terminal')
-
-    WHEN element_at(tags,'amenity') IN ('parking','parking_space','bicycle_parking') THEN ROW('transit', element_at(tags,'amenity'))
-
     WHEN element_at(tags,'public_transport') IN ('stop_position', 'platform') THEN ROW('transit', element_at(tags,'public_transport'))
 
-    -- Aerialways
-    WHEN element_at(tags,'aerialway') IN (
+    -- Parking
+    WHEN element_at(tags,'amenity') IN (
+        'parking',
+        'parking_space',
+        'bicycle_parking'
+    ) THEN ROW('transit', element_at(tags,'amenity'))
+
+    -- Aerialways (Linestrings)
+    WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_LineString' AND element_at(tags,'aerialway') IN (
         'cable_car',
-        'gondola',
-        'mixed_lift',
         'chair_lift',
         'drag_lift',
-        't-bar',
-        'pylon'
+        'gondola',
+        'mixed_lift',
+        't-bar'
     ) THEN ROW('aerialway', element_at(tags,'aerialway'))
+    
+    -- Pylons are points
+    WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_Point' AND element_at(tags,'aerialway') = 'pylon' THEN ROW('aerialway', 'pylon')
 
+    -- Stations are nodes/ways
     WHEN element_at(tags,'aerialway') = 'station' THEN ROW('aerialway', 'aerialway_station')
 
-    -- Airports
-    WHEN element_at(tags,'aeroway') IN ('runway', 'taxiway', 'airstrip', 'helipad') THEN ROW('airport', element_at(tags,'aeroway'))
+    -- Airports (Polygons)
+    WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) IN ('ST_Polygon', 'ST_MultiPolygon') AND element_at(tags,'aeroway') IN (
+        'airstrip', 
+        'helipad',
+        'heliport'
+    ) THEN ROW('airport', element_at(tags,'aeroway'))
 
-    WHEN element_at(tags,'aeroway') = 'gate' THEN ROW('airport', 'airport_gate')
+    -- Airports (LineStrings)
+    WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_LineString' AND element_at(tags, 'aeroway') IN (
+        'runway',
+        'taxiway'
+    ) THEN ROW('airport', element_at(tags,'aeroway'))
+
+    -- Airports (Points)
+    WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_Point' AND element_at(tags,'aeroway') IN (
+        'airstrip',
+        'helipad'
+    ) THEN ROW('airport', element_at(tags,'aeroway'))
+
+    WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_Point' AND element_at(tags,'aeroway') = 'gate'
+        THEN ROW('airport', 'airport_gate')
 
     WHEN element_at(tags,'aeroway') = 'aerodrome' THEN CASE
         WHEN element_at(tags,'aerodrome:type') = 'military' OR element_at(tags,'landuse') = 'military' OR element_at(tags,'military') IN (
@@ -65,7 +100,8 @@ CASE
     WHEN element_at(tags,'tower:type') = 'communication' THEN ROW('communication','communication_tower')
 
     -- Pedestrian
-    WHEN element_at(tags,'highway') IS NULL AND element_at(tags,'footway') IN ('crossing') AND (wkt LIKE 'MULTIPOLYGON%' OR wkt LIKE 'POLYGON%') THEN ROW('pedestrian','pedestrian_crossing')
+    WHEN element_at(tags,'highway') IS NULL AND element_at(tags,'footway') IN ('crossing') AND 
+        ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) IN ('ST_Polygon','ST_MultiPolygon') THEN ROW('pedestrian','pedestrian_crossing')
     WHEN element_at(tags,'tourism') IN ('information', 'viewpoint') THEN ROW('pedestrian', element_at(tags,'tourism'))
     WHEN element_at(tags,'amenity') IN (
         'atm',
@@ -102,7 +138,7 @@ CASE
     WHEN element_at(tags,'power') IN ('line', 'pole', 'tower') THEN ROW('power','power_' || element_at(tags,'power'))
 
     -- Recreation
-    WHEN element_at(tags,'tourism') = ('camp_site') AND wkt LIKE 'POINT%' THEN ROW('recreation','camp_site')
+    WHEN element_at(tags,'tourism') = ('camp_site') AND ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_Point' THEN ROW('recreation','camp_site')
 
     -- Towers
     WHEN element_at(tags,'tower:type') IN (
@@ -121,8 +157,14 @@ CASE
         'watchtower'
     ) THEN ROW('tower', element_at(tags,'tower:type'))
 
-    -- Utility
-    WHEN element_at(tags,'man_made') IN ('silo','utility_pole','storage_tank', 'pipeline', 'water_tower') THEN ROW('utility',element_at(tags,'man_made'))
+    -- Utility / human made made containers
+    WHEN element_at(tags,'man_made') IN (
+        'pipeline',
+        'silo',
+        'storage_tank', 
+        'utility_pole',
+        'water_tower'
+    ) THEN ROW('utility', element_at(tags,'man_made'))
 
     -- Waste Management
     WHEN element_at(tags,'amenity') IN(
@@ -146,7 +188,7 @@ CASE
 
     -- Barrier tags are often secondary on other features, so put them last.
     -- Barrier tags that are not allowed on points:
-    WHEN wkt NOT LIKE 'POINT%' AND element_at(tags,'barrier') IN (
+    WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) <> 'ST_Point' AND element_at(tags,'barrier') IN (
         'cable_barrier',
         'city_wall',
         'chain',
