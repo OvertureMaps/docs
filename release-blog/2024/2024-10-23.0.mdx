@@ -9,8 +9,9 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 ## Overview
 
 **The `2024-10-23.0` release of Overture data and `v1.2.0` of the Overture schema are now available.** As part of Overture's effort to expand our data sources, 
-we added in this release address data for several countries from several sources, transportation data from TomTom, and building height data from Microsoft and Esri Community Maps contributors. 
-The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
+we added in this release address data from several sources, transportation data from TomTom, and building height data from Microsoft and Esri Community Maps contributors. 
+
+The October release is available as GeoParquet files stored on both AWS and Azure. The release paths are:
 
 #### Microsoft Azure:
 ```
@@ -23,30 +24,26 @@ s3://overturemaps-us-west-2/release/2024-10-23.0
 ```
 :::note
 We are now releasing Overture's GeoParquet files in accordance with the [GeoParquet v1.1.0 specification](https://geoparquet.org/releases/v1.1.0/), 
-with the `covering` metadata included. So you can now do this:
+with the covering metadata included. So you can now do this:
 ```
-ogr2ogr --config AWS_NO_SIGN_REQUEST=yes -spat -71.068 42.353 -71.058 42.363  -f GeoJSON output.geojson
+ogr2ogr --config AWS_NO_SIGN_REQUEST=yes -spat -71.068 42.353 -71.058 42.363  
+-f GeoJSON output.geojson
 /vsis3/overturemaps-us-west-2/release/2024-10-23.0/theme=buildings/type=building/
 ```
 :::
 
-You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage users to report bugs and provide feedback on the data, schema, and GERS on one of our Overture GitHub repositories:
+You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage users to report bugs and provide feedback on the data and schema on GitHub:
 
 - [Schema](https://github.com/OvertureMaps/schema)
 - [Data](https://github.com/OvertureMaps/data)
-- [Docs](https://github.com/OvertureMaps/docs)
-- [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py)
-- [Explore site](https://github.com/OvertureMaps/io-site)
-
 
 ## Breaking changes
 
-We removed the `connector_ids` property from the schema. It has been replaced by the new `connectors` property. You'll find more information [here](https://docs.overturemaps.org/blog/2024/08/15/preview-august-release/#connectors).
+We removed the `connector_ids` property from the schema and replaced it with a new `connectors` property. You'll find more information about this change [here](https://docs.overturemaps.org/blog/2024/08/15/preview-august-release/#connectors).
 
 ## Deprecations
 
 In the `2024-08-20.0` [release notes](https://docs.overturemaps.org/release/2024-08-20.0/), we announced the deprecation of the `connector_ids` property in the transportation schema. We have removed that property in this release. 
-It has been replaced by the new `connectors` property.
 
 ## Theme-specific updates
 
@@ -73,7 +70,7 @@ The base, buildings, divisions, and places themes are in GA. The transportation 
 - fixed lake features in Manitoba, Canada
 
 ### Buildings
-- fixed building features with class but no subtype · Issue #183 · OvertureMaps/data 
+- fixed building features with class but no subtype 
 - fixed height data missing in September release 
 - fixed building height but there is no source information 
 - fixed building heights derived from lidar in areas with tree cover are incorrect 
@@ -84,7 +81,7 @@ The base, buildings, divisions, and places themes are in GA. The transportation 
 - added new from Esri (2024-10-15)
 
 ### Divisions
-- changed subtype of Puerto Rico to dependency
+- updated the subtype of 38 dependencies, e.g. Puerto Rico
 - fixed microhood/neighborhood discrepancy between feature types
 - updated regions in North Macedonia
 - moved features with a `suburbs` tag under a new `macrohood` subtype
@@ -93,7 +90,7 @@ The base, buildings, divisions, and places themes are in GA. The transportation 
 - no updates
 
 ### Transportation
-- removed `connector_ids` property; more information [here](https://docs.overturemaps.org/blog/2024/08/15/preview-august-release/#connectors). 
+- removed `connector_ids` property; more information [here](https://docs.overturemaps.org/blog/2024/08/15/preview-august-release/#connectors) 
 - removed duplicate coordinates for 100 segment geometries
 - fixed most remaining schema mismatch issues, primarily for turn restrictions
 - filtered out abandoned/disused railways until they can be properly flagged, affecting 336K segments
