@@ -13,31 +13,31 @@
             <link>https://docs.overturemaps.org/blog/2024/10/21/preview-october-release/</link>
             <guid>https://docs.overturemaps.org/blog/2024/10/21/preview-october-release/</guid>
             <pubDate>Mon, 21 Oct 2024 00:00:00 GMT</pubDate>
-            <description><![CDATA[Later this week Overture will release datasets that include new]]></description>
-            <content:encoded><![CDATA[<p>Later this week Overture will <a href="https://docs.overturemaps.org/getting-data/" target="_blank" rel="noopener noreferrer">release datasets</a> that include new
+            <description><![CDATA[Overture Maps Data Blog]]></description>
+            <content:encoded><![CDATA[<p>This week Overture is <a href="https://docs.overturemaps.org/release/latest/" target="_blank" rel="noopener noreferrer">releasing</a> datasets that include new
 addresses across ten countries, new road features in Saudi Arabia and Italy from TomTom,
-and new building height data from Microsoft and Esri Community Maps contributors.</p>
+and new building height data from Microsoft and Esri Community Maps contributors. Here's a preview of what you'll find in our October release.</p>
 <table><thead><tr><th style="text-align:center"><img decoding="async" loading="lazy" alt="H3 cells addresses" src="https://docs.overturemaps.org/assets/images/address-coverage-h3-october-aee3b670e60bd0dc05bdf39c80d3740d.png" width="1728" height="958" class="img_ev3q"></th></tr></thead><tbody><tr><td style="text-align:center"><em>H3 coverage map of Overture addresses - we see you Norway!</em></td></tr></tbody></table>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="addresses-around-the-world">Addresses around the world<a href="https://docs.overturemaps.org/blog/2024/10/21/preview-october-release/#addresses-around-the-world" class="hash-link" aria-label="Direct link to Addresses around the world" title="Direct link to Addresses around the world">​</a></h2>
-<p>In July, Overture <a href="https://docs.overturemaps.org/release/2024-07-22.0/#new-theme-addresses" target="_blank" rel="noopener noreferrer">launched</a> its addresses theme
+<p>In July, Overture <a href="https://docs.overturemaps.org/release/2024-07-22.0/#new-theme-addresses" target="_blank" rel="noopener noreferrer">launched</a> our addresses theme
 with 200 million features in 14 countries. Since then,
 we’ve added data for ten additional countries, bringing the total feature count to over 344 million.
 We’re building on great work by the open data community, including folks on the <a href="https://openaddresses.io/" target="_blank" rel="noopener noreferrer">OpenAddresses</a>
 and <a href="https://www.addressforall.org/en/" target="_blank" rel="noopener noreferrer">AddressForAll</a> projects.</p>
-<p>And now we're excited to share another new source of open data. Previously, Overture pulled all its address data
+<p>And now we're excited to share another new source of open data. Previously, Overture pulled all address data
 in the United States from the <a href="https://www.transportation.gov/gis/national-address-database" target="_blank" rel="noopener noreferrer">Department of Transportation’s National
 Address Database (NAD)</a>.
 For the October release, we developed a cut-and-replace workflow to swap NAD data in New York City
 with data from <a href="https://opendata.cityofnewyork.us/" target="_blank" rel="noopener noreferrer">NYC Open Data</a>. Local data FTW! This is a process
 we will continue to refine so that we can more
-easily fold in new data to improve coverage and quality across all <a href="https://docs.overturemaps.org/guides/" target="_blank" rel="noopener noreferrer">Overture themes</a>.</p>
+easily fold in new data across all <a href="https://docs.overturemaps.org/guides/" target="_blank" rel="noopener noreferrer">Overture themes</a>.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="roads-and-building-heights">Roads and building heights<a href="https://docs.overturemaps.org/blog/2024/10/21/preview-october-release/#roads-and-building-heights" class="hash-link" aria-label="Direct link to Roads and building heights" title="Direct link to Roads and building heights">​</a></h2>
-<p>Also in the October release, you’ll find new data from <a href="https://www.tomtom.com/" target="_blank" rel="noopener noreferrer">TomTom</a>, representing 31,654 kilometers of roads in Saudi Arabia
+<p>Also in the October release, you’ll find new data from <a href="https://www.tomtom.com/" target="_blank" rel="noopener noreferrer">TomTom</a>, representing more than 30,000 kilometers of roads in Saudi Arabia
 and Italy. We also added new building height data from both Microsoft and <a href="https://communitymaps.arcgis.com/home/" target="_blank" rel="noopener noreferrer">Esri Community Maps contributors</a>.
-These updates highlight Overture’s goal to improve data quality and coverage by incorporating new data in each release,
-with a focus on <a href="https://docs.overturemaps.org/attribution/" target="_blank" rel="noopener noreferrer">data sources</a> that have more permissive open-source licenses.</p>
-<p>Please <a href="https://github.com/OvertureMaps/data/discussions" target="_blank" rel="noopener noreferrer">reach out to us on GitHub</a> if you have any questions or feedback.
-And if you have a suggestion for a new dataset, we’d love to hear about it.</p>]]></content:encoded>
+These updates highlight Overture’s goal to improve data quality and coverage by incorporating new data into each release,
+with a focus on <a href="https://docs.overturemaps.org/attribution/" target="_blank" rel="noopener noreferrer">data sources</a> that have permissive open-source licenses.</p>
+<p>Please <a href="https://github.com/OvertureMaps/data/discussions" target="_blank" rel="noopener noreferrer">reach out to us on GitHub</a> with questions and feedback about our data.
+If you have a suggestion for a new dataset or if you have data you'd like to contribute, you can email us at <strong>data AT overturemaps.org</strong>. We’d love to hear from you.</p>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[What to expect in Overture’s August release]]></title>
