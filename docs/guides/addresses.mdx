@@ -16,9 +16,9 @@ import UtahAddresses from '!!raw-loader!@site/src/queries/duckdb/addresses_utah.
 
 _Note: This theme is currently in Alpha and we anticipate significant changes over the next several releases. We invite the Overture community to test the addresses schema and data and offer feedback via the [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repos._
 
-Overture maintains nearly 215 million address point entities. The address theme is derived from a variety of sources, mostly distributed through [OpenAddresses](https://openaddresses.io/).
+Overture maintains over 344 million address point entities. Data in the address theme is derived from a variety of sources, mostly distributed by  [OpenAddresses](https://openaddresses.io/) and [AddressForAll](https://www.addressforall.org/en/), but also relies on open data from the [City of New York](https://data.cityofnewyork.us/City-Government/NYC-Address-Points/g6pj-hd8k) and the [U.S. Department of Transportation](https://www.transportation.gov/gis/national-address-database).
 
-For licensing information, please see the [attribution page](https://docs.overturemaps.org/attribution/).
+For licensing information, please see the [Attribution and Licensing page](https://docs.overturemaps.org/attribution/).
 
 Address data can be used for a variety of purposes, which can include:
 
@@ -29,9 +29,9 @@ Address data can be used for a variety of purposes, which can include:
 - **Normalization**: Adhering to standard and consistent forms of address components.
 - **Validation and Verification**: Confirming an address exists within a known list of addresses.
 
-| ![Overture address coverage](/img/addresses/address-coverage.png) |
+| ![Overture address coverage](/img/addresses/address-coverage-h3-october.png) |
 |:--:|
-| *Overture address data, styled by country: countries with address coverage in color.* |
+| *Coverage of Overture address data, visualized using H3 cells.* |
 
 ## Dataset description
 
@@ -43,23 +43,30 @@ An `address` is a feature type that represents a physical place through a series
 	<summary>Counts, per country, of the address feature type</summary>
 | Country | Address Count |
 | -------- | -------- |
-| US | 78,078,341
-| MX | 30,278,896
-| FR | 26,041,499
-| CA | 16,457,790
-| AU | 15,608,317
-| NL | 9,750,341
-| CO | 7,786,046
-| PT | 5,911,139
-| CL | 4,042,071
-| DK | 3,920,253
-| FI | 3,897,449
-| CH | 3,147,964
-| AT | 2,492,155
-| NZ | 2,351,461
-| EE | 2,210,423
-| LT | 1,036,251
-| LU | 164,415
+BR | 89,899,299
+US | 80,322,430
+MX | 30,278,896
+FR | 26,041,499
+JP | 19,576,027
+CA | 16,457,790
+AU | 15,698,769
+NL | 9,750,341
+CO | 7,786,046
+PL | 7,669,619
+DE | 5,997,070
+PT | 5,911,139
+CL | 4,042,071
+DK | 3,923,693
+FI | 3,897,449
+CH | 3,147,964
+NO | 2,571,756
+AT | 2,492,155
+NZ | 2,358,669
+EE | 2,214,298
+HR | 1,680,578
+SK | 1,630,351
+LT | 1,036,251
+LU | 164,415
 </details>
 
 ### Data columns
