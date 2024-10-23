@@ -8,8 +8,8 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Overview
 
-**The `2024-10-23.0` release of Overture data and `v1.2.0` of the Overture schema are now available.** As part of Overture's effort to expand our data sources, 
-we added in this release address data from several sources, transportation data from TomTom, and building height data from Microsoft and Esri Community Maps contributors. 
+**The `2024-10-23.0` release of Overture data and `v1.2.0` of the Overture schema are now available.** As part of Overture's mission to improve data quality and coverage and to expand the number of sources we use to make our datasets, 
+we added in this release address data for several new countries, transportation data in Saudi Arabia and Italy from TomTom, and building height data from Microsoft and Esri Community Maps contributors. 
 
 The October release is available as GeoParquet files stored on both AWS and Azure. The release paths are:
 
@@ -23,19 +23,11 @@ wasbs://release@overturemapswestus2.blob.core.windows.net/2024-10-23.0
 s3://overturemaps-us-west-2/release/2024-10-23.0
 ```
 :::note
-We are now releasing Overture's GeoParquet files in accordance with the [GeoParquet v1.1.0 specification](https://geoparquet.org/releases/v1.1.0/), 
-with the covering metadata included. So you can now do this:
-```
-ogr2ogr --config AWS_NO_SIGN_REQUEST=yes -spat -71.068 42.353 -71.058 42.363  
--f GeoJSON output.geojson
-/vsis3/overturemaps-us-west-2/release/2024-10-23.0/theme=buildings/type=building/
-```
+We are now releasing Overture's GeoParquet files in accordance with the [GeoParquet v1.1.0 specification](https://geoparquet.org/releases/v1.1.0/), with the covering metadata included.
 :::
 
-You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage users to report bugs and provide feedback on the data and schema on GitHub:
+You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage you to ask questions, report bugs, and provide feedback via our [data](https://github.com/OvertureMaps/data) and [schema](https://github.com/OvertureMaps/schema) repositories on GitHub. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at **data AT overturemaps.org**. We’d love to hear from you.
 
-- [Schema](https://github.com/OvertureMaps/schema)
-- [Data](https://github.com/OvertureMaps/data)
 
 ## Breaking changes
 
@@ -70,21 +62,19 @@ The base, buildings, divisions, and places themes are in GA. The transportation 
 - fixed lake features in Manitoba, Canada
 
 ### Buildings
-- fixed building features with class but no subtype 
-- fixed height data missing in September release 
-- fixed building height but there is no source information 
-- fixed building heights derived from lidar in areas with tree cover are incorrect 
-- fixed ML building in water 
-- fixed lidar heights incorrectly being added 
+- fixed building features with class but no subtype property
+- fixed building height data missing in September release 
+- fixed building height data derived from lidar
+- fixed ML buildings in water 
 - added new data from OSM (2024-10-05)
 - added new data from Microsoft (2024-09-24)
-- added new from Esri (2024-10-15)
+- added new from Esri Community Maps contributors (2024-10-15)
 
 ### Divisions
 - updated the subtype of 38 dependencies, e.g. Puerto Rico
 - fixed microhood/neighborhood discrepancy between feature types
 - updated regions in North Macedonia
-- moved features with a `suburbs` tag under a new `macrohood` subtype
+- moved features with a suburbs tag into a new macrohood subtype
 
 ### Places
 - no updates
@@ -106,7 +96,7 @@ wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-10-23.0
 s3://overturemaps-us-west-2/changelog/2024-10-23.0
 ```
 
-You can find more information about [using the GERS Changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
+You can find more information about [the GERS Changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
 
 ## Schema changelog
 The changelog for Overture schema `v1.2.0` is [here](https://github.com/OvertureMaps/schema/releases). 
