@@ -4,14 +4,14 @@ slug: /gers
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
- The Global Entity Reference System (GERS) is a framework that structures, encodes, and matches map data to a shared universal reference within Overture. GERS, coupled with Overture datasets, is a potential standard for identifying and referencing the physical and conceptual entities we've defined in our world, such as office buildings, grocery stores, forests, countries, rivers, museums, capitals of provinces, and mailing addresses. 
+The Global Entity Reference System (GERS) is a framework that structures, encodes, and matches map data to a shared universal reference within Overture. GERS, coupled with Overture datasets, is a potential standard for identifying and referencing the physical and conceptual entities we've defined in our world, such as office buildings, grocery stores, forests, countries, rivers, museums, capitals of provinces, and mailing addresses. 
 
- Stable, unique feature IDs form the basis of GERS. Overture assigns an ID &mdash; called a GERS ID, or sometimes an Overture ID &mdash; to a feature in an Overture dataset. The feature, and therefore its GERS ID, represents an entity that exists in the real world. For example, a building might house a branch of a public library. The building itself is represented in the Overture buildings dataset with its own unique ID. The library is a place of interest, represented in the Overture places dataset with its own unique ID. The building and the library are distinct entities with distinct GERS IDs. If the library moves into a new building across town, its feature properties might change &mdash; its address, for example &mdash; but its GERS ID will remain the same in the places dataset. The library's former building, now vacated, also keeps its GERS ID in the buildings dataset. This ensures stability and accuracy amid change.
+Overture assigns a unique ID to each feature in an Overture dataset. These unique IDs form the basis of GERS. The map feature, and therefore its GERS ID, represents an entity that exists in the real world. For example, a building housing a branch of a public library is represented in the Overture buildings dataset as a feature with its own unique ID. The public library is a place of interest, represented in the Overture places dataset with its own unique ID. The building and the library are distinct entities with distinct GERS IDs. If the library moves into a new building across town, the library's GERS ID will remain the same. The library's former building, now vacated, also keeps its GERS ID in the buildings dataset. This ensures stability and accuracy amid change.
 
 
 ## Structure of a GERS ID
 
-GERS IDs are 32 characters and 128 bits. For most features types, the GERS ID is intended to be [stable](stability) across [Overture releases](/release). This means a GERS ID assigned to a `building` feature, for example, won't change even if the building's properties change, including changes to its geometry.
+GERS IDs are 32 characters and 128 bits. For most features types, the GERS ID is intended to be [stable](stability) across [Overture releases](/release). This means a GERS ID assigned to a building feature, for example, won't change even if the building's properties change, including changes to its geometry.
 
 Let's examine the GERS IDs for two iconic buildings in Berlin.
 
@@ -20,16 +20,18 @@ Let's examine the GERS IDs for two iconic buildings in Berlin.
 |------|----------|------|
 | `2024-07-22.0` | `08b1f1d488708fff0200bf6d40c1cf8f`| `data_changed` |
 | `2024-08-20.0` | `08b1f1d488708fff0200bf6d40c1cf8f` | `data_changed` |
-| `latest` | `08b1f1d488708fff0200bf6d40c1cf8f` | `data_changed` |
+| `2024-09-18.0` | `08b1f1d488708fff0200bf6d40c1cf8f` | `data_changed` |
+| `latest` | `08b1f1d488708fff0200bf6d40c1cf8f` | `unchanged` |
 
 #### [Brandenburg Gate](https://en.wikipedia.org/wiki/Brandenburg_Gate)
 | Overture release | `id` | `change_type` |
 |------|----------|------|
 | `2024-07-22.0`| `08b1f1d488601fff02002aee6ba961a4`| `data_changed` |
-| `2024-08-20.0`| `08b1f1d488601fff02002aee6ba961a4` | `data_changed` |
-| `latest` | `08b1f1d488601fff02002aee6ba961a4`| `data_changed` |
+| `2024-08-20.0`| `08b1f1d488601fff02002aee6ba961a4` | `unchanged` |
+| `2024-09-18.0` | `08b1f1d488601fff02002aee6ba961a4`| `unchanged`  |
+| `latest` | `08b1f1d488601fff02002aee6ba961a4`| `unchanged` |
 
-The GERS IDs are stable from the July 2024 [GA release](/release/2024-07-22.0/) to the [latest release](/release), and will remain stable over subsequent releases. Stable GERS IDs make it possible to query the [GERS changelog](changelog) and detect changes to the feature data associated with those GERS IDs. For each release listed above, the type of change logged for the two buildings in Berlin is `data_changed`, which usually indicates improvements to the data.
+The GERS IDs are stable from the July 2024 [GA release](/release/2024-07-22.0/) to the [latest release](/release), and will remain stable over subsequent releases. Stable GERS IDs make it possible to query the [GERS changelog](changelog) and detect changes to the feature data associated with those GERS IDs. For each release listed above, the types of change logged for these buildings in Berlin is `data_changed`, which usually indicates feature data improvements or updates, or `unchanged`, which means no change in the feature data.
 
 :::warning
 
