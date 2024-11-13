@@ -8,7 +8,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Overview
 
-**The `2024-11-13.0` release of Overture data and `v1.3.0` of the Overture schema are now available.** This release includes more than 66 unique address datasets from many new [sources](/attribution). We added a new `postal_city` column to the addresses schema to support address formatting. In the transportation schema, we dropped the unutilized `lanes` column in preparation for transportation's GA release in December. The places theme moved from GA back to beta status. 
+**The `2024-11-13.0` release of Overture data and `v1.3.0` of the Overture schema are now available.** This release includes more than 66 unique address datasets from many new [sources](/attribution). We added a new `postal_city` column to the addresses schema to support address formatting. In the transportation schema, we dropped the unutilized `lanes` column in preparation for transportation's GA release in December. 
 
 The November release is available as GeoParquet files stored on both AWS and Azure. The release paths are:
 
@@ -39,7 +39,7 @@ We removed the `lanes` column from the transportation schema, as we have not had
 ## Theme-specific updates
 
 :::info
-The base, buildings, and divisions themes are in GA. The transportation theme is in beta, and the addresses theme is in alpha. The places theme recently moved from GA back to beta status.
+The base, buildings, divisions, and places themes are in GA. The transportation theme is in beta, and the addresses theme is in alpha. 
 :::
 
 ### Addresses
@@ -66,7 +66,7 @@ The base, buildings, and divisions themes are in GA. The transportation theme is
 - made minor fixes and incremental updates
 
 ### Places
-- changed status of the theme from GA to beta
+- no updates
 
 ### Transportation
 - removed `lanes` column
