@@ -30,7 +30,7 @@ You can access the datasets by following the process outlined [here](https://doc
 
 ## Breaking changes
 
-We removed the `lanes` column from the transportation schema, as we have not had the data to populate it since its implementation many months ago. It's unlikely this is a breaking change for most users, but we are ering on the side of caution and including this information here. We intend to introduce a reimagined, data-rich lanes property in 2025. 
+We removed the `lanes` column from the transportation schema, as we have not had the data to populate it since its implementation many months ago. It's unlikely this will be a breaking change for most users, but we are erring on the side of caution and including this information here. We intend to introduce a reimagined, data-rich lanes property in 2025. 
 
 ## Deprecations
 
@@ -54,13 +54,16 @@ The base, buildings, and divisions themes are in GA. The transportation theme is
 
 
 ### Base
-- added more detailed land cover features at higher latitudes 
+- added more detailed features at higher latitudes in the land cover feature type
+- added new crater subtype and classes in the land feature type
+- added new classes in the infrastructure feature type
 
 ### Buildings
-- incremental updates
+- made incremental updates
+- added a new roof class to the building feature type
 
 ### Divisions
-- minor fixes and incremental updates
+- made minor fixes and incremental updates
 
 ### Places
 - changed status of the theme from GA to beta
