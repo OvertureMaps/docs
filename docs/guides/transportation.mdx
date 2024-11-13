@@ -1,5 +1,5 @@
 ---
-title: Transportation
+title: Transportation Guide
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -15,16 +15,11 @@ import ConnectingSegments from '!!raw-loader!@site/src/queries/athena/transporta
 
 import DocCardList from '@theme/DocCardList';
 
-Overture Maps transportation theme is the collection of features and attributes that describe the infrastructure and conventions of how people and objects travel around the world. Transportation data includes highways, footways, cycleways, railways, ferry routes, and public transportation. The dataset contains two features types: `connector` and `segment`.
+The Overture transportation theme is the collection of LineString and Point features that describe the infrastructure and conventions of how people and objects travel around the world. The dataset contains two features types: `connector` and `segment`. The three subtypes within `segment` -- `road`, `rail`, and `water` -- contain familiar categories of transportation data: highways, footways, cycleways, railways, ferry routes, and public transportation. 
 
-| feature type | Primary source |  Feature count, November 2024 release |
-| -------------------------- | -------------------------- | --------------------- |
-| connector | OpenStreetMap | ~364 million |
-| segment | OpenStreetMap | ~314 million |
+Most of the data in the transportation theme is sourced from OpenStreetMap. In the `2024-09-18.0` [release](/release), we began adding data from TomTom to improve coverage in key areas. 
 
-## Use cases
-
-You might use Overture Maps transportation data and schema for:
+You might use the Overture transportation data for:
 
 - **mapping:** rendering a map of connected roads and paths.
 - **routing:** calculating optimal routes from place to place.
@@ -35,35 +30,9 @@ You might use Overture Maps transportation data and schema for:
 - **geocoding:** getting the coordinates of street intersections (geocodes) or
   the street intersection near specific coordinates (reverse geocodes).
 
-## Key concepts
+This guide is an overview of the transportation data. To dig into the details of the schema, see the [schema concepts for transportation](/schema/concepts/by-theme/transportation) and the reference documentation for the [segment](/schema/reference/transportation/segment) and [connector](/schema/reference/transportation/connector) feature types. 
 
-- **Shape and connectivity.** The transportation theme schema captures the shape
-and connectivity of the transportation network using `segment` and `connector`
-features. The schema design allows the segmentation process to promote shape
-stability and ultimately feature ID stability. Read more on the [shape and connectivity](/schema/concepts/by-theme/transportation/shape-connectivity) page.
-
-- **Scoped and rule-based properties.** The `transportation` theme schema allows property values to be specified for granular scopes at the sub-feature level. For example:
-  - a speed limit on a road segment might be scoped to apply only to part of the
-  road geometry using _geometric scoping_.
-  - the directionality of a segment, controlling the direction or directions in
-  which traffic can flow along the segment geometry, may be specified to change
-  at different times of day using _temporal scoping_.
-  - the categories of people and vehicles who are allowed to travel on a segment
-  can be controlled using _subjective scoping_.
-  - a real-world attribute that varies under changing environmental conditions can
-  be modeled using _environmental scoping_.
-
-Read more about these concepts on the [scoped and rule-based properties](/schema/concepts/scoping-rules) page.
-
-- **Roads.** The `transportation` theme schema models any kind of road, street or
-path, including dedicated walking and cycling paths, as `road` segments. Roads
-are currently the most developed part of the `transportation` schema. Read more about roads on the [roads](/schema/concepts/by-theme/transportation/roads) page.
-
-- **Travel modes.** The `transportation` theme supports a fuzzy concept called
-travel mode which can be used as a way of controlling the scope of scoped
-and rule-based properties. Read more about the travel modes concept and how travel modes interact with other scoping properties on the [travel modes](/schema/concepts/by-theme/transportation/travel-modes) page.
-
-## Dataset Description
+## Dataset description
 
 All Overture data, including transportation data, is distributed as GeoParquet, a column-based data structure. Below you'll find a table with column-by-column descriptions of the properties in the transportation feature type.
 
@@ -75,7 +44,7 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 | column_name | column_type | Description |
 |---|---|---|
 | id | VARCHAR | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | BLOB | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
+| geometry | WKB | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
 | bbox | STRUCT | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | INTEGER | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | STRUCT[] | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
@@ -84,7 +53,6 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 | subclass | VARCHAR | Specifies the usage of a length of road. |
 | subclass_rules | STRUCT[] | Defines the portion of a road that the subclass applies to. |
 | names | STRUCT[] | Properties defining the names of a feature. |
-| connector_ids | VARCHAR[] | Deprecated: List of connector IDs identifying the connectors this segment is physically connected to. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
 | connectors | STRUCT[] | Array of connector IDs identifying the connectors this segment is physically connected to linearly referenced with their location. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
 | routes | STRUCT[] | Routes this segment belongs to. |
 | access_restrictions | STRUCT[] | Rules governing access to this road segment or lane. |
@@ -177,13 +145,6 @@ The latest transportation data can be obtained from AWS or Azure as GeoParquet f
 We recommend downloading only the Overture data you need. If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract places data and output a GeoJSON file.
 
 <Tabs>
-<TabItem value="Overture Maps Explorer" label="Overture Maps Explorer" default>
-To quickly view and download modest amounts of data, you can use the [Overture Maps Explorer website](https://explore.overturemaps.org/#15.07/41.89731/12.47626).
-
-To download data: Pan to the area you are interested in, turn off the other layers, then click `Download Visible`.
-
-This will download the area visible on your screen.
-</TabItem>
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
 First, follow the [setup guide for the Python Command-line Tool](/getting-data/overturemaps-py/).
 
@@ -278,7 +239,4 @@ The tool requires a Spark environment to run and has been tested using Azure Dat
 
 If you have feedback, questions, etc. on the tool you can create an [issue](https://github.com/OvertureMaps/transportation-splitter/issues) on the GitHub.
 
-## Schema reference
 
-- [Explore the schema for the segment feature type](/schema/reference/transportation/segment)
-- [Explore the schema for the connector feature type](/schema/reference/transportation/connector)

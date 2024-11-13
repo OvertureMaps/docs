@@ -1,0 +1,95 @@
+---
+title: 2024-11-13.0
+slug: latest
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2024-11-13.0` release of Overture data and `v1.3.0` of the Overture schema are now available.** This release includes more than 66 unique address datasets from many new [sources](/attribution). We added a new `postal_city` column to the addresses schema to support address formatting. In the transportation schema, we dropped the unutilized `lanes` column in preparation for transportation's GA release in December. 
+
+The November release is available as GeoParquet files stored on both AWS and Azure. The release paths are:
+
+#### Microsoft Azure:
+```
+wasbs://release@overturemapswestus2.blob.core.windows.net/2024-11-13.0
+```
+
+#### Amazon S3:
+```
+s3://overturemaps-us-west-2/release/2024-11-13.0
+```
+:::note
+We are now releasing Overture's GeoParquet files in accordance with the [GeoParquet v1.1.0 specification](https://geoparquet.org/releases/v1.1.0/), with the covering metadata included.
+:::
+
+You can access the datasets by following the process outlined [here](https://docs.overturemaps.org/getting-data/). We encourage you to ask questions, report bugs, and provide feedback via our [data](https://github.com/OvertureMaps/data) and [schema](https://github.com/OvertureMaps/schema) repositories on GitHub. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at **data AT overturemaps.org**. We’d love to hear from you.
+
+
+## Breaking changes
+
+We removed the `lanes` column from the transportation schema, as we have not had the data to populate it since its implementation many months ago. It's unlikely this will be a breaking change for most users, but we are erring on the side of caution and including this information here. We intend to introduce a reimagined, data-rich lanes property in 2025. 
+
+## Deprecations
+
+ None.
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, and places themes are in GA. The transportation theme is in beta, and the addresses theme is in alpha. 
+:::
+
+### Addresses
+- added a new `postal_city` column to support address formatting
+- added the following countries to the address theme:
+    - Belgium
+    - [Ice](https://youtu.be/1HU7ocv3S2o?feature=shared)land
+    - Italy
+    - Latvia
+    - Slovenia
+    - Spain
+    - Taiwan
+- added new data and new sources for several countries
+
+
+### Base
+- added more detailed features at higher latitudes in the land cover feature type
+- added new `crater` subtype and associated classes in the land feature type
+- added new classes in the infrastructure feature type
+
+### Buildings
+- made incremental updates
+- added a new roof class to the building feature type
+
+### Divisions
+- made minor fixes and incremental updates
+
+### Places
+- no updates
+
+### Transportation
+- removed `lanes` column
+- announced move to GA in December release
+
+## Global Entity Reference System (GERS) changelog
+
+The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations on Azure and AWS:
+
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2024-11-13.0
+```
+```
+s3://overturemaps-us-west-2/changelog/2024-11-13.0
+```
+
+You can find more information about [the GERS Changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
+
+## Schema changelog
+The changelog for Overture schema `v1.3.0` is [here](https://github.com/OvertureMaps/schema/releases). 
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
