@@ -67,7 +67,7 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="transportation">Transportation<a href="https://docs.overturemaps.org/release/latest/#transportation" class="hash-link" aria-label="Direct link to Transportation" title="Direct link to Transportation">​</a></h3>
 <ul>
 <li>removed <code>lanes</code> column</li>
-<li>announced move to GA in December release</li>
+<li>added 2.6M connectors for crosswalks on roads that don't yet have an intersecting segment</li>
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="global-entity-reference-system-gers-changelog">Global Entity Reference System (GERS) changelog<a href="https://docs.overturemaps.org/release/latest/#global-entity-reference-system-gers-changelog" class="hash-link" aria-label="Direct link to Global Entity Reference System (GERS) changelog" title="Direct link to Global Entity Reference System (GERS) changelog">​</a></h2>
 <p>The GERS changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files — partitioned by theme, type, and change type — at the following locations on Azure and AWS:</p>
