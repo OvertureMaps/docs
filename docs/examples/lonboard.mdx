@@ -42,15 +42,16 @@ Next we'll get a bounding box for our area of interest.
 
 ```python
 # specify bounding box in Milan
-bbox = 1.9402,48.7091,2.7784,49.0599
+bbox = 9.125034,45.433352,9.245223,45.507116
 ```
 
-The `record_batch_reader` function accepts an Overture feature type and a bounding box as arguments. Let's grab some road data for Milan.
+The `record_batch_reader` function accepts an Overture feature type and a bounding box as arguments. **Note: `.read_all()` will load all of the requested bbox into memory, so it's wise to keep the bbox reasonably small.** 
+
+Let's grab some road data for Milan.
 
 ```python
 # need feature type and bounding box as arguments
 table = overturemaps.record_batch_reader("segment", bbox).read_all()
-table = table.combine_chunks()
 ```
 
 We can inspect shape of the data.
@@ -59,7 +60,7 @@ We can inspect shape of the data.
 table.shape
 ```
 
-We can also dig into the complexity of the Overture transportation schema.
+We can also dig into the complexity of the Overture transportation schema. 
 
 ```python
 table.schema
@@ -101,7 +102,7 @@ We'll use the same bounding box for Milan.
 
 ``` python
 # specify bounding box
-bbox = 1.9402, 48.7091, 2.7784, 49.0599
+bbox = 9.125034,45.433352,9.245223,45.507116
 ```
 
 And we'll use the `record_bath_reader` method to pull the data into a PyArrow table. This time we'll grab buildings data.
@@ -169,7 +170,7 @@ Once again, we'll use the bounding box in Milan.
 
 ```python
 # specify bounding box
-bbox = 9.106105, 45.427315, 9.263542, 45.5164
+bbox = 9.125034,45.433352,9.245223,45.507116
 ```
 
 Direct to GeoDataFrame using the `geodataframe` method!
