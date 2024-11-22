@@ -24,6 +24,16 @@ const config = {
     overtureRelease: '2024-11-13.0',
   },
 
+  future: {
+    experimental_faster: {
+      swcJsLoader: true,
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: true,
+      lightningCssMinimizer: true,
+      rspackBundler: false, // rspack bundler doesn't work with our Webpack config for raw-loader and YAML files.
+      mdxCrossCompilerCache: true,
+    },
+  },
 
   // Set the production url of your site here
   url: getFromEnvironment('DOCUSAURUS_URL', defaultUrl),
