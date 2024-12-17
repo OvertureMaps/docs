@@ -1,4 +1,10 @@
 CASE
+    -- Craters
+    WHEN element_at(tags,'geological') IN ('meteor_crater', 'volcanic_caldera_rim')
+        AND (element_at(tags, 'water') IS NULL OR element_at(tags, 'water') <> 'lake')
+        AND (element_at(tags, 'natural') IS NULL OR element_at(tags, 'natural') <> 'water')
+        THEN ROW('crater', element_at(tags,'geological'))
+
     -- Desert
     WHEN element_at(tags,'natural') IN ('desert') THEN ROW('desert', element_at(tags,'natural'))
 
@@ -59,6 +65,7 @@ CASE
         'mountain_range',
         'peak',
         'peninsula',
+        'plateau',
         'ridge',
         'saddle',
         'valley'
