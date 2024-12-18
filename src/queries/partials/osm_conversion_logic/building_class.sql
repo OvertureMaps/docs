@@ -64,6 +64,7 @@ CASE
         --Outbuilding
         'allotment_house',
         'carport',
+        'roof',
         'outbuilding',
         'shed',
 

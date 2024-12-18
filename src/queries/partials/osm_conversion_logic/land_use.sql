@@ -1,13 +1,33 @@
 CASE
     -- Piste types
     WHEN ST_GeometryType(ST_GeomFromBinary(geometry)) <> 'ST_Point' AND element_at(tags,'piste:type') IN (
-        'playground'
+        'connection', 
+        'downhill',
+        'fatbike', 
+        'hike',
+        'ice_skate',
+        'nordic',
+        'playground', 
+        'ski_jump',
+        'skitour', 
+        'sled', 
+        'sleigh',
+        'snow_park'
     ) THEN ROW ('winter_sports', element_at(tags,'piste:type'))
 
     -- Polygons
     WHEN ST_GeometryType(ST_GeomFromBinary(geometry)) IN ('ST_Polygon', 'ST_MultiPolygon') THEN CASE
 
         -- Military Specific Landuses
+
+        WHEN ( element_at(tags,'landuse') = 'military' OR element_at(tags,'military') <> 'no') 
+            AND element_at(tags,'amenity') IN ('hospital', 'clinic') 
+            THEN ROW('military', 'military_hospital')
+        
+        WHEN ( element_at(tags,'landuse') = 'military' OR element_at(tags,'military') <> 'no') 
+            AND element_at(tags,'amenity') IN ('school','university','college') 
+            THEN ROW('military', 'military_school')
+        
         WHEN element_at(tags,'military') IN (
             'airfield',
             'barracks',
@@ -36,19 +56,11 @@ CASE
             'water_park'
         ) THEN ROW('entertainment', element_at(tags,'leisure'))
 
-        -- Give National Parks top priority since it might have other tags.
-        WHEN element_at(tags,'boundary') = 'national_park' THEN ROW('protected','national_park')
+        -- National Parks & Aboriginal Lands based on boundary
+        WHEN element_at(tags, 'boundary') = 'national_park' THEN ROW('protected','national_park')
+        WHEN element_at(tags, 'boundary') = 'aboriginal_lands' THEN ROW('protected', 'aboriginal_land')
 
-        -- Aboriginal Lands & Reservations
-        WHEN element_at(tags, 'boundary') IN ('aboriginal_lands') OR (
-            element_at(tags, 'boundary') = 'protected_area' AND element_at(tags, 'protect_class') = '24'
-        ) THEN ROW('protected', 'aboriginal_land')
-
-        -- Pedestrian land use, such as plazas
-        WHEN element_at(tags, 'place') = 'square' THEN ROW('pedestrian', 'plaza')
-        WHEN element_at(tags, 'highway') = 'pedestrian' THEN ROW('pedestrian', 'pedestrian')
-
-        -- Is there is an official Protect Class Designation (wiki.openstreetmap.org/wiki/Key:protect_class)?
+        -- Protected areas based on protect_class
         WHEN element_at(tags, 'protect_class') = '1a' THEN ROW('protected', 'strict_nature_reserve')
         WHEN element_at(tags, 'protect_class') IN ('1b', '1') THEN ROW('protected', 'wilderness_area')
         WHEN element_at(tags, 'protect_class') = '2' THEN ROW('protected', 'national_park')
@@ -56,34 +68,20 @@ CASE
         WHEN element_at(tags, 'protect_class') = '4' THEN ROW('protected', 'species_management_area')
         WHEN element_at(tags, 'protect_class') = '5' THEN ROW('protected', 'protected_landscape_seascape')
         WHEN element_at(tags, 'protect_class') = '6' THEN ROW('protected', 'nature_reserve')
+        WHEN element_at(tags, 'protect_class') = '24' THEN ROW('protected', 'aboriginal_land')
 
-        WHEN element_at(tags, 'boundary') = 'protected_area' THEN CASE
-            WHEN LOWER(element_at(tags, 'protection_title')) IN ('national forest', 'state forest')
-                THEN ROW('protected', 'forest')
-            WHEN LOWER(element_at(tags, 'protection_title')) IN ('national park', 'parque nacional', 'national_park')
-                THEN ROW('protected', 'national_park')
-            WHEN LOWER(element_at(tags, 'protection_title')) IN ('state park') THEN ROW('protected','state_park')
-            WHEN LOWER(element_at(tags, 'protection_title')) IN (
-                'wilderness area',
-                'wilderness study area'
-            ) THEN ROW('protected', 'wilderness_area')
-            WHEN LOWER(element_at(tags, 'protection_title')) IN ('nature reserve', 'nature refuge', 'reserva nacional')
-                THEN ROW('protected', 'nature_reserve')
-            WHEN LOWER(element_at(tags, 'protection_title')) IN ('environmental use')
-                THEN ROW('protected', 'environmental')
-            WHEN element_at(tags,'leisure') IN ('nature_reserve')
-                THEN ROW('protected', element_at(tags,'leisure'))
-            WHEN element_at(tags,'landuse') IS NOT NULL
-                THEN ROW('protected', 'protected')
-        END
-
-        WHEN element_at(tags,'leisure') IN ('nature_reserve') THEN ROW('protected','nature_reserve')
-
-        -- National & State Parks
-        WHEN LOWER(element_at(tags, 'protection_title')) = 'national park' THEN ROW('protected', 'national_park')
-        WHEN LOWER(element_at(tags, 'protection_title')) = 'state park' THEN ROW('protected', 'state_park')
-        WHEN element_at(tags, 'protected_area') = 'national_park' THEN ROW('protected', 'national_park')
-
+        -- Protected areas based on protection_title
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('national forest', 'state forest') THEN ROW('protected', 'forest')
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('national park', 'parque nacional', 'national_park') THEN ROW('protected', 'national_park')
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('state park') THEN ROW('protected','state_park')
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('wilderness area', 'wilderness study area') THEN ROW('protected', 'wilderness_area')
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('nature reserve', 'nature refuge', 'reserva nacional') THEN ROW('protected', 'nature_reserve')
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('environmental use') THEN ROW('protected', 'environmental')
+        
+        -- Protected areas based on leisure or landuse
+        WHEN element_at(tags, 'leisure') = 'nature_reserve' THEN ROW('protected','nature_reserve')
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND element_at(tags,'landuse') IS NOT NULL THEN ROW('protected', 'protected')
+        
         -- Golf
         WHEN element_at(tags,'golf') IN (
             'bunker',
@@ -122,6 +120,9 @@ CASE
         -- Education / Schoolyards
         WHEN element_at(tags, 'amenity') IN (
             'college',
+            'driving_school',
+            'kindergarten',
+            'music_school',
             'school',
             'university'
         ) THEN ROW('education', element_at(tags, 'amenity'))
@@ -143,6 +144,10 @@ CASE
             'park'
         ) THEN ROW('park', element_at(tags,'leisure'))
         WHEN element_at(tags,'landuse') IN ('village_green') THEN ROW('park', element_at(tags,'landuse'))
+
+        -- Pedestrian land use, such as plazas
+        WHEN element_at(tags, 'place') = 'square' THEN ROW('pedestrian', 'plaza')
+        WHEN element_at(tags, 'highway') = 'pedestrian' THEN ROW('pedestrian', 'pedestrian')
 
         -- Agriculture
         WHEN element_at(tags,'landuse') IN ('animal_keeping', 'farmland', 'farmyard', 'meadow')
@@ -178,6 +183,7 @@ CASE
             'pitch',
             'playground',
             'recreation_ground',
+            'resort',
             'stadium',
             'track'
         ) THEN ROW('recreation', element_at(tags,'leisure'))
@@ -194,6 +200,7 @@ CASE
             'institutional',
             'retail'
         ) THEN ROW('developed', element_at(tags,'landuse'))
+        WHEN element_at(tags,'shop') = 'mall' THEN ROW('developed', 'retail')
         WHEN element_at(tags,'man_made') = 'works' THEN ROW('developed', 'works')
 
         -- Construction

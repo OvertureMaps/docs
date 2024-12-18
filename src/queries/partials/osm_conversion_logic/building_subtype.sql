@@ -77,6 +77,7 @@ CASE
     WHEN lower(trim(element_at(tags, 'building'))) IN (
         'allotment_house',
         'carport',
+        'roof',
         'outbuilding',
         'shed'
     ) THEN 'outbuilding'

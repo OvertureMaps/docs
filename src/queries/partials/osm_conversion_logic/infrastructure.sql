@@ -1,11 +1,7 @@
 CASE
-    -- Railways / Subways
+    -- Railway stations / Subway stations
     WHEN element_at(tags,'railway') IN ('station','halt') THEN CASE
-
-        -- Railway Specific
-        WHEN element_at(tags,'station') <> 'subway' AND element_at(tags, 'subway') <> 'yes' THEN ROW('transit', 'railway_station')
-        
-        -- Multimodal stations
+        WHEN element_at(tags,'station') = 'subway' THEN ROW('transit', 'subway_station')
         ELSE ROW('transit', 'railway_' || element_at(tags,'railway'))
     END
 
@@ -24,7 +20,8 @@ CASE
     WHEN element_at(tags,'amenity') IN (
         'parking',
         'parking_space',
-        'bicycle_parking'
+        'bicycle_parking',
+        'motorcycle_parking'
     ) THEN ROW('transit', element_at(tags,'amenity'))
 
     -- Aerialways (Linestrings)
@@ -33,8 +30,14 @@ CASE
         'chair_lift',
         'drag_lift',
         'gondola',
+        'j-bar',
+        'magic_carpet',
+        'goods',
         'mixed_lift',
-        't-bar'
+        'platter',
+        'rope_tow',
+        't-bar',
+        'zip_line'
     ) THEN ROW('aerialway', element_at(tags,'aerialway'))
     
     -- Pylons are points
@@ -46,13 +49,19 @@ CASE
     -- Airports (Polygons)
     WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) IN ('ST_Polygon', 'ST_MultiPolygon') AND element_at(tags,'aeroway') IN (
         'airstrip', 
+        'apron',
         'helipad',
-        'heliport'
+        'heliport',
+        'launchpad',
+        'runway',
+        'taxiway'
     ) THEN ROW('airport', element_at(tags,'aeroway'))
 
     -- Airports (LineStrings)
     WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_LineString' AND element_at(tags, 'aeroway') IN (
         'runway',
+        'stopway',
+        'taxilane',
         'taxiway'
     ) THEN ROW('airport', element_at(tags,'aeroway'))
 
@@ -159,7 +168,9 @@ CASE
 
     -- Utility / human made made containers
     WHEN element_at(tags,'man_made') IN (
+        'gasometer',
         'pipeline',
+        'reservoir_covered',
         'silo',
         'storage_tank', 
         'utility_pole',
@@ -180,6 +191,7 @@ CASE
         (element_at(tags,'drinking_water') IS NULL OR element_at(tags,'drinking_water') <> 'no') AND
         (element_at(tags,'access') IS NULL OR element_at(tags,'access') <> 'private')
         THEN ROW('water', 'drinking_water')
+    WHEN element_at(tags,'amenity') IN ('fountain') THEN ROW('water', 'fountain')
 
 
     -- Standalone piers

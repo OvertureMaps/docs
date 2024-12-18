@@ -24,7 +24,7 @@ CASE
     WHEN element_at(tags, 'water') IN ('lake', 'oxbow','lagoon') THEN ROW('lake', element_at(tags, 'water'))
 
     -- Springs
-    WHEN element_at(tags, 'natural') IN ('spring','hot_spring','geyser') THEN ROW('spring', element_at(tags, 'natural'))
+    WHEN element_at(tags, 'natural') IN ('spring','hot_spring','geyser','blowhole') THEN ROW('spring', element_at(tags, 'natural'))
 
     -- Tidal Channels / Fairways
     WHEN element_at(tags, 'waterway') IN ('tidal_channel', 'fairway') THEN ROW('water', element_at(tags, 'waterway'))
