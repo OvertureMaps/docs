@@ -4,10 +4,57 @@
         <title>Overture Maps Documentation Blog</title>
         <link>https://docs.overturemaps.org/blog/</link>
         <description>Overture Maps Documentation Blog</description>
-        <lastBuildDate>Mon, 21 Oct 2024 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 18 Dec 2024 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Transportation theme navigates to GA]]></title>
+            <link>https://docs.overturemaps.org/blog/2024/12/18/transportation-to-ga/</link>
+            <guid>https://docs.overturemaps.org/blog/2024/12/18/transportation-to-ga/</guid>
+            <pubDate>Wed, 18 Dec 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Over the past several releases, Overture has been laying the groundwork to transition our transportation theme from beta to general availability (GA). This post provides a brief roadmap of the work we’ve done to reach that goal, along with a request for our community to continue testing the data and providing valuable feedback.]]></description>
+            <content:encoded><![CDATA[<p>Over the past several releases, Overture has been laying the groundwork to transition our transportation theme from beta to general availability (GA). This post provides a brief roadmap of the work we’ve done to reach that goal, along with a request for our community to continue testing the data and providing valuable feedback.</p>
+<p>First, let’s talk about what GA means for the transportation theme. We have a few guiding principles:</p>
+<ol>
+<li>There are no "trust violations" in the schema and data. It needs to "just work" when a developer writes code based on our schema and documentation.</li>
+<li>The road geometry and attributes should be on par with the roads in OSM.</li>
+<li>Roads have stable GERS IDs and those IDs can be references for attaching additional data.</li>
+<li>The road features we capture should support our core use cases: rendering for display, GERS referencing, and basic routing capabilities.</li>
+</ol>
+<p>Most of our work over the past few months has been around #1 and #2. We've been resolving data-schema violations by fixing inconsistencies in our schema and issues with the data transformation steps in our pipeline. To satisfy #3, we’ve been monitoring changes in GERS IDs from release to release, and our metrics show the vast majority of roads are maintaining stable IDs.</p>
+<p>We've had to break a few things in our schema to make way for improvements:</p>
+<ul>
+<li>
+<p>To better support routing use cases, we added to the segment feature type a new property called <code>connectors</code>: an array of IDs with pre-computed linear reference values that explicitly link segments and connector features via coordinates. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments that share the same connector. This new property — a replacement for the old <code>connector_ids</code> property — will reduce complexity and improve accuracy as we calculate the intersections between segment and connector features. You can read more about this improvement <a href="https://docs.overturemaps.org/blog/2024/08/15/preview-august-release/#transportation-schema-changes" target="_blank" rel="noopener noreferrer">here</a>.</p>
+</li>
+<li>
+<p>In the <a href="https://docs.overturemaps.org/release/2024-11-13.0/" target="_blank" rel="noopener noreferrer">November release</a>, we removed <code>lanes</code> from the schema to eliminate a significant trust violation. The <code>lanes</code> property has existed in the schema for months but we never populated it with data in our releases, which is a poor experience for our community. We intend to redesign <code>lanes</code> in the coming months.</p>
+</li>
+</ul>
+<p>With these changes, we are confident we’ve met our requirements for general availability (GA). We'll continue refining our schema and improving our data throughout 2025. We encourage our community to keep the feedback coming, particularly around data quality and our core use cases of map display, routing, and matching data via GERS.</p>
+<p>Here are some specific ways you can help:</p>
+<ol>
+<li>Examine Overture transportation data in your areas of interest and compare it to local sources of data. Bonus: combine transportation data with Overture places, buildings, and base data to make a map. Here are some suggestions for downloading data using <a href="https://docs.overturemaps.org/getting-data/overturemaps-py/" target="_blank" rel="noopener noreferrer">Overture's Python CLI</a>.</li>
+</ol>
+<p>Philadelphia area</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#403f53;--prism-background-color:#FBFBFB"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#403f53;background-color:#FBFBFB"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#403f53"><span class="token plain">overturemaps download --bbox=-75.8264,39.7032,-74.5213,40.444 -f geoparquet --type=segment -o overture-segments-philadelphia.geoparquet</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>Riyadh Province, Saudia Arabia</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#403f53;--prism-background-color:#FBFBFB"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#403f53;background-color:#FBFBFB"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#403f53"><span class="token plain">overturemaps download --bbox=38.97,21.33,48.66,25.98 -f geoparquet --type=segment -o overture-segments-riyadh.geoparquet</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>Campobasso, Italy</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#403f53;--prism-background-color:#FBFBFB"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#403f53;background-color:#FBFBFB"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#403f53"><span class="token plain">overturemaps download --bbox=13.8152,40.8473,15.6336,42.0773 -f geoparquet --type=segment -o overture-segments-campobasso.geoparquet</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<ol start="2">
+<li>
+<p>Test our <a href="https://github.com/OvertureMaps/transportation-splitter" target="_blank" rel="noopener noreferrer">transportation spitter tool</a> and help us improve it. PRs are welcome!</p>
+</li>
+<li>
+<p>Feed our data into a routing engine and let us know how it goes. Paul Ramsey from Crunchy Data shared <a href="https://www.crunchydata.com/blog/vehicle-routing-with-postgis-and-overture-data" target="_blank" rel="noopener noreferrer">a vehicle routing example using PostGIS and Overture data</a>. We'd like to see our users trying <a href="https://valhalla.github.io/valhalla/" target="_blank" rel="noopener noreferrer">Valhalla</a> and <a href="https://github.com/graphhopper/graphhopper-maps" target="_blank" rel="noopener noreferrer">Grasshopper</a> too. We are considering building a native Overture router and/or adding support to an existing open source router, such as Valhalla and Grasshopper, so that Overture consumers can easily use transportation data out of the box.</p>
+</li>
+<li>
+<p>Reach out to us at <a href="mailto:community@overturemaps.org" target="_blank" rel="noopener noreferrer">community@overturemaps.org</a> if you have a specific use case that you'd like to discuss with us.</p>
+</li>
+</ol>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[What to expect in Overture’s October release]]></title>
             <link>https://docs.overturemaps.org/blog/2024/10/21/preview-october-release/</link>
