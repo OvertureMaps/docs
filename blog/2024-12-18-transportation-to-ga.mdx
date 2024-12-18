@@ -23,7 +23,7 @@ With these changes, we are confident we’ve met our requirements for general av
 
 Here are some specific ways you can help:
 
-1. Examine transportation data in your areas of interest and compare it to local sources of data. Here are some suggestions for downloading data using Overture's Python CLI.
+1. Examine transportation data in your areas of interest and compare it to local sources of data. Bonus: combine it with Overture places, buildings, and base data to make a map. Here are some suggestions for downloading data using [Overture's Python CLI](https://docs.overturemaps.org/getting-data/overturemaps-py/).
 
 Philadelphia area
 ```
@@ -40,9 +40,9 @@ Campobasso, Italy
 overturemaps download --bbox=13.8152,40.8473,15.6336,42.0773 -f geoparquet --type=segment -o overture-segments-campobasso.geoparquet
 ```
 
-2. Test our [transportation spitter tool](https://github.com/OvertureMaps/transportation-splitter). 
+2. Test our [transportation spitter tool](https://github.com/OvertureMaps/transportation-splitter) and help us improve it. PRs are welcome! 
 
-3. Feed our data into a routing engine and let us know how it goes! Paul Ramsey from Crunchy Data shared [a vehicle routing example using PostGIS and Overture data](https://www.crunchydata.com/blog/vehicle-routing-with-postgis-and-overture-data0. We'd also like to see our users trying [Valhalla](https://valhalla.github.io/valhalla/) and [Grasshopper](https://github.com/graphhopper/graphhopper-maps). 
+3. Feed our data into a routing engine and let us know how it goes! Paul Ramsey from Crunchy Data shared [a vehicle routing example using PostGIS and Overture data](https://www.crunchydata.com/blog/vehicle-routing-with-postgis-and-overture-data). We'd like to see our users trying [Valhalla](https://valhalla.github.io/valhalla/) and [Grasshopper](https://github.com/graphhopper/graphhopper-maps) too. We are considering building a native Overture router implementation and/or adding support to an existing open source router, such as Valhalla and Grasshopper, so that Overture consumers could easily use transportation data out of the box.
 
 4. Reach out to us at community@overturemaps.org if you have a specific use case and would like to discuss it. 
 
