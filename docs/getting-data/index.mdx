@@ -20,19 +20,12 @@ Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a co
 
 ## Getting a small to medium amount of data (recommended)
 
-If you're new to Overture data, we _strongly recommend_ starting with small to medium amounts of data. You can access the data using the services available in AWS and Azure, where the data are stored, or by using a locally-installed query engine like [DuckDB](https://duckdb.org/). This allows you to download only the subset of data you want. You can also try Overture's experimental Python command-line tool to download data by feature type and area of interest. Or you can visually inspect all of Overture's data themes using our [Explore tool](https://explore.overturemaps.org/).
-
-- [DuckDB](duckdb)
-- [Overture's Python command-line tool](overturemaps-py)
-- [Overture's Explore tool](https://explore.overturemaps.org/)
-- [Amazon Athena](athena-aws) (account required)
-- [Microsoft Synapse](synapse-azure) (account required)
-
+If you're new to Overture data, we _strongly recommend_ starting with small to medium amounts of data. You can access the data using the cloud services available in [AWS](athena-aws) and [Azure](synapse-azure), where the data are stored, or by using a locally-installed query engine like [DuckDB](duckdb). This allows you to download only the subset of data you want. You can also try [overturemaps-py](overturemaps-py), Overture's experimental Python command-line tool, to download data by feature type and bounding box. Or you can use [Overture Explorer](https://explore.overturemaps.org/), our x-ray inspector tool, to explore and download data. 
 
 ## What if I want ALL the data?
 
 :::warning
-Are you sure? Each Overture GeoParquet file is ~1 GB and the total size of all the GeoParquet files is **>600 GB**.
+Are you sure? Each Overture GeoParquet file is ~1 GB and the total size of all the GeoParquet files is **~500 GB**.
 :::
 
 It is possible to download the GeoParquet files directly from either Azure Blob Storage or Amazon S3. Here's how you can do it:
