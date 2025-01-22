@@ -107,6 +107,9 @@ The addresses GeoParquet file contains the following properties:
 | **capital_division_ids** | array | Division IDs of this division's capital divisions. If present, this property will refer to the division IDs of the capital cities, county seats, etc. of a division.
 | **capital_of_divisions** | list | Division ID of the division that this feature is the capital of. If present, this property will refer to the division IDs of a parent county, region, country, etc.
 | **division_id** | string | Division ID of the division this area belongs to.
+| **cartography** | array | Contains a prominence property, which offers a suggestion for displaying Overture features at specific zoom levels based on it's importance and significance.
+| **is_land** | boolean | Indicates whether or not the feature geometry represents the non-maritime "land" boundary, which can be used for map rendering, cartographic display, and similar purposes.
+| **is_territorial** | boolean | Indicates whether or not the feature geometry represents the full territorial boundary or claim of a feature.
 | **filename** | string | Name of the S3 file being queried.
 | **theme** | string | Name of the Overture theme being queried.
 | **type** |  string | Name of the Overture feature type being queried.
