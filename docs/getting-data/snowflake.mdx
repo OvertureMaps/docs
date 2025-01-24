@@ -9,40 +9,83 @@ Overture data is accessible through the [Snowflake Data Marketplace](https://app
 1. Log in to your Snowflake account. Note that you must have an active Snowflake account with the necessary permissions to access the Data Marketplace.
 2. In the Snowflake interface, navigate to the **Marketplace** tab in the sidebar menu within section **Data Products**.
 
-![Snowflake Data Marketplace Screenshot 1](../../../docs/static/img/getting-data/snowflake-marketplace-1.png)
+
+<img 
+  src="../../static/img/getting-data/snowflake-marketplace-1.png" 
+  alt="Snowflake Data Marketplace" 
+  width="900" 
+  height="auto" 
+/>
+
 
 3. Use the search bar at the top of the Data Marketplace and enter `CARTO`.
 4. The listings have been organized by Overture theme; therefore, you will find the following listings available: Addresses, Base, Buildings, Divisions, Places and Transportation. Select one to access the listing details.
 
-/// Add image
+
+<img 
+  src="../../static/img/getting-data/snowflake-marketplace-2.png" 
+  alt="Overture Listings" 
+  width="900" 
+  height="auto" 
+/>
+
 
 5. Review the data description, example queries, terms of use, etc.
-6. Click on **Get Data**.
+6. Click on **Get**.
 
-/// Add image
+
+<img 
+  src="../../static/img/getting-data/snowflake-marketplace-3.png" 
+  alt="Overture Places" 
+  width="900" 
+  height="auto" 
+/>
+
+
+7. After clicking on **Get**, you are allowed to specify the name of the database in which to include the data and the user roles that will be able to work with it.
+
+<img 
+  src="../../static/img/getting-data/snowflake-marketplace-4.png" 
+  alt="Getting data" 
+  width="900" 
+  height="auto" 
+/>
+
 
 ## Working with Overture Data in Snowflake
+8. After access is granted, navigate to the **Databases** section in Snowflake (under **Data**).
+9. Locate the Overture dataset in the database that you have just created.
 
-7. After access is granted, navigate to the **Shares** section in Snowflake.
-8. Locate the Overture dataset under your shared data.
-10. Create a new database from the shared data by clicking **Create Database** and following the prompts.
 
-/// Add image
+<img 
+  src="../../static/img/getting-data/snowflake-marketplace-5.png" 
+  alt="Overture data in database" 
+  width="900" 
+  height="auto" 
+/>
 
-13. Once the database is created, navigate to your worksheet in Snowflake.
-14. Use SQL to query the Overture data. Below is an example query based on the XXXXX in the XXXXX listing:
+13. Once the database is created, you can then navigate to your worksheet in Snowflake and start working with the data.
+14. Use SQL to query the Overture data. Below is an example query to retrieve some attributes from the Places data in Overture. 
 
-/// Add query
 
-    ```sql
-    SELECT *
-    FROM "OVERTURE_DATA"."DATASET_NAME";
-    ```
+```sql
+// Identify places within the "Restaurant" category
+SELECT id, phones['list'][0]['element'] AS phone, names['primary'] AS name
+FROM CARTO.PLACE
+WHERE categories['primary'] = 'restaurant'
+LIMIT 100;
+```
+
+<img 
+  src="../../static/img/getting-data/snowflake-marketplace-6.png" 
+  alt="Overture data in database" 
+  width="900" 
+  height="auto" 
+/>
 
   ## Additional Notes
 
 - **Updates**: CARTO regularly updates the Overture datasets in Snowflake and keeps the listings synced with the last release. You can check the release version of the data from the share description in each listing. 
 - **Support**: If you encounter issues accessing the data, contact CARTO support via support@carto.com.
-- **Overture Data in CARTO**: Once you have the Overture data you need in Snowflake, you can use CARTO's cloud-native spatial analytics platform running on your Snowflake account to build interactive maps, data procesing and analytical workflows or geospatial applications. Not yet on CARTO? Open a 14-day free trial [here](https://www.carto.com/signup).
-
-For more information on Snowflake Data Marketplace, refer to the official [Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-marketplace.html).
+- **CARTO**: Once you have the Overture data you need in Snowflake, you can use CARTO's cloud-native spatial analytics platform running on your Snowflake account to build interactive maps, data procesing and analytical workflows or geospatial applications. Not yet on CARTO? Open a 14-day free trial [here](https://www.carto.com/signup).
+- **Snowflake**: For more information on Snowflake Data Marketplace, refer to the official [Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-marketplace.html).
