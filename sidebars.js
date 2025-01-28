@@ -17,6 +17,9 @@ const sidebars = {
         'getting-data/athena-aws',
         'getting-data/synapse-azure',
         'getting-data/sedona',
+        'getting-data/bigquery',
+        'getting-data/snowflake',
+        'getting-data/databricks'
       ]
     },
     {
