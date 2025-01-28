@@ -1,0 +1,4 @@
+[sqlfluff]
+
+verbose = 0
+dialect = bigquery
