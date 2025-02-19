@@ -17,10 +17,6 @@ The Overture Maps buildings theme describes human-made structures with roofs or 
 - **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
 - **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
 
-
-
-
-
 ## Data sources
 
 <figure>
@@ -50,10 +46,10 @@ Currently, the Overture buildings dataset is a combination of the following open
 
 | Source                     |  Type                 | Conflation <br /> Priority | Count    |
 | -------------------------- | --------------------- | -------------------------- | ----------- |
-| [OpenStreetMap](//osm.org) | Community-contributed | 1                          |~628 Million  |
+| [OpenStreetMap](//osm.org) | Community-contributed | 1                          |~631 Million  |
 | [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2| ~15 Million |
 | [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&gt;90% precision) | 3|~400 Million |
-| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) |ML-derived roofprints  | 4|~740 Million |
+| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) |ML-derived roofprints  | 4|~741 Million |
 | [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&lt;90% precision) | 5|~700 Million |
 | [Buildings in East Asian Countries](https://zenodo.org/records/8174931)| ML-derived roofprints<br />  | 6|~228 Million |
 
