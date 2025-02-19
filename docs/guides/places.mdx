@@ -67,11 +67,12 @@ All Overture data, including places data, is distributed as GeoParquet, a column
 
 ## Data access and retrieval
 
-The latest places data can be obtained from AWS or Azure as GeoParquet files at the following locations.
+Overture's places theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+
 | Provider | Location |
 | ------ | -------- |
-| Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/" language="text"></QueryBuilder>|
-| Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/" language="text"></QueryBuilder> |
+| Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder>|
+| Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder> |
 
 More information can be found in the [Getting Overture Data](https://docs.overturemaps.org/getting-data/) section of this documentation. You can download the entire dataset directly from the S3 or Azure locations above. Warning: the output will be a very large file.
 Depending on your use case, these methods might be more practical for you:

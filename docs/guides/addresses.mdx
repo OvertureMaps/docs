@@ -107,12 +107,12 @@ The addresses GeoParquet file contains the following properties:
 
 ## Data access and retrieval
 
-Overture's data themes, including addresses, are freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+Overture's addresses theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
 
 | Provider | Location |
 | -------- | -------- |
-| Amazon S3 | `s3://overturemaps-us-west-2/release/` |
-| Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/` |
+| Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=addresses/type=address/*" language="text"></QueryBuilder> |
+| Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=addresses/type=address/*" language="text"></QueryBuilder> |
 
 Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
 
