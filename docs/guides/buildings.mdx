@@ -17,8 +17,31 @@ The Overture Maps buildings theme describes human-made structures with roofs or 
 - **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
 - **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
 
+## Data access and retrieval
 
+Overture's building theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
 
+<Tabs>
+  <TabItem value="building" label="building" default>
+    | Provider | Location |
+    | -------- | -------- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building/*" language="text"></QueryBuilder> |
+  </TabItem>
+  <TabItem value="building_part" label="building_part">
+    | Provider | Location |
+    | -------- | -------- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
+  </TabItem>
+</Tabs>
+
+Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
+
+[The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for addresses.
+
+We recommend querying and downloading only the Overture data you need.
+If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract address data.
 
 
 ## Data sources
