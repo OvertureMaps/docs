@@ -1,5 +1,6 @@
 ---
 title: Transportation
+description: Global road, rail, and water transportation data
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -24,11 +25,11 @@ You might use the Overture transportation data for:
 - **mapping:** rendering a map of connected roads and paths.
 - **routing:** calculating optimal routes from place to place.
 - **navigation:** generating granular instructions on the maneuvers needed to
-  follow a route.
+ follow a route.
 - **analytics:** transportation-related analysis including traffic safety
-  analysis and disaster planning.
+ analysis and disaster planning.
 - **geocoding:** getting the coordinates of street intersections (geocodes) or
-  the street intersection near specific coordinates (reverse geocodes).
+ the street intersection near specific coordinates (reverse geocodes).
 
 This guide is an overview of the transportation data. To dig into the details of the schema, see the [schema concepts for transportation](/schema/concepts/by-theme/transportation) and the reference documentation for the [segment](/schema/reference/transportation/segment) and [connector](/schema/reference/transportation/connector) feature types. 
 
@@ -37,7 +38,7 @@ This guide is an overview of the transportation data. To dig into the details of
 All Overture data, including transportation data, is distributed as GeoParquet, a column-based data structure. Below you'll find a table with column-by-column descriptions of the properties in the transportation feature type.
 
 <details>
-    <summary>Schema for GeoParquet files in the transportation theme</summary>
+ <summary>Schema for GeoParquet files in the transportation theme</summary>
 <div>
 <Tabs>
 <TabItem value="segment" label="segment" default>
@@ -81,42 +82,42 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 Transportation segments are divided into three subtypes: **rail**, **water**, and **road**. The road subtype is then further divided into a variety of different classes based on usage captured in the table below.
 
 <details>
-    <summary>Class and subclass feature counts</summary>
+ <summary>Class and subclass feature counts</summary>
 <div>
 <Tabs>
 <TabItem value="classes" label="classes" default>
-| subtype | class | subclass | Feature count, January 2025 release |
+| subtype | class | subclass | Feature count, February 2025 release |
 |---|---|---|---|
-| rail | | | 1,587,296 |
-| road | bridleway | | 96,774 |
-| road | cycleway | cycle_crossing | 50,097 |
-| road | cycleway | | 1,221,521 |
-| road | footway | crosswalk | 1,934,264 |
-| road | footway | sidewalk | 3,102,065 |
-| road | footway | | 14,879,098 |
-| road | living_street | | 3,217,422 |
-| road | motorway | link | 633,742 |
-| road | motorway | | 432,773 |
-| road | path | | 12,924,418 |
-| road | pedestrian | | 452,798 |
-| road | primary | link | 474,341 |
-| road | primary | | 6,560,174 |
-| road | residential | | 124,318,098 |
-| road | secondary | link | 374,248 |
-| road | secondary | | 10,523,508 |
-| road | service | alley | 1,575,784 |
-| road | service | driveway | 15,579,960 |
-| road | service | parking_aisle | 6,072,123 |
-| road | service | | 31,999,597 |
-| road | steps | | 1,727,022 |
-| road | tertiary | link | 286,181 |
-| road | tertiary | | 19,355,710 |
-| road | track | | 24,340,093 |
-| road | trunk | link | 536,463 |
-| road | trunk | | 3,368,503 |
-| road | unclassified | | 28,987,105 |
-| road | unknown | | 645,577 |
-| water | | | 27,399 |
+| rail | | | 1,597,620 |
+| road | bridleway | | 97,353 |
+| road | cycleway | cycle_crossing | 52,254 |
+| road | cycleway | | 1,233,818 |
+| road | footway | crosswalk | 1,982,514 |
+| road | footway | sidewalk | 3,177,530 |
+| road | footway | | 15,079,348 |
+| road | living_street | | 3,233,941 |
+| road | motorway | link | 636,495 |
+| road | motorway | | 434,651 |
+| road | path | | 13,044,351 |
+| road | pedestrian | | 455,537 |
+| road | primary | link | 478,565 |
+| road | primary | | 6,598,649 |
+| road | residential | | 124,588,928 |
+| road | secondary | link | 375,958 |
+| road | secondary | | 10,563,593 |
+| road | service | alley | 1,611,545 |
+| road | service | driveway | 15,800,503 |
+| road | service | parking_aisle | 6,127,036 |
+| road | service | | 32,196,787 |
+| road | steps | | 1,749,584 |
+| road | tertiary | link | 288,787 |
+| road | tertiary | | 19,450,090 |
+| road | track | | 24,539,016 |
+| road | trunk | link | 538,705 |
+| road | trunk | | 3,370,500 |
+| road | unclassified | | 29,134,496 |
+| road | unknown | | 646,983 |
+| water | | | 27,625 |
 </TabItem>
 </Tabs>
 </div>
