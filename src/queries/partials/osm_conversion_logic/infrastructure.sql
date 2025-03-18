@@ -7,20 +7,39 @@ CASE
 
     -- Ferry Terminals
     WHEN element_at(tags,'amenity') = 'ferry_terminal' OR (
-            element_at(tags,'public_transport') = 'stop_position' AND element_at(tags,'ferry') = 'yes' 
+            element_at(tags,'public_transport') = 'stop_position' AND element_at(tags,'ferry') = 'yes'
         ) THEN ROW('transit','ferry_terminal')
 
     -- Transit Stops
     WHEN element_at(tags,'highway') = 'bus_stop' THEN ROW('transit', 'bus_stop')
-    WHEN element_at(tags,'route') = 'bus' THEN ROW('transit', 'bus_route')
+    -- WHEN element_at(tags,'route') = 'bus' THEN ROW('transit', 'bus_route') -- Route relations not considered in this type
     WHEN element_at(tags,'amenity') = 'bus_station' THEN ROW('transit', 'bus_station')
     WHEN element_at(tags,'public_transport') IN ('stop_position', 'platform') THEN ROW('transit', element_at(tags,'public_transport'))
+
+    -- Roadway / Highway infrastructure NODES with OSM `highway` tag
+    WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_Point' AND element_at(tags,'highway') IN (
+        'crossing',
+        'give_way',
+        'stop',
+        'street_lamp',
+        'traffic_signals',
+        'motorway_junction',
+        'milestone'
+    ) THEN ROW('transportation', element_at(tags,'highway'))
+
+    WHEN element_at(tags,'street_cabinet') IS NOT NULL THEN ROW('transportation', 'street_cabinet')
+    WHEN element_at(tags,'amenity') IN ('charging_station') THEN ROW('transportation', element_at(tags,'amenity'))
+
+    -- Emergency Infrastructure
+    WHEN element_at(tags,'emergency') IN ('fire_hydrant') THEN ROW('emergency', element_at(tags,'emergency'))
 
     -- Parking
     WHEN element_at(tags,'amenity') IN (
         'parking',
+        'parking_entrance',
         'parking_space',
         'bicycle_parking',
+        'bicycle_rental',
         'motorcycle_parking'
     ) THEN ROW('transit', element_at(tags,'amenity'))
 
@@ -39,7 +58,7 @@ CASE
         't-bar',
         'zip_line'
     ) THEN ROW('aerialway', element_at(tags,'aerialway'))
-    
+
     -- Pylons are points
     WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) = 'ST_Point' AND element_at(tags,'aerialway') = 'pylon' THEN ROW('aerialway', 'pylon')
 
@@ -48,7 +67,7 @@ CASE
 
     -- Airports (Polygons)
     WHEN ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) IN ('ST_Polygon', 'ST_MultiPolygon') AND element_at(tags,'aeroway') IN (
-        'airstrip', 
+        'airstrip',
         'apron',
         'helipad',
         'heliport',
@@ -109,7 +128,7 @@ CASE
     WHEN element_at(tags,'tower:type') = 'communication' THEN ROW('communication','communication_tower')
 
     -- Pedestrian
-    WHEN element_at(tags,'highway') IS NULL AND element_at(tags,'footway') IN ('crossing') AND 
+    WHEN element_at(tags,'highway') IS NULL AND element_at(tags,'footway') IN ('crossing') AND
         ST_GEOMETRYTYPE(ST_GeomFromBinary(geometry)) IN ('ST_Polygon','ST_MultiPolygon') THEN ROW('pedestrian','pedestrian_crossing')
     WHEN element_at(tags,'tourism') IN ('information', 'viewpoint') THEN ROW('pedestrian', element_at(tags,'tourism'))
     WHEN element_at(tags,'amenity') IN (
@@ -137,7 +156,6 @@ CASE
         'minor_line',
         'plant',
         'portal',
-        'sub_station',
         'substation',
         'switch',
         'terminal',
@@ -172,7 +190,7 @@ CASE
         'pipeline',
         'reservoir_covered',
         'silo',
-        'storage_tank', 
+        'storage_tank',
         'utility_pole',
         'water_tower'
     ) THEN ROW('utility', element_at(tags,'man_made'))
@@ -184,18 +202,17 @@ CASE
         'waste_disposal'
     ) THEN ROW('waste_management',element_at(tags,'amenity'))
 
-    --Water
-    WHEN element_at(tags,'man_made') IN ('dam') THEN ROW('water',element_at(tags,'man_made'))
+    -- Water related
+    WHEN element_at(tags,'man_made') IN ('dam', 'breakwater') THEN ROW('water',element_at(tags,'man_made'))
+    WHEN element_at(tags,'man_made') IN ('pier') THEN ROW('pier','pier')
+
     WHEN element_at(tags,'waterway') IN ('dam','weir') THEN ROW('water', element_at(tags,'waterway'))
+
     WHEN element_at(tags,'amenity') = ('drinking_water') AND
         (element_at(tags,'drinking_water') IS NULL OR element_at(tags,'drinking_water') <> 'no') AND
         (element_at(tags,'access') IS NULL OR element_at(tags,'access') <> 'private')
         THEN ROW('water', 'drinking_water')
     WHEN element_at(tags,'amenity') IN ('fountain') THEN ROW('water', 'fountain')
-
-
-    -- Standalone piers
-    WHEN element_at(tags,'man_made') IN ('pier') THEN ROW('pier','pier')
 
 
     -- Barrier tags are often secondary on other features, so put them last.
