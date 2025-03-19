@@ -27,7 +27,7 @@ You can access the datasets by following the process outlined [here](/getting-da
 
 ## Breaking changes
 
-None. 
+None.
 
 ## Deprecations
 
@@ -41,24 +41,39 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ### Addresses
 
+- added new data sources for all California counties, aside from Sierra County
+- added new county-level and state-level data sources in Florida
+	- coverage now includes all but four counties
+- added a new data source for Hong Kong
+- added a new data source in Oregon
 
 
 ### Base
 
-
+- minor data fixes and updates
 
 ### Buildings
 
+- added ~13M new buildings from [Instituto Geográfico Nacional, Spain](https://www.ign.es)
 
 
 ### Divisions
 
+- corrected format of OSM source ids, which now include the @version format, as seen in other themes
+- removed an incorrect Argentina perspective field value
+- the `local_type` value is set on regions in the US and India
+- all division boundary GERS IDs have changed since the February release
+
 
 ### Places
 
+- minor data fixes and updates
 
 
 ### Transportation
+
+- added an [is_indoor road flag](https://github.com/OvertureMaps/schema/pull/327#event-16716730346) to the schema
+- re-included 88,005 segments flagged as ‘indoor’, which had previously been filtered out
 
   
 ## Data changelog
