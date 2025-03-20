@@ -1,0 +1,167 @@
+---
+title: 2025-03-19.0
+slug: latest
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2025-03-19.0` release of Overture data and `v1.7.0` of the Overture schema are now available.** 
+
+The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
+
+#### Microsoft Azure:
+```
+wasbs://release@overturemapswestus2.blob.core.windows.net/2025-03-19.0
+```
+
+#### Amazon S3:
+```
+s3://overturemaps-us-west-2/release/2025-03-19.0
+```
+
+You can access the datasets by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussions forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at data@overturemaps.org. We’d love to hear from you.
+
+
+## Breaking changes
+
+None.
+
+## Deprecations
+
+None.
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- added new data sources for all California counties, aside from Sierra County
+- added new county-level and state-level data sources in Florida
+	- coverage now includes all but four counties
+- added a new data source for Hong Kong
+- added a new data source in Oregon
+
+| theme | type | change type | feature count |
+| -------- | -------- | ------- | ------- |
+| addresses | address | added | 428,821,683 |
+| addresses | address | removed | 407,936,328 |
+
+
+### Base
+
+- minor data fixes and updates
+
+| theme | type | change type | feature count |
+| -------- | -------- | ------- | ------- |
+| base | bathymetry | unchanged | 60,060 |
+| base | infrastructure | added | 715,297 |
+| base | infrastructure | data_changed | 326,313 |
+| base | infrastructure | removed | 65,623 |
+| base | infrastructure | unchanged | 118,573,035 |
+| base | land | added | 355,006 |
+| base | land | data_changed | 145,877 |
+| base | land | removed | 34,300 |
+| base | land | unchanged | 63,364,140 |
+| base | land_cover | unchanged | 123,302,114 |
+| base | land_use | added | 218,946 |
+| base | land_use | data_changed | 663,489 |
+| base | land_use | removed | 41,562 |
+| base | land_use | unchanged | 47,065,761 |
+| base | water | added | 603,639 |
+| base | water | data_changed | 58,313 |
+| base | water | removed | 31,885 |
+| base | water | unchanged | 54,706,153 |
+
+
+### Buildings
+
+- added ~13M new buildings from [Instituto Geográfico Nacional, Spain](https://www.ign.es)
+
+| theme | type | change type | feature count |
+| -------- | -------- | ------- | ------- |
+| buildings | building | added | 20,895,759 |
+| buildings | building | data_changed | 10,104,299 |
+| buildings | building | removed | 9,188,886 |
+| buildings | building | unchanged | 2,598,324,355 |
+| buildings | building_part | added | 32,568 |
+| buildings | building_part | data_changed | 56,729 |
+| buildings | building_part | removed | 3,101 |
+| buildings | building_part | unchanged | 3,136,373 |
+
+
+### Divisions
+
+- corrected format of OSM source ids, which now include the @version format, as seen in other themes
+- removed an incorrect Argentina perspective field value
+- the `local_type` value is set on regions in the US and India
+- all division boundary GERS IDs have changed since the February release
+
+| theme | type | change type | feature count |
+| -------- | -------- | ------- | ------- |
+| divisions | division | added | 40,462 |
+| divisions | division | data_changed | 621,942 |
+| divisions | division | removed | 33,684 |
+| divisions | division | unchanged | 3,699,466 |
+| divisions | division_area | added | 26,620 |
+| divisions | division_area | data_changed | 46,748 |
+| divisions | division_area | removed | 23,266 |
+| divisions | division_area | unchanged | 945,111 |
+| divisions | division_boundary | added | 86,684 |
+| divisions | division_boundary | data_changed | 2 |
+| divisions | division_boundary | removed | 86,756 |
+| divisions | division_boundary | unchanged | 27 |
+
+
+### Places
+
+- minor data fixes and updates
+
+| theme | type | change type | feature count |
+| -------- | -------- | ------- | ------- |
+| places | place | added | 17,185,352 |
+| places | place | data_changed | 16,596,848 |
+| places | place | removed | 12,857,805 |
+| places | place | unchanged | 32,815,899 |
+
+### Transportation
+
+- added an [is_indoor road flag](https://github.com/OvertureMaps/schema/pull/327#event-16716730346) to the schema
+- re-included 88,005 segments flagged as ‘indoor’, which had previously been filtered out
+
+| theme | type | change type | feature count |
+| -------- | -------- | ------- | ------- |
+| transportation | connector | added | 1,774,872 |
+| transportation | connector | data_changed | 815,586 |
+| transportation | connector | removed | 311,378 |
+| transportation | connector | unchanged | 370,644,827 |
+| transportation | segment | added | 1,698,190 |
+| transportation | segment | data_changed | 4,171,164 |
+| transportation | segment | removed | 635,288 |
+| transportation | segment | unchanged | 314,306,310 |
+
+  
+## Data changelog
+
+The data changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations on Azure and AWS:
+
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2025-03-19.0
+```
+```
+s3://overturemaps-us-west-2/changelog/2025-03-19.0
+```
+
+You can find more information about [the data changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
+
+## Schema changelog
+The changelog for Overture schema `v1.7.0` is [here](https://github.com/OvertureMaps/schema/releases). 
+
+## Attribution  
+
+You'll find information about attribution and licensing [here](/attribution).
