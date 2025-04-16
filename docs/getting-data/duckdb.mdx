@@ -10,6 +10,7 @@ import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_de
 import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level_geometries.sql';
 import NewYorkPizza from '!!raw-loader!@site/src/queries/duckdb/new_york_pizza.sql';
 import ParisRoads from '!!raw-loader!@site/src/queries/duckdb/paris_roads.sql';
+import WriteGeoparquet from '!!raw-loader!@site/src/queries/duckdb/write_geoparquet.sql';
 
 [DuckDB](https://duckdb.org/) is powerful analytics tool that allows you to query remote files and download only the data you want. You'll need to install at least [DuckDB 1.1.0](https://duckdb.org/2024/09/09/announcing-duckdb-110.html), which supports reading and writing geoparquet.
 
@@ -69,14 +70,7 @@ County-level geometries for Pennsylvania from the divisions theme and outputs a 
 
 DuckDB v1.1.0 supports reading and writing GeoParquet directly. It recognizes the `geometry` type and will write the appropriate metadata.
 
-```sql
-COPY(
-  SELECT
-    *
-  FROM read_parquet('s3://overturemaps-us-west-2/release/2024-08-20.0/theme=places/type=place/*', filename=true, hive_partitioning=1)
-  LIMIT 100000
-) TO 'places.parquet';
-```
+<QueryBuilder query={WriteGeoparquet}></QueryBuilder>
 
 DuckDB recognizes the input as geoparquet and will automatically cast the _geometry_ column to a `GEOMETRY` type.
 The `COPY` command writes a parquet file of 100,000 places named `places.parquet` with the appropriate geoparquet metadata.
