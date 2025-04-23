@@ -86,38 +86,38 @@ Transportation segments are divided into three subtypes: **rail**, **water**, an
 <div>
 <Tabs>
 <TabItem value="classes" label="classes" default>
-| subtype | class | subclass | Feature count, March 2025 release |
+| subtype | class | subclass | Feature count, April 2025 release |
 |---|---|---|---|
-| rail | | | 1,602,948 |
-| road | bridleway | | 97,702 |
-| road | cycleway | cycle_crossing | 52,642 |
-| road | cycleway | | 1,238,322 |
-| road | footway | crosswalk | 2,005,938 |
-| road | footway | sidewalk | 3,219,217 |
-| road | footway | | 15,234,374 |
-| road | living_street | | 3,246,258 |
-| road | motorway | link | 637,736 |
-| road | motorway | | 433,574 |
-| road | path | | 13,110,983 |
-| road | pedestrian | | 457,405 |
-| road | primary | link | 482,265 |
-| road | primary | | 6,613,423 |
-| road | residential | | 124,704,423 |
-| road | secondary | link | 378,214 |
-| road | secondary | | 10,592,515 |
-| road | service | alley | 1,622,275 |
-| road | service | driveway | 15,932,702 |
-| road | service | parking_aisle | 6,156,040 |
-| road | service | | 32,306,876 |
-| road | steps | | 1,790,044 |
-| road | tertiary | link | 290,366 |
-| road | tertiary | | 19,498,067 |
-| road | track | | 24,646,895 |
-| road | trunk | link | 538,466 |
-| road | trunk | | 3,376,124 |
-| road | unclassified | | 29,234,595 |
-| road | unknown | | 647,474 |
-| water | | | 27,801 |
+| rail    |           |            | 1609338      |
+| road    | bridleway     |            | 98230        |
+| road    | cycleway      | cycle_crossing | 53764        |
+| road    | cycleway      |            | 1246074      |
+| road    | footway       | crosswalk      | 2039673      |
+| road    | footway       | sidewalk       | 3281282      |
+| road    | footway       |            | 15378957     |
+| road    | living_street |            | 3265976      |
+| road    | motorway      | link           | 638308       |
+| road    | motorway      |            | 432262       |
+| road    | path          |            | 13187280     |
+| road    | pedestrian    |            | 458725       |
+| road    | primary       | link           | 484551       |
+| road    | primary       |            | 6635394      |
+| road    | residential   |            | 124922897    |
+| road    | secondary     | link           | 381553       |
+| road    | secondary     |            | 10618673     |
+| road    | service       | alley          | 1638837      |
+| road    | service       | driveway       | 16100016     |
+| road    | service       | parking_aisle  | 6197666      |
+| road    | service       |            | 32478397     |
+| road    | steps         |            | 1805735      |
+| road    | tertiary      | link           | 292466       |
+| road    | tertiary      |            | 19573564     |
+| road    | track         |            | 24780102     |
+| road    | trunk         | link           | 541491       |
+| road    | trunk         |            | 3390893      |
+| road    | unclassified  |            | 29319388     |
+| road    | unknown       |            | 649519       |
+| water   |           |            | 27959        |
 
 </TabItem>
 </Tabs>
@@ -227,7 +227,7 @@ To help visualize this process better, here is a real world example of a residen
 | ![Overture Splitter Example](/img/transportation/splitter_overture.png) |
 |:--:| 
 | In Overture the two segments have been combined into one feature and the restricted access tag has been stored as this linear reference in **access_restrictions**: 
-`[{'access_type': allowed, 'when': {'during': NULL, 'heading': NULL, 'using': NULL, 'recognized': [as_private], 'mode': NULL, 'vehicle': NULL}, 'between': [0.521962729, 1.0]}]` | 
+`[{'access_type': allowed, 'when': {'during': , 'heading': , 'using': , 'recognized': [as_private], 'mode': , 'vehicle': }, 'between': [0.521962729, 1.0]}]` | 
 </TabItem>
 <TabItem value="Transportation Splitter" label="Transportation Splitter" default>
 ![Splitter Output Example](/img/transportation/splitter_output.png)
