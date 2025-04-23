@@ -1,0 +1,142 @@
+---
+title: 2025-04-23.0
+slug: latest
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2025-04-23.0` release of Overture data and `v1.8.0` of the Overture schema are now available.** 
+
+The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
+
+#### Microsoft Azure:
+```
+wasbs://release@overturemapswestus2.blob.core.windows.net/2025-04-23.0
+```
+
+#### Amazon S3:
+```
+s3://overturemaps-us-west-2/release/2025-04-23.0
+```
+
+You can access the datasets by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussions forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at data@overturemaps.org. We’d love to hear from you.
+
+
+## Breaking changes
+
+none
+
+## Deprecations
+
+none
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- fixed overlapping datasets in two Florida counties
+- added data for Lee and Marion counties in Florida
+
+| feature type | change type | feature count |
+| ---------- | ---------- | ---------- | 
+| address | added | 429,683,781 |
+| address | removed | 428,821,683 |
+
+
+### Base
+
+- added golf course data from OpenStreetMap
+- explicitly specified the data type of the `class` property for `water` features as `string` (this very a very minor schema change)
+
+
+### Buildings
+
+- made minor data fixes and updates
+
+| feature type | change type | feature count |
+| ---------- | ---------- | ---------- |
+| building | added | 5,409,438 |
+| building | data_changed | 2,608,368,718 |
+| building | removed | 20,955,173 |
+| building | unchanged | 522 |
+| building_part | added | 16,060 |
+| building_part | data_changed | 3,181,177 |
+| building_part | removed | 2343 |
+| building_part | unchanged | 42,150 |
+
+
+### Divisions
+
+- added `country` and `region` properties to `division_boundary` (this is a minor schema change)
+- calculated `cartography.prominence` values for `subtype=locality`
+- populated `local_type` with set values; the default value is the same as `subtype`
+
+| feature type | change type | feature count |
+| ---------- | ---------- | ---------- |
+| division | added | 19,641 |
+| division | data_changed | 3,648,319 |
+| division | removed | 11,719 |
+| division | unchanged | 701,832 |
+| division_area | added | 6,647 |
+| division_area | data_changed | 175,984 |
+| division_area | removed | 92,47 |
+| division_area | unchanged | 833,248 |
+| division_boundary | added | 698 |
+| division_boundary | data_changed | 86,105 |
+| division_boundary | removed | 142 |
+| division_boundary | unchanged | 466 |
+
+
+### Places
+
+- made minor data fixes and updates
+
+| feature type | change type | feature count |
+| ---------- | ---------- | ---------- | 
+| place | added | 7,461,890 |
+| place | data_changed | 19,546,689 |
+| place | removed | 8,015,519 |
+| place | unchanged | 39,035,891 |
+
+### Transportation
+
+- made minor data fixes and updates
+
+| feature type | change type | feature count |
+| ---------- | ---------- | ---------- |
+| connector | added | 2,440,563 |
+| connector | data_changed | 1,167,874 |
+| connector | removed | 428,404 |
+| connector | unchanged | 371,639,007 |
+| segment | added | 2,220,972 |
+| segment | data_changed | 5,306,151|
+| segment | removed | 867,666 |
+| segment | unchanged | 314,001,847 |
+
+  
+## Data changelog
+
+The data changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations on Azure and AWS:
+
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2025-04-23.0
+```
+```
+s3://overturemaps-us-west-2/changelog/2025-04-23.0
+```
+
+You can find more information about [the data changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
+
+## Schema changelog
+The changelog for Overture schema `v1.8.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.8.0). 
+
+## Attribution  
+
+You'll find information about attribution and licensing [here](/attribution).
