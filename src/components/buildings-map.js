@@ -3,6 +3,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Protocol } from 'pmtiles';
 import '../css/map.css';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 export default function GlobalBuildingsMap() {
   const mapContainer = useRef(null);
@@ -10,6 +11,7 @@ export default function GlobalBuildingsMap() {
   const [lng] = useState(-117.05154);
   const [lat] = useState(32.58453);
   const [zoom] = useState(14);
+  const siteConfig = useDocusaurusContext();
 
   useEffect(() => {
     if (map.current) return; // stops map from intializing more than once
@@ -42,20 +44,20 @@ export default function GlobalBuildingsMap() {
         sources: {
           buildings: {
             type: "vector",
-            url: "pmtiles://https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/buildings.pmtiles"
+            url: "pmtiles://" + siteConfig.pmtiles_release + "/buildings.pmtiles"
 
           },
           transportation: {
             type: "vector",
-            url: "pmtiles://https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/transportation.pmtiles"
+            url: "pmtiles://" + siteConfig.pmtiles_release + "/transportation.pmtiles"
           },
           divisions: {
             type: "vector",
-            url: "pmtiles://https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/divisions.pmtiles"
+            url: "pmtiles://" + siteConfig.pmtiles_release + "/divisions.pmtiles"
           },
           base: {
             type: "vector",
-            url: "pmtiles://https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-07-22/base.pmtiles"
+            url: "pmtiles://" + siteConfig.pmtiles_release + "/base.pmtiles"
           },
           // TODO: Determine best source for some sat imagery here?
           // 'satellite-bg': {
