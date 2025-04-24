@@ -11,7 +11,9 @@ export default function GlobalBuildingsMap() {
   const [lng] = useState(-117.05154);
   const [lat] = useState(32.58453);
   const [zoom] = useState(14);
-  const siteConfig = useDocusaurusContext();
+  const {
+    siteConfig: {customFields},
+  } = useDocusaurusContext();
 
   useEffect(() => {
     if (map.current) return; // stops map from intializing more than once
@@ -44,20 +46,20 @@ export default function GlobalBuildingsMap() {
         sources: {
           buildings: {
             type: "vector",
-            url: "pmtiles://" + siteConfig.pmtiles_release + "/buildings.pmtiles"
+            url: "pmtiles://" + customFields.pmtiles_path + "/buildings.pmtiles"
 
           },
           transportation: {
             type: "vector",
-            url: "pmtiles://" + siteConfig.pmtiles_release + "/transportation.pmtiles"
+            url: "pmtiles://" + customFields.pmtiles_path + "/transportation.pmtiles"
           },
           divisions: {
             type: "vector",
-            url: "pmtiles://" + siteConfig.pmtiles_release + "/divisions.pmtiles"
+            url: "pmtiles://" + customFields.pmtiles_path + "/divisions.pmtiles"
           },
           base: {
             type: "vector",
-            url: "pmtiles://" + siteConfig.pmtiles_release + "/base.pmtiles"
+            url: "pmtiles://" + customFields.pmtiles_path + "/base.pmtiles"
           },
           // TODO: Determine best source for some sat imagery here?
           // 'satellite-bg': {
