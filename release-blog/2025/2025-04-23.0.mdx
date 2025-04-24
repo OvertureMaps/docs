@@ -41,6 +41,7 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ### Addresses
 
+<<<<<<< HEAD
 #### Data changes
 
 - fixed overlapping datasets in two Florida counties
@@ -52,16 +53,36 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 - added golf course data from OpenStreetMap
 - explicitly specified the data type of the `class` property for `water` features as `string` (very minor schema change)
+=======
+- fixed overlapping datasets in two Florida counties
+- added data for Lee and Marion counties in Florida
+
+| feature type | change type | feature count |
+| ---------- | ---------- | ---------- | 
+| address | added | 429,683,781 |
+| address | removed | 428,821,683 |
+
+
+### Base
+
+- added golf course data from OpenStreetMap
+- explicitly specified the data type of the `class` property for `water` features as `string` (this very a very minor schema change)
+>>>>>>> 37aba803 (resolve merge conflict)
 
 
 ### Buildings
 
+<<<<<<< HEAD
 #### Data changes
 
 - made minor data fixes and updates
 
 #### Stats
 
+=======
+- made minor data fixes and updates
+
+>>>>>>> 37aba803 (resolve merge conflict)
 | feature type | change type | feature count |
 | ---------- | ---------- | ---------- |
 | building | added | 5,409,438 |
@@ -76,6 +97,7 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ### Divisions
 
+<<<<<<< HEAD
 #### Data changes
 
 - added `country` and `region` properties to `division_boundary` (minor schema change)
@@ -84,6 +106,12 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 #### Stats
 
+=======
+- added `country` and `region` properties to `division_boundary` (this is a minor schema change)
+- calculated `cartography.prominence` values for `subtype=locality`
+- populated `local_type` with set values; the default value is the same as `subtype`
+
+>>>>>>> 37aba803 (resolve merge conflict)
 | feature type | change type | feature count |
 | ---------- | ---------- | ---------- |
 | division | added | 19,641 |
@@ -102,12 +130,17 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ### Places
 
+<<<<<<< HEAD
 #### Data changes
 
 - made minor data fixes and updates
 
 #### Stats
 
+=======
+- made minor data fixes and updates
+
+>>>>>>> 37aba803 (resolve merge conflict)
 | feature type | change type | feature count |
 | ---------- | ---------- | ---------- | 
 | place | added | 7,461,890 |
@@ -117,12 +150,17 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ### Transportation
 
+<<<<<<< HEAD
 #### Data changes
 
 - made minor data fixes and updates
 
 #### Stats
 
+=======
+- made minor data fixes and updates
+
+>>>>>>> 37aba803 (resolve merge conflict)
 | feature type | change type | feature count |
 | ---------- | ---------- | ---------- |
 | connector | added | 2,440,563 |
@@ -149,7 +187,10 @@ s3://overturemaps-us-west-2/changelog/2025-04-23.0
 You can find more information about [the data changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
 
 ## Schema changelog
+<<<<<<< HEAD
 
+=======
+>>>>>>> 37aba803 (resolve merge conflict)
 The changelog for Overture schema `v1.8.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.8.0). 
 
 ## Attribution  

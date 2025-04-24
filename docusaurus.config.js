@@ -22,6 +22,7 @@ const config = {
 
   customFields: {
     overtureRelease: '2025-04-23.0',
+    pmtiles_path: 'https://d3c1b7bog2u1nn.cloudfront.net/2025-03-19'
   },
 
   future: {
