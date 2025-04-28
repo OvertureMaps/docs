@@ -28,6 +28,7 @@ const sidebars = {
       },
       collapsed: true,
       items: [
+        'examples/spark',
         'examples/pandas',
         'examples/lonboard',
         'examples/fused',
