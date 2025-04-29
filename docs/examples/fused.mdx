@@ -10,7 +10,7 @@ In these examples, we'll see ways to load and transform Overture data using Fuse
 
 This example shows how to join the Overture Buildings dataset with the [National Structures Inventory (NSI)](https://www.hec.usace.army.mil/confluence/nsi/technicalreferences/latest/technical-documentation) dataset. The NSI API provides point data on buildings in the U.S. that are relevant to hazard analyses. Joining the NSI data with Overture Buildings can be used to enrich Overture Building features with additional metadata.
 
-We'll be loading Overture Buildings data using the Fused User Defined Function explained in [this](/getting-data/fused/) section of the docs.
+We'll be loading Overture Buildings data using the Fused User Defined Function explained in [this](/getting-data/data-mirrors/fused) section of the docs.
 
 First we import Fused.
 
@@ -18,7 +18,7 @@ First we import Fused.
 import fused
 ```
 
-Now we can define a `GeoDataFrame` with a bounding box of our area of interest. We'll use it to load data for the same area of each dataset. 
+Now we can define a `GeoDataFrame` with a bounding box of our area of interest. We'll use it to load data for the same area of each dataset.
 
 ```python
 import fused
@@ -26,7 +26,7 @@ import geopandas as gpd
 import shapely
 
 bbox = gpd.GeoDataFrame(
-    geometry=[shapely.box(-73.9847, 40.7666, -73.9810, 40.7694)], 
+    geometry=[shapely.box(-73.9847, 40.7666, -73.9810, 40.7694)],
     crs=4326
 )
 ```
@@ -35,9 +35,9 @@ We use `fused.run` to run the predefined Overture UDF that loads Overture Buildi
 
 ```python
 gdf_overture = fused.run(
-    "UDF_Overture_Maps_Example", 
-    bbox=bbox, 
-    overture_type='building', 
+    "UDF_Overture_Maps_Example",
+    bbox=bbox,
+    overture_type='building',
     use_columns=['geometry', 'names', 'sources']
 )
 ```
@@ -102,7 +102,7 @@ def udf(bbox):
 Now we can run the UDF for an area specified by the bounding box.
 
 ```python
-fused.run(udf, bbox=bbox) 
+fused.run(udf, bbox=bbox)
 ```
 
 By encapsulating the code into a UDF, a workflow or client application can dynamically pass different areas of interest to the `bbox` parameter to run the UDF and return its output table. A simple way to try this is to run a UDF equivalent to the one we just created in the [Fused UDF Builder](https://www.fused.io/workbench/catalog/Overture_Nsi-dd89972c-ce30-4544-ba0f-81fc09f5bbef) which renders the UDF outputs on a map.
