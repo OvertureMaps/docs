@@ -17,9 +17,9 @@ const sidebars = {
           label: 'Data Mirrors',
           collapsed: true,
           items: [
-            'getting-data/data-mirrors/fused', 
-            'getting-data/data-mirrors/bigquery', 
-            'getting-data/data-mirrors/databricks', 
+            'getting-data/data-mirrors/fused',
+            'getting-data/data-mirrors/bigquery',
+            'getting-data/data-mirrors/databricks',
             'getting-data/data-mirrors/snowflake',
           ],
         },
@@ -42,7 +42,7 @@ const sidebars = {
     },
    {
       type: 'category',
-      label: ' Data   Guides',
+      label: 'Data Guides',
       collapsed: true,
       items: [
         'guides/addresses',
