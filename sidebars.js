@@ -4,31 +4,30 @@ const sidebars = {
     'introduction',
     {
       type: 'category',
-      label: 'Getting Overture Data',
-      link: {
-        type: 'doc',
-        id: 'getting-data/index'
-      },
+      label: 'Getting Started',
       collapsed: true,
       items: [
+        'getting-data/index',
         'getting-data/duckdb',
         'getting-data/overturemaps-py',
-        'getting-data/fused',
         'getting-data/athena-aws',
         'getting-data/synapse-azure',
-        'getting-data/sedona',
-        'getting-data/bigquery',
-        'getting-data/databricks',
-        'getting-data/snowflake',
-      ]
+        {
+          type: 'category',
+          label: 'Data Mirrors',
+          collapsed: true,
+          items: [
+            'getting-data/data-mirrors/fused', 
+            'getting-data/data-mirrors/bigquery', 
+            'getting-data/data-mirrors/databricks', 
+            'getting-data/data-mirrors/snowflake',
+          ],
+        },
+      ],
     },
     {
       type: 'category',
       label: 'Examples',
-      link: {
-        type: 'doc',
-        id: 'examples/index'
-      },
       collapsed: true,
       items: [
         'examples/pandas',
@@ -41,13 +40,9 @@ const sidebars = {
         'examples/QGIS',
       ]
     },
-    {
+   {
       type: 'category',
-      label: 'Guides',
-      link: {
-        type: 'doc',
-        id: 'guides/index'
-      },
+      label: ' Data   Guides',
       collapsed: true,
       items: [
         'guides/addresses',
