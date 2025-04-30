@@ -74,6 +74,7 @@ const sidebars = {
         'gers/changelog',
         'gers/gers-demonstrations',
         'gers/stability',
+        'gers/gers-tutorial'
       ]
     },
     'attribution'
