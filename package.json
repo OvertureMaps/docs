@@ -34,6 +34,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.3.2",
     "@docusaurus/types": "^3.3.2",
+    "@docusaurus/faster": "^3.6.3",
     "yaml-loader": "^0.8.0"
   },
   "browserslist": {
