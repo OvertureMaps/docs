@@ -34,14 +34,15 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        'examples/pandas',
-        'examples/lonboard',
+        'examples/build-a-map',
+        'examples/carto',
         'examples/fused',
         'examples/kepler-gl',
-        'examples/rapid-id',
+        'examples/lonboard',
         'examples/overture-tiles',
-        'examples/build-a-map',
+        'examples/pandas',
         'examples/QGIS',
+        'examples/rapid-id',
       ]
     },
    {
