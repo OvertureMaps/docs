@@ -35,7 +35,7 @@ const sidebars = {
       collapsed: true,
       items: [
         'examples/build-a-map',
-        'examples/carto',
+        'examples/CARTO',
         'examples/fused',
         'examples/kepler-gl',
         'examples/lonboard',
