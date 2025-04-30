@@ -28,6 +28,10 @@ const sidebars = {
     {
       type: 'category',
       label: 'Examples',
+      link: {
+        type: 'doc',
+        id: 'examples/index'
+      },
       collapsed: true,
       items: [
         'examples/pandas',
@@ -43,6 +47,10 @@ const sidebars = {
    {
       type: 'category',
       label: 'Data Guides',
+      link: {
+        type: 'doc',
+        id: 'guides/index'
+      },
       collapsed: true,
       items: [
         'guides/addresses',
