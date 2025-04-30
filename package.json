@@ -7,7 +7,7 @@
     "start": "./fetch_schema.sh && npm run docusaurus start",
     "start-dev": "EXPORT SCHEMA_BRANCH=dev && ./fetch_schema.sh && npm run docusaurus start",
     "start-staging": "EXPORT SCHEMA_BRANCH=staging && ./fetch_schema.sh && npm run docusaurus start",
-    "build": "./fetch_schema.sh && npm run docusaurus build",
+    "build": "./fetch_schema.sh && npm run docusaurus build --faster",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@docusaurus/core": "^3.6.0",
+    "@docusaurus/faster": "^3.7.0",
     "@docusaurus/preset-classic": "^3.6.0",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^1.2.1",
