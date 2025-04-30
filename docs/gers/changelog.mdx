@@ -6,7 +6,7 @@ import changelog_buildings_churn from '!!raw-loader!@site/src/queries/duckdb/cha
 import changelog_buildings_feature_by_change_type from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_feature_by_change_type.sql';
 import changelog_buildings_join from '!!raw-loader!@site/src/queries/athena/changelog_buildings_join.sql';
 
-With each data release, Overture generates a [GERS](../) changelog to capture changes in the data tied to the unique ID for each feature. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors. 
+With each data release, Overture generates a [GERS](../) changelog to capture changes in the data tied to the unique ID for each feature. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors.
 
 The GERS changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations:
 
@@ -15,7 +15,7 @@ The GERS changelog is available as Parquet files &mdash; partitioned by theme, t
 | Amazon S3 | `s3://overturemaps-us-west-2/changelog/` |
 | Microsoft Azure | `wasbs://changelog@overturemapswestus2.blob.core.windows.net/` |
 
-The latest path is: 
+The latest path is:
 <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
 
 ## Types of changes
@@ -29,7 +29,7 @@ The types of changes in the changelog include:
 
 ## Querying the GERS changelog
 
-We can query the changelog with DuckDB to get a quick look at changes in data from the last release to the current release. In this example, we're grabbing ID, feature type, and change type for buildings in several towns across the [Amhara Region](https://en.wikipedia.org/wiki/Amhara_Region) in Ethiopia. 
+We can query the changelog with DuckDB to get a quick look at changes in data from the last release to the current release. In this example, we're grabbing ID, feature type, and change type for buildings in several towns across the [Amhara Region](https://en.wikipedia.org/wiki/Amhara_Region) in Ethiopia.
 
 <QueryBuilder query={changelog_buildings_churn}></QueryBuilder>
 
@@ -37,16 +37,10 @@ We can also get a count of building features by change type for our area of inte
 
 <QueryBuilder query={changelog_buildings_feature_by_change_type}></QueryBuilder>
 
-Taking this one step further, this time using Athena to run our query, we can join the changelog and data via Overture ID to connect the change type and feature geometries and properties.  
+Taking this one step further, this time using Athena to run our query, we can join the changelog and data via Overture ID to connect the change type and feature geometries and properties.
 
 <QueryBuilder query={changelog_buildings_join}></QueryBuilder>
 
-Finally we can use the results of our query to visualize building features by change type and inspect the properties for each feature. The example below, created using [kepler.gl](https://kepler.gl/), shows buildings in [Finote Selam](https://en.wikipedia.org/wiki/Finote_Selam), a city in the Amhara Region of Ethiopia. The data is from Overture's `2024-06-13-beta.0` release, to which we added 100 million new buildings, many of them derived from satellite imagery by Microsoft. 
-
+Finally we can use the results of our query to visualize building features by change type and inspect the properties for each feature. The example below, created using [kepler.gl](https://kepler.gl/), shows buildings in [Finote Selam](https://en.wikipedia.org/wiki/Finote_Selam), a city in the Amhara Region of Ethiopia. The data is from Overture's `2024-06-13-beta.0` release, to which we added 100 million new buildings, many of them derived from satellite imagery by Microsoft.
 
 ![Buildings By Change Type](/img/gers/buildings-change-type-amhara-region.png)
-
-
-
-
-

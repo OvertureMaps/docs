@@ -96,6 +96,7 @@ const config = {
         blogDescription: "Overture Maps Release Notes and Schema Changelog",
         showReadingTime: false,
         postsPerPage: 1,
+        onUntruncatedBlogPosts: 'ignore',
         blogSidebarCount: 'ALL',
         routeBasePath: 'release',
         path: './release-blog',
