@@ -1,58 +1,54 @@
 ---
-title: Global Entity Reference System (GERS)
+title: What is GERS?
 slug: /gers
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-The Global Entity Reference System (GERS) is a framework that structures, encodes, and matches map data to a shared universal reference within Overture. GERS, coupled with Overture datasets, is a potential standard for identifying and referencing the physical and conceptual entities we've defined in our world, such as office buildings, grocery stores, forests, countries, rivers, museums, capitals of provinces, and mailing addresses. 
+## Global Entity Reference System
 
-Overture assigns a unique ID to each feature in an Overture dataset. These unique IDs form the basis of GERS. The map feature, and therefore its GERS ID, represents an entity that exists in the real world. For example, a building housing a branch of a public library is represented in the Overture buildings dataset as a feature with its own unique ID. The public library is a place of interest, represented in the Overture places dataset with its own unique ID. The building and the library are distinct entities with distinct GERS IDs. If the library moves into a new building across town, the library's GERS ID will remain the same. The library's former building, now vacated, also keeps its GERS ID in the buildings dataset. This ensures stability and accuracy amid change.
+The Global Entity Reference System (GERS) is a universal framework for structuring and matching map data across systems. GERS, coupled with Overture datasets, is a potential standard for identifying and referencing the physical and conceptual entities we've defined in our world. It's also a mechanism that can simplify the integration and exchange of data layers. 
 
+At the heart of GERS is a unique ID called the GERS ID. Overture assigns a GERS ID to each feature in our dataset. That feature, and therefore its GERS ID, represents an entity that exists in the real world, such as an office building, highway, country, river, museum or school. 
 
-## Structure of a GERS ID
-
-GERS IDs are 32 characters and 128 bits. For most features types, the GERS ID is intended to be [stable](stability) across [Overture releases](/release). This means a GERS ID assigned to a building feature, for example, won't change even if the building's properties change, including changes to its geometry.
-
-Let's examine the GERS IDs for two iconic buildings in Berlin.
-
-#### [Reichstag Building](https://en.wikipedia.org/wiki/Reichstag_building)
-| Overture release | `id` | `change_type` |
-|------|----------|------|
-| `2024-07-22.0` | `08b1f1d488708fff0200bf6d40c1cf8f`| `data_changed` |
-| `2024-08-20.0` | `08b1f1d488708fff0200bf6d40c1cf8f` | `data_changed` |
-| `2024-09-18.0` | `08b1f1d488708fff0200bf6d40c1cf8f` | `data_changed` |
-| `latest` | `08b1f1d488708fff0200bf6d40c1cf8f` | `unchanged` |
-
-#### [Brandenburg Gate](https://en.wikipedia.org/wiki/Brandenburg_Gate)
-| Overture release | `id` | `change_type` |
-|------|----------|------|
-| `2024-07-22.0`| `08b1f1d488601fff02002aee6ba961a4`| `data_changed` |
-| `2024-08-20.0`| `08b1f1d488601fff02002aee6ba961a4` | `unchanged` |
-| `2024-09-18.0` | `08b1f1d488601fff02002aee6ba961a4`| `unchanged`  |
-| `latest` | `08b1f1d488601fff02002aee6ba961a4`| `unchanged` |
-
-The GERS IDs are stable from the July 2024 [GA release](/release/2024-07-22.0/) to the [latest release](/release), and will remain stable over subsequent releases. Stable GERS IDs make it possible to query the [GERS changelog](changelog) and detect changes to the feature data associated with those GERS IDs. For each release listed above, the types of change logged for these buildings in Berlin is `data_changed`, which usually indicates feature data improvements or updates, or `unchanged`, which means no change in the feature data.
-
-:::warning
-
-Many users have noticed that in some Overture datasets the GERS IDs contain an [H3 index](https://h3geo.org). As a reminder, Overture does **not** guarantee that a feature with an H3 index in its GERS ID will be permanently located in the expected H3 cell. We encourage you to use `bbox` for data sharding and association. 
+:::note
+We use *feature* and *entity* interchangably in this documentation but their meaning is a bit more complicated. For example, a building that hosts a branch of a public library is represented in the Overture buildings dataset as a map feature with its own unique GERS ID. The public library may also be represented in the Overture places dataset as a point of interest with its own unique GERS ID. The building and the library are distinct entities with distinct GERS IDs. 
 :::
+
+
+## The system
+
+The "S" in GERS stands for a *system*, with the following components:
+
+| Component | Description |
+| ---------- | ---------- | 
+| [Overture reference map](/#overture-data) | The reference map consists of the canonical datasets Overture releases each month. |
+| Global registry of GERS IDs | The global registry is a catalog of all GERS IDs ever published. |
+| [Data changelog](changelog) | The changelog describes changes to entities across releases. You detect changes to Overture data from one release to another by querying across stable GERS IDs in the data changelog. |
+| Bridge files | Bridge files link a feature's ID from the [source data](../attribution) &mdash; e.g. OSM, Meta, Micosoft, geoBoundaries, etc &mdash; to its GERS ID in an Overture dataset |
+| [Onboarding services](gers-demonstrations) | These are tools and services to help you associate your data with GERS. |
+
+## How does GERS work?
+
+1. Overture assigns a **unique ID** to discrete entities. These could be buildings, road segments, places, or addresses. These IDs are intended to be **stable** across Overture releases. 
+
+2. Overture maintains open-source **matching and conflation libraries** to ensure that the ID remains stable across releases.
+
+3. Each Overture release is the latest **reference map** for these IDs.
+
+4. The reference map is **global** and **open**.
+
 
 ## Using GERS
 
-These stable IDs, which form the backbone of GERS, make it possible to measure and track change over many Overture releases. Through GERS, you can:
+We envision the Overture ecosystem using GERS in the following ways:
 
-- [track the stability](stability) of Overture features by their GERS IDs
-- [match features](gers-demonstrations) across an Overture dataset and a third-party dataset and assign GERS IDs to the matched features 
-- [associate third-party data](gers-demonstrations) to Overture features by GERS ID
-- [detect changes](changelog) to Overture data from one release to another by querying across stable IDs in the GERS changelog
-
-We envision our community using GERS to engage with Overture data in the following ways:
-
-#### Associating data
+### Matching and associating data
 You can independently associate your own data (or a third-party dataset) with Overture data. For example, you might want to link real-time traffic data to Overture road segments, insurance data to Overture buildings, restaurant reviews to features in Overture's places dataset, and socioeconomic data features in Overture's divisions dataset. When third-party data is matched to an Overture feature it picks up that feature's GERS ID and becomes "GERS-enabled" data, ready to be associated via ID to any other GERS-enabled dataset in the Overture ecosystem.
 
-#### Contributing data
-You can contribute data to the Overture Maps Foundation, and our engineering team will match the features in your dataset to features in Overture. Matched features may be assigned an existing GERS ID, and we may generate new IDs for new features.
+<img src="/img/gers-layers.png" alt="GERS and Overture data layers" width="400"/>
+
+
+### Contributing data
+You can contribute data to the Overture Maps Foundation, and we will uas Overture's matching algorithms to match the features in your dataset to features in Overture. Matched features may be assigned an existing GERS ID, and we may generate new GERS IDs for new features. 
 
 You'll find theme-specific examples of GERS use cases in the [GERS demonstrations](gers-demonstrations) section of this documentation.

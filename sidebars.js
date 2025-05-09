@@ -65,15 +65,13 @@ const sidebars = {
     {
       type: 'category',
       label: 'Global Entity Reference System',
-      link: {
-        type: 'doc',
-        id: 'gers/index'
-      },
       collapsed: true,
       items: [
-        'gers/changelog',
-        'gers/gers-demonstrations',
+        'gers/index',
         'gers/stability',
+        'gers/changelog',
+        'gers/bridge-files',
+        'gers/gers-demonstrations',
         'gers/gers-tutorial'
       ]
     },

@@ -4,11 +4,9 @@ title: GERS Tutorial
 
 ## Why associate your data with GERS identifiers?
 
-Overture Data isn’t just a base layer for building your own map, it’s a shared reference layer for exchanging and enriching geospatial data. The Global Entity Reference System (GERS) is the framework that enables this exchange. Every datapoint in Overture data releases has a GERS identifier, a persistent value referencing itself. 
+The Overture Maps Foundation doesn’t just produce a collection of open datasets, it defines a reference system for exchanging and enriching geospatial data. This reference system, called GERS (Geospatial Entity Reference System), provides persistent unique identifiers for each map feature in Overture’s datasets.
 
-The Overture Maps Foundation doesn’t just produce a collection of open datasets, it defines a reference system for exchanging and enriching geospatial data. This reference system, called GERS (Geospatial Entity Reference System), provides persistent unique identifiers for each map feature in Overture’s dataset.
-
-By matching your data to Overture’s and attaching GERS identifiers to your datapoints, you can seamlessly share and connect your data with other GERS-associated datasets. 
+By matching your data to Overture’s and attaching GERS identifiers to your datapoints, you can share and connect your data with other GERS-associated datasets. 
 
 ## Process overview
 
@@ -24,7 +22,7 @@ Joining geospatial datasets is a highly context dependent task. Sometimes you wa
 
 One dataset we want to add is [Alameda County’s restaurant inspection reports](https://data.acgov.org/datasets/e95ff2829e9d4ea0b3d8266aac37ff14_0/explore), a dataset detailing the health and safety scores for each restaurant. This data will allow our users to filter restaurants by their health scores and present these health scores in our restaurant profiles.
 
-The following tutorial walks through how to join this dataset to Overture Places, both as a one-off connection and an ongoing match process.
+The following tutorial walks through how to join this dataset to Overture's places, both as a one-off connection and an ongoing match process.
 
 ## Performing an initial match 
 
@@ -67,7 +65,7 @@ If you’re following along, go ahead and download [the GeoJSON data from Alamed
 
 Inspection records are associated with restaurants and eateries, so it makes sense to associate these records with Overture’s Places theme. 
 
-In the Places dataset, the record which matches the inspection example above looks like this, in GeoJSON form:
+In the Overture places dataset, the record which matches the inspection example above looks like this, in GeoJSON form:
 
 ```javascript
 {
@@ -128,19 +126,19 @@ Comparing the schema of each, we can see there are a few elements we can referen
 
 ![schema-comparison](/img/gers/schema-comparison.png)
 
-Using these common attributes, and a bit of SQL, we can quickly spin up a quick matcher using DuckDB.
+Using these common properties, and a bit of SQL, we can spin up a quick matcher using DuckDB.
 
 ### Staging our datasets
 
-With our inspection data saved as `inspection_records.geojson`, let’s boot up DuckDB, specifying a local database as a cache.
+With our inspection data saved as `inspection_records.geojson`, let’s boot up [DuckDB](/getting-data/duckdb), specifying a local database as a cache.
 
-```
+```bash
 $ duckdb inspection_match.ddb
 ```
 
-We’ll load the `spatial` and `httpfs` plug-ins, then load our inspections into a local table.
+We’ll load DuckDB's `spatial` and `httpfs` plug-ins, then load our inspections into a local table.
 
-```
+```sql
 D install spatial;
 D load spatial;
 D install httpfs;
@@ -148,9 +146,9 @@ D load httpfs;
 D CREATE TABLE IF NOT EXISTS inspections AS SELECT * FROM ST_Read('inspection_records.geojson');
 ```
 
-Since there are multiple inspections for each venue, and we want to match each venue to an Overture Place, we’re going to create a separate table just for the facilities.
+Since there are multiple inspections for each venue, and we want to match each venue to an Overture place, we’re going to create a separate table just for the facilities.
 
-```
+```sql
 D CREATE TABLE IF NOT EXISTS facilities AS 
   SELECT Facility_ID, Facility_Name, Address, City, State, Zip, geom
   FROM inspections
@@ -158,12 +156,12 @@ D CREATE TABLE IF NOT EXISTS facilities AS
   ```
 
 :::note
-We’re only pulling in each facility's ID and the columns which overlap with Overture’s Places.
+We’re only pulling in each facility's ID and the columns which overlap with Overture’s places.
 :::
 
 Geospatial matching processes can get quite complex, so we’re going to load the Overture data we need in a local table before attempting any joins. 
 
-```
+```sql
 D CREATE TABLE IF NOT EXISTS places AS 
   WITH bounding_box AS (
     SELECT max(ST_Y(geom)) as max_lat, 
@@ -184,7 +182,7 @@ D CREATE TABLE IF NOT EXISTS places AS
     confidence 
   FROM (
     SELECT * 
-    FROM read_parquet('s3://overturemaps-us-west-2/release/2025-03-19.1/theme=places/type=place/*', filename=true, hive_partitioning=1),
+    FROM read_parquet('s3://overturemaps-us-west-2/release/2025-04-23.0/theme=places/type=place/*', filename=true, hive_partitioning=1),
       bounding_box
     WHERE addresses[1] IS NOT NULL 
       AND bbox.xmin BETWEEN (bounding_box.min_lon - 0.01) AND (bounding_box.max_lon + 0.01)
@@ -202,7 +200,7 @@ We now have three tables: `inspections` with 27,515 records, `facilities` with 4
 
 Before we work on connecting them, we’ll add some spatial indexes to each table, making our lookups much faster:
 
-```
+```sql
 D CREATE INDEX IF NOT EXISTS idx_places_geometry ON places USING RTREE (geom);
 D CREATE INDEX IF NOT EXISTS idx_facilities_geometry ON facilities USING RTREE (geom);
 ```
@@ -219,7 +217,7 @@ For our example, we will be constructing a *simple cautious* matcher. We’ve ch
 
 But to get started, we will write a join using three conditions with very loose thresholds. We’ll break down each condition below.
 
-```
+```sql
 D SELECT 
     f.Facility_ID as input_id, 
     f.Facility_Name as input_name, 
@@ -279,7 +277,7 @@ For larger matches &mdash; beyond the scale of ~4,000 restaurants in a single co
 
 But for our restaurant app scenario, we’re fine with a quick match to populate our listings. After reviewing the data and running a few adjusted queries, we landed on an effective *simple conservative* matcher query:
 
-```
+```sql
 WITH ranked_matches AS (
 SELECT 
     f.Facility_ID as input_id, 
@@ -313,7 +311,7 @@ This query yields 2,358 correct matches and no false positives, for a match rate
 
 With our matcher written and tuned, let’s add a column to our `facilities` table named `gers_id` and populate it with our join query above:
 
-```
+```sql
 ALTER TABLE inspections ADD COLUMN geometry VARCHAR;
 ALTER TABLE inspections ADD COLUMN gers_id VARCHAR;
 WITH ranked_matches AS (
@@ -356,13 +354,13 @@ A bridge file is a join table, connecting GERS identifiers with another set of i
 
 Once you’ve enriched your dataset with GERS identifiers, you can produce a bridge file like this:
 
-```
+```sql
 SELECT Facility_ID, gers_id FROM inspections WHERE gers_id IS NOT NULL GROUP BY Facility_ID, gers_id;
 ```
 
 Output this query as a CSV or parquet file and you’re done. It looks like this:
 
-```
+```bash
 Facility_ID,gers_id
 FA0319719,08f28346e8ca018503160340e65ac7b6
 FA0319719,08f28346e8ca018503160340e65ac7b6
@@ -391,15 +389,15 @@ With each data release, Overture generates a [data changelog](https://docs.overt
 
 Using our same DuckDB database, we can remotely query the current changelog using a bounding box defined by our inspections dataset. 
 
-But wait &mdash; using the current March changelog won’t yield very interesting results, since we’ve already matched against the March data. For this exercise we’ll redo our work above, this time referencing the previous, February, Overture release.
+But wait &mdash; using the current April changelog won’t yield very interesting results, since we’ve already matched against the April data. For this exercise we’ll redo our work above, this time referencing the previous, March, Overture release.
 
-### Finding a Subset of Records That Need Matching
+### Finding a subset of records that need matching
 
-Matching against the February data, we connect 2,366 of our facility IDs to GERS IDs. Let’s see how the March changelog can help during our maintenance match.
+Matching against the March data, we connect 2,366 of our facility IDs to GERS IDs. Let’s see how the April changelog can help during our maintenance match.
 
 First, we’ll cache the changelog in a table, filtered again by a bounding box:
 
-```
+```sql
 CREATE TABLE IF NOT EXISTS changes AS
 WITH bounding_box AS (
     SELECT max(ST_Y(geom)) as max_lat, min(ST_Y(geom)) as min_lat, max(ST_X(geom)) as max_lon, min(ST_X(geom)) as min_lon
@@ -419,24 +417,24 @@ FROM (
 
 This loads 87,229 records, which we’ll now intersect with our existing, associated GERS IDs:
 
-```
+```sql
 SELECT Facility_ID, gers_id, change_type FROM inspections i 
 JOIN changes c
 ON i.gers_id = c.id
 GROUP BY Facility_ID, gers_id, change_type;
 ```
 
-Of our 2,366 associated GERS, 61% are `unchanged`. 37% have had `data_changed`, in some form or another, but Overture’s matchers have determined their GERS ID should persist – indicating that the record refers to the same entity. 
+Of our 2,366 associated GERS, 61% are `unchanged`. 37% have had `data_changed`, in some form or another, but Overture’s matchers have determined their GERS ID should persist, indicating that the record refers to the same entity. 
 
-But ~1.5% of our matched GERS IDs – or 37 records – have been `removed`. This could indicate a business has closed or a data record was identified as incorrect. Either way, this is a very small subset of records that we should rematch.
+But ~1.5% of our matched GERS IDs &mdash; or 37 records &mdash; have been `removed`. This could indicate a business has closed or a data record was identified as incorrect. Either way, this is a very small subset of records that we should rematch.
 
 Given our use case and our desire to produce a cautious match, we will also be rematching against the `data_changed` records. There are many cases where a data update could correct an over-eager match based on incorrect input data.
 
 For our county restaurant inspection use case, our data volumes aren’t of a sufficient size to really bother with this nuance (it’s easier to just rematch against the new release and quickly compare the output to make sure nothing is breaking). But for much larger datasets, where matching routines might take hours, this list of `removed` and `data_changed` records is valuable. 
 
-Let’s build a new query which finds the subset of the `Facility_ID` we should rematch. It’s similar to our last one:
+Let’s build a new query which finds the subset of the facilities IDs we should rematch. It’s similar to our last one:
 
-```
+```sql
 SELECT Facility_ID, gers_id, change_type FROM inspections i 
 LEFT JOIN changes c
 ON i.gers_id = c.id
@@ -450,11 +448,11 @@ This gives us 2,804 facilities we need to match.
 
 To simplify our SQL, we’ll save the results from the above query as `facilities_to_match`.
 
-#### Matching Unmatched records to the latest release
+#### Matching unmatched records to the latest release
 
-Armed with a shopping list of unmatched facilities, we can now drop our `places` table and refresh it with the March Overture data, then create our spatial index.
+Armed with a shopping list of unmatched facilities, we can now drop our `places` table and refresh it with the April Overture data, then create our spatial index.
 
-```
+```sql
 D DROP TABLE places;
 D CREATE TABLE places AS 
   WITH bounding_box AS (
@@ -473,7 +471,7 @@ D CREATE TABLE places AS
     categories 
   FROM (
     SELECT * 
-    FROM read_parquet('s3://overturemaps-us-west-2/release/2025-03-19.1/theme=places/type=place/*', filename=true, hive_partitioning=1),
+    FROM read_parquet('s3://overturemaps-us-west-2/release/2025-04-23.0/theme=places/type=place/*', filename=true, hive_partitioning=1),
             bounding_box
     WHERE addresses[1] IS NOT NULL AND
         bbox.xmin BETWEEN (bounding_box.min_lon - 0.01) AND (bounding_box.max_lon + 0.01) AND
@@ -485,7 +483,7 @@ D CREATE INDEX IF NOT EXISTS idx_places_geometry ON places USING RTREE (geom);
 
 Finally, we run our match query again, limiting it to only those facilities in `facilities_to_match`.
 
-```
+```sql
 WITH ranked_matches AS (
     SELECT 
         f.Facility_ID as input_id, 
