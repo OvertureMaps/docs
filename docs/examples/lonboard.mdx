@@ -1,6 +1,6 @@
 ---
 description: fetch and visualize Overture data with Lonboard
-title: Overture + Lonboard
+title: Lonboard
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -26,6 +26,10 @@ To follow along with these examples, you should have [JupyterLab or Jupyter Note
 The examples below are available in [the notebooks directory](//github.com/OvertureMaps/docs/tree/main/static/notebooks) in our docs repository on GitHub.
 
 ## Examples
+
+:::note
+Lonboard now has support for `.from_duckdb()` which allows us to interface directly with Overture data as Arrow tables and skip the steps with Shapely.
+:::
 
 In the first and simplest example, we'll use the [record_batch_reader](https://github.com/OvertureMaps/overturemaps-py/blob/e9632d4d2481a472a22dfd2d0a47ec9798ced9ef/overturemaps/core.py#L17) method in the overturemaps-py library to load Overture GeoParquet data directly into a PyArrow table. Then we'll use lonboard's built-in visualization tools to create an interactive map.
 
