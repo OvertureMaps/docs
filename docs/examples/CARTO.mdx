@@ -1,27 +1,25 @@
 ---
-description: Analyze and visualize Overture data in CARTO
-title: Overture + CARTO
+description: analytics ftw!
+title: CARTO
 ---
 
-[CARTO](https://carto.com/) is the leading Location Intelligence platform empowering organizations with cloud-native spatial analytics. CARTO helps organizations make better business decisions by enabling data analysts, business analysts, GIS professionals, and developers with scalable, faster, more flexible, and more secure spatial data analysis and visualization tools on top of their cloud data warehouse platforms.
-
-<iframe width="640px" height="360px" src="https://clausa.app.carto.com/map/8b7754af-4810-471b-836c-d1b99742021c"></iframe>
+![Example of CARTO Builder map with Overture data](/img/examples/CARTO_overture_map.png)
 
 ## Access Overture data in CARTO
 
-CARTO provides access to Overture Data from different cloud data marketplaces as well as from their own [Data Observatory](https://carto.com/spatial-data-catalog/browser). In order to access Overture Data in BigQuery, Snowflake or Databricks, please follow the guides available in the [Getting Overture Data](https://docs.overturemaps.org/getting-data/#13/47.6/-122.33/0/45) section:
+[CARTO](https://carto.com/) provides access to Overture data from different cloud data marketplaces as well as from its own [Data Observatory](https://carto.com/spatial-data-catalog/browser). In order to access Overture data in BigQuery, Snowflake or Databricks, please follow the guides available in the [Getting Overture Data](../getting-data/) section:
 
 - Overture data in [Google BigQuery](/getting-data/data-mirrors/bigquery/)
 - Overture data in [Snowflake](/getting-data/data-mirrors/snowflake/)
 - Overture data in [Databricks](/getting-data/data-mirrors/databricks/)
 
-Additionally, CARTO users have direct access to Overture Data from the Data Observatory available in the platform. In order to access Overture Data from there, you just have to navigate to the Data Observatory section, search for Overture Data, and access the tables that you need in a matter of a few clicks.
+Additionally, CARTO users have direct access to Overture data from the Data Observatory available in the platform. In order to access Overture data from there, you just have to navigate to the Data Observatory section, search for Overture data, and access the tables that you need in a matter of a few clicks.
 
 ![Overture data from CARTO DO](/img/examples/CARTO_DO.gif)
 
 ## Analyzing Overture data with CARTO Workflows
 
-Once you have access to Overture Data via one of your connections in CARTO, you can start using it with [Workflows](https://carto.com/workflows) - a low-code tool for creating and automating data preparation and analysis pipelines. Just drag and drop your Overture data into the canvas and start building powerful geospatial workflows that will then run natively on your connected cloud data warehouse.
+Once you have access to Overture data via one of your connections in CARTO, you can start using it with [Workflows](https://carto.com/workflows), a low-code tool for creating and automating data preparation and analysis pipelines. Just drag and drop your Overture data into the canvas and start building powerful geospatial workflows that will then run natively on your connected cloud data warehouse.
 
 In the example below we illustrate a workflow that uses Overture's data to identify buildings in areas with a deficit of cell network antennas. This example leverages data from Overture and other publicly available sources that can be added to the workflow canvas. Then, the workflow uses geospatial techniques such as H3 spatial indexing, the creation of a composite score, and geostatistics techniques such as Getis-Ord Gi* to process the data and identify hot spots and cold spots of telco antenna coverage in different areas of a city.
 
@@ -31,18 +29,17 @@ You can access this [step-by-step tutorial](https://academy.carto.com/creating-w
 
 ## Visualizing Overture data with CARTO Builder
 
-With [CARTO Builder](https://carto.com/builder) users can create stunning interactive dashboards in a matter of seconds. You can access your data instantly with a simple, intuitive interface, and start building interactive maps running natively on top of your data warehouse. Builder provides flexible styling options, access to different basemaps, and the possibility to add widgets and controls for data interactivity. Maps can then be shared with other users in your organization, publicly on the web, or embedded in your applications.
+With [CARTO Builder](https://carto.com/builder) users can create interactive dashboards in a matter of seconds. You can access your data instantly and start building interactive maps running natively on top of your data warehouse. Builder provides flexible styling options, access to different basemaps, and the possibility to add widgets and controls for data interactivity. Maps can then be shared with other users in your organization, publicly on the web, or embedded in your applications.
 
 ![Example of CARTO Builder with Overture data](/img/examples/CARTO_Builder.gif)
 
-In this example we are visualizing on a map the results from the workflow described in the previous section; there we can quickly identify that the busy city center of Madrid is well covered by cell towers, enough to satisfy the potential demand. Also, locations with little human activity (like El Pardo park) have also enough network capacity to provide a good service. However, the outskirts of the city seem to be lacking network infrastructure, based on the overall human activity and the cell tower presence patterns in Madrid.
+In this example, we are visualizing on a map the results from the workflow described in the previous section; there we can quickly identify that the busy city center of Madrid is well covered by cell towers, enough to satisfy the potential demand. Also, locations with little human activity (like El Pardo park) have also enough network capacity to provide a good service. However, the outskirts of the city seem to be lacking network infrastructure, based on the overall human activity and the cell tower presence patterns in Madrid.
 
-<iframe width="640px" height="360px" src="https://clausa.app.carto.com/map/8b7754af-4810-471b-836c-d1b99742021c"></iframe>
+<iframe width="740px" height="560px" src="https://clausa.app.carto.com/map/8b7754af-4810-471b-836c-d1b99742021c"></iframe>
 
 You can also access this map directly from [here](https://clausa.app.carto.com/map/8b7754af-4810-471b-836c-d1b99742021c).
 
-## Additional Resources
+## Additional resources
 
 - CARTO's [QGIS Plugin](https://docs.carto.com/data-and-analysis/carto-qgis-plugin) allows you to access, visualize, and edit spatial data from the leading cloud data warehouses directly within QGIS. You can also use this plugin to access Overture data in QGIS via CARTO.
 - CARTO's [Application Development tools](https://docs.carto.com/carto-for-developers/overview) provides resources for develpers creating top-class spatial apps with their location data. Have a look to our documentation if you'd like to include Overture data in your applications based on [deck.gl](https://deck.gl/).
-- If you would like to learn more you can either [sign up](https://www.carto.com/signup) for a 14-day free trial or [book a demo](https://carto.com/request-live-demo) with one of our geospatial experts.
