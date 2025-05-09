@@ -47,7 +47,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::207370808101:role/Overture_GitHub_schema_Publish_Docs_Staging
-          aws-region: us-east-2
+          aws-region: us-west-2
 
       - name: Copy Docusaurus website to staging bucket how-to/pr/${{github.event.number}}/
         run: |

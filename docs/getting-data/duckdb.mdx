@@ -96,9 +96,20 @@ or as a `geopackage`:
 The DuckDB Spatial extension supports more than [50 geospatial file formats](https://duckdb.org/docs/extensions/spatial.html#st_read--read-spatial-data-from-files).
 :::
 
+You can also use DuckDB to loop over the Parquet files in a directory and convert the data to a spatial format of your choice. The spatial extension uses GDAL so you could export to PBF if that's the data format that works best for you. Here's a bash script that shows you how:
+
+```
+for f in *.parquet;
+do duckdb -c \
+"install spatial;
+load spatial;
+COPY (SELECT id, st_geomfromwkb(geometry) from read_parquet('$f'))
+to '$f.fgb' WITH (FORMAT GDAL, DRIVER 'flatgeobuf');";
+done
+```
 
 ## Next steps
 
 - Visualize the data in [QGIS](/examples/QGIS) or [kepler.gl](/examples/kepler-gl).
 - [Make an interactive map](/examples/build-a-map).
-- Consult one of our [Data Guides](/guides/) to learn more about the data and for more advanced queries.
+- Consult one of our Data Guides to learn more about the data and for more advanced queries.

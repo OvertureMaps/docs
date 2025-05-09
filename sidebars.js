@@ -4,20 +4,26 @@ const sidebars = {
     'introduction',
     {
       type: 'category',
-      label: 'Getting Overture Data',
-      link: {
-        type: 'doc',
-        id: 'getting-data/index'
-      },
+      label: 'Getting Started',
       collapsed: true,
       items: [
+        'getting-data/index',
         'getting-data/duckdb',
         'getting-data/overturemaps-py',
-        'getting-data/fused',
         'getting-data/athena-aws',
         'getting-data/synapse-azure',
-        'getting-data/sedona',
-      ]
+        {
+          type: 'category',
+          label: 'Data Mirrors',
+          collapsed: true,
+          items: [
+            'getting-data/data-mirrors/fused',
+            'getting-data/data-mirrors/bigquery',
+            'getting-data/data-mirrors/databricks',
+            'getting-data/data-mirrors/snowflake',
+          ],
+        },
+      ],
     },
     {
       type: 'category',
@@ -31,17 +37,20 @@ const sidebars = {
         'examples/spark',
         'examples/pandas',
         'examples/lonboard',
+        'examples/spark',
+        'examples/build-a-map',
+        'examples/CARTO',
         'examples/fused',
         'examples/kepler-gl',
-        'examples/rapid-id',
+        'examples/lonboard',
         'examples/overture-tiles',
-        'examples/build-a-map',
         'examples/QGIS',
+        'examples/rapid-id',
       ]
     },
-    {
+   {
       type: 'category',
-      label: 'Guides',
+      label: 'Data Guides',
       link: {
         type: 'doc',
         id: 'guides/index'
@@ -68,6 +77,7 @@ const sidebars = {
         'gers/changelog',
         'gers/gers-demonstrations',
         'gers/stability',
+        'gers/gers-tutorial'
       ]
     },
     'attribution'

@@ -24,7 +24,7 @@ const config = {
     overtureRelease: '2025-04-23.0',
     pmtiles_path: 'https://d3c1b7bog2u1nn.cloudfront.net/2025-03-19'
   },
-
+ /**
   future: {
     experimental_faster: {
       swcJsLoader: true,
@@ -34,7 +34,7 @@ const config = {
       rspackBundler: false, // rspack bundler doesn't work with our Webpack config for raw-loader and YAML files.
       mdxCrossCompilerCache: true,
     },
-  },
+  }, */
 
   // Set the production url of your site here
   url: getFromEnvironment('DOCUSAURUS_URL', defaultUrl),
@@ -96,6 +96,7 @@ const config = {
         blogDescription: "Overture Maps Release Notes and Schema Changelog",
         showReadingTime: false,
         postsPerPage: 1,
+        onUntruncatedBlogPosts: 'ignore',
         blogSidebarCount: 'ALL',
         routeBasePath: 'release',
         path: './release-blog',
