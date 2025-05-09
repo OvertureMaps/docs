@@ -34,13 +34,16 @@ const sidebars = {
       },
       collapsed: true,
       items: [
+        'examples/spark',
+        'examples/pandas',
+        'examples/lonboard',
+        'examples/spark',
         'examples/build-a-map',
         'examples/CARTO',
         'examples/fused',
         'examples/kepler-gl',
         'examples/lonboard',
         'examples/overture-tiles',
-        'examples/pandas',
         'examples/QGIS',
         'examples/rapid-id',
       ]

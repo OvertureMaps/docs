@@ -1,0 +1,93 @@
+---
+description: extract and manipulate Overture data with Spark.
+title: Overture with Spark 
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+In this example, we'll show you how to use [Spark](https://spark.apache.org/) in Python to extract and manipulate Overture data in a Jupyter notebook.
+
+## Why Spark?
+Spark is a robust distributed compute engine designed for scalable, fault-tolerant data processing across clusters. It provides a powerful mix of in-memory computation, lazy evaluation, and a declarative programming model, allowing users to build complex data pipelines that are automatically optimized for performance. Spark integrates seamlessly with common storage systems like S3 and supports multiple languages including Python, Java, Scala, and R, as well as SQL.
+
+## Why Spark with Overture?
+* **Scales to big data**: Overture queries can contain millions of records, and Spark’s distributed architecture scales compute and memory to process them efficiently.
+* **Leverages declarative programming paradigms and lazy evaluation**: Spark builds execution plans and defers running operations until actions like `display()`, `print()`, `count()`, or `.write` collect data to memory. This enables complex transformations on Overture data to be optimized without overwhelming your system's memory.
+* **Enables efficient predicate pushdown with parquet**: Spark intelligently applies filters at the file scan level using Parquet metadata, so even complex filters on Overture data only read the necessary rows. Given Overture is stored in [GeoParquet](https://geoparquet.org/), Spark is a great fit.
+* **Integrates easily with S3**: Spark treats S3 paths like local filesystem paths, making it simple to load Overture datasets directly without manual file handling or custom connectors.
+
+
+<details>
+
+    <summary>
+    **Installation requirements**
+    
+    </summary>
+To follow along with these examples, you should have [JupyterLab or Jupyter Notebook](https://jupyter.org/) running and the following dependencies installed:
+
+- [PySpark](https://spark.apache.org/docs/latest/api/python/getting_started/install.html)
+ 
+</details>
+
+## Example
+
+First, let's install pyspark.
+
+```bash
+pip install pyspark
+```
+
+With our newest dependency installed, let's start by defining our configuration.
+
+```python
+import pyspark.sql.functions as F
+from pyspark.sql import SparkSession
+
+# Define our spark session
+# For more, visit the spark docs: https://spark.apache.org/docs/latest/sql-getting-started.html
+spark = SparkSession.builder.getOrCreate()
+
+# Define constants for our read
+OVERTURE_RELEASE = "2025-01-22.0"
+COUNTRY_CODES_OF_INTEREST = ["US", "GH"]
+SOURCE_DATA_URL = f"s3a://overturemaps-us-west-2/release/{OVERTURE_RELEASE}/theme=places/type=place"
+OUTPUT_FILE = "my_super_cool_data.parquet"
+```
+
+Next, let's define a simple lazily-evaluated filter. Note that this filter on `COUNTRY_CODES_OF_INTEREST` will be pushed down to parquet. If there is relevant metadata in the parquet file, spark will be able to skip entire row groups and sometimes even entire parquet files when scanning for the criteria in the filter.
+
+```python
+country_overlap_condition = F.arrays_overlap(
+    F.col("addresses.country"),
+    F.array(*[F.lit(x.upper()) for x in COUNTRY_CODES_OF_INTEREST]),
+)
+```
+
+With our filter defined, let's define our read and some additional metadata columns.
+
+```python
+source_df = (
+    spark.read.format("parquet")
+    .load(SOURCE_DATA_URL)
+    .filter(country_overlap_condition)
+    .withColumn("_overture_release_version", F.lit(OVERTURE_RELEASE))
+    .withColumn("_ingest_timestamp", F.current_timestamp())
+)
+```
+
+With eagerly evaluated frameworks, such as [Pandas](https://pandas.pydata.org/), the above step would immediately load data into memory. However, Spark is lazily evaluated, so transformations are planned but not executed until an action like `.write()` or `.show()` triggers a distributed computation.
+
+To actually run a transformation, let's write this new dataset to another Parquet file on our local system.
+
+```python
+source_df.write.mode("append").format("parquet").save(OUTPUT_FILE)
+```
+
+And that's it! You've successfully used Spark to extract and transform Overture data.
+
+## Next steps
+
+* To run scalable ML algorithms on Spark, explore [Spark MLib](https://spark.apache.org/docs/latest/ml-guide.html), which offers a range of distributed machine learning models and tools. 
+* For efficient execution of arbitrary columnar operations in Python, start with a [Pandas UDF](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.pandas_udf.html). 
+* For broader parallelism beyond Spark’s native model, consider [Ray on Spark](https://docs.ray.io/en/latest/ray-more-libs/raydp.html) or standalone Ray to orchestrate distributed execution of arbitrary Python code.
