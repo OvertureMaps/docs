@@ -56,11 +56,38 @@ CASE
             'water_park'
         ) THEN ROW('entertainment', element_at(tags,'leisure'))
 
-        -- National Parks & Aboriginal Lands based on boundary
+        -- Protected Areas (National, State Parks, Reserves).
+
+        -- State / National Parks by Protection Title
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('national park', 'parque nacional', 'national_park') 
+            THEN ROW('protected', 'national_park')
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('state park') 
+            THEN ROW('protected','state_park')
+        
+        -- State / National Forests
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN (
+            'national forest', 'state forest'
+        ) THEN ROW('protected', 'forest')
+        
+        -- Wilderness Areas
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN (
+            'wilderness area', 
+            'wilderness study area'
+        ) THEN ROW('protected', 'wilderness_area')
+
+        -- Nature Reserves
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('nature reserve', 'nature refuge', 'reserva nacional') 
+            THEN ROW('protected', 'nature_reserve')
+        
+        -- Environmental
+        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('environmental use') 
+            THEN ROW('protected', 'environmental')
+
+        -- National Parks & Aboriginal Lands based on boundary only
         WHEN element_at(tags, 'boundary') = 'national_park' THEN ROW('protected','national_park')
         WHEN element_at(tags, 'boundary') = 'aboriginal_lands' THEN ROW('protected', 'aboriginal_land')
 
-        -- Protected areas based on protect_class
+        -- Last chance: classify based on the protect_class: 
         WHEN element_at(tags, 'protect_class') = '1a' THEN ROW('protected', 'strict_nature_reserve')
         WHEN element_at(tags, 'protect_class') IN ('1b', '1') THEN ROW('protected', 'wilderness_area')
         WHEN element_at(tags, 'protect_class') = '2' THEN ROW('protected', 'national_park')
@@ -70,16 +97,10 @@ CASE
         WHEN element_at(tags, 'protect_class') = '6' THEN ROW('protected', 'nature_reserve')
         WHEN element_at(tags, 'protect_class') = '24' THEN ROW('protected', 'aboriginal_land')
 
-        -- Protected areas based on protection_title
-        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('national forest', 'state forest') THEN ROW('protected', 'forest')
-        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('national park', 'parque nacional', 'national_park') THEN ROW('protected', 'national_park')
-        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('state park') THEN ROW('protected','state_park')
-        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('wilderness area', 'wilderness study area') THEN ROW('protected', 'wilderness_area')
-        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('nature reserve', 'nature refuge', 'reserva nacional') THEN ROW('protected', 'nature_reserve')
-        WHEN element_at(tags, 'boundary') = 'protected_area' AND LOWER(element_at(tags, 'protection_title')) IN ('environmental use') THEN ROW('protected', 'environmental')
-        
         -- Protected areas based on leisure or landuse
         WHEN element_at(tags, 'leisure') = 'nature_reserve' THEN ROW('protected','nature_reserve')
+
+        -- Else, general protected area:
         WHEN element_at(tags, 'boundary') = 'protected_area' AND element_at(tags,'landuse') IS NOT NULL THEN ROW('protected', 'protected')
         
         -- Golf
