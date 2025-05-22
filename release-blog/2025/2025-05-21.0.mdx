@@ -1,0 +1,111 @@
+---
+title: 2025-05-21.0
+slug: latest
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2025-05-21.0` release of Overture data and `v1.9.0` of the Overture schema are now available.** 
+
+The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
+
+#### Microsoft Azure:
+```
+wasbs://release@overturemapswestus2.blob.core.windows.net/2025-05-21.0
+```
+
+#### Amazon S3:
+```
+s3://overturemaps-us-west-2/release/2025-05-21.0
+```
+
+You can access the datasets by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussions forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at data@overturemaps.org. We’d love to hear from you.
+
+## What's new? Bridge files!
+
+Overture is now releasing bridge files alongside our monthly data releases. Bridge files map GERS IDs to source data IDs, providing a comprehensive matrix that traces the origin of all data in the Overture corpus, including data that doesn't appear in our published releases.
+
+Overture's approach to conflation is to handle the complexity internally and deliver a fully conflated, interoperable data product. While we publish this conflated data, we haven't previously made our internal GERS ID matching results available. Bridge files change this by sharing our conflation results, making it easier for you to understand data provenance and giving you an opportunity to be more provider-agnostic.
+
+You can find the latest bridge files here:
+
+```
+wasbs://bridgefiles@overturemapswestus2.blob.core.windows.net/2025-05-21.0
+```
+```
+s3://overturemaps-us-west-2/bridgefiles/2025-05-21.0
+```
+
+## Big changes are coming
+
+In next month's release (late June), Overture is changing the format of its [`id` property](/schema/#top-level-properties) to standard [UUID](https://www.rfc-editor.org/rfc/rfc9562.html) strings of hexadecimal characters, separated by dashes: 
+```
+xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
+
+Currently the structure of our IDs varies slightly by `theme`, with some themes using encoded data structures (e.g. [H3](https://h3geo.org/)). The new UUIDs will be randomly-generated identifiers with no additional data that can be extracted or interpreted beyond their identity function. Moving to UUIDs enables centralized ID generation and registration across our pipelines, which is necessary for successful implementation of [GERS](/gers). We will support our users by providing a one-time file that maps the old IDs to the new UUIDs.
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- added new data sources for Waupaca County, WI and Sierra County, CA
+- added a new data source for Italy that will replace the existing regional/municipal datasets
+
+### Base
+
+- improved coverage of state park, forest, and taxiline `class` values
+- improved processing of `bathymetry` geometries
+
+
+### Buildings
+
+- fixed an issue with duplicate IDs on IGN Spain buildings
+- added `names` property to the `building_part` type
+
+
+### Divisions
+
+- generated the point geometries for the `division` type from OpenStreetMap nodes instead of using centroids calculated from of `division_area` polygons 
+- fixed a bug in `capital_of_divisions` ID assignments
+
+
+### Places
+
+- added [PinMeTo](/attribution/#places) as a new provider for places data
+- improved the taxonomy of the `categories` property by fixing inconsistencies in the hierarchy
+- made improvements to the data matching tools
+
+### Transportation
+
+- no updates
+
+
+## Data changelog
+
+The data changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations on Azure and AWS:
+
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2025-05-21.0
+```
+```
+s3://overturemaps-us-west-2/changelog/2025-05-21.0
+```
+
+You can find more information about [the data changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
+
+## Schema changelog
+
+The changelog for Overture schema `v1.9.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.9.0). 
+
+## Attribution  
+
+You'll find information about attribution and licensing [here](/attribution).
