@@ -26,7 +26,7 @@ You can access the datasets by following the process outlined [here](/getting-da
 
 ## What's new? Bridge files!
 
-Overture is now releasing bridge files alongside our monthly data releases. Bridge files map GERS IDs to source data IDs, providing a comprehensive matrix that traces the origin of all data in the Overture corpus, including data that doesn't appear in our published releases.
+Overture is now releasing bridge files alongside our monthly data releases. Bridge files map GERS IDs to source data IDs, providing a mechanism to trace the origin of data in the Overture corpus, including data that doesn't appear in our published releases.
 
 Overture's approach to conflation is to handle the complexity internally and deliver a fully conflated, interoperable data product. While we publish this conflated data, we haven't previously made our internal GERS ID matching results available. Bridge files change this by sharing our conflation results, making it easier for you to understand data provenance and giving you an opportunity to be more provider-agnostic.
 
@@ -41,12 +41,9 @@ s3://overturemaps-us-west-2/bridgefiles/2025-05-21.0
 
 ## Big changes are coming
 
-In next month's release (late June), Overture is changing the format of its [`id` property](/schema/#top-level-properties) to standard [UUID](https://www.rfc-editor.org/rfc/rfc9562.html) strings of hexadecimal characters, separated by dashes: 
-```
-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-```
+In next month's release (late June), Overture is standardizing the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUID](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings. 
 
-Currently the structure of our IDs varies slightly by `theme`, with some themes using encoded data structures (e.g. [H3](https://h3geo.org/)). The new UUIDs will be randomly-generated identifiers with no additional data that can be extracted or interpreted beyond their identity function. Moving to UUIDs enables centralized ID generation and registration across our pipelines, which is necessary for successful implementation of [GERS](/gers). We will support our users by providing a one-time file that maps the old IDs to the new UUIDs.
+Currently the structure of our IDs varies slightly across datasets, with some themes embedding metadata (e.g. [H3](https://h3geo.org/)) in the `id` property. The new UUIDs will be randomly-generated identifiers with no encoded information. Moving to UUIDs enables consistent ID generation and registration across our data pipelines, which is necessary for our successful implementation of [GERS](/gers). We plan to support our users by providing a file that maps the old IDs to the new UUIDs.
 
 
 ## Theme-specific updates
