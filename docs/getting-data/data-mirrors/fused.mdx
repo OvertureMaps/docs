@@ -19,7 +19,7 @@ The Fused Overture UDF loads data from GeoParquet files of the Overture Dataset 
 We install the [Fused Python library](https://pypi.org/project/fused/) with pip. 
 
 ```python
-pip install fused>=1.10.0
+pip install 'fused[all]'
 ```
 
 ### Define the area of interest
@@ -28,13 +28,8 @@ We specify the area for the UDF to download data by passing a `GeoDataFrame` to 
 
 ```python
 import fused
-import geopandas as gpd
-import shapely
 
-bbox = gpd.GeoDataFrame(
-    geometry=[shapely.box(-73.9847, 40.7666, -73.9810, 40.7694)], 
-    crs=4326
-)
+bounds = [4.895,52.368,4.914,52.377]
 ```
 
 ### Run the Overture UDF
@@ -43,22 +38,22 @@ We may run the Fused Overture UDF with `fused.run` (see more about `fused.run` o
 
 <Tabs queryString="fused-run">
     <TabItem value="buildings" label="Buildings">
-        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='building') `}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bounds=bounds, overture_type='building') `}></QueryBuilder>
     </TabItem>
     <TabItem value="water" label="Water">
-        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='water')`}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bounds=bounds, overture_type='water')`}></QueryBuilder>
     </TabItem>
     <TabItem value="divisions" label="Divisions">
-        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='division_boundary')
-fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='division')
-fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='division_area')`}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bounds=bounds, overture_type='division_boundary')
+fused.run('UDF_Overture_Maps_Example', bounds=bounds, overture_type='division')
+fused.run('UDF_Overture_Maps_Example', bounds=bounds, overture_type='division_area')`}></QueryBuilder>
     </TabItem>
     <TabItem value="segments-connectors" label="Segments & Connectors">
-        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='segment')
-fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='connector')`}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bounds=bounds, overture_type='segment')
+fused.run('UDF_Overture_Maps_Example', bounds=bounds, overture_type='connector')`}></QueryBuilder>
     </TabItem>
     <TabItem value="landuse" label="Land Use">
-        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bbox=bbox, overture_type='land_use')`}></QueryBuilder>
+        <QueryBuilder query={`fused.run('UDF_Overture_Maps_Example', bounds=bounds, overture_type='land_use')`}></QueryBuilder>
     </TabItem>
 </Tabs>
 
