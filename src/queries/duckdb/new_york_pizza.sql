@@ -1,5 +1,5 @@
-INSTALL spatial;
 LOAD spatial; -- noqa
+
 SET s3_region='us-west-2';
 
 COPY(                                       -- COPY <query> TO <output> saves the results to disk.
