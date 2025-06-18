@@ -9,7 +9,8 @@ import Peaks from '!!raw-loader!@site/src/queries/duckdb/mountain_peaks.sql';
 import DetroitBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_detroit.sql';
 import CountyGeometries from '!!raw-loader!@site/src/queries/duckdb/county_level_geometries.sql';
 import NewYorkPizza from '!!raw-loader!@site/src/queries/duckdb/new_york_pizza.sql';
-import ParisRoads from '!!raw-loader!@site/src/queries/duckdb/paris_roads.sql';
+import ParisRoadsContained from '!!raw-loader!@site/src/queries/duckdb/paris_roads_contained.sql';
+import ParisRoadsIntersecting from '!!raw-loader!@site/src/queries/duckdb/paris_roads_intersecting.sql';
 import WriteGeoparquet from '!!raw-loader!@site/src/queries/duckdb/write_geoparquet.sql';
 import BuildingsInDivision from '!!raw-loader!@site/src/queries/duckdb/buildings_in_division_area.sql';
 
@@ -46,9 +47,13 @@ Access Overture buildings data hosted on Azure to download named buildings aroun
 
 <TabItem value="Roads" label="Roads">
 
-Download roads in Paris around the _Arc de Triomphe_ and save as GeoJSON.
+Download all roads intersecting a given bounding box around the Arc de Triomphe in Paris and save as GeoJSON.
 
-<QueryBuilder query={ParisRoads}></QueryBuilder>
+<QueryBuilder query={ParisRoadsIntersecting}></QueryBuilder>
+_Note: This will result in a GeoJSON file that contains all road segments that intersect the bounding box, not just road segments contained within the bounding box._
+
+To download only roads contained within that bounding box around the Arc de Triomphe in Paris, use the following:
+<QueryBuilder query={ParisRoadsContained}></QueryBuilder>
 </TabItem>
 
 <TabItem value="Mountains" label="Mountains">
