@@ -11,8 +11,8 @@ COPY(
   FROM
     read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=transportation/type=segment/*', filename=true, hive_partitioning=1)
   WHERE
-    bbox.xmin < 2.314 
-    AND bbox.ymin < 48.882 
-    AND bbox.xmax > 2.276 
-    AND bbox.ymax > 48.865
-) TO 'paris_roads.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
+    bbox.xmin > 2.276
+    AND bbox.ymin > 48.865
+    AND bbox.xmax < 2.314
+    AND bbox.ymax < 48.882
+) TO 'paris_roads_contained.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');

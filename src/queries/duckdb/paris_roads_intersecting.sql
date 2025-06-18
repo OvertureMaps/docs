@@ -15,4 +15,4 @@ COPY(
     AND bbox.ymin < 48.882 
     AND bbox.xmax > 2.276 
     AND bbox.ymax > 48.865
-) TO 'paris_roads.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
+) TO 'paris_roads_intersecting.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
