@@ -1,11 +1,17 @@
 ---
 title: Exploring our beta release
 description: Highlights from Overture Maps beta release
+tags:
+  - releases
+  - developer-tools
+  - geoparquet
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 Last week Overture Maps [announced the beta release](https://overturemaps.org/overture-maps-foundation-releases-beta-of-its-first-open-map-dataset/) of our schema and data. After months of hard work and steady improvements, we are nearing production-level stability. In a series of posts over the next few weeks -- starting with this one -- we’ll unpack the highlights and improvements you'll see in this release and beyond. 
+
+<!-- truncate -->
 
 ## Making geospatial fast
 The first thing you'll notice is how much faster you can [pull Overture Maps data out of the cloud](https://docs.overturemaps.org/getting-data/locally/). We made this possible by working closely with open-source collaborators on the repartitioning and [spatial optimization](https://cloudnativegeo.org/blog/2024/03/coming-soon-geoparquet-1.1/) of our GeoParquet files. Meanwhile, our friends at DuckDB, one of our favorite SQL tools, [added a feature](https://github.com/duckdb/duckdb/pull/10314) that improves the performance of queries with bounding boxes.

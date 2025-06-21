@@ -1,6 +1,8 @@
 ---
-title: 2025-05-21.0
-slug: latest
+title: 2025-05-21.0 release notes
+slug: 2025-05-21.0
+tags:
+  - releases
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -8,7 +10,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Overview
 
-**The `2025-05-21.0` release of Overture data and `v1.9.0` of the Overture schema are now available.** 
+**The `2025-05-21.0` release of Overture data and `v1.9.0` of the Overture schema are now available.** This month we added [PinMeTo](/attribution/#places) as a new data provider for `places`, improved the taxonomy of the `categories` property, added new data sources for `addresses`, and fixed bugs. Also in this release, we're introducing bridge files and announcing a major change to how we generate GERS IDs starting with the June release. 
 
 The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
 
@@ -21,6 +23,8 @@ wasbs://release@overturemapswestus2.blob.core.windows.net/2025-05-21.0
 ```
 s3://overturemaps-us-west-2/release/2025-05-21.0
 ```
+
+<!-- truncate -->
 
 You can access the datasets by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at data@overturemaps.org. We’d love to hear from you.
 

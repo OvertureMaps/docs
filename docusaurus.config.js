@@ -88,21 +88,6 @@ const config = {
       },
     }),
     [
-      '@docusaurus/plugin-content-blog',
-      {
-        id: 'release-blog',
-        blogSidebarTitle: 'Releases',
-        blogTitle: "Overture Release Notes and Schema Changelog",
-        blogDescription: "Overture Maps Release Notes and Schema Changelog",
-        showReadingTime: false,
-        postsPerPage: 1,
-        onUntruncatedBlogPosts: 'ignore',
-        blogSidebarCount: 'ALL',
-        routeBasePath: 'release',
-        path: './release-blog',
-      },
-    ],
-    [
       '@docusaurus/plugin-content-pages',
       {
         id: 'community',
@@ -124,10 +109,10 @@ const config = {
           showLastUpdateTime: true,
         },
         blog: {
-          blogTitle: 'Overture Maps Data Blog',
-          blogDescription: 'Data stories from the Overture Maps engineering team',
-          blogSidebarTitle: 'Overture Maps Data Blog',
-          blogSidebarCount: 'ALL',
+          blogTitle: 'Overture Maps Engineering Blog',
+          blogDescription: 'Building Overture Maps',
+          blogSidebarTitle: 'Posts from the Overture Maps engineering team',
+          blogSidebarCount: 20,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -164,11 +149,6 @@ const config = {
             sidebarId: 'schema',
             position: 'left',
             label: 'Schema Reference',
-          },
-          {
-            to: 'release/latest',
-            label: 'Releases',
-            position: 'left',
           },
           {
             to: 'blog',
