@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkoverture_documentation=self.webpackChunkoverture_documentation||[]).push([[631],{8912:e=>{e.exports=JSON.parse('{"blogBasePath":"/release","blogTitle":"Overture Release Notes and Schema Changelog","authorsListPath":"/release/authors"}')}}]);
