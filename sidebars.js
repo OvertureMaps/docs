@@ -76,7 +76,8 @@ const sidebars = {
         'gers/gers-tutorial'
       ]
     },
-    'attribution'
+    'attribution',
+    'release-calendar'
   ],
   schema:[
     {
