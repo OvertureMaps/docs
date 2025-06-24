@@ -17,7 +17,7 @@ Here's how to get the bridge files:
 The latest Overture data `<RELEASE>` is: <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
 
 :::note
-Currently, Overture only provides bridge files for these source datasets: Esri Community, geoBoundaries, Instituto Geográfico Nacional (España)Maps, Meta, Microsoft, OpenStreetMap, PinMeTo
+Currently, Overture only generates bridge files for these source datasets: Esri Community Maps, geoBoundaries, Instituto Geográfico Nacional (España), Meta Places, Microsoft Places, OpenStreetMap, PinMeTo. 
 :::
 
 ## Partitioning and schema
@@ -172,6 +172,7 @@ Let's pull out one example:
 This shows that building `08b29a4c428ebfff02002b827866f466` was created by a conflation process that included data from OpenStreetMap (way 1182486582, version 1) and Esri Community Maps (esri_ChulaVistaCA13510). The conflation process _may_ have included other data sources that have not been mapped to GERS and released as bridge files.
 
 ## Next steps
+- Examine the source data for building `08b29a4c428ebfff02002b827866f466` by looking up the OSM ID in [OpenStreetMap](https://www.openstreetmap.org/)
 - Explore the other components of GERS: registry, [changelog](../changelog), and [reference map](https://explore.overturemaps.org/#15/38.90678/-77.03649)
 - Follow our [GERS tutorial](../gers-tutorial)
 
