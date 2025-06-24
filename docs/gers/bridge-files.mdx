@@ -1,9 +1,9 @@
 ---
 title: Bridge Files
-
 ---
+import QueryBuilder from '@site/src/components/queryBuilder';
 
-With each release Overture generates **bridge files** that connect GERS IDs to the IDs from the [source data](../attribution). These files are a key component of GERS and offer two critical capabilities: reverse lookup of source features and insight into Overture's conflation process. 
+With each release Overture generates **bridge files** that connect GERS IDs to the IDs from the [source data](/attribution). These files are a key component of GERS and offer two critical capabilities: reverse lookup of source features and insight into Overture's conflation process. 
 
 Here's how to get the bridge files:
 
@@ -14,14 +14,18 @@ Here's how to get the bridge files:
 
 The latest Overture data `<RELEASE>` is: <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
 
+:::note
+Currently, Overture only provides bridge files for these source datasets: Esri Community, geoBoundaries, Instituto Geográfico Nacional (España)Maps, Meta, Microsoft, OpenStreetMap, PinMeTo
+:::
+
 ## Partitioning and schema
 
-Bridge files are released as Parquet files, partitioned by `dataset`, `theme`, and `type`. Overture currently provides mappings for the following datasets:
+Bridge files are released as Parquet files, partitioned by `dataset`, `theme`, and `type` and structured in this way:
 
 ```
 \bridgefiles
     \<RELEASE>
-        **\dataset=OpenStreetMap**
+        \dataset=OpenStreetMap
             \theme=divisions
                 \type=division
                 \type=division_area
@@ -29,22 +33,22 @@ Bridge files are released as Parquet files, partitioned by `dataset`, `theme`, a
                  \type=building
             \theme=transportation
                  \type=segment
-        **\dataset=Esri Community Maps**
+        \dataset=Esri Community Maps
             \theme=buildings
                  \type=building
-        **\dataset=PinMeTo**
+        \dataset=PinMeTo
             \theme=places
                  \type=places
-        **\dataset=meta**
+        \dataset=meta
             \theme=places
                 \type=places
-        **\dataset=Microsoft**
+        \dataset=Microsoft
             \theme=places
                 \type=places
-        **\dataset=Instituto Geográfico Nacional (España)**
+        \dataset=Instituto Geográfico Nacional (España)
             \theme=buildings
                 \type=building
-        **\dataset=geoBoundaries**
+        \dataset=geoBoundaries
             \theme=divisions
                 \type=division
                 \type=division_area
@@ -52,30 +56,23 @@ Bridge files are released as Parquet files, partitioned by `dataset`, `theme`, a
 ```
 
 
+The Parquet schema includes the following properties:
+
 | Property | Data type | Description |
 | ---- | ---- | ---- |
 | `id` | string | represents the GERS ID and is populated from the id column in the Overture data schema |
-
 | `record_id` | string | represents the id of the feature as it is in the source data provider (e.g. n2757802019@9) and is populated by parsing the sources column in the Overture data schema |
-
 | `update_time` | string | represents the time the feature or dataset was updated, depending on the data provider; also populated by parsing the sources column in the Overture schema |
-
 | `dataset` | string | represents the name of the dataset the feature has been provided in; also populated by parsing the sources column in the Overture data schema |
-
 | `theme` | string | represents the theme the feature is a part of, provided by the creator of the bridge file itself |
-
 | `type` | string | represents the type of the feature, either derived from the data or provided by the creator of the bridge file |
-
-| `between` | array<double> | represents the portion of the normalized length of the GERS feature the dataset way takes, represented by a range between 0 and 1 |
-
-| `dataset_between` | array<double> | represents the portion of the normalized length of the dataset way the GERS feature takes, represented by a range between 0 and 1 |
+| `between` | array | represents the portion of the normalized length of the GERS feature the dataset way takes, represented by a range between 0 and 1 
+| `dataset_between` | array | represents the portion of the normalized length of the dataset way the GERS feature takes, represented by a range between 0 and 1 |
 
 
-## Using bridge files
+## Example: examining the source data for the `building` dataset
 
-Let's trace buildings data in the latest release back to the underlying source datasets. We'll examine an area near the US-Mexico border outside San Diego.
-
-First, get the buildings in our area of interest:
+In this example, we'll trace the buildings data in the latest release back to the underlying source datasets. We'll examine an area near the US-Mexico border outside San Diego. First, let's get the buildings in our area of interest:
 
 ```sql
 CREATE TABLE IF NOT EXISTS border_buildings AS
@@ -87,12 +84,12 @@ bbox.xmin > -117.048198 AND bbox.xmax < -117.044608
     AND bbox.ymin > 32.535068 AND bbox.ymax < 32.600154);
 ```
 
-Your table has 4367 building features in the latest release for your area of interest. Now let's look at a count of these building features by data source:
+You'll notice the table has 4367 `building` features. Now let's look at the `building` count by data source:
 
-```
+```sql
 SELECT 
-sources[1].dataset AS source,
-count(*)    
+   sources[1].dataset AS source,
+   count(*)    
 FROM border_buildings
 GROUP BY source;
 ```
@@ -109,7 +106,7 @@ GROUP BY source;
 └────────────────────────┴──────────────┘
 ```
 
-Now use the bridge file to find additional source data from the Overture corpus that didn't make it into the release. Join the data from the release with the bridge file data to create a detailed view of the source mappings. _Remember: we only have bridge files for Esri Community Maps data and OpenStreetMap data._ 
+Now we'll use the latest bridge file to find additional information about data in the Overture corpus that didn't make it into the release. We'll join the table we created from the release data with the bridge file data to create a new table that has detailed view of the source mappings. _Remember: we only have bridge files for Esri Community Maps data and OpenStreetMap data._ 
 
 ```sql
 CREATE TABLE IF NOT EXISTS border_buildings_corpus AS
@@ -125,12 +122,12 @@ ON border_buildings.id = bridge.id
 ORDER BY border_buildings.id, bridge.dataset);
 ```
 
-Notice that the bridge file results show 2,021 total records compared to 4,367 buildings in the original query. This is because we have incomplete bridge file coverage for buildings. We don't generate bridge files for Microsoft ML Buildings, Google Open Buildings, and Meta Buildings because those sources don't have meaningful IDs for reverse lookup. However, the source mappings that do exist for buildings reveal important patterns:
+You might notice this new table created from our join has only 2,021 records compared to 4,367 `building` records in our original query of the latest release data. This is because we have incomplete bridge file coverage for buildings; we don't generate bridge files for Microsoft ML Buildings, Google Open Buildings, and Meta Buildings because those sources don't have meaningful IDs for reverse lookup. However the bridge files that do exist for buildings reveal important patterns:
 
 - Multiple sources per building: a single Overture building may be conflated from multiple source datasets
 - One-to-many mapping: each source contribution gets its own bridge file record
 
-Let's dig into this a bit more. We can identify the buildings in the release that have multiple sources mappings. 
+Let's dig into this a bit more. We can identify the `building` features in the release that have multiple source mappings. 
 
 ``sql
 -- Identify buildings conflated from multiple sources
@@ -142,7 +139,7 @@ GROUP BY gers_id
 HAVING COUNT(DISTINCT dataset) > 1;
 ```
 
-There are 70 buildings with that are mapped to two data sources. 
+There are 70 buildings with that are mapped to two data sources. Here's a snippet of the query result:
 
 ```
 ┌──────────────────────────────────┬──────────────┬────────────────────────────────────┐
@@ -168,16 +165,6 @@ Let's pull out one example:
 | 08b29a4c428ebfff02002b827866f466 | Esri Community Maps | esri_ChulaVistaCA13510 | 2024-10-15T00:00:00.000Z |
 | 08b29a4c428ebfff02002b827866f466 | OpenStreetMap | w1182486582@1 | 2023-06-16T14:22:10.000Z |
 
-This shows that building `08b29a4c428ebfff02002b827866f466` was created by a conflation process that definitely included data from OpenStreetMap (way 1182486582, version 1) and Esri Community Maps (esri_ChulaVistaCA13510) and may have included other data sources that have not been mapped to GERS.
-
-
-## Bridge file limitations
-
-**Missing bridge files**: some datasets (Microsoft ML Buildings, Google Open Buildings, Meta Buildings) don't have bridge files because they lack meaningful source IDs for reverse lookup.
-
-**Linear feature complexity**: transportation segments may have complex geometry relationships captured in the `between` and `dataset_between` fields
-
-**Update frequency**: bridge files are generated per release and reflect conflation decisions at release time
-
+This shows that building `08b29a4c428ebfff02002b827866f466` was created by a conflation process that included data from OpenStreetMap (way 1182486582, version 1) and Esri Community Maps (esri_ChulaVistaCA13510). The conflation process _may_ have included other data sources that have not been mapped to GERS and released as bridge files.
 
 Bridge files provide essential transparency into Overture's conflation process, enabling users to understand data provenance and trace features back to their source datasets.
