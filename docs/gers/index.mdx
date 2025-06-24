@@ -8,24 +8,19 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 The Global Entity Reference System (GERS) is a universal framework for structuring and matching map data across systems. GERS, coupled with Overture datasets, is a potential standard for identifying and referencing the physical and conceptual entities we've defined in our world. It's also a mechanism that can simplify the integration and exchange of data layers.
 
-At the heart of GERS is a unique ID called the GERS ID. Overture assigns a GERS ID to each feature in our dataset. That feature, and therefore its GERS ID, represents an entity that exists in the real world, such as an office building, highway, country, river, museum or school. 
+GERS provides stable identifiers called GERS IDs for real-world geospatial entities across data releases and maintains consistency when entities appear in multiple source datasets.
 
-:::note
-We use *feature* and *entity* interchangably in this documentation but their meaning is a bit more complicated. For example, a building that hosts a branch of a public library is represented in the Overture buildings dataset as a map feature with its own unique GERS ID. The public library may also be represented in the Overture places dataset as a point of interest with its own unique GERS ID. The building and the library are distinct entities with distinct GERS IDs. 
-:::
-
-
-## The system
+## GERS is a system
 
 The "S" in GERS stands for a *system*, with the following components:
 
 | Component | Description |
 | ---------- | ---------- | 
-| [Overture reference map](/#overture-data) | The reference map consists of the canonical datasets Overture releases each month. |
-| Global registry of GERS IDs | The global registry is a catalog of all GERS IDs ever published. |
-| [Data changelog](changelog) | The changelog describes changes to entities across releases. You detect changes to Overture data from one release to another by querying across stable GERS IDs in the data changelog. |
-| Bridge files | Bridge files link a feature's ID from the [source data](../attribution) &mdash; e.g. OSM, Meta, Micosoft, geoBoundaries, etc &mdash; to its GERS ID in an Overture dataset |
-| [Onboarding services](gers-demonstrations) | These are tools and services to help you associate your data with GERS. |
+| [Overture reference map](/#overture-data) | consists of the canonical datasets Overture releases each month |
+| Global registry of GERS IDs | catalogs all GERS IDs ever published |
+| [Data changelog](changelog) | describes changes to entities across releases |
+| [Bridge files](bridgefiles) | connects the GERS IDs in a release to the IDs from the underlying source data |
+
 
 ## How does GERS work?
 
@@ -51,4 +46,3 @@ You can independently associate your own data (or a third-party dataset) with Ov
 ### Contributing data
 You can contribute data to the Overture Maps Foundation, and we will uas Overture's matching algorithms to match the features in your dataset to features in Overture. Matched features may be assigned an existing GERS ID, and we may generate new GERS IDs for new features. 
 
-You'll find theme-specific examples of GERS use cases in the [GERS demonstrations](gers-demonstrations) section of this documentation.
