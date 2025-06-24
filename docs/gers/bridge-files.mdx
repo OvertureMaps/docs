@@ -3,6 +3,8 @@ title: Bridge Files
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
+## What are bridge files?
+
 With each release Overture generates **bridge files** that connect GERS IDs to the IDs from the [source data](/attribution). These files are a key component of GERS and offer two critical capabilities: reverse lookup of source features and insight into Overture's conflation process. 
 
 Here's how to get the bridge files:
@@ -129,7 +131,7 @@ You might notice this new table created from our join has only 2,021 records com
 
 Let's dig into this a bit more. We can identify the `building` features in the release that have multiple source mappings. 
 
-``sql
+```sql
 -- Identify buildings conflated from multiple sources
 SELECT gers_id, 
        COUNT(DISTINCT dataset) as source_count,
@@ -156,10 +158,12 @@ There are 70 buildings with that are mapped to two data sources. Here's a snippe
 │ 08b29a4c42809fff02000729055d0147 │            2 │ Esri Community Maps, OpenStreetMap │
 │ 08b29a4c428ccfff02002cbabfaf31e0 │            2 │ Esri Community Maps, OpenStreetMap │
 │ 08b29a4c4280bfff02003a1e8ccaeb68 │            2 │ Esri Community Maps, OpenStreetMap │
+
 ...
 ```
 
 Let's pull out one example:
+
 | gers_id | dataset | dataset_record_id | update_time |
 | ---- | ---- | ---- | ---- |
 | 08b29a4c428ebfff02002b827866f466 | Esri Community Maps | esri_ChulaVistaCA13510 | 2024-10-15T00:00:00.000Z |
@@ -167,4 +171,7 @@ Let's pull out one example:
 
 This shows that building `08b29a4c428ebfff02002b827866f466` was created by a conflation process that included data from OpenStreetMap (way 1182486582, version 1) and Esri Community Maps (esri_ChulaVistaCA13510). The conflation process _may_ have included other data sources that have not been mapped to GERS and released as bridge files.
 
-Bridge files provide essential transparency into Overture's conflation process, enabling users to understand data provenance and trace features back to their source datasets.
+## Next steps
+- Explore the other components of GERS: registry, [changelog](../changelog), and [reference map](https://explore.overturemaps.org/#15/38.90678/-77.03649)
+- Follow our [GERS tutorial](../gers-tutorial)
+
