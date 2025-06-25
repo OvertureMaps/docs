@@ -1,0 +1,129 @@
+---
+title: 2025-06-25.0 release notes
+slug: 2025-06-25.0
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2025-06-25.0` release of Overture data and `v1.10.0` of the Overture schema are now available.** We're pleased to annouce that GERS is now in GA! This means we've launched and updated several componenets of the "system" to make it production-ready. 
+
+The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
+
+#### Microsoft Azure:
+```
+wasbs://release@overturemapswestus2.blob.core.windows.net/2025-06-25.0
+```
+
+#### Amazon S3:
+```
+s3://overturemaps-us-west-2/release/2025-06-25.0
+```
+
+<!-- truncate -->
+
+You can access the datasets by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at data@overturemaps.org. We’d love to hear from you.
+
+## What's new? Big changes to GERS. 
+
+In this release, Overture has standardized the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings. This is a **one-time** breaking change for our ID system. For this release only, we are offering Parquet files, partioned by `theme` and `type` that map the old May IDs to the new June UUIDs.  You can find that file here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
+
+Overture is now producing bridge files with each release. You can find the latest bridge files here, partitioned by `dataset`, `theme`, and `type`:
+
+```
+wasbs://bridgefiles@overturemapswestus2.blob.core.windows.net/2025-06-25.0
+```
+```
+s3://overturemaps-us-west-2/bridgefiles/2025-06-25.0
+```
+
+The newest component of GERS is the GERS Registry, which will also be updated with each release. The GERS Registry files are here:
+
+```
+wasbs://registry@overturemapswestus2.blob.core.windows.net/2025-06-25.0
+```
+```
+s3://overturemaps-us-west-2/registry/2025-06-25.0
+```
+
+## Breaking changes
+
+- added `perspectives` to the top-level `names` property
+- added `between` to the top-level `sources` property
+- added rails to transportation
+- ensured no array is empty on places properties
+- migrated GERS IDs to new GERS UUIDs 
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. All themes have 100% ID churn this release because of the switch to UUIDs.
+:::
+
+### Addresses
+
+- added new Greenland data source: OpenAddresses/Asiaq, Greenland Survey
+- added new Singapore data source: OpenAddresses/Singapore Land Authority
+- added several new data sources in the United States
+    - Clarke County, GA: OpenAddresses/GA/Athens-Clarke County GIS
+    - State of Minnesota: OpenAddresses/MN/Department of Public Safety
+    - State of Colorado: OpenAddresses/CO/Governor's Office of Information Technology
+    - Lackawanna County, PA: OpenAddresses/PA/City of Scranton GIS
+- made improvements to existing Mexico and Australia address data
+- made improvements to existing US data and Australia address data
+
+
+### Base
+
+- increased number of features with `names`
+- increased coverage of certain classes, especially within land_use and infrastructure. Examples: `communication_pole`, `pedestrian_crossing`, `plaza`, `street_lamp`, `cable_barrier`, `fire_hydrant`
+- addded all upstream source tages from OSM to the `source_tags` property
+
+### Buildings
+ - added a new data provider: City of Vancouver, CA
+
+
+### Divisions
+
+- added new "land" polygons (`is_land=TRUE`) for regions that have access to oceans
+
+### Places
+
+- 64.37M total places compared to 61.68M in May
+- added a new data provider: Krick
+- made improvements made to neurologist category mappings
+
+### Transportation
+
+- added rail_flags and classes: railway segments now have classes (e.g. standard_gauge, tram, subway) and linear-referenced flags (is_abandoned, is_freight, etc.)
+- added linear references to `sources`, making it possible to trace exactly how a segment was constructed from its sources
+- added new TomTom-sourced segments, improving coverage in Turkey
+
+## Data changelog
+
+:::note
+Because of the switch to GERS UUIDs this month, we are not release a changelog. See below for paths to the May changelog, with relies on the "old" GERS IDs. 
+:::
+
+The data changelog captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations on Azure and AWS:
+
+```
+wasbs://changelog@overturemapswestus2.blob.core.windows.net/2025-05-21.0
+```
+```
+s3://overturemaps-us-west-2/changelog/2025-05-21.0
+```
+
+You can find more information about [the data changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
+
+## Schema changelog
+
+The changelog for Overture schema `v1.10.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.10.0). 
+
+## Attribution  
+
+You'll find information about attribution and licensing [here](/attribution).
