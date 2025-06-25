@@ -61,6 +61,7 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 | prohibited_transitions | STRUCT[] | Defines where traveling from the segment to another is disallowed for navigation. This covers things situations prohibited turns or a transition from road to bike lane disallowing cars. |
 | road_surface | STRUCT[] | Defines the surface material on a road such as paved, asphalt, or unpaved. |
 | road_flags | STRUCT[] | Additional properties relevant to roads such as is_bridge or is_under_construction. |
+| rail_flags | STRUCT[] | Additional properties relevant to rail such as is_tunnel or is_freight. |
 | speed_limits | STRUCT[] | Defines the speed limit of the road segment. |
 | width_rules | STRUCT[] | Defines the width of the road segment for rendering. |
 | destinations | STRUCT[] | Describes the transitions from one segment to another on the way to a specified location. This data is primarily used for routing. |
@@ -86,38 +87,45 @@ Transportation segments are divided into three subtypes: **rail**, **water**, an
 <div>
 <Tabs>
 <TabItem value="classes" label="classes" default>
-| subtype | class | subclass | Feature count, May 2025 release |
+| subtype | class | subclass | Feature count, June 2025 release |
 |---|---|---|---|
-| rail    |               |                |      1,609,337 |
-| road    | bridleway     |                |         98,230 |
-| road    | cycleway      | cycle_crossing |         53,764 |
-| road    | cycleway      |                |      1,246,074 |
-| road    | footway       | crosswalk      |      2,039,673 |
-| road    | footway       | sidewalk       |      3,281,282 |
-| road    | footway       |                |     15,378,957 |
-| road    | living_street |                |      3,265,976 |
-| road    | motorway      | link           |        638,308 |
-| road    | motorway      |                |        432,262 |
-| road    | path          |                |     13,187,280 |
-| road    | pedestrian    |                |        458,725 |
-| road    | primary       | link           |        484,551 |
-| road    | primary       |                |      6,635,394 |
-| road    | residential   |                |    124,922,897 |
-| road    | secondary     | link           |        381,553 |
-| road    | secondary     |                |     10,618,673 |
-| road    | service       | alley          |      1,638,837 |
-| road    | service       | driveway       |     16,100,016 |
-| road    | service       | parking_aisle  |      6,197,666 |
-| road    | service       |                |     32,478,397 |
-| road    | steps         |                |      1,805,735 |
-| road    | tertiary      | link           |        292,466 |
-| road    | tertiary      |                |     19,573,564 |
-| road    | track         |                |     24,780,102 |
-| road    | trunk         | link           |        541,491 |
-| road    | trunk         |                |      3,390,893 |
-| road    | unclassified  |                |     29,319,388 |
-| road    | unknown       |                |        649,519 |
-| water   |               |                |         27,959 |
+| rail    | funicular      |                |       1,297 |
+| rail    | light_rail     |                |      15,930 |
+| rail    | monorail       |                |       2,979 |
+| rail    | narrow_gauge   |                |      30,843 |
+| rail    | standard_gauge |                |   1,423,890 |
+| rail    | subway         |                |      52,344 |
+| rail    | tram           |                |      59,142 |
+| rail    | unknown        |                |     372,866 |
+| road    | bridleway      |                |      99,049 |
+| road    | cycleway       | cycle_crossing |      55,477 |
+| road    | cycleway       |                |   1,259,399 |
+| road    | footway        | crosswalk      |   2,109,280 |
+| road    | footway        | sidewalk       |   3,394,404 |
+| road    | footway        |                |  15,631,725 |
+| road    | living_street  |                |   3,296,747 |
+| road    | motorway       | link           |     638,701 |
+| road    | motorway       |                |     432,035 |
+| road    | path           |                |  13,329,876 |
+| road    | pedestrian     |                |     461,593 |
+| road    | primary        | link           |     487,257 |
+| road    | primary        |                |   6,670,265 |
+| road    | residential    |                | 125,385,316 |
+| road    | secondary      | link           |     385,637 |
+| road    | secondary      |                |  10,666,584 |
+| road    | service        | alley          |   1,664,772 |
+| road    | service        | driveway       |  16,377,919 |
+| road    | service        | parking_aisle  |   6,266,426 |
+| road    | service        |                |  32,743,206 |
+| road    | steps          |                |   1,836,112 |
+| road    | tertiary       | link           |     295,551 |
+| road    | tertiary       |                |  19,711,085 |
+| road    | track          |                |  25,012,146 |
+| road    | trunk          | link           |     547,842 |
+| road    | trunk          |                |   3,417,014 |
+| road    | unclassified   |                |  29,488,205 |
+| road    | unknown        |                |     704,794 |
+| water   |                |                |      28,224 |
 
 </TabItem>
 </Tabs>
