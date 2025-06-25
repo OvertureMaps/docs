@@ -1,0 +1,81 @@
+---
+title: Wherobots
+---
+
+This guide will show you how to access and work with Overture datasets in Wherobots, a cloud-native environment for geospatial data processing, powered by Apache Sedona. Wherobots provides hosted notebook environments and data pipeline APIs, allowing you to work with massive geospatial datasets at scale.  
+
+:::info
+**Before you start** ensure that you have a free Wherobots Community Edition Organization or a paid Professional or Enterprise Edition Organization. For more information, see [Create a Wherobots Account](https://docs.wherobots.com/latest/get-started/create-account/#create-or-join-an-organization).
+:::
+
+## Accessing Overture Maps Data in Wherobots Cloud
+To explore and query Overture Maps data within the Wherobots Cloud platform, follow these steps.
+
+### Navigate to the Spatial Data Catalog
+
+1. Log in to [Wherobots Cloud](https://cloud.wherobots.com/).
+
+2. Go to the [Spatial Catalog](https://cloud.wherobots.com/spatial-catalog).
+
+### Locate the Overture Maps Database
+
+1. In the sidebar, expand either the `wherobots_open_data` catalog or `wherobots_pro_data`. 
+
+If you have a Wherobots Professional or Enterprise Edition Organization, you also have access to `wherobots_pro_data`, which includes datasets for enriching your analysis, such as US Census demographics and local weather events.
+
+2. Within `wherobots_open_data`, expand the `overture_maps_foundation` database.
+
+Here, you'll find Overture Maps tables, including:
+- `places_place`
+- `buildings_building`
+- `transportation_segment`
+
+3. Select a table to view its detailed schema and confirm it contains the data you need.
+
+Each table contains the following:
+- Catalog Name
+- Catalog Storage Path
+- Database
+- Table Name
+- Table Schema
+
+### Start a Wherobots Notebook
+1. Return to the [Wherobots Cloud](https://cloud.wherobots.com/) homepage.
+2. Select an available runtime to launch a new Notebook.
+3. Once the runtime has loaded, open the Notebook.
+
+## Loading Overture Data
+
+You can load Overture Maps data using either the DataFrame API or SQL API:
+
+### DataFrame API
+
+So for example, you create a Wherobots dataframe with of the Overture Places dataset, you would do the following:
+
+```python
+# Load Places dataset
+places_df = sedona.table("wherobots_open_data.overture_maps_foundation.places_place")
+
+# Display sample data
+places_df.show(5)
+```
+
+### SQL API
+Or if you prefer Spatial SQL, you can use Spatial SQL syntax instead:
+
+```python
+# Load Overture Places data
+places_df = sedona.sql("""
+    SELECT * FROM wherobots_open_data.overture_maps_foundation.places_place
+""")
+
+# Create a temporary view
+places_df.createOrReplaceTempView("places")
+
+# Display sample data
+places_df.show(5)
+```
+
+## Resources
+For more on using the Wherobots platform, see the official [Wherobots Documentation](https://docs.wherobots.com/).
+

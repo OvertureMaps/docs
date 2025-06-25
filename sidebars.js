@@ -17,10 +17,11 @@ const sidebars = {
           label: 'Data Mirrors',
           collapsed: true,
           items: [
-            'getting-data/data-mirrors/fused',
             'getting-data/data-mirrors/bigquery',
             'getting-data/data-mirrors/databricks',
+            'getting-data/data-mirrors/fused',
             'getting-data/data-mirrors/snowflake',
+            'getting-data/data-mirrors/wherobots'
           ],
         },
       ],
