@@ -13,7 +13,7 @@ By matching your data to Overture’s and attaching GERS identifiers to your dat
 To associate your data with GERS identifiers, we need to:
 
 1. Perform an initial association between your data and a relevant Overture theme.
-2. Add GERS identifiers to your dataset as a column or produce a “bridge file” mapping your data identifiers to their corresponding GERS identifiers.
+2. Add GERS identifiers to your dataset as a column or produce your own “bridge file” mapping your data identifiers to their corresponding GERS identifiers.
 3. Perform a regular maintenance match, usually with every monthly Overture release.
 
 Joining geospatial datasets is a highly context dependent task. Sometimes you want very precise matches, with little risk of false positives. And other times you want greedy, loose matches, with wide coverage. To demonstrate this context dependency, we’ll be adopting the following use case to frame our decisions:
@@ -305,7 +305,7 @@ SELECT * FROM ranked_matches WHERE rank = 1
 
 This query yields 2,358 correct matches and no false positives, for a match rate of 55%. By adding more conditionals and stages, we could get much higher results (if you’d like the details about that, [check out a longer exploration here](https://www.dbreunig.com/2024/09/27/conflating-overture-points-of-interests-with-duckdb-ollama-and-more.html)), but for our restaurant listing app, this suits our needs. 
 
-## Enriching data with GERS IDs & producing a bridge file
+## Enriching your data with GERS IDs & producing your own bridge file
 
 ### Enriching our table
 
@@ -346,11 +346,11 @@ Our `facilities` table is now enriched with GERS identifiers.
 
 We can use this association to connect county health scores with our Overture Places basemap, then display them to our app users.
 
-Further, if we can share our association with others, allowing them to benefit from the hard work we’ve done matching this data and easily connect it to their GERS-associated datasets using only a column join. One way to facilitate this is a *bridge file*.
+Further, if we can share our association with others, allowing them to benefit from the hard work we’ve done matching this data and easily connect it to their GERS-associated datasets using only a column join. One way to facilitate this is a bridge file.
 
 ### Producing a bridge file
 
-A bridge file is a join table, connecting GERS identifiers with another set of identifiers. Overture produces bridge files for the data sources we use to produce our datasets, allowing others to understand the provenance of our data and to quickly enrich their own data with Overture datasets, if they’re currently using one of our input data sources.
+A bridge file is essentially a join table, connecting GERS identifiers with another set of identifiers. Overture produces [bridge files](bridge-files) with each data release for the data sources we use to produce our datasets, allowing others to understand the provenance of our data and to quickly enrich their own data with Overture datasets, if they’re currently using one of our input data sources.
 
 Once you’ve enriched your dataset with GERS identifiers, you can produce a bridge file like this:
 

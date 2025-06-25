@@ -6,7 +6,7 @@ import changelog_buildings_churn from '!!raw-loader!@site/src/queries/duckdb/cha
 import changelog_buildings_feature_by_change_type from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_feature_by_change_type.sql';
 import changelog_buildings_join from '!!raw-loader!@site/src/queries/athena/changelog_buildings_join.sql';
 
-With each data release, Overture publishes a changelog that capture changes in the data from the previous release to the current release. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors.
+With each data release, Overture publishes a **changelog** that capture changes in the data from the previous release to the current release. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors.
 
 The data changelog is available as Parquet files, partitioned by `theme`, `type`, and `change_type` and sorted geospatially with a unique index on `id`. The changelog files are available at the following locations:
 
