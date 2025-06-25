@@ -81,7 +81,7 @@ SELECT
 FROM read_parquet('https://overturemapswestus2.blob.core.windows.net/registry/2025-06.25.0/')    
 WHERE id='d724e74f-017a-4902-9031-bc784ffc1789';
 ```
-We can see that it's a `place` type that was first seen by the [GERS Registry](/gers/registry) in June 2025. This makes sense because the GERS Registry didn't exist to _see_ any features before that. 
+We can see that it's a `place` type that was first seen by the [GERS Registry](https://docs.overturemaps.org/gers/registry/) in June 2025. This makes sense because the GERS Registry didn't exist to _see_ any features before that. 
 </details>
 
 
@@ -99,7 +99,7 @@ What's the UUID for the Great Salt Lake? Is it part of the GERS Registry?
 For the next part of this tutorial, we're using artifacts from the May release (`2025-05-21.0`). Because of the switch to UUIDs in June, we did not generate a changelog in June. The next changelog will be published with the July release.
 :::
 
-Every Overture release (except the June 2025 release) includes a [changelog](/gers/changelog) with a high level overview of data added, removed, or changed, based on the ID. The changelog is partitioned by `theme`, `type`, and `change_type`. Let's use the changelog to identify all of the features added in Salt Lake City in Overture's May release.
+Every Overture release (except the June 2025 release) includes a [changelog](https://docs.overturemaps.org/gers/changelog/) with a high level overview of data added, removed, or changed, based on the ID. The changelog is partitioned by `theme`, `type`, and `change_type`. Let's use the changelog to identify all of the features added in Salt Lake City in Overture's May release.
 
     ```sql
     SELECT
@@ -168,7 +168,7 @@ We could go one step further and query the one-time May to June ID mapping to tr
 
 ## 4. Using bridge files
 
-[Bridge files](/gers/bridge-files) are published mappings of GERS ID to Source IDs for Overture features that came from an established dataset with a meaningful `record_id`. ML-Derived buildings, for example, do not have stable meaningful input IDs, but place records from Meta have corresponding IDs that reference public Facebook pages.
+[Bridge files](https://docs.overturemaps.org/gers/bridge-files/) are published mappings of GERS ID to Source IDs for Overture features that came from an established dataset with a meaningful `record_id`. ML-Derived buildings, for example, do not have stable meaningful input IDs, but place records from Meta have corresponding IDs that reference public Facebook pages.
 
 The `sources` property lists the original source of the data and any additional properties that Overture has added. We can use the bridge file for Meta's places data to map the GERS ID back to the source ID. Then we can look upthe Facebook pages for the new places in Salt Lake City:
 
@@ -188,4 +188,7 @@ The `sources` property lists the original source of the data and any additional 
     ) TO 'results/new_places_slc_with_fb_pages.geojson' WITH (FORMAT GDAL, Driver GeoJSON);
     ```
 
-
+## 5. Next steps
+- Checkout our [GERS tutorial](https://docs.overturemaps.org/gers/gers-tutorial/)
+- Read more about the components of GERS in our [docs](https://docs.overturemaps.org/gers/)
+- Read our ["GERS Deep Dive"](https://overturemaps.org/blog/2025/understanding-overtures-global-entity-reference-system/) and ["Introducing Bridge Files"](https://overturemaps.org/blog/2025/introducing-bridge-files/) blog posts

@@ -122,7 +122,7 @@ ON border_buildings.id = bridge.id
 ORDER BY border_buildings.id, bridge.dataset);
 ```
 
-You might notice this new table created from our join has only 2,021 records compared to 4,367 `building` records in our original query of the latest release data. This is because we have incomplete bridge file coverage for buildings; we don't generate bridge files for Microsoft ML Buildings, Google Open Buildings, and Meta Buildings because those sources don't have meaningful IDs for reverse lookup. However the bridge files that do exist for buildings reveal important patterns:
+You might notice this new table created from our join has only 2,021 records compared to 4,367 `building` records in our original query of the latest release data. This is because we have incomplete bridge file coverage for buildings; we don't generate bridge files for Microsoft ML Buildings and Google Open Buildings because those sources don't have meaningful IDs for reverse lookup. However the bridge files that do exist for buildings reveal important patterns:
 
 - Multiple sources per building: a single Overture building may be conflated from multiple source datasets
 - One-to-many mapping: each source contribution gets its own bridge file record
