@@ -18,12 +18,12 @@ The datasets and release artifacts are available as GeoParquet files stored on b
 
 **Microsoft Azure:**
 ```
-wasbs://release@overturemapswestus2.blob.core.windows.net/2025-06-25.0
+az://overturemapswestus2.blob.core.windows.net/release/2025-06-25.0/
 ```
 
 **Amazon S3:**
 ```
-s3://overturemaps-us-west-2/release/2025-06-25.0
+s3://overturemaps-us-west-2/release/2025-06-25.0/
 ```
 ### Data changelog
 
@@ -34,24 +34,24 @@ No changelog for the June release
 
 **Microsoft Azure:**
 ```
-wasbs://bridgefiles@overturemapswestus2.blob.core.windows.net/2025-06-25.0
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-06-25.0/
 ```
 
 **Amazon S3:**
 ```
-s3://overturemaps-us-west-2/bridgefiles/2025-06-25.0
+s3://overturemaps-us-west-2/bridgefiles/2025-06-25.0/
 ```
 
 ### GERS Registry
 
 **Microsoft Azure:**
 ```
-wasbs://registry@overturemapswestus2.blob.core.windows.net/2025-06-25.0
+az://overturemapswestus2.blob.core.windows.net/registry/
 ```
 
 **Amazon S3:**
 ```
-s3://overturemaps-us-west-2/registry/2025-06-25.0
+s3://overturemaps-us-west-2/registry/
 ```
 
 
@@ -67,8 +67,9 @@ In this release, Overture has standardized the [`id` property](/schema/#top-leve
 Overture is now producing [bridge files](https://docs.overturemaps.org/gers/bridge-files/) with each release. You can find the latest bridge files here, partitioned by `dataset`, `theme`, and `type`:
 
 ```
-wasbs://bridgefiles@overturemapswestus2.blob.core.windows.net/2025-06-25.0
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-06-25.0
 ```
+
 ```
 s3://overturemaps-us-west-2/bridgefiles/2025-06-25.0
 ```
@@ -76,10 +77,11 @@ s3://overturemaps-us-west-2/bridgefiles/2025-06-25.0
 The newest component of GERS is the [GERS Registry](https://docs.overturemaps.org/gers/registry/), which will also be updated with each release. The GERS Registry files are here:
 
 ```
-wasbs://registry@overturemapswestus2.blob.core.windows.net/2025-06-25.0
+az://overturemapswestus2.blob.core.windows.net/registry/
 ```
+
 ```
-s3://overturemaps-us-west-2/registry/2025-06-25.0
+s3://overturemaps-us-west-2/registry/
 ```
 
 ## Breaking changes
@@ -145,10 +147,10 @@ Because of the switch to GERS UUIDs this month, we are not release a changelog. 
 The [data changelog](https://docs.overturemaps.org/gers/changelog/) captures any changes in Overture features between this release and the previous release. The changelog is available as Parquet files &mdash; partitioned by theme, type, and change type &mdash; at the following locations on Azure and AWS:
 
 ```
-wasbs://changelog@overturemapswestus2.blob.core.windows.net/2025-05-21.0
+az://overturemapswestus2.blob.core.windows.net/changelog/2025-06-25.0/
+
 ```
-```
-s3://overturemaps-us-west-2/changelog/2025-05-21.0
+s3://overturemaps-us-west-2/changelog/2025-06-25.0/
 ```
 
 You can find more information about [the data changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).

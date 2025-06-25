@@ -3,192 +3,215 @@ title: Using the GERS "system"
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-With the June release, we introduced several updated and new components of our Global Entity Reference System (GERS), including a [new format for GERS IDs](https://github.com/orgs/OvertureMaps/discussions/390) and a new [GERS Registry](/gers/registry). In this blog post, we'll walk you through the components of the GERS "system" show you how to ask new questions of Overture data. 
+In the [June release](2025/2025-06-25.0), we introduced new components of GERS, including a [new format for GERS IDs](https://github.com/orgs/OvertureMaps/discussions/390) and a [GERS Registry](https://docs.overturemaps.org/gers/registry/). In this blog post, we'll walk you through the GERS "system" and show you how to ask probing questions of the Overture datasets. 
 
 ## Understanding GERS IDs
-As of the June 2025 release, all GERS IDs are UUIDs: 128-bit, randomly-generated identifiers ([UUID v4](https://datatracker.ietf.org/doc/html/rfc4122)) that Overture keeps stable across data releases and updates. These IDs are stored as strings with dashes: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`. 
+First, let's look at the new ID format for GERS. As of the June 2025 release, all GERS IDs are UUIDs: 128-bit, randomly-generated identifiers ([UUID v4](https://datatracker.ietf.org/doc/html/rfc4122)) that Overture keeps stable across data releases and updates. These IDs are stored as strings with dashes: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`. 
 
-For this release only, we're providing Parquet files that map GERS IDs from the May release to the new GERS UUIDs in June release. These files are partitioned by `theme` and 'type' and can be accessed here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`
+For this release only, we're providing Parquet files that map GERS IDs from the May release to the new GERS UUIDs in June release. These files are partitioned by `theme` and 'type' and can be accessed here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
 
-## Exploring Overture's `divisions` and `hierarchies` with GERS
+## Exploring Overture data with GERS
 
- Let's start by exploring how GERS IDs work in one Overture dataset. The `divisions` theme contains administrative boundaries and points for global administrative areas. In this example, we'll use DuckDB to connect to Azure and read the Parquet files from Azure blob storage. You can also access the files on Amazon S3.
+ Let's start our exploration by examining how GERS IDs work in one Overture dataset. The [`divisions` theme](https://docs.overturemaps.org/guides/divisions/) contains administrative boundaries and points for global administrative areas. In this example, we'll use DuckDB to connect to Azure and read the Parquet files from Azure blob storage. You can also [access the files](https://docs.overturemaps.org/getting-data/) on Amazon S3.
 
-    ```sql
-    CREATE TABLE slc AS (
-        SELECT
-            *
-        FROM
-            read_parquet('az://overturemapswestus2.blob.core.windows.net/release/2025-06-25.0/theme=divisions/type=division/*')
-        WHERE
-            -- ID for Salt Lake City, Utah
-            id = 'c85948de-26de-4c4a-8479-1dac33fa8b04'
-    );
-    ```
+```sql
+CREATE TABLE slc AS (
+    SELECT
+        *
+    FROM
+        read_parquet('az://overturemapswestus2.blob.core.windows.net/release/2025-06-25.0/theme=divisions/type=division/*')
+    WHERE
+    -- ID for Salt Lake City, Utah
+        id = 'c85948de-26de-4c4a-8479-1dac33fa8b04'
+);   
+```
 
 When we query that table, we can see the `divisions` hierarchy: Salt Lake City is a locality in Salt Lake County, which is in the region of Utah, within the country of the United States.
 
-    ```sql
+```sql
+SELECT
+    h.name,
+    h.subtype,
+    h.division_id
+FROM
+    slc
+CROSS JOIN UNNEST(hierarchies[1]) AS t(h);
+```
+```
+┌──────────────────┬──────────┬──────────────────────────────────────┐
+│       name       │ subtype  │             division_id              │
+│     varchar      │ varchar  │               varchar                │
+├──────────────────┼──────────┼──────────────────────────────────────┤
+│ United States    │ country  │ f39eb4af-5206-481b-b19e-bd784ded3f05 │
+│ Utah             │ region   │ 506017c0-8932-44b5-b82c-92f9dcffdcf1 │
+│ Salt Lake County │ county   │ 53d671bc-c294-44fb-a767-169bffedc5cb │
+│ Salt Lake City   │ locality │ c85948de-26de-4c4a-8479-1dac33fa8b04 │
+└──────────────────┴──────────┴──────────────────────────────────────┘
+
+```
+
+To retrieve the actual polygons for these entities, we can query the `division_area` type of the `divisions` theme, using `division_id` as the foreign key that links the datasets. _Note: This query will take a few minutes to run._ 
+
+```sql
+COPY(
     SELECT
-        h.name,
-        h.subtype,
-        h.division_id
+        names.primary AS name,
+        subtype,
+        id,
+        geometry
     FROM
-        slc
-    CROSS JOIN UNNEST(hierarchies[1]) AS t(h);
-    ```
-
-If we wanted to retrieve the actual polygons for the administrative boundaries, we can search the `division_area` type of the `divisions` theme to obtain these particular `division` IDs:
-
-    ```sql
-    COPY(
-        SELECT
-            names.primary AS name,
-            subtype,
-            id,
-            geometry
-        FROM
-            read_parquet('az://overturemapswestus2.blob.core.windows.net/release/2025-06-25.0/theme=divisions/type=division_area/*') areas
-        WHERE
-            division_id IN (
-                SELECT
-                    h.division_id
-                FROM
-                    slc
-                CROSS JOIN UNNEST(hierarchies[1]) AS t(h)
+        read_parquet('az://overturemapswestus2.blob.core.windows.net/release/2025-06-25.0/theme=divisions/type=division_area/*') areas
+    WHERE
+        division_id IN (
+            SELECT
+                h.division_id
+            FROM
+                slc
+            CROSS JOIN UNNEST(hierarchies[1]) AS t(h)
             )
     ) TO 'slc_hierarchies.geojson' WITH (FORMAT GDAL, DRIVER GeoJSON);
     ```
 
 Next we'll load `slc_hierarchies.geojson` into [KeplerGL](https://kepler.gl/) so that we can see the complete hierarchy of divisions.
 
+ ![Salt lake City Hierarchies](/img/blog/slc_hierarchy.jpg)
+
+:::info
 GERS IDs are intended to be the key to unlock interoperability both inside and outside of Overture data. This example showed how Overture features within the same theme can reference one-another via GERS.
-
-## 2. Looking up IDs in the GERS Registry
-
-Let's grab the GERS IDs for a couple landmarks and places in Salt Lake City and look them up in the GERS Registry. 
-
-<details>
-    <summary>
-The UUID for the Utah State Capitol is `d724e74f-017a-4902-9031-bc784ffc1789`. Is that part of GERS?
-    </summary>
-
-Yes! We can search for that `id` in the GERS Registry with this query:
-
-```
-SELECT 
-   *
-FROM read_parquet('https://overturemapswestus2.blob.core.windows.net/registry/2025-06.25.0/')    
-WHERE id='d724e74f-017a-4902-9031-bc784ffc1789';
-```
-We can see that it's a `place` type that was first seen by the [GERS Registry](https://docs.overturemaps.org/gers/registry/) in June 2025. This makes sense because the GERS Registry didn't exist to _see_ any features before that. 
-</details>
-
-
-<details>
-    <summary>
-What's the UUID for the Great Salt Lake? Is it part of the GERS Registry?
-    </summary>
-
-</details>
-
-
-## 3. Using the data changelog
-
-:::note
-For the next part of this tutorial, we're using artifacts from the May release (`2025-05-21.0`). Because of the switch to UUIDs in June, we did not generate a changelog in June. The next changelog will be published with the July release.
 :::
 
-Every Overture release (except the June 2025 release) includes a [changelog](https://docs.overturemaps.org/gers/changelog/) with a high level overview of data added, removed, or changed, based on the ID. The changelog is partitioned by `theme`, `type`, and `change_type`. Let's use the changelog to identify all of the features added in Salt Lake City in Overture's May release.
+## Looking up IDs in the GERS Registry
 
-    ```sql
+Let's grab a GERS ID for an important place in Salt Lake City and see if it exists in the GERS Registry. The UUID for the Utah State Capitol is `d724e74f-017a-4902-9031-bc784ffc1789`. Is that part of GERS? We can search the GERS Registry with this query:
+
+```sql
+SELECT 
+    *
+FROM 
+    read_parquet('s3://overturemaps-us-west-2/registry/*')   
+WHERE 
+    id='d724e74f-017a-4902-9031-bc784ffc1789';
+```
+
+We can see that `d724e74f-017a-4902-9031-bc784ffc1789` is a `place` type that was first seen by the [GERS Registry](https://docs.overturemaps.org/gers/registry/) in the `2025-06-25.0` release. (This makes sense because the GERS Registry didn't exist to _see_ any features before then!) It has a `bbox ` of `{'xmin': -111.888214, 'xmax': -111.8882, 'ymin': 40.777214, 'ymax': 40.77722}` and it lives in this Parquet file: `/theme=places/type=place/part-00001-f6d803dd-3ff7-47d7-a58f-7af6e054e9c4-c000.zstd.parquet`. 
+
+
+## Using the data changelog
+
+:::note
+For the next part of this tutorial, we're using the data changelog from the May release (`2025-05-21.0`) to examine new places in Salt Lake City. Because of the switch to UUIDs in June, we did not generate a changelog in June. The next changelog will be published with the July release.
+:::
+
+Every Overture release (except the June 2025 release) includes a [changelog](https://docs.overturemaps.org/gers/changelog/) with a high-level overview of data added, removed, or changed, based on the ID. The changelog is partitioned by `theme`, `type`, and `change_type`. Let's query the changelog to identify all of the features added in Salt Lake City in Overture's May release.
+
+Let's do query that dumps to the terminal all the new places in the May release for our area of interest.
+
+```sql
+SELECT
+    id
+FROM
+    read_parquet('s3://overturemaps-us-west-2/changelog/2025-05-21.0/theme=places/*/*/*.parquet')
+WHERE
+    change_type = 'added'
+    AND bbox.xmin > -112.461 AND bbox.xmax < -111.073
+    AND bbox.ymin > 40.296 AND bbox.ymax < 40.955;
+```
+
+This gives us 5,727 new places in the Salt Lake City area added to the May release. Now let's write a query to join this list of new places to the full May data release by `id` and write out a new Parquet file:
+
+```sql
+COPY(
     SELECT
-        id
+        places.id as id,
+        names.primary as name,
+        categories.primary as category,
+        confidence,
+        CAST(sources AS JSON) as sources,
+        geometry
     FROM
-        read_parquet('s3://overturemaps-us-west-2/changelog/2025-05-21.0/theme=places/*/*/*.parquet')
-    WHERE
-        change_type = 'added'
-        AND bbox.xmin > -112.461 AND bbox.xmax < -111.073
-        AND bbox.ymin > 40.296 AND bbox.ymax < 40.955
-    ```
-
-Next we can join this list of new places to the `places` theme by `id` and write out a new GeoJSON file:
-
-    ```sql
-    COPY(
+        read_parquet('s3://overturemaps-us-west-2/release/2025-05-21.0/theme=places/type=place/*') places
+    JOIN (
         SELECT
-            places.id as id,
+            id
+        FROM
+            read_parquet('s3://overturemaps-us-west-2/changelog/2025-05-21.0/theme=places/*/*/*.parquet')
+        WHERE 
+            change_type = 'added'
+            AND bbox.xmin > -112.461 AND bbox.xmax < -111.073 
+            AND bbox.ymin > 40.296 AND bbox.ymax < 40.955
+            ) changelog
+        ON places.id = changelog.id
+        ORDER BY places.id ASC
+    ) TO 'new_places_slc_may.parquet';
+```
+
+ Let's go one step further and query the one-time May to June ID mapping to translate the May IDs in our list of new places to the new UUID system. Here's how we would do that:
+
+```sql
+COPY(
+    SELECT 
+        newUUIDs.id
+     FROM 
+         read_parquet('new_places_slc_may.parquet') oldIDs
+     JOIN (
+     SELECT
+        *
+     FROM read_parquet('s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/theme=places/type=place/*')) newUUIDs
+     ON newUUIDs.previous_id = oldIDs.id
+     ) TO 'new_places_slc_may_UUIDs.parquet';
+```
+
+This tells us that all 5,727 new places in Salt Lake City that appeared in the May release were assigned new UUIDs before the June data release. Can we find all of those UUIDs in the June release? Let's take a look. _Note: this query take several minutes to run._
+
+```sql
+COPY(
+     SELECT
+            june_places_UUID.id,
             names.primary as name,
             categories.primary as category,
             confidence,
             CAST(sources AS JSON) as sources,
             geometry
         FROM
-            read_parquet('s3://overturemaps-us-west-2/release/2025-05-21.0/theme=places/type=place/*') places
-        JOIN (
+            read_parquet('s3://overturemaps-us-west-2/release/2025-06-25.0/theme=places/type=place/*') june_places_UUID
+        JOIN(
             SELECT
                 id
             FROM
-                read_parquet('s3://overturemaps-us-west-2/changelog/2025-05-21.0/theme=places/*/*/*.parquet')
-            WHERE change_type = 'added'
-            AND bbox.xmin > -112.461 AND bbox.xmax < -111.073 AND bbox.ymin > 40.296 AND bbox.ymax < 40.955
-            ) changelog
-        ON places.id = changelog.id
-        ORDER BY places.id ASC
-    ) TO 'new_places_slc_may.geojson' WITH (FORMAT GDAL, DRIVER GeoJSON);
-    ```
-
-We could go one step further and query the one-time May to June ID mapping to translate our list of IDs from the May release to the new UUIDs in June. Here's how we would do that:
-
+                read_parquet('new_places_slc_may_UUIDs.parquet')) may_places_UUID
+            ON 
+                june_places_UUID.id = may_places_UUID.id
+    ) TO new_places_slc_may_to_june_UUIDs.parquet;
 ```
- COPY (SELECT
-        id
-    FROM
-        read_parquet('s3://overturemaps-us-west-2/changelog/2025-05-21.0/theme=places/*/*/*.parquet')
-    WHERE
-        change_type = 'added'
-        AND bbox.xmin > -112.461 AND bbox.xmax < -111.073
-        AND bbox.ymin > 40.296 AND bbox.ymax < 40.955
-    ) TO 'added_places_slc_may.parquet'
+Only 1,546 of new places that appeared in the May release show up in the June release with their newly- assigned UUIDs. This is a known quality issue with our source datasets. As tedious as this process might be, it demonstrates how we can use the GERS tools to track features across releases and gauge churn and data quality from one release to another. Overture is aware that some of our source data providers have significant churn in their data _before_ the data is ingested in Overture pipelines each month. We're working hard to improve these issues. Transparency is the first step. 
 
+## Using bridge files
 
- CREATE TABLE IF NOT EXISTS oldIDs AS
- (SELECT
- oldIDs.id
- FROM read_parquet('added_places_slc_may.parquet')
- JOIN
- (SELECT 
- * 
- FROM read_parquet ('s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/theme=places/type=place/*'') newUUIDs
- ON 
- oldIDs.id = newUUIDs.previous_id
- TO 'added_places_slc_june.geojson' WITH (FORMAT GDAL, DRIVER GeoJSON);
+Now what? Let's move forward with our smaller-than-expected dataset of new places in the June release and see if we can find the Facebook pages for some of them. How might we do that? [Bridge files](https://docs.overturemaps.org/gers/bridge-files/) are published mappings of GERS ID to source IDs for the datasets that Overture ingests before each release. We only create bridge files for established datasets with a meaningful `record_id` properites. ML-Derived buildings, for example, do not have stable meaningful input IDs, but place records from Meta have corresponding IDs that reference public Facebook pages.
 
-  ```
+The `sources` property in each Overture data release lists the original source of the data and any additional properties that Overture has added. We can use the bridge file for Meta's places data to map the GERS ID back to the source ID. Then we can look up the Facebook pages for the new places in Salt Lake City:
 
-## 4. Using bridge files
-
-[Bridge files](https://docs.overturemaps.org/gers/bridge-files/) are published mappings of GERS ID to Source IDs for Overture features that came from an established dataset with a meaningful `record_id`. ML-Derived buildings, for example, do not have stable meaningful input IDs, but place records from Meta have corresponding IDs that reference public Facebook pages.
-
-The `sources` property lists the original source of the data and any additional properties that Overture has added. We can use the bridge file for Meta's places data to map the GERS ID back to the source ID. Then we can look upthe Facebook pages for the new places in Salt Lake City:
-
-    ```sql
-    COPY(
-        SELECT
-            'https://facebook.com/' || cast(bridge.record_id as varchar) AS facebook_page,
+```sql
+COPY(
+    SELECT
+        'https://facebook.com/' || cast(bridge.record_id as varchar) AS facebook_page,
             slc_places.*
-        FROM ST_READ('results/new_places_slc.geojson') slc_places JOIN (
-            SELECT
-                id,
-                record_id
-            FROM
-                read_parquet('s3://overturemaps-us-west-2/bridgefiles/2025-05-21.0/dataset=meta/theme=places/type=place/*')
+    FROM read_parquet('new_places_slc_may_to_june_UUIDs.parquet') slc_places 
+    JOIN(
+        SELECT
+            id,
+            record_id
+        FROM
+            read_parquet('s3://overturemaps-us-west-2/bridgefiles/2025-06-25.0/dataset=meta/theme=places/type=place/*')
         ) bridge ON slc_places.id = bridge.id
-        LIMIT 100
-    ) TO 'results/new_places_slc_with_fb_pages.geojson' WITH (FORMAT GDAL, Driver GeoJSON);
+    ) TO 'new_places_slc_with_fb_pages.geojson' WITH (FORMAT GDAL, Driver GeoJSON);
     ```
 
-## 5. Next steps
+One new place of note is the "Bootlegged Barber" in Sandy, Utah. On their [Facebook page](https://www.facebook.com/bootleggedbarbersandy/), the proprietors advertise themselves as a "NeoTraditional Barbershop | Where tradition and style meet."
+
+![Bootleg Barbershop](/img/blog/bootleg.jpg)
+
+## Next steps
 - Checkout our [GERS tutorial](https://docs.overturemaps.org/gers/gers-tutorial/)
 - Read more about the components of GERS in our [docs](https://docs.overturemaps.org/gers/)
 - Read our ["GERS Deep Dive"](https://overturemaps.org/blog/2025/understanding-overtures-global-entity-reference-system/) and ["Introducing Bridge Files"](https://overturemaps.org/blog/2025/introducing-bridge-files/) blog posts
