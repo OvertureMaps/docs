@@ -71,10 +71,12 @@ const sidebars = {
       items: [
         'gers/index',
         'gers/stability',
-        'gers/changelog',
         'gers/bridge-files',
+        'gers/changelog',
+        'gers/registry',
+        'gers/gers-tutorial',
         'gers/gers-demonstrations',
-        'gers/gers-tutorial'
+        
       ]
     },
     'attribution',

@@ -3,9 +3,7 @@ title: Bridge Files
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-## What are bridge files?
-
-With each release Overture generates **bridge files** that connect GERS IDs to the IDs from the [source data](/attribution). These files are a key component of GERS and offer two critical capabilities: reverse lookup of source features and insight into Overture's conflation process. 
+With each data release, Overture generates **bridge files** that connect GERS IDs to the IDs from the [source data](/attribution). These files are a key component of GERS and offer two critical capabilities: reverse lookup of source features and insight into Overture's conflation process. 
 
 Here's how to get the bridge files:
 
@@ -58,9 +56,9 @@ Bridge files are released as Parquet files, partitioned by `dataset`, `theme`, a
 ```
 
 
-The Parquet schema includes the following properties:
+The bridge file schema includes the following columns:
 
-| Property | Data type | Description |
+| Column | Data type | Description |
 | ---- | ---- | ---- |
 | `id` | string | represents the GERS ID and is populated from the id column in the Overture data schema |
 | `record_id` | string | represents the id of the feature as it is in the source data provider (e.g. n2757802019@9) and is populated by parsing the sources column in the Overture data schema |
