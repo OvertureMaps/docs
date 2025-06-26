@@ -3,7 +3,7 @@ title: Using the GERS "system"
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-In the [June release](2025/2025-06-25.0), we introduced new components of GERS, including a [new format for GERS IDs](https://github.com/orgs/OvertureMaps/discussions/390) and a [GERS Registry](https://docs.overturemaps.org/gers/registry/). In this blog post, we'll walk you through the GERS "system" and show you how to ask probing questions of the Overture datasets. 
+In the June release, we introduced new components of GERS, including a [new format for GERS IDs](https://github.com/orgs/OvertureMaps/discussions/390) and a [GERS Registry](https://docs.overturemaps.org/gers/registry/). In this blog post, we'll walk you through the GERS "system" and show you how to ask probing questions of the Overture datasets. 
 
 ## Understanding GERS IDs
 First, let's look at the new ID format for GERS. As of the June 2025 release, all GERS IDs are UUIDs: 128-bit, randomly-generated identifiers ([UUID v4](https://datatracker.ietf.org/doc/html/rfc4122)) that Overture keeps stable across data releases and updates. These IDs are stored as strings with dashes: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`. 
