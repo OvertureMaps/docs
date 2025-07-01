@@ -2,6 +2,7 @@
 title: Transportation
 description: Global road, rail, and water transportation data
 ---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
@@ -10,7 +11,6 @@ import ParkingAisles from '!!raw-loader!@site/src/queries/duckdb/transportation_
 import Routes from '!!raw-loader!@site/src/queries/duckdb/transportation_routes.sql';
 import SpeedLimits from '!!raw-loader!@site/src/queries/athena/transportation_speed_limits.sql';
 import ConnectingSegments from '!!raw-loader!@site/src/queries/athena/transportation_connecting_segments.sql';
-
 
 ## Overview
 
@@ -42,38 +42,48 @@ All Overture data, including transportation data, is distributed as GeoParquet, 
 <div>
 <Tabs>
 <TabItem value="segment" label="segment" default>
-| column_name | column_type | Description |
-|---|---|---|
-| id | VARCHAR | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | WKB | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
-| bbox | STRUCT | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version | INTEGER | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources | STRUCT[] | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
-| subtype | VARCHAR | The broad category of transportation segment. |
-| class | VARCHAR | Captures the kind of road and its position in the road network hierarchy. |
-| subclass | VARCHAR | Specifies the usage of a length of road. |
-| subclass_rules | STRUCT[] | Defines the portion of a road that the subclass applies to. |
-| names | STRUCT[] | Properties defining the names of a feature. |
-| connectors | STRUCT[] | Array of connector IDs identifying the connectors this segment is physically connected to linearly referenced with their location. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
-| routes | STRUCT[] | Routes this segment belongs to. |
-| access_restrictions | STRUCT[] | Rules governing access to this road segment or lane. |
-| level_rules | STRUCT[] | Defines the Z-order, i.e. stacking order, of the road segment. |
-| prohibited_transitions | STRUCT[] | Defines where traveling from the segment to another is disallowed for navigation. This covers things situations prohibited turns or a transition from road to bike lane disallowing cars. |
-| road_surface | STRUCT[] | Defines the surface material on a road such as paved, asphalt, or unpaved. |
-| road_flags | STRUCT[] | Additional properties relevant to roads such as is_bridge or is_under_construction. |
-| rail_flags | STRUCT[] | Additional properties relevant to rail such as is_tunnel or is_freight. |
-| speed_limits | STRUCT[] | Defines the speed limit of the road segment. |
-| width_rules | STRUCT[] | Defines the width of the road segment for rendering. |
-| destinations | STRUCT[] | Describes the transitions from one segment to another on the way to a specified location. This data is primarily used for routing. |
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| subtype | string | The broad category of transportation segment. |
+| class | string | Captures the kind of road and its position in the road network hierarchy. |
+| names | struct | Properties defining the names of a feature. |
+| connectors | struct | Array of connector IDs identifying the connectors this segment is physically connected to linearly referenced with their location. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
+| routes | struct | Routes this segment belongs to. |
+| subclass_rules | struct | Defines the portion of a road that the subclass applies to. |
+| access_restrictions | struct | Rules governing access to this road segment or lane. |
+| level_rules | struct | Defines the Z-order, i.e. stacking order, of the road segment. |
+| destinations | struct | Describes objects that can be reached by following a transportation segment in the same way those objects are described on signposts or ground writing that a traveller following the segment would observe in the real world. This allows navigation systems to refer to signs and observable writing that a traveller actually sees. |
+| prohibited_transitions | struct | Defines where traveling from the segment to another is disallowed for navigation. This covers things situations prohibited turns or a transition from road to bike lane disallowing cars. |
+| road_surface | struct | Defines the surface material on a road such as paved, asphalt, or unpaved. |
+| road_flags | struct | Additional properties relevant to roads such as is_bridge or is_under_construction. |
+| speed_limits | struct | Defines the speed limit of the road segment. |
+| width_rules | struct | Defines the width of the road segment for rendering. |
+| subclass | string | Specifies the usage of a length of road. |
+| rail_flags | struct | Additional properties relevant to rail such as is_tunnel or is_freight. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
 </TabItem>
 <TabItem value="connector" label="connector" default>
-| column_name | column_type | Description |
-|---|---|---|
-| id | VARCHAR | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | BLOB | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
-| bbox | STRUCT | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version | INTEGER | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources | STRUCT[] | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
 </TabItem>
 </Tabs>
 </div>
@@ -87,45 +97,45 @@ Transportation segments are divided into three subtypes: **rail**, **water**, an
 <div>
 <Tabs>
 <TabItem value="classes" label="classes" default>
-| subtype | class | subclass | Feature count, June 2025 release |
-|---|---|---|---|
-| rail    | funicular      |                |       1,297 |
-| rail    | light_rail     |                |      15,930 |
-| rail    | monorail       |                |       2,979 |
-| rail    | narrow_gauge   |                |      30,843 |
-| rail    | standard_gauge |                |   1,423,890 |
-| rail    | subway         |                |      52,344 |
-| rail    | tram           |                |      59,142 |
-| rail    | unknown        |                |     372,866 |
-| road    | bridleway      |                |      99,049 |
-| road    | cycleway       | cycle_crossing |      55,477 |
-| road    | cycleway       |                |   1,259,399 |
-| road    | footway        | crosswalk      |   2,109,280 |
-| road    | footway        | sidewalk       |   3,394,404 |
-| road    | footway        |                |  15,631,725 |
-| road    | living_street  |                |   3,296,747 |
-| road    | motorway       | link           |     638,701 |
-| road    | motorway       |                |     432,035 |
-| road    | path           |                |  13,329,876 |
-| road    | pedestrian     |                |     461,593 |
-| road    | primary        | link           |     487,257 |
-| road    | primary        |                |   6,670,265 |
-| road    | residential    |                | 125,385,316 |
-| road    | secondary      | link           |     385,637 |
-| road    | secondary      |                |  10,666,584 |
-| road    | service        | alley          |   1,664,772 |
-| road    | service        | driveway       |  16,377,919 |
-| road    | service        | parking_aisle  |   6,266,426 |
-| road    | service        |                |  32,743,206 |
-| road    | steps          |                |   1,836,112 |
-| road    | tertiary       | link           |     295,551 |
-| road    | tertiary       |                |  19,711,085 |
-| road    | track          |                |  25,012,146 |
-| road    | trunk          | link           |     547,842 |
-| road    | trunk          |                |   3,417,014 |
-| road    | unclassified   |                |  29,488,205 |
-| road    | unknown        |                |     704,794 |
-| water   |                |                |      28,224 |
+| subtype | class | subclass | feature count, June 2025 |
+| --- | --- | --- | --- |
+| rail | funicular |  | 1,297 |
+| rail | light_rail |  | 15,930 |
+| rail | monorail |  | 2,979 |
+| rail | narrow_gauge |  | 30,843 |
+| rail | standard_gauge |  | 1,423,890 |
+| rail | subway |  | 52,344 |
+| rail | tram |  | 59,142 |
+| rail | unknown |  | 372,866 |
+| road | bridleway |  | 99,049 |
+| road | cycleway | cycle_crossing | 55,477 |
+| road | cycleway |  | 1,259,399 |
+| road | footway | crosswalk | 2,109,280 |
+| road | footway | sidewalk | 3,394,404 |
+| road | footway |  | 15,631,725 |
+| road | living_street |  | 3,296,747 |
+| road | motorway | link | 638,701 |
+| road | motorway |  | 432,035 |
+| road | path |  | 13,329,876 |
+| road | pedestrian |  | 461,593 |
+| road | primary | link | 487,257 |
+| road | primary |  | 6,670,265 |
+| road | residential |  | 125,385,316 |
+| road | secondary | link | 385,637 |
+| road | secondary |  | 10,666,584 |
+| road | service | alley | 1,664,772 |
+| road | service | driveway | 16,377,919 |
+| road | service | parking_aisle | 6,266,426 |
+| road | service |  | 32,743,206 |
+| road | steps |  | 1,836,112 |
+| road | tertiary | link | 295,551 |
+| road | tertiary |  | 19,711,085 |
+| road | track |  | 25,012,146 |
+| road | trunk | link | 547,842 |
+| road | trunk |  | 3,417,014 |
+| road | unclassified |  | 29,488,205 |
+| road | unknown |  | 704,794 |
+| water |  |  | 28,224 |
 
 </TabItem>
 </Tabs>
@@ -138,14 +148,14 @@ Overture's transportation theme data is freely available on both Amazon S3 and M
 
 <Tabs>
 <TabItem value="segment_url" label="Segment" default>
-| Provider | Location |
-| ------ | -------- |
+| provider | location |
+| --- | --- |
 | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=transportation/type=segment/*" language="text"></QueryBuilder>|
 | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=transportation/type=segment/*" language="text"></QueryBuilder> |
 </TabItem>
 <TabItem value="connector_url" label="Connector" default>
-| Provider | Location |
-| ------ | -------- |
+| provider | location |
+| --- | --- |
 | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=transportation/type=connector/*" language="text"></QueryBuilder>|
 | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=transportation/type=connector/*" language="text"></QueryBuilder> |
 </TabItem>

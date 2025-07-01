@@ -1,7 +1,8 @@
 ---
 title: Places
-description: 61M+ places and points of interest around the world
+description: 64M+ places and points of interest around the world
 ---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
@@ -27,18 +28,18 @@ The Overture places theme has one feature type, called `place`, and contains mor
 |:--:|
 | *Overture places data, June 2025* |
 
-| Source |  Feature count, June 2025 release |
-| -------------------------- | --------------------- |
+| source | feature count, June 2025 |
+| --- | --- |
 | meta | 56,677,393 |
 | Microsoft | 4,655,498 |
-| Microsoft & meta | 2,891,357 |
+| meta & Microsoft | 2,891,357 |
 | Microsoft & PinMeTo | 48,157 |
 | PinMeTo | 44,506 |
-| Microsoft, PinMeTo & meta | 31,546 |
+| meta, Microsoft & PinMeTo | 31,546 |
 | Krick & Microsoft | 6,306 |
-| PinMeTo & meta | 5,835 |
+| meta & PinMeTo | 5,835 |
 | Krick | 3,199 |
-| Krick, Microsoft & meta | 2,690 |
+| Krick, meta & Microsoft | 2,690 |
 | Krick & meta | 723 |
 
 ## Dataset description
@@ -48,36 +49,36 @@ All Overture data, including places data, is distributed as GeoParquet, a column
 <details>
     <summary>Schema for GeoParquet files in the places theme</summary>
 <div>
-<Tabs>
-<TabItem value="places" label="places" default>
+
 | column | type | description |
-|---|---|---|
-| id | VARCHAR | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | BLOB | The point representation of the Place's location. Place's geometry which MUST be a Point as defined by GeoJSON schema. |
-| bbox | STRUCT | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version | INTEGER | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources | STRUCT | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
-| names | STRUCT | Properties defining the names of a feature. |
-| categories | STRUCT | The categories of the place. Complete list is available on GitHub: https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv |
-| confidence | DOUBLE | The confidence of the existence of the place. It's a number between 0 and 1. 0 means that we're sure that the place doesn't exist (anymore). 1 means that we're sure that the place exists. If there's no value for the confidence, it means that we don't have any confidence information. |
-| websites | VARCHAR[] | The websites of the place. |
-| socials | VARCHAR[] | The social media URLs of the place. |
-| emails | VARCHAR[] | The email addresses of the place. |
-| phones | VARCHAR[] | The phone numbers of the place. |
-| brand | STRUCT | The brand of the place. A location with multiple brands is modeled as multiple separate places, each with its own brand. |
-| addresses | STRUCT | The addresses of the place. |
-</TabItem>
-</Tabs>
+| --- | --- | --- |
+| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | The point representation of the Place's location. Place's geometry which MUST be a Point as defined by GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| names | struct | Properties defining the names of a feature. |
+| categories | struct | The categories of the place. Complete list is available on GitHub: https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv |
+| confidence | double | The confidence of the existence of the place. It's a number between 0 and 1. 0 means that we're sure that the place doesn't exist (anymore). 1 means that we're sure that the place exists. If there's no value for the confidence, it means that we don't have any confidence information. |
+| websites | string | The websites of the place. |
+| socials | string | The social media URLs of the place. |
+| emails | string | The email addresses of the place. |
+| phones | string | The phone numbers of the place. |
+| brand | struct | The brand of the place. A location with multiple brands is modeled as multiple separate places, each with its own brand. |
+| addresses | struct | The addresses of the place. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
 </div>
 </details>
-
 
 ## Data access and retrieval
 
 Overture's places theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
 
-| Provider | Location |
-| ------ | -------- |
+| provider | location |
+| --- | --- |
 | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder>|
 | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder> |
 
