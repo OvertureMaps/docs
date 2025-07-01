@@ -53,6 +53,10 @@ The Overture Maps base theme provides the land, water, infrastructure, and bathy
 | names | struct | The name associated with the feature. The first entry in the array of names must have a "local" language. |
 | class | varchar | Further delineation of the building's built purpose. |
 | level | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| height | double | Height of the feature in meters. |
+| surface | varchar | Surface material, mostly from the OSM tag, with some normalization. |
+| source_tags | struct | Any attributes/tags from the original source data that should be passed through. |
+| wikidata | varchar | The Wikidata ID for the feature. |
 | filename | varchar | Name of the file being queried. |
 | theme | varchar | Name of the Overture theme being queried. |
 | type | varchar | Name of the Overture feature type being queried. |
