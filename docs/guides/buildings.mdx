@@ -2,6 +2,7 @@
 title: Buildings
 description: Over 2.6B buildings globally
 ---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
@@ -71,76 +72,85 @@ Above is a visualization of San Diego, USA where multiple datasets are conflated
 
 Currently, the Overture buildings dataset is a combination of the following open building datasets:
 
-| Source                     |  Type                 | Conflation <br /> Priority | Count    |
-| -------------------------- | --------------------- | -------------------------- | ----------- |
-| [OpenStreetMap](//osm.org) | Community-contributed | 1 | ~635 Million |
-| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2| ~11 Million |
-| [Instituto Geográfico Nacional (España)](https://www.ign.es/) | National dataset | 3 | ~11.7 Million |
-| [City of Vancouver, Canada](https://opendata.vancouver.ca/) | Municipal dataset | 4 | ~14 Thousand |
-| [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&gt;90% precision) | 5 | ~350 Million |
-| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) |ML-derived roofprints  | 6 | ~723 Million |
-| [Google Open Buildings](https://sites.research.google/open-buildings/)| ML-derived roofprints<br />  (&lt;90% precision) | 7 |~650 Million |
-| [Buildings in East Asian Countries](https://zenodo.org/records/8174931)| ML-derived roofprints<br />  | 8 |~213 Million |
+| source																	| type										| conflation priority	| count |
+| ------------------------------------------------------------------------- | ----------------------------------------- | --------------------- | ----- |
+| [OpenStreetMap](//osm.org)												| Community-contributed						| 1						| ~635 Million |
+| [Esri Community Maps](https://communitymaps.arcgis.com/home)				| Community-contributed						| 2						| ~11 Million |
+| [Instituto Geográfico Nacional (España)](https://www.ign.es/)				| National dataset							| 3						| ~11.7 Million |
+| [City of Vancouver, Canada](https://opendata.vancouver.ca/)				| Municipal dataset							| 4						| ~14 Thousand |
+| [Google Open Buildings](https://sites.research.google/open-buildings/)	| ML-derived roofprints (~90% precision)	| 5						| ~350 Million |
+| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints)		| ML-derived roofprints						| 6						| ~723 Million |
+| [Google Open Buildings](https://sites.research.google/open-buildings/)	| ML-derived roofprints (~90% precision)	| 7						| ~650 Million |
+| [Buildings in East Asian Countries](https://zenodo.org/records/8174931)	| ML-derived roofprints						| 8						| ~213 Million |
 
-## Understanding the Parquet Files
+## Understanding the parquet files
 
 <details>
-        <summary>Schema for the GeoParquet files in the buildings theme</summary>
-        <div>
+	<summary>Schema for the GeoParquet files in the buildings theme</summary>
+<div>
 <Tabs>
 <TabItem value="building" label="building" default>
 
-| column                 | type    | description |
-| ---------------------- | ------- | ------------ |
-| id                     | varchar | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry               | blob    | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
-| bbox                   | struct  | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version                | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed.
-| sources                | struct  | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
-| subtype                | varchar | A broad category of the building type and purpose. |
-| names                  | struct  | The name associated with the feature. The first entry in the array of names must have a "local" language. |
-| class                  | varchar | Further delineation of the building's built purpose. |
-| level                  | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
-| has_parts              | boolean | Flag indicating whether the building has parts. |
-| is_underground         | boolean | Whether the entire building or part is completely below ground. This is useful for rendering which typically omits these buildings or styles them differently because they are not visible above ground. This is different than the level column which is used to indicate z-ordering of elements and negative values may be above ground. |
-| height                 | double  | Height of the building or part in meters. The height is the distance from the lowest point to the highest point. |
-| num_floors             | integer | Number of above-ground floors of the building or part. |
-| num_floors_underground | integer | Number of below-ground floors of the building or part.
-| min_height             | double  | The height of the bottom part of building in meters. Used if a building or part of building starts above the ground level. |
-| min_floor              | integer | The "start" floor of a building or building part. Indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach ground level. |
-| facade_color           | varchar | The color (name or color triplet) of the facade of a building or building part in hexadecimal. |
-| facade_material        | varchar | The outer surface material of building facade. |
-| roof_material          | varchar | The outermost material of the roof. |
-| roof_shape             | varchar | The shape of the roof. |
-| roof_direction         | double  | Bearing of the roof ridge line. |
-| roof_orientation       | varchar | Orientation of the roof shape relative to the footprint shape. Either "along" or "across." |
-| roof_color             | varchar | The color (name or color triplet) of the roof of a building or building part in hexadecimal. |
+| column					| type		| description |
+| ------------------------- | --------- | ----------- |
+| id                    	| string	| A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry              	| binary	| A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| bbox                  	| struct	| Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version               	| integer	| Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources               	| struct	| The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| subtype               	| string	| A broad category of the building type and purpose. |
+| names                 	| struct	| The name associated with the feature. The first entry in the array of names must have a "local" language. |
+| class                 	| string	| Further delineation of the building's built purpose. |
+| level                 	| integer	| The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| has_parts             	| boolean	| Flag indicating whether the building has parts. |
+| is_underground        	| boolean	| Whether the entire building or part is completely below ground. This is useful for rendering which typically omits these buildings or styles them differently because they are not visible above ground. This is different than the level column which is used to indicate z-ordering of elements and negative values may be above ground. |
+| height                	| double	| Height of the building or part in meters. The height is the distance from the lowest point to the highest point. |
+| num_floors            	| integer	| Number of above-ground floors of the building or part. |
+| num_floors_underground	| integer	| Number of below-ground floors of the building or part. |
+| min_height            	| double	| The height of the bottom part of building in meters. Used if a building or part of building starts above the ground level. |
+| min_floor             	| integer	| The "start" floor of a building or building part. Indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach ground level. |
+| facade_color          	| string	| The color (name or color triplet) of the facade of a building or building part in hexadecimal. |
+| facade_material       	| string	| The outer surface material of building facade. |
+| roof_material         	| string	| The outermost material of the roof. |
+| roof_shape            	| string	| The shape of the roof. |
+| roof_direction        	| double	| Bearing of the roof ridge line. |
+| roof_orientation     		| string	| Orientation of the roof shape relative to the footprint shape. Either "along" or "across." |
+| roof_color             	| string	| The color (name or color triplet) of the roof of a building or building part in hexadecimal. |
+| roof_height           	| double	| The height of the building roof in meters. This represents the distance from the base of the roof to the highest point of the roof. |
+| filename					| string	| Name of the file being queried. |
+| theme						| varchar	| Name of the Overture theme being queried. |
+| type						| varchar	| Name of the Overture feature type being queried. |
 
 </TabItem>
 <TabItem value="building_part" label="building_part" default>
-| column                 | type    | description |
-| ---------------------- | ------- | ------------ |
-| id                     | varchar | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry               | blob    | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
-| bbox                   | struct  | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version                | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed.
-| sources                | struct  | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
-| names                  | struct  | The name associated with the feature. The first entry in the array of names must have a "local" language. |
-| level                  | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
-| is_underground         | boolean | Whether the entire building or part is completely below ground. This is useful for rendering which typically omits these buildings or styles them differently because they are not visible above ground. This is different than the level column which is used to indicate z-ordering of elements and negative values may be above ground. |
-| height                 | double  | Height of the building or part in meters. The height is the distance from the lowest point to the highest point. |
-| num_floors             | integer | Number of above-ground floors of the building or part. |
-| num_floors_underground | integer | Number of below-ground floors of the building or part. |
-| min_height             | double  | The height of the bottom part of building in meters. Used if a building or part of building starts above the ground level. |
-| min_floor              | integer | The "start" floor of a building or building part. Indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach ground level. |
-| facade_color           | varchar | The color (name or color triplet) of the facade of a building or building part in hexadecimal. |
-| facade_material        | varchar | The outer surface material of building facade. |
-| roof_material          | varchar | The outermost material of the roof. |
-| roof_shape             | varchar | The shape of the roof. |
-| roof_direction         | double  | Bearing of the roof ridge line. |
-| roof_orientation       | varchar | Orientation of the roof shape relative to the footprint shape. Either "along" or "across." |
-| roof_color             | varchar | The color (name or color triplet) of the roof of a building or building part in hexadecimal. |
-| building_id            | varchar | The building ID to which this part belongs.|
+
+| column                 	| type    	| description |
+| ------------------------- | --------- | ----------- |
+| id                    	| string	| A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry              	| binary	| A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| bbox                  	| struct	| Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version               	| integer	| Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources               	| struct	| The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| names                 	| struct	| The name associated with the feature. The first entry in the array of names must have a "local" language. |
+| level                 	| integer	| The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| is_underground        	| boolean	| Whether the entire building or part is completely below ground. This is useful for rendering which typically omits these buildings or styles them differently because they are not visible above ground. This is different than the level column which is used to indicate z-ordering of elements and negative values may be above ground. |
+| height                	| double	| Height of the building or part in meters. The height is the distance from the lowest point to the highest point. |
+| num_floors            	| integer	| Number of above-ground floors of the building or part. |
+| num_floors_underground	| integer	| Number of below-ground floors of the building or part. |
+| min_height            	| double	| The height of the bottom part of building in meters. Used if a building or part of building starts above the ground level. |
+| min_floor             	| integer	| The "start" floor of a building or building part. Indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach ground level. |
+| facade_color          	| string	| The color (name or color triplet) of the facade of a building or building part in hexadecimal. |
+| facade_material       	| string	| The outer surface material of building facade. |
+| roof_material         	| string	| The outermost material of the roof. |
+| roof_shape            	| string	| The shape of the roof. |
+| roof_direction        	| double	| Bearing of the roof ridge line. |
+| roof_orientation      	| string	| Orientation of the roof shape relative to the footprint shape. Either "along" or "across." |
+| roof_color            	| string	| The color (name or color triplet) of the roof of a building or building part in hexadecimal. |
+| roof_height           	| double	| The height of the building roof in meters. This represents the distance from the base of the roof to the highest point of the roof. |
+| building_id           	| string	| The building ID to which this part belongs. |
+| filename					| string	| Name of the file being queried. |
+| theme						| string	| Name of the Overture theme being queried. |
+| type						| string	| Name of the Overture feature type being queried. |
 
 </TabItem>
 </Tabs>

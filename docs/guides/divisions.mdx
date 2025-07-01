@@ -54,59 +54,105 @@ Subtypes can represent each feature's administrative level, from `country` down 
 <details>
 	<summary>List of all subtypes in the divisions theme</summary>
 
-| Subtype | Description | Example |
-| -------- | -------- | ------- |
-| **country** | Largest unit of independent sovereignty. | United States |
-| **dependency** | A place that is not exactly a sub-region of a country but is dependent on a parent company for defence, passport control, subsidies, etc. | Puerto Rico |
-| **macroregion** | A bundle of regions. These exist mainly in Europe. | Scotland; Île-de-France |
-| **region** | States, provinces, regions. Largest sub-country administrative unit most countries, unless they have dependencies/macroregions. | Alaska; Alberta |
-| **macrocounty** | A bundle of counties. Again, these exist mainly in Europe. | Inverness |
-| **county** | Counties... Largest sub-region administrative unit in most countries, unless they have macrocounties. | Kings County, NY |
-| **localadmin** | A level of government available in some parts of the world that contains localities or populated places that themselves have no authority. Often but not exclusively found in Europe. | Paris |
-| **locality** | A populated place that may or may not have its own administrative authority. (It won't if it belongs to a localadmin.) | Taipei |
-| **borough** | A local government unit, below the locality placetype. | Brooklyn, Queens, etc. |
-| **macrohood** | A super-neighborhood that contains smaller divisions of type neighborhood. | BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
-| **neighborhood** | A neighborhood. Most neighborhoods will be just this, unless there's enough granular division to warrant introducing macrohood and/or microhood divisions. | Cobble Hill |
-| **microhood** | A mini-neighborhood that is contained within a division of type neighborhood. | Gätjensort in Hamburg |
+| subtype			| description																																											| example |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| **country**		| Largest unit of independent sovereignty.																																				| United States |
+| **dependency**	| A place that is not exactly a sub-region of a country but is dependent on a parent company for defence, passport control, subsidies, etc.												| Puerto Rico |
+| **macroregion**	| A bundle of regions. These exist mainly in Europe.																																	| Scotland; Île-de-France |
+| **region**		| States, provinces, regions. Largest sub-country administrative unit most countries, unless they have dependencies/macroregions.														| Alaska; Alberta |
+| **macrocounty**	| A bundle of counties. Again, these exist mainly in Europe.																															| Inverness |
+| **county**		| Counties... Largest sub-region administrative unit in most countries, unless they have macrocounties.																					| Kings County, NY |
+| **localadmin**	| A level of government available in some parts of the world that contains localities or populated places that themselves have no authority. Often but not exclusively found in Europe. | Paris |
+| **locality**		| A populated place that may or may not have its own administrative authority. (It won't if it belongs to a localadmin.)																| Taipei |
+| **borough**		| A local government unit, below the locality placetype.																																| Brooklyn, Queens, etc. |
+| **macrohood**		| A super-neighborhood that contains smaller divisions of type neighborhood.																											| BoCoCa (Boerum Hill, Cobble Hill, and Carroll Gardens) |
+| **neighborhood**	| A neighborhood. Most neighborhoods will be just this, unless there's enough granular division to warrant introducing macrohood and/or microhood divisions.							| Cobble Hill |
+| **microhood**		| A mini-neighborhood that is contained within a division of type neighborhood.																											| Gätjensort in Hamburg |
+
 </details>
 
-### Data columns
-
-The divisions GeoParquet file contains the following properties:
+## Understanding the parquet files
 
 <details>
     <summary>Schema for the GeoParquet files in the divisions theme</summary>
+<div>
+<Tabs>
+<TabItem value="division" label="division" default>
 
-| Property Name | Type | Description |
-| -------- | -------- | ------- |
-| **id** |string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS.
-| **geometry** | blob | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString.
-| **bbox** | array | The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format.
-| **version** | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed.
-| **sources** | array | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified.
-| **subtype** | string | Category of the division from a finite, hierarchical, ordered list of categories (e.g. country, region, locality, etc.) similar to a Who's on First placetype.
-| **wikidata** | string | A wikidata ID if available, as found on https://www.wikidata.org/.
-| **population** | integer | Population of the division.
-| **names** | array | A primary name of the entity, and a set of optional name translations. Name translations are represented in key, value pairs, where the key is an ISO language code and the value is the translated name.
-| **class** | string | A value to represent whether an entity represents a `maritime` or `land` feature.
-| **division_ids** | list | A list of the two division IDs that share this division boundary.
-| **is_disputed** | boolean | Indicator if there are entities disputing this division boundary. Information about entities disputing this boundary should be included in perspectives property. This property should also be true if boundary between two entities is unclear and this is "best guess". So having it true and no perspectives gives map creators reason not to fully trust the boundary, but use it if they have no other.
-| **perspectives** | array | Political perspectives from which this division boundary is considered to be an accurate representation. If this property is absent, then this boundary is not known to be disputed from any political perspective. Consequently, there is only one boundary feature representing the entire real world entity. If this property is present, it means the boundary represents one of several alternative perspectives on the same real-world entity.
-| **local_type** | string | Local name for the subtype property, optionally localized. This property is localized using a standard Overture names structure.
-| **country** | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root.
-| **region** | string | ISO 3166-2 principal subdivision code of the subdivision-like entity this division represents or belongs to. If the entity this division represents has a principal subdivision code, the region property contains it. If it does not, the region property contains the principal subdivision code of the first division encountered by traversing the parent_division_id chain to the root.
-| **hierarchies** | Array | Hierarchies in which this division participates.
-| **parent_division_id** | string | Division ID of this division's parent division. Not allowed for top-level divisions (countries) and required for all other divisions. The default parent division is the parent division as seen from the default political perspective, if there is one, and is otherwise chosen somewhat arbitrarily. The hierarchies property can be used to inspect the exhaustive list of parent divisions.
-| **norms** | list | Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases. If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed.
-| **capital_division_ids** | array | Division IDs of this division's capital divisions. If present, this property will refer to the division IDs of the capital cities, county seats, etc. of a division.
-| **capital_of_divisions** | list | Division ID of the division that this feature is the capital of. If present, this property will refer to the division IDs of a parent county, region, country, etc.
-| **division_id** | string | Division ID of the division this area belongs to.
-| **cartography** | array | Contains a prominence property, which offers a suggestion for displaying Overture features at specific zoom levels based on it's importance and significance.
-| **is_land** | boolean | Indicates whether or not the feature geometry represents the non-maritime "land" boundary, which can be used for map rendering, cartographic display, and similar purposes.
-| **is_territorial** | boolean | Indicates whether or not the feature geometry represents the full territorial boundary or claim of a feature.
-| **filename** | string | Name of the S3 file being queried.
-| **theme** | string | Name of the Overture theme being queried.
-| **type** |  string | Name of the Overture feature type being queried.
+| column                 	| type    	| description |
+| ------------------------- | --------- | ----------- |
+| id						| string	| A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry					| binary	| A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| bbox						| struct	| The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format. |
+| country					| string	| ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root. |
+| version					| integer	| Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources					| struct	| The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| cartography				| struct	| Contains a prominence property, which offers a suggestion for displaying Overture features at specific zoom levels based on it's importance and significance. |
+| subtype					| string	| Category of the division from a finite, hierarchical, ordered list of categories (e.g. country, region, locality, etc.) similar to a Who's on First placetype. |
+| class						| string	| A value to represent whether an entity represents a `maritime` or `land` feature. |
+| names						| struct	| A primary name of the entity, and a set of optional name translations. Name translations are represented in key, value pairs, where the key is an ISO language code and the value is the translated name. |
+| wikidata					| string	| A wikidata ID if available, as found on https://www.wikidata.org/. |
+| region					| string	| ISO 3166-2 principal subdivision code of the subdivision-like entity this division represents or belongs to. If the entity this division represents has a principal subdivision code, the region property contains it. If it does not, the region property contains the principal subdivision code of the first division encountered by traversing the parent_division_id chain to the root. |
+| perspectives				| struct	| Political perspectives from which this division boundary is considered to be an accurate representation. If this property is absent, then this boundary is not known to be disputed from any political perspective. Consequently, there is only one boundary feature representing the entire real world entity. If this property is present, it means the boundary represents one of several alternative perspectives on the same real-world entity. |
+| local_type				| string	| Local name for the subtype property, optionally localized. This property is localized using a standard Overture names structure. |
+| hierarchies				| struct	| Hierarchies in which this division participates. |
+| parent_division_id		| string	| Division ID of this division's parent division. Not allowed for top-level divisions (countries) and required for all other divisions. The default parent division is the parent division as seen from the default political perspective, if there is one, and is otherwise chosen somewhat arbitrarily. The hierarchies property can be used to inspect the exhaustive list of parent divisions. |
+| norms						| array		| Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases. If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed. |
+| population				| integer	| Population of the division. |
+| capital_division_ids		| struct	| Division IDs of this division's capital divisions. If present, this property will refer to the division IDs of the capital cities, county seats, etc. of a division. |
+| capital_of_divisions		| array		| Division ID of the division that this feature is the capital of. If present, this property will refer to the division IDs of a parent county, region, country, etc. |
+| filename					| string	| Name of the file being queried. |
+| theme						| string	| Name of the Overture theme being queried. |
+| type						| string	| Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="division_area" label="division_area" default>
+
+| column                 	| type    	| description |
+| ------------------------- | --------- | ----------- |
+| id						| string	| A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry					| binary	| A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| bbox						| struct	| The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format. |
+| country					| string	| ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root. |
+| version					| integer	| Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources					| struct	| The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| subtype					| string	| Category of the division from a finite, hierarchical, ordered list of categories (e.g. country, region, locality, etc.) similar to a Who's on First placetype. |
+| class						| string	| A value to represent whether an entity represents a `maritime` or `land` feature. |
+| names						| struct	| A primary name of the entity, and a set of optional name translations. Name translations are represented in key, value pairs, where the key is an ISO language code and the value is the translated name. |
+| is_land					| boolean	| Indicates whether or not the feature geometry represents the non-maritime "land" boundary, which can be used for map rendering, cartographic display, and similar purposes. |
+| is_territorial			| boolean	| Indicates whether or not the feature geometry represents the full territorial boundary or claim of a feature. |
+| region					| string	| ISO 3166-2 principal subdivision code of the subdivision-like entity this division represents or belongs to. If the entity this division represents has a principal subdivision code, the region property contains it. If it does not, the region property contains the principal subdivision code of the first division encountered by traversing the parent_division_id chain to the root. |
+| division_id				| string	| Division ID of the division this area belongs to. |
+| filename					| string	| Name of the S3 file being queried. |
+| theme						| string	| Name of the Overture theme being queried. |
+| type						| string	| Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="division_boundary" label="division_boundary" default>
+
+| column                 	| type    	| description |
+| ------------------------- | --------- | ----------- |
+| id						| string	| A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry					| binary	| A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| bbox						| struct	| The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format. |
+| country					| string	| ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root. |
+| version					| integer	| Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources					| struct	| The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| subtype					| string	| Category of the division from a finite, hierarchical, ordered list of categories (e.g. country, region, locality, etc.) similar to a Who's on First placetype. |
+| class						| string	| A value to represent whether an entity represents a `maritime` or `land` feature. |
+| is_land					| boolean	| Indicates whether or not the feature geometry represents the non-maritime "land" boundary, which can be used for map rendering, cartographic display, and similar purposes. |
+| is_territorial			| boolean	| Indicates whether or not the feature geometry represents the full territorial boundary or claim of a feature. |
+| division_ids				| array		| A list of the two division IDs that share this division boundary. |
+| region					| string	| ISO 3166-2 principal subdivision code of the subdivision-like entity this division represents or belongs to. If the entity this division represents has a principal subdivision code, the region property contains it. If it does not, the region property contains the principal subdivision code of the first division encountered by traversing the parent_division_id chain to the root. |
+| is_disputed				| boolean	| Indicator if there are entities disputing this division boundary. Information about entities disputing this boundary should be included in perspectives property. This property should also be true if boundary between two entities is unclear and this is "best guess". So having it true and no perspectives gives map creators reason not to fully trust the boundary, but use it if they have no other. |
+| perspectives				| struct	| Political perspectives from which this division boundary is considered to be an accurate representation. If this property is absent, then this boundary is not known to be disputed from any political perspective. Consequently, there is only one boundary feature representing the entire real world entity. If this property is present, it means the boundary represents one of several alternative perspectives on the same real-world entity. |
+| filename					| string	| Name of the S3 file being queried. |
+| theme						| string	| Name of the Overture theme being queried. |
+| type						| string	| Name of the Overture feature type being queried. |
+
+</TabItem>
+</Tabs>
+</div>
 </details>
 
 ## Data access and retrieval
