@@ -43,43 +43,43 @@ An `address` is a feature type that represents a physical place through a series
 	<summary>Address counts, per country</summary>
 <div>
 
-| country	| address count |
-| --------- | ------------- |
-| AT		|     2,492,155 |
-| AU		|    15,706,733 |
-| BE		|     6,878,909 |
-| BR		|    89,899,299 |
-| CA		|    17,062,677 |
-| CH		|     3,255,937 |
-| CL		|     4,219,970 |
-| CO		|     7,786,046 |
-| CZ		|     2,994,390 |
-| DE		|    15,847,817 |
-| DK		|     3,928,962 |
-| EE		|     2,214,971 |
-| ES		|    13,188,482 |
-| FI		|     3,748,102 |
-| FR		|    26,054,056 |
-| HK		|       182,155 |
-| HR		|     1,674,127 |
-| IS		|       136,726 |
-| IT		|    25,949,445 |
-| JP		|    19,576,027 |
-| LI		|        12,867 |
-| LT		|     1,036,251 |
-| LU		|       164,415 |
-| LV		|       544,380 |
-| MX		|    30,278,896 |
-| NL		|     9,869,902 |
-| NO		|     2,571,756 |
-| NZ		|     2,378,530 |
-| PL		|     7,669,619 |
-| PT		|     5,676,331 |
-| SI		|       576,419 |
-| SK		|     1,630,271 |
-| TW		|     9,505,574 |
-| US		|   110,994,780 |
-| UY		|     1,059,695 |
+| country | address count |
+| --- | --- |
+| AT |     2,492,155 |
+| AU |    15,706,733 |
+| BE |     6,878,909 |
+| BR |    89,899,299 |
+| CA |    17,062,677 |
+| CH |     3,255,937 |
+| CL |     4,219,970 |
+| CO |     7,786,046 |
+| CZ |     2,994,390 |
+| DE |    15,847,817 |
+| DK |     3,928,962 |
+| EE |     2,214,971 |
+| ES |    13,188,482 |
+| FI |     3,748,102 |
+| FR |    26,054,056 |
+| HK |       182,155 |
+| HR |     1,674,127 |
+| IS |       136,726 |
+| IT |    25,949,445 |
+| JP |    19,576,027 |
+| LI |        12,867 |
+| LT |     1,036,251 |
+| LU |       164,415 |
+| LV |       544,380 |
+| MX |    30,278,896 |
+| NL |     9,869,902 |
+| NO |     2,571,756 |
+| NZ |     2,378,530 |
+| PL |     7,669,619 |
+| PT |     5,676,331 |
+| SI |       576,419 |
+| SK |     1,630,271 |
+| TW |     9,505,574 |
+| US |   110,994,780 |
+| UY |     1,059,695 |
 
 </div>
 </details>
@@ -90,23 +90,23 @@ An `address` is a feature type that represents a physical place through a series
 	<summary>Schema for the GeoParquet files in the addresses theme</summary>
 <div>
 
-| column                | type		| description |
-| --------------------- | --------- | ----------- |
-| id					| string	| A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry              | binary	| A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
-| bbox                  | struct	| Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| country				| string	| ISO 3166-1 alpha-2 country code of the country or country-like entity, that this address represents or belongs to. |
-| postcode				| string	| The postcode for the address. |
-| street				| string	| The street name associated with this address. The street name can include the street "type" or street suffix, e.g., Main Street. Ideally this is fully spelled out and not abbreviated but we acknowledge that many address datasets abbreviate the street name so it is acceptable. |
-| number				| string	| The house number for this address. This field may not strictly be a number. Values such as "74B", "189 1/2", "208.5" are common as the number part of an address and they are not part of the "unit" of this address. |
-| unit					| string	| The suite/unit/apartment/floor number. |
-| address_levels		| array		| The administrative levels present in an address. The number of values in this list and their meaning is country-dependent. For example, in the United States we expect two values: the state and the municipality. In other countries there might be only one. Other countries could have three or more. The array is ordered with the highest levels first. |
-| postal_city			| string	| In some countries or regions, a mailing address may need to specify a different city name than the city that actually contains the address coordinates. This optional field can be used to specify the alternate city name to use. |
-| version				| boolean	| Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources				| array		| The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
-| filename				| string	| Name of the file being queried. |
-| theme					| string	| Name of the Overture theme being queried. |
-| type					| string	| Name of the Overture feature type being queried. |
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| country | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this address represents or belongs to. |
+| postcode | string | The postcode for the address. |
+| street | string | The street name associated with this address. The street name can include the street "type" or street suffix, e.g., Main Street. Ideally this is fully spelled out and not abbreviated but we acknowledge that many address datasets abbreviate the street name so it is acceptable. |
+| number | string | The house number for this address. This field may not strictly be a number. Values such as "74B", "189 1/2", "208.5" are common as the number part of an address and they are not part of the "unit" of this address. |
+| unit | string | The suite/unit/apartment/floor number. |
+| address_levels | array | The administrative levels present in an address. The number of values in this list and their meaning is country-dependent. For example, in the United States we expect two values: the state and the municipality. In other countries there might be only one. Other countries could have three or more. The array is ordered with the highest levels first. |
+| postal_city | string | In some countries or regions, a mailing address may need to specify a different city name than the city that actually contains the address coordinates. This optional field can be used to specify the alternate city name to use. |
+| version | boolean | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | array | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
 
 </div>
 </details>
@@ -115,8 +115,8 @@ An `address` is a feature type that represents a physical place through a series
 
 Overture's addresses theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
 
-| Provider | Location |
-| -------- | -------- |
+| provider | location |
+| --- | --- |
 | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=addresses/type=address/*" language="text"></QueryBuilder> |
 | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=addresses/type=address/*" language="text"></QueryBuilder> |
 
