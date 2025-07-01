@@ -28,18 +28,18 @@ The Overture places theme has one feature type, called `place`, and contains mor
 |:--:|
 | *Overture places data, June 2025* |
 
-| source | feature count, june 2025 |
+| source | feature count, June 2025 |
 | --- | --- |
 | meta | 56,677,393 |
 | Microsoft | 4,655,498 |
-| Microsoft & meta | 2,891,357 |
+| meta & Microsoft | 2,891,357 |
 | Microsoft & PinMeTo | 48,157 |
 | PinMeTo | 44,506 |
-| Microsoft, PinMeTo & meta | 31,546 |
+| meta, Microsoft & PinMeTo | 31,546 |
 | Krick & Microsoft | 6,306 |
-| PinMeTo & meta | 5,835 |
+| meta & PinMeTo | 5,835 |
 | Krick | 3,199 |
-| Krick, Microsoft & meta | 2,690 |
+| Krick, meta & Microsoft | 2,690 |
 | Krick & meta | 723 |
 
 ## Dataset description
@@ -51,7 +51,7 @@ All Overture data, including places data, is distributed as GeoParquet, a column
 <div>
 
 | column | type | description |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
 | geometry | binary | The point representation of the Place's location. Place's geometry which MUST be a Point as defined by GeoJSON schema. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
