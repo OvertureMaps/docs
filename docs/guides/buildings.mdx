@@ -80,7 +80,7 @@ Currently, the Overture buildings dataset is a combination of the following open
 | [City of Vancouver, Canada](https://opendata.vancouver.ca/) | Municipal dataset | 4 | ~14 Thousand |
 | [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (>90% precision) | 5 | ~350 Million |
 | [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) | ML-derived roofprints | 6 | ~723 Million |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (<90% precision) | 7 | ~650 Million |
+| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (\<90% precision) | 7 | ~650 Million |
 | [Buildings in East Asian Countries](https://zenodo.org/records/8174931) | ML-derived roofprints | 8 | ~213 Million |
 
 ## Understanding the parquet files
@@ -94,7 +94,7 @@ Currently, the Overture buildings dataset is a combination of the following open
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). It MUST be a Polygon or MultiPolygon as defined by the GeoJSON schema. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
@@ -127,7 +127,7 @@ Currently, the Overture buildings dataset is a combination of the following open
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | The geometry of a single building part. It MUST be a Polygon or MultiPolygon as defined by the GeoJSON schema. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
