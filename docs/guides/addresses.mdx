@@ -93,7 +93,7 @@ An `address` is a feature type that represents a physical place through a series
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | A WKB representation of the entity's geometry. MUST be a Point as defined by GeoJSON schema. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | country | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this address represents or belongs to. |
 | postcode | string | The postcode for the address. |
