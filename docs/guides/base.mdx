@@ -29,7 +29,7 @@ The Overture Maps base theme provides the land, water, infrastructure, and bathy
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | A WKB representation of the entity's geometry - a Polygon or MultiPolygon. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
@@ -45,7 +45,7 @@ The Overture Maps base theme provides the land, water, infrastructure, and bathy
 | column | type | description |
 | --- | --- | --- |
 | id | varchar | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
@@ -67,7 +67,7 @@ The Overture Maps base theme provides the land, water, infrastructure, and bathy
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
@@ -89,7 +89,7 @@ The Overture Maps base theme provides the land, water, infrastructure, and bathy
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | A WKB representation of the entity's geometry - a Polygon or MultiPolygon. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
@@ -105,7 +105,7 @@ The Overture Maps base theme provides the land, water, infrastructure, and bathy
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
@@ -127,7 +127,7 @@ The Overture Maps base theme provides the land, water, infrastructure, and bathy
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). MUST be a Polygon as defined by GeoJSON schema. |
+| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
 | bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
 | sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
