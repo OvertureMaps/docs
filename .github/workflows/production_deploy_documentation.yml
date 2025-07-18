@@ -15,12 +15,12 @@ on:
         default: 'main'
 
 permissions:
-  contents: write
-  id-token: write
-  pages: write
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+  pages: write # for actions/deploy-pages
 
 jobs:
-  build_docs_and_deploy:
+  build:
     name: Build the documentation and deploy
     if: github.repository == 'overturemaps/docs'
     runs-on: ubuntu-latest
@@ -45,3 +45,22 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build
+
+      - name: Upload static files as GH-Pages artifact 📦
+        id: docs
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    environment:
+      name: production
+      url: https://docs.overturemaps.org/
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages 🚀
+        id: docs
+        uses: actions/deploy-pages@v4
