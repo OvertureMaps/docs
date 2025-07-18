@@ -41,13 +41,11 @@ jobs:
           SCHEMA_BRANCH: ${{ inputs.schema_branch }}
         run: npm run build
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: build
+      - name: Setup Pages 🗂️
+        uses: actions/configure-pages@v5
 
       - name: Upload static files as GH-Pages artifact 📦
-        id: docs
+        id: docs-website
         uses: actions/upload-pages-artifact@v3
         with:
           path: build
@@ -56,11 +54,11 @@ jobs:
     name: Deploy to GitHub Pages
     needs: build
     environment:
-      name: production
+      name: github-pages
       url: https://docs.overturemaps.org/
     runs-on: ubuntu-latest
 
     steps:
       - name: Deploy to GitHub Pages 🚀
-        id: docs
+        id: docs-website
         uses: actions/deploy-pages@v4
