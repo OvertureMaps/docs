@@ -3,12 +3,14 @@ title: Using the GERS "system"
 ---
 import QueryBuilder from '@site/src/components/queryBuilder';
 
-In the June release, we introduced new components of GERS, including a [new format for GERS IDs](https://github.com/orgs/OvertureMaps/discussions/390) and a [GERS Registry](https://docs.overturemaps.org/gers/registry/). In this blog post, we'll walk you through the GERS "system" and show you how to ask probing questions of the Overture datasets. 
+In the June release, we introduced new components of GERS, including a [new format for GERS IDs](https://github.com/orgs/OvertureMaps/discussions/390) and a [GERS Registry](https://docs.overturemaps.org/gers/registry/). In this blog post, we'll walk you through the GERS "system" and show you how to ask probing questions of the Overture datasets.
 
 ## Understanding GERS IDs
-First, let's look at the new ID format for GERS. As of the June 2025 release, all GERS IDs are UUIDs: 128-bit, randomly-generated identifiers ([UUID v4](https://datatracker.ietf.org/doc/html/rfc4122)) that Overture keeps stable across data releases and updates. These IDs are stored as strings with dashes: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`. 
+First, let's look at the new ID format for GERS. As of the June 2025 release, all GERS IDs are UUIDs: 128-bit, randomly-generated identifiers ([UUID v4](https://datatracker.ietf.org/doc/html/rfc4122)) that Overture keeps stable across data releases and updates. These IDs are stored as strings with dashes: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
 
 For this release only, we're providing Parquet files that map GERS IDs from the May release to the new GERS UUIDs in June release. These files are partitioned by `theme` and 'type' and can be accessed here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
+
+<!-- truncate -->
 
 ## Exploring Overture data with GERS
 
@@ -23,7 +25,7 @@ CREATE TABLE slc AS (
     WHERE
     -- ID for Salt Lake City, Utah
         id = 'c85948de-26de-4c4a-8479-1dac33fa8b04'
-);   
+);
 ```
 
 When we query that table, we can see the `divisions` hierarchy: Salt Lake City is a locality in Salt Lake County, which is in the region of Utah, within the country of the United States.
@@ -50,7 +52,7 @@ CROSS JOIN UNNEST(hierarchies[1]) AS t(h);
 
 ```
 
-To retrieve the actual polygons for these entities, we can query the `division_area` type of the `divisions` theme, using `division_id` as the foreign key that links the datasets. _Note: This query will take a few minutes to run._ 
+To retrieve the actual polygons for these entities, we can query the `division_area` type of the `divisions` theme, using `division_id` as the foreign key that links the datasets. _Note: This query will take a few minutes to run._
 
 ```sql
 COPY(
@@ -85,15 +87,15 @@ GERS IDs are intended to be the key to unlock interoperability both inside and o
 Let's grab a GERS ID for an important place in Salt Lake City and see if it exists in the GERS Registry. The UUID for the Utah State Capitol is `d724e74f-017a-4902-9031-bc784ffc1789`. Is that part of GERS? We can search the GERS Registry with this query:
 
 ```sql
-SELECT 
+SELECT
     *
-FROM 
-    read_parquet('s3://overturemaps-us-west-2/registry/*')   
-WHERE 
+FROM
+    read_parquet('s3://overturemaps-us-west-2/registry/*')
+WHERE
     id='d724e74f-017a-4902-9031-bc784ffc1789';
 ```
 
-We can see that `d724e74f-017a-4902-9031-bc784ffc1789` is a `place` type that was first seen by the [GERS Registry](https://docs.overturemaps.org/gers/registry/) in the `2025-06-25.0` release. (This makes sense because the GERS Registry didn't exist to _see_ any features before then!) It has a `bbox ` of `{'xmin': -111.888214, 'xmax': -111.8882, 'ymin': 40.777214, 'ymax': 40.77722}` and it lives in this Parquet file: `/theme=places/type=place/part-00001-f6d803dd-3ff7-47d7-a58f-7af6e054e9c4-c000.zstd.parquet`. 
+We can see that `d724e74f-017a-4902-9031-bc784ffc1789` is a `place` type that was first seen by the [GERS Registry](https://docs.overturemaps.org/gers/registry/) in the `2025-06-25.0` release. (This makes sense because the GERS Registry didn't exist to _see_ any features before then!) It has a `bbox ` of `{'xmin': -111.888214, 'xmax': -111.8882, 'ymin': 40.777214, 'ymax': 40.77722}` and it lives in this Parquet file: `/theme=places/type=place/part-00001-f6d803dd-3ff7-47d7-a58f-7af6e054e9c4-c000.zstd.parquet`.
 
 
 ## Using the data changelog
@@ -135,9 +137,9 @@ COPY(
             id
         FROM
             read_parquet('s3://overturemaps-us-west-2/changelog/2025-05-21.0/theme=places/*/*/*.parquet')
-        WHERE 
+        WHERE
             change_type = 'added'
-            AND bbox.xmin > -112.461 AND bbox.xmax < -111.073 
+            AND bbox.xmin > -112.461 AND bbox.xmax < -111.073
             AND bbox.ymin > 40.296 AND bbox.ymax < 40.955
             ) changelog
         ON places.id = changelog.id
@@ -149,9 +151,9 @@ COPY(
 
 ```sql
 COPY(
-    SELECT 
+    SELECT
         newUUIDs.id
-     FROM 
+     FROM
          read_parquet('new_places_slc_may.parquet') oldIDs
      JOIN (
      SELECT
@@ -179,11 +181,11 @@ COPY(
                 id
             FROM
                 read_parquet('new_places_slc_may_UUIDs.parquet')) may_places_UUID
-            ON 
+            ON
                 june_places_UUID.id = may_places_UUID.id
     ) TO new_places_slc_may_to_june_UUIDs.parquet;
 ```
-Only 1,546 of new places that appeared in the May release show up in the June release with their newly- assigned UUIDs. This is a known quality issue with our source datasets. As tedious as this process might be, it demonstrates how we can use the GERS tools to track features across releases and gauge churn and data quality from one release to another. Overture is aware that some of our source data providers have significant churn in their data _before_ the data is ingested in Overture pipelines each month. We're working hard to improve these issues. Transparency is the first step. 
+Only 1,546 of new places that appeared in the May release show up in the June release with their newly- assigned UUIDs. This is a known quality issue with our source datasets. As tedious as this process might be, it demonstrates how we can use the GERS tools to track features across releases and gauge churn and data quality from one release to another. Overture is aware that some of our source data providers have significant churn in their data _before_ the data is ingested in Overture pipelines each month. We're working hard to improve these issues. Transparency is the first step.
 
 ## Using bridge files
 
@@ -196,7 +198,7 @@ COPY(
     SELECT
         'https://facebook.com/' || cast(bridge.record_id as varchar) AS facebook_page,
             slc_places.*
-    FROM read_parquet('new_places_slc_may_to_june_UUIDs.parquet') slc_places 
+    FROM read_parquet('new_places_slc_may_to_june_UUIDs.parquet') slc_places
     JOIN(
         SELECT
             id,
