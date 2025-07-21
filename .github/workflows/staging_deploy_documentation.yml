@@ -18,11 +18,8 @@ permissions:
   contents: read
 
 jobs:
-  build_and_publish:
-    environment:
-      name: staging
-      url: https://dfhx9f55j8eg5.cloudfront.net/how-to/pr/${{github.event.number}}/
-    name: Build documentation and publish to staging
+  build:
+    name: Build documentation from PR
     runs-on: ubuntu-latest
     steps:
       - name: Check out the main docs repo repository and build.
@@ -43,11 +40,30 @@ jobs:
           SCHEMA_BRANCH: ${{ inputs.schema_branch }}
         run: npm run build
 
+      - name: Upload static files as GH-Pages artifact 📦
+        id: build
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+          name: build
+
+  publish_staging:
+    environment:
+      name: staging
+      url: https://dfhx9f55j8eg5.cloudfront.net/how-to/pr/${{github.event.number}}/
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Fetch AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::207370808101:role/Overture_GitHub_schema_Publish_Docs_Staging
           aws-region: us-west-2
+
+      - name: Download GH-Pages artifact 📦
+        uses: actions/download-artifact@v4
+        with:
+          name: build
 
       - name: Copy Docusaurus website to staging bucket how-to/pr/${{github.event.number}}/
         run: |
