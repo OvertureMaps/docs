@@ -41,7 +41,6 @@ jobs:
         run: npm run build
 
       - name: Upload docs build as GH-Pages artifact 📦
-        id: build
         uses: actions/upload-pages-artifact@v3
         with:
           path: build
@@ -65,10 +64,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
+          path: build
 
       - name: Copy to staging bucket how-to/pr/${{github.event.number}}/
         run: |
-          aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING . s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
+          aws --region us-east-2 s3 sync --delete --storage-class INTELLIGENT_TIERING build s3://overture-schema-docs-static-staging-us-east-2/how-to/pr/${{github.event.number}}
 
       - name: Purge CDN cache
         run: |
