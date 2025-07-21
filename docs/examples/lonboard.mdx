@@ -49,7 +49,7 @@ Next we'll get a bounding box for our area of interest.
 bbox = 9.125034,45.433352,9.245223,45.507116
 ```
 
-The `record_batch_reader` function accepts an Overture feature type and a bounding box as arguments. **Note: `.read_all()` will load all of the requested bbox into memory, so it's wise to keep the bbox reasonably small.** 
+The `record_batch_reader` function accepts an Overture feature type and a bounding box as arguments. **Note: `.read_all()` will load all of the requested bbox into memory, so it's wise to keep the bbox reasonably small.**
 
 Let's grab some road data for Milan.
 
@@ -64,7 +64,7 @@ We can inspect shape of the data.
 table.shape
 ```
 
-We can also dig into the complexity of the Overture transportation schema. 
+We can also dig into the complexity of the Overture transportation schema.
 
 ```python
 table.schema
@@ -88,9 +88,9 @@ m = Map(layer, view_state=view_state)
 m
 ```
 
-![roads in Milan](/img/examples/road-network-milan.png)
+![roads in Milan](./assets/road-network-milan.png)
 
-### GeoPandas 
+### GeoPandas
 
 In the second example, we'll add a few steps in the notebook to convert the PyArrow table to a GeoPandas GeoDataFrame. Getting the data into a GeoDataFrame requires a few more tools, depending on which methods we use. Here's our expanded toolkit:
 
@@ -155,7 +155,7 @@ m = Map(layer, view_state=view_state)
 m
 ```
 
-![buildings in Milan](/img/examples/buildings-milan.png)
+![buildings in Milan](./assets/buildings-milan.png)
 
 ### `geodataframe` method in overturemaps-py
 
@@ -204,7 +204,7 @@ m = Map(layer)
 m
 ```
 
-![places in Milan](/img/examples/places-milan.png)
+![places in Milan](./assets/places-milan.png)
 
 ## Next steps
 
