@@ -45,6 +45,7 @@ const sidebars = {
         'examples/QGIS',
         'examples/rapid-id',
         'examples/spark',
+        'examples/wherobots',
       ]
     },
    {

@@ -1,0 +1,185 @@
+---
+title: Wherobots
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+[Wherobots](https://wherobots.com/) provides a cloud-native environment for geospatial data analysis, powered by [Apache Sedona](https://sedona.apache.org/latest/), allowing you to work with massive geospatial datasets at scale. Wherobots, an Overture Maps Foundation member, maintains a mirror of the Overture Maps data catalog on its platform.
+
+In this guide, we'll show you two ways to work with Overture Maps data in the Wherobots platform: loading and querying the Overture Maps data tables that already exist in the Wherobots cloud; and accessing and querying GeoParquet files directly from Overture Map's own Amazon S3 buckets. 
+
+:::info
+Before you get started you need to create a Wherobots account. You can create a **free** [Wherobots Community Edition Organization](https://cloud.wherobots.com/auth/register) or you can sign up for a **paid** Wherobots Professional Organization on [AWS marketplace]((https://aws.amazon.com/marketplace/pp/prodview-ndy62v6hhwrne).
+:::
+
+## Part 1: Working with Overture Maps data tables in the Wherobots platform
+
+### Setting up your notebook 
+
+In your Wherobots account, go to the [notebooks section](https://cloud.wherobots.com/notebooks) and create a “Tiny” instance. This will spin up a Sedona Spark cluster with a Jupyter notebook environment. You'll notice that you have several [example notebooks](https://docs.wherobots.com/latest/get-started/start-notebook/) available to you. For this exercise, you'll need to create a new notebook with a Python 3 kernal. Run the following code in a notebook cell to import the necessary dependencies and create a `SedonaContext` that provides access to powerful spatial operations.
+
+```python
+from sedona.spark import *
+from pyspark.sql import functions as f
+from pyspark.sql.functions import col
+
+config = (SedonaContext.builder().getOrCreate())
+sedona = SedonaContext.create(config)
+```
+
+### Available datasets
+
+In your notebook, you can use the following line of code to list the available Overture Maps data tables. 
+
+```python
+# List all available Overture datasets
+sedona.sql("SHOW TABLES IN wherobots_open_data.overture_maps_foundation").show(truncate=False)
+```
+
+When you run that query you’ll get a list of all the available datasets under `tableName`:
+
+```
++------------------------+---------------------------+-----------+
+|namespace               |tableName                  |isTemporary|
++------------------------+---------------------------+-----------+
+|overture_maps_foundation|geocodes                   |false      |
+|overture_maps_foundation|places_place               |false      |
+|overture_maps_foundation|transportation_segment     |false      |
+|overture_maps_foundation|transportation_connector   |false      |
+|overture_maps_foundation|buildings_building         |false      |
+|overture_maps_foundation|divisions_division_area    |false      |
+|overture_maps_foundation|buildings_building_part    |false      |
+|overture_maps_foundation|base_land_cover            |false      |
+|overture_maps_foundation|base_land_use              |false      |
+|overture_maps_foundation|base_infrastructure        |false      |
+|overture_maps_foundation|divisions_division_boundary|false      |
+|overture_maps_foundation|base_land                  |false      |
+|overture_maps_foundation|base_water                 |false      |
+|overture_maps_foundation|divisions_division         |false      |
+|overture_maps_foundation|addresses_address          |false      |
+|overture_maps_foundation|base_bathymetry            |false      |
++------------------------+---------------------------+-----------+
+```
+
+To call any of these datasets, use the following syntax for the table name: `wherobots_open_data.overture_maps_foundation.{tableName}`.
+
+
+### Loading Overture data
+
+You can load Overture Maps data into your notebook using either the DataFrame API or SQL API:
+
+<Tabs>
+<TabItem value="DataFrame API" label="DataFrame API" default>
+Here's how to create a Wherobots dataframe with of the Overture Places dataset:
+
+```python
+# Load Places dataset
+places_df = sedona.table("wherobots_open_data.overture_maps_foundation.places_place")
+
+# Display sample data
+places_df.show(5)
+```
+</TabItem>
+<TabItem value="SQL API" label="SQL API" default>
+You can also use spatial SQL syntax with the SQL API:
+```python
+# Load Overture Places data
+places_df = sedona.sql("""
+    SELECT * FROM wherobots_open_data.overture_maps_foundation.places_place
+""")
+
+# Create a temporary view
+places_df.createOrReplaceTempView("places")
+
+# Display sample data
+places_df.show(5)
+```
+</TabItem>
+</Tabs>
+
+### Example query: filtering by geography
+
+Let's run a query to get a count of all the Overture Maps places in San Francisco. 
+
+```python
+# Define an area of interest (e.g., San Francisco bounding box)
+sf_bbox = "POLYGON((-122.512 37.708, -122.512 37.810, -122.357 37.810, -122.357 37.708, -122.512 37.708))"
+
+# Find places within San Francisco
+sf_places = sedona.sql(f"""
+    SELECT *
+    FROM places
+    WHERE ST_Intersects(geometry, ST_GeomFromWKT('{sf_bbox}'))
+""")
+
+# Show result count
+print(f"Found {sf_places.count()} places in the specified area")
+sf_places.show()
+```
+
+## Part 2: Access and query Overture Maps data directly from Amazon S3 
+
+While Wherobots provides its own hosted version of the Overture dataset, the next part of this guide explains how to perform Spatial SQL queries directly on the [Overture Maps data stored on Amazon S3](https://docs.overturemaps.org/getting-data/). We'll demonstrate a simple ETL pipeline: extract GeoParquet data from S3, transform it through geographic filtering and schema refinement, and load it into a clean dataframe in your Jupyter notebook.
+
+### Get the Amazon S3 path for the Overture Maps data you want to query
+
+Review the [getting started page in the Overture Maps documentation](https://docs.overturemaps.org/getting-data/) to determine the Amazon S3 Path of the data that you wish to query. This example will query the `building` type from the `buildings` theme and the `segment` type from the `transportation` theme.
+
+### Setting up your notebook environment
+On the Wherobots Cloud landing page, select an available runtime to launch a new notebook. Once the runtime has loaded, open the notebook. In a notebook cell, import the necessary dependencies and initialize the Sedona Context.
+
+```python
+from sedona.spark import *
+from pyspark.sql import functions as f
+from pyspark.sql.functions import col
+
+config = (SedonaContext.builder().getOrCreate())
+sedona = SedonaContext.create(config)
+```
+
+### Querying Overture Maps data in Wherobots
+Once you have the correct S3 path, you can query the Overture Maps data. This example takes two separate, siloed datasets (`buildings` and `transportation`) and merges them into a single, unified table.
+
+Define your area of interest (in this case, Golden Gate Park) and a reusable helper function to load, filter, and combine the buildings and transportation data. Click `Run > Run Selected Cell` to execute the query and see the results.
+
+```python
+# Define the region of interest as San Francisco's Golden Gate Park
+region_wkt = "POLYGON ((-122.5106 37.7736, -122.4549 37.7788, -122.4491 37.7656, -122.5103 37.7606, -122.5106 37.7736))"
+
+def process_overture_layer(theme, type, region_wkt):
+    """
+    Loads an Overture theme from S3, filters it by a geographic region,
+    and selects the required columns.
+    """
+    s3_path = f"s3://overturemaps-us-west-2/release/2025-06-25.0/theme={theme}/type={type}"
+    print(f"Processing {theme} in Golden Gate Park...")
+
+    df = (
+        sedona.read.parquet(s3_path)
+        .withColumn("geometry", f.expr("ST_GeomFromWKB(geometry)"))
+        .where(f.expr(f"ST_Intersects(geometry, ST_GeomFromText('{region_wkt}'))"))
+        .select(
+            "geometry",
+            f.lit(theme).alias("layer"),
+            f.element_at(f.col("sources"), 1)["dataset"].alias("source")
+        )
+    )
+    return df
+
+# Process each layer using the function
+buildings_df = process_overture_layer("buildings", "building", region_wkt)
+roads_df = process_overture_layer("transportation", "segment", region_wkt)
+
+# Union the processed dataframes and get the final count
+combined_df = buildings_df.unionByName(roads_df)
+
+print("\n--- Analysis Complete ---")
+print(f"Found {combined_df.count()} total features in Golden Gate Park.")
+combined_df.show(10)
+```
+
+## Resources
+For more on using the Wherobots platform, see the official [Wherobots documentation](https://docs.wherobots.com/).
+
+
