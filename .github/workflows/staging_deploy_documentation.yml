@@ -41,7 +41,7 @@ jobs:
         run: npm run build
 
       - name: Upload docs build as GH-Pages artifact 📦
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: build
           name: build
