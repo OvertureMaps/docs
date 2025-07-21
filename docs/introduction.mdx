@@ -10,7 +10,19 @@ In this documentation, you'll find [instructions](getting-data) for accessing an
 
 ## Overture data
 
-We release our data monthly as [cloud-native GeoParquet](https://guide.cloudnativegeo.org/geoparquet/) files, partitioned by theme and type. Each data theme contains one or more feature types, mapped in this way:
+We release our data monthly as [cloud-native GeoParquet](https://guide.cloudnativegeo.org/geoparquet/) files, partitioned by theme and type. Each data theme contains one or more feature types:
+
+| Theme | Feature types |
+| ----- | ------------- |
+| [Addresses](guides/addresses) | address |
+| [Base](guides/base) | bathymetry, infrastructure, land, land_cover, land_use, water |
+| [Buildings](guides/buildings) | building, building_part |
+| [Divisions](guides/divisions) | division, division_area, division_boundary |
+| [Places](guides/places) | place |
+| [Transportation](guides/transportation) | segment, connector |
+
+<details>
+<summary>Theme-type mapping as JSON</summary>
 
 ```json
 type_theme_map = {
@@ -31,6 +43,9 @@ type_theme_map = {
     "water": "base"
 }
 ```
+</details>
+
+
 
 You'll find the GeoParquet column definitions for each feature type in our data [guides](guides).
 

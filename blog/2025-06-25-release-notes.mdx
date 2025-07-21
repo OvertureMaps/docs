@@ -9,7 +9,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Overview
 
-**The `2025-06-25.0` release of Overture data and `v1.10.0` of the Overture schema are now available.** We're pleased to annouce that GERS is now in GA! This means we've launched and updated several components of the "system" to make it production-ready. 
+**The `2025-06-25.0` release of Overture data and `v1.10.0` of the Overture schema are now available.** We're pleased to annouce that GERS is now in GA! This means we've launched and updated several components of the "system" to make it production-ready.
 
 The datasets and release artifacts are available as GeoParquet files stored on both AWS and Azure. The paths are:
 
@@ -59,7 +59,7 @@ s3://overturemaps-us-west-2/registry/
 
 You can access the datasets by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at data@overturemaps.org. We’d love to hear from you.
 
-## What's new? Big changes to GERS. 
+## What's new? Big changes to GERS.
 
 In this release, Overture has standardized the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings. This is a **one-time** breaking change for our ID system. For this release only, we are offering Parquet files, partioned by `theme` and `type` that map the old May IDs to the new June UUIDs.  You can find that file here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
 
@@ -89,7 +89,7 @@ s3://overturemaps-us-west-2/registry/
 - added `between` to the top-level `sources` property
 - added `rail` subtype to the transportation theme
 - ensured no array is empty on `place` properties
-- migrated GERS IDs to new GERS UUIDs 
+- migrated GERS IDs to new GERS UUIDs
 
 ## Theme-specific updates
 
@@ -156,8 +156,8 @@ You can find more information about [the data changelog in our documentation](ht
 
 ## Schema changelog
 
-The changelog for Overture schema `v1.10.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.10.0). 
+The changelog for Overture schema `v1.10.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.10.0).
 
-## Attribution  
+## Attribution
 
 You'll find information about attribution and licensing [here](/attribution).
