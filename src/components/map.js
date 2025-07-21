@@ -40,24 +40,24 @@ export default function Map() {
         sources: {
           roads: {
               type: "vector",
-              url: "pmtiles://../../example-map/tiles/roads.pmtiles"
+              url: "pmtiles://https://d3c1b7bog2u1nn.cloudfront.net/examples/roads.pmtiles"
           },
           places: {
               type: "vector",
-              url: "pmtiles://../../example-map/tiles/places.pmtiles"
+              url: "pmtiles://https://d3c1b7bog2u1nn.cloudfront.net/examples/places.pmtiles"
           },
           // This is really "Admins"
           placenames: {
               type: "vector",
-              url: "pmtiles://../../example-map/tiles/placenames.pmtiles"
+              url: "pmtiles:/https://d3c1b7bog2u1nn.cloudfront.net/examples/placenames.pmtiles"
           },
           buildings: {
               type: "vector",
-              url: "pmtiles://../../example-map/tiles/buildings.pmtiles"
+              url: "pmtiles://https://d3c1b7bog2u1nn.cloudfront.net/examples/buildings.pmtiles"
           },
           base: {
               type: "vector",
-              url: "pmtiles://../../example-map/tiles/base.pmtiles"
+              url: "pmtiles://https://d3c1b7bog2u1nn.cloudfront.net/examples/base.pmtiles"
           }
         },
         layers: [
