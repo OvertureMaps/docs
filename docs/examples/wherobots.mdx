@@ -147,12 +147,15 @@ Define your area of interest (in this case, Golden Gate Park) and a reusable hel
 # Define the region of interest as San Francisco's Golden Gate Park
 region_wkt = "POLYGON ((-122.5106 37.7736, -122.4549 37.7788, -122.4491 37.7656, -122.5103 37.7606, -122.5106 37.7736))"
 
+# Define the release version as a variable for configurability
+RELEASE_VERSION = "2025-06-25.0"  # Update this value when a new release is available
+
 def process_overture_layer(theme, type, region_wkt):
     """
     Loads an Overture theme from S3, filters it by a geographic region,
     and selects the required columns.
     """
-    s3_path = f"s3://overturemaps-us-west-2/release/2025-06-25.0/theme={theme}/type={type}"
+    s3_path = f"s3://overturemaps-us-west-2/release/{RELEASE_VERSION}/theme={theme}/type={type}"
     print(f"Processing {theme} in Golden Gate Park...")
 
     df = (
