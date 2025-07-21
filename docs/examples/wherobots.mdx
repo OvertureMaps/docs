@@ -7,10 +7,10 @@ import TabItem from '@theme/TabItem';
 
 [Wherobots](https://wherobots.com/) provides a cloud-native environment for geospatial data analysis, powered by [Apache Sedona](https://sedona.apache.org/latest/), allowing you to work with massive geospatial datasets at scale. Wherobots, an Overture Maps Foundation member, maintains a mirror of the Overture Maps data catalog on its platform.
 
-In this guide, we'll show you two ways to work with Overture Maps data in the Wherobots platform: loading and querying the Overture Maps data tables that already exist in the Wherobots cloud; and accessing and querying GeoParquet files directly from Overture Map's own Amazon S3 buckets. 
+In this example, we'll show you two ways to work with Overture Maps data in the Wherobots platform: loading and querying the Overture Maps data tables that already exist in the Wherobots cloud; and accessing and querying GeoParquet files directly from Overture Map's own Amazon S3 buckets. 
 
 :::info
-Before you get started you need to create a Wherobots account. You can create a **free** [Wherobots Community Edition Organization](https://cloud.wherobots.com/auth/register) or you can sign up for a **paid** Wherobots Professional Organization on [AWS marketplace]((https://aws.amazon.com/marketplace/pp/prodview-ndy62v6hhwrne).
+Before you get started you need to create a Wherobots account. You can create a **free** [Wherobots Community Edition Organization](https://cloud.wherobots.com/auth/register) or you can sign up for a **paid** Wherobots Professional Organization on [AWS marketplace](https://aws.amazon.com/marketplace/pp/prodview-ndy62v6hhwrne).
 :::
 
 ## Part 1: Working with Overture Maps data tables in the Wherobots platform
@@ -120,7 +120,7 @@ sf_places.show()
 
 ## Part 2: Access and query Overture Maps data directly from Amazon S3 
 
-While Wherobots provides its own hosted version of the Overture dataset, the next part of this guide explains how to perform Spatial SQL queries directly on the [Overture Maps data stored on Amazon S3](https://docs.overturemaps.org/getting-data/). We'll demonstrate a simple ETL pipeline: extract GeoParquet data from S3, transform it through geographic filtering and schema refinement, and load it into a clean dataframe in your Jupyter notebook.
+While Wherobots provides its own hosted version of the Overture dataset, the next part of this example explains how to perform Spatial SQL queries directly on the [Overture Maps data stored on Amazon S3](https://docs.overturemaps.org/getting-data/). We'll demonstrate a simple ETL pipeline: extract GeoParquet data from S3, transform it through geographic filtering and schema refinement, and load it into a clean dataframe in your Jupyter notebook.
 
 ### Get the Amazon S3 path for the Overture Maps data you want to query
 
@@ -139,7 +139,7 @@ sedona = SedonaContext.create(config)
 ```
 
 ### Querying Overture Maps data in Wherobots
-Once you have the correct S3 path, you can query the Overture Maps data. This example takes two separate, siloed datasets (`buildings` and `transportation`) and merges them into a single, unified table.
+Once you have the correct S3 path, you can query the Overture Maps data. The code example below takes two separate, siloed datasets (`buildings` and `transportation`) and merges them into a single, unified table.
 
 Define your area of interest (in this case, Golden Gate Park) and a reusable helper function to load, filter, and combine the buildings and transportation data. Click `Run > Run Selected Cell` to execute the query and see the results.
 
