@@ -43,7 +43,7 @@ const sidebars = {
         'examples/pandas',
         'examples/overture-tiles',
         'examples/QGIS',
-        'examples/rapid-id',
+        'examples/rapid',
         'examples/spark',
         'examples/wherobots',
       ]
@@ -77,7 +77,7 @@ const sidebars = {
         'gers/registry',
         'gers/gers-tutorial',
         'gers/gers-demonstrations',
-        
+
       ]
     },
     'attribution',
