@@ -70,10 +70,6 @@ const config = {
           module: {
             rules: [
               {
-                test: /\.pmtiles$/,
-                use: 'raw-loader'
-              },
-              {
                 test: /\.yaml$/,
                 use: 'raw-loader'
               },
@@ -119,7 +115,7 @@ const config = {
         },
         gtag: {
         trackingID: 'G-JBXK7VCHV4',
-        anonymizeIP: true, 
+        anonymizeIP: true,
         },
       }),
     ],
