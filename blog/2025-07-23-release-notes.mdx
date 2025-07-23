@@ -1,0 +1,110 @@
+---
+title: 2025-07-23 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2025-07-23.0` release of Overture data and `v1.11.0` of the Overture schema are now available.** The datasets and release artifacts are available as GeoParquet files stored on both AWS and Azure. The paths are:
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2025-07-23.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2025-07-23.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2025-07-23.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2025-07-23.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-07-23.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2025-07-23.0/
+```
+
+### GERS Registry
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+
+
+<!-- truncate -->
+
+You can access the datasets by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at data@overturemaps.org. We’d love to hear from you.
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- no updates
+
+
+### Base
+
+- added OSM tags for `quay`, `railway`, `artwork`
+
+### Buildings
+
+- added a new data source to populate favelas in Brazil: DadosAbertos
+- added `is_land` geometries to the `division_area` type, `country` subtype
+
+
+### Divisions
+
+- added new "land" polygons (`is_land=TRUE`) for regions that have access to oceans
+
+### Places
+
+- no updates
+
+### Transportation
+
+- fixed a small bug in the route `source_id` formatting
+- added new data from TomTom in Turkey
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.11.0` is [here](https://github.com/OvertureMaps/schema/releases/).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
