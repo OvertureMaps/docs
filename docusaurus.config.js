@@ -21,8 +21,8 @@ const config = {
   favicon: 'img/favicon.png',
 
   customFields: {
-    overtureRelease: '2025-06-25.0',
-    pmtiles_path: 'https://d3c1b7bog2u1nn.cloudfront.net/2025-05-21'
+    overtureRelease: '2025-07-23.0',
+    pmtiles_path: 'https://d3c1b7bog2u1nn.cloudfront.net/2025-06-25'
   },
  /**
   future: {
