@@ -191,7 +191,7 @@ You can find Overture's official Python command-line tool [here](https://github.
 This tool helps to download Overture data within a region of interest and converts it to a few different file formats. In this example, a bounding box is passed to obtain all divisions data around Boston, MA:
 
 ```
-overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=divisions -o boston.geojson
+overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=division -o boston.geojson
 ```
 
 Right now there is only one option to the overturemaps utility: download. It will download Overture Maps data with an optional bounding box into the specified file format. When specifying a bounding box, only the minimum data is transferred. The result is streamed out and can handle arbitrarily large bounding boxes.
@@ -239,7 +239,7 @@ First, follow the [setup guide for the Python Command-line Tool](/getting-data/o
 You can alter the `bbox` value to download a particular area.
 
 ```
-overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=divisions -o boston.geojson
+overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=division -o boston.geojson
 ```
 </TabItem>
 
