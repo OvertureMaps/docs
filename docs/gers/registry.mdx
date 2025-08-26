@@ -54,10 +54,10 @@ You can use the GERS Registry to verify that an entity exists in Overture, track
 ```
 SELECT 
     *
-FROM read_parquet('https://overturemapswestus2.blob.core.windows.net/registry/2025-06-25.0')
+FROM read_parquet('s3://overturemaps-us-west-2/registry/*.parquet')
 WHERE id='fea28f69-7afa-460c-b270-61ef74cd340c';
 ```
 
-We can see that `fea28f69-7afa-460c-b270-61ef74cd340c` is a building first released by Overture in June 2025 and last seen in June 2025 (`2025-06-25.0`), the current release. The exact bounding box of the feature is `{'xmin': 80.67177, 'xmax': 80.67182, 'ymin': 26.619795, 'ymax': 26.619843}` and the relative path to the feature is `/theme=buildings/type=building/part-00149-8a741876-e04d-4e66-bc96-0171910fa1b1-c000.zstd.parquet`. You can directly access the Parquet file that contains this feature by appending the relative path to the current release path: `https://overturemapswestus2.blob.core.windows.net/registry/2025-06-25.0`. Since you know the exact bounding box of the feature, you can optimize your query and you should be able to fetch this feature directly from the data release in seconds. 
+We can see that `fea28f69-7afa-460c-b270-61ef74cd340c` is a building first released by Overture in June 2025 and last seen in August 2025 (`2025-08-20.1`), the current release. The exact bounding box of the feature is `{'xmin': 80.67177, 'xmax': 80.67182, 'ymin': 26.619795, 'ymax': 26.619843}` and the relative path to the feature is `/theme=buildings/type=building/part-00149-8a741876-e04d-4e66-bc96-0171910fa1b1-c000.zstd.parquet`. You can directly access the Parquet file that contains this feature by appending the relative path to the current release path: `s3://overturemaps-us-west-2/release/2025-08-20.1`. Since you know the exact bounding box of the feature, you can optimize your query and you should be able to fetch this feature directly from the data release in seconds. 
 
 
