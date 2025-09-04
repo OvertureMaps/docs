@@ -10,7 +10,22 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 :::info
 
-During our final QA processes, we detected the following issue in the data: all Microsoft ML buildings were incorrectly assigned `"is_underground": true`. We decided to make the `2025-08-20.0` release public with the bug and follow up with a patch to the data. Expect `2025-08-20.1` to be released shortly.
+August 26th, 2025
+
+Today, Overture released a patch for the August data. The new release paths are:
+
+#### Amazon S3 
+```
+s3://overturemaps-us-west-2/release/2025-08-20.1
+```
+
+#### Microsoft Azure 
+```
+wasbs://release@overturemapswestus2.blob.core.windows.net/2025-08-20.1
+```
+
+During our final QA processes, we detected the following issue in the data: all Microsoft ML buildings were incorrectly assigned `"is_underground": true`. We decided to make the `2025-08-20.0
+` release public with the bug and follow up with a patch to the data. 
 
 ![Schema docs describing is_underground](/img/is_underground.png)
 
