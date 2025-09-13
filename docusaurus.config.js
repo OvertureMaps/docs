@@ -63,22 +63,6 @@ const config = {
   themes: [],
 
   plugins: [
-    // () => ({
-    //   name: 'custom-docusaurus-plugin',
-    //   configureWebpack() {
-    //     return {
-    //       module: {
-    //         rules: [
-    //           {
-    //             resolve: {
-    //               symlinks: false
-    //             }
-    //           }
-    //         ],
-    //       },
-    //     };
-    //   },
-    // }),
     [
       '@docusaurus/plugin-content-pages',
       {
