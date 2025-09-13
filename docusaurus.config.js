@@ -24,17 +24,17 @@ const config = {
     overtureRelease: '2025-08-20.1',
     pmtiles_path: 'https://d3c1b7bog2u1nn.cloudfront.net/2025-07-23'
   },
- /**
+
   future: {
     experimental_faster: {
       swcJsLoader: true,
       swcJsMinimizer: true,
       swcHtmlMinimizer: true,
       lightningCssMinimizer: true,
-      rspackBundler: false, // rspack bundler doesn't work with our Webpack config for raw-loader and YAML files.
+      rspackBundler: true,
       mdxCrossCompilerCache: true,
     },
-  }, */
+  },
 
   // Set the production url of your site here
   url: getFromEnvironment('DOCUSAURUS_URL', defaultUrl),
@@ -63,26 +63,22 @@ const config = {
   themes: [],
 
   plugins: [
-    () => ({
-      name: 'custom-docusaurus-plugin',
-      configureWebpack() {
-        return {
-          module: {
-            rules: [
-              {
-                test: /\.yaml$/,
-                use: 'raw-loader'
-              },
-              {
-                resolve: {
-                  symlinks: false
-                }
-              }
-            ],
-          },
-        };
-      },
-    }),
+    // () => ({
+    //   name: 'custom-docusaurus-plugin',
+    //   configureWebpack() {
+    //     return {
+    //       module: {
+    //         rules: [
+    //           {
+    //             resolve: {
+    //               symlinks: false
+    //             }
+    //           }
+    //         ],
+    //       },
+    //     };
+    //   },
+    // }),
     [
       '@docusaurus/plugin-content-pages',
       {
