@@ -60,7 +60,7 @@ const config = {
     locales: ['en'],
   },
 
-  themes: ["docusaurus-json-schema-plugin"],
+  themes: [],
 
   plugins: [
     () => ({
