@@ -46,7 +46,7 @@ information about roads from our data sources. For example, we’ve been able
 to move more than 30 million “unknown” road segments from OSM into the new subclasses, laying the groundwork
 for richer and more detailed map displays with Overture data.
 
-Here's how class, subclasses, and flags are modeled in the [Overture schema](https://github.com/OvertureMaps/schema/blob/main/schema/transportation/segment.yaml):
+Here's how class, subclasses, and flags are modeled in the Overture schema:
 
 ```yaml
 class: footway
@@ -75,7 +75,7 @@ subclass_rules:
 ### Connectors
 To better support routing use cases, we added to the segment feature type [a new property](https://github.com/OvertureMaps/schema/pull/257) called
 `connectors`: an array of IDs with pre-computed linear reference values that explicitly link segments and
-[connector features](https://docs.overturemaps.org/schema/reference/transportation/connector/) via coordinates. The `connectors` property contains a list of connector features to which a segment feature is physically connected and the relative location of those connector features along the segment. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments that share the same connector.
+connector features via coordinates. The `connectors` property contains a list of connector features to which a segment feature is physically connected and the relative location of those connector features along the segment. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments that share the same connector.
 
 This new property &mdash; a replacement for the existing `connector_ids`
 property &mdash; will reduce complexity and improve accuracy as we calculate the intersections between segment and connector features. We plan to deprecate the `connector_ids` property in the August release and remove it from the schema in the October release.
