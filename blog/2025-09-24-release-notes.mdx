@@ -55,13 +55,13 @@ If you use, modify, or redistribute the Foursquare data, you must:
 More information on license requirements and data usage is available on Foursquare’s [website](https://docs.foursquare.com/data-products/docs/access-fsq-os-places). General information on Overture licensing is available in the [licensing and attribution section](https://docs.overturemaps.org/attribution/) of Overture's documentation.
 
 #### How to filter for CDLA-only data
-To create a purely CDLA-licensed dataset, filter out all records where the source property is “Foursquare”
+To create a purely CDLA-licensed dataset, filter out all records where the source property is “Foursquare”.
 
 ### New schema properties 
 
 This month we added a new `license` sub-property within the `sources` property to more clearly link entities to the licensing information for their source data. This change affects all Overture themes, as `sources` is [a top-level property](https://docs.overturemaps.org/schema/#top-level-properties) in the Overture schema. 
 
-In the places theme, we're added a new `operating_status` property, with all values set to "open". In future releases, we plan to update this property with data that indicates whether a place is "open", "permanently_closed", or "temporarily_closed".
+In the places theme, we added a new `operating_status` property, with all values set to "open". In future releases, we plan to update this property with data that indicates whether a place is "open", "permanently_closed", or "temporarily_closed".
 
 ### Signal "patches"
 About a million POIs in our places theme now have a signal "patch" that determines the calculation of the score in the `confidence` property. POIs enhanced by these patches have "SparkGeo-confidence-conflation" in the `sources` property.
@@ -181,7 +181,7 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ## Schema changelog
 
-The changelog for Overture schema `v1.12.0` is [here](https://github.com/OvertureMaps/schema/tree/v1.12.0).
+The changelog for Overture schema `v1.12.0` is [here](https://github.com/OvertureMaps/schema/releases).
 
 ## Attribution
 
