@@ -56,11 +56,14 @@ More information on license requirements and data usage is available on Foursqua
 #### How to filter for CDLA-only data
 To create a purely CDLA-licensed dataset, filter out all records where the source property is “Foursquare”.
 
-### New scehma properties 
+## New schema properties 
 
 This month we added a new `license` sub-property within the `sources` property to more clearly link entities to the licensing information for their source data. This change affects all Overture themes, as `sources` is [a top-level property](https://docs.overturemaps.org/schema/#top-level-properties) in the Overture schema. 
 
 In the places theme, we're added a new `operating_status` property, with all values set to `open`. In future releases, we plan to update this property with data that indicates whether a place is `open`, `permanently_closed`, or `temporarily_closed`.
+
+## Signal "patches"
+About a million POIs in our Places theme now have a signal "patch" that affects the calculation of the score in the `confidence` property. POIs enhanced by these patches have `SparkGeo-confidence-conflation` in the `sources` property.
 
 
 ## Getting the data
@@ -159,7 +162,7 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 - added a new `license` property within `sources` and populated with applicable license information
 
-- added a new `operating_status` property, indicating the operating status of a place (open, permanently_closed, temporarily_closed); set all values to open for the September release.
+- added a new `operating_status` property, indicating the operating status of a place (`open`, `permanently_closed`, `temporarily_closed`); set all values to `open` for the September release.
 
 - added six million POIs from Foursquare 
 
