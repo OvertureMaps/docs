@@ -1,92 +1,55 @@
 ---
 title: Buildings
-description: Over 2.6B buildings globally
+description: 2.6 billion buildings and counting
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import QueryBuilder from '@site/src/components/queryBuilder';
-import ThemedImage from '@theme/ThemedImage';
-import useBaseUrl from '@docusaurus/useBaseUrl';
-
+import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem'; import QueryBuilder from '@site/src/components/queryBuilder'; import ThemedImage from '@theme/ThemedImage'; import useBaseUrl from '@docusaurus/useBaseUrl';
 import BuildingsMap from '@site/src/components/buildings-map';
+
+# Guide to Overture Buildings
 
 ## Overview
 
-The Overture Maps buildings theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). The theme includes two feature types:
+The Overture Maps buildings theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). Overture's goal is to provide the world's most comprehensive set of building structures compiled from the best available open data sources, covering all the world's buildings. The theme includes two feature types:
 
 - **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
 - **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
 
-## Data access and retrieval
+### Data access and retrieval
 
-Overture's building theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+Overture's `building` and `building_part` datasets are freely available on both Amazon S3 and Microsoft Azure Blob Storage at the locations listed below. We provide [a comprehensive guide](https://docs.overturemaps.org/getting-data/) to accessing Overture data in our documentation.
 
 <Tabs>
   <TabItem value="building" label="building" default>
-    | provider | location |
+    | Provider | Location |
     | --- | --- |
     | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/*" language="text"></QueryBuilder> |
     | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building/*" language="text"></QueryBuilder> |
   </TabItem>
   <TabItem value="building_part" label="building_part">
-    | provider | location |
+    | Provider | Location |
     | --- | --- |
     | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
     | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
   </TabItem>
 </Tabs>
 
-Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
+### Use cases
 
-[The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for addresses.
+Our buildings data is intended to support multiple use cases, as defined and prioritized by various Overture members, but may be used for other use cases as imagined by Overture data users assuming they comply with the open data license.
 
-We recommend querying and downloading only the Overture data you need.
-If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract address data.
+- **2D Visualization**: Display of the buildings in a 2D map display, perhaps symbolized by other properties.
+- **3D Visualization**: Display of the buildings (and parts) in a 3D (or 2.5D) display, extruded by building height or levels.
+- **Data Enrichment**: Enable end users to enrich the buildings with additional attributes using GERS ID.
+- **Spatial Analysis**: Enable end users to perform analysis to create derivative datasets or train AI models.
 
 
-## Data sources
+## Dataset schema
 
-<figure>
-  <BuildingsMap></BuildingsMap>
-  {/* <!-- <ThemedImage
-    alt="Overture buildings in San Diego"
-    sources={{
-      light: useBaseUrl('/img/guides/buildings/san_diego_buildings_3.jpg'),
-      dark: useBaseUrl('/img/guides/buildings/san_diego_buildings_3.jpg'),
-    }}
-  /> --> */}
-  <figcaption>
-  <div style={{'textAlign':'center'}}>
-    <span style={{'backgroundColor':'rgb(36,39,47)', padding:2}}>
-    <span style={{color:'rgb(194,42,87)'}}>&#x25AC;   <span style={{color:'white'}}>OpenStreetMap | </span></span>
-    <span style={{color:'rgb(4,151,188)'}}>&#x25AC;   <span style={{color:'white'}}>Esri Community Maps | </span></span>
-    <span style={{color:'rgb(243,175,102)'}}>&#x25AC; <span style={{color:'white'}}>Microsoft ML Buildings | </span></span>
-    <span style={{color:'rgb(236,253,188)'}}>&#x25AC; <span style={{color:'white'}}>Google Open Buildings </span></span>
-    </span>
-  </div>
-  </figcaption>
-</figure>
-
-Above is a visualization of San Diego, USA where multiple datasets are conflated. Notice how Esri and OSM buildings appear in big blocks while the Google and Microsoft buildings appear to mix together. This is a product of our conflation process that prioritizes community contributed data first and then "fills in" the rest of the map with the best ML data available.
-
-Currently, the Overture buildings dataset is a combination of the following open building datasets:
-
-| source | type | conflation priority | count |
-| --- | --- | --- | --- |
-| [OpenStreetMap](//osm.org) | Community-contributed | 1 | ~635 Million |
-| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2 | ~11 Million |
-| [Instituto Geográfico Nacional (España)](https://www.ign.es/) | National dataset | 3 | ~11.7 Million |
-| [City of Vancouver, Canada](https://opendata.vancouver.ca/) | Municipal dataset | 4 | ~14 Thousand |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (>90% precision) | 5 | ~350 Million |
-| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) | ML-derived roofprints | 6 | ~723 Million |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (\<90% precision) | 7 | ~650 Million |
-| [Buildings in East Asian Countries](https://zenodo.org/records/8174931) | ML-derived roofprints | 8 | ~213 Million |
-
-## Understanding the parquet files
+Overture releases its data as GeoParquet files. The `building` and `building_part` datasets have slightly different schemas, and the column definitions for those data files are described below. For more detailed information about the buildings schema see Overture [schema reference documentation](https://docs.overturemaps.org/schema/). 
 
 <details>
-	<summary>Schema for the GeoParquet files in the buildings theme</summary>
+	<summary>Column definitions for the `building` and `building_part` datasets</summary>
 <div>
 <Tabs>
 <TabItem value="building" label="building" default>

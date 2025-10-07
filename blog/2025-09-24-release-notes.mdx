@@ -1,0 +1,188 @@
+---
+title: 2025-09-24 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+:::warning
+With the September release, Overture is implementing a data retention policy for publicly-available data releases.
+
+#### What's changing:
+- Data releases will be publicly available for a maximum of 60 days (approximately two monthly releases)
+- Data files will be automatically removed from public distribution after this period using cloud storage lifecycle policies
+
+#### What remains available:
+- The most recent two monthly data releases (last 60 days)
+- Versioned changelogs and bridgefiles for all releases
+- GERS registry
+- Release notes from all past releases
+
+#### Why we're implementing this:
+This policy ensures compliance with data protection regulations, including GDPR "right to be forgotten" requirements.
+
+You can find complete details about our release schedule and policies on the [releases](https://docs.overturemaps.org/release-calendar/) page in the Overture documentation. Questions? Comments? Please contribute to [this thread on our GitHub Discussions forum](https://github.com/orgs/OvertureMaps/discussions/422) or reach out to us at info@overturemaps.org.
+
+:::
+
+
+## Overview
+
+**The `2025-09-24.0` release of Overture data and `v1.12.0` of the Overture schema are now available.** The datasets and release artifacts are available as GeoParquet files stored on both AWS and Azure. There are several data updates and (minor) breaking schema changes in this release. 
+
+## What's new?
+
+### New POIs from Foursquare Open Source Places
+
+This release adds approximately 6 million new POIs from Foursquare Open Source Places (FSQ OS Places) to grow the coverage of our data. We selected these records as POIs not previously included in Overture. We plan to add more Foursquare data as our validation models mature. 
+You can find the original source for FSQ OS Places [here](https://opensource.foursquare.com/os-places/).
+
+#### Overture places is now a multi-license dataset
+
+Previously all places data was under a CDLA license, but in this release each place has a license based on its source property:
+- Foursquare-sourced data is licensed under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+- Data from other sources remains licensed under [CDLA 2.0](https://cdla.dev/permissive-2-0/).
+Note that all Foursquare-sourced data is single sourced, meaning we do not blend its attributes with any other sources.
+
+#### License requirements
+If you use, modify, or redistribute the Foursquare data, you must:
+- Provide a copy of the Apache 2.0 license.
+- State that you changed the files and include the date of any changes.
+- Preserve attribution notices from the source NOTICE file, including at minimum: `Copyright 2024 Foursquare Labs, Inc. All rights reserved.`
+
+More information on license requirements and data usage is available on Foursquare’s [website](https://docs.foursquare.com/data-products/docs/access-fsq-os-places). General information on Overture licensing is available in the [licensing and attribution section](https://docs.overturemaps.org/attribution/) of Overture's documentation.
+
+#### How to filter for CDLA-only data
+To create a purely CDLA-licensed dataset, filter out all records where the source property is “Foursquare”.
+
+### New schema properties 
+
+This month we added a new `license` sub-property within the `sources` property to more clearly link entities to the licensing information for their source data. This change affects all Overture themes, as `sources` is [a top-level property](https://docs.overturemaps.org/schema/#top-level-properties) in the Overture schema. 
+
+In the places theme, we added a new `operating_status` property, with all values set to "open". In future releases, we plan to update this property with data that indicates whether a place is "open", "permanently_closed", or "temporarily_closed".
+
+### Signal "patches"
+About a million POIs in our places theme now have a signal "patch" that determines the calculation of the score in the `confidence` property. POIs enhanced by these patches have "SparkGeo-confidence-conflation" in the `sources` property.
+
+
+## Getting the data
+
+You can access this month's data and release artifacts by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at info@overturemaps.org. We’d love to hear from you.
+
+The paths are:
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2025-09-24.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2025-09-24.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2025-09-24.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2025-09-24.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-09-24.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2025-09-24.0/
+```
+
+### GERS Registry
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+
+<!-- truncate -->
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- added a new `license` property within `sources`
+
+
+### Base
+
+- added a new `license` property within `sources` and populated with applicable license information
+
+### Buildings
+
+- added a new `license` property within `sources` and populated with applicable license information for Microsoft and OSM features.
+
+
+### Divisions
+
+- added a new `license` property within `sources` and populated with applicable license information
+
+- added geoBoundaries-sourced counties in New Zealand
+
+- added LINZ-sourced localities and neighborhoods in New Zealand
+
+- mapped OSM features with an admin_level=7 tag in Argentina to `localadmin` 
+
+- fixed `local_type` for geoBoundaries-sourced counties
+
+- refreshed OSM with updates to 2025-08-29
+
+### Places
+
+- added a new `license` property within `sources` and populated with applicable license information
+
+- added a new `operating_status` property, indicating the operating status of a place ("open", "permanently_closed", "temporarily_closed"); set all values to "open" for the September release.
+
+- added six million POIs from Foursquare 
+
+- implemented signal “patches” to dynamically update `confidence` property based on signals
+
+
+### Transportation
+
+- added a new `license` property within `sources` and populated with applicable license information
+
+- added new TomTom-sourced segments
+
+- made significant additions to the data in Italy, Portugal, Mexico, Egypt, Sweden, Indonesia
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.12.0` is [here](https://github.com/OvertureMaps/schema/releases).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
