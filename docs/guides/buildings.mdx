@@ -10,27 +10,43 @@ import BuildingsMap from '@site/src/components/buildings-map';
 
 ## Overview
 
-The Overture Maps buildings theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). Overture's goal is to provide the world's most comprehensive set of building structures compiled from the best available open data sources, covering all the world's buildings to the extent that they exist as open data. Our buildings data is intended to support multiple use cases, as defined and prioritized by various Overture members, but may be used for other use cases as imagined by Overture data users assuming they comply with the open data license.
+The Overture Maps buildings theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). Overture's goal is to provide the world's most comprehensive set of building structures compiled from the best available open data sources, covering all the world's buildings to the extent that they exist as open data. The theme includes two feature types:
+
+- **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
+- **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
+
+### Data access and retrieval
+
+Overture's building theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at the locations listed below. We provide [a comprehensive guide](https://docs.overturemaps.org/getting-data/) to accessing Overture data in our documentation.
+
+<Tabs>
+  <TabItem value="building" label="building" default>
+    | Provider | Location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building/*" language="text"></QueryBuilder> |
+  </TabItem>
+  <TabItem value="building_part" label="building_part">
+    | Provider | Location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
+  </TabItem>
+</Tabs>
+
+### Use cases
+
+Our buildings data is intended to support multiple use cases, as defined and prioritized by various Overture members, but may be used for other use cases as imagined by Overture data users assuming they comply with the open data license.
 
 - **2D Visualization**: Display of the buildings in a 2D map display, perhaps symbolized by other properties.
 - **3D Visualization**: Display of the buildings (and parts) in a 3D (or 2.5D) display, extruded by building height or levels.
 - **Data Enrichment**: Enable end users to enrich the buildings with additional attributes using GERS ID.
 - **Spatial Analysis**: Enable end users to perform analysis to create derivative datasets or train AI models.
 
-## Feature types
-
-The buildings theme includes two feature types:
-
-- **building**: The most basic form of a building feature. The geometry is expected to be the most outer footprint—roofprint if traced from satellite/aerial imagery—of a building. Buildings have a boolean attribute has_parts that describe whether there are any associated building parts.
-
-- **building_part**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a building_id.
 
 ## Dataset schema
 
-Overture releases its data as GeoParquet files. The `building` and `building_part` datasets have slightly different schemas, and the column definitions for those data files are described below. For more detailed information about the buildings schema see Overture [schema reference documentation](https://docs.overturemaps.org/schema/). 
-
-- [Explore the schema reference for the building feature type](/schema/reference/buildings/building).
-- [Explore the schema reference for the building part feature type](/schema/reference/buildings/building_part).
+Overture [releases its data](../getting-data/) as GeoParquet files. The `building` and `building_part` datasets have slightly different schemas, and the column definitions for those data files are described below. For more detailed information about the buildings schema see Overture [schema reference documentation](https://docs.overturemaps.org/schema/). 
 
 <details>
 	<summary>Column definitions for the `building` and `building_part` datasets</summary>
@@ -110,15 +126,14 @@ Currently, the Overture `building` dataset is a combination of the following ope
 
 | Source | Type | Conflation Priority | Count |
 |--------|------|-------------------|--------|
-| [OpenStreetMap](https://osm.org/) | Community-contributed | 1 | ~635 Million |
-| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2 | ~11 Million |
-| [Instituto Geográfico Nacional (España)](https://www.ign.es/) | National dataset | 3 | ~11.7 Million |
-| [City of Vancouver, Canada](https://opendata.vancouver.ca/) | Municipal dataset | 4 | ~14 Thousand |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints greater than 90% precision | 5 | ~350 Million |
-| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) | ML-derived roofprints | 6 | ~723 Million |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints less than 90% precision | 7 | ~650 Million |
+| [OpenStreetMap](//osm.org) | Community-contributed | 1 | ~656 Million |
+| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2 | ~17.5 Million |
+| [Instituto Geográfico Nacional (España)](https://www.ign.es/) | National dataset | 3 | ~12.9 Million |
+| [City of Vancouver, Canada](https://opendata.vancouver.ca/) | Municipal dataset | 4 | ~17 Thousand |
+| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (>90% precision) | 5 | ~350 Million |
+| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) | ML-derived roofprints | 6 | ~805 Million |
+| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (\<90% precision) | 7 | ~650 Million |
 | [Buildings in East Asian Countries](https://zenodo.org/records/8174931) | ML-derived roofprints | 8 | ~213 Million |
-
 
 ## How we build the dataset
 
@@ -153,16 +168,7 @@ The visualization below shows Overture buildings data looking across the US-Mexi
 
 ## Licensing
 
-The Overture Maps buildings theme is provided under the ODbL license, largely because the primary OpenStreetMap data is provided under that license. This requires that other data sources that are included in the buildings theme are also provided under ODbL or a license that is compatible with ODbL, such as CC BY 4.0. Overture Maps determine if potential sources of open data that would expand coverage or improve quality are provided under a license that is compatible with ODbL before adding to the conflation process.
-| source | type | conflation priority | count |
-| --- | --- | --- | --- |
-| [OpenStreetMap](//osm.org) | Community-contributed | 1 | ~656 Million |
-| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2 | ~17.5 Million |
-| [Instituto Geográfico Nacional (España)](https://www.ign.es/) | National dataset | 3 | ~12.9 Million |
-| [City of Vancouver, Canada](https://opendata.vancouver.ca/) | Municipal dataset | 4 | ~17 Thousand |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (>90% precision) | 5 | ~350 Million |
-| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) | ML-derived roofprints | 6 | ~805 Million |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (\<90% precision) | 7 | ~650 Million |
-| [Buildings in East Asian Countries](https://zenodo.org/records/8174931) | ML-derived roofprints | 8 | ~213 Million |
+The Overture Maps buildings theme is provided under the ODbL license, largely because the primary OpenStreetMap data is provided under that license. This requires that other data sources that are included in the buildings theme are also provided under ODbL or a license that is compatible with ODbL, such as CC BY 4.0. Overture Maps determine if potential sources of open data that would expand coverage or improve quality are provided under a license that is compatible with ODbL before adding to the conflation process. For more information, see the [licensing and attribution](https://docs.overturemaps.org/attribution/) section of our documentation.
+
 
 
