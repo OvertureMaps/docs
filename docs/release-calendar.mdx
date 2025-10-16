@@ -4,25 +4,35 @@ title: Releases
 
 This page provides information about Overture's data and schema releases, including upcoming release dates, our versioning and schema change policies, data retention practices, and a complete history of past releases with links to release notes.
 
+## Current release
+
+The latest Overture data release is `2025-09-24.0`. The schema version is `v1.12.0`. The release notes with the full data access paths are available [here](https://docs.overturemaps.org/blog/2025/09/24/release-notes/). 
+
 ## Release schedule
 
 Our planned release schedule for the next two months is below. The release dates and schema versions are subject to change.
 
 | Date | Data version | Schema version |
 | ----- | ----- | ----- |
-| 24 September 2025 | [`2025-09-24.0`](https://docs.overturemaps.org/blog/2025/09/24/release-notes/) | [`v1.12.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.12.0) |
 | 22 October 2025 | `2025-10-22.0` | `v1.13.0` | 
+| 19 November 2025 | `2025-11-19.0` | `v1.14.0` | 
 
 
 ## Versioning and schema changes
 
+### Versioning
+
 Overture uses a three-component `<major>.<minor>.<patch>` version number, i.e. `v1.1.0`, that effectively follows the [semantic versioning specification](https://semver.org/spec/v2.0.0.html). In general, a “major” change is expected to have a larger impact on data consumers, while a “minor” change is expected to have a lesser impact. Our monthly data releases are tagged with the date of the release, in the format `yyyy-mm-dd.x`, with x indicating a patch or hotfix to the data. 
+
+### Minor schema changes
 
 Minor schema changes may occur in any month, meaning that the next monthly data release may follow a new schema version that contains minor schema changes. We typically do not announce minor changes in advance unless they are part of an overarching schema update that involves related major changes. Minor changes include: 
 - adding feature types; 
 - adding top-level properties (columns); 
 - adding nested properties; 
 - changing constraints on property values either by relaxing or tightening them, e.g. adding or subtracting allowed values for enumerated value properties such as `class`. 
+
+### Major schema changes
 
 Major schema changes will only occur once per quarter, during the designated **major change months of March, June, September, and December**. We will strive to announce upcoming major changes as far in advance as possible, along with the reasons behind the change. If there are no major changes in a designated major change month, the schema version for that month’s release will reflect minor changes or no changes. Major changes include: 
 - deleting feature types;
@@ -37,10 +47,11 @@ Overture maintains publicly available data releases for a maximum of 60 days (tw
 
 ## Release history
 
-Overture has been releasing data monthly since October 2023. The data releases and their corresponding schema versions are listed below, with links to the release notes. 
+Overture has been releasing data monthly since October 2023. Past releases are listed below. Only the last two months of releases available in our public buckets on AWS and Azure. The release notes for all past releases are available at the links below. 
 
 | Date | Data version | Schema version |
 | ----- | ----- | ----- |
+| 24 September 2025 | [`2025-09-24.0`](https://docs.overturemaps.org/blog/2025/09/24/release-notes/) | [`v1.12.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.12.0) |
 | 20 August 2025 | [`2025-08-20.0`](https://docs.overturemaps.org/blog/2025/08/20/release-notes/) | [`v1.11.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.11.0) |
 | 23 July 2025 | [`2025-07-23.0`](https://docs.overturemaps.org/blog/2025/07/23/release-notes/) | [`v1.11.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.11.0) | 
 | 25 June 2025	| [`2025-06-25.0`](https://docs.overturemaps.org/blog/2025/06/25/release-notes/) | [`v1.10.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.10.0)| 
