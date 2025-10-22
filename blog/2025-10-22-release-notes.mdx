@@ -8,24 +8,11 @@ import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
 :::warning
-With the September release, Overture is implementing a data retention policy for publicly-available data releases.
 
-#### What's changing:
-- Data releases will be publicly available for a maximum of 60 days (approximately two monthly releases)
-- Data files will be automatically removed from public distribution after this period using cloud storage lifecycle policies
-
-#### What remains available:
-- The most recent two monthly data releases (last 60 days)
-- Versioned changelogs and bridgefiles for all releases
-- GERS registry
-- Release notes from all past releases
-
-#### Why we're implementing this:
-This policy ensures compliance with data protection regulations, including GDPR "right to be forgotten" requirements.
-
-You can find complete details about our release schedule and policies on the [releases](https://docs.overturemaps.org/release-calendar/) page in the Overture documentation. Questions? Comments? Please contribute to [this thread on our GitHub Discussions forum](https://github.com/orgs/OvertureMaps/discussions/422) or reach out to us at info@overturemaps.org.
+Recently Overture implemented a data retention policy for our releases. Overture data will be publicly available on AWS and Azure for a maximum of 60 days, approximately two monthly releases. After that, we will automatically remove data files from public distribution using cloud storage lifecycle policies. You can find more information about Overture's data retention policy on the [releases](https://docs.overturemaps.org/release-calendar/#data-retention-policy) page in this documentation. 
 
 :::
+
 
 
 ## Overview
@@ -36,16 +23,19 @@ You can find complete details about our release schedule and policies on the [re
 
 ### New `basic_category` property in the places schema
 
+In the places schema this month, we introduced a simple `basic_category` property that maps to our original `categories.primary` property. This change is part of an ongoing initiative to reimagine Overture's places category taxomony. The creation of a `basic_category` property is based on a commonly-used cognitive science concept called "basic-level categories." The idea is to find a balance between being specific enough to be useful while general enough to be broadly applicable. 
 
- 
+
 ### Major data updates in addresses
 
-
+tk
 
 ### New Hilbert cure partitioning of our data
 
+(two sentences and a link to blog post - tk)
 
-## Getting the data
+
+## Getting the data and release artifacts
 
 You can access this month's data and release artifacts by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at info@overturemaps.org. We’d love to hear from you.
 
@@ -87,7 +77,7 @@ az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-10-22.0/
 s3://overturemaps-us-west-2/bridgefiles/2025-10-22.0/
 ```
 
-### GERS Registry
+### GERS registry
 
 **Microsoft Azure:**
 ```
