@@ -24,43 +24,17 @@ This guide is focused on the Overture places **data**—its content, scope, prop
 
 The Overture places theme has one feature type, called `place`, and contains more than 64 million point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. The theme is derived from a conflation of Meta, Microsoft, and PinMeTo data and is available under a [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) license.
 
-| ![Overture places theme coverage](/img/places/places-coverage-h3-sept.png) |
+| ![Overture places theme coverage](/img/places/places-coverage-h3-oct.png) |
 |:--:|
-| *Overture places data, September 2025* |
+| *Overture places data, October 2025* |
 
-| sources (ordered) | feature count, September 2025 |
+| sources (ordered) | feature count, October 2025 |
 | --- | --- |
-| meta | 56,229,637 | 
-| Foursquare | 6,089,297 | 
-| Microsoft | 5,322,704 | 
-| meta & Microsoft | 2,613,673 | 
-| meta & SparkGeo-confidence-conflation | 541,168 | 
-| meta, Microsoft & SparkGeo-confidence-conflation | 404,772 | 
-| Microsoft & meta | 207,468 | 
-| PinMeTo & Microsoft | 71,793 | 
-| Microsoft & SparkGeo-confidence-conflation | 62,751 | 
-| PinMeTo, meta & Microsoft | 31,490 | 
-| PinMeTo | 16,184 | 
-| Microsoft, meta & SparkGeo-confidence-conflation | 7,175 | 
-| Microsoft & Krick | 6,301 | 
-| Microsoft & PinMeTo | 6,004 | 
-| Krick | 3,172 | 
-| PinMeTo & meta | 2,780 | 
-| meta, Microsoft & Krick | 2,643 | 
-| PinMeTo, Microsoft & meta | 2,285 | 
-| Foursquare & SparkGeo-confidence-conflation | 1,067 | 
-| meta & Krick | 679 | 
-| meta, Microsoft & PinMeTo | 647 | 
-| Microsoft, meta & PinMeTo | 362 | 
-| meta & PinMeTo | 307 | 
-| Microsoft, meta & Krick | 64 | 
-| Microsoft, Krick & meta | 43 | 
-| PinMeTo, meta, Microsoft & SparkGeo-confidence-conflation | 4 | 
-| Krick & meta | 16 | 
-| PinMeTo, Microsoft & SparkGeo-confidence-conflation | 2 | 
-| Microsoft, PinMeTo & SparkGeo-confidence-conflation | 1 | 
-| PinMeTo, meta & SparkGeo-confidence-conflation | 1 | 
-| meta, Microsoft, PinMeTo & SparkGeo-confidence-conflation | 1 | 
+| Foursquare, Overture                                        | 6,192,142      |
+| Krick, Overture                                             | 3,193         |
+| Microsoft, Overture                                         | 5,723,539      |
+| PinMeTo, Overture                                           | 125,377       |
+| meta, Overture                                              | 5,9457,529     |
 
 ## Dataset description
 
@@ -79,6 +53,7 @@ All Overture data, including places data, is distributed as GeoParquet, a column
 | sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
 | names | struct | Properties defining the names of a feature. |
 | categories | struct | The categories of the place. Complete list is available on GitHub: https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv |
+| basic_category | string | A simplified category taxonomy |
 | confidence | double | The confidence of the existence of the place. It's a number between 0 and 1. 0 means that we're sure that the place doesn't exist (anymore). 1 means that we're sure that the place exists. If there's no value for the confidence, it means that we don't have any confidence information. |
 | websites | string | The websites of the place. |
 | socials | string | The social media URLs of the place. |
@@ -86,6 +61,7 @@ All Overture data, including places data, is distributed as GeoParquet, a column
 | phones | string | The phone numbers of the place. |
 | brand | struct | The brand of the place. A location with multiple brands is modeled as multiple separate places, each with its own brand. |
 | addresses | struct | The addresses of the place. |
+| operating_status | string | Indicates the operating status of a place. |
 | filename | string | Name of the file being queried. |
 | theme | string | Name of the Overture theme being queried. |
 | type | string | Name of the Overture feature type being queried. |
