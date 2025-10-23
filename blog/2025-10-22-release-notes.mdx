@@ -1,0 +1,173 @@
+---
+title: 2025-10-22 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+:::warning
+
+Recently Overture implemented a data retention policy for our releases. Overture data will be publicly available on AWS and Azure for a maximum of 60 days, approximately two monthly releases. After that, we will automatically remove data files from public distribution using cloud storage lifecycle policies. You can find more information about Overture's data retention policy on the [releases](https://docs.overturemaps.org/release-calendar/#data-retention-policy) page in this documentation. 
+
+:::
+
+
+
+## Overview
+
+**The `2025-10-22.0` release of Overture data and `v1.13.0` of the Overture schema are now available.** The datasets and release artifacts are available as GeoParquet files stored on both AWS and Azure. There are several data updates and (minor) breaking schema changes in this release. 
+
+## What's new?
+
+### New `basic_category` property in the places schema
+
+In the places schema this month, we introduced a simple `basic_category` property that maps to our original `categories.primary` property. This change is part of a new initiative to reimagine Overture's category taxonomy. The new property is based on a commonly-used cognitive science concept called "basic-level categories," where category names balance being specific enough to be useful while general enough to be broadly applicable.
+
+
+### Major data updates and GERS stability in addresses
+
+The addresses theme has hit a new high of 455 million records, an increase of nine million records from our September release. More than 325 million of those records retained their GERS ID from the previous release, a major milestone for GERS stability as addresses moves toward General Availability next quarter.
+
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined [here](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at info@overturemaps.org. We’d love to hear from you.
+
+The paths are:
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2025-10-22.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2025-10-22.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2025-10-22.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2025-10-22.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-10-22.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2025-10-22.0/
+```
+
+### GERS registry
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+
+<!-- truncate -->
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- added additional `postal_city` values to NAD-sourced US addresses
+- added new data in the following locations:
+    - Faroe Islands
+    - Serbia
+    - USA
+        - Mississippi
+        - Idaho: Ada County
+        - Oregon: Jackson County 
+        - Florida: Orange County, Palm Beach County
+        - Michigan: Musgekon County, Kent County, Allegan County 
+        - many others from NAD
+- refreshed data in the following locations:
+    - Austria
+    - Australia
+    - Canada
+    - Japan
+    - Finland
+    - Germany (Berlin, Hamburg, Hesse, Saxony)
+    - Hong Kong
+    - Latvia
+    - Lithuania
+    - Luxembourg
+    - Poland
+    - Slovakia
+    - Spain
+    - Taiwan (CHA, KEE, KHH, KIN, MIA, NWT, TAO, TNN, TPE, TXG, YUN)
+    - USA
+- fixed the following bugs:
+    - removed unincorporated placeholder value in `address_level` from NAD
+    - added Estonia units
+    - fixed missing numbers in Lithuania
+    - removed various duplicate address records
+    - fixed issue sometimes causing invalid address_level values in Slovenia
+- identified the following "known" issues:
+    - partial loss of data in: Placer County, CA, USA; Desoto County, FL, USA; Schleswig-Holstein, DE
+    - full loss of data in Kern County, CA, USA
+
+### Base
+
+- made minor, incremental updates to the data
+- refreshed OpenStreetMap data as of 2025-10-11
+
+### Buildings
+
+- fixed a de-duplication bug, allowing ~5 million more Google-sourced buildings in SE Asia
+- populated the license property in sources for building height data
+- refreshed OpenStreetMap data as of 2025-10-11
+
+
+### Divisions
+
+- refreshed OSM data on 2025-10-02
+- made minor, incremental updates to the data
+
+
+### Places
+
+- added a new basic level category property the places schema
+- populated the basic level category property with data : https://github.com/OvertureMaps/schema/pull/399
+
+
+### Transportation
+
+- added new TomTom-sourced `segment` data 
+- refreshed OpenStreetMap data as of 2025-09-29
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.13.0` is [here](https://github.com/OvertureMaps/schema/releases).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
