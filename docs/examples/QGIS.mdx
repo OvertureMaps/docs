@@ -11,7 +11,7 @@ In this example, we'll show you how to get Overture Maps data into [QGIS](https:
 
 ## Method 1: Stream data with the GeoParquet Downloader plugin (recommended)
 
-Instead of downloading large datasets, you can stream Overture data directly into QGIS. The [GeoParquet Downloader plugin](https://github.com/cholmes/qgis_plugin_gpq_downloader) treats cloud-hosted GeoParquet files like a data service, pulling only the features within your current map view. It uses DuckDB under the hood to query the data in Overture's cloud storage and automatically converts that data to your preffered format (GeoParquet, GeoPackage, GeoJSON).
+Instead of downloading large datasets, you can stream Overture data directly into QGIS. The [GeoParquet Downloader plugin](https://github.com/cholmes/qgis_plugin_gpq_downloader) treats cloud-hosted GeoParquet files like a data service, pulling only the features within your current map view. It uses DuckDB under the hood to query the data in Overture's cloud storage and automatically converts that data to your preffered format.
 
 
 ### Installation
@@ -26,14 +26,14 @@ After installation, you'll find a new toolbar for accessing Overture data and ot
 
 ### Example
 
-Let's say you're analyzing building footprints in downtown Boston:
+Let's grab building footprints in downtown Boston:
 
 1. **Zoom to your study area**: Pan and zoom in QGIS to downtown Boston
 2. **Launch the downloader**: Click the plugin's toolbar icon
 3. **Configure your download**:
    - Source: Overture Maps
    - Theme: Buildings
-   - Output: GeoParquet, GeoPackage, or GeoJSON
+   - Output: GeoParquet, GeoPackage, DuckDB, GeoJSON or FlatGeobuf
 
 ![Configure GeoParquet Downloader](./assets/geoparquet-downloader-config.png)   
 
