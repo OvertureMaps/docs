@@ -1,17 +1,15 @@
 ---
-description: Stream Overture Maps data directly into QGIS for your area of interest
-title: QGIS 
+description: Load Overture data directly into QGIS
+title: QGIS
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import QueryBuilder from '@site/src/components/queryBuilder';
-import BoulderCoDuckDB from '!!raw-loader!@site/src/queries/duckdb/boulder_co_duckdb.sql';
 
-In this example, we'll show you how to get Overture Maps data into [QGIS](https://www.qgis.org/), a powerful open GIS and mapping platform. QGIS offers multiple pathways to work with Overture's cloud-native GeoParquet files, from streaming data for specific areas to working with complete datasets locally.
+# Load Overture data into QGIS
 
-## Method 1: Stream data with the GeoParquet Downloader plugin (recommended)
+In this example, we'll show you how to get Overture data into [QGIS](https://www.qgis.org/), a powerful open GIS and mapping platform. 
 
-Instead of downloading large datasets, you can stream Overture data directly into QGIS. The [GeoParquet Downloader plugin](https://github.com/cholmes/qgis_plugin_gpq_downloader) treats cloud-hosted GeoParquet files like a data service, pulling only the features within your current map view. It uses DuckDB under the hood to query the data in Overture's cloud storage and automatically converts that data to your preffered format.
+## Method 1: Using the GeoParquet Downloader plugin (recommended)
+
+You can load Overture data directly into QGIS using the [GeoParquet Downloader plugin](https://github.com/cholmes/qgis_plugin_gpq_downloader). This plugin treats cloud-hosted GeoParquet files like a data service, pulling only the features within your current map view. It uses DuckDB under the hood to query the data in Overture's cloud storage and automatically converts that data to your preffered format.
 
 
 ### Installation
@@ -22,27 +20,26 @@ The plugin is available through QGIS's standard plugin repository. To install it
 - Search for "GeoParquet Downloader"
 - Install and restart QGIS if prompted
 
-After installation, you'll find a new toolbar for accessing Overture data and other cloud-native geospatial datasets, from [Source Cooperative](https://source.coop/) and [OpenStreetMap](https://openstreetmap.us/our-work/layercake/). Most installations handle the DuckDB automatically, though some systems may require additional setup, see [installation instructions](https://github.com/cholmes/qgis_plugin_gpq_downloader/blob/main/README.md#installation). Note: To save the data as GeoParquet files, your QGIS installation needs GDAL version 3.5 or higher.
+After installation, you'll find a new toolbar for accessing Overture data and other cloud-native geospatial datasets, from [Source Cooperative](https://source.coop/) and [OpenStreetMap](https://openstreetmap.us/our-work/layercake/). Most installations handle DuckDB automatically, though some systems may require additional setup, see these [installation instructions](https://github.com/cholmes/qgis_plugin_gpq_downloader/blob/main/README.md#installation) for more information. Note: To save the data as GeoParquet files, your QGIS installation needs GDAL version 3.8 or higher. For macOS, we recommend [using Pixi](https://github.com/cholmes/qgis_plugin_gpq_downloader/wiki/Installing-GeoParquet-Support-in-QGIS#osx) to install QGIS and the necessary dependencies in a separate environment. 
 
 ### Example
 
-Let's grab building footprints in downtown Boston:
+Let's add streets to our map of buildings in Florence, Italy:
 
-1. **Zoom to your study area**: Pan and zoom in QGIS to downtown Boston
+1. **Zoom to your area**: Pan and zoom in QGIS to Florence
 2. **Launch the downloader**: Click the plugin's toolbar icon
 3. **Configure your download**:
    - Source: Overture Maps
-   - Theme: Buildings
+   - Theme: Addresses, Base, Buildings, Divisions, Places or Transportation
    - Output: GeoParquet, GeoPackage, DuckDB, GeoJSON or FlatGeobuf
+4. **Load the data**: The plugin queries Overture's cloud storage and downloads data in the bounding box defined by your current view in QGIS.
 
-![Configure GeoParquet Downloader](./assets/geoparquet-downloader-config.png)   
+The entire process typically takes seconds to minutes depending on data density. You can change your view and reload to pull data in different areas. You can also load additional datasets in your map.
 
-4. **Stream the data**: The plugin queries Overture's cloud storage and downloads only buildings visible in your current view
-
-The entire process typically takes seconds to minutes depending on data density. You can change your view and reload to explore data in different areas. You can also load additional datasets in your map.
+![GeoParquet Downloader in action](./assets/qgis-plugin.gif)   
 
 
-## Method 2: Import Overture data directly
+## Method 2: Importing Overture data 
 
 If you already have Overture data files stored locally, you can import them or drag and drop them into QGIS. GeoParquet files work as first-class vector data sources in QGIS, just like Shapefiles or GeoPackage. You have several options for loading them:
 
@@ -50,19 +47,6 @@ If you already have Overture data files stored locally, you can import them or d
 - **Batch import**: Select multiple Parquet files and drop them simultaneously to build multi-layer projects instantly
 - **Data Source Manager**: Use `Layer → Add Layer → Add Vector Layer`, then browse to your Parquet files
 - **Browser panel**: Navigate to your files in the QGIS Browser panel and double-click to add them
-
-![Drag-n-drop parquet files in QGIS](./assets/qgis-parquet-drag-drop.gif)
-
-
-## Troubleshooting
-
-| Challenge | Try this |
-|---|---|
-| Large areas taking too long to load | _Smaller viewports download faster. Start zoomed in, then expand your area as needed_ |
-| Memory issues with dense data | _Use GeoParquet format which QGIS can read more efficiently than GeoJSON_ | 
-| Need offline access to large regions | _Download datasets locally and import them into QGIS before going offline_ | 
-| Properties are nested or complex | _Some of Overture's properties have a complex structure; try using QGIS expressions to extract sub-properties_ | 
-
 
 
 ## Resources and next steps
