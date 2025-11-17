@@ -1,76 +1,56 @@
 ---
-description: drag and drop GeoParquet files into QGIS
+description: Load Overture data directly into QGIS
 title: QGIS
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import QueryBuilder from '@site/src/components/queryBuilder';
-import BoulderCoDuckDB from '!!raw-loader!@site/src/queries/duckdb/boulder_co_duckdb.sql';
+# Load Overture data into QGIS
 
-In this example, we'll show you how to get Overture Maps data into [QGIS](https://www.qgis.org/), a powerful and popular open source geographic information system. QGIS can ingest almost every spatial data format, including [Parquet](https://parquet.apache.org/docs/) and [GeoParquet](https://geoparquet.org/). Once you get your data into QGIS, the sky's the limit for data analysis, data conflation, visualization and beautiful mapmaking.
+In this example, we'll show you how to get Overture data into [QGIS](https://www.qgis.org/), a powerful open GIS and mapping platform. 
 
-<details>
+## Method 1: Using the GeoParquet Downloader plugin (recommended)
 
-    <summary>Instructions: Install a version of QGIS with GDAL > 3.5 that can read `(geo)parquet`</summary>
-
-    <Tabs>
-        <TabItem value="mac" label="MacOS" default>
-            You can find the latest installers for Mac here: [github.com/opengisch/qgis-conda-builder/releases](https://github.com/opengisch/qgis-conda-builder/releases)
-
-            Additionally, the [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
-        </TabItem>
-
-        <TabItem value="windows" label="Windows" default>
-            Most distributions of QGIS for Windows have support for parquet.
-        </TabItem>
-
-        <TabItem value="linux" label="Linux" default>
-            The [conda packages](https://anaconda.org/conda-forge/qgis) of QGIS have support for Parquet.
-
-            Additionally, there is a Flatpak QGIS package that includes support for Parquet:
-
-            ```bash
-            flatpak install --user https://dl.flathub.org/build-repo/94031/org.qgis.qgis.flatpakref
-            ```
-        </TabItem>
-    </Tabs>
-</details>
-
-## Download Overture Data
-
-<Tabs>
-    <TabItem value="DuckDB">
-
-        Using only the `bbox` parameters, we can efficiently retrieve all Overture data without processing any geometries. With SELECT `*`, we will simply download _all_ of the data in Overture across all themes and types. Note: if your query is interupted by a connection error, you might try running the following command first: `SET http_keep_alive=false;`.
-
-        <QueryBuilder query={BoulderCoDuckDB}></QueryBuilder>
-
-        Note that this query gathers data from all Overture themes with `theme=*/type=*/*`. The resulting file has _all_ of the columns and multiple geometry types.
+You can load Overture data directly into QGIS using the [GeoParquet Downloader plugin](https://github.com/cholmes/qgis_plugin_gpq_downloader). This plugin treats cloud-hosted GeoParquet files like a data service, pulling only the features within your current map view. It uses DuckDB under the hood to query the data in Overture's cloud storage and automatically converts that data to your preffered format.
 
 
-    </TabItem>
+### Installation
 
-    <TabItem value="Python">
+The plugin is available through QGIS's standard plugin repository. To install it:
 
-        The new [`overturemaps-py`](https://github.com/OvertureMaps/overturemaps-py) Python utility can download Overture data as both `geojson` and `geoparquet`. This example downloads buildlings around Boston.
+- Open QGIS Plugin Manager (`Plugins → Manage and Install Plugins`)
+- Search for "GeoParquet Downloader"
+- Install and restart QGIS if prompted
 
-        ```bash
-        $ pip install overturemaps
+After installation, you'll find a new toolbar for accessing Overture data and other cloud-native geospatial datasets, from [Source Cooperative](https://source.coop/) and [OpenStreetMap](https://openstreetmap.us/our-work/layercake/). Most installations handle DuckDB automatically, though some systems may require additional setup, see these [installation instructions](https://github.com/cholmes/qgis_plugin_gpq_downloader/blob/main/README.md#installation) for more information. Note: To save the data as GeoParquet files, your QGIS installation needs GDAL version 3.8 or higher. For macOS, we recommend [using Pixi](https://github.com/cholmes/qgis_plugin_gpq_downloader/wiki/Installing-GeoParquet-Support-in-QGIS#osx) to install QGIS and the necessary dependencies in a separate environment. 
 
-        $ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 \
-            -f geoparquet --type=building --output=boston.geoparquet
-        ```
+### Example
 
-        Note: run `overturemaps download --help` for a full list of types and output formats.
+Let's add streets to our map of buildings in Florence, Italy:
+
+1. **Zoom to your area**: Pan and zoom in QGIS to Florence
+2. **Launch the downloader**: Click the plugin's toolbar icon
+3. **Configure your download**:
+   - Source: Overture Maps
+   - Theme: Addresses, Base, Buildings, Divisions, Places or Transportation
+   - Output: GeoParquet, GeoPackage, DuckDB, GeoJSON or FlatGeobuf
+4. **Load the data**: The plugin queries Overture's cloud storage and downloads data in the bounding box defined by your current view in QGIS.
+
+The entire process typically takes seconds to minutes depending on data density. You can change your view and reload to pull data in different areas. You can also load additional datasets in your map.
+
+![GeoParquet Downloader in action](./assets/qgis-plugin.gif)   
 
 
-    </TabItem>
+## Method 2: Importing Overture data 
 
-</Tabs>
+If you already have Overture data files stored locally, you can import them or drag and drop them into QGIS. GeoParquet files work as first-class vector data sources in QGIS, just like Shapefiles or GeoPackage. You have several options for loading them:
+
+- **Drag and drop**: The fastest method—simply drag GeoParquet files from your file manager directly onto the QGIS map canvas
+- **Batch import**: Select multiple Parquet files and drop them simultaneously to build multi-layer projects instantly
+- **Data Source Manager**: Use `Layer → Add Layer → Add Vector Layer`, then browse to your Parquet files
+- **Browser panel**: Navigate to your files in the QGIS Browser panel and double-click to add them
 
 
-## Add the data to QGIS
-All of the data files we created in the previous step are vector files that can be added as layers in QGIS. The easiest method is to drag-and-drop the file(s) directly into the map canvas.
+## Resources and next steps
 
-![Drag-n-drop parquet files in QGIS](./assets/qgis-parquet-drag-drop.gif)
+- Explore the [GeoParquet Downloader plugin repository](https://github.com/cholmes/qgis_plugin_gpq_downloader) for updates and additional examples.
+- Learn about [Overture's schema](https://docs.overturemaps.org/schema/) to better understand the properties available.
+- Chat with the [Overture community](https://github.com/OvertureMaps/data/discussions) to share workflows and get help.
