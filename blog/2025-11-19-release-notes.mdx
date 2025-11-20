@@ -1,0 +1,128 @@
+---
+title: 2025-11-19 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2025-11-19.0` release of Overture data and `v1.14.0` of the Overture schema are now available.** The datasets and release artifacts are available as GeoParquet files stored on both AWS and Azure. This is a [minor breaking change](/release-calendar) release. 
+
+## What's new?
+
+We added a `roller_coaster` class to our schema this month. Buckle up because next month we're adding rollercoaster data!
+
+![Rollercoasters!](./assets/roller-coasters.gif) 
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined [here](/getting-data). The paths to the data and release artifacts are listed below. We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at info@overturemaps.org. We’d love to hear from you.
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2025-11-19.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2025-11-19.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2025-11-19.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2025-11-19.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-11-19.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2025-11-19.0/
+```
+
+### GERS registry
+
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+
+<!-- truncate -->
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- repromoted the October data release
+
+
+### Base
+
+- added a new `roller_coaster` class to the schema (data coming next month!)
+- refreshed OSM data
+- made minor, incremental updates to the data
+
+
+### Buildings
+
+- refreshed OSM data
+- made minor, incremental updates to the data
+
+
+### Divisions
+
+- refreshed OSM data on 6 November 2025
+- made minor, incremental updates to the data
+
+
+### Places
+
+- added ~5,000 new POIs from RenderSEO
+- added ~1,500,000 new POIs from AllThePlaces
+- known issue: GERS ID churn on 12 million place records
+
+
+### Transportation
+
+- added new TomTom-sourced `segment` data to bring the total length of road segments from TomTom to more than 1 million kilometers across 115 countries
+- refreshed OSM data on 2 November 2025
+
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.14.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.14.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
