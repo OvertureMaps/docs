@@ -4,7 +4,7 @@
       "brief_description": "Concrete, physically identifiable, stationary destinations.",
       "licenses": [
         {
-          "name": "CDLA Permissive 2.0.",
+          "name": "CDLA Permissive 2.0",
           "url": "https://cdla.dev/permissive-2-0/"
         },
         {
@@ -112,7 +112,10 @@
         ]
       },
       "merging": {
-        "summary": "Promotion of single source; no merging of attributes",
+        "summary": [
+          "Promotion of single source for matched places",
+          "No merging of attributes"
+        ],
         "logic": [
           "Clustering of matched places",
           "Promotion of place from source with the highest match count",
@@ -242,9 +245,12 @@
         ]
       },
       "merging": {
-        "summary": "Hierarchical non-overlapping spatial merge",
-        "logic": [
+        "summary": [
           "Hierarchical merging of non-overlapping footprints",
+          "Merging of height attributes between matches"
+        ],
+        "logic": [
+          "Hierarchical merging of non-overlapping building footprints",
           "Merging of building height attributes between matches"
         ],
         "constraints": [
@@ -289,7 +295,7 @@
       ],
       "gers": {
         "gersified": {
-          "flag": false,
+          "flag": true,
           "note": ""
         },
         "bridge_files": {
@@ -310,43 +316,47 @@
         "note": ""
       },
       "excluded_by_design": [
-        "Open, navigable spaces like fields, parks, or oceans"
       ],
       "freshness": {
-        "release_frequency": "",
+        "release_frequency": "monthly",
         "last_updated": ""
       },
       "quality_assurance": {
-        "coverage_summary": "37 countries",
+        "coverage_summary": "39 countries",
         "coverage": [
-          "Coverage in 37 countries",
+          "Coverage in 39 countries",
           "Several countries with partial coverage: US, Germany, Taiwan",
           "Datasets have varying levels of completeness in their attributes. A dataset may be missing postcodes or only have partial coverage for `address_levels` for example."
         ],
-        "quality_summary": "Duplicates",
+        "quality_summary": "Limited GERS ID stability and variable point location accuracy",
         "quality": [
-          "Duplicates"
+          "Address point locations vary from dataset to dataset but most often represent either building centroids, building entrances, points on road, or parcel centroids.",
+          "GERS IDs are not very stable because of identical matching. Any change to an attribute or location will result in a new GERS ID."
         ],
         "violations": []
       },
       "filtering": {
         "summary": "",
-        "location": [
-          ""
-        ],
+        "location": [],
         "topological": [],
         "geometrical": [],
         "properties": [],
         "others": []
       },
       "matching": {
-        "summary": "",
-        "logic": "n/a (subtypes within a country have a single source)",
-        "properties": []
+        "summary": "Exact matching",
+        "logic": "Matching based on exact point geometry and address properties",
+        "properties": ["All properties incl. geometry"]
       },
       "merging": {
-        "summary": "",
-        "logic": "",
+        "summary": [
+          "Promotion of single source for matched addresses",
+          "No merging of attributes"
+        ],
+        "logic": [
+          "All addresses, except for perfect duplicates/matches, are released",
+          "No merging of attributes between sources"
+        ],
         "constraints": []
       }
     },
@@ -395,6 +405,7 @@
         "note": ""
       },
       "excluded_by_design": [
+        "Open, navigable spaces like fields, parks, or oceans",
         "Aerial paths, such as flight paths or geostationary satellite orbits",
         "Paths traversed by continuous entities: oil pipelines, electric lines"
       ],
@@ -430,7 +441,7 @@
         "properties": []
       },
       "merging": {
-        "summary": "",
+        "summary": [],
         "logic": "n/a (single source)",
         "constraints": []
       }
@@ -479,11 +490,9 @@
         "flag": false,
         "note": ""
       },
-      "excluded_by_design": [
-        "Non unique features: An address could relate to multiple Places for example but there should not be more than one address point with the same values."
-      ],
+      "excluded_by_design": [],
       "freshness": {
-        "release_frequency": "",
+        "release_frequency": "monthly",
         "last_updated": ""
       },
       "quality_assurance": {
@@ -518,7 +527,7 @@
         "properties": []
       },
       "merging": {
-        "summary": "",
+        "summary": [],
         "logic": "",
         "constraints": []
       }
@@ -601,12 +610,12 @@
       },
       "matching": {
         "summary": "",
-        "logic": "n/a (types are single source)",
+        "logic": "n/a (single source)",
         "properties": []
       },
       "merging": {
-        "summary": "",
-        "logic": "n/a (types are single source)",
+        "summary": [],
+        "logic": "n/a (single source)",
         "constraints": []
       }
     }

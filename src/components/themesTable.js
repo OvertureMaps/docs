@@ -294,7 +294,7 @@ export default function ThemesTable({ data }) {
                     <CroppedText text={renderCodeSpans(matchingSummary)} expanded={expandedTheme === name} />
                   </td>
                   <td style={td}>
-                    <CroppedText text={renderCodeSpans(mergingSummary)} expanded={expandedTheme === name} />
+                    <CroppedText text={renderList(mergingSummary)} expanded={expandedTheme === name} />
                   </td>
                 </tr>
 
@@ -351,7 +351,7 @@ function ExpandedThemeDetails({ theme, schemas }) {
   const renderList = (arr) => (
     <ul style={{ margin: 0, paddingLeft: "1.25rem" }}>
       {arr.map((item, i) => (
-        <li key={i}>{item}</li>
+        <li key={i}>{renderCodeSpans(item)}</li>
       ))}
     </ul>
   );
