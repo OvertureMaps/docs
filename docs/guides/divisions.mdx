@@ -82,7 +82,7 @@ Subtypes can represent each feature's administrative level, from `country` down 
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| geometry | binary | A WKB representation of the entity's geometry. MUST be a Point as defined by GeoJSON schema. |
 | bbox | struct | The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format. |
 | country | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
@@ -111,7 +111,7 @@ Subtypes can represent each feature's administrative level, from `country` down 
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| geometry | binary | A WKB representation of the entity's geometry. MUST be a Polygon or MultiPolygon as defined by GeoJSON schema. |
 | bbox | struct | The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format. |
 | country | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
@@ -133,7 +133,7 @@ Subtypes can represent each feature's administrative level, from `country` down 
 | column | type | description |
 | --- | --- | --- |
 | id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| geometry | binary | A WKB representation of the entity's geometry. MUST be a LineString or MultiLineString as defined by GeoJSON schema. |
 | bbox | struct | The bounding box of an entity's geometry, represented with float values, in a `xmin, xmax, ymin, ymax` format. |
 | country | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this division represents or belongs to. If the entity this division represents has a country code, the country property contains it. If it does not, the country property contains the country code of the first division encountered by traversing the parent_division_id chain to the root. |
 | version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
