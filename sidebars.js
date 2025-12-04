@@ -57,7 +57,6 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        'guides/theme-definitions',
         'guides/addresses',
         'guides/base',
         'guides/buildings',

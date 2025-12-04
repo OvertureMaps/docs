@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///Users/danabauer/Downloads/theme-definitions-table_9.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overture Maps - Theme Definitions Table</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #fff;
+        }
+
+        .header {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 1.5rem 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .back-link {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .description {
+            margin-bottom: 2rem;
+            color: #6c757d;
+        }
+
+        .hint {
+            margin-bottom: 1rem;
+            padding: 0.5rem 0.75rem;
+            background: #e7f3ff;
+            border-left: 3px solid #0066cc;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: #004080;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 0 -2rem;
+            padding: 0 2rem;
+        }
+
+        table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        th {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            border: 1px solid #dee2e6;
+            padding: 0.625rem;
+            vertical-align: top;
+            font-size: 0.875rem;
+        }
+
+        tr.theme-row {
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        tr.theme-row:hover {
+            background: #f0f8ff;
+        }
+
+        tr.theme-row.expanded {
+            background: #e7f3ff;
+        }
+
+        .theme-name {
+            font-weight: 600;
+            color: #0066cc;
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .expand-icon {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            transition: transform 0.2s ease;
+        }
+
+        tr.theme-row.expanded .expand-icon {
+            transform: rotate(90deg);
+        }
+
+        tr.theme-row:hover .theme-name {
+            background: #f0f8ff;
+        }
+
+        tr.theme-row.expanded .theme-name {
+            background: #e7f3ff;
+        }
+
+        th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+        }
+
+        /* Compact status indicators */
+        .status-grid {
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.125rem;
+            padding: 0.125rem 0.375rem;
+            background: #f0f0f0;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .status-indicator.active {
+            background: #d4f4dd;
+            color: #0a6c2e;
+        }
+
+        .status-indicator.inactive {
+            background: #fce4e4;
+            color: #a91e1e;
+        }
+
+        .status-indicator.partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Source count badge */
+        .source-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 1.5rem;
+            padding: 0.125rem 0.375rem;
+            background: #0066cc;
+            color: white;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Types summary */
+        .types-summary {
+            font-size: 0.85rem;
+            color: #495057;
+            font-style: italic;
+        }
+
+        /* Coverage and quality badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-global {
+            background: #d4f4dd;
+            color: #0a6c2e;
+        }
+
+        .badge-regional {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-quality {
+            background: #f0f0f0;
+            color: #495057;
+        }
+
+        /* Processing summary */
+        .processing-summary {
+            font-size: 0.8rem;
+            color: #6c757d;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Expanded details row */
+        tr.details-row {
+            display: none;
+        }
+
+        tr.details-row.show {
+            display: table-row;
+        }
+
+        .details-content {
+            padding: 2rem;
+            background: linear-gradient(to bottom, #f0f8ff, #ffffff);
+            border-top: 2px solid #0066cc;
+        }
+
+        .details-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .details-section h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: #0066cc;
+        }
+
+        .detail-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            margin-bottom: 2rem;
+        }
+
+        .detail-box {
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        .detail-box h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            color: #495057;
+        }
+
+        /* Lists */
+        ul {
+            margin: 0;
+            padding-left: 1.25rem;
+            list-style-type: disc;
+        }
+
+        li {
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .detail-list li {
+            padding: 0.5rem;
+            background: white;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #0066cc;
+        }
+
+        /* Links */
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code */
+        code {
+            background: #f4f4f4;
+            padding: 0.125rem 0.25rem;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: #6c757d;
+        }
+
+        /* Error */
+        .error {
+            text-align: center;
+            padding: 4rem;
+            color: #dc3545;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .table-wrapper {
+                margin: 0 -1rem;
+                padding: 0 1rem;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+                color: #e4e4e4;
+            }
+
+            .header {
+                background: #252525;
+                border-bottom-color: #3a3a3a;
+            }
+
+            .hint {
+                background: #2a3644;
+                border-left-color: #5a8bb8;
+                color: #a8c4db;
+            }
+
+            table {
+                background: #252525;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            }
+
+            th {
+                background: #2d2d2d;
+                border-color: #3a3a3a;
+                color: #d4d4d4;
+            }
+
+            td {
+                border-color: #3a3a3a;
+            }
+
+            tr.theme-row:hover {
+                background: #2d3844;
+            }
+
+            tr.theme-row.expanded {
+                background: #2a3644;
+            }
+
+            .theme-name {
+                background: #252525;
+            }
+
+            tr.theme-row:hover .theme-name {
+                background: #2d3844;
+            }
+
+            tr.theme-row.expanded .theme-name {
+                background: #2a3644;
+            }
+
+            .details-content {
+                background: linear-gradient(to bottom, #2a3644, #252525);
+            }
+
+            .detail-box {
+                background: #2d2d2d;
+                border-color: #3a3a3a;
+            }
+
+            .detail-list li {
+                background: #2d2d2d;
+                border-left-color: #5a8bb8;
+            }
+
+            code {
+                background: #2d2d2d;
+                color: #e4e4e4;
+            }
+
+            .status-indicator {
+                background: #2d2d2d;
+            }
+
+            .status-indicator.active {
+                background: #2a4d3a;
+                color: #7ec699;
+            }
+
+            .status-indicator.inactive {
+                background: #4d2a2a;
+                color: #db8585;
+            }
+
+            .status-indicator.partial {
+                background: #4d4330;
+                color: #d4b377;
+            }
+
+            .badge-global {
+                background: #2a4d3a;
+                color: #7ec699;
+            }
+
+            .badge-regional {
+                background: #4d4330;
+                color: #d4b377;
+            }
+
+            .badge-quality {
+                background: #2d2d2d;
+                color: #d4d4d4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Theme Definitions Table</h1>
+            <a href="file:///guides" class="back-link">← Back to Data Guides</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <p class="description">
+            Comprehensive specifications for Overture Maps data themes. 
+        </p>
+
+        <div class="hint">
+            Click any row to view detailed specifications including sources, licenses, and processing methods
+        </div>
+
+        <div id="table-container" class="loading"><div class="error">Error loading theme definitions: Failed to fetch</div></div>
+    </div>
+
+    <script>
+        // Track expanded rows
+        let expandedRows = new Set();
+
+        // Load the theme definitions data from separate JSON file
+        fetch('/theme_definitions.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load data: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => renderTable(data))
+            .catch(error => {
+                document.getElementById('table-container').innerHTML = 
+                    '<div class="error">Error loading theme definitions: ' + error.message + '</div>';
+            });
+
+        function toggleRow(themeName) {
+            const row = document.getElementById(`row-${themeName}`);
+            const detailsRow = document.getElementById(`details-${themeName}`);
+            
+            if (expandedRows.has(themeName)) {
+                expandedRows.delete(themeName);
+                row.classList.remove('expanded');
+                detailsRow.classList.remove('show');
+            } else {
+                expandedRows.add(themeName);
+                row.classList.add('expanded');
+                detailsRow.classList.add('show');
+            }
+        }
+
+        function renderTable(data) {
+            const themes = data.themes;
+            const container = document.getElementById('table-container');
+            
+            let html = '<div class="table-wrapper"><table>';
+            
+            // Streamlined header
+            html += `
+                <thead>
+                    <tr>
+                        <th>Theme</th>
+                        <th>Description</th>
+                        <th>Types</th>
+                        <th>Coverage</th>
+                        <th>Sources</th>
+                        <th>Release Artifacts</th>
+                        <th>Release Frequency</th>
+                        <th>Processing</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            // Rows with expandable details
+            for (const [name, theme] of Object.entries(themes)) {
+                const gers = theme.gers || {};
+                const safeId = name.replace(/\s+/g, '-');
+                
+                // Main row (streamlined)
+                html += `
+                    <tr class="theme-row" id="row-${safeId}" onclick="toggleRow('${safeId}')">
+                        <td class="theme-name">
+                            <span class="expand-icon">▶</span>
+                            ${name}
+                        </td>
+                        <td>${theme.brief_description || '—'}</td>
+                        <td>${renderTypes(theme.types)}</td>
+                        <td>${renderCoverageBadge(theme.quality_assurance?.coverage_summary)}</td>
+                        <td>${renderSourceCount(theme.sources)}</td>
+                        <td>${renderReleaseArtifacts(gers)}</td>
+                        <td>${theme.freshness?.release_frequency || '—'}</td>
+                        <td>${renderProcessingSummary(theme)}</td>
+                    </tr>
+                `;
+                
+                // Details row (hidden by default)
+                html += `
+                    <tr class="details-row" id="details-${safeId}">
+                        <td colspan="8">
+                            <div class="details-content">
+                                ${renderFullDetails(theme)}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+            container.classList.remove('loading');
+        }
+
+        function renderCoverageBadge(coverage) {
+            if (!coverage) return '<span class="badge badge-quality">—</span>';
+            if (coverage.toLowerCase().includes('global')) {
+                return '<span class="badge badge-global">Global</span>';
+            } else if (coverage.toLowerCase().includes('select') || coverage.toLowerCase().includes('countries')) {
+                return '<span class="badge badge-regional">Countries</span>';
+            }
+            return `<span class="badge badge-quality">${coverage}</span>`;
+        }
+
+        function renderQualityBadge(quality) {
+            if (!quality || quality === '—') return '<span class="badge badge-quality">—</span>';
+            // Truncate long quality descriptions
+            const shortQuality = quality.length > 20 ? quality.substring(0, 20) + '...' : quality;
+            return `<span class="badge badge-quality" title="${quality}">${shortQuality}</span>`;
+        }
+
+        function renderSourceCount(sources) {
+            if (!sources || sources.length === 0) return '<span class="source-count">0</span>';
+            const count = sources.length;
+            const types = [...new Set(sources.map(s => s.type).filter(Boolean))];
+            const typeStr = types.length > 0 ? ` (${types.join(', ')})` : '';
+            return `<span class="source-count" title="${count} sources${typeStr}">${count}</span>`;
+        }
+
+        function renderTypes(types) {
+            if (!types || types.length === 0) return '—';
+            // Display all types as a simple comma-separated list without truncation
+            return `<span style="font-size: 0.85rem; color: #6c757d;">${types.join(', ')}</span>`;
+        }
+
+        function renderReleaseArtifacts(gers) {
+            const items = [];
+            
+            // If it has Registry, show "GERS Registry"
+            if (gers.registry?.flag) {
+                items.push('<span class="status-indicator active">GERS registry</span>');
+            } else if (gers.gersified?.flag) {
+                // Only show GERS if no Registry
+                items.push('<span class="status-indicator active">GERS registry</span>');
+            }
+            
+            if (gers.bridge_files?.flag) {
+                // Show as "bridge files"
+                const title = gers.bridge_files.note || '';
+                items.push(`<span class="status-indicator active" title="${title}">bridge files</span>`);
+            }
+            
+            if (gers.data_changelog?.flag) {
+                items.push('<span class="status-indicator active">changelog</span>');
+            }
+            
+            return items.length > 0 ? `<div class="status-grid">${items.join('')}</div>` : '—';
+        }
+
+        function renderConfidence(confidence) {
+            if (!confidence || !confidence.flag) return '—';
+            return '<span class="status-indicator active">Yes</span>';
+        }
+
+        function renderProcessingSummary(theme) {
+            const parts = [];
+            if (theme.filtering?.summary) parts.push('Filtered');
+            if (theme.matching?.summary && theme.matching.summary !== '—' && !theme.matching.summary.includes('n/a')) parts.push('Matched');
+            if (theme.merging?.summary && theme.merging.summary !== '—' && !theme.merging.summary.includes('n/a')) parts.push('Merged');
+            
+            if (parts.length === 0) return '<span class="processing-summary">Single source</span>';
+            return `<span class="processing-summary">${parts.join(' → ')}</span>`;
+        }
+
+        function renderFullDetails(theme) {
+            let html = '';
+            
+            // Types section (if available)
+            if (theme.types && theme.types.length > 0) {
+                html += `
+                    <div class="details-section">
+                        <h3>Feature Types</h3>
+                        <div class="status-grid">
+                            ${theme.types.map(type => 
+                                `<span class="status-indicator active">${type}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Sources and Licenses section
+            html += '<div class="detail-grid">';
+            
+            // Sources
+            if (theme.sources && theme.sources.length > 0) {
+                html += `
+                    <div class="detail-box">
+                        <h4>Data Sources (${theme.sources.length})</h4>
+                        <ul>
+                            ${theme.sources.map(s => {
+                                const link = s.url ? `<a href="${s.url}" target="_blank" onclick="event.stopPropagation()">${s.name}</a>` : s.name;
+                                const meta = [s.type, s.freshness].filter(Boolean).join(', ');
+                                return `<li>${link}${meta ? ` — <em>${meta}</em>` : ''}</li>`;
+                            }).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // Licenses
+            if (theme.licenses && theme.licenses.length > 0) {
+                html += `
+                    <div class="detail-box">
+                        <h4>Licenses</h4>
+                        <ul>
+                            ${theme.licenses.map(l => 
+                                l.url ? `<li><a href="${l.url}" target="_blank" onclick="event.stopPropagation()">${l.name}</a></li>` : `<li>${l.name}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            
+            // Data Quality Summary
+            if (theme.quality_assurance?.quality_summary) {
+                html += `
+                    <div class="details-section">
+                        <h3>Data Quality Summary</h3>
+                        <p>${theme.quality_assurance.quality_summary}</p>
+                    </div>
+                `;
+            }
+            
+            // Confidence Score (only for Places)
+            if (theme.signal_confidence_score?.flag) {
+                html += `
+                    <div class="details-section">
+                        <h3>Confidence Score</h3>
+                        <p>This theme includes confidence scores for each feature.</p>
+                    </div>
+                `;
+            }
+            
+            // Release Artifacts Details
+            if (theme.gers) {
+                html += `
+                    <div class="details-section">
+                        <h3>Release Artifacts</h3>
+                        <ul>
+                `;
+                
+                if (theme.gers.gersified?.flag) {
+                    html += `<li><strong>GERS:</strong> Yes${theme.gers.gersified.note ? ` — ${theme.gers.gersified.note}` : ''}</li>`;
+                }
+                if (theme.gers.registry?.flag) {
+                    html += `<li><strong>Registry:</strong> Yes${theme.gers.registry.note ? ` — ${theme.gers.registry.note}` : ''}</li>`;
+                }
+                if (theme.gers.bridge_files?.flag) {
+                    html += `<li><strong>Bridge Files:</strong> Yes${theme.gers.bridge_files.note ? ` — ${theme.gers.bridge_files.note}` : ''}</li>`;
+                }
+                if (theme.gers.data_changelog?.flag) {
+                    html += `<li><strong>Changelog:</strong> Yes${theme.gers.data_changelog.note ? ` — ${theme.gers.data_changelog.note}` : ''}</li>`;
+                }
+                
+                html += '</ul></div>';
+            }
+            
+            // Excluded by Design
+            if (theme.excluded_by_design && theme.excluded_by_design.length > 0) {
+                html += `
+                    <div class="details-section">
+                        <h3>Excluded by Design</h3>
+                        <ul class="detail-list">
+                            ${theme.excluded_by_design.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // Quality Assurance Details
+            if (theme.quality_assurance) {
+                html += `
+                    <div class="details-section">
+                        <h3>Quality Assurance</h3>
+                        ${renderQualityDetails(theme.quality_assurance)}
+                    </div>
+                `;
+            }
+            
+            // Processing Details
+            html += '<h3 style="margin-top: 2rem; margin-bottom: 1rem;">Processing Pipeline</h3>';
+            html += '<div class="detail-grid">';
+            
+            // Filtering
+            if (theme.filtering) {
+                html += `
+                    <div class="detail-box">
+                        <h4>Filtering</h4>
+                        ${renderProcessingDetails(theme.filtering)}
+                    </div>
+                `;
+            }
+            
+            // Matching
+            if (theme.matching) {
+                html += `
+                    <div class="detail-box">
+                        <h4>Matching</h4>
+                        ${renderProcessingDetails(theme.matching)}
+                    </div>
+                `;
+            }
+            
+            // Merging
+            if (theme.merging) {
+                html += `
+                    <div class="detail-box">
+                        <h4>Merging</h4>
+                        ${renderProcessingDetails(theme.merging)}
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            
+            return html;
+        }
+
+        function renderQualityDetails(qa) {
+            let html = '<ul>';
+            
+            if (qa.coverage && Array.isArray(qa.coverage)) {
+                html += '<li><strong>Coverage:</strong><ul>';
+                qa.coverage.forEach(item => {
+                    if (item !== undefined && item !== null) {
+                        html += `<li>${String(item)}</li>`;
+                    }
+                });
+                html += '</ul></li>';
+            }
+            
+            if (qa.quality && Array.isArray(qa.quality)) {
+                html += '<li><strong>Quality Issues:</strong><ul>';
+                qa.quality.forEach(item => {
+                    if (item !== undefined && item !== null) {
+                        html += `<li>${String(item)}</li>`;
+                    }
+                });
+                html += '</ul></li>';
+            }
+            
+            if (qa.violations && Array.isArray(qa.violations) && qa.violations.length > 0) {
+                html += '<li><strong>Violations:</strong><ul>';
+                qa.violations.forEach(item => {
+                    if (item !== undefined && item !== null) {
+                        const itemText = String(item);
+                        html += `<li>${itemText.replace(/`([^`]+)`/g, '<code>$1</code>')}</li>`;
+                    }
+                });
+                html += '</ul></li>';
+            }
+            
+            html += '</ul>';
+            return html;
+        }
+
+        function renderProcessingDetails(obj) {
+            if (!obj) return '<p>—</p>';
+            
+            let html = '';
+            
+            if (obj.summary !== undefined && obj.summary !== null) {
+                const summaryText = String(obj.summary);
+                html += `<p><strong>Summary:</strong> ${summaryText.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>`;
+            }
+            
+            if (obj.note) {
+                html += `<p><strong>Note:</strong> ${obj.note}</p>`;
+            }
+            
+            const lists = ['logic', 'properties', 'constraints', 'location', 'topological', 'geometrical', 'others', 'highway_values'];
+            
+            lists.forEach(key => {
+                if (obj[key] && Array.isArray(obj[key]) && obj[key].length > 0) {
+                    const displayKey = key === 'highway_values' ? 'Highway Values in Scope' : key.charAt(0).toUpperCase() + key.slice(1);
+                    html += `<p><strong>${displayKey}:</strong></p>`;
+                    html += '<ul>';
+                    obj[key].forEach(item => {
+                        if (item !== undefined && item !== null) {
+                            const itemText = String(item);
+                            html += `<li>${itemText.replace(/`([^`]+)`/g, '<code>$1</code>')}</li>`;
+                        }
+                    });
+                    html += '</ul>';
+                }
+            });
+            
+            return html || '<p>—</p>';
+        }
+    </script>
+
+</body></html>
