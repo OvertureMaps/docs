@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)file:///Users/danabauer/Downloads/theme-definitions-table_9.html -->
+<!-- saved from url=(0065)file:///Users/danabauer/Downloads/theme-definitions-table_11.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -480,13 +480,13 @@
     <div class="header">
         <div class="header-content">
             <h1>Theme Definitions Table</h1>
-            <a href="file:///guides" class="back-link">← Back to Data Guides</a>
+            <a href="/guides" class="back-link">← Back to Data Guides</a>
         </div>
     </div>
 
     <div class="container">
         <p class="description">
-            Comprehensive specifications for Overture Maps data themes. 
+            Comprehensive specifications for all Overture Maps data themes. 
         </p>
 
         <div class="hint">
@@ -501,6 +501,7 @@
         let expandedRows = new Set();
 
         // Load the theme definitions data from separate JSON file
+        // Use relative path to work regardless of base URL
         fetch('/theme_definitions.json')
             .then(response => {
                 if (!response.ok) {
@@ -541,7 +542,7 @@
                     <tr>
                         <th>Theme</th>
                         <th>Description</th>
-                        <th>Types</th>
+                        <th>Type</th>
                         <th>Coverage</th>
                         <th>Sources</th>
                         <th>Release Artifacts</th>
@@ -634,7 +635,7 @@
             }
             
             if (gers.bridge_files?.flag) {
-                // Show as "bridge files"
+                // Show as "Bridge Files"
                 const title = gers.bridge_files.note || '';
                 items.push(`<span class="status-indicator active" title="${title}">bridge files</span>`);
             }
@@ -668,7 +669,7 @@
             if (theme.types && theme.types.length > 0) {
                 html += `
                     <div class="details-section">
-                        <h3>Feature Types</h3>
+                        <h3>Type</h3>
                         <div class="status-grid">
                             ${theme.types.map(type => 
                                 `<span class="status-indicator active">${type}</span>`
