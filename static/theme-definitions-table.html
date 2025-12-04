@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///Users/danabauer/Downloads/theme-definitions-table_11.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -502,7 +501,7 @@
 
         // Load the theme definitions data from separate JSON file
         // Use relative path to work regardless of base URL
-        fetch('/theme_definitions.json')
+        fetch('theme_definitions.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to load data: ' + response.status);
