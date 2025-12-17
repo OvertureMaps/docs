@@ -1,0 +1,164 @@
+---
+title: 2025-12-17 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2025-12-17.0` release of Overture data and `v1.15.0` of the Overture schema are now available.** The datasets and release artifacts are available as GeoParquet files stored on both AWS and Azure. There are [breaking changes](/release-calendar) in this release. 
+
+## What's new?
+
+We added a new `taxonomy` property to our places schema this month, as part of our ongoing initiative to redesign the places category system. The new property offers a streamlined and logical structure with consolidated primary and alternate names and a hierarchy that makes clear the parent/child relationship between categories. 
+
+In October, we introduced the `basic_category` property. That property corresponds 1:1 to the primary place name in the new `taxonomy` property. (It also maps to the primary name in the original `categories` property.) The hierarchical paths in `taxonomy` support deeper and more logical structures. For example, in the restaurant branch, you can see a clear progression from very broad to very specific category names: `restaurant > asian_restaurant > east_asian_restaurant > chinese_restaurant > cantonese_restaurant`. This kind of structure makes it easier to aggregate and display POIs in meaningful ways.
+
+The original `categories` property, with more than 2100 category names, will remain in the schema for the next several months so that users can compare the old system to the new taxonomy. 
+
+Examples:
+
+1. Original categories system 
+```
+properties:
+   categories:
+      primary: greasy_diner
+```
+
+2. `basic_category` mapped to primary category in original categories system 
+```
+properties:
+   basic_category: casual_eatery
+   categories:
+      primary: gas_station_sushi
+      alternate:
+         - bait_and_tackle
+```
+
+3. New taxonomy
+```
+properties:
+   basic_category: casual_eatery
+   taxonomy: 
+      hierarchy: [food_and_drink, restaurant, casual_eatery, gas_station_sushi]
+      primary: gas_station_sushi
+      alternate:
+         - gas_station
+         - sushi_restaurant
+```
+
+
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined [here](/getting-data). The paths to the data and release artifacts are listed below. We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at info@overturemaps.org. We’d love to hear from you.
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2025-12-17.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2025-12-17.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2025-12-17.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2025-12-17.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-12-17.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2025-12-17.0/
+```
+
+### GERS registry
+
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+
+<!-- truncate -->
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- added new province-level dataset for Quebec from [Le ministère des Ressources naturelles et des Forêts](https://www.quebec.ca/gouvernement/ministeres-organismes/ressources-naturelles-forets)
+- removed certain placeholder values like “N/A” and “unincorporated”
+
+
+### Base
+- refreshed OSM data 2025-11-30
+- made minor, incremental updates to the data
+- added 9,690 rollercoasters to infrastructure!
+
+![Rollercoasters!](./assets/roller-coasters.gif)
+
+
+### Buildings
+
+- refreshed OSM data 2025-11-30
+- made minor, incremental updates to the data
+
+
+### Divisions
+
+- refreshed OSM data 
+- made minor, incremental updates to the data
+
+
+### Places
+
+- added new `taxonomy` property
+
+
+### Transportation
+
+- added more than 725k new TomTom-sourced transportation segments in the US, Puerto Rico, Canada, Algeria, Colombia, Belarus, and Bosnia and Herzegovina
+
+- refreshed OSM data 2025-11-30
+
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.15.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.15.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
