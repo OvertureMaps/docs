@@ -14,7 +14,7 @@ This repository uses [Docusaurus](https://docusaurus.io/) to publish the documen
 
 The Overture schema repository [github/overturemaps/schema](https://github.com/overturemaps/schema) maintains the official Overture schema and the documentation surrounding the actual schema reference pages. This is to ensure that the schema, documentation, and relevant examples are always in-sync.
 
-The script `fetch_schema.sh` injects the contents of the schema's documentation into `docs/schema/` and copies the schema `YAMl` files and examples to `docs/_schema` and `docs/_examples`, respectively. This script runs with every build.
+The script `fetch_schema.sh` injects the contents of the schema's documentation into `docs/schema/` and copies the schema `YAML` files and examples to `docs/_schema` and `docs/_examples`, respectively. This script runs with every build.
 
 Therefore, anything available at `docs.overturemaps.org/schema` (under the **Schema Reference** link in the header) comes from the Overture schema repository, not this repository. Any changes to `schema` will be overwritten on every build.
 
