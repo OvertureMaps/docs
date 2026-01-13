@@ -3,6 +3,7 @@ title: Accessing the Data
 ---
 
 import QueryBuilder from '@site/src/components/queryBuilder';
+import MadridBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_madrid.sql';
 
 ## Official Overture sources
 
@@ -72,26 +73,11 @@ You can read more about querying with the data directly in [Azure using Synapse]
 
 ### DuckDB
 
-[DuckDB](duckdb) is one of our favorite tools for querying the data and downloading only what you need. We have a full page of example queries here; we'll give you one quick example below. 
+[DuckDB](https://duckdb.org/) is one of our favorite tools for querying the data and downloading only what you need. We have a full page of example queries [here](/getting-data/duckdb/); we'll give you one quick example below.
 
-Let's say you don't want the entire buildings dataset for the planet. With DuckDB, you can scan the Parquet files in the S3 bucket and extract only the data for a particular area of interest:
+Let's say you don't want the entire buildings dataset for the planet. With DuckDB, you can scan Parquet files directly in S3 and extract only the data that matches specific parameters:
 
-```sql
-install spatial;
-load spatial;
-COPY(                             
-      SELECT
-         id, -- GERS ID
-         names.primary as name,
-         confidence,
-         CAST(socials AS JSON) as socials, -- serialize property to JSON
-         geometry -- DuckDB understands the geometry type
-      FROM read_parquet('s3://overturemaps-us-west-2/release/2025-04-23.0/theme=places/type=place/*', filename=true, hive_partitioning=1)
-      WHERE categories.primary = 'pizza_restaurant'
-      AND bbox.xmin BETWEEN -75 AND -73  AND bbox.ymin BETWEEN 40 AND 41 -- with point geometries you only need the bbox min values
-  
-  ) TO 'nyc_pizza.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
-  ```
+<QueryBuilder query={MadridBuildings}></QueryBuilder>
 
 Alternatively, you can put your query in a SQL file and run `duckdb -f query.sql` at the command line.
 
