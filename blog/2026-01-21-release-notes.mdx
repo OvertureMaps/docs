@@ -1,0 +1,111 @@
+---
+title: 2026-01-21 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2026-01-21.0` release of Overture data and `v1.15.0` of the Overture schema are now available.** The datasets and release artifacts are available as GeoParquet files stored on both AWS and Azure. 
+
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined [here](/getting-data). The paths to the data and release artifacts are listed below. We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at info@overturemaps.org. We’d love to hear from you.
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2026-01-21.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2026-01-21.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2026-01-21.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2026-01-21.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2026-01-21.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2026-01-21.0/
+```
+
+### GERS registry
+
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+
+<!-- truncate -->
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- re-promoted December data, which included new province-level dataset for Quebec from [Le ministère des Ressources naturelles et des Forêts](https://www.quebec.ca/gouvernement/ministeres-organismes/ressources-naturelles-forets)
+
+
+### Base
+- made minor, incremental updates to the data
+
+
+### Buildings
+- made minor, incremental updates to the data
+
+
+### Divisions
+- made minor, incremental updates to the data
+
+
+### Places
+- added ~150,000 place records from [DAC Group](https://www.dacgroup.com/)
+
+
+### Transportation
+
+- added new road segments covering 85,000 km, expanding coverage across ~150 countries
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.15.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.15.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
