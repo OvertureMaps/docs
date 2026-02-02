@@ -45,7 +45,7 @@ jobs:
     needs: build
     environment:
       name: staging
-      url: https://staging.overturemaps.org/${{ github.event.repository.name }}/pr/${{ github.event.number }}/
+      url: https://staging.overturemaps.org/${{ github.event.repository.name }}/pr/${{ github.event.number }}/index.html
 
     steps:
       - name: Configure AWS credentials 🔐
