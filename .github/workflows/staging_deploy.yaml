@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: build
-          name: build
+          name: build-artifact
 
   deploy:
     name: Deploy
