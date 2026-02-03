@@ -24,7 +24,7 @@ jobs:
           node-version: "20"
 
       - name: Install NPM dependencies
-        run: npm install --prefer-dedupe
+        run: npm ci --omit=dev
 
       - name: Build Docusaurus website
         env:
