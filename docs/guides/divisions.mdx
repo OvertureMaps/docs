@@ -5,6 +5,7 @@ description: Global administrative data, from microhoods to countries
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import QueryBuilder from '@site/src/components/queryBuilder';
 import ToParquet from '!!raw-loader!@site/src/queries/duckdb/divisions_to_parquet.sql';
 import CountsPerType from '!!raw-loader!@site/src/queries/duckdb/divisions_counts_per_type.sql';
@@ -228,9 +229,14 @@ To download data: Pan to the area you are interested in, turn off the other laye
 
 This will download the area visible on your screen.
 
-| ![Exploring divsions data in NYC](/img/divisions/divisions-us.gif) |
-|:--:|
-| *Exploring divisions data in NYC using [Overture's Explore tool](https://explore.overturemaps.org/#10.35/40.802/-73.9407).* |
+<figure>
+  <video autoPlay loop muted playsInline style={{ width: '100%' }}>
+    <source src={useBaseUrl('/img/divisions/divisions-us.mp4')} type="video/mp4" />
+  </video>
+  <figcaption style={{ textAlign: 'center' }}>
+    <em>Exploring divisions data in NYC using <a href="https://explore.overturemaps.org/#10.35/40.802/-73.9407">Overture's Explore tool</a>.</em>
+  </figcaption>
+</figure>
 </TabItem>
 
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>

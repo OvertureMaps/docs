@@ -4,7 +4,7 @@ run-name: Publish docs to staging website (for PR)
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   id-token: write
@@ -19,9 +19,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: '24'
 
       - name: Install NPM dependencies
         run: npm ci --omit=dev
@@ -30,10 +30,9 @@ jobs:
         env:
           DOCUSAURUS_URL: https://staging.overturemaps.org/
           DOCUSAURUS_BASE_URL: /${{ github.event.repository.name }}/pr/${{ github.event.number }}/
-          SCHEMA_BRANCH: ${{ inputs.schema_branch }}
         run: npm run build
 
-      - name: Upload docs build as GH-Pages artifact 📦
+      - name: Upload docs build as an artifact 📦
         uses: actions/upload-artifact@v4
         with:
           path: build
