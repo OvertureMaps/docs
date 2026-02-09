@@ -5,15 +5,19 @@ tags:
   - base
 ---
 
-![land cover gif](/img/blog/lc.gif)
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-## Mapmakers rejoice! 
+<video autoPlay loop muted playsInline style={{ width: '100%' }}>
+  <source src={useBaseUrl('/img/blog/lc.mp4')} type="video/mp4" />
+</video>
+
+## Mapmakers rejoice!
 
 The [May release](https://docs.overturemaps.org/release/latest) of Overture Maps includes new high-resolution land cover data *and* new cartographic schema properties.
 
 <!-- truncate -->
 
-Our `land_cover` layer is vectorized data derived from the [European Space Agency’s 2020 WorldCover (10m) rasters](https://esa-worldcover.org/en). It's similar to the land cover layer in the [Daylight](https://daylightmap.org/2023/10/11/landcover.html) map distribution, but Overture Maps added higher-resolution data (zoom level 15) with more detail and land cover classes. You'll find 10 subtypes in the new data: snow, forest, urban, grass, crop, barren, wetland, moss, mangrove, and shrub. 
+Our `land_cover` layer is vectorized data derived from the [European Space Agency’s 2020 WorldCover (10m) rasters](https://esa-worldcover.org/en). It's similar to the land cover layer in the [Daylight](https://daylightmap.org/2023/10/11/landcover.html) map distribution, but Overture Maps added higher-resolution data (zoom level 15) with more detail and land cover classes. You'll find 10 subtypes in the new data: snow, forest, urban, grass, crop, barren, wetland, moss, mangrove, and shrub.
 
 Our May release also includes [schema properties](https://docs.overturemaps.org/schema/reference/base/land_cover/) that offer cartographic "hints" for optimal use of Overture Maps data in mapmaking. We added `min_zoom` and `max_zoom` to define the recommended zooms for each resolution of land cover, using the common “slippy maps” zoom level specification. This is a first step toward improving the user experience for mapmakers. We plan to expand these properties in future releases of Overture Maps data.
 
@@ -29,13 +33,13 @@ In the notebook example below, we'll show you how to extract, process, and visua
  - [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
  - [pandas](https://pandas.pydata.org/)
  - [GeoPandas](https://geopandas.org/en/stable/index.html)
- - [Shapely](https://shapely.readthedocs.io/en/stable/index.html) 
+ - [Shapely](https://shapely.readthedocs.io/en/stable/index.html)
 
 
 ``` python
 import pandas as pd
 import geopandas as gpd
-import overturemaps 
+import overturemaps
 from shapely import wkb
 from lonboard import Map, PolygonLayer
 from lonboard.colormap import apply_categorical_cmap
@@ -71,10 +75,10 @@ color_map = {
     "shrub": [239, 218, 182],
     "grass": [254, 239, 173],
     "crop": [222, 223, 154],
-    "wetland": [158, 207, 195], 
+    "wetland": [158, 207, 195],
     "mangrove": [83, 171, 128],
     "moss": [250, 230, 160],
-    "snow": [255, 255, 255],  
+    "snow": [255, 255, 255],
 }
 ```
 
@@ -86,14 +90,14 @@ colors = apply_categorical_cmap(df_h.subtype, color_map)
 ``` python
 # dataframe to geodataframe, set crs
 gdf = gpd.GeoDataFrame(
-    df_h, 
-    geometry=df_h['geometry'].apply(wkb.loads), 
+    df_h,
+    geometry=df_h['geometry'].apply(wkb.loads),
     crs="EPSG:4326"
 )
 ```
 
 ``` python
-# create map layer 
+# create map layer
 layer = PolygonLayer.from_geopandas(
     gdf= gdf[['id','subtype', 'cartography', 'geometry']].reset_index(drop=True),
     get_fill_color=colors,
@@ -113,6 +117,3 @@ view_state = {
 m = Map(layer, view_state=view_state)
 m
 ```
-
-
-
