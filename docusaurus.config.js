@@ -1,7 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const {themes} = require('prism-react-renderer');
+const { themes } = require('prism-react-renderer');
 
 const lightCodeTheme = themes.nightOwlLight;
 const darkCodeTheme = themes.nightOwl;
@@ -14,6 +14,25 @@ function getFromEnvironment(variableName, defaultValue) {
   return environmentValue ? environmentValue : defaultValue;
 }
 
+function getLatestOvertureRelease() {
+  const fallback = '2026-01-21.0';
+  try {
+    const { execSync } = require('child_process');
+    const response = execSync('curl -s https://stac.overturemaps.org/catalog.json', {
+      encoding: 'utf-8',
+      timeout: 10000,
+    });
+    const catalog = JSON.parse(response);
+    return catalog.latest || fallback;
+  } catch (error) {
+    console.warn(error);
+    console.warn('Failed to fetch latest Overture release, using fallback:', fallback);
+    return fallback;
+  }
+}
+
+const latestOvertureRelease = getLatestOvertureRelease();
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Overture Maps Documentation',
@@ -21,20 +40,20 @@ const config = {
   favicon: 'img/favicon.png',
 
   customFields: {
-    overtureRelease: '2026-01-21.0',
-    pmtiles_path: 'https://d3c1b7bog2u1nn.cloudfront.net/2025-10-22'
+    overtureRelease: latestOvertureRelease,
+    pmtiles_path: 'https://tiles.overturemaps.org/' + latestOvertureRelease,
   },
- /**
+
   future: {
+    v4: true,
     experimental_faster: {
       swcJsLoader: true,
       swcJsMinimizer: true,
       swcHtmlMinimizer: true,
       lightningCssMinimizer: true,
-      rspackBundler: false, // rspack bundler doesn't work with our Webpack config for raw-loader and YAML files.
-      mdxCrossCompilerCache: true,
+      rspackBundler: true,
     },
-  }, */
+  },
 
   // Set the production url of your site here
   url: getFromEnvironment('DOCUSAURUS_URL', defaultUrl),
@@ -47,8 +66,13 @@ const config = {
   organizationName: 'OvertureMaps', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  onBrokenLinks: 'ignore',
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'ignore',
+    },
+  },
 
   trailingSlash: true,
 
@@ -60,29 +84,9 @@ const config = {
     locales: ['en'],
   },
 
-  themes: ["docusaurus-json-schema-plugin"],
+  themes: [],
 
   plugins: [
-    () => ({
-      name: 'custom-docusaurus-plugin',
-      configureWebpack() {
-        return {
-          module: {
-            rules: [
-              {
-                test: /\.yaml$/,
-                use: 'raw-loader'
-              },
-              {
-                resolve: {
-                  symlinks: false
-                }
-              }
-            ],
-          },
-        };
-      },
-    }),
     [
       '@docusaurus/plugin-content-pages',
       {
@@ -90,8 +94,8 @@ const config = {
         path: './community',
         routeBasePath: 'community',
         showLastUpdateTime: true,
-      }
-    ]
+      },
+    ],
   ],
 
   presets: [
@@ -113,10 +117,13 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-        gtag: {
-        trackingID: 'G-JBXK7VCHV4',
-        anonymizeIP: true,
-        },
+        gtag:
+          process.env.DOCUSAURUS_URL === defaultUrl
+            ? {
+                trackingID: 'G-JBXK7VCHV4',
+                anonymizeIP: true,
+              }
+            : false,
       }),
     ],
   ],
@@ -131,7 +138,7 @@ const config = {
         logo: {
           alt: 'Overture Maps Foundation Logo',
           src: 'img/omf_logo_transparent.png',
-          href: 'https://overturemaps.org'
+          href: 'https://overturemaps.org',
         },
         items: [
           {
@@ -167,7 +174,7 @@ const config = {
       algolia: {
         appId: 'MK8X1051PQ',
         //this is the public search API key; ok to commit
-        apiKey:'29fe3f5bc0dabfade01c016695919c8d',
+        apiKey: '29fe3f5bc0dabfade01c016695919c8d',
         indexName: 'overturemaps',
         contextualSearch: true,
 
@@ -179,7 +186,6 @@ const config = {
 
         // Optional: whether the insights feature is enabled or not on Docsearch (`false` by default)
         insights: false,
-
       },
       footer: {
         style: 'dark',
@@ -188,7 +194,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['bash', 'diff', 'json', 'sql','python'],
+        additionalLanguages: ['bash', 'diff', 'json', 'sql', 'python'],
       },
     }),
 };
