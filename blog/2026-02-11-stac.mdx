@@ -11,7 +11,7 @@ tags:
 
 Over the past few releases, the Overture engineering team has gone from generating a [STAC catalog](https://stacspec.org/en) as an ad hoc release artifact to making STAC the backbone of our tooling. Now our [Python client](https://github.com/OvertureMaps/overturemaps-py), [Explorer](https://explore.overturemaps.org/), internal QA tools, and data pipelines all use [Overture STAC](https://stac.overturemaps.org/) to stay in sync with the latest release. We did this to improve our own workflows, but we think it'll make things easier for everyone.
 
-Here she is, from the top. So simple, so beautiful. https://stac.overturemaps.org/.
+Here she is, from the top. So powerful, so beautiful. https://stac.overturemaps.org/.
 
 
 ```json
@@ -50,11 +50,11 @@ Many of the [examples in our docs](https://docs.overturemaps.org/getting-data/) 
 
 (*Not so long ago Paul Ramsey [wrote](https://www.crunchydata.com/blog/vehicle-routing-with-postgis-and-overture-data) that the trickiest part of accessing Overture data was figuring out how to contruct the endpoint. **Noted.***)
 
-Using well-structured files on cloud storage as a de facto API for data distribution isn't new. It's actually one of the most important ideas in cloud-native geospatial. Back in 2014, when the AWS open data team [put Landsat imagery on S3](https://radiant.earth/blog/2023/03/the-naive-origins-of-the-cloud-optimized-geotiff/), they didn't build any custom tooling. No servers. They made well-structured data available in a public cloud storage and let people have at it over HTTP. This principle is what makes [Cloud Optimized GeoTIFFs](https://cogeo.org/) work for raster imagery, [PMTiles](https://protomaps.com/) for map tiles, and [GeoParquet](https://geoparquet.org/) for vector map data. The storage endpoint is the API.
+Using well-structured files on cloud storage as a de facto API for data distribution isn't new. It's actually one of the most important ideas in cloud-native geospatial. Back in 2014, when the AWS open data team [put Landsat imagery on S3](https://radiant.earth/blog/2023/03/the-naive-origins-of-the-cloud-optimized-geotiff/), they didn't build any custom tooling. No servers. They made well-structured data available on public cloud storage and let people have at it over HTTP. This principle is what makes [Cloud Optimized GeoTIFFs](https://cogeo.org/) work for raster imagery, [PMTiles](https://protomaps.com/) for map tiles, and [GeoParquet](https://geoparquet.org/) for vector map data. The storage endpoint is the API.
 
-For Overture, this means tools like [DuckDB](https://til.simonwillison.net/overture-maps/overture-maps-parquet) can query gigabytes of data because Parquet's Hive-style partitioning (`theme=buildings/type=building/*.parquet`) and built-in row group statistics let query engines skip irrelevant files and irrelevant chunks within files. Users can quickly download megabytes. They don't have to drink the ocean to get what they want. 
+For Overture, this means tools like [DuckDB](https://til.simonwillison.net/overture-maps/overture-maps-parquet) can query gigabytes of data because Parquet's Hive-style partitioning (`theme=buildings/type=building/*.parquet`) and built-in row group statistics let query engines skip irrelevant files and irrelevant chunks within files. Users can quickly download megabytes. They don't have to drink the ocean to get the data they want. 
 
-The limitation is that this pattern assumes stable endpoints. Overture releases monthly, partitions data by theme and type, and divides its global datasets across multiple Parquet files. All of these factors go into the construction of the S3 and Azure paths. Hardcode a path today, and it's stale in few weeks. We knew this was a pain point for users, but we expected people to build their own solutions around it. Like the AWS team back in 2014, our philosophy was: *give people the data and get out of the way.* 
+The pattern works best with stable endpoints. Things break when endpoints change unpredictably. Overture releases monthly, partitions data by theme and type, and divides its global datasets across multiple Parquet files. All of these factors go into the construction of the S3 and Azure paths. Hardcode a path today, and it's stale in few weeks. We knew this was a pain point for users, but we expected people to build their own solutions around it. Like the AWS team back in 2014, our philosophy was: *give people the data and get out of the way.* 
 
 Not everyone was happy about this. Many users have asked Overture to provide APIs (and SDKs, mostly to handle the complexity of our schema). We did build overturemaps-py, our Python client, to abstract from those long endpoints, but even early versions of that tool had a hardcoded path to the data and required a manual update after each release. 
 
@@ -91,7 +91,7 @@ Your scripts stay stable even as the underlying data and cloud storage endpoints
 
 ## Explore the Data
 
-You can quickly poke around the catalog using the [STAC browser](https://radiantearth.github.io/stac-browser/#/external/stac.overturemaps.org/catalog.json). Click into any release and theme, and you'll find links to GeoParquet files on AWS and Azure. You'll also see PMTiles listed under additional resources. Hover over those for a link to load the tiles directly in [PMTiles Viewer](https://pmtiles.io/). It's another way to explore the PMTiles that powers our [Explorer](https://explore.overturemaps.org/) site.
+You can quickly poke around the catalog using the [STAC browser](https://radiantearth.github.io/stac-browser/#/external/stac.overturemaps.org/catalog.json). Click into any release and theme, and you'll find links to GeoParquet files on AWS and Azure. You'll also see PMTiles listed under additional resources. Hover over those for a link to load the tiles directly in [PMTiles Viewer](https://pmtiles.io/). This is the data that powers our [Explorer](https://explore.overturemaps.org/) site.
 
 If you want to go deeper, you can drill into a [specific release](https://stac.overturemaps.org/2026-01-21.0/catalog.json) to see which themes it contains and which schema version it uses, then into a [theme](https://stac.overturemaps.org/2026-01-21.0/divisions/catalog.json) to find PMTiles links and the available types. Each type is a [STAC collection](https://stac.overturemaps.org/2026-01-21.0/divisions/division/collection.json) with feature counts, spatial extent, license, and column names, enough to know what you're getting before you download anything. The catalog also includes a peek into our GERS registry by providing a full manifest of the registry files.
 
@@ -206,14 +206,14 @@ Since GERS IDs sort lexicographically, hex character by hex character, the [Pyth
 
 ## What's Next
 
-Many of the tools I mentioned in this post are in active development in public GitHub repositories. We welcome your comments, questions, and contributions:
+Many of the tools I mention in this post are in active development in public GitHub repositories. We welcome your comments, questions, and contributions:
 
   - https://github.com/OvertureMaps/stac — STAC 
   - https://github.com/OvertureMaps/overturemaps-py — Python CLI
   - https://github.com/OvertureMaps/explore-site — Explorer
 
 
-You can also build your own thing with Overture STAC. Here's a tiny website I made [this](https://danabauer.github.io/overture-latest/) to share at meetups and conferences. It answers a question I consistently get from users: what's the latest Overture release? You can grab the source code [here](https://github.com/danabauer/overture-latest). 
+You can also build your own thing with Overture STAC. Here's a tiny website I made [this](https://danabauer.github.io/overture-latest/) to share at meetups and conferences. It answers a question I consistently get from users: what's the latest Overture release? You can grab the source code [here](https://github.com/danabauer/overture-latest) if you want.
 
 
 *Huge thanks to Ben Clark for getting Overture started on our STAC journey back in 2024 and to Jennings Anderson for fully realizing Overture's STAC vision. Y'all are the best.*
