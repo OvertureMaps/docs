@@ -11,7 +11,7 @@ tags:
 
 Over the past few releases, the Overture engineering team has gone from generating a [STAC catalog](https://stacspec.org/en) as an ad hoc release artifact to making STAC the backbone of our tooling. Now our [Python client](https://github.com/OvertureMaps/overturemaps-py), [Explorer](https://explore.overturemaps.org/), internal QA tools, and data pipelines all use [Overture STAC](https://stac.overturemaps.org/) to stay in sync with the latest release. We did this to improve our own workflows, but we think it'll make things easier for everyone.
 
-Here she is, from the top. So powerful, so beautiful. https://stac.overturemaps.org/.
+Here's our STAC, from the top. https://stac.overturemaps.org/.
 
 
 ```json
@@ -42,6 +42,12 @@ Here she is, from the top. So powerful, so beautiful. https://stac.overturemaps.
   ],
   "latest": "2026-01-21.0",
   ```
+:::danger[Shoutout!]
+
+Huge thanks to Ben Clark for getting Overture started on our STAC journey back in 2024. Watch [his talk on STACing GeoParquet](https://youtu.be/FWQz7H99qEs?si=membEVd0JarkKmbn) at the 2025 Cloud Native Geospatial Forum. And thanks to Jennings Anderson for fully realizing Overture's STAC vision and getting us where we are today.
+
+:::
+
 <!-- truncate -->
 
 ## Why We Needed This
@@ -89,7 +95,7 @@ SELECT * FROM read_parquet(
 Your scripts stay stable even as the underlying data and cloud storage endpoints update. 
 
 
-## Explore the Data
+## Explore the Metadata
 
 You can quickly poke around the catalog using the [STAC browser](https://radiantearth.github.io/stac-browser/#/external/stac.overturemaps.org/catalog.json). Click into any release and theme, and you'll find links to GeoParquet files on AWS and Azure. You'll also see PMTiles listed under additional resources. Hover over those for a link to load the tiles directly in [PMTiles Viewer](https://pmtiles.io/). This is the data that powers our [Explorer](https://explore.overturemaps.org/) site.
 
@@ -213,7 +219,11 @@ Many of the tools I mention in this post are in active development in public Git
   - https://github.com/OvertureMaps/explore-site — Explorer
 
 
-You can also build your own thing with Overture STAC. Here's a tiny website I made [this](https://danabauer.github.io/overture-latest/) to share at meetups and conferences. It answers a question I consistently get from users: what's the latest Overture release? You can grab the source code [here](https://github.com/danabauer/overture-latest) if you want.
+You can also build your own thing with Overture STAC. Here's a tiny website I made [this](https://danabauer.github.io/overture-latest/) to share at meetups and conferences. It answers a question I consistently get from users: what's the latest Overture release? You can grab the source code [here](https://github.com/danabauer/overture-latest).
 
+:::tip[Talk to us]
 
-*Huge thanks to Ben Clark for getting Overture started on our STAC journey back in 2024 and to Jennings Anderson for fully realizing Overture's STAC vision. Y'all are the best.*
+We want to hear about your experience using Overture Maps. Share your ideas and questions on our [GitHub Discussion Forum](https://github.com/orgs/OvertureMaps/discussions) or reach out to us at community@overturemaps.org. 
+
+:::
+
