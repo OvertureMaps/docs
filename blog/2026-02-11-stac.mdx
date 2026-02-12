@@ -54,7 +54,7 @@ Huge thanks to Ben Clark for getting Overture started on our STAC journey back i
 
 Many of the [examples in our docs](https://docs.overturemaps.org/getting-data/) instruct users to sip or gulp Overture data directly from our public cloud buckets, at very long endpoints like `s3://overturemaps-us-west-2/release/2026-01-21.0/theme=buildings/type=building/*.parquet`.
 
-(*Not so long ago Paul Ramsey [wrote](https://www.crunchydata.com/blog/vehicle-routing-with-postgis-and-overture-data) that the trickiest part of accessing Overture data was figuring out how to contruct the endpoint. **Noted.***)
+(*Not so long ago Paul Ramsey [wrote](https://www.crunchydata.com/blog/vehicle-routing-with-postgis-and-overture-data) that the trickiest part of accessing Overture data was figuring out how to construct the endpoint. **Noted.***)
 
 Using well-structured files on cloud storage as a de facto API for data distribution isn't new. It's actually one of the most important ideas in cloud-native geospatial. Back in 2014, when the AWS open data team [put Landsat imagery on S3](https://radiant.earth/blog/2023/03/the-naive-origins-of-the-cloud-optimized-geotiff/), they didn't build any custom tooling. No servers. They made well-structured data available on public cloud storage and let people have at it over HTTP. This principle is what makes [Cloud Optimized GeoTIFFs](https://cogeo.org/) work for raster imagery, [PMTiles](https://protomaps.com/) for map tiles, and [GeoParquet](https://geoparquet.org/) for vector map data. The storage endpoint is the API.
 
@@ -219,7 +219,7 @@ Many of the tools I mention in this post are in active development in public Git
   - https://github.com/OvertureMaps/explore-site — Explorer
 
 
-You can also build your own thing with Overture STAC. Here's a tiny website I made [this](https://danabauer.github.io/overture-latest/) to share at meetups and conferences. It answers a question I consistently get from users: what's the latest Overture release? You can grab the source code [here](https://github.com/danabauer/overture-latest).
+You can also build your own thing with Overture STAC. Here's a [tiny website I made](https://danabauer.github.io/overture-latest/) to share at meetups and conferences. It answers a question I consistently get from users: what's the latest Overture release? You can grab the source code [here](https://github.com/danabauer/overture-latest).
 
 :::tip[Talk to us]
 
