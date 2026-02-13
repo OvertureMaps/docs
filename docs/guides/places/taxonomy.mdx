@@ -1,0 +1,86 @@
+---
+title: Taxonomy
+description: How we organize categories of places
+---
+
+Recently, Overture introduced new `basic_category` and `taxonomy` properties for places data. These new properties are designed to better categorize location entities such as businesses, landmarks, and attractions and facilitate search, display, and navigation in map applications. With these changes, Overture is embarking on an iterative process to address known issues with the original `categories` property, including structural inconsistencies, naming ambiguity, and coverage gaps. We are implementing taxonomy design best practices to improve granularity and ease of use.
+
+:::tip
+
+The original `categories` property will be available alongside the new `basic_category` and `taxonomy` properties for several months. We encourage users to provide [feedback](https://github.com/orgs/OvertureMaps/discussions) on the new structure and make suggestions for further improvement. 
+
+:::
+
+## Taxonomy Change Summary 
+Users should be aware of the following key updates when evaluating and integrating the new places taxonomy.
+
+
+| Change area | Details | Impact on Data Use |
+| -------- | -------- | -------- |
+| Top-Level Overhaul (L0) | Reduced top-level categories from 22 to 13. | Requires updating logic dependent on L0 categories. Consolidation reduces ambiguity. |
+| New Categories| 209 new categories added (e.g., artist_studio, pickleball_court). | New, more granular POI types are available for filtering and display. |
+| Removed Categories | 80 categories removed (resolved duplicates, merged obscure types). | Users must use the provided "redirect" rules to map old category IDs to active categories for backfill/historical data continuity. |
+| Renamed Categories | 407 categories renamed (primarily plural-to-singular conversion, e.g., banks to bank). | Update category-based lookups and display logic to use singular forms for better mapping interface labeling. |
+| Reparented Categories | 482 categories moved under a different direct parent. | The immediate parent-child relationship has changed for nearly 500 categories. |
+| Repathed Categories (Hierarchy) | 2,108 categories have a different hierarchical structure or "path". | Critical: Hierarchy-dependent processing (e.g., aggregation) must be updated to reflect the new paths, especially in areas like food_and_drink and arts_and_entertainment. |
+| Basic Category Mapping | All place categories are now mapped to a "Basic Level Category" (approx. 280 labels like restaurant, museum). | Facilitates simplified map iconography, high-level filtering, and cross-taxonomy mapping. |
+
+
+## Comparing the Original and New Properties
+
+#### Original Categories System 
+
+The original `categories` property will remain in the schema for several months to allow users to compare the old system to the new taxonomy and facilitate migration.
+
+```
+properties:
+    categories:
+        primary: greasy_diner
+```
+
+
+#### New Basic Level Category
+
+The new `basic_category`, introduced in the October release, provides a single, high-level, "cognitively basic" label.
+
+```
+properties:
+    basic_category: casual_eatery
+```
+
+#### New Taxonomy Structure
+
+The new `taxonomy` property, introduced in the December 2025 release, contains a new hierarchy and category labels.
+
+```
+properties:
+    basic_category: casual_eatery
+    taxonomy:
+        hierarchy: [food_and_drink, restaurant, casual_eatery, gas_station_sushi]
+        primary: gas_station_sushi
+        alternate:
+            - gas_station
+            - sushi_restaurant
+```
+
+
+## Key Taxonomy Fields
+- `hierarchy`: An ordered list representing the full path from the top-level (L0) category down to the primary category. This array is essential for aggregating POIs based on subtype/supertype relationships (e.g., for aggregating all cantonese_restaurant POIs up to chinese_restaurant). 
+- `primary`: The most specific and appropriate category label for the POI, consistent with the lowest level of the hierarchy.
+- basic_category`: Identifies a  “cognitively basic” category, as a supplement to the Primary Place category. This is recommended for use in map applications for high-level filtering and defining map iconography, LLM’s as it offers a streamlined set of labels (approx. 280) that are less specific than the full 2.1k taxonomy.
+- `alternate`: Other relevant category labels for the POI.
+
+
+## Aggregation and Generalization
+
+The structured `hierarchy` property is designed to support robust aggregation logic. Users can reliably generalize specialized POIs by traversing the path. For example, you can find all Asian restaurants by traversing the `hierarchy` property of POIs and checking for `asian_restaurant`.
+
+| Hierarchy Path | Aggregation Level |
+| -------- | -------- | 
+| [food_and_drink, ...] | Food and Drink POIs |
+| [..., restaurant, ...] | All Restaurants |
+| [..., asian_restaurant, ...] | All Asian Restaurants | 
+| [..., chinese_restaurant, ...] | All Chinese Restaurants |
+| [..., cantonese_restaurant] | Specific Cantonese Restaurants | 
+
+
