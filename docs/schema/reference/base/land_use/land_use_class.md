@@ -2,6 +2,8 @@
 
 Further classification of the land use.
 
+The land use class adds detail to the broad classification of `LandUseSubtype`.
+
 ## Values
 
 - `aboriginal_land`

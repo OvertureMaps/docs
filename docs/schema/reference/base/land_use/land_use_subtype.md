@@ -1,6 +1,8 @@
 # LandUseSubtype
 
-Broad type of land.
+Broadest classification of the land use.
+
+This broad classification can be refined by `LandUseClass`.
 
 ## Values
 

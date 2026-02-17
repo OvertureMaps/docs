@@ -1,6 +1,8 @@
 # BuildingClass
 
-Further delineation of the building's built purpose.
+Further classification of the type and purpose of a building.
+
+The building class adds detail to the broad classification of `BuildingSubtype`.
 
 ## Values
 

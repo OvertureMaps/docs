@@ -1,6 +1,8 @@
 # InfrastructureSubtype
 
-Further description of the type of infrastructure.
+Broadest classification of the type of infrastructure.
+
+This broad classification can be refined by `InfrastructureClass`.
 
 ## Values
 

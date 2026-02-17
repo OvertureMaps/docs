@@ -66,13 +66,9 @@ const config = {
   organizationName: 'OvertureMaps', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
 
-  onBrokenLinks: 'ignore',
+  onBrokenLinks: 'warn',
 
-  markdown: {
-    hooks: {
-      onBrokenMarkdownLinks: 'ignore',
-    },
-  },
+  onBrokenMarkdownLinks: 'warn',
 
   trailingSlash: true,
 

@@ -1,86 +1,181 @@
 # Place
 
-A Place is a point representation of a real-world facility, service, or amenity.
-
-Place features are compatible with GeoJSON Point features.
+Places are point representations of real-world facilities, businesses, services, or amenities.
 
 ## Fields
 
 | Name | Type | Description |
 |-----:|:----:|-------------|
-| `names` | `object` (`[Names](../../Names/names)`) (optional) |  |
-| `names.primary` | `string` | The most commonly used name. |
-| `names.common` | `object` (optional) |  |
-| `names.rules[]` | `list<object (`[NameRule](../../Names/name_rule)`)>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
-| `names.rules[].side` | `string` ([Side](../../Names/side)) (optional) | Examples: `left`, `right` |
-| `names.rules[].between` | `list<float64>` (optional) |  |
-| `names.rules[].value` | `string` |  |
-| `names.rules[].variant` | `string` ([NameVariant](../../Names/name_variant)) | Examples: `common`, `official`, `alternate`, ... |
-| `names.rules[].language` | `string` (optional) |  |
-| `names.rules[].perspectives` | `object` (`[Perspectives](../../Names/perspectives)`) (optional) |  |
-| `names.rules[].perspectives.mode` | `string` ([PerspectiveMode](../../Names/perspective_mode)) | Whether the perspective holder accepts or disputes this name. Examples: `accepted_by`, `disputed_by` |
-| `names.rules[].perspectives.countries` | `list` | Countries holding the given mode of perspective. |
-| `id` | `string` |  |
+| `id` | [`Id`](../../types/references/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
+| `geometry` | `geometry` | Position of the place. Places are point geometries. |
 | `theme` | `"places"` |  |
 | `type` | `"place"` |  |
-| `geometry` | `geometry` | Position of the place |
-| `version` | `int32` |  |
-| `sources[]` | `list<object (`[SourcePropertyItem](../../Sources/source_property_item)`)>` (optional) |  |
-| `sources[].between` | `list<float64>` (optional) |  |
-| `sources[].property` | `string` |  |
-| `sources[].dataset` | `string` |  |
-| `sources[].record_id` | `string` (optional) | Refers to the specific record within the dataset that was used. |
-| `sources[].update_time` | `string` (optional) |  |
-| `sources[].confidence` | `float64` (optional) |  |
-| `categories` | `object` (`[Categories](categories)`) (optional) |  |
-| `categories.primary` | `string` | The primary or main category of the place. |
-| `categories.alternate` | `list<string>` (optional) | Alternate categories of the place. Some places might fit into two categories, e.g. a book store and a coffee shop. In such a case, the primary category can be augmented with additional applicable categories. |
-| `confidence` | `float64` (optional) | The confidence of the existence of the place. It's a number between 0 and 1. 0 means that we're sure that the place doesn't exist (anymore). 1 means that we're sure that the place exists. If there's no value for the confidence, it means that we don't have any confidence information. |
+| `version` | [`FeatureVersion`](../../types/core_types/feature_version.md) |  |
+| `sources[]` | [`Sources`](../../types/sources/sources.md) (list, optional) |  |
+| `sources[].property` | [`JsonPointer`](../../types/strings/json_pointer.md) | A JSON Pointer identifying the property (field) that this source information applies to.
+
+The root document value `""` indicates that this source information applies to the
+entire feature, excepting properties (fields) for which a dedicated source information
+record exists.
+
+Any other JSON Pointer apart from `""` indicates that this source record provides
+dedicated source information for the property at the path in the JSON Pointer. As an
+example, the value `"/names/common/en"` indicates that the source information applies to
+the English common name of a named feature, while the value `"/geometry"` indicates that
+it applies to the feature geometry. |
+| `sources[].dataset` | `string` | Name of the dataset where the source data can be found. |
+| `sources[].license` | [`StrippedString`](../../types/strings/stripped_string.md) (optional) | Source data license name.
+
+This should be a valid SPDX license identifier when available.
+
+If omitted, contact the data provider for more license information. |
+| `sources[].record_id` | `string` (optional) | Identifies the specific record within the source dataset where the source data can
+be found.
+
+The format of record identifiers is dataset-specific. |
+| `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
+| `sources[].confidence` | [`ConfidenceScore`](../../types/core_types/confidence_score.md) (optional) | Confidence value from the source dataset.
+
+This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
+| `sources[].between` | [`LinearlyReferencedRange`](../../types/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
+| `operating_status` | [`OperatingStatus`](operating_status.md) | An indication of whether a place is: in continued operation, in a temporary
+operating hiatus, or closed permanently.
+
+This is not an indication of opening hours or that the place is open/closed at the
+current time-of-day or day-of-week.
+
+When `operating_status` is `"permanently_closed"`, the `confidence` field will be
+set to 0. |
+| `categories` | [`Categories`](categories.md) (optional) |  |
+| `categories.primary` | [`SnakeCaseString`](../../types/strings/snake_case_string.md) | The primary or main category of the place. |
+| `categories.alternate` | [`SnakeCaseString`](../../types/strings/snake_case_string.md) (list, optional) | Alternate categories of the place.
+
+Some places might fit into two categories, e.g., a book store and a coffee shop. In
+these cases, the primary category can be augmented with additional categories. |
+| `basic_category` | [`SnakeCaseString`](../../types/strings/snake_case_string.md) (optional) | The basic level category of a place.
+
+This field classifies places into categories at a level that most people find
+intuitive. The full list of possible values it may hold can be found at (TODO).
+
+The basic level category, or simply basic category, is based on a cognitive science
+model use in taxonomy and ontology development. The idea is to provide the category
+name at the level of generality that is preferred by humans in learning and memory
+tasks. This category to be roughly in the middle of the general-to-specific category
+hierarchy.
+
+The full list of basic level categories is available at https://docs.overturemaps.org/guides/places/ |
+| `taxonomy` | [`Taxonomy`](taxonomy.md) (optional) | A structured representation of the place's category within the Overture taxonomy.
+
+Provides the primary classification, full hierarchy path, and alternate categories. |
+| `taxonomy.primary` | [`SnakeCaseString`](../../types/strings/snake_case_string.md) | 
+The primary, or most specific, category known about this place.
+
+The `primary` category value must always equal the last or rightmost entry in the `hierarchy` field.
+ |
+| `taxonomy.hierarchy` | [`SnakeCaseString`](../../types/strings/snake_case_string.md) (list) | The full primary hierarchy of categories known for this place, ordered from most general to most specific.
+An example hierarchy might be: `["food_and_drink", "restaurant", "casual_eatery", "gas_station_sushi"]`.
+
+The rightmost, or most specific, value in the `hierarchy` must always be equal to the `primary` field.
+The basic level category of the place will typically be found in the middle of the primary hierarchy.
+The primary hierarchy does not include any of the alternate categories found in the `alternates` field. |
+| `taxonomy.alternates` | [`SnakeCaseString`](../../types/strings/snake_case_string.md) (list, optional) | Unordered list of additional categories that are known for this
+place but that are not part of the primary category hierarchy.
+
+Alternate categories allow a more complete picture of the place
+to be surfaced when it fits multiple unconnected branches in the
+taxonomy. For example a gas station that also sells groceries
+might have primary category of "gas_station" with an alternate
+of "grocery_store".
+
+Alternate categories are not part of the primary hierarchy or
+another alternate category's hierarchy.
+In other words, if a category is a parent in the hierarchy of another category,
+that category can't be a primary or alternate category itself.
+
+Note as well that this field is an unordered list of extra
+categories and does not represent a hierarchy. |
+| `confidence` | [`ConfidenceScore`](../../types/core_types/confidence_score.md) (optional) | A score between 0 and 1 indicating how confident we are that the place exists.
+
+A confidence score of 0 indicates that we are certain the place doesn't exist
+anymore and will always be paired with an `operating_status` of
+`"permanently_closed"`.
+
+A confidence score of 1 indicates that we are certain the place does exist.
+
+If there is no value for confidence, it means we don't have enough information on
+which to estimate our confidence level. |
 | `websites` | `list<HttpUrl>` (optional) | The websites of the place. |
 | `socials` | `list<HttpUrl>` (optional) | The social media URLs of the place. |
 | `emails` | `list<EmailStr>` (optional) | The email addresses of the place. |
-| `phones` | `list<string>` (optional) | The phone numbers of the place. |
-| `brand` | `object` (`[Brand](brand)`) (optional) |  |
-| `brand.names` | `object` (`[Names](../../Names/names)`) (optional) |  |
-| `brand.wikidata` | `string` (optional) |  |
-| `addresses` | `list<object (`[Address](../../address)`)>` (optional) |  |
-| `addresses.freeform` | `string` (optional) | Free-form address that contains street name, house number and other address info |
-| `addresses.locality` | `string` (optional) | Name of the city or neighborhood where the address is located |
-| `addresses.postcode` | `string` (optional) | Postal code where the address is located |
-| `addresses.region` | `string` (optional) |  |
-| `addresses.country` | `string` (optional) |  |
+| `phones` | [`PhoneNumber`](../../types/strings/phone_number.md) (list, optional) | The phone numbers of the place. |
+| `brand` | [`Brand`](brand.md) (optional) | The brand associated with the place. |
+| `brand.names` | [`Names`](../../types/names/names.md) (optional) |  |
+| `brand.names.primary` | [`StrippedString`](../../types/strings/stripped_string.md) | The most commonly used name. |
+| `brand.names.common` | [`CommonNames`](../../types/names/common_names.md) (map, optional) |  |
+| `brand.names.rules[]` | `list<`[`NameRule`](../../types/names/name_rule.md)`>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
+| `brand.names.rules[].value` | [`StrippedString`](../../types/strings/stripped_string.md) | The actual name value. |
+| `brand.names.rules[].variant` | [`NameVariant`](../../types/names/name_variant.md) | The name variant for this name rule. |
+| `brand.names.rules[].language` | [`LanguageTag`](../../types/strings/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47
+language tag. |
+| `brand.names.rules[].perspectives` | [`Perspectives`](../../types/perspectives/perspectives.md) (optional) |  |
+| `brand.names.rules[].perspectives.mode` | [`PerspectiveMode`](../../types/perspectives/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
+| `brand.names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../../types/strings/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `brand.names.rules[].between` | [`LinearlyReferencedRange`](../../types/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
+| `brand.names.rules[].side` | [`Side`](../../types/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
+| `brand.wikidata` | [`WikidataId`](../../types/strings/wikidata_id.md) (optional) |  |
+| `addresses[]` | `list<`[`Address`](../../addresses/address/address.md)`>` (optional) | The address or addresses of the place |
+| `addresses[].freeform` | `string` (optional) | Free-form address that contains street name, house number and other address info |
+| `addresses[].locality` | `string` (optional) | City, town, or neighborhood component of the place address |
+| `addresses[].postcode` | `string` (optional) | Postal code component of the place address |
+| `addresses[].region` | [`RegionCode`](../../types/strings/region_code.md) (optional) |  |
+| `addresses[].country` | [`CountryCodeAlpha2`](../../types/strings/country_code_alpha2.md) (optional) |  |
+| `names` | [`Names`](../../types/names/names.md) (optional) |  |
+| `names.primary` | [`StrippedString`](../../types/strings/stripped_string.md) | The most commonly used name. |
+| `names.common` | [`CommonNames`](../../types/names/common_names.md) (map, optional) |  |
+| `names.rules[]` | `list<`[`NameRule`](../../types/names/name_rule.md)`>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
+| `names.rules[].value` | [`StrippedString`](../../types/strings/stripped_string.md) | The actual name value. |
+| `names.rules[].variant` | [`NameVariant`](../../types/names/name_variant.md) | The name variant for this name rule. |
+| `names.rules[].language` | [`LanguageTag`](../../types/strings/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47
+language tag. |
+| `names.rules[].perspectives` | [`Perspectives`](../../types/perspectives/perspectives.md) (optional) |  |
+| `names.rules[].perspectives.mode` | [`PerspectiveMode`](../../types/perspectives/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
+| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../../types/strings/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].between` | [`LinearlyReferencedRange`](../../types/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
+| `names.rules[].side` | [`Side`](../../types/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 
 ## Examples
 
 | Column | Value |
 |-------:|-------|
-| `geometry` | `POINT (-151.7990018 -79.5664328)` |
-| `categories.alternate` | `null` |
-| `categories.primary` | `media_news_website` |
-| `confidence` | `0.8015267175572519` |
-| `websites` | `[https://www.primenewsmonde.bj/]` |
-| `socials` | `[https://www.facebook.com/105157324629740]` |
-| `emails` | `null` |
-| `phones` | `[+22991510404]` |
-| `brand.names.common` | `null` |
-| `brand.names.primary` | `null` |
-| `brand.names.rules` | `null` |
-| `brand.wikidata` | `null` |
-| `addresses[0].country` | `BJ` |
-| `addresses[0].freeform` | `Fidjrossè Calvaire Villa située entre Sun Beach Hôtel et l'agence PDME. ` |
-| `addresses[0].locality` | `Fidjrossè-Centre` |
-| `addresses[0].postcode` | `null` |
-| `addresses[0].region` | `null` |
-| `id` | `25d1faae-e887-493b-97d6-1c5bf39ed51f` |
-| `names.common` | `null` |
-| `names.primary` | `Prime News TV Monde` |
-| `names.rules` | `null` |
-| `sources[0].between` | `null` |
-| `sources[0].confidence` | `0.8015267175572519` |
-| `sources[0].dataset` | `meta` |
-| `sources[0].property` |  |
-| `sources[0].record_id` | `105157324629740` |
-| `sources[0].update_time` | `2025-06-30T07:00:00.000Z` |
-| `theme` | `places` |
-| `type` | `place` |
+| `id` | 99003ee6-e75b-4dd6-8a8a-53a5a716c50d |
+| `geometry` | POINT (-150.46875 -79.1713346) |
+| `theme` | places |
+| `type` | place |
 | `version` | `1` |
+| `sources[0].property` |  |
+| `sources[0].dataset` | meta |
+| `sources[0].record_id` | 107663894904826 |
+| `sources[0].update_time` | 2025-06-30T07:00:00.000Z |
+| `sources[0].confidence` | `0.7337175792507205` |
+| `sources[0].between` | `null` |
+| `operating_status` | open |
+| `categories.primary` | hotel |
+| `categories.alternate` | `null` |
+| `confidence` | `0.7337175792507205` |
+| `websites` | `[https://www.superhotel.co.jp/s_hotels/beppu/]` |
+| `socials` | `[https://www.facebook.com/107663894904826]` |
+| `emails` | `null` |
+| `phones` | `[+81977009000]` |
+| `brand.wikidata` | `null` |
+| `brand.names.primary` | SUPER HOTEL |
+| `brand.names.common` | `null` |
+| `brand.names.rules` | `null` |
+| `addresses[0].freeform` | 秋田県横手市駅前町１３−８ |
+| `addresses[0].locality` | 横手市 |
+| `addresses[0].postcode` | 013-0036 |
+| `addresses[0].region` | `null` |
+| `addresses[0].country` | JP |
+| `names.primary` | スーパーホテル別府駅前 |
+| `names.common` | `null` |
+| `names.rules` | `null` |

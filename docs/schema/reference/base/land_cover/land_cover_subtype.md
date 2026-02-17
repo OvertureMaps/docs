@@ -1,6 +1,6 @@
 # LandCoverSubtype
 
-Type of surface represented.
+Primary or dominant material covering the land.
 
 ## Values
 

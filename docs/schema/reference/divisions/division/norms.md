@@ -6,4 +6,4 @@ Local norms and standards.
 
 | Name | Type | Description |
 |-----:|:----:|-------------|
-| `driving_side` | `string` ([Side](/schema/codegen/divisions/Names/side/)) (optional) | Side of the road on which vehicles drive in the division. Examples: `left`, `right` |
+| `driving_side` | [`Side`](../../types/scoping/side.md) (optional) | Side of the road on which vehicles drive in the division. |

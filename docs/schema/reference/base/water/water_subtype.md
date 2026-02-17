@@ -1,6 +1,8 @@
 # WaterSubtype
 
-The type of water body such as an river, ocean or lake.
+The broad classification of water body such as river, ocean or lake.
+
+This broad classification can be refined using `WaterClass`.
 
 ## Values
 

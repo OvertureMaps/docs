@@ -1,6 +1,8 @@
 # InfrastructureClass
 
-Further classification of the infrastructure type.
+Further classification of the type of infrastructure.
+
+The infrastructure class adds detail to the broad classification of `InfrastructureSubtype`.
 
 ## Values
 
@@ -129,6 +131,7 @@ Further classification of the infrastructure type.
 - `regional_airport`
 - `reservoir_covered`
 - `retaining_wall`
+- `roller_coaster`
 - `rope_tow`
 - `runway`
 - `sally_port`

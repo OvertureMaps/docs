@@ -8,6 +8,12 @@ import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+:::caution Work in Progress
+The schema reference pages are being regenerated from the Pydantic model
+definitions. Transportation segment types (road, rail, water) and their
+associated properties are not yet available. Other themes are complete.
+:::
+
 ### Top-level properties
 
 In the Overture schema, all features have a unique `id` called a [GERS ID](https://docs.overturemaps.org/gers/), a `geometry` object that follows the OGC geometry specification, and other top-level properties.

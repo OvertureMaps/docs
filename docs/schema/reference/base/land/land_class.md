@@ -1,6 +1,8 @@
 # LandClass
 
-Further classification of type of landcover.
+Further classification of the land.
+
+The land class adds detail to the broad classification of `LandSubtype`.
 
 ## Values
 

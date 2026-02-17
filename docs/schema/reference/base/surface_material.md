@@ -1,6 +1,6 @@
 # SurfaceMaterial
 
-Surface material enum used by infrastructure and land features.
+Material that makes up the surface of `Infrastructure` and `Land` features.
 
 ## Values
 

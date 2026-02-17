@@ -15,6 +15,6 @@ The outermost material of the roof.
 - `roof_tiles`
 - `slate`
 - `solar_panels`
-- `thatch`
 - `tar_paper`
+- `thatch`
 - `wood`

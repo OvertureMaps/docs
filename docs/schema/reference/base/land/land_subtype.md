@@ -1,7 +1,8 @@
 # LandSubtype
 
-Further description of the type of land cover, such as forest, glacier, grass, or
-a physical feature, such as a mountain peak.
+Broadest classification of the land.
+
+This broad classification can be refined by `LandClass`.
 
 ## Values
 

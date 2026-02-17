@@ -1,6 +1,8 @@
 # WaterClass
 
-Further description of the type of water.
+Further description of the type of water body.
+
+The water class adds detail to the broad classification of `WaterSubtype`.
 
 ## Values
 
