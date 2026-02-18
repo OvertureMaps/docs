@@ -18,6 +18,12 @@ Download the building footprints for the specific bounding box as GeoJSON and sa
 $ overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=building -o boston.geojson
 ```
 
+If you have [uv](https://docs.astral.sh/uv/) installed, you can run overturemaps [with uvx](https://docs.astral.sh/uv/guides/tools/#running-tools) without installing it:
+
+```bash
+uvx overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=building -o boston.parquet
+```
+
 ## Usage
 **download**
 
