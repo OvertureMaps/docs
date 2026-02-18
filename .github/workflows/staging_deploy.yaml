@@ -76,7 +76,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            🚀 Overture Maps docs branch preview deployed!
+            ## 🚀 Overture Maps docs branch preview deployed!
 
             You can review your changes at https://staging.overturemaps.org/${{ github.event.repository.name }}/pr/${{ github.event.number }}/index.html
 
