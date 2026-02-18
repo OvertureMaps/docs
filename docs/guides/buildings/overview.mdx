@@ -1,0 +1,175 @@
+---
+title: Overview
+description: 2.6 billion buildings and counting
+slug: /guides/buildings/
+---
+
+import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem'; import QueryBuilder from '@site/src/components/queryBuilder'; import ThemedImage from '@theme/ThemedImage'; import useBaseUrl from '@docusaurus/useBaseUrl';
+import BuildingsMap from '@site/src/components/buildings-map';
+
+# Guide to Overture Buildings
+
+## Overview
+
+The Overture Maps buildings theme describes human-made structures with roofs or interior spaces that are permanently or semi-permanently in one place (source: [OSM building definition](https://wiki.openstreetmap.org/wiki/Key:building)). Overture's goal is to provide the world's most comprehensive set of building structures compiled from the best available open data sources, covering all the world's buildings. The theme includes two feature types:
+
+- **`building`**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
+- **`building_part`**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a `building_id`.
+
+### Data access and retrieval
+
+Overture's `building` and `building_part` datasets are freely available on both Amazon S3 and Microsoft Azure Blob Storage at the locations listed below. We provide [a comprehensive guide](https://docs.overturemaps.org/getting-data/) to accessing Overture data in our documentation.
+
+<Tabs>
+  <TabItem value="building" label="building" default>
+    | Provider | Location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building/*" language="text"></QueryBuilder> |
+  </TabItem>
+  <TabItem value="building_part" label="building_part">
+    | Provider | Location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
+  </TabItem>
+</Tabs>
+
+### Use cases
+
+Our buildings data is intended to support multiple use cases, as defined and prioritized by various Overture members, but may be used for other use cases as imagined by Overture data users assuming they comply with the open data license.
+
+- **2D Visualization**: Display of the buildings in a 2D map display, perhaps symbolized by other properties.
+- **3D Visualization**: Display of the buildings (and parts) in a 3D (or 2.5D) display, extruded by building height or levels.
+- **Data Enrichment**: Enable end users to enrich the buildings with additional attributes using GERS ID.
+- **Spatial Analysis**: Enable end users to perform analysis to create derivative datasets or train AI models.
+
+
+## Dataset schema
+
+Overture releases its data as GeoParquet files. The `building` and `building_part` datasets have slightly different schemas, and the column definitions for those data files are described below. For more detailed information about the buildings schema see Overture [schema reference documentation](https://docs.overturemaps.org/schema/). 
+
+<details>
+	<summary>Column definitions for the `building` and `building_part` datasets</summary>
+<div>
+<Tabs>
+<TabItem value="building" label="building" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A building's geometry is defined as its footprint or roofprint (if traced from aerial/satellite imagery). It MUST be a Polygon or MultiPolygon as defined by the GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| subtype | string | A broad category of the building type and purpose. |
+| names | struct | The name associated with the feature. The first entry in the array of names must have a "local" language. |
+| class | string | Further delineation of the building's built purpose. |
+| level | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| has_parts | boolean | Flag indicating whether the building has parts. |
+| is_underground | boolean | Whether the entire building or part is completely below ground. This is useful for rendering which typically omits these buildings or styles them differently because they are not visible above ground. This is different than the level column which is used to indicate z-ordering of elements and negative values may be above ground. |
+| height | double | Height of the building or part in meters. The height is the distance from the lowest point to the highest point. |
+| num_floors | integer | Number of above-ground floors of the building or part. |
+| num_floors_underground | integer | Number of below-ground floors of the building or part. |
+| min_height | double | The height of the bottom part of building in meters. Used if a building or part of building starts above the ground level. |
+| min_floor | integer | The "start" floor of a building or building part. Indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach ground level. |
+| facade_color | string | The color (name or color triplet) of the facade of a building or building part in hexadecimal. |
+| facade_material | string | The outer surface material of building facade. |
+| roof_material | string | The outermost material of the roof. |
+| roof_shape | string | The shape of the roof. |
+| roof_direction | double | Bearing of the roof ridge line. |
+| roof_orientation | string | Orientation of the roof shape relative to the footprint shape. Either "along" or "across." |
+| roof_color | string | The color (name or color triplet) of the roof of a building or building part in hexadecimal. |
+| roof_height | double | The height of the building roof in meters. This represents the distance from the base of the roof to the highest point of the roof. |
+| filename | string | Name of the file being queried. |
+| theme | varchar | Name of the Overture theme being queried. |
+| type | varchar | Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="building_part" label="building_part" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | The geometry of a single building part. It MUST be a Polygon or MultiPolygon as defined by the GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| names | struct | The name associated with the feature. The first entry in the array of names must have a "local" language. |
+| level | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| is_underground | boolean | Whether the entire building or part is completely below ground. This is useful for rendering which typically omits these buildings or styles them differently because they are not visible above ground. This is different than the level column which is used to indicate z-ordering of elements and negative values may be above ground. |
+| height | double | Height of the building or part in meters. The height is the distance from the lowest point to the highest point. |
+| num_floors | integer | Number of above-ground floors of the building or part. |
+| num_floors_underground | integer | Number of below-ground floors of the building or part. |
+| min_height | double | The height of the bottom part of building in meters. Used if a building or part of building starts above the ground level. |
+| min_floor | integer | The "start" floor of a building or building part. Indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach ground level. |
+| facade_color | string | The color (name or color triplet) of the facade of a building or building part in hexadecimal. |
+| facade_material | string | The outer surface material of building facade. |
+| roof_material | string | The outermost material of the roof. |
+| roof_shape | string | The shape of the roof. |
+| roof_direction | double | Bearing of the roof ridge line. |
+| roof_orientation | string | Orientation of the roof shape relative to the footprint shape. Either "along" or "across." |
+| roof_color | string | The color (name or color triplet) of the roof of a building or building part in hexadecimal. |
+| roof_height | double | The height of the building roof in meters. This represents the distance from the base of the roof to the highest point of the roof. |
+| building_id | string | The building ID to which this part belongs. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</TabItem>
+</Tabs>
+</div>
+</details>
+
+## How we build the dataset
+
+### Sources
+
+Currently, the Overture `building` dataset is a combination of the following open building datasets. (The `building_part` dataset comes from one source: OpenStreetMap.)
+
+| Source | Type | Conflation Priority | Count |
+|--------|------|-------------------|--------|
+| [OpenStreetMap](//osm.org) | Community-contributed | 1 | ~672 Million |
+| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2 | ~17 Million |
+| [Instituto Geográfico Nacional (España)](https://www.ign.es/) | National dataset | 3 | ~12.7 Million |
+| [City of Vancouver, Canada](https://opendata.vancouver.ca/) | Municipal dataset | 4 | ~17 Thousand |
+| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (>90% precision) | 5 | ~350 Million |
+| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) | ML-derived roofprints | 6 | ~711 Million |
+| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (\<90  % precision) | 7 | ~650 Million |
+| [Buildings in East Asian Countries](https://zenodo.org/records/8174931) | ML-derived roofprints | 8 | ~213 Million |
+
+### Quality and prioritization
+
+To help ensure quality as well as quantity, the conflation process for the `building` dataset prioritizes community contributed data over machine learning (ML) generated data. The highest priority dataset used in conflation is OpenStreetMap. This ensures that any data added to OpenStreetMap based on local knowledge or manual editing of ML data is prioritized with each update of Overture Maps buildings. If there is a quality issue in one of the Overture Maps buildings, it can be addressed by adding, updating, or deleting that same building structure in OpenStreetMap and it will be reflected in the next Overture Maps release.
+
+Many Overture Maps buildings are derived from ML sources (e.g. Microsoft and Google Open Buildings). These ML datasets are known to include some detections that do not qualify as building structures as defined above. These might be shipping containers, car ports, solar panels, or other objects that resemble buildings in satellite or aerial imagery. To remove most of these invalid features from the buildings theme, the Overture Maps conflation process excludes ML features below a certain size that are unlikely to be valid buildings. These exclusion rules might result in some valid features being missed but, on balance, improve the quality of the buildings theme. Missing features can be added through OpenStreetMap editing (e.g. Rapid editor accessing ML features).
+
+### Conflation and matching
+
+As part of the conflation process, features in the open data sources are matched and assigned a GERS ID. The intent is to have a single, stable GERS ID for each building feature. If there are multiple sources for an individual building feature (e.g. the Lincoln Memorial), then that building feature in each data source should be assigned the same GERS ID, whether that feature is included in the Overture buildings theme that is released or not. 
+
+The matching step in the conflation process is based on the geometry of the building features, using a metric called Intersection over Union (IoU). Buildings are considered a match if the IoU score exceeds 50%. The score is calculated by dividing the area where the two building shapes overlap by the total area they cover combined. On this scale, a 100% score signifies a perfect overlap, whereas disconnected (non-overlapping) geometries score 0%.
+
+The visualization below shows Overture buildings data looking across the US-Mexico border toward San Diego. Notice how Esri and OSM buildings appear in big blocks while the Google and Microsoft buildings appear to mix together. This is a product of our conflation process that prioritizes community contributed data first and then "fills in" the rest of the map with the best ML data available.
+
+<figure>
+  <BuildingsMap></BuildingsMap>
+  <figcaption>
+  <div style={{'textAlign':'center'}}>
+    <span style={{'backgroundColor':'rgb(36,39,47)', padding:2}}>
+    <span style={{color:'rgb(194,42,87)'}}>&#x25AC;   <span style={{color:'white'}}>OpenStreetMap | </span></span>
+    <span style={{color:'rgb(4,151,188)'}}>&#x25AC;   <span style={{color:'white'}}>Esri Community Maps | </span></span>
+    <span style={{color:'rgb(243,175,102)'}}>&#x25AC; <span style={{color:'white'}}>Microsoft ML Buildings | </span></span>
+    <span style={{color:'rgb(236,253,188)'}}>&#x25AC; <span style={{color:'white'}}>Google Open Buildings </span></span>
+    </span>
+  </div>
+  </figcaption>
+</figure>
+*© OpenStreetMap contributors, OvertureMaps Foundation*
+
+## Licensing
+
+The Overture Maps buildings theme is provided under the ODbL license, largely because the primary OpenStreetMap data is provided under that license. This requires that other data sources that are included in the buildings theme are also provided under ODbL or a license that is compatible with ODbL, such as CC BY 4.0. Overture Maps determine if potential sources of open data that would expand coverage or improve quality are provided under a license that is compatible with ODbL before adding to the conflation process. For more information, see the [licensing and attribution](https://docs.overturemaps.org/attribution/) section of our documentation.
+
+
+

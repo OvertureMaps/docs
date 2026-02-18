@@ -1,0 +1,186 @@
+---
+title: Overview
+description: Points of interest around the world
+slug: /guides/places/
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import PlacesQuery from '!!raw-loader!@site/src/queries/duckdb/places.sql';
+import RomeQuery from '!!raw-loader!@site/src/queries/duckdb/rome_places.sql';
+import LithuaniaQuery from '!!raw-loader!@site/src/queries/duckdb/lithuania_places.sql';
+import MillQuery from '!!raw-loader!@site/src/queries/duckdb/places_mills.sql';
+import ConfidenceQuery from '!!raw-loader!@site/src/queries/duckdb/places_confidence.sql';
+import ConflateOSMQuery from '!!raw-loader!@site/src/queries/duckdb/places_conflating_OSM.sql';
+import PlacesInBuildingsQuery from '!!raw-loader!@site/src/queries/duckdb/places_in_buildings.sql';
+
+
+The Overture places theme has one feature type, called `place`, and contains more than 64 million point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more.
+
+| ![Overture places theme coverage](/img/places/places-coverage-h3-feb.png) |
+|:--:|
+| *Overture places data, February 2026* |
+
+| Sources | License | feature count, February 2026 |
+| --- | --- | --- |
+| AllThePlaces, Overture | CC0-1.0              | 1,554,249    |
+| Foursquare, Overture   | Apache-2.0           | 6,003,562    |
+| DAC, Overture          | CDLA-Permissive-2.0  | 148,042      |
+| Krick, Overture        | CDLA-Permissive-2.0  | 3,199        |
+| Microsoft, Overture    | CDLA-Permissive-2.0  | 5,644,707    |
+| PinMeTo, Overture      | CDLA-Permissive-2.0  | 127,862      |
+| RenderSEO, Overture    | CDLA-Permissive-2.0  | 4,844        |
+| meta, Overture         | CDLA-Permissive-2.0  | 58,958,274   |
+
+## Dataset description
+
+All Overture data, including places data, is distributed as GeoParquet, a column-based data structure. Below you'll find a table with column-by-column descriptions of the properties in the place feature type. Of particular interest to users is the categories property; we offer a complete list of available categories [here](https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv).
+
+<details>
+    <summary>Schema for GeoParquet files in the places theme</summary>
+<div>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | The point representation of the Place's location. Place's geometry which MUST be a Point as defined by GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| names | struct | Properties defining the names of a feature. |
+| categories | struct | The categories of the place. Complete list is available on GitHub: https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv |
+| basic_category | string | A simplified category taxonomy |
+| confidence | double | The confidence of the existence of the place. It's a number between 0 and 1. 0 means that we're sure that the place doesn't exist (anymore). 1 means that we're sure that the place exists. If there's no value for the confidence, it means that we don't have any confidence information. |
+| websites | string | The websites of the place. |
+| socials | string | The social media URLs of the place. |
+| emails | string | The email addresses of the place. |
+| phones | string | The phone numbers of the place. |
+| brand | struct | The brand of the place. A location with multiple brands is modeled as multiple separate places, each with its own brand. |
+| addresses | struct | The addresses of the place. |
+| operating_status | string | Indicates the operating status of a place. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</div>
+</details>
+
+## Data access and retrieval
+
+Overture's places theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+
+| provider | location |
+| --- | --- |
+| Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder>|
+| Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder> |
+
+More information can be found in the [Getting Overture Data](https://docs.overturemaps.org/getting-data/) section of this documentation. You can download the entire dataset directly from the S3 or Azure locations above. Warning: the output will be a very large file.
+Depending on your use case, these methods might be more practical for you:
+
+<Tabs>
+<TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
+First, follow the [setup guide for the Python Command-line Tool](/getting-data/overturemaps-py/).
+
+```
+overturemaps download -f geoparquet --type=place -o places.geoparquet
+```
+</TabItem>
+<TabItem value="DuckDB" label="DuckDB" default>
+First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
+
+<QueryBuilder query={PlacesQuery}></QueryBuilder>
+</TabItem>
+</Tabs>
+
+## Data usage guidelines
+
+We recommend downloading only the Overture data you need. If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract places data and output a GeoJSON file.
+
+<Tabs>
+<TabItem value="Overture Maps Explorer" label="Overture Maps Explorer" default>
+To quickly view and download modest amounts of data, you can use the [Overture Maps Explorer website](https://explore.overturemaps.org/#15.07/41.89731/12.47626).
+
+To download data: Pan to the area you are interested in, turn off the other layers, then click `Download Visible`.
+
+This will download the area visible on your screen.
+</TabItem>
+<TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
+First, follow the [setup guide for the Python Command-line Tool](/getting-data/overturemaps-py/).
+
+Simply alter the `bbox` value to download a particular area.
+```
+overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=place -o rome.geojson
+```
+</TabItem>
+<TabItem value="DuckDB" label="DuckDB" default>
+First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
+
+Replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run the query for a different area.
+<QueryBuilder query={RomeQuery}></QueryBuilder>
+</TabItem>
+</Tabs>
+
+## Data manipulation and analysis
+
+### Querying by properties
+
+These examples use data properties in the address, category, and confidence scores columns to filter the data in useful ways using DuckDB.
+<Tabs>
+<TabItem value="Query by address" label="Query by address" default>
+The `address` column can be used to quickly filter data down to a particular political unit. This example uses the country key to get all the data with addresses in Lithuania. Region can be likewise used to extract data from smaller units such as US states.
+<QueryBuilder query={LithuaniaQuery}></QueryBuilder>
+</TabItem>
+<TabItem value="Query by category" label="Query by category" default>
+For filtering data by a particular type of place we can use the `categories` column. In this example we'll extract all the places with categories of `rice_mill` or `flour_mill`
+
+The full category list is available [here](https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv).
+<QueryBuilder query={MillQuery}></QueryBuilder>
+</TabItem>
+<TabItem value="Query by confidence score" label="Query by confidence score" default>
+Suppose you only want data that definitely exists and is accurate. We can use the `confidence` score to filter out data below a certain threshold to remove any suspect data.
+<QueryBuilder query={ConfidenceQuery}></QueryBuilder>
+</TabItem>
+</Tabs>
+
+### Advanced examples
+
+These examples present some use cases that combine places data with other datasets.
+
+<Tabs>
+<TabItem value="Conflate with OpenStreetMap" label="Conflate with OpenStreetMap" default>
+Overture Places can be a valuable source for conflating with or enhancing your own existing dataset.
+
+In this example, suppose we want to use OpenStreetMap POIs for a project but would like to fill in any missing attributes such as addresses or phone numbers with Overture Place data.
+
+Using some basic matching logic, we can join these two datasets together to create a more robust final product. By also joining the GERS ID to our output dataset we could easily keep our now conflated dataset synced with future Overture releases with a simple join.
+
+To run this example yourself, an Oregon PBF can be obtained from [Geofabrik](https://download.geofabrik.de/north-america/us/oregon.html).
+
+Note: Joining data with a CDLA Permissive 2.0 license to OSM is permitted but the resulting data may need to carry the Open Database License (ODbL) if it is a derivative database.  Please see the [OSM Collective Database Guideline](https://osmfoundation.org/wiki/Licence/Community_Guidelines/Collective_Database_Guideline_Guideline) for information on this topic.
+<details>
+    <summary>Query</summary>
+<div>
+<QueryBuilder query={ConflateOSMQuery}></QueryBuilder>
+</div>
+</details>
+</TabItem>
+<TabItem value="Find building addresses" label="Find building addresses" default>
+Suppose you are interested in having address data attached to buildings. The [Overture addresses](/schema/reference/addresses/address/) theme might be a good place to check, but let's assume it does not cover the area you are interested in.
+
+The places theme has wide coverage and many of the place point features have addresses associated with them. Using an intersect we can find places that fall inside buildings and then join the place's address to the building polygon.
+<details>
+    <summary>Query</summary>
+<div>
+<QueryBuilder query={PlacesInBuildingsQuery}></QueryBuilder>
+</div>
+</details>
+</TabItem>
+</Tabs>
+
+## Tools and libraries
+
+### Rapid
+Rapid, an OpenStreetMap editor, is capable of displaying places data as a reference layer by following the guide [here](/examples/rapid/).
+
+The license is compatible with OSM and this data can be used for mapping.

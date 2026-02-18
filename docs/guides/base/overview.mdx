@@ -1,0 +1,216 @@
+---
+title: Overview
+description: Bathymetry, Infrastructure, Land, Landuse, Landcover, and Water features.
+slug: /guides/base/
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+The Overture Maps base theme provides the land, water, infrastructure, and bathymetry features that are necessary to render a complete basemap. The majority of these features come from OpenStreetMap. We classify OSM features into *type*, *subtype*, and *class* based on their tags. The land and ocean polygons are derived from the [Daylight Coastlines](https://daylightmap.org/coastlines.html). The theme includes six feature types:
+
+- **`bathymetry`**: derived vectorized bathymetric data products from [ETOPO1](https://www.ncei.noaa.gov/products/etopo-global-relief-model) and [GLOBathy](https://www.nature.com/articles/s41597-022-01132-9) data.
+- **`infrastructure`**: Infrastructure features such as communication towers and lines, piers, and bridges from OpenStreetMap.
+- **`land`**: physical representations of land surfaces derived from the inverse of OSM Coastlines; translates natural tags from OpenStreetMap.
+- **`land_cover`**: derived from [ESA WorldCover](https://esa-worldcover.org/en), high-resolution optical Earth observation data.
+- **`land_use`**: classifications of the human use of a section of land; translates landuse tag from OpenStreetMap.
+- **`water`**: physical representations of inland and ocean marine surfaces; translates natural and waterway tags from OpenStreetMap.
+
+## Understanding the parquet files
+
+<details>
+	<summary>Schema for the GeoParquet files in the base theme</summary>
+<div>
+<Tabs>
+<TabItem value="bathymetry" label="bathymetry" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A WKB representation of the entity's geometry - a Polygon or MultiPolygon. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| depth | integer | Depth below surface level (in meters) of the feature. |
+| cartography | struct | Defines cartographic hints for optimal use of Overture features in map-making. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="infrastructure" label="infrastructure" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | varchar | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| subtype | varchar | A broad category of the building type and purpose. |
+| names | struct | The name associated with the feature. The first entry in the array of names must have a "local" language. |
+| class | varchar | Further delineation of the building's built purpose. |
+| level | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| height | double | Height of the feature in meters. |
+| surface | varchar | Surface material, mostly from the OSM tag, with some normalization. |
+| source_tags | struct | Any attributes/tags from the original source data that should be passed through. |
+| wikidata | varchar | The Wikidata ID for the feature. |
+| filename | varchar | Name of the file being queried. |
+| theme | varchar | Name of the Overture theme being queried. |
+| type | varchar | Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="land" label="land" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| level | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| subtype | string | A broad category of the building type and purpose. |
+| class | string | Further delineation of the building's built purpose. |
+| surface | string | Surface material, mostly from the OSM tag, with some normalization. |
+| names | struct | The name associated with the feature. The first entry in the array of names must have a "local" language. |
+| source_tags | struct | Any attributes/tags from the original source data that should be passed through. |
+| wikidata | string | The Wikidata ID for the feature. |
+| elevation | integer | Elevation above sea level (in meters) of the feature. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="land_cover" label="land_cover" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A WKB representation of the entity's geometry - a Polygon or MultiPolygon. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| cartography | struct | Defines cartographic hints for optimal use of Overture features in map-making. |
+| subtype | string | A broad category of the building type and purpose. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="land_use" label="land_use" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| level | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| subtype | string | A broad category of the building type and purpose. |
+| class | string | Further delineation of the building's built purpose. |
+| surface | string | Surface material, mostly from the OSM tag, with some normalization. |
+| names | struct | The name associated with the feature. The first entry in the array of names must have a "local" language. |
+| source_tags | struct | Any attributes/tags from the original source data that should be passed through. |
+| wikidata | string | The Wikidata ID for the feature. |
+| elevation | integer | Elevation above sea level (in meters) of the feature. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="water" label="water" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID that may be associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A WKB representation of the entity's geometry - a Point, Polygon, MultiPolygon, or LineString. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature. Each source object lists the property in JSON Pointer notation and the dataset from which that specific value originated. |
+| level | integer | The building feature's Z-order, i.e., stacking order. A Z-order of 0 is ground level. |
+| subtype | string | A broad category of the building type and purpose. |
+| class | string | Further delineation of the building's built purpose. |
+| names | struct | The name associated with the feature. The first entry in the array of names must have a "local" language. |
+| source_tags | struct | Any attributes/tags from the original source data that should be passed through. |
+| wikidata | string | The Wikidata ID for the feature. |
+| is_salt | boolean | Indicates the presence of salt water. |
+| is_intermittent | boolean | Indicates whether or not the water is intermittent. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</TabItem>
+</Tabs>
+</div>
+</details>
+
+## Data access and retrieval
+
+Overture's base theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+
+<Tabs>
+  <TabItem value="bathymetry" label="Bathymetry">
+    | provider | location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=bathymetry/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=base/type=bathymetry/*" language="text"></QueryBuilder> |
+  </TabItem>
+  <TabItem value="infrastructure" label="Infrastructure">
+    | provider | location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=infrastructure/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=base/type=infrastructure/*" language="text"></QueryBuilder> |
+  </TabItem>
+  <TabItem value="land" label="Land">
+    | provider | location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=land/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=base/type=land/*" language="text"></QueryBuilder> |
+  </TabItem>
+  <TabItem value="land_cover" label="Land Cover">
+    | provider | location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=land_cover/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=base/type=land_cover/*" language="text"></QueryBuilder> |
+  </TabItem>
+  <TabItem value="land_use" label="Land Use">
+    | provider | location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=land_use/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=base/type=land_use/*" language="text"></QueryBuilder> |
+  </TabItem>
+  <TabItem value="water" label="Water">
+    | provider | location |
+    | --- | --- |
+    | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=water/*" language="text"></QueryBuilder> |
+    | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=base/type=water/*" language="text"></QueryBuilder> |
+  </TabItem>
+</Tabs>
+
+Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
+
+[The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for addresses.
+
+We recommend querying and downloading only the Overture data you need.
+If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract address data.
+
+## Schema design choices
+
+- basic classification of features into `type`, `subtype` and `class` where appropriate.
+- parsing and normalization of common OSM tags, such as `height` and `ele`.
+- extraction of consistent OSM tags, such as `wikidata` to top-level properties.
+- direct pass-through of remaining relevant OSM tags.
+
+## Schema reference
+
+- [Explore the schema for the bathymetry feature type](/schema/reference/base/bathymetry).
+- [Explore the schema for the infrastructure feature type](/schema/reference/base/infrastructure).
+- [Explore the schema for the land feature type](/schema/reference/base/land).
+- [Explore the schema for the land cover feature type](/schema/reference/base/land_cover).
+- [Explore the schema for the land use feature type](/schema/reference/base/land_use).
+- [Explore the schema for the water feature type](/schema/reference/base/water).

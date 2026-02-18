@@ -86,24 +86,17 @@
       "matching": {
         "summary": "Exact matching",
         "logic": "Matching based on exact point geometry and address properties",
-        "properties": [
-          "All properties incl. geometry"
-        ]
+        "properties": ["All properties incl. geometry"]
       },
       "merging": {
-        "summary": [
-          "Promotion of single source for matched addresses",
-          "No merging of attributes"
-        ],
+        "summary": ["Promotion of single source for matched addresses", "No merging of attributes"],
         "logic": [
           "All addresses, except for perfect duplicates/matches, are released",
           "No merging of attributes between sources"
         ],
         "constraints": []
       },
-      "types": [
-        "address"
-      ]
+      "types": ["address"]
     },
     "Base": {
       "brief_description": "Foundational layers such as land, water, infrastructure, and bathymetry.",
@@ -191,14 +184,7 @@
         "logic": "n/a (single source)",
         "constraints": []
       },
-      "types": [
-        "land",
-        "land_cover",
-        "land_use",
-        "water",
-        "bathymetry",
-        "infrastructure"
-      ]
+      "types": ["land", "land_cover", "land_use", "water", "bathymetry", "infrastructure"]
     },
     "Buildings": {
       "brief_description": "Permanent human-made structures with a roof.",
@@ -297,28 +283,20 @@
       },
       "filtering": {
         "summary": "Overlap allowed within source, but not between sources",
-        "location": [
-          "Buildings in water"
-        ],
-        "topological": [
-          "Overlap allowed within source, but not between sources"
-        ],
+        "location": ["Buildings in water"],
+        "topological": ["Overlap allowed within source, but not between sources"],
         "geometrical": [
           "Geometry identical to source",
           "(Multi)Polygons with too many sharp angles are excluded",
           "Footprint area > 10m for ML-derived sources"
         ],
-        "properties": [
-          "`height` < 900m"
-        ],
+        "properties": ["`height` < 900m"],
         "others": []
       },
       "matching": {
         "summary": "Geometric similarity (Intersection-over-Union > 0.5)",
         "logic": "Intersection-over-Union > 0.5",
-        "properties": [
-          "`geometry`"
-        ]
+        "properties": ["`geometry`"]
       },
       "merging": {
         "summary": [
@@ -334,10 +312,7 @@
           "Intersection-over-Union > 0.5 for attribute merging"
         ]
       },
-      "types": [
-        "building",
-        "building_part"
-      ]
+      "types": ["building", "building_part"]
     },
     "Divisions": {
       "brief_description": "Recognized areas for governance, culture, or organization.",
@@ -402,17 +377,13 @@
       },
       "filtering": {
         "summary": "Deduplication; overlap not allowed for countries",
-        "location": [
-          ""
-        ],
+        "location": [""],
         "topological": [
           "Overlap allowed at lower subtypes (ex locality), not allowed in others (ex country)"
         ],
         "geometrical": [],
         "properties": [],
-        "others": [
-          "Deduplication"
-        ]
+        "others": ["Deduplication"]
       },
       "matching": {
         "summary": "",
@@ -424,11 +395,7 @@
         "logic": "",
         "constraints": []
       },
-      "types": [
-        "division",
-        "division_area",
-        "division_boundary"
-      ]
+      "types": ["division", "division_area", "division_boundary"]
     },
     "Places": {
       "brief_description": "Concrete, physically identifiable, stationary destinations.",
@@ -502,28 +469,17 @@
       },
       "quality_assurance": {
         "coverage_summary": "Global",
-        "coverage": [
-          "Global",
-          "US ~73%"
-        ],
+        "coverage": ["Global", "US ~73%"],
         "quality_summary": "Duplicates",
-        "quality": [
-          "Duplicates",
-          "High junk rate",
-          "Low attribute completeness"
-        ],
+        "quality": ["Duplicates", "High junk rate", "Low attribute completeness"],
         "violations": []
       },
       "filtering": {
         "summary": "None, except existence `confidence` > 0.2",
-        "location": [
-          ""
-        ],
+        "location": [""],
         "topological": [],
         "geometrical": [],
-        "properties": [
-          "`confidence` > 0.2"
-        ],
+        "properties": ["`confidence` > 0.2"],
         "others": []
       },
       "matching": {
@@ -542,10 +498,7 @@
         ]
       },
       "merging": {
-        "summary": [
-          "Promotion of single source for matched places",
-          "No merging of attributes"
-        ],
+        "summary": ["Promotion of single source for matched places", "No merging of attributes"],
         "logic": [
           "Clustering of matched places",
           "Promotion of place from source with the highest match count",
@@ -553,9 +506,7 @@
         ],
         "constraints": []
       },
-      "types": [
-        "place"
-      ]
+      "types": ["place"]
     },
     "Transportation": {
       "brief_description": "Traversable segments (roads, railways, ferries) and connectors (intersections), representing how people and objects travel.",
@@ -671,10 +622,7 @@
           "Ongoing integration of TomTom legacy network"
         ]
       },
-      "types": [
-        "connector",
-        "segment"
-      ]
+      "types": ["connector", "segment"]
     }
   }
 }

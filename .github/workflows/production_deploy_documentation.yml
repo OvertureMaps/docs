@@ -8,11 +8,6 @@ on:
 
   # Allow running from the actions tab
   workflow_dispatch:
-    inputs:
-      schema_branch:
-        description: 'Schema branch to pull from for /reference'
-        required: true
-        default: 'main'
 
 permissions:
   id-token: write # required to use OIDC authentication
@@ -26,19 +21,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the docs repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: '24'
 
       - name: Install NPM dependencies
         run: npm install --prefer-dedupe
 
       - name: Build Docusaurus Pages 🔧
-        env:
-          SCHEMA_BRANCH: ${{ inputs.schema_branch }}
         run: npm run build
 
       - name: Setup Pages 🗂️
@@ -46,7 +41,7 @@ jobs:
 
       - name: Upload static files as GH-Pages artifact 📦
         id: docs-website
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: build
 

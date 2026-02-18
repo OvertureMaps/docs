@@ -1,0 +1,231 @@
+---
+title: Overview
+description: A collection of global address points
+slug: /guides/addresses/
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import ToParquet from '!!raw-loader!@site/src/queries/duckdb/addresses_to_parquet.sql';
+import AddressesCalgary from '!!raw-loader!@site/src/queries/duckdb/addresses_calgary.sql';
+import AddressCounts from '!!raw-loader!@site/src/queries/duckdb/addresses_counts.sql';
+import AddressesNZExport from '!!raw-loader!@site/src/queries/duckdb/addresses_nz_export.sql';
+import UtahAddresses from '!!raw-loader!@site/src/queries/duckdb/addresses_utah.sql';
+
+## Overview
+
+_Note: This theme is currently in Alpha. We invite the Overture community to test the addresses schema and data and offer feedback via the [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repos._
+
+Overture maintains over 446 million address point entities. Data in the address theme is derived from over 175 sources, many distributed by [OpenAddresses](https://openaddresses.io/) and [AddressForAll](https://www.addressforall.org/en/), but also includes open data from the [City of New York](https://data.cityofnewyork.us/City-Government/NYC-Address-Points/g6pj-hd8k), the [U.S. Department of Transportation](https://www.transportation.gov/gis/national-address-database), and various public agencies.
+
+For licensing information, please see the [Attribution and Licensing page](https://docs.overturemaps.org/attribution/).
+
+Address data can be used for a variety of purposes, which can include:
+
+- **Mapping**: Addresses may be displayed on the map for reference purposes.
+- **Geocoding**: Addresses are a primary component of high-accuracy geocoding services (i.e. converting text for an address to a complete address with a location).
+- **Conflation**: Addresses can be used to conflate to other data themes (e.g. places, buildings) where appropriate for mapping or other use cases (e.g. refining search).
+- **Standardization**: Parsing an input address into address components based on an existing schema or address model.
+- **Normalization**: Adhering to standard and consistent forms of address components.
+- **Validation and Verification**: Confirming an address exists within a known list of addresses.
+
+| ![Overture address coverage](/img/addresses/address-coverage-h3-feb.png) |
+|:--:|
+| *February 2026 coverage of Overture address data, visualized using H3 cells.* |
+
+## Dataset description
+
+### Feature type descriptions
+
+An `address` is a feature type that represents a physical place through a series of attributes: street number, street name, unit, address_levels, postalcode and/or country. They also have a `Point` geometry, which provides an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `address` feature type](/schema/reference/addresses/address).
+
+<details>
+	<summary>Address counts, per country</summary>
+<div>
+
+| country | address count |
+| --- | --- |
+| AT      | 2,516,341      |
+| AU      | 15,620,931     |
+| BE      | 6,884,498      |
+| BR      | 89,899,299     |
+| CA      | 16,656,521     |
+| CH      | 3,278,719      |
+| CL      | 4,199,023      |
+| CO      | 7,786,046      |
+| CZ      | 3,011,691      |
+| DE      | 15,918,386     |
+| DK      | 3,942,892      |
+| EE      | 2,225,667      |
+| ES      | 15,589,532     |
+| FI      | 3,633,089      |
+| FO      | 26,217         |
+| FR      | 26,056,645     |
+| GL      | 20,322         |
+| HK      | 175,794        |
+| HR      | 1,676,931      |
+| IS      | 137,737        |
+| IT      | 25,914,431     |
+| JP      | 19,488,871     |
+| LI      | 12,926         |
+| LT      | 1,121,571      |
+| LU      | 178,633        |
+| LV      | 548,313        |
+| MX      | 30,723,333     |
+| NL      | 9,869,049      |
+| NO      | 3,571,193      |
+| NZ      | 2,400,282      |
+| PL      | 8,528,581      |
+| PT      | 3,447,239      |
+| RS      | 2,681,230      |
+| SG      | 140,062        |
+| SI      | 578,393        |
+| SK      | 1,676,765      |
+| TW      | 9,626,682      |
+| US      | 127,008,550    |
+| UY      | 1,059,027      |
+
+</div>
+</details>
+
+## Understanding the parquet files
+
+<details>
+	<summary>Schema for the GeoParquet files in the addresses theme</summary>
+<div>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | A WKB representation of the entity's geometry. MUST be a Point as defined by GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| country | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this address represents or belongs to. |
+| postcode | string | The postcode for the address. |
+| street | string | The street name associated with this address. The street name can include the street "type" or street suffix, e.g., Main Street. Ideally this is fully spelled out and not abbreviated but we acknowledge that many address datasets abbreviate the street name so it is acceptable. |
+| number | string | The house number for this address. This field may not strictly be a number. Values such as "74B", "189 1/2", "208.5" are common as the number part of an address and they are not part of the "unit" of this address. |
+| unit | string | The suite/unit/apartment/floor number. |
+| address_levels | array | The administrative levels present in an address. The number of values in this list and their meaning is country-dependent. For example, in the United States we expect two values: the state and the municipality. In other countries there might be only one. Other countries could have three or more. The array is ordered with the highest levels first. |
+| postal_city | string | In some countries or regions, a mailing address may need to specify a different city name than the city that actually contains the address coordinates. This optional field can be used to specify the alternate city name to use. |
+| version | boolean | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | array | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</div>
+</details>
+
+## Data access and retrieval
+
+Overture's addresses theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
+
+| provider | location |
+| --- | --- |
+| Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=addresses/type=address/*" language="text"></QueryBuilder> |
+| Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=addresses/type=address/*" language="text"></QueryBuilder> |
+
+Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
+
+[The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for addresses.
+
+We recommend querying and downloading only the Overture data you need.
+If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract address data.
+
+<Tabs>
+
+<TabItem value="DuckDB" label="DuckDB" default>
+First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
+
+DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area.
+
+This example returns address data for Calgary, CA and the surrounding area:
+<QueryBuilder query={AddressesCalgary}></QueryBuilder>
+</TabItem>
+
+<TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
+You can find Overture's official Python command-line tool [here](https://github.com/OvertureMaps/overturemaps-py).
+
+This tool helps to download Overture data within a region of interest and converts it to a few different file formats. In this example, a bounding box is passed to obtain all address data around Boston, MA:
+
+```
+overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=address -o boston.geojson
+```
+
+This command results in the following address points, displayed in QGIS:
+
+![Boston address coverage via bbox](/img/addresses/boston-export.png)
+
+Right now there is only one option to the overturemaps utility: download. It will download Overture Maps data with an optional bounding box into the specified file format. When specifying a bounding box, only the minimum data is transferred. The result is streamed out and can handle arbitrarily large bounding boxes.
+
+Command-line options:
+
+- **--bbox** (optional): west, south, east, north longitude and latitude coordinates. When omitted the entire dataset for the specified type will be downloaded
+- **-f** (required: one of "geojson", "geojsonseq", "geoparquet"): output format
+- **--output/-o** (optional): Location of output file. When omitted output will be written to stdout.
+- **--type/-t** (required): The Overture map data type to be downloaded. Examples of types are building for building footprints, place for POI places data, etc. Run overturemaps download --help for the complete list of allowed types
+
+This downloads data directly from Overture's S3 bucket without interacting with any other servers. By including bounding box extents on each row in the Overture distribution, the underlying Parquet readers use the Parquet summary statistics to download the minimum amount of data necessary to extract data from the desired region.
+
+</TabItem>
+
+</Tabs>
+
+## Data manipulation and analysis
+
+Using this query, you can get a count of addresses per country:
+
+<details>
+	<summary>Query</summary>
+<QueryBuilder query={AddressCounts}></QueryBuilder>
+
+</details>
+
+This query will create a shapefile of address data in New Zealand, with limited attributes:
+
+<details>
+	<summary>Query</summary>
+<QueryBuilder query={AddressesNZExport}></QueryBuilder>
+</details>
+
+This query will create a CSV file of address within the State of Utah, using the `divisions` theme data in a spatial query:
+
+<details>
+	<summary>Query</summary>
+<QueryBuilder query={UtahAddresses}></QueryBuilder>
+</details>
+
+## Revision history
+### Version info
+
+You can find the most recent release notes [here](https://docs.overturemaps.org/release/latest/).
+
+## Support
+
+### Feedback
+
+You can find a list of Overture repositories [here](https://github.com/orgs/OvertureMaps/repositories).
+
+Discussions are generally reserved for broader conversations around the addresses project as a whole (supporting a new workflow, adding a dataset, null attributes).
+
+Issues are generally reserved for more specific concerns with specific entities in the dataset (geometry validation, missing entities, duplicate entities) or country-specific concerns.
+
+### Discussions
+
+You can start and add to discussions in each of the public Overture repositories. Some examples:
+
+- **General Overture Discussions**: https://github.com/orgs/OvertureMaps/discussions
+- **Data Discussions**: https://github.com/OvertureMaps/data/discussions
+- **Schema Discussions**: https://github.com/OvertureMaps/schema/discussions
+
+Discussions around Overture's address data should be filed in the Data repository.
+
+### Issues
+
+You can start and add to issues in each of the public Overture repositories, too. Some examples:
+
+- **Data Issues**: https://github.com/OvertureMaps/data/issues
+- **Schema Issues**: https://github.com/OvertureMaps/schema/issues
+- **Tiles issues**: https://github.com/OvertureMaps/overture-tiles/issues
+
+Issues around Overture's address data should be filed in the data repository.

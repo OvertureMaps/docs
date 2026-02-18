@@ -1,27 +1,38 @@
 ---
 title: Exploring Overture data, no SQL required
+authors:
+  name: Dana Bauer
+  title: Technical Product Manager, Overture Maps
+  email: dana@overturemaps.org
 tags:
-  - developer-tools
+  - tools
 ---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 Overture has launched a new browser-based tool to give users a no-code option to interact with our data. The Explore website is now the quickest way to get started with Overture, no SQL required: [https://explore.overturemaps.org](https://explore.overturemaps.org/#13.01/39.95692/-75.15583)
 
-| ![Exploring Philadelphia](/img/blog/explore-philadelphia2.gif) | 
-|:--:| 
-| *Checking out ["Lion Crushing a Serpent"](https://www.associationforpublicart.org/artwork/lion-crushing-a-serpent/) in Philadelphia’s Rittenhouse Park* |
+<figure>
+  <video autoPlay loop muted playsInline style={{ width: '100%' }}>
+    <source src={useBaseUrl('/img/blog/explore-philadelphia2.mp4')} type="video/mp4" />
+  </video>
+  <figcaption style={{ textAlign: 'center' }}>
+    <em>Checking out <a href="https://www.associationforpublicart.org/artwork/lion-crushing-a-serpent/">"Lion Crushing a Serpent"</a> in Philadelphia's Rittenhouse Park</em>
+  </figcaption>
+</figure>
 
 <!-- truncate -->
 
-## Not a map 
+## Not a map
 
-The Explore tool might look like a map, but we prefer to think of it as an x-ray data inspector. We’ve punted on making cartographic decisions in favor of displaying all of Overture’s themes, all at once: addresses, base, buildings, divisions, places, and transportation. Our users are coming at the data with different perspectives and goals, and we want to provide as much information as possible. We also want to stoke your curiosity and inspire you to ask new questions of Overture data. 
+The Explore tool might look like a map, but we prefer to think of it as an x-ray data inspector. We’ve punted on making cartographic decisions in favor of displaying all of Overture’s themes, all at once: addresses, base, buildings, divisions, places, and transportation. Our users are coming at the data with different perspectives and goals, and we want to provide as much information as possible. We also want to stoke your curiosity and inspire you to ask new questions of Overture data.
 
-Seeing all the data all at once might be a bit overwhelming. We recommend zooming to an area of interest, hovering over the layers icon in the upper left corner of the map, and toggling the data themes off and on. You can click on an individual map feature, like the famous ["Lion Crushing a Serpent"](https://youtu.be/rTl2ewUc6bA?feature=shared) statue, to inspect its properties. Want to download the data? In the upper right corner of the Explore site, you can click on the Download Visible button to generate a GeoJSON file containing all the data visible in the browser. 
+Seeing all the data all at once might be a bit overwhelming. We recommend zooming to an area of interest, hovering over the layers icon in the upper left corner of the map, and toggling the data themes off and on. You can click on an individual map feature, like the famous ["Lion Crushing a Serpent"](https://youtu.be/rTl2ewUc6bA?feature=shared) statue, to inspect its properties. Want to download the data? In the upper right corner of the Explore site, you can click on the Download Visible button to generate a GeoJSON file containing all the data visible in the browser.
 
 The [Explore site](https://explore.overturemaps.org/#13.01/39.95692/-75.15583) is currently in beta, and your feedback will inform the features we add in the coming months. If you have questions about the data, or if you want to report a problem with data quality or a glitch in the website, please click on the bug icon and [file an issue on GitHub](https://github.com/OvertureMaps/io-site/issues). (Note: we are actively working on fixing known issues with the downloaded data.)
 
 ## Build with us
 
-This project grew out of the diverse experiences and skill sets of the engineers working on Overture. We’re using [WebAssembly](https://webassembly.org/) and Rust, specifically [geoarrow-rs](https://geoarrow.org/geoarrow-rs/), to query and download [Overture’s GeoParquet files](https://docs.overturemaps.org/getting-data/). The front end is React and [Maplibre](https://maplibre.org/), and we’re generating [PMTiles](https://docs.protomaps.com/pmtiles/) to visualize the data. It’s a serverless site, using all cloud-native data storage formats. We also plan to make [PMTiles available with each Overture release](https://github.com/OvertureMaps/overture-tiles). Special thanks to Kyle Barron from [Development Seed](https://developmentseed.org/) and Brandon Liu from [Protomaps](https://protomaps.com/) for collaborating with Overture's Developer Advocacy team on this project. 
+This project grew out of the diverse experiences and skill sets of the engineers working on Overture. We’re using [WebAssembly](https://webassembly.org/) and Rust, specifically [geoarrow-rs](https://geoarrow.org/geoarrow-rs/), to query and download [Overture’s GeoParquet files](https://docs.overturemaps.org/getting-data/). The front end is React and [Maplibre](https://maplibre.org/), and we’re generating [PMTiles](https://docs.protomaps.com/pmtiles/) to visualize the data. It’s a serverless site, using all cloud-native data storage formats. We also plan to make [PMTiles available with each Overture release](https://github.com/OvertureMaps/overture-tiles). Special thanks to Kyle Barron from [Development Seed](https://developmentseed.org/) and Brandon Liu from [Protomaps](https://protomaps.com/) for collaborating with Overture's Developer Advocacy team on this project.
 
-[Explore is open source](https://github.com/OvertureMaps/io-site), under an MIT license, and we welcome contributions from the Overture community. Our goal is to give you the basic building blocks for creating your own tools around Overture data. Let us know what you make and we’ll happily share it on our [community projects page](https://docs.overturemaps.org/community/). 
+[Explore is open source](https://github.com/OvertureMaps/io-site), under an MIT license, and we welcome contributions from the Overture community. Our goal is to give you the basic building blocks for creating your own tools around Overture data. Let us know what you make and we’ll happily share it on our [community projects page](https://docs.overturemaps.org/community/).

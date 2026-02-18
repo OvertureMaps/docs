@@ -1,0 +1,229 @@
+---
+title: Overture Has Fully Embraced STAC
+authors:
+  name: Dana Bauer
+  title: Technical Product Manager, Overture Maps
+  email: dana@overturemaps.org
+tags:
+  - tools
+---
+
+
+Over the past few releases, the Overture engineering team has gone from generating a [STAC catalog](https://stacspec.org/en) as an ad hoc release artifact to making STAC the backbone of our tooling. Now our [Python client](https://github.com/OvertureMaps/overturemaps-py), [Explorer](https://explore.overturemaps.org/), internal QA tools, and data pipelines all use [Overture STAC](https://stac.overturemaps.org/) to stay in sync with the latest release. We did this to improve our own workflows, but we think it'll make things easier for everyone.
+
+Here's our STAC, from the top. https://stac.overturemaps.org/.
+
+
+```json
+{
+  "type": "Catalog",
+  "id": "Overture Releases",
+  "stac_version": "1.1.0",
+  "description": "All Overture Releases",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./2026-01-21.0/catalog.json",
+      "type": "application/json",
+      "title": "Latest Overture Release",
+      "latest": true
+    },
+    {
+      "rel": "child",
+      "href": "./2025-12-17.0/catalog.json",
+      "type": "application/json",
+      "title": "2025-12-17.0 Overture Release"
+    }
+  ],
+  "latest": "2026-01-21.0",
+  ```
+:::danger[Shoutout!]
+
+Huge thanks to Ben Clark for getting Overture started on our STAC journey back in 2024. Watch [his talk on STACing GeoParquet](https://youtu.be/FWQz7H99qEs?si=membEVd0JarkKmbn) at the 2025 Cloud Native Geospatial Forum. And thanks to Jennings Anderson for fully realizing Overture's STAC vision and getting us where we are today.
+
+:::
+
+<!-- truncate -->
+
+## Why We Needed This
+
+Many of the [examples in our docs](https://docs.overturemaps.org/getting-data/) instruct users to sip or gulp Overture data directly from our public cloud buckets, at very long endpoints like `s3://overturemaps-us-west-2/release/2026-01-21.0/theme=buildings/type=building/*.parquet`.
+
+(*Not so long ago Paul Ramsey [wrote](https://www.crunchydata.com/blog/vehicle-routing-with-postgis-and-overture-data) that the trickiest part of accessing Overture data was figuring out how to construct the endpoint. **Noted.***)
+
+Using well-structured files on cloud storage as a de facto API for data distribution isn't new. It's actually one of the most important ideas in cloud-native geospatial. Back in 2014, when the AWS open data team [put Landsat imagery on S3](https://radiant.earth/blog/2023/03/the-naive-origins-of-the-cloud-optimized-geotiff/), they didn't build any custom tooling. No servers. They made well-structured data available on public cloud storage and let people have at it over HTTP. This principle is what makes [Cloud Optimized GeoTIFFs](https://cogeo.org/) work for raster imagery, [PMTiles](https://protomaps.com/) for map tiles, and [GeoParquet](https://geoparquet.org/) for vector map data. The storage endpoint is the API.
+
+For Overture, this means tools like [DuckDB](https://til.simonwillison.net/overture-maps/overture-maps-parquet) can query gigabytes of data because Parquet's Hive-style partitioning (`theme=buildings/type=building/*.parquet`) and built-in row group statistics let query engines skip irrelevant files and irrelevant chunks within files. Users can quickly download megabytes. They don't have to drink the ocean to get the data they want. 
+
+The pattern works best with stable endpoints. Things break when endpoints change unpredictably. Overture releases monthly, partitions data by theme and type, and divides its global datasets across multiple Parquet files. All of these factors go into the construction of the S3 and Azure paths. Hardcode a path today, and it's stale in few weeks. We knew this was a pain point for users, but we expected people to build their own solutions around it. Like the AWS team back in 2014, our philosophy was: *give people the data and get out of the way.* 
+
+Not everyone was happy about this. Many users have asked Overture to provide APIs (and SDKs, mostly to handle the complexity of our schema). We did build overturemaps-py, our Python client, to abstract from those long endpoints, but even early versions of that tool had a hardcoded path to the data and required a manual update after each release. 
+
+Internally, the pressure to build better tooling came from a different direction. As we [migrated more data pipelines](https://overturemaps.org/blog/2025/overture-maps-building-platform-agnostic-infrastructure-a-collaboration-story/) from member company infrastructure onto Overture infrastructure, we needed better solutions for keeping things in sync across themes and releases. STAC has helped tremendously. It also lets us access metadata to speed up queries and requests. And because it's the same catalog we publish externally, it solves a lot of user pain points too.
+
+
+## This Makes Your Life Easier Too (We Hope!)
+
+If you've ever hardcoded an S3 path to Overture data and had it break when we released a new version, we're sorry. Try using Overture STAC. The catalog rebuilds daily directly from our production environment. Instead of checking our [release notes](https://docs.overturemaps.org/blog/tags/releases/) or guessing at paths, query the catalog directly to get the latest release:
+
+```bash
+curl https://stac.overturemaps.org | jq -r '.latest'
+```
+
+Or if you're in DuckDB:
+
+```sql
+SELECT latest FROM 'https://stac.overturemaps.org/catalog.json';
+```
+
+Even better, create a variable to use the latest release endpoint in all your queries.
+
+```sql
+SET VARIABLE latest = (SELECT latest FROM 'https://stac.overturemaps.org/catalog.json');
+
+SELECT * FROM read_parquet(
+    's3://overturemaps-us-west-2/release/' 
+    || getvariable('latest') 
+    || '/theme=addresses/type=address/*'
+) LIMIT 10;
+```
+Your scripts stay stable even as the underlying data and cloud storage endpoints update. 
+
+
+## Explore the Metadata
+
+You can quickly poke around the catalog using the [STAC browser](https://radiantearth.github.io/stac-browser/#/external/stac.overturemaps.org/catalog.json). Click into any release and theme, and you'll find links to GeoParquet files on AWS and Azure. You'll also see PMTiles listed under additional resources. Hover over those for a link to load the tiles directly in [PMTiles Viewer](https://pmtiles.io/). This is the data that powers our [Explorer](https://explore.overturemaps.org/) site.
+
+If you want to go deeper, you can drill into a [specific release](https://stac.overturemaps.org/2026-01-21.0/catalog.json) to see which themes it contains and which schema version it uses, then into a [theme](https://stac.overturemaps.org/2026-01-21.0/divisions/catalog.json) to find PMTiles links and the available types. Each type is a [STAC collection](https://stac.overturemaps.org/2026-01-21.0/divisions/division/collection.json) with feature counts, spatial extent, license, and column names, enough to know what you're getting before you download anything. The catalog also includes a peek into our GERS registry by providing a full manifest of the registry files.
+
+If you're using Python, you can install [pystac](https://pystac.readthedocs.io/) to explore the catalog programmatically. Here's a script that grabs feature counts in the latest Overture release.
+
+```python
+import pystac
+
+catalog = pystac.Catalog.from_file("https://stac.overturemaps.org/catalog.json")
+latest = next(c for c in catalog.get_children() if c.extra_fields.get("latest"))
+
+print(f"Release: {latest.id}")
+print(f"Schema:  {latest.extra_fields['schema:version']}\n")
+
+for theme in latest.get_children():
+    print(f"{theme.id}:")
+    for collection in theme.get_children():
+        count = collection.extra_fields.get("features", "?")
+        if isinstance(count, int):
+            count = f"{count:,}"
+        print(f"  {collection.id}: {count} features")
+```
+
+```
+Release: 2026-01-21.0
+Schema:  1.15.0
+
+divisions:
+  division: 4,575,616 features
+  division_area: 1,068,997 features
+  division_boundary: 87,814 features
+places:
+  place: 72,444,739 features
+addresses:
+  address: 460,734,720 features
+transportation:
+  connector: 401,294,301 features
+  segment: 338,773,725 features
+buildings:
+  building: 2,540,587,907 features
+  building_part: 3,577,657 features
+base:
+  bathymetry: 59,963 features
+  infrastructure: 144,896,847 features
+  land: 71,029,712 features
+  land_cover: 123,302,114 features
+  land_use: 53,037,060 features
+  water: 63,442,033 features
+  ```
+
+Now let's dig into the metadata for the `building` type:
+
+
+```python
+import pystac
+
+collection = pystac.Collection.from_file(
+    "https://stac.overturemaps.org/2026-01-21.0/buildings/building/collection.json"
+)
+
+num_files = sum(1 for link in collection.links if link.rel == "item")
+
+print(f"Type:          {collection.id}")
+print(f"Features:      {collection.extra_fields['features']:,}")
+print(f"License:       {collection.license}")
+print(f"Parquet files: {num_files}")
+print(f"Columns:       {collection.summaries.lists.get('columns', [])}")
+```
+
+```
+Type:          building
+Features:      2,540,587,907
+License:       ODbL-1.0
+Parquet files: 236
+Columns:       ['id', 'geometry', 'bbox', 'version', 'sources', 'level', 'subtype', 'class', 'height', 'names', 'has_parts', 'is_underground', 'num_floors', 'num_floors_underground', 'min_height', 'min_floor', 'facade_color', 'facade_material', 'roof_material', 'roof_shape', 'roof_direction', 'roof_orientation', 'roof_color', 'roof_height']
+```
+
+You can even fetch the bounding boxes and AWS and Azure paths to individual Parquet files. Exciting!
+
+```bash
+  00000
+  bbox: [-179.9685336, -84.2945957, -2.8229824, -22.499915]
+  aws: https://overturemaps-us-west-2.s3.us-west-2.amazonaws.com/release/2026-01-21.0/theme=buildings/type=building/part-00000-47160ab1-2f19-4475-89f8-cc1348df69a6-c000.zstd.parquet
+  azure: https://overturemapswestus2.blob.core.windows.net/release/2026-01-21.0/theme=buildings/type=building/part-00000-47160ab1-2f19-4475-89f8-cc1348df69a6-c000.zstd.parquet
+
+  00001
+  bbox: [-71.7188172, -33.7503154, -56.249949, -28.1249106]
+  aws: https://overturemaps-us-west-2.s3.us-west-2.amazonaws.com/release/2026-01-21.0/theme=buildings/type=building/part-00001-47160ab1-2f19-4475-89f8-cc1348df69a6-c000.zstd.parquet
+  azure: https://overturemapswestus2.blob.core.windows.net/release/2026-01-21.0/theme=buildings/type=building/part-00001-47160ab1-2f19-4475-89f8-cc1348df69a6-c000.zstd.parquet
+
+  00002
+  bbox: [-67.5002494, -30.937648, -50.6249127, -22.4999315]
+  aws: https://overturemaps-us-west-2.s3.us-west-2.amazonaws.com/release/2026-01-21.0/theme=buildings/type=building/part-00002-47160ab1-2f19-4475-89f8-cc1348df69a6-c000.zstd.parquet
+  azure: https://overturemapswestus2.blob.core.windows.net/release/2026-01-21.0/theme=buildings/type=building/part-00002-47160ab1-2f19-4475-89f8-cc1348df69a6-c000.zstd.parquet
+  ```
+
+
+## GERS Registry Manifest
+
+The catalog also includes the [GERS registry](https://docs.overturemaps.org/gers/registry/) manifest. The registry is split into dozens of Parquet files, sorted by ID, and the manifest lists the maximum ID in each file:
+
+```json
+"manifest": [
+  ["part-00000-...zstd.parquet", "0492a38d-6c33-417c-abd4-de67d7a1b2d8"],
+  ["part-00001-...zstd.parquet", "09ff1f68-d9e0-4739-b3b3-ef375d8bf7fe"],
+  ["part-00002-...zstd.parquet", "0edc25ba-2d73-4eb7-9c6e-2648644dc125"],
+  ...
+]
+```
+Since GERS IDs sort lexicographically, hex character by hex character, the [Python CLI](https://github.com/OvertureMaps/overturemaps-py?tab=readme-ov-file#gers-uuid) can check this manifest to find exactly which file contains a GERS ID of interest. It's one small JSON fetch instead of checking every file.
+
+
+## What's Next
+
+Many of the tools I mention in this post are in active development in public GitHub repositories. We welcome your comments, questions, and contributions:
+
+  - https://github.com/OvertureMaps/stac — STAC 
+  - https://github.com/OvertureMaps/overturemaps-py — Python CLI
+  - https://github.com/OvertureMaps/explore-site — Explorer
+
+
+You can also build your own thing with Overture STAC. Here's a [tiny website I made](https://danabauer.github.io/overture-latest/) to share at meetups and conferences. It answers a question I consistently get from users: what's the latest Overture release? You can grab the source code [here](https://github.com/danabauer/overture-latest).
+
+:::tip[Talk to us]
+
+We want to hear about your experience using Overture Maps. Share your ideas and questions on our [GitHub Discussion Forum](https://github.com/orgs/OvertureMaps/discussions) or reach out to us at community@overturemaps.org. 
+
+:::
+

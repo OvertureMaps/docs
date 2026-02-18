@@ -1,0 +1,68 @@
+---
+name: Staging Deploy
+run-name: Publish docs to staging website (for PR)
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the main docs repo repository and build.
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install NPM dependencies
+        run: npm ci --omit=dev
+
+      - name: Build Docusaurus website
+        env:
+          DOCUSAURUS_URL: https://staging.overturemaps.org/
+          DOCUSAURUS_BASE_URL: /${{ github.event.repository.name }}/pr/${{ github.event.number }}/
+        run: npm run build
+
+      - name: Upload docs build as an artifact 📦
+        uses: actions/upload-artifact@v4
+        with:
+          path: build
+          name: build-artifact
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: staging
+      url: https://staging.overturemaps.org/${{ github.event.repository.name }}/pr/${{ github.event.number }}/index.html
+
+    steps:
+      - name: Configure AWS credentials 🔐
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::763944545891:role/pages-staging-oidc-overturemaps
+          aws-region: us-west-2
+
+      - name: Download artifacts 📥
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: build
+
+      - name: Copy to S3
+        run: |
+          aws s3 sync --delete build s3://overture-managed-staging-usw2/gh-pages/${{ github.event.repository.name }}/pr/${{ github.event.number }}/
+      - name: Bust the Cache
+        run: aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "/${{ github.event.repository.name }}/pr/${{ github.event.number }}/*"
