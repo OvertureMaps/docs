@@ -1,3 +1,4 @@
+<!-- markdownlint-disable -->
 ## Pull Request
 
 ### Docs Preview:
