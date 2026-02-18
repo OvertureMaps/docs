@@ -2,6 +2,9 @@
 # Default: enable all rules
 default: true
 
+# Disable line length rule - URLs and long content make this impractical
+MD013: false
+
 # Ignore files that don't follow standard markdown conventions
 ignores:
-  - ".github/pull_request_template.md"
+  - "**pull_request_template.md"
