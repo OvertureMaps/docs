@@ -30,7 +30,6 @@ jobs:
           SAVE_SUPER_LINTER_SUMMARY: true
           ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: true
           ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
-          # Only lint changed files on PRs
           VALIDATE_ALL_CODEBASE: true
           # Enable only Markdown (markdownlint), natural language (textlint),
           # and SQL (sqlfluff). Setting any VALIDATE_* to true causes all
