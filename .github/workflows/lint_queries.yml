@@ -27,6 +27,9 @@ jobs:
         uses: super-linter/super-linter/slim@v8.5.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SAVE_SUPER_LINTER_SUMMARY: true
+          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: true
+          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
           # Only lint changed files on PRs
           VALIDATE_ALL_CODEBASE: false
           # Enable only Markdown (markdownlint), natural language (textlint),
