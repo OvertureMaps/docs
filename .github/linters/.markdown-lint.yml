@@ -1,0 +1,7 @@
+---
+# Default: enable all rules
+default: true
+
+# Ignore files that don't follow standard markdown conventions
+ignores:
+  - ".github/pull_request_template.md"

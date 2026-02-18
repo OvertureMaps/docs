@@ -38,5 +38,3 @@ jobs:
           VALIDATE_MARKDOWN: true
           VALIDATE_NATURAL_LANGUAGE: true
           VALIDATE_SQLFLUFF: true
-          # Exclude the PR template from markdown linting
-          FILTER_REGEX_EXCLUDE: .github/pull_request_template.md
