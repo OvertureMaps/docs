@@ -6,4 +6,4 @@ Local norms and standards.
 
 | Name | Type | Description |
 |-----:|:----:|-------------|
-| `driving_side` | [`Side`](../../types/scoping/side.md) (optional) | Side of the road on which vehicles drive in the division. |
+| `driving_side` | [`Side`](../../core/scoping/side.md) (optional) | Side of the road on which vehicles drive in the division. |
