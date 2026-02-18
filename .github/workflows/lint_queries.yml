@@ -1,0 +1,42 @@
+---
+name: Lint
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+  issues: write
+  pull-requests: write
+  statuses: write
+
+jobs:
+  lint:
+    name: Super-Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          # Required for super-linter to detect changed files
+          fetch-depth: 0
+
+      - name: Super-Linter
+        uses: super-linter/super-linter/slim@v8.5.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SAVE_SUPER_LINTER_SUMMARY: true
+          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: true
+          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
+          # Only lint changed files on PRs
+          VALIDATE_ALL_CODEBASE: true
+          # Enable only Markdown (markdownlint), natural language (textlint),
+          # and SQL (sqlfluff). Setting any VALIDATE_* to true causes all
+          # other linters to default to false.
+          VALIDATE_MARKDOWN: true
+          VALIDATE_NATURAL_LANGUAGE: true
+          VALIDATE_SQLFLUFF: true
+          # Exclude the PR template from markdown linting
+          FILTER_REGEX_EXCLUDE: .github/pull_request_template.md
