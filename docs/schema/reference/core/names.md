@@ -11,8 +11,7 @@ Multilingual names container.
 | `rules[]` | `list<`[`NameRule`](name_rule.md)`>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
 | `rules[].value` | [`StrippedString`](../system/stripped_string.md) | The actual name value. |
 | `rules[].variant` | [`NameVariant`](name_variant.md) | The name variant for this name rule. |
-| `rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47
-language tag. |
+| `rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47<br/>language tag. |
 | `rules[].perspectives` | [`Perspectives`](perspectives.md) (optional) |  |
 | `rules[].perspectives.mode` | [`PerspectiveMode`](perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
 | `rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |

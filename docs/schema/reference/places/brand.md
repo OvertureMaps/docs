@@ -14,8 +14,7 @@ A location with multiple brands is modeled as multiple separate places, each wit
 | `names.rules[]` | `list<`[`NameRule`](../core/name_rule.md)`>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
 | `names.rules[].value` | [`StrippedString`](../system/stripped_string.md) | The actual name value. |
 | `names.rules[].variant` | [`NameVariant`](../core/name_variant.md) | The name variant for this name rule. |
-| `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47
-language tag. |
+| `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47<br/>language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) |  |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
 | `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |

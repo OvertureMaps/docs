@@ -20,8 +20,7 @@ Examples might include:
 |-----:|:----:|-------------|
 | `value` | [`StrippedString`](../system/stripped_string.md) | The actual name value. |
 | `variant` | [`NameVariant`](name_variant.md) | The name variant for this name rule. |
-| `language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47
-language tag. |
+| `language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47<br/>language tag. |
 | `perspectives` | [`Perspectives`](perspectives.md) (optional) |  |
 | `perspectives.mode` | [`PerspectiveMode`](perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
 | `perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
