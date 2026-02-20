@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Connector
 
 Connectors create physical connections between segments.

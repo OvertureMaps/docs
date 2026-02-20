@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # LandCover
 
 Land cover features indicate the primary natural or artificial surface material covering a land
@@ -28,7 +32,7 @@ TODO: Explain relationship to `Land` features.
 | `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
 | `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
-| `subtype` | [`LandCoverSubtype`](land_cover_subtype.md) |  |
+| `subtype` | [`LandCoverSubtype`](types/land_cover_subtype.md) |  |
 | `cartography` | [`CartographicHints`](../core/cartographic_hints.md) (optional) |  |
 | `cartography.prominence` | [`Prominence`](../core/prominence.md) (optional) |  |
 | `cartography.min_zoom` | [`MinZoom`](../core/min_zoom.md) (optional) |  |

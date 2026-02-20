@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # BuildingPart
 
 Building parts represent parts of larger building features. They allow buildings to be modeled
@@ -50,11 +54,11 @@ vertical dimension.
 | `min_height` | `float64` (optional) | Altitude above ground where the bottom of the building or building part starts.<br/><br/>If present, this value indicates that the lowest part of the building or building<br/>part starts is above ground level. |
 | `min_floor` | `int32` (optional) | Start floor of this building or part.<br/><br/>If present, this value indicates that the building or part is "floating" and its<br/>bottom-most floor is above ground level, usually because it is part of a larger<br/>building in which some parts do reach down to ground level. An example is a building<br/>that has an entry road or driveway at ground level into an interior courtyard, where<br/>part of the building bridges above the entry road. This property may sometimes be<br/>populated when `min_height` is missing and in these cases can be used as a proxy for<br/>`min_height`. |
 | `facade_color` | [`HexColor`](../system/hex_color.md) (optional) | Facade color in `#rgb` or `#rrggbb` hex notation |
-| `facade_material` | [`FacadeMaterial`](facade_material.md) (optional) | Outer surface material of the facade |
-| `roof_material` | [`RoofMaterial`](roof_material.md) (optional) | Outer surface material of the roof |
-| `roof_shape` | [`RoofShape`](roof_shape.md) (optional) | Shape of the roof |
+| `facade_material` | [`FacadeMaterial`](types/facade_material.md) (optional) | Outer surface material of the facade |
+| `roof_material` | [`RoofMaterial`](types/roof_material.md) (optional) | Outer surface material of the roof |
+| `roof_shape` | [`RoofShape`](types/roof_shape.md) (optional) | Shape of the roof |
 | `roof_direction` | `float64` (optional) | Bearing of the roof ridge line in degrees |
-| `roof_orientation` | [`RoofOrientation`](roof_orientation.md) (optional) | Orientation of the roof shape relative to the footprint shape |
+| `roof_orientation` | [`RoofOrientation`](types/roof_orientation.md) (optional) | Orientation of the roof shape relative to the footprint shape |
 | `roof_color` | [`HexColor`](../system/hex_color.md) (optional) | The roof color in `#rgb` or `#rrggbb` hex notation |
 | `roof_height` | `float64` (optional) | Height of the roof in meters.<br/><br/>This is the distance from the base of the roof to its highest point. |
 

@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Place
 
 Places are point representations of real-world facilities, businesses, services, or amenities.
@@ -20,12 +24,12 @@ Places are point representations of real-world facilities, businesses, services,
 | `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
 | `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
-| `operating_status` | [`OperatingStatus`](operating_status.md) | An indication of whether a place is: in continued operation, in a temporary<br/>operating hiatus, or closed permanently.<br/><br/>This is not an indication of opening hours or that the place is open/closed at the<br/>current time-of-day or day-of-week.<br/><br/>When `operating_status` is `"permanently_closed"`, the `confidence` field will be<br/>set to 0. |
-| `categories` | [`Categories`](categories.md) (optional) |  |
+| `operating_status` | [`OperatingStatus`](types/operating_status.md) | An indication of whether a place is: in continued operation, in a temporary<br/>operating hiatus, or closed permanently.<br/><br/>This is not an indication of opening hours or that the place is open/closed at the<br/>current time-of-day or day-of-week.<br/><br/>When `operating_status` is `"permanently_closed"`, the `confidence` field will be<br/>set to 0. |
+| `categories` | [`Categories`](types/categories.md) (optional) |  |
 | `categories.primary` | [`SnakeCaseString`](../system/snake_case_string.md) | The primary or main category of the place. |
 | `categories.alternate` | [`SnakeCaseString`](../system/snake_case_string.md) (list, optional) | Alternate categories of the place.<br/><br/>Some places might fit into two categories, e.g., a book store and a coffee shop. In<br/>these cases, the primary category can be augmented with additional categories. |
 | `basic_category` | [`SnakeCaseString`](../system/snake_case_string.md) (optional) | The basic level category of a place.<br/><br/>This field classifies places into categories at a level that most people find<br/>intuitive. The full list of possible values it may hold can be found at (TODO).<br/><br/>The basic level category, or simply basic category, is based on a cognitive science<br/>model use in taxonomy and ontology development. The idea is to provide the category<br/>name at the level of generality that is preferred by humans in learning and memory<br/>tasks. This category to be roughly in the middle of the general-to-specific category<br/>hierarchy.<br/><br/>The full list of basic level categories is available at https://docs.overturemaps.org/guides/places/ |
-| `taxonomy` | [`Taxonomy`](taxonomy.md) (optional) | A structured representation of the place's category within the Overture taxonomy.<br/><br/>Provides the primary classification, full hierarchy path, and alternate categories. |
+| `taxonomy` | [`Taxonomy`](types/taxonomy.md) (optional) | A structured representation of the place's category within the Overture taxonomy.<br/><br/>Provides the primary classification, full hierarchy path, and alternate categories. |
 | `taxonomy.primary` | [`SnakeCaseString`](../system/snake_case_string.md) | The primary, or most specific, category known about this place.<br/><br/>The `primary` category value must always equal the last or rightmost entry in the `hierarchy` field. |
 | `taxonomy.hierarchy` | [`SnakeCaseString`](../system/snake_case_string.md) (list) | The full primary hierarchy of categories known for this place, ordered from most general to most specific.<br/>An example hierarchy might be: `["food_and_drink", "restaurant", "casual_eatery", "gas_station_sushi"]`.<br/><br/>The rightmost, or most specific, value in the `hierarchy` must always be equal to the `primary` field.<br/>The basic level category of the place will typically be found in the middle of the primary hierarchy.<br/>The primary hierarchy does not include any of the alternate categories found in the `alternates` field. |
 | `taxonomy.alternates` | [`SnakeCaseString`](../system/snake_case_string.md) (list, optional) | Unordered list of additional categories that are known for this<br/>place but that are not part of the primary category hierarchy.<br/><br/>Alternate categories allow a more complete picture of the place<br/>to be surfaced when it fits multiple unconnected branches in the<br/>taxonomy. For example a gas station that also sells groceries<br/>might have primary category of "gas_station" with an alternate<br/>of "grocery_store".<br/><br/>Alternate categories are not part of the primary hierarchy or<br/>another alternate category's hierarchy.<br/>In other words, if a category is a parent in the hierarchy of another category,<br/>that category can't be a primary or alternate category itself.<br/><br/>Note as well that this field is an unordered list of extra<br/>categories and does not represent a hierarchy. |
@@ -34,7 +38,7 @@ Places are point representations of real-world facilities, businesses, services,
 | `socials` | `list<HttpUrl>` (optional) | The social media URLs of the place. |
 | `emails` | `list<EmailStr>` (optional) | The email addresses of the place. |
 | `phones` | [`PhoneNumber`](../system/phone_number.md) (list, optional) | The phone numbers of the place. |
-| `brand` | [`Brand`](brand.md) (optional) | The brand associated with the place. |
+| `brand` | [`Brand`](types/brand.md) (optional) | The brand associated with the place. |
 | `brand.names` | [`Names`](../core/names.md) (optional) |  |
 | `brand.names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
 | `brand.names.common` | [`CommonNames`](../core/common_names.md) (map, optional) |  |

@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Water
 
 Water features represent ocean and inland water bodies.
@@ -42,8 +46,8 @@ and `water=*`.
 | `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
 | `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
-| `class` | [`WaterClass`](water_class.md) (optional) |  |
-| `subtype` | [`WaterSubtype`](water_subtype.md) (optional) |  |
+| `class` | [`WaterClass`](types/water_class.md) (optional) |  |
+| `subtype` | [`WaterSubtype`](types/water_subtype.md) (optional) |  |
 | `is_intermittent` | `boolean` (optional) | Whether the water body exists intermittently, not permanently |
 | `is_salt` | `boolean` (optional) | Whether the water body contains salt water |
 | `level` | [`Level`](../core/level.md) (optional) |  |
@@ -59,7 +63,7 @@ and `water=*`.
 | `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
-| `source_tags` | [`SourceTags`](source_tags.md) (map, optional) |  |
+| `source_tags` | [`SourceTags`](types/source_tags.md) (map, optional) |  |
 | `wikidata` | [`WikidataId`](../system/wikidata_id.md) (optional) |  |
 
 ## Examples

@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Infrastructure
 
 Infrastructure features provide basic information about real-world infrastructure entitites
@@ -21,10 +25,10 @@ such as bridges, airports, runways, aerialways, communication towers, and power 
 | `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
 | `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
-| `class` | [`InfrastructureClass`](infrastructure_class.md) |  |
-| `subtype` | [`InfrastructureSubtype`](infrastructure_subtype.md) |  |
-| `height` | [`Height`](height.md) (optional) |  |
-| `surface` | [`SurfaceMaterial`](surface_material.md) (optional) |  |
+| `class` | [`InfrastructureClass`](types/infrastructure_class.md) |  |
+| `subtype` | [`InfrastructureSubtype`](types/infrastructure_subtype.md) |  |
+| `height` | [`Height`](types/height.md) (optional) |  |
+| `surface` | [`SurfaceMaterial`](types/surface_material.md) (optional) |  |
 | `names` | [`Names`](../core/names.md) (optional) |  |
 | `names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
 | `names.common` | [`CommonNames`](../core/common_names.md) (map, optional) |  |
@@ -38,7 +42,7 @@ such as bridges, airports, runways, aerialways, communication towers, and power 
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `level` | [`Level`](../core/level.md) (optional) |  |
-| `source_tags` | [`SourceTags`](source_tags.md) (map, optional) |  |
+| `source_tags` | [`SourceTags`](types/source_tags.md) (map, optional) |  |
 | `wikidata` | [`WikidataId`](../system/wikidata_id.md) (optional) |  |
 
 ## Examples

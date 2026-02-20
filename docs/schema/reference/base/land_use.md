@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # LandUse
 
 Land use features specify the predominant human use of an area of land, for example commercial
@@ -26,10 +30,10 @@ TODO: Explain relationship to `Land` features.
 | `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
 | `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
-| `class` | [`LandUseClass`](land_use_class.md) |  |
-| `subtype` | [`LandUseSubtype`](land_use_subtype.md) |  |
-| `elevation` | [`Elevation`](elevation.md) (optional) |  |
-| `surface` | [`SurfaceMaterial`](surface_material.md) (optional) |  |
+| `class` | [`LandUseClass`](types/land_use_class.md) |  |
+| `subtype` | [`LandUseSubtype`](types/land_use_subtype.md) |  |
+| `elevation` | [`Elevation`](types/elevation.md) (optional) |  |
+| `surface` | [`SurfaceMaterial`](types/surface_material.md) (optional) |  |
 | `names` | [`Names`](../core/names.md) (optional) |  |
 | `names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
 | `names.common` | [`CommonNames`](../core/common_names.md) (map, optional) |  |
@@ -43,7 +47,7 @@ TODO: Explain relationship to `Land` features.
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `level` | [`Level`](../core/level.md) (optional) |  |
-| `source_tags` | [`SourceTags`](source_tags.md) (map, optional) |  |
+| `source_tags` | [`SourceTags`](types/source_tags.md) (map, optional) |  |
 | `wikidata` | [`WikidataId`](../system/wikidata_id.md) (optional) |  |
 
 ## Examples
