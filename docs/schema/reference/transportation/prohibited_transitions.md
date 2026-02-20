@@ -1,0 +1,1 @@
+# ProhibitedTransitions (`list<ProhibitedTransitionRule>`)

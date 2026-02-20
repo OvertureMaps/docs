@@ -86,7 +86,18 @@ Examples include countries, provinces, cities, towns, neighborhoods, etc.
 | `sources[0].between` | `null` |
 | `subtype` | locality |
 | `country` | TO |
-| `hierarchies` | `[[{'division_id': 'fef8748b-0c91-46ad-9f2d-976d8d2de3e9', 'subtype': 'country', 'name': 'Tonga'}, {'division_id': '4d67561a-2292-41bd-8996-7853d276a42c', 'subtype': 'region', 'name': 'Tongatapu'}, {'division_id': '8730f0cc-d436-4f11-a7d3-49085813ef44', 'subtype': 'county', 'name': "Vahe Kolomotu'a"}, {'division_id': '350e85f6-68ba-4114-9906-c2844815988b', 'subtype': 'locality', 'name': "Sia'atoutai"}]]` |
+| `hierarchies[0][0].division_id` | fef8748b-0c91-46ad-9f2d-976d8d2de3e9 |
+| `hierarchies[0][0].subtype` | country |
+| `hierarchies[0][0].name` | Tonga |
+| `hierarchies[0][1].division_id` | 4d67561a-2292-41bd-8996-7853d276a42c |
+| `hierarchies[0][1].subtype` | region |
+| `hierarchies[0][1].name` | Tongatapu |
+| `hierarchies[0][2].division_id` | 8730f0cc-d436-4f11-a7d3-49085813ef44 |
+| `hierarchies[0][2].subtype` | county |
+| `hierarchies[0][2].name` | Vahe Kolomotu'a |
+| `hierarchies[0][3].division_id` | 350e85f6-68ba-4114-9906-c2844815988b |
+| `hierarchies[0][3].subtype` | locality |
+| `hierarchies[0][3].name` | Sia'atoutai |
 | `parent_division_id` | 8730f0cc-d436-4f11-a7d3-49085813ef44 |
 | `class` | village |
 | `local_type.en` | village |
