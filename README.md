@@ -2,7 +2,7 @@
 
 This repository uses [Docusaurus](https://docusaurus.io/) to publish the documentation pages seen at [docs.overturemaps.org](https://docs.overturemaps.org)
 
-### Structure
+## Structure
 
 - `blog/`: Entries for the Overture engineering blog available at docs.overturemaps.org/blog
 - `community/`: The community page that showcases Overture data being used in the wild.
@@ -10,7 +10,7 @@ This repository uses [Docusaurus](https://docusaurus.io/) to publish the documen
 - `release-blog/`: Release notes for every Overture data release. The latest release is always available at <https://docs.overturemaps.org/release/latest/>
 - Notice there is no `schema reference` folder. See below.
 
-### Schema Reference (`docs.overturemaps.org/schema`)
+## Schema Reference (`docs.overturemaps.org/schema`)
 
 The Overture schema repository [github/overturemaps/schema](https://github.com/overturemaps/schema) maintains the official Overture schema and the documentation surrounding the actual schema reference pages. This is to ensure that the schema, documentation, and relevant examples are always in-sync.
 
