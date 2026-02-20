@@ -1,0 +1,131 @@
+---
+title: 2026-02-18 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2026-02-18.0` release of Overture data and `v1.16.0` of the Overture schema are now available.** You can access the datasets, changelog, GERS registry, bridge files, and PMTiles on AWS and Azure at the paths listed below. 
+
+## What's new?
+In this release, we added a new `admin_level` property to the divisions schema to represent a division’s position in its country’s hierarchy, e.g. 0, 1, 2. We also updated our [places guide](/guides/places/taxonomy) with more information about our recent taxonomy work, including mappings across the `basic_category`, `taxonomy`, and `categories` properties. Last but not least, we updated our address data for Norway and made small improvements to our address schema thanks to [user feedback](https://github.com/orgs/OvertureMaps/discussions/451) from Johannes-Andersen. Keep the [comments](https://github.com/OvertureMaps/data/issues) and [discussions](https://github.com/orgs/OvertureMaps/discussions) coming!
+
+
+## Deprecations
+The `categories` property in the places schema is now deprecated and will be removed in the June 2026 release, replaced by the new `basic_category` and `taxonomy` properties. All three properties will be available until then to ease the transition for our users. 
+
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined [here](/getting-data). The paths to the data and release artifacts are listed below. We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at community@overturemaps.org. We’d love to hear from you.
+
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2026-02-18.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2026-02-18.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2026-02-18.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2026-02-18.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2026-02-18.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2026-02-18.0/
+```
+
+### GERS registry
+
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+### PMTiles
+
+**Amazon S3:**
+```
+s3://overturemaps-extras-us-west-2/tiles/2026-02-18.0/
+```
+
+<!-- truncate -->
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- refreshed data in the following countries: Canada, Poland, Spain, Austria, US, Latvia, and Finland
+- updated Norway and improved our schema thanks to [user feedback](https://github.com/orgs/OvertureMaps/discussions/451) from Johannes-Andersen.
+
+
+### Base
+- made minor, incremental updates to the data
+
+
+### Buildings
+- made minor, incremental updates to the data
+
+
+### Divisions
+- added new `admin_level` property to better represent a division's position in its country's administrative hierarchy, i.e. lower numbers correspond to higher level administrative units (0, 1, and 2).
+- adjusted top-level subtypes in Antigua and Barbuda.
+
+
+### Places
+- refreshed Foursquare data
+- updated matching priorities, causing a slight drop in the number of PinMeTo-sourced place records
+
+
+### Transportation
+
+- OSM cut-off date: 2026-02-08
+- added TomTom-sourced road segments in 65+ new countries including Azerbaijan, Sri Lanka, Nigeria, and El Salvador
+- ingested over 1.6M new TomTom-sourced road segments with a combined length of over 280k km
+- increased the total number of connectors to 405.9M and the total number of segments to 341.7M
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.16.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.16.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).

@@ -21,8 +21,8 @@ const config = {
   favicon: 'img/favicon.png',
 
   customFields: {
-    overtureRelease: '2026-01-21.0',
-    pmtiles_path: 'https://d3c1b7bog2u1nn.cloudfront.net/2025-10-22'
+    overtureRelease: '2026-02-18.0',
+    pmtiles_path: 's3://overturemaps-extras-us-west-2/tiles/2026-02-18.0/'
   },
  /**
   future: {
