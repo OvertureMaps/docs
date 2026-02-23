@@ -14,4 +14,4 @@ For example:
 
 ## Constraints
 
-- `JsonPointerConstraint`
+- Allows only valid JSON Pointer values (RFC 6901). (`JsonPointerConstraint`)

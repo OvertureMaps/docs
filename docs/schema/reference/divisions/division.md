@@ -58,7 +58,7 @@ Examples include countries, provinces, cities, towns, neighborhoods, etc.
 | `perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which this division is considered to be an accurate representation.<br/><br/>If this property is absent, then this division is not known to be disputed from any political perspective. Consequently, there is only one division feature representing the entire real world entity.<br/><br/>If this property is present, it means the division represents one of several alternative perspectives on the same real-world entity.<br/><br/>There are two modes of perspective:<br/><br/>1. `accepted_by` means the representation of the division is accepted by the listed entities and would be included on a map drawn from their perspective.<br/><br/>2. `disputed_by` means the representation of the division is disputed by the listed entities and would be excluded from a map drawn from their perspective.<br/><br/>When drawing a map from the perspective of a given country, one would start by gathering all the undisputed divisions (with no `perspectives` property), and then adding to that first all divisions explicitly accepted by the country, and second all divisions not explicitly disputed by the country. |
 | `perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
 | `perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
-| `norms` | [`Norms`](division/norms.md) (optional) | Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases.<br/><br/>If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed. |
+| `norms` | [`Norms`](types/division/norms.md) (optional) | Collects information about local norms and rules within the division that are generally useful for mapping and map-related use cases.<br/><br/>If the norms property or a desired sub-property of the norms property is missing on a division, but at least one of its ancestor divisions has the norms property and the desired sub-property, then the value from the nearest ancestor division may be assumed. |
 | `norms.driving_side` | [`Side`](../core/scoping/side.md) (optional) | Side of the road on which vehicles drive in the division. |
 | `population` | `int32` (optional) | Population of the division |
 | `capital_division_ids` | [`Id`](../system/ref/id.md) (list, optional) | Division IDs of this division's capital divisions. If present, this property will refer to the division IDs of the capital cities, county seats, etc. of a division. |
@@ -66,6 +66,12 @@ Examples include countries, provinces, cities, towns, neighborhoods, etc.
 | `capital_of_divisions[].division_id` | [`DivisionId`](types/division_id.md) |  |
 | `capital_of_divisions[].subtype` | [`PlaceType`](types/place_type.md) |  |
 | `wikidata` | [`WikidataId`](../system/wikidata_id.md) (optional) |  |
+
+## Constraints
+
+- `admin_level` is required when `subtype` is one of: `county`, `macrocounty`, `region`, `macroregion`, `dependency`, `country`
+- `parent_division_id` is required when `subtype` ≠ `country`
+- `parent_division_id` is forbidden when `subtype` = `country`
 
 ## Examples
 
@@ -75,46 +81,46 @@ Examples include countries, provinces, cities, towns, neighborhoods, etc.
 | `cartography.min_zoom` | `null` |
 | `cartography.max_zoom` | `null` |
 | `cartography.sort_key` | `null` |
-| `names.primary` | Sia'atoutai |
+| `names.primary` | `Sia'atoutai` |
 | `names.common` | `null` |
-| `id` | 350e85f6-68ba-4114-9906-c2844815988b |
-| `geometry` | POINT (-175.2551522 -21.1353686) |
-| `theme` | divisions |
-| `type` | division |
+| `id` | `350e85f6-68ba-4114-9906-c2844815988b` |
+| `geometry` | `POINT (-175.2551522 -21.1353686)` |
+| `theme` | `divisions` |
+| `type` | `division` |
 | `version` | `1` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
-| `sources[0].record_id` | n3173231082@4 |
-| `sources[0].update_time` | 2014-12-18T09:17:03Z |
+| `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].record_id` | `n3173231082@4` |
+| `sources[0].update_time` | `2014-12-18T09:17:03Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `subtype` | locality |
-| `country` | TO |
-| `hierarchies[0][0].division_id` | fef8748b-0c91-46ad-9f2d-976d8d2de3e9 |
-| `hierarchies[0][0].subtype` | country |
-| `hierarchies[0][0].name` | Tonga |
-| `hierarchies[0][1].division_id` | 4d67561a-2292-41bd-8996-7853d276a42c |
-| `hierarchies[0][1].subtype` | region |
-| `hierarchies[0][1].name` | Tongatapu |
-| `hierarchies[0][2].division_id` | 8730f0cc-d436-4f11-a7d3-49085813ef44 |
-| `hierarchies[0][2].subtype` | county |
-| `hierarchies[0][2].name` | Vahe Kolomotu'a |
-| `hierarchies[0][3].division_id` | 350e85f6-68ba-4114-9906-c2844815988b |
-| `hierarchies[0][3].subtype` | locality |
-| `hierarchies[0][3].name` | Sia'atoutai |
-| `parent_division_id` | 8730f0cc-d436-4f11-a7d3-49085813ef44 |
-| `class` | village |
-| `local_type.en` | village |
-| `region` | TO-04 |
+| `subtype` | `locality` |
+| `country` | `TO` |
+| `hierarchies[0][0].division_id` | `fef8748b-0c91-46ad-9f2d-976d8d2de3e9` |
+| `hierarchies[0][0].subtype` | `country` |
+| `hierarchies[0][0].name` | `Tonga` |
+| `hierarchies[0][1].division_id` | `4d67561a-2292-41bd-8996-7853d276a42c` |
+| `hierarchies[0][1].subtype` | `region` |
+| `hierarchies[0][1].name` | `Tongatapu` |
+| `hierarchies[0][2].division_id` | `8730f0cc-d436-4f11-a7d3-49085813ef44` |
+| `hierarchies[0][2].subtype` | `county` |
+| `hierarchies[0][2].name` | `Vahe Kolomotu'a` |
+| `hierarchies[0][3].division_id` | `350e85f6-68ba-4114-9906-c2844815988b` |
+| `hierarchies[0][3].subtype` | `locality` |
+| `hierarchies[0][3].name` | `Sia'atoutai` |
+| `parent_division_id` | `8730f0cc-d436-4f11-a7d3-49085813ef44` |
+| `class` | `village` |
+| `local_type.en` | `village` |
+| `region` | `TO-04` |
 | `perspectives` | `null` |
 | `norms` | `null` |
 | `population` | `534` |
 | `capital_division_ids` | `null` |
 | `capital_of_divisions` | `null` |
 | `wikidata` | `null` |
-| `names.rules[0].variant` | alternate |
+| `names.rules[0].variant` | `alternate` |
 | `names.rules[0].language` | `null` |
 | `names.rules[0].perspectives` | `null` |
-| `names.rules[0].value` | Nafualu |
+| `names.rules[0].value` | `Nafualu` |
 | `names.rules[0].between` | `null` |
 | `names.rules[0].side` | `null` |

@@ -50,22 +50,22 @@ provinces, state, and regions, and similar addressing units are found.
 
 | Column | Value |
 |-------:|-------|
-| `id` | 416ab01c-d836-4c4f-aedc-2f30941ce94d |
-| `geometry` | POINT (-176.5637854 -43.9471955) |
-| `theme` | addresses |
-| `type` | address |
+| `id` | `416ab01c-d836-4c4f-aedc-2f30941ce94d` |
+| `geometry` | `POINT (-176.5637854 -43.9471955)` |
+| `theme` | `addresses` |
+| `type` | `address` |
 | `version` | `1` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenAddresses/LINZ |
+| `sources[0].dataset` | `OpenAddresses/LINZ` |
 | `sources[0].record_id` | `null` |
 | `sources[0].update_time` | `null` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `address_levels[0].value` | Chatham Islands |
-| `address_levels[1].value` | Chatham Island |
-| `country` | NZ |
-| `number` | 54 |
+| `address_levels[0].value` | `Chatham Islands` |
+| `address_levels[1].value` | `Chatham Island` |
+| `country` | `NZ` |
+| `number` | `54` |
 | `postal_city` | `null` |
 | `postcode` | `null` |
-| `street` | Tikitiki Hill Road |
+| `street` | `Tikitiki Hill Road` |
 | `unit` | `null` |

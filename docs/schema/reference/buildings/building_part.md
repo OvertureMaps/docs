@@ -66,18 +66,18 @@ vertical dimension.
 
 | Column | Value |
 |-------:|-------|
-| `id` | 19412d64-51ac-3d6a-ac2f-8a8c8b91bb60 |
-| `geometry` | POLYGON ((-73.2462509 -39.8108937, -73.2462755 -39.8109047, -73.246291 -39.8109182, -73.2463022 -39.... |
-| `theme` | buildings |
-| `type` | building_part |
+| `id` | `19412d64-51ac-3d6a-ac2f-8a8c8b91bb60` |
+| `geometry` | `POLYGON ((-73.2462509 -39.8108937, -73.2462755 -39.8109047, -73.246291 -39.8109182, -73.2463022 -39....` |
+| `theme` | `buildings` |
+| `type` | `building_part` |
 | `version` | `0` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
-| `sources[0].record_id` | w223076787@2 |
-| `sources[0].update_time` | 2014-10-31T22:55:36.000Z |
+| `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].record_id` | `w223076787@2` |
+| `sources[0].update_time` | `2014-10-31T22:55:36.000Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `building_id` | bd663bd4-1844-4d7d-a400-114de051cf49 |
+| `building_id` | `bd663bd4-1844-4d7d-a400-114de051cf49` |
 | `names` | `null` |
 | `level` | `3` |
 | `height` | `null` |

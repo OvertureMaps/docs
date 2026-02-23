@@ -4,4 +4,4 @@ A string without leading or trailing whitespace.
 
 ## Constraints
 
-- `StrippedConstraint`
+- Allows only strings that have no leading/trailing whitespace. (`StrippedConstraint`)

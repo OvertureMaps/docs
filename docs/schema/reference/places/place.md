@@ -75,19 +75,19 @@ Places are point representations of real-world facilities, businesses, services,
 
 | Column | Value |
 |-------:|-------|
-| `id` | 99003ee6-e75b-4dd6-8a8a-53a5a716c50d |
-| `geometry` | POINT (-150.46875 -79.1713346) |
-| `theme` | places |
-| `type` | place |
+| `id` | `99003ee6-e75b-4dd6-8a8a-53a5a716c50d` |
+| `geometry` | `POINT (-150.46875 -79.1713346)` |
+| `theme` | `places` |
+| `type` | `place` |
 | `version` | `1` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | meta |
-| `sources[0].record_id` | 107663894904826 |
-| `sources[0].update_time` | 2025-06-30T07:00:00.000Z |
+| `sources[0].dataset` | `meta` |
+| `sources[0].record_id` | `107663894904826` |
+| `sources[0].update_time` | `2025-06-30T07:00:00.000Z` |
 | `sources[0].confidence` | `0.7337175792507205` |
 | `sources[0].between` | `null` |
-| `operating_status` | open |
-| `categories.primary` | hotel |
+| `operating_status` | `open` |
+| `categories.primary` | `hotel` |
 | `categories.alternate` | `null` |
 | `confidence` | `0.7337175792507205` |
 | `websites` | `[https://www.superhotel.co.jp/s_hotels/beppu/]` |
@@ -95,14 +95,14 @@ Places are point representations of real-world facilities, businesses, services,
 | `emails` | `null` |
 | `phones` | `[+81977009000]` |
 | `brand.wikidata` | `null` |
-| `brand.names.primary` | SUPER HOTEL |
+| `brand.names.primary` | `SUPER HOTEL` |
 | `brand.names.common` | `null` |
 | `brand.names.rules` | `null` |
-| `addresses[0].freeform` | 秋田県横手市駅前町１３−８ |
-| `addresses[0].locality` | 横手市 |
-| `addresses[0].postcode` | 013-0036 |
+| `addresses[0].freeform` | `秋田県横手市駅前町１３−８` |
+| `addresses[0].locality` | `横手市` |
+| `addresses[0].postcode` | `013-0036` |
 | `addresses[0].region` | `null` |
-| `addresses[0].country` | JP |
-| `names.primary` | スーパーホテル別府駅前 |
+| `addresses[0].country` | `JP` |
+| `names.primary` | `スーパーホテル別府駅前` |
 | `names.common` | `null` |
 | `names.rules` | `null` |

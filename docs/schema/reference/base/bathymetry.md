@@ -36,14 +36,14 @@ lake beds or ocean floors.
 
 | Column | Value |
 |-------:|-------|
-| `id` | 5d40bd6c-db14-5492-b29f-5e25a59032bc |
-| `geometry` | MULTIPOLYGON (((-170.71296928 -76.744313428, -170.719841483 -76.757076376, -170.731061124 -76.761566... |
-| `theme` | base |
-| `type` | bathymetry |
+| `id` | `5d40bd6c-db14-5492-b29f-5e25a59032bc` |
+| `geometry` | `MULTIPOLYGON (((-170.71296928 -76.744313428, -170.719841483 -76.757076376, -170.731061124 -76.761566...` |
+| `theme` | `base` |
+| `type` | `bathymetry` |
 | `version` | `0` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | ETOPO/GLOBathy |
-| `sources[0].record_id` | 2024-12-09T00:00:00.000Z |
+| `sources[0].dataset` | `ETOPO/GLOBathy` |
+| `sources[0].record_id` | `2024-12-09T00:00:00.000Z` |
 | `sources[0].update_time` | `null` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |

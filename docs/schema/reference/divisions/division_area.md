@@ -43,7 +43,7 @@ belongs to.
 | `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
 | `subtype` | [`PlaceType`](types/place_type.md) |  |
-| `class` | [`AreaClass`](division_area/area_class.md) |  |
+| `class` | [`AreaClass`](types/division_area/area_class.md) |  |
 | `is_land` | `boolean` (optional) | A boolean to indicate whether or not the feature geometry represents the land-clipped, non-maritime boundary. The geometry can be used for map rendering, cartographic display, and similar purposes. |
 | `is_territorial` | `boolean` (optional) | A boolean to indicate whether or not the feature geometry represents Overture's best approximation of this place's maritime boundary. For coastal places, this would tend to include the water area. The geometry can be used for data processing, reverse-geocoding, and similar purposes. |
 | `division_id` | [`Id`](../system/ref/id.md) | Division ID of the division this area belongs to. |
@@ -51,28 +51,33 @@ belongs to.
 | `region` | [`RegionCode`](../system/region_code.md) (optional) | ISO 3166-2 principal subdivision code of the division this area belongs to. |
 | `admin_level` | [`AdminLevel`](types/admin_level.md) (optional) |  |
 
+## Constraints
+
+- Exactly one of `is_land`, `is_territorial` must be `true`
+- `admin_level` is required when `subtype` is one of: `county`, `macrocounty`, `region`, `macroregion`, `dependency`, `country`
+
 ## Examples
 
 | Column | Value |
 |-------:|-------|
-| `names.primary` | ʻEua |
+| `names.primary` | `ʻEua` |
 | `names.common` | `null` |
 | `names.rules` | `null` |
-| `id` | eb9b112f-ec3c-47f7-b519-6f9f2e6fc2bd |
-| `geometry` | MULTIPOLYGON (((-174.9553949 -21.4730179, -174.9514163 -21.4719978, -174.9520108 -21.4681253, -174.9... |
-| `theme` | divisions |
-| `type` | division_area |
+| `id` | `eb9b112f-ec3c-47f7-b519-6f9f2e6fc2bd` |
+| `geometry` | `MULTIPOLYGON (((-174.9553949 -21.4730179, -174.9514163 -21.4719978, -174.9520108 -21.4681253, -174.9...` |
+| `theme` | `divisions` |
+| `type` | `division_area` |
 | `version` | `2` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
-| `sources[0].record_id` | r7247527@3 |
-| `sources[0].update_time` | 2020-12-30T18:41:56Z |
+| `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].record_id` | `r7247527@3` |
+| `sources[0].update_time` | `2020-12-30T18:41:56Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `subtype` | region |
-| `class` | land |
+| `subtype` | `region` |
+| `class` | `land` |
 | `is_land` | `true` |
 | `is_territorial` | `false` |
-| `division_id` | 21597af0-b564-463c-a356-42c29e712b7d |
-| `country` | TO |
-| `region` | TO-01 |
+| `division_id` | `21597af0-b564-463c-a356-42c29e712b7d` |
+| `country` | `TO` |
+| `region` | `TO-01` |

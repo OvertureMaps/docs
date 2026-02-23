@@ -65,15 +65,15 @@ model of the building.
 
 | Column | Value |
 |-------:|-------|
-| `id` | 148f35b1-7bc1-4180-9280-10d39b13883b |
-| `geometry` | POLYGON ((-176.6435004 -43.9938042, -176.6435738 -43.9937107, -176.6437726 -43.9937913, -176.6436992... |
-| `theme` | buildings |
-| `type` | building |
+| `id` | `148f35b1-7bc1-4180-9280-10d39b13883b` |
+| `geometry` | `POLYGON ((-176.6435004 -43.9938042, -176.6435738 -43.9937107, -176.6437726 -43.9937913, -176.6436992...` |
+| `theme` | `buildings` |
+| `type` | `building` |
 | `version` | `1` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
-| `sources[0].record_id` | w519166507@1 |
-| `sources[0].update_time` | 2017-08-27T21:39:50.000Z |
+| `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].record_id` | `w519166507@1` |
+| `sources[0].update_time` | `2017-08-27T21:39:50.000Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
 | `subtype` | `null` |

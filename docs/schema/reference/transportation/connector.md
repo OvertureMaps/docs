@@ -31,13 +31,13 @@ Connectors are compatible with GeoJSON Point features.
 
 | Column | Value |
 |-------:|-------|
-| `id` | 39542bee-230f-4b91-b7e5-a9b58e0c59b1 |
-| `geometry` | POINT (-176.5472979 -43.9679472) |
-| `theme` | transportation |
-| `type` | connector |
+| `id` | `39542bee-230f-4b91-b7e5-a9b58e0c59b1` |
+| `geometry` | `POINT (-176.5472979 -43.9679472)` |
+| `theme` | `transportation` |
+| `type` | `connector` |
 | `version` | `1` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
+| `sources[0].dataset` | `OpenStreetMap` |
 | `sources[0].record_id` | `null` |
 | `sources[0].update_time` | `null` |
 | `sources[0].confidence` | `null` |

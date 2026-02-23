@@ -54,27 +54,27 @@ TODO: Explain relationship to `Land` features.
 
 | Column | Value |
 |-------:|-------|
-| `id` | 1e1f6095-5bd2-3fdb-a422-41351b848e9d |
-| `geometry` | POLYGON ((-176.5623454 -43.9567812, -176.5627644 -43.9561272, -176.5626898 -43.9557432, -176.5624297... |
-| `theme` | base |
-| `type` | land_use |
+| `id` | `1e1f6095-5bd2-3fdb-a422-41351b848e9d` |
+| `geometry` | `POLYGON ((-176.5623454 -43.9567812, -176.5627644 -43.9561272, -176.5626898 -43.9557432, -176.5624297...` |
+| `theme` | `base` |
+| `type` | `land_use` |
 | `version` | `0` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
-| `sources[0].record_id` | w56117029@3 |
-| `sources[0].update_time` | 2010-04-24T22:35:13.000Z |
+| `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].record_id` | `w56117029@3` |
+| `sources[0].update_time` | `2010-04-24T22:35:13.000Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `class` | golf_course |
-| `subtype` | golf |
+| `class` | `golf_course` |
+| `subtype` | `golf` |
 | `elevation` | `null` |
 | `surface` | `null` |
-| `names.primary` | Chatham Islands Golf Club |
+| `names.primary` | `Chatham Islands Golf Club` |
 | `names.common` | `null` |
 | `names.rules` | `null` |
 | `level` | `null` |
-| `source_tags.LINZ:source_version` | V16 |
-| `source_tags.attribution` | http://wiki.osm.org/wiki/Attribution#LINZ |
-| `source_tags.leisure` | golf_course |
-| `source_tags.source_ref` | http://www.linz.govt.nz/topography/topo-maps/ |
+| `source_tags.LINZ:source_version` | `V16` |
+| `source_tags.attribution` | `http://wiki.osm.org/wiki/Attribution#LINZ` |
+| `source_tags.leisure` | `golf_course` |
+| `source_tags.source_ref` | `http://www.linz.govt.nz/topography/topo-maps/` |
 | `wikidata` | `null` |

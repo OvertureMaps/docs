@@ -14,3 +14,7 @@
 | `symbols` | `list<`[`DestinationSignSymbol`](destination_sign_symbol.md)`>` (optional) | A collection of symbols or icons present on the sign next to current destination label. |
 | `when` | [`DestinationRule.When`](destination_rule.when.md) (optional) | Scope for DestinationRule: |
 | `when.heading` | [`Heading`](../../core/scoping/heading.md) | The heading, either forward or backward, that the containing DestinationRule applies to. |
+
+## Constraints
+
+- At least one of `labels`, `symbols` must be set

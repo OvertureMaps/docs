@@ -2,4 +2,4 @@
 
 ## Constraints
 
-- `Gt(gt=0)`
+- `> 0`

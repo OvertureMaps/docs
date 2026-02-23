@@ -49,29 +49,29 @@ such as bridges, airports, runways, aerialways, communication towers, and power 
 
 | Column | Value |
 |-------:|-------|
-| `id` | e9e3d506-89c0-3473-8cee-5e5ac6596d6c |
-| `geometry` | POINT (-179.9999994 -82.42408) |
-| `theme` | base |
-| `type` | infrastructure |
+| `id` | `e9e3d506-89c0-3473-8cee-5e5ac6596d6c` |
+| `geometry` | `POINT (-179.9999994 -82.42408)` |
+| `theme` | `base` |
+| `type` | `infrastructure` |
 | `version` | `0` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
-| `sources[0].record_id` | n7674174803@2 |
-| `sources[0].update_time` | 2023-04-07T17:37:48.000Z |
+| `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].record_id` | `n7674174803@2` |
+| `sources[0].update_time` | `2023-04-07T17:37:48.000Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `class` | information |
-| `subtype` | pedestrian |
+| `class` | `information` |
+| `subtype` | `pedestrian` |
 | `height` | `null` |
 | `surface` | `null` |
-| `names.primary` | 1306 km to South Pole |
+| `names.primary` | `1306 km to South Pole` |
 | `names.common` | `null` |
 | `names.rules` | `null` |
 | `level` | `null` |
-| `source_tags.description` | 1036 km to South Pole. |
-| `source_tags.information` | route_marker |
-| `source_tags.note` | The road continue in west side of the map |
-| `source_tags.start_date` | 2007 |
-| `source_tags.tourism` | information |
-| `source_tags.wikipedia` | en:South Pole Traverse |
-| `wikidata` | Q800558 |
+| `source_tags.description` | `1036 km to South Pole.` |
+| `source_tags.information` | `route_marker` |
+| `source_tags.note` | `The road continue in west side of the map` |
+| `source_tags.start_date` | `2007` |
+| `source_tags.tourism` | `information` |
+| `source_tags.wikipedia` | `en:South Pole Traverse` |
+| `wikidata` | `Q800558` |

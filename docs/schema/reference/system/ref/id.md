@@ -4,5 +4,5 @@ A unique identifier.
 
 ## Constraints
 
-- `MinLen(min_length=1)`
-- `NoWhitespaceConstraint`
+- `minimum length: 1`
+- Allows only strings that contain no whitespace characters. (`NoWhitespaceConstraint`, pattern: `^\S+$`)

@@ -70,25 +70,25 @@ and `water=*`.
 
 | Column | Value |
 |-------:|-------|
-| `id` | 6bbb5fe5-bf26-3efa-b120-0a7079b60840 |
-| `geometry` | POINT (-177.031799 -84.934793) |
-| `theme` | base |
-| `type` | water |
+| `id` | `6bbb5fe5-bf26-3efa-b120-0a7079b60840` |
+| `geometry` | `POINT (-177.031799 -84.934793)` |
+| `theme` | `base` |
+| `type` | `water` |
 | `version` | `0` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
-| `sources[0].record_id` | n11109190647@2 |
-| `sources[0].update_time` | 2024-02-11T05:52:05.000Z |
+| `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].record_id` | `n11109190647@2` |
+| `sources[0].update_time` | `2024-02-11T05:52:05.000Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `class` | cape |
-| `subtype` | physical |
+| `class` | `cape` |
+| `subtype` | `physical` |
 | `is_intermittent` | `null` |
 | `is_salt` | `null` |
 | `level` | `null` |
-| `names.primary` | Thanksgiving Point |
+| `names.primary` | `Thanksgiving Point` |
 | `names.common` | `null` |
 | `names.rules` | `null` |
-| `source_tags.natural` | cape |
-| `source_tags.ref:linz:place_id` | 13433 |
-| `wikidata` | Q33140589 |
+| `source_tags.natural` | `cape` |
+| `source_tags.ref:linz:place_id` | `13433` |
+| `wikidata` | `Q33140589` |

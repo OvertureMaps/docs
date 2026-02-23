@@ -59,26 +59,26 @@ TODO: Update this description when the relationship to `land_cover` is better un
 
 | Column | Value |
 |-------:|-------|
-| `id` | 70fc3596-a987-3fea-820c-c016c0a2f0da |
-| `geometry` | POINT (-178.7 -85.45) |
-| `theme` | base |
-| `type` | land |
+| `id` | `70fc3596-a987-3fea-820c-c016c0a2f0da` |
+| `geometry` | `POINT (-178.7 -85.45)` |
+| `theme` | `base` |
+| `type` | `land` |
 | `version` | `0` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | OpenStreetMap |
-| `sources[0].record_id` | n11693475112@1 |
-| `sources[0].update_time` | 2024-03-05T09:23:39.000Z |
+| `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].record_id` | `n11693475112@1` |
+| `sources[0].update_time` | `2024-03-05T09:23:39.000Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `class` | cliff |
-| `subtype` | physical |
+| `class` | `cliff` |
+| `subtype` | `physical` |
 | `elevation` | `null` |
 | `surface` | `null` |
-| `names.primary` | Dismal Buttress |
+| `names.primary` | `Dismal Buttress` |
 | `names.common` | `null` |
 | `names.rules` | `null` |
 | `level` | `null` |
-| `source_tags.natural` | cliff |
-| `source_tags.ref:linz:place_id` | 12318 |
-| `source_tags.wikipedia` | en:Dismal Buttress |
-| `wikidata` | Q5282342 |
+| `source_tags.natural` | `cliff` |
+| `source_tags.ref:linz:place_id` | `12318` |
+| `source_tags.wikipedia` | `en:Dismal Buttress` |
+| `wikidata` | `Q5282342` |

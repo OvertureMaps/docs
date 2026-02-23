@@ -43,18 +43,18 @@ TODO: Explain relationship to `Land` features.
 
 | Column | Value |
 |-------:|-------|
-| `id` | c347312d-012b-5e73-8bd3-a10d04b2981d |
-| `geometry` | POLYGON ((-179.99877531181616 65.95172539425603, -179.99740705536922 65.95265577758867, -179.9975172... |
-| `theme` | base |
-| `type` | land_cover |
+| `id` | `c347312d-012b-5e73-8bd3-a10d04b2981d` |
+| `geometry` | `POLYGON ((-179.99877531181616 65.95172539425603, -179.99740705536922 65.95265577758867, -179.9975172...` |
+| `theme` | `base` |
+| `type` | `land_cover` |
 | `version` | `0` |
 | `sources[0].property` |  |
-| `sources[0].dataset` | ESA WorldCover |
+| `sources[0].dataset` | `ESA WorldCover` |
 | `sources[0].record_id` | `null` |
-| `sources[0].update_time` | 2024-11-07T00:00:00.000Z |
+| `sources[0].update_time` | `2024-11-07T00:00:00.000Z` |
 | `sources[0].confidence` | `null` |
 | `sources[0].between` | `null` |
-| `subtype` | barren |
+| `subtype` | `barren` |
 | `cartography.prominence` | `null` |
 | `cartography.min_zoom` | `8` |
 | `cartography.max_zoom` | `15` |

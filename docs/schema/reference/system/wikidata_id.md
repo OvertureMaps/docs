@@ -8,4 +8,4 @@ A wikidata ID, as found on https://www.wikidata.org/.
 
 ## Constraints
 
-- `WikidataIdConstraint`
+- Constraint for Wikidata identifiers (Q followed by digits). (`WikidataIdConstraint`, pattern: `^Q\d+$`)

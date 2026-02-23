@@ -10,4 +10,4 @@ For example:
 
 ## Constraints
 
-- `HexColorConstraint`
+- Allows only hexadecimal color codes (e.g., #FF0000 or #FFF). (`HexColorConstraint`, pattern: `^#[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?$`)

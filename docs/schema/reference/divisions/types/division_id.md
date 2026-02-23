@@ -2,6 +2,6 @@
 
 ## Constraints
 
-- `MinLen(min_length=1)`
-- `MinLen(min_length=1)` (from [`Id`](../../system/ref/id.md))
-- `NoWhitespaceConstraint`
+- `minimum length: 1`
+- `minimum length: 1` (from [`Id`](../../system/ref/id.md))
+- Allows only strings that contain no whitespace characters. (`NoWhitespaceConstraint`, pattern: `^\S+$`)

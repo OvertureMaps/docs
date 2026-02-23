@@ -2,5 +2,5 @@
 
 ## Constraints
 
-- `MinLen(min_length=1)`
-- `UniqueItemsConstraint`
+- `minimum length: 1`
+- Ensures all items in a collection are unique. (`UniqueItemsConstraint`)
