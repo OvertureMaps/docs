@@ -6,3 +6,7 @@ Unit of speed.
 
 - `mph` - Miles per hour
 - `km/h` - Kilometers per hour
+
+## Used By
+
+- [`Speed`](../transportation/types/speed.md)

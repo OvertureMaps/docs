@@ -28,3 +28,9 @@ Material that makes up the surface of `Infrastructure` and `Land` features.
 - `unpaved`
 - `wood`
 - `woodchips`
+
+## Used By
+
+- [`Infrastructure`](../infrastructure.md)
+- [`Land`](../land.md)
+- [`LandUse`](../land_use.md)

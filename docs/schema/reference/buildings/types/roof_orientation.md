@@ -9,3 +9,8 @@ The members of this enumeration, `"across"` and `"along"`, are borrowed from the
 
 - `across` - The roof ridge runs perpendicular to the longer of the two building edges, parallel to the shorter
 - `along` - The roof ridge runs parallel to the longer of the two building edges
+
+## Used By
+
+- [`Building`](../building.md)
+- [`BuildingPart`](../building_part.md)

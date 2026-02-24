@@ -18,3 +18,8 @@ The shape of the roof.
 - `sawtooth`
 - `skillion`
 - `spherical`
+
+## Used By
+
+- [`Building`](../building.md)
+- [`BuildingPart`](../building_part.md)

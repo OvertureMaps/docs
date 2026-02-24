@@ -18,5 +18,9 @@ countries and regions, address levels do not necessarily correspond to administr
 ## Fields
 
 | Name | Type | Description |
-|-----:|:----:|-------------|
-| `value` | [`StrippedString`](../../system/stripped_string.md) (optional) |  |
+| -----: | :----: | ------------- |
+| `value` | [`StrippedString`](../../system/stripped_string.md) (optional) | A string without leading or trailing whitespace |
+
+## Used By
+
+- [`Address`](../address.md)

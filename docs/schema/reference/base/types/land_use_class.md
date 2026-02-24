@@ -115,3 +115,7 @@ The land use class adds detail to the broad classification of `LandUseSubtype`.
 - `winter_sports`
 - `works`
 - `zoo`
+
+## Used By
+
+- [`LandUse`](../land_use.md)

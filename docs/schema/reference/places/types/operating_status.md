@@ -13,3 +13,7 @@ place is continuing to operate normally, as opposed to being in an operating hia
 - `open`
 - `permanently_closed`
 - `temporarily_closed`
+
+## Used By
+
+- [`Place`](../place.md)

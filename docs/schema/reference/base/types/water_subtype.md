@@ -18,3 +18,7 @@ This broad classification can be refined using `WaterClass`.
 - `stream`
 - `wastewater`
 - `water`
+
+## Used By
+
+- [`Water`](../water.md)

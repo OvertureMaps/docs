@@ -170,3 +170,7 @@ The infrastructure class adds detail to the broad classification of `Infrastruct
 - `water_tower`
 - `weir`
 - `zip_line`
+
+## Used By
+
+- [`Infrastructure`](../infrastructure.md)

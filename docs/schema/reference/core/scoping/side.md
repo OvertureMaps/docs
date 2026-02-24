@@ -8,3 +8,8 @@ travel of a person or vehicle.
 
 - `left` - On the left relative to the facing direction
 - `right` - On the right side relative to the facing direction
+
+## Used By
+
+- [`NameRule`](../name_rule.md)
+- [`Norms`](../../divisions/types/division/norms.md)

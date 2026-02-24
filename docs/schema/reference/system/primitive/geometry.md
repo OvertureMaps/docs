@@ -5,7 +5,7 @@ Spatial types for representing geographic features.
 ## Types
 
 | Type | Description |
-|-----:|-------------|
+| -----: | ------------- |
 | `Geometry` | GeoJSON geometry value (Point, LineString, Polygon, etc.) |
 | `BBox` | Bounding box as 4 or 6 coordinate values: [west, south, east, north] or [west, south, min-altitude, east, north, max-altitude] |
 | `GeometryType` | Enumeration of geometry types: `geometry_collection`, `line_string`, `multi_line_string`, `multi_point`, `multi_polygon`, `point`, `polygon` |

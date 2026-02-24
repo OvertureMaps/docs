@@ -7,3 +7,7 @@ Transportation segment subtype classification.
 - `road`
 - `rail`
 - `water`
+
+## Used By
+
+- [`Segment`](../segment.md)

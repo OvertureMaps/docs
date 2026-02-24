@@ -11,3 +11,7 @@ Unit of weight.
 - `g` - One gram in the metric and SI systems
 - `kg` - One kilogram in the metric and SI systems
 - `t` - One tonne in the metric and SI systems
+
+## Used By
+
+- [`VehicleWeightSelector`](scoping/vehicle_weight_selector.md)

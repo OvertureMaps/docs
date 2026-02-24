@@ -48,3 +48,7 @@ The land class adds detail to the broad classification of `LandSubtype`.
 - `volcano`
 - `wetland`
 - `wood`
+
+## Used By
+
+- [`Land`](../land.md)

@@ -15,3 +15,8 @@ The outer surface material of building facade.
 - `stone`
 - `timber_framing`
 - `wood`
+
+## Used By
+
+- [`Building`](../building.md)
+- [`BuildingPart`](../building_part.md)

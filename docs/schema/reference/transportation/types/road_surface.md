@@ -11,3 +11,7 @@ Physical surface of the road.
 - `dirt`
 - `paving_stones`
 - `metal`
+
+## Used By
+
+- [`SurfaceRule`](surface_rule.md)

@@ -19,3 +19,7 @@ This broad classification can be refined by `BuildingClass`.
 - `residential`
 - `service`
 - `transportation`
+
+## Used By
+
+- [`Building`](../building.md)

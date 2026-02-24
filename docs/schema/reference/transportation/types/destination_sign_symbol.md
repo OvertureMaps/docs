@@ -25,3 +25,7 @@ similar.
 - `camp_site`
 - `interchange`
 - `restrooms`
+
+## Used By
+
+- [`DestinationRule`](destination_rule.md)

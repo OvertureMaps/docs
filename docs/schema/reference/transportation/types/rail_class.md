@@ -12,3 +12,7 @@ Captures the kind of rail segment.
 - `subway`
 - `tram`
 - `unknown`
+
+## Used By
+
+- [`Segment`](../segment.md)

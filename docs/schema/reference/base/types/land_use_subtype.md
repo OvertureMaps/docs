@@ -30,3 +30,7 @@ This broad classification can be refined by `LandUseClass`.
 - `resource_extraction`
 - `transportation`
 - `winter_sports`
+
+## Used By
+
+- [`LandUse`](../land_use.md)

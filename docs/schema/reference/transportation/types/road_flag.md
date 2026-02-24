@@ -13,3 +13,7 @@ Specifies physical characteristics and can overlap.
 - `is_abandoned`
 - `is_covered`
 - `is_indoor`
+
+## Used By
+
+- [`RoadFlagRule`](road_flag_rule.md)

@@ -11,3 +11,9 @@ Unit of length.
 - `cm` - One centimeter in the metric and SI systems
 - `m` - One meter in the metric and SI systems
 - `km` - One kilometer in the metric and SI systems
+
+## Used By
+
+- [`VehicleHeightSelector`](scoping/vehicle_height_selector.md)
+- [`VehicleLengthSelector`](scoping/vehicle_length_selector.md)
+- [`VehicleWidthSelector`](scoping/vehicle_width_selector.md)

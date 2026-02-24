@@ -14,3 +14,7 @@ Specifies physical characteristics and can overlap.
 - `is_passenger`
 - `is_freight`
 - `is_disused`
+
+## Used By
+
+- [`RailFlagRule`](rail_flag_rule.md)

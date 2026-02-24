@@ -14,3 +14,7 @@ Primary or dominant material covering the land.
 - `snow`
 - `urban`
 - `wetland`
+
+## Used By
+
+- [`LandCover`](../land_cover.md)

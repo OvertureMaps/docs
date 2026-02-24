@@ -24,3 +24,7 @@ This broad classification can be refined by `InfrastructureClass`.
 - `utility`
 - `waste_management`
 - `water`
+
+## Used By
+
+- [`Infrastructure`](../infrastructure.md)

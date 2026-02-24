@@ -9,3 +9,7 @@ Division-specific class designations.
 - `town`
 - `village`
 - `hamlet`
+
+## Used By
+
+- [`Division`](../division.md)

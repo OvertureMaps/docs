@@ -6,6 +6,10 @@ segment.
 ## Fields
 
 | Name | Type | Description |
-|-----:|:----:|-------------|
-| `connector_id` | [`Id`](../../system/ref/id.md) |  |
+| -----: | :----: | ------------- |
+| `connector_id` | [`Id`](../../system/ref/id.md) | A unique identifier |
 | `at` | [`LinearlyReferencedPosition`](../../core/scoping/linearly_referenced_position.md) (optional) | The linearly-referenced position on the geometry, specified as a percentage displacement from the start of the geometry, that the containing ConnectorReference applies to. |
+
+## Used By
+
+- [`Segment`](../segment.md)

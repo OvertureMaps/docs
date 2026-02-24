@@ -93,3 +93,7 @@ The building class adds detail to the broad classification of `BuildingSubtype`.
 - `university`
 - `warehouse`
 - `wayside_shrine`
+
+## Used By
+
+- [`Building`](../building.md)

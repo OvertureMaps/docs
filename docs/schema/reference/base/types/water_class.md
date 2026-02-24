@@ -41,3 +41,7 @@ The water class adds detail to the broad classification of `WaterSubtype`.
 - `water`
 - `water_storage`
 - `waterfall`
+
+## Used By
+
+- [`Water`](../water.md)

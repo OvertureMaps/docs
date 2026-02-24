@@ -19,3 +19,7 @@ This broad classification can be refined by `LandClass`.
 - `shrub`
 - `tree`
 - `wetland`
+
+## Used By
+
+- [`Land`](../land.md)

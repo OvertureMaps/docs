@@ -6,3 +6,7 @@ Area and boundary class designations.
 
 - `land`
 - `maritime`
+
+## Used By
+
+- [`DivisionArea`](../../division_area.md)

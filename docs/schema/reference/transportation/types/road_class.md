@@ -21,3 +21,7 @@ Captures the kind of road and its position in the road network hierarchy.
 - `cycleway`
 - `bridleway`
 - `unknown`
+
+## Used By
+
+- [`Segment`](../segment.md)

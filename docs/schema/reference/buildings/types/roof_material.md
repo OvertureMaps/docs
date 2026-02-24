@@ -18,3 +18,8 @@ The outermost material of the roof.
 - `tar_paper`
 - `thatch`
 - `wood`
+
+## Used By
+
+- [`Building`](../building.md)
+- [`BuildingPart`](../building_part.md)

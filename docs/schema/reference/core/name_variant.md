@@ -16,3 +16,7 @@ official documents.
 other well-known name is not the common name.
 - `short` - An abbreviated or shortened version of the name, which may be an acronym or some other
 commonly-used short form. An example is "NYC" for New York City.
+
+## Used By
+
+- [`NameRule`](name_rule.md)

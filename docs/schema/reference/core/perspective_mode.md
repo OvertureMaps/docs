@@ -6,3 +6,7 @@ Perspective mode for disputed names.
 
 - `accepted_by`
 - `disputed_by`
+
+## Used By
+
+- [`Perspectives`](perspectives.md)

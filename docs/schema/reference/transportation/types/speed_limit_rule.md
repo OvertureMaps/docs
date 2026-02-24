@@ -5,12 +5,12 @@ An individual speed limit rule.
 ## Fields
 
 | Name | Type | Description |
-|-----:|:----:|-------------|
-| `max_speed` | [`Speed`](speed.md) (optional) |  |
-| `max_speed.value` | [`SpeedValue`](speed_value.md) |  |
+| -----: | :----: | ------------- |
+| `max_speed` | [`Speed`](speed.md) (optional) | *At least one of `max_speed`, `min_speed` must be set* |
+| `max_speed.value` | [`SpeedValue`](speed_value.md) | Speed value |
 | `max_speed.unit` | [`SpeedUnit`](../../core/speed_unit.md) |  |
-| `min_speed` | [`Speed`](speed.md) (optional) |  |
-| `min_speed.value` | [`SpeedValue`](speed_value.md) |  |
+| `min_speed` | [`Speed`](speed.md) (optional) | *At least one of `max_speed`, `min_speed` must be set* |
+| `min_speed.value` | [`SpeedValue`](speed_value.md) | Speed value |
 | `min_speed.unit` | [`SpeedUnit`](../../core/speed_unit.md) |  |
 | `is_max_speed_variable` | `boolean` (optional) | Indicates a variable speed corridor |
 | `between` | [`LinearlyReferencedRange`](../../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SpeedLimitRule applies to. |
@@ -25,3 +25,8 @@ An individual speed limit rule.
 ## Constraints
 
 - At least one of `max_speed`, `min_speed` must be set
+
+## Used By
+
+- [`Segment`](../segment.md)
+- [`SpeedLimits`](speed_limits.md)
