@@ -52,7 +52,6 @@ const sidebars = {
       ],
     },
     {
-    {
       type: 'category',
       label: 'Data Guides',
       link: {
