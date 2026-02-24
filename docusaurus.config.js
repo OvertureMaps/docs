@@ -144,12 +144,6 @@ const config = {
             label: 'Docs',
           },
           {
-            type: 'docSidebar',
-            sidebarId: 'schema',
-            position: 'left',
-            label: 'Schema Reference',
-          },
-          {
             to: 'blog',
             label: 'Blog',
             position: 'left',
