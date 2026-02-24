@@ -5,9 +5,12 @@ const sidebars = {
     {
       type: 'category',
       label: 'Getting Started',
+      link: {
+        type: 'doc',
+        id: 'getting-data/index'
+      },
       collapsed: true,
       items: [
-        'getting-data/index',
         'getting-data/duckdb',
         'getting-data/overturemaps-py',
         'getting-data/athena-aws',
@@ -49,6 +52,7 @@ const sidebars = {
       ],
     },
     {
+    {
       type: 'category',
       label: 'Data Guides',
       link: {
@@ -57,12 +61,55 @@ const sidebars = {
       },
       collapsed: true,
       items: [
-        'guides/addresses',
-        'guides/base',
-        'guides/buildings',
-        'guides/divisions',
-        'guides/places',
-        'guides/transportation',
+        {
+          type: 'category',
+          label: 'Addresses',
+          collapsed: true,
+          items: [
+            'guides/addresses/overview',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Base',
+          collapsed: true,
+          items: [
+            'guides/base/overview',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Buildings',
+          collapsed: true,
+          items: [
+            'guides/buildings/overview',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Divisions',
+          collapsed: true,
+          items: [
+            'guides/divisions/overview',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Places',
+          collapsed: true,
+          items: [
+            'guides/places/overview',
+            'guides/places/taxonomy',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Transportation',
+          collapsed: true,
+          items: [
+            'guides/transportation/overview',
+          ],
+        },
       ],
     },
     {
@@ -92,5 +139,4 @@ const sidebars = {
     },
   ],
 };
-
 module.exports = sidebars;
