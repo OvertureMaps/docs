@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the main docs repo repository and build.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: Upload docs build as an artifact 📦
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           path: build
           name: build-artifact
@@ -51,13 +51,13 @@ jobs:
 
     steps:
       - name: Configure AWS credentials 🔐
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::763944545891:role/pages-staging-oidc-overturemaps
           aws-region: us-west-2
 
       - name: Download artifacts 📥
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: build-artifact
           path: build
