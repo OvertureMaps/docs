@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: Upload docs build as an artifact 📦
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           path: build
           name: build-artifact
