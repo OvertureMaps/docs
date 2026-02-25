@@ -7,68 +7,76 @@ import MadridBuildings from '!!raw-loader!@site/src/queries/duckdb/buildings_mad
 
 ## Official Overture sources
 
-The Overture Maps Foundation provides free access to its data on Amazon S3 and Microsoft Azure Blob Storage, with no account registration or credentials required. 
+The Overture Maps Foundation provides free access to its data on Amazon S3 and Microsoft Azure Blob Storage, with no account registration or credentials required.
 
-| Provider | Location |
-| ----------- | -------- |
-| Amazon S3 | `s3://overturemaps-us-west-2/release/<RELEASE>` |
+| Provider                     | Location                                                              |
+| ---------------------------- | --------------------------------------------------------------------- |
+| Amazon S3                    | `s3://overturemaps-us-west-2/release/<RELEASE>`                       |
 | Microsoft Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/release/<RELEASE>` |
 
-The latest Overture data `<RELEASE>` is: <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
+The latest Overture data `<RELEASE>` is:
+
+<QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
 
 ### Getting only the data you want
 
 The base paths above point to all of the data in a particular Overture release, about 500 GigaBytes (GB) worth. Overture partitions the data by `theme` and `type`; specifying those directories in your path will significantly narrow the universe of data you are trying to access. For example, here's the S3 path to the `infrastructure` feature type in the `base` theme:
 
-<QueryBuilder   query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=infrastructure/*.parquet" language="text">
-</QueryBuilder>
+<QueryBuilder
+  query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=infrastructure/*.parquet"
+  language="text"
+></QueryBuilder>
 
 Let's break down the components in that path:
 
-- `<RELEASE>`: Overture releases data monthly &mdash; following a date-based versioning scheme in the format `yyyy-mm-dd.x` &mdash;and maintains an archive of releases on Amazon S3 and Azure Blob Storage 
-- `<theme>`: one of Overture's six data themes &mdash; addresses, base, buildings, divisions, places, and transportation &mdash; and the first level of partitioning of the data 
+- `<RELEASE>`: Overture releases data monthly &mdash; following a date-based versioning scheme in the format `yyyy-mm-dd.x` &mdash;and maintains an archive of releases on Amazon S3 and Azure Blob Storage
+- `<theme>`: one of Overture's six data themes &mdash; addresses, base, buildings, divisions, places, and transportation &mdash; and the first level of partitioning of the data
 - `<type>`: a feature type within a theme, e.g. infrastructure within base, and the second level of partitioning of the data |
 - `*.parquet`: the file type Overture uses to store and deliver the data, the `*` indicates you want all of the Parquet files in a particular directory
 
 ### Parquet files
 
-Overture distributes its data as [GeoParquet](https://geoparquet.org/) files, a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for cloud-native queries, which means you can efficiently fetch chunks of the data from cloud storage. Instead of extracting one huge data file containing a planet's worth of data, you can scan across the many GeoParquet files in each `type` directory and pull only the data you need. To learn more about GeoParquet, you can consult [this guide](https://guide.cloudnativegeo.org/geoparquet/) from the Cloud Native Geospatial Forum. 
-
+Overture distributes its data as [GeoParquet](https://geoparquet.org/) files, a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for cloud-native queries, which means you can efficiently fetch chunks of the data from cloud storage. Instead of extracting one huge data file containing a planet's worth of data, you can scan across the many GeoParquet files in each `type` directory and pull only the data you need. To learn more about GeoParquet, you can consult [this guide](https://guide.cloudnativegeo.org/geoparquet/) from the Cloud Native Geospatial Forum.
 
 ## Quickstart
 
 Let's go back to the example above with the infrastructure map data. Now that you know the correct path, how do you actually query and download the data? Below are a few examples to get you started quickly.
 
-### AWS CLI 
+### AWS CLI
 
 You can install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to download the Parquet files from S3 at the command line. Set `<DESTINATION>` to a local directory path to download the files, or to an `s3://` path you control to copy them into your S3 bucket.
 
 In this example, you can use the AWS CLI to download all nine Parquet files, about one GB of data, in the `infrastructure` feature type to the current working directory on your local drive.
 
-<QueryBuilder   query="aws s3 cp --no-sign-request --recursive s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=infrastructure/ ." language="text">
-</QueryBuilder>
+<QueryBuilder
+  query="aws s3 cp --no-sign-request --recursive s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=infrastructure/ ."
+  language="text"
+></QueryBuilder>
 
 Here's another example with the AWS CLI, this time extracting all of the data for the `building` feature type:
 
-<QueryBuilder   query="aws s3 cp --no-sign-request --recursive s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/ ." language="text">
-</QueryBuilder>
+<QueryBuilder
+  query="aws s3 cp --no-sign-request --recursive s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/ ."
+  language="text"
+></QueryBuilder>
 
 This will download 200 GeoParquet files containing all of the `building` feature type data around the world &mdash; that's more than 230 GB of data!
 
 :::tip
-If you'd like to query the data directly on the AWS platform, please read our documentation about setting up an Overture data catalog on [Athena](athena-aws). You'll need an AWS account secured with a credit card. 
+If you'd like to query the data directly on the AWS platform, please read our documentation about setting up an Overture data catalog on [Athena](athena-aws). You'll need an AWS account secured with a credit card.
 :::
 
-
 ### AzCopy
+
 You can download the files from Azure Blob Storage directly using [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/) or by installing Microsoft's [AzCopy](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json#download-azcopy) command-line tool. Here's how you would use the`azcopy` command to grab all of the `place` data:
 
-<QueryBuilder   query='azcopy copy "https://overturemapswestus2.dfs.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/" "<<local directory path>>"  --recursive'
-                language="text">
-</QueryBuilder>
+<QueryBuilder
+  query='azcopy copy "https://overturemapswestus2.dfs.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/" "<<local directory path>>"  --recursive'
+  language="text"
+></QueryBuilder>
 
 :::tip
-You can read more about querying with the data directly in [Azure using Synapse](synapse-azure). You'll need an account backed by a credit card to do this. 
+You can read more about querying with the data directly in [Azure using Synapse](synapse-azure). You'll need an account backed by a credit card to do this.
 :::
 
 ### DuckDB
@@ -83,16 +91,15 @@ Alternatively, you can put your query in a SQL file and run `duckdb -f query.sql
 
 ### Python CLI
 
-Overture also offers its own [Python CLI](overturemaps-py) for downloading data at the command line. 
+Overture also offers its own [Python CLI](overturemaps-py) for downloading data at the command line.
 
 ```
 $ overturemaps download --bbox=-75,40,-73,41 -f geojson --type=building -o nyc_buildings.geojson
 ```
 
-
 ## Data mirrors
 
-In addition to the official sources maintained by the Overture Maps Foundation, several *friends of Overture* are maintaining mirrors of the data on these platforms:
+In addition to the official sources maintained by the Overture Maps Foundation, several _friends of Overture_ are maintaining mirrors of the data on these platforms:
 
 - [Bigquery](data-mirrors/bigquery)
 - [Databricks](data-mirrors/databricks)
@@ -101,7 +108,4 @@ In addition to the official sources maintained by the Overture Maps Foundation, 
 - [Snowflake](data-mirrors/snowflake)
 - [Wherobots](data-mirrors/wherobots)
 
-
-
-
-These are community-maintained resources. These mirrors may offer different access patterns, additional tooling, or other platform-specific benefits. Please consult the documentation for details. 
+These are community-maintained resources. These mirrors may offer different access patterns, additional tooling, or other platform-specific benefits. Please consult the documentation for details.
