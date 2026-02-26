@@ -1,49 +1,55 @@
 ---
+id: index
+slug: /schema/
 title: Schema Reference
-slug: /schema
+sidebar_label: Overview
+description: Pydantic schemas for Overture Maps data
+pagination_label: Schema Reference
 ---
 
-import CodeBlock from '@theme/CodeBlock';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import DocCardList from '@theme/DocCardList';
+# Overture Maps Schema {#top-level-properties}
 
-<DocCardList />
+:::note
+This section has been recently updated to reflect changes in our schema modeling. We welcome your feedback in [GitHub Discussions](https://github.com/OvertureMaps/data/discussions).
+:::
 
-## Top-level properties
 
-In the Overture schema, all features have a unique `id` called a [GERS ID](https://docs.overturemaps.org/gers/), a `geometry` object that follows the OGC geometry specification, and other top-level properties.
+The Overture Maps schema defines the structure, properties, and constraints for all features across six themes: addresses, base, buildings, divisions, places, and transportation. The reference pages in this section document the theme-based and shared modules in the schema. 
 
-### Other key schema properties
+The schema is authored as [Pydantic](https://docs.pydantic.dev/) models and the reference documentation is generated from those models. The source code lives in the [OvertureMaps/schema](https://github.com/OvertureMaps/schema) repository on GitHub.
 
-Most but not all of the feature types in the Overture schema require data for the `names`, `subtype`, and `class` properties. The `names` property is complex enough to have its own schema.
+## Why Use Pydantic to Define Data Schemas?
 
-### Properties may be specific to a feature type
+This project addresses a fundamental challenge in data consumption: bridging the semantic gap between raw data and human understanding while enabling machine-actionable workflows.
 
-Some properties in the Overture schema are only populated with data for specific feature types. For example, the `place` feature type must include data for the `categories` property, as required by the schema. The `division_area` and `address` feature types require the `country` property to be populated with ISO 3166-1 alpha-2 country codes. The `segment` feature type in the transportation theme is the only feature type that includes data for a complex set of properties that describe roads. The reference section of this documentation digs into the details of these complexities.
+## Why Schema at All: Beyond Raw Data
 
-## Schema conventions
+Take a column like `pop_2020`. Is it total population? Population density per square kilometer? Working-age population? Without a schema, you're left sampling values and guessing from column names.
 
-### Notations
+Compare this to OpenStreetMap's approach: features use well-known key/value pairs like `building=residential` or `addr:housenumber=42` that have semantic meaning and can be looked up on the OSM wiki. This creates a step toward a schema — shared vocabulary with documented semantics used across a vast dataset. However, OSM tags remain free-form: multiple valid ways to express the same concept, no built-in validation, and complex downstream validation because of undocumented keys that might have meaning to someone, somewhere. A schema provides the structured alternative: explicit types, clear validation rules, and semantic meaning that both humans and systems can rely on.
 
-#### Snake case
+Data files containing only column names and values aren't fully documented. External metadata files typically focus on how data was collected and encoded, not on semantic meaning or validation rules. Data consumers struggle to understand what datasets contain and which columns they need for their goals.
 
-We use snake case instead of camel case for all property names, string enumeration members, and string-valued enumeration equivalents. We do this because of case sensitivity and transformation issues in different databases and query engines. For example, Athena/Trino downcases everything, so text string splits in camel case property names get lost; in contrast, snake case passes through without issues.
+## Why Pydantic Over JSON Schema: Solving Multiple Problems
 
-#### Booleans
+We initially chose JSON Schema because it aligned with our mental model and promised to solve our problems as we understood them. But JSON Schema surfaced several pain points:
 
-Boolean properties have a prefix verb "is" or "has" in a way that grammatically makes sense, e.g. `has_street_lights=true` and `is_accessible=false`.
+- **Authoring difficulty:** Hard to write correctly, difficult to verify, limited IDE support, no refactoring capabilities
+- **Tooling gaps:** Generic tools can't tailor output for specific applications like ours
+- **Development friction:** Schema changes required manual coordination across multiple artifacts
 
-### Measurements
+Pydantic addresses these systematically: author in Python with full IDE support, generate tailored documentation, and automatically produce the specific artifacts each workflow needs. Pydantic can also produce JSON Schema, so any application that requires it can use it while we gain all the Python benefits during authoring.
 
-Measurements of real-world objects and features follow [The International System of Units (SI)](https://www.bipm.org/en/publications/si-brochure): heights, widths, lengths, etc. In the Overture schema, these values are provided as scalar numeric value without units such as feet or meters. Overture does this to maximize consistency and predictability.
+## The Result: Faster Understanding, Higher Quality
 
-Quantities specified in regulatory rules, norms and customs follow local specifications wherever possible. In the schema, these values are provided as two-element arrays where the first element is the scalar numeric value and the second value is the units. Overture uses local units of measurement: feet in the United States and meters in the EU, for example. The exact unit is confirmed in the specification of the property but is not repeated in the data.
+Instead of spending time deciphering what columns mean and whether data matches expectations, users can focus on their actual goals: analysis, visualization, integration. Quality improves because validation happens automatically rather than through manual inspection.
 
-### Regulations and restrictions
+The fundamental approach — human-readable authoring that generates machine-actionable outputs — has broader applications beyond Overture and geospatial data. We hope others will adapt these patterns for linking with Overture data or modeling their own domains entirely.
 
-All quantities that relate to posted or ordinance regulations and restrictions are expressed in the same units as used in the regulation. The unit is explicitly included with the property in the data.
+## Schema Modules
 
-### Opening hours and validity periods
+Browse the schema reference in the sidebar. Modules are organized by theme and shared components:
 
-Opening hours and the time frame during which time dependent properties are applicable are indicated following the [OSM Opening Hours specification](https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification).
+**Themes:** Addresses, Base, Buildings, Divisions, Places, Transportation
+
+**Shared:** Core (names, sources, cartographic hints), System (country codes, language tags, geometry primitives)
