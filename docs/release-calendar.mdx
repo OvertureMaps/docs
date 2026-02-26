@@ -8,82 +8,84 @@ This page provides information about Overture's data and schema releases, includ
 
 ## Current release
 
-The latest Overture data release is: <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>. 
+The latest Overture data release is:
+
+<QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
 
 ## Release schedule
 
 Our planned release schedule is below. Release dates and schema versions are subject to change.
 
-| Date | Data version | Schema version |
-| ----- | ----- | ----- |
-| 18 February 2026 | [`2026-02-18.0`](https://docs.overturemaps.org/blog/2026/02/18/release-notes/) |[`v1.16.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.16.0) |
-| 18 March 2026* | `2026-03-18.0` | TBD |
+| Date             | Data version                                                                   | Schema version                                                           |
+| ---------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| 18 February 2026 | [`2026-02-18.0`](https://docs.overturemaps.org/blog/2026/02/18/release-notes/) | [`v1.16.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.16.0) |
+| 18 March 2026\*  | `2026-03-18.0`                                                                 | TBD                                                                      |
 
-
-*quarterly major breaking change release
+\*quarterly major breaking change release
 
 ## Versioning and schema changes
 
 ### Versioning
 
-Overture uses a three-component `<major>.<minor>.<patch>` version number, i.e. `v1.1.0`, that effectively follows the [semantic versioning specification](https://semver.org/spec/v2.0.0.html). In general, a “major” change is expected to have a larger impact on data consumers, while a “minor” change is expected to have a lesser impact. Our monthly data releases are tagged with the date of the release, in the format `yyyy-mm-dd.x`, with x indicating a patch or hotfix to the data. 
+Overture uses a three-component `<major>.<minor>.<patch>` version number, i.e. `v1.1.0`, that effectively follows the [semantic versioning specification](https://semver.org/spec/v2.0.0.html). In general, a “major” change is expected to have a larger impact on data consumers, while a “minor” change is expected to have a lesser impact. Our monthly data releases are tagged with the date of the release, in the format `yyyy-mm-dd.x`, with x indicating a patch or hotfix to the data.
 
 ### Minor schema changes
 
-Minor schema changes may occur in any month, meaning that the next monthly data release may follow a new schema version that contains minor schema changes. We typically do not announce minor changes in advance unless they are part of an overarching schema update that involves related major changes. Minor changes include: 
-- adding feature types; 
-- adding top-level properties (columns); 
-- adding nested properties; 
-- changing constraints on property values either by relaxing or tightening them, e.g. adding or subtracting allowed values for enumerated value properties such as `class`. 
+Minor schema changes may occur in any month, meaning that the next monthly data release may follow a new schema version that contains minor schema changes. We typically do not announce minor changes in advance unless they are part of an overarching schema update that involves related major changes. Minor changes include:
+
+- adding feature types;
+- adding top-level properties (columns);
+- adding nested properties;
+- changing constraints on property values either by relaxing or tightening them, e.g. adding or subtracting allowed values for enumerated value properties such as `class`.
 
 ### Major schema changes
 
-Major schema changes will only occur once per quarter, during the designated **major change months of March, June, September, and December**. We will strive to announce upcoming major changes as far in advance as possible, along with the reasons behind the change. If there are no major changes in a designated major change month, the schema version for that month’s release will reflect minor changes or no changes. Major changes include: 
+Major schema changes will only occur once per quarter, during the designated **major change months of March, June, September, and December**. We will strive to announce upcoming major changes as far in advance as possible, along with the reasons behind the change. If there are no major changes in a designated major change month, the schema version for that month’s release will reflect minor changes or no changes. Major changes include:
+
 - deleting feature types;
-- deleting top-level properties (columns); 
+- deleting top-level properties (columns);
 - deleting nested properties;
-- changing data types, e.g. an integer value to a structured object. 
+- changing data types, e.g. an integer value to a structured object.
 
 ## Data retention policy
 
 Overture maintains publicly available data releases for a maximum of 60 days (two monthly releases) to comply with data protection regulations, including GDPR "right to be forgotten" requirements. Files are automatically removed from public distribution after this period using cloud storage lifecycle policies on AWS and Azure. Versioned changelogs and bridgefiles remain publicly available for all releases where they were provided. Release notes from past releases also remain publicly available.
 
-
 ## Release history
 
-Overture has been releasing data monthly since October 2023. Past releases are listed below. Only the last two months of releases available in our public buckets on AWS and Azure. The release notes for all past releases are available at the links below. 
+Overture has been releasing data monthly since October 2023. Past releases are listed below. Only the last two months of releases available in our public buckets on AWS and Azure. The release notes for all past releases are available at the links below.
 
-| Date | Data version | Schema version |
-| ----- | ----- | ----- |
-| 18 February 2026 | [`2026-02-18.0`](https://docs.overturemaps.org/blog/2026/02/18/release-notes/) |[`v1.16.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.16.0) |
-| 21 January 2026 | [`2026-01-21.0`](https://docs.overturemaps.org/blog/2026/01/21/release-notes/) | [`v1.15.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.15.0) |
-| 17 December 2025 | [`2025-12-17.0`](https://docs.overturemaps.org/blog/2025/12/17/release-notes/) | [`v1.15.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.15.0) |
-| 19 November 2025 | [`2025-11-19.0`](https://docs.overturemaps.org/blog/2025/11/19/release-notes/) | [`v1.14.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.14.0) |
-| 22 October 2025 | [`2025-10-22.0`](https://docs.overturemaps.org/blog/2025/10/22/release-notes/) | [`v1.13.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.13.0) |
+| Date              | Data version                                                                   | Schema version                                                           |
+| ----------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| 18 February 2026  | [`2026-02-18.0`](https://docs.overturemaps.org/blog/2026/02/18/release-notes/) | [`v1.16.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.16.0) |
+| 21 January 2026   | [`2026-01-21.0`](https://docs.overturemaps.org/blog/2026/01/21/release-notes/) | [`v1.15.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.15.0) |
+| 17 December 2025  | [`2025-12-17.0`](https://docs.overturemaps.org/blog/2025/12/17/release-notes/) | [`v1.15.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.15.0) |
+| 19 November 2025  | [`2025-11-19.0`](https://docs.overturemaps.org/blog/2025/11/19/release-notes/) | [`v1.14.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.14.0) |
+| 22 October 2025   | [`2025-10-22.0`](https://docs.overturemaps.org/blog/2025/10/22/release-notes/) | [`v1.13.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.13.0) |
 | 24 September 2025 | [`2025-09-24.0`](https://docs.overturemaps.org/blog/2025/09/24/release-notes/) | [`v1.12.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.12.0) |
-| 20 August 2025 | [`2025-08-20.0`](https://docs.overturemaps.org/blog/2025/08/20/release-notes/) | [`v1.11.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.11.0) |
-| 23 July 2025 | [`2025-07-23.0`](https://docs.overturemaps.org/blog/2025/07/23/release-notes/) | [`v1.11.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.11.0) | 
-| 25 June 2025	| [`2025-06-25.0`](https://docs.overturemaps.org/blog/2025/06/25/release-notes/) | [`v1.10.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.10.0)| 
-| 21 May 2025	| [`2025-05-21.0`](https://docs.overturemaps.org/blog/2025/05/21/release-notes/) | [`v1.9.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.9.0) | 
-| 23 April 2025 | [`2025-04-23.0`](https://docs.overturemaps.org/blog/2025/04/23/release-notes/) | [`v1.8.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.8.0) | 
-| 20 March 2025 | [`2025-03-19.1`](https://docs.overturemaps.org/blog/2025/03/19/release-notes/) | [`v1.7.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.7.0) |
-| 19 March 2025 | [`2025-03-19.0`](https://docs.overturemaps.org/blog/2025/03/19/release-notes/) | [`v1.7.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.7.0) |
-| 19 February 2025 | [`2025-02-19.0`](https://docs.overturemaps.org/blog/2025/02/19/release-notes/) | [`v1.6.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.6.0) | 
-| 22 January 2025 | [`2025-01-22.0`](https://docs.overturemaps.org/blog/2025/01/22/release-notes/)| [`v1.5.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.5.0) | 
-| 18 December 2024 | [`2024-12-18.0`](https://docs.overturemaps.org/blog/2024-12-18.0/) | [`v1.4.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.4.0) |
-| 13 November 2024	| [`2024-11-13.0`](https://docs.overturemaps.org/blog/2024-11-13.0/) | [`v1.3.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.3.0) | 
-| 23 October 2024 | [`2024-10-23.0`](https://docs.overturemaps.org/blog/2024-10-23.0/) | [`v1.2.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.2.0) | 
-| 18 September 2024 | [`2024-09-18.0`](https://docs.overturemaps.org/blog/2024-09-18.0/) | [`v1.1.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.1.0) |
-| 20 August 2024	| [`2024-08-20.0`](https://docs.overturemaps.org/blog/2024-08-20.0/) | [`v1.1.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.1.0) | 
-| 22 July 2024 | [`2024-07-22.0`](https://docs.overturemaps.org/blog/2024-07-22.0/) | [`v1.0.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.0.0) | 
-| 24 June 2024 | `2024-06-13-beta.1` | `v0.12.0-beta` |
-| 13 June 2024 | `2024-06-13-beta.0` | `v0.12.0-beta` |
-| 16 May 2024	| `2024-05-16-beta.0` | `v0.11.0-beta` | 
-| 16 April 2024 | `2024-04-16-beta.0` | `v0.10.0-beta` | 
-| 12 March 2024 | `2024-03-12-alpha.0` | `v0.9.0` |
-| 15 February 2024	| `2024-02-15-alpha.0` | `v0.8.0` | 
-| 17 January 2024 | `2024-01-17-alpha.0` | `v0.7.0` | 
-| 14 December 2023 | `2023-12-14-alpha.0` | `v0.7.0` |
-| 14 November 2023 | `2023-11-14-alpha.0` | `v0.6.0` |
-| 19 October 2023	| `2023-10-19-alpha.0` | `v0.5.0`| 
-| 26 July 2023 | `2023-07-26-alpha.0` | `v0.4.0`  | 
+| 20 August 2025    | [`2025-08-20.0`](https://docs.overturemaps.org/blog/2025/08/20/release-notes/) | [`v1.11.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.11.0) |
+| 23 July 2025      | [`2025-07-23.0`](https://docs.overturemaps.org/blog/2025/07/23/release-notes/) | [`v1.11.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.11.0) |
+| 25 June 2025      | [`2025-06-25.0`](https://docs.overturemaps.org/blog/2025/06/25/release-notes/) | [`v1.10.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.10.0) |
+| 21 May 2025       | [`2025-05-21.0`](https://docs.overturemaps.org/blog/2025/05/21/release-notes/) | [`v1.9.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.9.0)   |
+| 23 April 2025     | [`2025-04-23.0`](https://docs.overturemaps.org/blog/2025/04/23/release-notes/) | [`v1.8.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.8.0)   |
+| 20 March 2025     | [`2025-03-19.1`](https://docs.overturemaps.org/blog/2025/03/19/release-notes/) | [`v1.7.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.7.0)   |
+| 19 March 2025     | [`2025-03-19.0`](https://docs.overturemaps.org/blog/2025/03/19/release-notes/) | [`v1.7.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.7.0)   |
+| 19 February 2025  | [`2025-02-19.0`](https://docs.overturemaps.org/blog/2025/02/19/release-notes/) | [`v1.6.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.6.0)   |
+| 22 January 2025   | [`2025-01-22.0`](https://docs.overturemaps.org/blog/2025/01/22/release-notes/) | [`v1.5.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.5.0)   |
+| 18 December 2024  | [`2024-12-18.0`](https://docs.overturemaps.org/blog/2024-12-18.0/)             | [`v1.4.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.4.0)   |
+| 13 November 2024  | [`2024-11-13.0`](https://docs.overturemaps.org/blog/2024-11-13.0/)             | [`v1.3.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.3.0)   |
+| 23 October 2024   | [`2024-10-23.0`](https://docs.overturemaps.org/blog/2024-10-23.0/)             | [`v1.2.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.2.0)   |
+| 18 September 2024 | [`2024-09-18.0`](https://docs.overturemaps.org/blog/2024-09-18.0/)             | [`v1.1.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.1.0)   |
+| 20 August 2024    | [`2024-08-20.0`](https://docs.overturemaps.org/blog/2024-08-20.0/)             | [`v1.1.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.1.0)   |
+| 22 July 2024      | [`2024-07-22.0`](https://docs.overturemaps.org/blog/2024-07-22.0/)             | [`v1.0.0`](https://github.com/OvertureMaps/schema/releases/tag/v1.0.0)   |
+| 24 June 2024      | `2024-06-13-beta.1`                                                            | `v0.12.0-beta`                                                           |
+| 13 June 2024      | `2024-06-13-beta.0`                                                            | `v0.12.0-beta`                                                           |
+| 16 May 2024       | `2024-05-16-beta.0`                                                            | `v0.11.0-beta`                                                           |
+| 16 April 2024     | `2024-04-16-beta.0`                                                            | `v0.10.0-beta`                                                           |
+| 12 March 2024     | `2024-03-12-alpha.0`                                                           | `v0.9.0`                                                                 |
+| 15 February 2024  | `2024-02-15-alpha.0`                                                           | `v0.8.0`                                                                 |
+| 17 January 2024   | `2024-01-17-alpha.0`                                                           | `v0.7.0`                                                                 |
+| 14 December 2023  | `2023-12-14-alpha.0`                                                           | `v0.7.0`                                                                 |
+| 14 November 2023  | `2023-11-14-alpha.0`                                                           | `v0.6.0`                                                                 |
+| 19 October 2023   | `2023-10-19-alpha.0`                                                           | `v0.5.0`                                                                 |
+| 26 July 2023      | `2023-07-26-alpha.0`                                                           | `v0.4.0`                                                                 |
