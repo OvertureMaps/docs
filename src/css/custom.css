@@ -112,6 +112,10 @@
   font-weight: 500;
 }
 
+[data-theme='dark'] .DocSearch-Input {
+  color: #e6edf3;
+}
+
 /* =================================
    NAVBAR SEARCH — BIGGER & PROMINENT
    ================================= */
