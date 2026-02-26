@@ -52,21 +52,23 @@
 }
 
 [data-theme='light'] .DocSearch {
-  --docsearch-primary-color: var(--ifm-color-black);
-  --docsearch-text-color: var(--ifm-font-color-primary);
-  --docsearch-muted-color: var(--ifm-color-black);
-  --docsearch-container-background: rgba(94, 100, 112, 0.7);
+  --docsearch-primary-color: #3a48b8;
+  --docsearch-text-color: #1a1a2e;
+  --docsearch-muted-color: #495057;
+  --docsearch-container-background: rgba(0, 0, 0, 0.6);
   /* Modal */
-  --docsearch-modal-background: var(--ifm-color-black);
+  --docsearch-modal-background: #ffffff;
+  --docsearch-modal-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   /* Search box */
-  --docsearch-searchbox-background: var(--ifm-background-color);
-  --docsearch-searchbox-focus-background: var(--ifm-color-white);
+  --docsearch-searchbox-background: #f1f3f5;
+  --docsearch-searchbox-focus-background: #ffffff;
   /* Hit */
-  --docsearch-hit-color: var(--ifm-font-color-base);
-  --docsearch-hit-active-color: var(--ifm-color-white);
-  --docsearch-hit-background: var(--ifm-color-white);
+  --docsearch-hit-color: #1a1a2e;
+  --docsearch-hit-active-color: #ffffff;
+  --docsearch-hit-background: #ffffff;
   /* Footer */
-  --docsearch-footer-background: var(--ifm-color-white);
+  --docsearch-footer-background: #ffffff;
+  --docsearch-footer-shadow: 0 -1px 0 0 #dee2e6;
 }
 
 [data-theme='dark'] .DocSearch {
@@ -92,7 +94,75 @@
   );
 }
 
-/* Header Icons */
+/* =================================
+   DOCSEARCH MODAL SIZE & POSITION
+   ================================= */
+
+/* Wider, centered modal */
+.DocSearch-Modal {
+  max-width: 800px;
+  margin: 10vh auto;
+}
+
+/* Larger search input inside modal */
+.DocSearch-Input {
+  font-size: 1.2rem;
+  padding: 0.75rem 1rem;
+  color: #1a1a2e;
+  font-weight: 500;
+}
+
+/* =================================
+   NAVBAR SEARCH — BIGGER & PROMINENT
+   ================================= */
+
+.navbar .DocSearch-Button {
+  padding: 0.35rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #3a48b8;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(58, 72, 184, 0.3);
+  transition: all 0.2s ease;
+}
+
+.navbar .DocSearch-Button:hover {
+  background: #2c2e7f;
+  box-shadow: 0 4px 12px rgba(58, 72, 184, 0.4);
+  transform: translateY(-1px);
+}
+
+.navbar .DocSearch-Button-Placeholder {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar .DocSearch-Search-Icon {
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar .DocSearch-Button-Keys kbd {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  box-shadow: none;
+}
+
+[data-theme='dark'] .navbar .DocSearch-Button {
+  background: #3a48b8;
+  box-shadow: 0 2px 8px rgba(58, 72, 184, 0.4);
+}
+
+[data-theme='dark'] .navbar .DocSearch-Button:hover {
+  background: #5362d1;
+  box-shadow: 0 4px 12px rgba(58, 72, 184, 0.5);
+}
+
+/* =================================
+   HEADER ICONS
+   ================================= */
 
 .github-link {
   width: 32px;
@@ -120,9 +190,9 @@
     0 0 / contain;
 }
 
-/* =================================>>>>>>> REPLACE
+/* =================================
    SMART TABLE STYLING
-   ======================================== */
+   ================================= */
 
 /* Smart table container */
 .smart-table-container {
