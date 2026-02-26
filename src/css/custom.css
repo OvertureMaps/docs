@@ -1,3 +1,4 @@
+
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
@@ -20,7 +21,6 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='light'] {
   --ifm-color-primary: #2c2e7f;
   --ifm-color-primary-dark: #3a48b8;
@@ -94,17 +94,11 @@
   );
 }
 
-/* =================================
-   DOCSEARCH MODAL SIZE & POSITION
-   ================================= */
-
-/* Wider, centered modal */
 .DocSearch-Modal {
   max-width: 800px;
   margin: 10vh auto;
 }
 
-/* Larger search input inside modal */
 .DocSearch-Input {
   font-size: 1.2rem;
   padding: 0.75rem 1rem;
@@ -116,23 +110,19 @@
   color: #e6edf3;
 }
 
-/* =================================
-   NAVBAR SEARCH — BIGGER & PROMINENT
-   ================================= */
-
 .navbar .DocSearch-Button {
   padding: 0.35rem 1rem;
   border-radius: 8px;
   border: none;
-  background: #3a48b8;
+  background: rgba(58, 72, 184, 0.8);
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(58, 72, 184, 0.3);
+  box-shadow: 0 2px 8px rgba(58, 72, 184, 0.2);
   transition: all 0.2s ease;
 }
 
 .navbar .DocSearch-Button:hover {
-  background: #2c2e7f;
-  box-shadow: 0 4px 12px rgba(58, 72, 184, 0.4);
+  background: rgba(58, 72, 184, 0.9);
+  box-shadow: 0 4px 12px rgba(58, 72, 184, 0.3);
   transform: translateY(-1px);
 }
 
@@ -155,13 +145,13 @@
 }
 
 [data-theme='dark'] .navbar .DocSearch-Button {
-  background: #3a48b8;
-  box-shadow: 0 2px 8px rgba(58, 72, 184, 0.4);
+  background: rgba(58, 72, 184, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme='dark'] .navbar .DocSearch-Button:hover {
-  background: #5362d1;
-  box-shadow: 0 4px 12px rgba(58, 72, 184, 0.5);
+  background: rgba(83, 98, 209, 0.75);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* =================================
