@@ -1,9 +1,6 @@
 ---
 title: Land cover is live
-authors:
-  name: Dana Bauer
-  title: Technical Product Manager, Overture Maps
-  email: dana@overturemaps.org
+authors: dana
 tags:
   - base
 ---
@@ -16,7 +13,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Mapmakers rejoice!
 
-The [May release](https://docs.overturemaps.org/release/latest) of Overture Maps includes new high-resolution land cover data *and* new cartographic schema properties.
+The [May release](https://docs.overturemaps.org/release/latest) of Overture Maps includes new high-resolution land cover data _and_ new cartographic schema properties.
 
 <!-- truncate -->
 
@@ -26,20 +23,19 @@ Our May release also includes [schema properties](https://docs.overturemaps.org/
 
 ## Exploring land cover
 
-In the notebook example below, we'll show you how to extract, process, and visualize land cover data for an area of interest using [lonboard](https://developmentseed.org/lonboard/latest/) and the [Overture Maps Python command-line tool](https://github.com/OvertureMaps/overturemaps-py). We recommend that you consult [this example](https://developmentseed.org/lonboard/latest/examples/overture-maps/ ) in the lonboard docs to better understand the methods used here. You can view and download the complete notebook on [Notebook Sharing Space](https://notebooksharing.space/view/b63f6b3dda1da99c45caf53284fbc508aaae0a43480b43bb0316db636c5e6677).
-
+In the notebook example below, we'll show you how to extract, process, and visualize land cover data for an area of interest using [lonboard](https://developmentseed.org/lonboard/latest/) and the [Overture Maps Python command-line tool](https://github.com/OvertureMaps/overturemaps-py). We recommend that you consult [this example](https://developmentseed.org/lonboard/latest/examples/overture-maps/) in the lonboard docs to better understand the methods used here. You can view and download the complete notebook on [Notebook Sharing Space](https://notebooksharing.space/view/b63f6b3dda1da99c45caf53284fbc508aaae0a43480b43bb0316db636c5e6677).
 
 ![land cover](/img/blog/notebook-overture-lc.png)
 
- To follow along, you'll need to have [JupyterLab or Jupyter Notebook](https://jupyter.org/) running and the following dependencies installed:
- - [lonboard](https://developmentseed.org/lonboard/latest/#install)
- - [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
- - [pandas](https://pandas.pydata.org/)
- - [GeoPandas](https://geopandas.org/en/stable/index.html)
- - [Shapely](https://shapely.readthedocs.io/en/stable/index.html)
+To follow along, you'll need to have [JupyterLab or Jupyter Notebook](https://jupyter.org/) running and the following dependencies installed:
 
+- [lonboard](https://developmentseed.org/lonboard/latest/#install)
+- [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
+- [pandas](https://pandas.pydata.org/)
+- [GeoPandas](https://geopandas.org/en/stable/index.html)
+- [Shapely](https://shapely.readthedocs.io/en/stable/index.html)
 
-``` python
+```python
 import pandas as pd
 import geopandas as gpd
 import overturemaps
@@ -48,28 +44,28 @@ from lonboard import Map, PolygonLayer
 from lonboard.colormap import apply_categorical_cmap
 ```
 
-``` python
+```python
 # specify bounding box
 bbox =  -78.6429, 39.463, -73.7806, 41.6242
 ```
 
-``` python
+```python
 # read in Overture Maps land_cover data type
 table = overturemaps.record_batch_reader("land_cover", bbox).read_all()
 table = table.combine_chunks()
 ```
 
-``` python
+```python
 # convert to dataframe
 df = table.to_pandas()
 ```
 
-``` python
+```python
 # filter for higher resolution land_cover features
 df_h = df[df.cartography.apply(lambda x: x['min_zoom'] == 8)]
 ```
 
-``` python
+```python
 # create color map for land_cover subtypes, loosely based on natural-color palette: https://www.shadedrelief.com/shelton/c.html
 color_map = {
     "urban": [167, 162, 186],
@@ -85,12 +81,12 @@ color_map = {
 }
 ```
 
-``` python
+```python
 # apply color map to land_cover subtypes
 colors = apply_categorical_cmap(df_h.subtype, color_map)
 ```
 
-``` python
+```python
 # dataframe to geodataframe, set crs
 gdf = gpd.GeoDataFrame(
     df_h,
@@ -99,7 +95,7 @@ gdf = gpd.GeoDataFrame(
 )
 ```
 
-``` python
+```python
 # create map layer
 layer = PolygonLayer.from_geopandas(
     gdf= gdf[['id','subtype', 'cartography', 'geometry']].reset_index(drop=True),
@@ -108,7 +104,7 @@ layer = PolygonLayer.from_geopandas(
 )
 ```
 
-``` python
+```python
 #render map
 view_state = {
     "longitude": -76.2,
