@@ -14,10 +14,10 @@ Connectors are compatible with GeoJSON Point features.
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
 | `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Position of the connector |
-| `theme` | `"transportation"` |  |
-| `type` | `"connector"` |  |
-| `version` | [`FeatureVersion`](../core/feature_version.md) |  |
+| `geometry` | `geometry` | Position of the connector<br/>*Allowed geometry types: Point* |
+| `theme` | `"transportation"` | |
+| `type` | `"connector"` | |
+| `version` | [`FeatureVersion`](../core/feature_version.md) | |
 | `sources[]` | [`Sources`](../core/sources.md) (list, optional) | Information about the source data used to assemble the feature. |
 | `sources[].property` | [`JsonPointer`](../system/json_pointer.md) | A JSON Pointer identifying the property (field) that this source information applies to.<br/><br/>The root document value `""` indicates that this source information applies to the entire feature, excepting properties (fields) for which a dedicated source information record exists.<br/><br/>Any other JSON Pointer apart from `""` indicates that this source record provides dedicated source information for the property at the path in the JSON Pointer. As an example, the value `"/names/common/en"` indicates that the source information applies to the English common name of a named feature, while the value `"/geometry"` indicates that it applies to the feature geometry. |
 | `sources[].dataset` | `string` | Name of the dataset where the source data can be found. |

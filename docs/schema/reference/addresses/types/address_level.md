@@ -19,7 +19,7 @@ countries and regions, address levels do not necessarily correspond to administr
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `value` | [`StrippedString`](../../system/stripped_string.md) (optional) | A string without leading or trailing whitespace |
+| `value` | [`StrippedString`](../../system/stripped_string.md) (optional) | A string without leading or trailing whitespace<br/>*`minimum length: 1`* |
 
 ## Used By
 

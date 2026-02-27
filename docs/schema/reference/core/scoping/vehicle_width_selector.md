@@ -6,9 +6,9 @@ Selects vehicles based on their width.
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `dimension` | `"width"` |  |
-| `comparison` | [`VehicleRelation`](vehicle_relation.md) |  |
-| `value` | `float64` | Vehicle width selection threshold in the given `unit` |
+| `dimension` | `"width"` | |
+| `comparison` | [`VehicleRelation`](vehicle_relation.md) | |
+| `value` | `float64` | Vehicle width selection threshold in the given `unit`<br/>*`≥ 0`* |
 | `unit` | [`LengthUnit`](../length_unit.md) | Width unit in which `value` is expressed |
 
 ## Used By

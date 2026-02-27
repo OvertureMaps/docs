@@ -7,7 +7,7 @@ segment.
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `connector_id` | [`Id`](../../system/ref/id.md) | A unique identifier |
+| `connector_id` | [`Id`](../../system/ref/id.md) | A unique identifier<br/>*References [`Connector`](../connector.md) (connects to)* |
 | `at` | [`LinearlyReferencedPosition`](../../core/scoping/linearly_referenced_position.md) (optional) | The linearly-referenced position on the geometry, specified as a percentage displacement from the start of the geometry, that the containing ConnectorReference applies to. |
 
 ## Used By

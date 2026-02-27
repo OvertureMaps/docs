@@ -6,8 +6,8 @@ Multilingual names container.
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
-| `common` | [`CommonNames`](common_names.md) (map, optional) |  |
+| `primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name.<br/>*`minimum length: 1`* |
+| `common` | [`CommonNames`](common_names.md) (map, optional) | |
 | `rules[]` | `list<`[`NameRule`](name_rule.md)`>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
 | `rules[].value` | [`StrippedString`](../system/stripped_string.md) | The actual name value. |
 | `rules[].variant` | [`NameVariant`](name_variant.md) | The name variant for this name rule. |

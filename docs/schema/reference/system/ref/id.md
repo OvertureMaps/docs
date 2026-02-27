@@ -7,7 +7,7 @@ Underlying type: `string`
 ## Constraints
 
 - `minimum length: 1`
-- Allows only strings that contain no whitespace characters. (`NoWhitespaceConstraint`, pattern: `^\S+$`)
+- Allows only strings that contain no whitespace characters. (`NoWhitespaceConstraint`, pattern: `^\S+$`) (from [`NoWhitespaceString`](../no_whitespace_string.md))
 
 ## Used By
 
