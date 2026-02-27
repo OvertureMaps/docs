@@ -18,10 +18,10 @@ TODO: Explain relationship to `Land` features.
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
 | `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Geometry of the land use area, which may be a point, line string, polygon, or multi-polygon. |
-| `theme` | `"base"` |  |
-| `type` | `"land_use"` |  |
-| `version` | [`FeatureVersion`](../core/feature_version.md) |  |
+| `geometry` | `geometry` | Geometry of the land use area, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
+| `theme` | `"base"` | |
+| `type` | `"land_use"` | |
+| `version` | [`FeatureVersion`](../core/feature_version.md) | |
 | `sources[]` | [`Sources`](../core/sources.md) (list, optional) | Information about the source data used to assemble the feature. |
 | `sources[].property` | [`JsonPointer`](../system/json_pointer.md) | A JSON Pointer identifying the property (field) that this source information applies to.<br/><br/>The root document value `""` indicates that this source information applies to the entire feature, excepting properties (fields) for which a dedicated source information record exists.<br/><br/>Any other JSON Pointer apart from `""` indicates that this source record provides dedicated source information for the property at the path in the JSON Pointer. As an example, the value `"/names/common/en"` indicates that the source information applies to the English common name of a named feature, while the value `"/geometry"` indicates that it applies to the feature geometry. |
 | `sources[].dataset` | `string` | Name of the dataset where the source data can be found. |
@@ -30,13 +30,13 @@ TODO: Explain relationship to `Land` features.
 | `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
 | `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
-| `class` | [`LandUseClass`](types/land_use_class.md) |  |
-| `subtype` | [`LandUseSubtype`](types/land_use_subtype.md) |  |
+| `class` | [`LandUseClass`](types/land_use_class.md) | |
+| `subtype` | [`LandUseSubtype`](types/land_use_subtype.md) | |
 | `elevation` | [`Elevation`](types/elevation.md) (optional) | Elevation above sea level of the feature in meters. |
-| `surface` | [`SurfaceMaterial`](types/surface_material.md) (optional) |  |
-| `names` | [`Names`](../core/names.md) (optional) |  |
+| `surface` | [`SurfaceMaterial`](types/surface_material.md) (optional) | |
+| `names` | [`Names`](../core/names.md) (optional) | |
 | `names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
-| `names.common` | [`CommonNames`](../core/common_names.md) (map, optional) |  |
+| `names.common` | [`CommonNames`](../core/common_names.md) (map, optional) | |
 | `names.rules[]` | `list<`[`NameRule`](../core/name_rule.md)`>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
 | `names.rules[].value` | [`StrippedString`](../system/stripped_string.md) | The actual name value. |
 | `names.rules[].variant` | [`NameVariant`](../core/name_variant.md) | The name variant for this name rule. |

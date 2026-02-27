@@ -6,9 +6,9 @@ Selects vehicles based on their weight.
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `dimension` | `"weight"` |  |
-| `comparison` | [`VehicleRelation`](vehicle_relation.md) |  |
-| `value` | `float64` | Vehicle weight selection threshold in the given `unit` |
+| `dimension` | `"weight"` | |
+| `comparison` | [`VehicleRelation`](vehicle_relation.md) | |
+| `value` | `float64` | Vehicle weight selection threshold in the given `unit`<br/>*`≥ 0`* |
 | `unit` | [`WeightUnit`](../weight_unit.md) | Weight unit in which `value` is expressed |
 
 ## Used By

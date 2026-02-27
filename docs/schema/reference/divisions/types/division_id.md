@@ -8,7 +8,7 @@ Underlying type: `string`
 
 - `minimum length: 1`
 - `minimum length: 1` (from [`Id`](../../system/ref/id.md))
-- Allows only strings that contain no whitespace characters. (`NoWhitespaceConstraint`, pattern: `^\S+$`)
+- Allows only strings that contain no whitespace characters. (`NoWhitespaceConstraint`, pattern: `^\S+$`) (from [`NoWhitespaceString`](../../system/no_whitespace_string.md))
 
 ## Used By
 

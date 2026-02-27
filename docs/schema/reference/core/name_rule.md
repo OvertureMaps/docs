@@ -18,7 +18,7 @@ Examples might include:
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `value` | [`StrippedString`](../system/stripped_string.md) | The actual name value. |
+| `value` | [`StrippedString`](../system/stripped_string.md) | The actual name value.<br/>*`minimum length: 1`* |
 | `variant` | [`NameVariant`](name_variant.md) | The name variant for this name rule. |
 | `language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `perspectives` | [`Perspectives`](perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |

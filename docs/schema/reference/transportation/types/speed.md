@@ -7,7 +7,7 @@ A speed value, i.e. a certain number of distance units travelled per unit time.
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `value` | [`SpeedValue`](speed_value.md) | Speed value |
-| `unit` | [`SpeedUnit`](../../core/speed_unit.md) |  |
+| `unit` | [`SpeedUnit`](../../core/speed_unit.md) | |
 
 ## Used By
 

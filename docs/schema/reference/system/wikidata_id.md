@@ -1,6 +1,6 @@
 # WikidataId
 
-A wikidata ID, as found on [https://www.wikidata.org/.](https://www.wikidata.org/.)
+A wikidata ID, as found on [https://www.wikidata.org/](https://www.wikidata.org/).
 
 - `"Q42"`
 - `"Q11643"`
