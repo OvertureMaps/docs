@@ -76,6 +76,10 @@ Places are point representations of real-world facilities, businesses, services,
 | Column | Value |
 | -------: | ------- |
 | `id` | `99003ee6-e75b-4dd6-8a8a-53a5a716c50d` |
+| `bbox.xmin` | `-150.46875` |
+| `bbox.xmax` | `-150.46875` |
+| `bbox.ymin` | `-79.17134094238281` |
+| `bbox.ymax` | `-79.17133331298828` |
 | `geometry` | `POINT (-150.46875 -79.1713346)` |
 | `theme` | `places` |
 | `type` | `place` |

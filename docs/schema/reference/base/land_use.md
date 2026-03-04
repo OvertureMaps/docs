@@ -55,6 +55,10 @@ TODO: Explain relationship to `Land` features.
 | Column | Value |
 | -------: | ------- |
 | `id` | `1e1f6095-5bd2-3fdb-a422-41351b848e9d` |
+| `bbox.xmin` | `-176.56825256347656` |
+| `bbox.xmax` | `-176.56231689453125` |
+| `bbox.ymin` | `-43.96001052856445` |
+| `bbox.ymax` | `-43.95420837402344` |
 | `geometry` | `POLYGON ((-176.5623454 -43.9567812, -176.5627644 -43.9561272, -176.5626898 -43.9557432, -176.5624297...` |
 | `theme` | `base` |
 | `type` | `land_use` |

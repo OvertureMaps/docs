@@ -50,6 +50,10 @@ such as bridges, airports, runways, aerialways, communication towers, and power 
 | Column | Value |
 | -------: | ------- |
 | `id` | `e9e3d506-89c0-3473-8cee-5e5ac6596d6c` |
+| `bbox.xmin` | `-180.0` |
+| `bbox.xmax` | `-179.99998474121094` |
+| `bbox.ymin` | `-82.42408752441406` |
+| `bbox.ymax` | `-82.42407989501953` |
 | `geometry` | `POINT (-179.9999994 -82.42408)` |
 | `theme` | `base` |
 | `type` | `infrastructure` |

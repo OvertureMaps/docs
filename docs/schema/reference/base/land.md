@@ -60,6 +60,10 @@ TODO: Update this description when the relationship to `land_cover` is better un
 | Column | Value |
 | -------: | ------- |
 | `id` | `70fc3596-a987-3fea-820c-c016c0a2f0da` |
+| `bbox.xmin` | `-178.7000274658203` |
+| `bbox.xmax` | `-178.6999969482422` |
+| `bbox.ymin` | `-85.45001220703125` |
+| `bbox.ymax` | `-85.44999694824219` |
 | `geometry` | `POINT (-178.7 -85.45)` |
 | `theme` | `base` |
 | `type` | `land` |

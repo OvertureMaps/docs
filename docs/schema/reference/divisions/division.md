@@ -84,6 +84,10 @@ Examples include countries, provinces, cities, towns, neighborhoods, etc.
 | `names.primary` | `Sia'atoutai` |
 | `names.common` | `null` |
 | `id` | `350e85f6-68ba-4114-9906-c2844815988b` |
+| `bbox.xmin` | `-175.25515747070312` |
+| `bbox.xmax` | `-175.255126953125` |
+| `bbox.ymin` | `-21.1353702545166` |
+| `bbox.ymax` | `-21.13536834716797` |
 | `geometry` | `POINT (-175.2551522 -21.1353686)` |
 | `theme` | `divisions` |
 | `type` | `division` |

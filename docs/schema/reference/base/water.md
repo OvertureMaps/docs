@@ -71,6 +71,10 @@ and `water=*`.
 | Column | Value |
 | -------: | ------- |
 | `id` | `6bbb5fe5-bf26-3efa-b120-0a7079b60840` |
+| `bbox.xmin` | `-177.03179931640625` |
+| `bbox.xmax` | `-177.0317840576172` |
+| `bbox.ymin` | `-84.93480682373047` |
+| `bbox.ymax` | `-84.9347915649414` |
 | `geometry` | `POINT (-177.031799 -84.934793)` |
 | `theme` | `base` |
 | `type` | `water` |

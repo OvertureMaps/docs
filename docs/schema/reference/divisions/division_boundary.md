@@ -51,6 +51,10 @@ Some boundaries may be disputed by the divisions on one or both sides.
 | Column | Value |
 | -------: | ------- |
 | `id` | `2bdf68e4-860d-3d8c-a472-ccf439a5302a` |
+| `bbox.xmin` | `-147.06483459472656` |
+| `bbox.xmax` | `-147.04847717285156` |
+| `bbox.ymin` | `-15.4231538772583` |
+| `bbox.ymax` | `-15.151169776916504` |
 | `geometry` | `LINESTRING (-147.064823 -15.4231537, -147.0519131 -15.2885069, -147.048482 -15.1511701)` |
 | `theme` | `divisions` |
 | `type` | `division_boundary` |

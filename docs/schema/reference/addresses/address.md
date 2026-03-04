@@ -51,6 +51,10 @@ provinces, state, and regions, and similar addressing units are found.
 | Column | Value |
 | -------: | ------- |
 | `id` | `416ab01c-d836-4c4f-aedc-2f30941ce94d` |
+| `bbox.xmin` | `-176.56381225585938` |
+| `bbox.xmax` | `-176.56378173828125` |
+| `bbox.ymin` | `-43.94719696044922` |
+| `bbox.ymax` | `-43.94718933105469` |
 | `geometry` | `POINT (-176.5637854 -43.9471955)` |
 | `theme` | `addresses` |
 | `type` | `address` |

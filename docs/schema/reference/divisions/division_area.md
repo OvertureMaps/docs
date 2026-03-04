@@ -64,6 +64,10 @@ belongs to.
 | `names.common` | `null` |
 | `names.rules` | `null` |
 | `id` | `eb9b112f-ec3c-47f7-b519-6f9f2e6fc2bd` |
+| `bbox.xmin` | `-174.97535705566406` |
+| `bbox.xmax` | `-174.90040588378906` |
+| `bbox.ymin` | `-21.473018646240234` |
+| `bbox.ymax` | `-21.283489227294922` |
 | `geometry` | `MULTIPOLYGON (((-174.9553949 -21.4730179, -174.9514163 -21.4719978, -174.9520108 -21.4681253, -174.9...` |
 | `theme` | `divisions` |
 | `type` | `division_area` |

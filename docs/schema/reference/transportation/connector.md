@@ -32,6 +32,10 @@ Connectors are compatible with GeoJSON Point features.
 | Column | Value |
 | -------: | ------- |
 | `id` | `39542bee-230f-4b91-b7e5-a9b58e0c59b1` |
+| `bbox.xmin` | `-176.54730224609375` |
+| `bbox.xmax` | `-176.54727172851562` |
+| `bbox.ymin` | `-43.96794891357422` |
+| `bbox.ymax` | `-43.96794128417969` |
 | `geometry` | `POINT (-176.5472979 -43.9679472)` |
 | `theme` | `transportation` |
 | `type` | `connector` |
