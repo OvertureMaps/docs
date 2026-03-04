@@ -6,7 +6,7 @@ The type of object of the destination label.
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `value` | [`StrippedString`](../../system/stripped_string.md) | Names the object that is reached<br/>*Minimum length: 1* |
+| `value` | [`StrippedString`](../../system/stripped_string.md) | Names the object that is reached<br/><br/>*Minimum length: 1* |
 | `type` | [`DestinationLabelType`](destination_label_type.md) | |
 
 ## Used By

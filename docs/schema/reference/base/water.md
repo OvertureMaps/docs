@@ -34,7 +34,7 @@ and `water=*`.
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
 | `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
-| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the water feature, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the water feature, which may be a point, line string, polygon, or multi-polygon.<br/><br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"water"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -48,8 +48,8 @@ and `water=*`.
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
 | `class` | [`WaterClass`](types/water_class.md) (optional) | |
 | `subtype` | [`WaterSubtype`](types/water_subtype.md) (optional) | |
-| `is_intermittent` | `boolean` (optional) | Whether the water body exists intermittently, not permanently<br/>*`strict=True`* |
-| `is_salt` | `boolean` (optional) | Whether the water body contains salt water<br/>*`strict=True`* |
+| `is_intermittent` | `boolean` (optional) | Whether the water body exists intermittently, not permanently<br/><br/>*`strict=True`* |
+| `is_salt` | `boolean` (optional) | Whether the water body contains salt water<br/><br/>*`strict=True`* |
 | `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
 | `names` | [`Names`](../core/names.md) (optional) | |
 | `names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |

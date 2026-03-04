@@ -18,7 +18,7 @@ TODO: Explain relationship to `Land` features.
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
 | `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
-| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the land use area, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the land use area, which may be a point, line string, polygon, or multi-polygon.<br/><br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"land_use"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |

@@ -13,7 +13,7 @@ lake beds or ocean floors.
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
 | `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
-| `geometry` | [`geometry`](../system/primitive/geometry.md) | Shape of the underwater area, which may be a polygon or multi-polygon.<br/>*Allowed geometry types: MultiPolygon, Polygon* |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Shape of the underwater area, which may be a polygon or multi-polygon.<br/><br/>*Allowed geometry types: MultiPolygon, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"bathymetry"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |

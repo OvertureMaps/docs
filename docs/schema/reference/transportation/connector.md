@@ -14,7 +14,7 @@ Connectors are compatible with GeoJSON Point features.
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
 | `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
-| `geometry` | [`geometry`](../system/primitive/geometry.md) | Position of the connector<br/>*Allowed geometry types: Point* |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Position of the connector<br/><br/>*Allowed geometry types: Point* |
 | `theme` | `"transportation"` | |
 | `type` | `"connector"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |

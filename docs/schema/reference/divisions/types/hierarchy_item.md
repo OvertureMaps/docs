@@ -8,7 +8,7 @@ One division in a hierarchy.
 | -----: | :----: | ------------- |
 | `division_id` | [`DivisionId`](division_id.md) | ID of the division |
 | `subtype` | [`PlaceType`](place_type.md) | |
-| `name` | [`StrippedString`](../../system/stripped_string.md) | Primary name of the division<br/>*Minimum length: 1* |
+| `name` | [`StrippedString`](../../system/stripped_string.md) | Primary name of the division<br/><br/>*Minimum length: 1* |
 
 ## Used By
 
