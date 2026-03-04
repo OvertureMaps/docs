@@ -168,6 +168,7 @@ function TableGroup({ group, isExpanded, onToggle, searchTerm, level = 0, expand
       <tr className={level > 0 ? `nested-field nested-level-${level}` : ''}>
         <td>
           <code>{highlightText(group.name, searchTerm)}</code>
+          {group.annotation && <em> ({group.annotation})</em>}
         </td>
         <td>{renderRichContent(group.type, searchTerm)}</td>
         <td>{renderRichContent(group.description, searchTerm)}</td>
@@ -194,6 +195,7 @@ function TableGroup({ group, isExpanded, onToggle, searchTerm, level = 0, expand
             </span>
           </button>
           <code>{highlightText(group.name, searchTerm)}</code>
+          {group.annotation && <em> ({group.annotation})</em>}
           {group.children.length > 0 && (
             <span className="child-count" aria-label={`${getTotalChildCount(group)} child fields`}>
               ({getTotalChildCount(group)})
@@ -222,11 +224,16 @@ function TableGroup({ group, isExpanded, onToggle, searchTerm, level = 0, expand
 
 // Auto-detect field groupings based on common prefixes with recursive nesting
 function autoDetectFieldGroups(rows) {
-  const fields = rows.map((row) => ({
-    name: extractFieldName(row[0]), // Extract from first column
-    type: row[1],
-    description: row[2],
-  }));
+  const fields = rows.map((row, index) => {
+    const { name, annotation } = extractFieldName(row[0]);
+    return {
+      name,
+      annotation,
+      type: row[1],
+      description: row[2],
+      originalIndex: index,
+    };
+  });
 
   return buildNestedGroups(fields);
 }
@@ -264,25 +271,32 @@ function buildNestedGroups(fields) {
 
       groups.push({
         name: field.name,
+        annotation: field.annotation,
         type: field.type,
         description: field.description,
         isCollapsible: true,
         children: nestedChildren,
         level: getFieldLevel(field.name),
+        originalIndex: field.originalIndex,
       });
     } else {
       // Standalone field
       groups.push({
         name: field.name,
+        annotation: field.annotation,
         type: field.type,
         description: field.description,
         isCollapsible: false,
         children: [],
         level: getFieldLevel(field.name),
+        originalIndex: field.originalIndex,
       });
     }
     processed.add(field.name);
   }
+
+  // Restore original source order from the markdown
+  groups.sort((a, b) => a.originalIndex - b.originalIndex);
 
   return groups;
 }
@@ -491,11 +505,13 @@ function highlightText(text, searchTerm) {
 }
 
 function extractFieldName(cellContent) {
-  // Extract field name from cell content (remove code formatting, etc.)
-  if (typeof cellContent === 'string') {
-    return cellContent.trim();
+  // Extract field name, separating trailing annotations like (Road)/(Rail)
+  const raw = typeof cellContent === 'string' ? cellContent.trim() : String(cellContent || '').trim();
+  const match = raw.match(/^(.+?)\s*\(([^)]+)\)\s*$/);
+  if (match) {
+    return { name: match[1], annotation: match[2] };
   }
-  return String(cellContent || '').trim();
+  return { name: raw, annotation: null };
 }
 
 function isSchemaTable(headers) {
