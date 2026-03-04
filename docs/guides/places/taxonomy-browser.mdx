@@ -7,14 +7,14 @@ import TaxonomyBrowser from '@site/src/components/taxonomyBrowser';
 import originalCsv from '!!raw-loader!./csv/2025-04-01-Original-Taxonomy.csv';
 import basicLevelCsv from '!!raw-loader!./csv/2025-09-29-Basic-Level-Category.csv';
 import decemberCsv from '!!raw-loader!./csv/2025-12-05-Categories-Hierarchies.csv';
-import februaryCsv from '!!raw-loader!./csv/2026-02-15-categories-hierarchies.csv';
+import marchCsv from '!!raw-loader!./csv/2026-03-04-categories-hierarchies.csv';
 import originalCountsCsv from '!!raw-loader!./csv/2025-04-01-counts.csv';
 import basicLevelCountsCsv from '!!raw-loader!./csv/2025-10-22-counts.csv';
 import decemberCountsCsv from '!!raw-loader!./csv/2025-12-05-counts.csv';
 
 # Taxonomy Browser
 
-Explore and compare Point of Interest classification systems.
+Explore and compare updates to the Overture Taxonomy.
 
 <TaxonomyBrowser releases={[
   {
@@ -78,30 +78,32 @@ Explore and compare Point of Interest classification systems.
     displayFields: null
   },
   {
-    id: 'february',
-    label: 'February (Bug Fixes, Simplified Basic)',
-    releaseUrl: 'https://docs.overturemaps.org/blog/2025/12/17/release-notes/',
-    enabled: false,
+    id: 'march',
+    label: 'March (Bug Fixes, Simplified Basic)',
+    releaseUrl: 'https://docs.overturemaps.org/blog/',
+    enabled: true,
     tags: [
-      { label: '15 February 2026', title: 'Date' },
+      { label: '04 March 2026', title: 'Date' },
       { label: '2025-12-17.0', title: 'Data version' },
       { label: 'v1.15.0', title: 'Schema version' },
     ],
-    dataCsv: februaryCsv,
+    dataCsv: marchCsv,
     countsCsv: null,
     hierarchyField: 'new_primary_hierarchy',
     codeField: 'new_primary_category',
-    fieldNames: ['group', 'level', 'is_basic', 'new_primary_hierarchy', 'new_primary_category', 'new_display_name', 'basic_level_category', 'old_primary_hierarchy', 'old_primary_category', 'added', 'renamed', 'removed', 'redirect_to'],
-    basicCategoryField: 'basic_level_category',
+    fieldNames: ['group', 'level', 'is_basic', 'new_primary_hierarchy', 'new_primary_category', 'new_display_name', 'new_basic_level_category', 'old_primary_hierarchy', 'old_primary_category', 'old_basic_level_category', 'pc_added', 'pc_hierarchy_change', 'pc_name_change', 'pc_removed', 'pc_redirect_to', 'blc_change'],
+    basicCategoryField: 'new_basic_level_category',
     matchColumn: 'old_primary_category',
     matchType: 'new',
     displayFields: [
       { field: 'new_display_name', label: 'Display Name' },
       { field: 'is_basic', label: 'Is Basic' },
-      { field: 'added', label: 'Added' },
-      { field: 'renamed', label: 'Renamed' },
-      { field: 'removed', label: 'Removed' },
-      { field: 'redirect_to', label: 'Redirect To' },
+      { field: 'pc_added', label: 'Primary Category Added' },
+      { field: 'pc_hierarchy_change', label: 'Primary Category Hierarchy Change' },
+      { field: 'pc_name_change', label: 'Primary Category Name Change' },
+      { field: 'pc_removed', label: 'Primary Category Removed' },
+      { field: 'pc_redirect_to', label: 'Primary Category Redirect To' },
+      { field: 'blc_change', label: 'Basic Level Category Change' },
     ],
   },
 ]} />

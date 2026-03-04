@@ -91,6 +91,7 @@ const sidebars = {
           items: [
             'guides/places/overview',
             'guides/places/taxonomy',
+            'guides/places/taxonomy-browser',
           ],
         },
         {

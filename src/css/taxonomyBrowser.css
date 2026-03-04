@@ -535,9 +535,9 @@
   color: var(--ifm-color-emphasis-600);
   font-size: 0.9em;
   font-weight: 400;
-  width: 120px;
-  text-align: right;
+  text-align: left;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .taxonomy-kv-label::after {
