@@ -96,6 +96,7 @@ When category codes change between releases, set `matchColumn` and `matchType` s
   - `'new'` — the `matchColumn` values correspond to the immediately previous release's category codes. Use this when releases change incrementally.
 
 This does two things:
+
 1. **Cross-tab lookup**: entries are also indexed by the `matchColumn` value, so selecting a category on one tab finds the matching data in releases that renamed it.
 2. **Change indicators**: `prevCount` is resolved using the `matchColumn` value against the appropriate prior release's counts.
 
