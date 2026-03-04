@@ -66,7 +66,7 @@ hierarchyField: 'hierarchy_column_name',
 ### Field reference
 
 | Field | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `id` | Yes | Unique identifier for this release |
 | `label` | Yes | Display label shown in the dropdown and section headers |
 | `releaseUrl` | No | Link for the release date tag |
@@ -80,7 +80,7 @@ hierarchyField: 'hierarchy_column_name',
 | `hierarchyField` | * | Single field containing a pre-built `" > "` hierarchy |
 | `basicCategoryField` | No | Field holding the basic-level category label, or `null` |
 | `enabled` | No | Set to `false` to hide this release from the built site. Defaults to `true` |
-| `displayFields` | No | Array of `{ field, label }` for extra key/value rows in the detail panel |
+| `displayFields` | No | Array of `{ field, label }` for extra key-value rows in the detail panel |
 | `matchColumn` | No | Column containing a code from another release for cross-tab matching |
 | `matchType` | No | Which release's codes `matchColumn` maps to: `'original'` or `'new'` |
 
@@ -125,7 +125,7 @@ If `countsCsv` is `null`, the stats row shows "No Data" instead of counts, and t
 
 ### Display fields
 
-Use `displayFields` to show extra key/value rows from the CSV data in the detail panel. Each entry maps a CSV column (`field`) to a label. Fields with empty values are automatically skipped.
+Use `displayFields` to show extra key-value rows from the CSV data in the detail panel. Each entry maps a CSV column (`field`) to a label. Fields with empty values are automatically skipped.
 
 ```jsx
 displayFields: [
@@ -137,7 +137,7 @@ displayFields: [
 These appear after the hierarchy levels and basic category, but before counts and percentile tags. Current releases use:
 
 | Release | Display fields |
-|---|---|
+| --- | --- |
 | April | `category_key` |
 | October | `match_type`, `modified`, `remove_from_v1` |
 | December | `old_primary_category`, `old_primary_hierarchy` |
