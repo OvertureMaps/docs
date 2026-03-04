@@ -29,8 +29,8 @@ belongs to.
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | The area covered by the division with which this area feature is associated<br/>*Allowed geometry types: MultiPolygon, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | The area covered by the division with which this area feature is associated<br/>*Allowed geometry types: MultiPolygon, Polygon* |
 | `theme` | `"divisions"` | |
 | `type` | `"division_area"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |

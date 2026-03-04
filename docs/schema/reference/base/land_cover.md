@@ -19,8 +19,8 @@ TODO: Explain relationship to `Land` features.
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Shape of the covered land area, which may be a polygon or multi-polygon.<br/>*Allowed geometry types: MultiPolygon, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Shape of the covered land area, which may be a polygon or multi-polygon.<br/>*Allowed geometry types: MultiPolygon, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"land_cover"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |

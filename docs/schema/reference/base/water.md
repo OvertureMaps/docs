@@ -33,8 +33,8 @@ and `water=*`.
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Geometry of the water feature, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the water feature, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"water"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
