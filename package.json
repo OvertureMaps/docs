@@ -18,6 +18,8 @@
     "lint:md:fix": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -38,13 +40,17 @@
     "@docusaurus/module-type-aliases": "^3.9.2",
     "@docusaurus/types": "^3.9.2",
     "@eslint/js": "^9.19.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^15.14.0",
+    "jsdom": "^28.1.0",
     "markdownlint-cli": "^0.43.0",
     "prettier": "^3.4.2",
     "typescript": "^5.7.3",
+    "vitest": "^4.0.18",
     "yaml-loader": "^0.8.0"
   },
   "browserslist": {
