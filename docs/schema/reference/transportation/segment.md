@@ -58,7 +58,7 @@ sidebar_position: 1
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `class` *(Road)* | [`RoadClass`](types/road_class.md) | |
@@ -126,7 +126,7 @@ sidebar_position: 1
 | `bbox.xmax` | `-176.56361389160156` |
 | `bbox.ymin` | `-43.954410552978516` |
 | `bbox.ymax` | `-43.953250885009766` |
-| `geometry` | `LINESTRING (-176.5636191 -43.954404, -176.5643637 -43.9538145, -176.5647264 -43.9535274, -176.564994...` |
+| `geometry` | `LINESTRING (-176.5636191 -43.954404, -176.5643637 -43.9538145, -176.5647264 -43.9535274, -176.564...` |
 | `theme` | `transportation` |
 | `type` | `segment` |
 | `version` | `1` |

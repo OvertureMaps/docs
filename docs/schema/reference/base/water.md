@@ -60,7 +60,7 @@ and `water=*`.
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `source_tags` | [`SourceTags`](types/source_tags.md) (map, optional) | Key/value pairs imported directly from the source data without change.<br/><br/>This field provides access to raw OSM entity tags for features sourced from OpenStreetMap. |
@@ -93,6 +93,5 @@ and `water=*`.
 | `names.primary` | `Thanksgiving Point` |
 | `names.common` | `null` |
 | `names.rules` | `null` |
-| `source_tags.natural` | `cape` |
-| `source_tags.ref:linz:place_id` | `13433` |
+| `source_tags` | `{"natural": "cape", "ref:linz:place_id": "13433"}` |
 | `wikidata` | `Q33140589` |

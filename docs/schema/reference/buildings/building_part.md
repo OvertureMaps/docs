@@ -43,7 +43,7 @@ vertical dimension.
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
@@ -71,7 +71,7 @@ vertical dimension.
 | `bbox.xmax` | `-73.24613952636719` |
 | `bbox.ymin` | `-39.81101608276367` |
 | `bbox.ymax` | `-39.81088638305664` |
-| `geometry` | `POLYGON ((-73.2462509 -39.8108937, -73.2462755 -39.8109047, -73.246291 -39.8109182, -73.2463022 -39....` |
+| `geometry` | `POLYGON ((-73.2462509 -39.8108937, -73.2462755 -39.8109047, -73.246291 -39.8109182, -73.2463022 -...` |
 | `theme` | `buildings` |
 | `type` | `building_part` |
 | `version` | `0` |

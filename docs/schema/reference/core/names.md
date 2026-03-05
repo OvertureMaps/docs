@@ -14,7 +14,7 @@ Multilingual names container.
 | `rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `rules[].perspectives` | [`Perspectives`](perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `rules[].perspectives.mode` | [`PerspectiveMode`](perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `rules[].between` | [`LinearlyReferencedRange`](scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `rules[].side` | [`Side`](scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 
