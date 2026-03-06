@@ -18,81 +18,32 @@ import ConnectingSegments from '!!raw-loader!@site/src/queries/athena/transporta
 
 import DocCardList from '@theme/DocCardList';
 
-The Overture transportation theme is the collection of LineString and Point features that describe the infrastructure and conventions of how people and objects travel around the world. The dataset contains two features types: `connector` and `segment`. The three subtypes within `segment` -- `road`, `rail`, and `water` -- contain familiar categories of transportation data: highways, footways, cycleways, railways, ferry routes, and public transportation. 
+Every time you ask for directions, hail a ride, or check a map, you're relying on a model of how the world's roads, rails, and waterways connect. The Overture transportation theme is such a model: a global, open dataset of paths people and vehicles travel, built from OpenStreetMap and enhanced with data from TomTom and other local and regional authoritative data sources.
 
-Most of the data in the transportation theme is sourced from OpenStreetMap. In the `2024-09-18.0` release, we began adding data from TomTom to improve coverage in key areas. 
+The dataset is simple at its core — just two feature types, `segment` and `connector` — but expressive enough to capture highway speed limits that change by time of day, one-way streets that allow buses to go the wrong way, and weight-restricted bridges with axle limits. Three subtypes within `segment` cover `road`, `rail`, and `water` transportation.
 
-You might use the Overture transportation data for:
+The rest of this page covers the feature types and subtypes, describes the dataset and how to access it, and points to tools and libraries for working with the data. The deeper topics are covered in the rest of the guide:
 
-- **mapping:** rendering a map of connected roads and paths.
-- **routing:** calculating optimal routes from place to place.
-- **navigation:** generating granular instructions on the maneuvers needed to
- follow a route.
-- **analytics:** transportation-related analysis including traffic safety
- analysis and disaster planning.
-- **geocoding:** getting the coordinates of street intersections (geocodes) or
- the street intersection near specific coordinates (reverse geocodes).
+- **[Segments and connectors](./segments-and-connectors):** The building blocks of the network. Segments are the paths; connectors are the junctions where they meet. This page covers how they combine to form a routable graph, along with orientation, heading, and how Overture decides where to split a road.
+- **[Linear referencing](./linear-referencing):** How properties can apply to just *part* of a segment — say, the first 500 meters — without chopping the geometry in two. Includes calculation methods and code examples.
+- **[Scoping and travel modes](./scoping-and-travel-modes):** The rule system that makes properties conditional. A speed limit might apply only to trucks, only on weekdays, or only in the forward direction. Scoping is how all of that gets expressed.
+- **[Roads](./roads):** The details specific to road segments — access restrictions, turn restrictions, speed limits, and more.
 
-This guide is an overview of the transportation data. To dig into the details of the schema, see the reference documentation for the [segment](/schema/reference/transportation/segment) and [connector](/schema/reference/transportation/connector) feature types. 
+You might use Overture transportation data for mapping, routing, navigation, or geocoding street intersections. For the full schema details, see the reference documentation.
 
-## Dataset description
 
-All Overture data, including transportation data, is distributed as GeoParquet, a column-based data structure. Below you'll find a table with column-by-column descriptions of the properties in the transportation feature type.
+## Feature types
 
-<details>
- <summary>Schema for GeoParquet files in the transportation theme</summary>
-<div>
-<Tabs>
-<TabItem value="segment" label="segment" default>
+The Overture transportation schema defines two feature types:
 
-| column | type | description |
-| --- | --- | --- |
-| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
-| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
-| subtype | string | The broad category of transportation segment. |
-| class | string | Captures the kind of road and its position in the road network hierarchy. |
-| names | struct | Properties defining the names of a feature. |
-| connectors | struct | Array of connector IDs identifying the connectors this segment is physically connected to linearly referenced with their location. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
-| routes | struct | Routes this segment belongs to. |
-| subclass_rules | struct | Defines the portion of a road that the subclass applies to. |
-| access_restrictions | struct | Rules governing access to this road segment or lane. |
-| level_rules | struct | Defines the Z-order, i.e. stacking order, of the road segment. |
-| destinations | struct | Describes objects that can be reached by following a transportation segment in the same way those objects are described on signposts or ground writing that a traveller following the segment would observe in the real world. This allows navigation systems to refer to signs and observable writing that a traveller actually sees. |
-| prohibited_transitions | struct | Defines where traveling from the segment to another is disallowed for navigation. This covers things situations prohibited turns or a transition from road to bike lane disallowing cars. |
-| road_surface | struct | Defines the surface material on a road such as paved, asphalt, or unpaved. |
-| road_flags | struct | Additional properties relevant to roads such as is_bridge or is_under_construction. |
-| speed_limits | struct | Defines the speed limit of the road segment. |
-| width_rules | struct | Defines the width of the road segment for rendering. |
-| subclass | string | Specifies the usage of a length of road. |
-| rail_flags | struct | Additional properties relevant to rail such as is_tunnel or is_freight. |
-| filename | string | Name of the file being queried. |
-| theme | string | Name of the Overture theme being queried. |
-| type | string | Name of the Overture feature type being queried. |
+- The **segment** type has a LineString geometry that represents the center-line of a path repeatedly traversed by people or objects. Segment properties describe both the physical properties (e.g. road surface and width) and non-physical properties (e.g. access restriction rules) of that path.
+- The **connector** type has a Point geometry that represents the physical positions where two or more segments meet. While topology is defined by the connectors field within the `segment` type, the `connector` type provides a convenient, queryable list of those connection points. Connectors do not have properties beyond geometry and the common properties required for all Overture features.
 
-</TabItem>
-<TabItem value="connector" label="connector" default>
+A more detailed overview of these feature types can be found in [segments and connectors](./segments-and-connectors).
 
-| column | type | description |
-| --- | --- | --- |
-| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
-| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
-| filename | string | Name of the file being queried. |
-| theme | string | Name of the Overture theme being queried. |
-| type | string | Name of the Overture feature type being queried. |
+## Subtypes, classes, and subclasses
 
-</TabItem>
-</Tabs>
-</div>
-</details>
-
-### Subtypes
-Transportation segments are divided into three subtypes: **rail**, **water**, and **road**. The road subtype is then further divided into a variety of different classes based on usage captured in the table below.
+Transportation segments are divided into three subtypes: **rail**, **water**, and **road**. These subtypes are further divided into a variety of different classes based on usage captured in the table below.
 
 <details>
  <summary>Class and subclass feature counts</summary>
@@ -145,6 +96,62 @@ Transportation segments are divided into three subtypes: **rail**, **water**, an
 </div>
 </details>
 
+## Data dictionary
+
+All Overture data, including transportation data, is distributed as GeoParquet, a column-based data structure. Below you'll find tables with column-by-column descriptions of the properties for the segment and connector feature types.
+
+<details>
+ <summary>Data dictionary for the GeoParquet files in the transportation theme</summary>
+<div>
+<Tabs>
+<TabItem value="segment" label="segment" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| subtype | string | The broad category of transportation segment. |
+| class | string | Captures the kind of road and its position in the road network hierarchy. |
+| names | struct | Properties defining the names of a feature. |
+| connectors | struct | Array of connector IDs identifying the connectors this segment is physically connected to linearly referenced with their location. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector. |
+| routes | struct | Routes this segment belongs to. |
+| subclass_rules | struct | Defines the portion of a road that the subclass applies to. |
+| access_restrictions | struct | Rules governing access to this road segment or lane. |
+| level_rules | struct | Defines the Z-order, i.e. stacking order, of the road segment. |
+| destinations | struct | Describes objects that can be reached by following a transportation segment in the same way those objects are described on signposts or ground writing that a traveller following the segment would observe in the real world. This allows navigation systems to refer to signs and observable writing that a traveller actually sees. |
+| prohibited_transitions | struct | Defines where traveling from the segment to another is disallowed for navigation. This covers things situations prohibited turns or a transition from road to bike lane disallowing cars. |
+| road_surface | struct | Defines the surface material on a road such as paved, asphalt, or unpaved. |
+| road_flags | struct | Additional properties relevant to roads such as is_bridge or is_under_construction. |
+| speed_limits | struct | Defines the speed limit of the road segment. |
+| width_rules | struct | Defines the width of the road segment for rendering. |
+| subclass | string | Specifies the usage of a length of road. |
+| rail_flags | struct | Additional properties relevant to rail such as is_tunnel or is_freight. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</TabItem>
+<TabItem value="connector" label="connector" default>
+
+| column | type | description |
+| --- | --- | --- |
+| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
+| geometry | binary | The line representation of the segment's location. Segment's geometry which MUST be a LineSting as defined by GeoJSON schema. |
+| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
+| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
+| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
+| filename | string | Name of the file being queried. |
+| theme | string | Name of the Overture theme being queried. |
+| type | string | Name of the Overture feature type being queried. |
+
+</TabItem>
+</Tabs>
+</div>
+</details>
+
 ## Data access and retrieval
 
 Overture's transportation theme data is freely available on both Amazon S3 and Microsoft Azure Blob Storage at these locations:
@@ -164,9 +171,7 @@ Overture's transportation theme data is freely available on both Amazon S3 and M
 </TabItem>
 </Tabs>
 
-## Data usage guidelines
-
-We recommend downloading only the Overture data you need. If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract places data and output a GeoJSON file.
+We recommend downloading only the Overture data you need. If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract data and output a GeoJSON file.
 
 <Tabs>
 <TabItem value="Python Command-line Tool" label="Python Command-line Tool" default>
@@ -175,7 +180,7 @@ First, follow the [setup guide for the Python Command-line Tool](/getting-data/o
 Set type to either `segment` or `connector` and simply alter the `bbox` value to download a particular area.
 ```
 overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=segment -o rome_segments.geojson
-``` 
+```
 </TabItem>
 <TabItem value="DuckDB" label="DuckDB" default>
 First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
@@ -187,7 +192,7 @@ Replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run th
 </TabItem>
 </Tabs>
 
-## Data manipulation and analysis
+## Querying transportation data
 
 ### Querying by properties in DuckDB
 
@@ -223,44 +228,41 @@ This example selects all the segments that that connect to the example id.
 </TabItem>
 </Tabs>
 
-
 ## Tools and libraries
 
 ### transportation-splitter
 
-| ![Overture Splitter](/img/transportation/splitter_concept.svg) | 
-|:--:| 
-| *Conceptual diagram of the splitter tool output. The numbers following 1234@ represent start_lr and end_lr values.* | 
+| ![Overture Splitter](/img/transportation/splitter_concept.png) |
+|:--|
+| *Conceptual diagram of the splitter tool output. The numbers following 1234@ represent start_lr and end_lr values.* |
 
-The [transportation-spitter tool](https://github.com/OvertureMaps/transportation-splitter) transforms Overture road data into simpler sub segments. It will optionally divide features at each connector point and at each change of a [scoped based property](/schema/reference/core/scoping/linearly_referenced_range), depending on configuration. Depending on your needs and map stack, the resulting dataset may be easier to manipulate than the original Overture data as each segment will only have connections at either end and have one set of properties for its entire length.
+The [transportation-spitter tool](https://github.com/OvertureMaps/transportation-splitter) transforms Overture road data into simpler sub-segments. It will optionally divide features at each connector point and at each change of a [scoped based property](/schema/reference/core/scoping/linearly_referenced_range), depending on configuration. Depending on your needs and map stack, the resulting dataset may be easier to manipulate than the original Overture data as each segment will only have connections at either end and have one set of properties for its entire length.
 
-Since a GERS ID will no longer be unique with this output, the resulting data will have two additional columns: `start_lr` and `end_lr` which are linear references describing which section of the orginal feature this new segment comes from.
+Since a GERS ID will no longer be unique with this output, the resulting data will have two additional columns: `start_lr` and `end_lr` which are linear references describing which section of the original feature this new segment comes from.
 
-#### Splitter Example
-To help visualize this process better, here is a real world example of a residential street in OpenStreetMap, Overture, and after being run through the splitter tool.
+#### Splitter example
+To help visualize this process better, here is a real-world example of a residential street in OpenStreetMap, Overture, and after being run through the splitter tool.
 <Tabs>
 <TabItem value="OpenStreetMap" label="OpenStreetMap" default>
 | ![OpenStreetMap Splitter Example](/img/transportation/splitter_osm.png) |
-|:--:| 
+|:--|
 | In OpenStreetMap this residential road is represented by two different features with the same tags with feature 1 having an additional restricted access tag. |
 </TabItem>
 <TabItem value="Overture" label="Overture" default>
 | ![Overture Splitter Example](/img/transportation/splitter_overture.png) |
-|:--:| 
-| In Overture the two segments have been combined into one feature and the restricted access tag has been stored as this linear reference in **access_restrictions**: 
-`[{'access_type': allowed, 'when': {'during': , 'heading': , 'using': , 'recognized': [as_private], 'mode': , 'vehicle': }, 'between': [0.521962729, 1.0]}]` | 
+|:--|
+| In Overture the two segments have been combined into one feature and the restricted access tag has been stored as this linear reference in **access_restrictions**:
+`[{'access_type': allowed, 'when': {'during': , 'heading': , 'using': , 'recognized': [as_private], 'mode': , 'vehicle': }, 'between': [0.521962729, 1.0]}]` |
 </TabItem>
 <TabItem value="Transportation Splitter" label="Transportation Splitter" default>
 ![Splitter Output Example](/img/transportation/splitter_output.png)
-|:--:| 
+|:--|
 | The splitter has sliced the Overture feature at each connector point for the driveways as well as at the point where the access restriction begins. This results in six unique features in the output all still sharing the same GERS ID. |
 </TabItem>
 </Tabs>
 
-#### More Information and Feedback
+#### More information and feedback
 
-The tool requires a Spark environment to run and has been tested using Azure Databricks and AWS Glue. For set up information the [transportation-spitter GitHub](https://github.com/OvertureMaps/transportation-splitter) will contain the most up to date information as the tool is in active development still.
+The tool requires a Spark environment to run and has been tested using Azure Databricks and AWS Glue. For setup information the [transportation-spitter GitHub](https://github.com/OvertureMaps/transportation-splitter) will contain the most up-to-date information as the tool is in active development still.
 
 If you have feedback, questions, etc. on the tool you can create an [issue](https://github.com/OvertureMaps/transportation-splitter/issues) on the GitHub.
-
-
