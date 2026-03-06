@@ -1,7 +1,6 @@
 import React from 'react';
-import Layout from '@theme/Layout';
 import RotatingWord from '@site/src/components/RotatingWord';
-import styles from './index.module.css';
+import styles from './home.module.css';
 
 const STATS = [
   { number: '4B+',  label: 'map features globally' },
@@ -12,11 +11,7 @@ const STATS = [
 
 export default function Home() {
   return (
-    <Layout
-      title="Open Map Data for Everyone"
-      description="A project building open, reliable, and interoperable map data for the world."
-    >
-      {/* HERO TEXT */}
+    <>
       <section className={styles.hero}>
         <div className={styles.headline}>
           <div className={styles.headlineTop}>
@@ -42,12 +37,11 @@ export default function Home() {
             Explore the data
           </a>
           <a href="/getting-data/index" className={styles.btnSecondary}>
-            Read the docs →
+            Read the docs {'\u2192'}
           </a>
         </div>
       </section>
 
-      {/* EXPLORER EMBED */}
       <div className={styles.explorerSection}>
         <div className={styles.explorerFrame}>
           <iframe
@@ -62,7 +56,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Open full screen ↗
+            Open full screen {'\u2197'}
           </a>
         </div>
         <p className={styles.explorerCaption}>
@@ -70,7 +64,6 @@ export default function Home() {
         </p>
       </div>
 
-      {/* STATS */}
       <div className={styles.statsSection}>
         <hr className={styles.statsDivider} />
         <div className={styles.stats}>
@@ -82,6 +75,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
