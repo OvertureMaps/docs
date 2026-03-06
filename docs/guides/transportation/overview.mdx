@@ -37,7 +37,7 @@ You might use Overture transportation data for mapping, routing, navigation, or 
 The Overture transportation schema defines two feature types:
 
 - The **segment** type has a LineString geometry that represents the center-line of a path repeatedly traversed by people or objects. Segment properties describe both the physical properties (e.g. road surface and width) and non-physical properties (e.g. access restriction rules) of that path.
-- The **connector** type has a Point geometry that defines the topology of the transportation network by representing the physical connection between two or more segments. Connectors do not have properties beyond geometry and the common properties required for all Overture features.
+- The **connector** type has a Point geometry that represents the physical positions where two or more segments meet. While topology is defined by the connectors field within the `segment` type, the `connector` type provides a convenient, queryable list of those connection points. Connectors do not have properties beyond geometry and the common properties required for all Overture features.
 
 A more detailed overview of these feature types can be found in [segments and connectors](./segments-and-connectors).
 
