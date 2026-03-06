@@ -3,13 +3,16 @@ import Layout from '@theme/Layout';
 import styles from './index.module.css';
 
 const WORDS = [
-  'open map data.',
+  'free and open map data.',
+  'a modular, extendable schema.',
+  'stable UUIDs for the world.',
   'shared infrastructure.',
-  'a cross-sector collaboration.',
+  'cross-sector collaboration.',
+  'an invitation to build and share.',
 ];
 
 const STATS = [
-  { number: '2.4B+', label: 'map features globally' },
+  { number: '4B+', label: 'map features globally' },
   { number: '6',     label: 'unified data themes' },
   { number: '50+',   label: 'member organizations' },
   { number: 'Free',  label: 'under open licenses' },
@@ -18,17 +21,11 @@ const STATS = [
 function RotatingWord() {
   const [current, setCurrent] = useState(0);
   const [exiting, setExiting] = useState(null);
-  const timerRef = useRef(null);
+  const pausedRef = useRef(false);
 
-  function goTo(next, currentVal) {
-    if (next === currentVal) return;
-    setExiting(currentVal);
-    setTimeout(() => setExiting(null), 400);
-    setCurrent(next);
-  }
-
-  function startTimer() {
-    timerRef.current = setInterval(() => {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (pausedRef.current) return;
       setCurrent(prev => {
         const next = (prev + 1) % WORDS.length;
         setExiting(prev);
@@ -36,19 +33,24 @@ function RotatingWord() {
         return next;
       });
     }, 3200);
-  }
-
-  useEffect(() => {
-    startTimer();
-    return () => clearInterval(timerRef.current);
+    return () => clearInterval(interval);
   }, []);
+
+  function jumpTo(i) {
+    setCurrent(prev => {
+      if (i === prev) return prev;
+      setExiting(prev);
+      setTimeout(() => setExiting(null), 400);
+      return i;
+    });
+  }
 
   return (
     <>
       <div
         className={styles.rotatingWrap}
-        onMouseEnter={() => clearInterval(timerRef.current)}
-        onMouseLeave={() => startTimer()}
+        onMouseEnter={() => { pausedRef.current = true; }}
+        onMouseLeave={() => { pausedRef.current = false; }}
       >
         {WORDS.map((word, i) => (
           <span
@@ -68,11 +70,7 @@ function RotatingWord() {
           <div
             key={i}
             className={`${styles.rotateDot} ${i === current ? styles.activeDot : ''}`}
-            onClick={() => {
-              clearInterval(timerRef.current);
-              goTo(i, current);
-              startTimer();
-            }}
+            onClick={() => jumpTo(i)}
           />
         ))}
       </div>
@@ -84,7 +82,7 @@ export default function Home() {
   return (
     <Layout
       title="Open Map Data for Everyone"
-      description="A Linux Foundation project building open, reliable, and interoperable map data for the world."
+      description="A project building open, reliable, and interoperable map data for the world."
     >
       {/* HERO TEXT */}
       <section className={styles.hero}>
@@ -97,9 +95,9 @@ export default function Home() {
         </div>
 
         <p className={styles.subtext}>
-          A Linux Foundation project bringing together the world's leading
-          technology companies, mapping organizations, and open data communities
-          to build reliable, open geospatial data.
+          A platform for bringing together tech companies, mapping organizations,
+          government agencies, open data communities, and researchers to build
+          open, reliable, and interoperable map data infrastructure.
         </p>
 
         <div className={styles.ctaRow}>
@@ -111,7 +109,7 @@ export default function Home() {
           >
             Explore the data
           </a>
-          <a href="/getting-data" className={styles.btnSecondary}>
+          <a href="/getting-data/index" className={styles.btnSecondary}>
             Read the docs →
           </a>
         </div>
