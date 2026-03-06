@@ -1,3 +1,7 @@
+/* =================================
+   HERO PAGE — index.module.css
+   ================================= */
+
 /* ── HERO TEXT ── */
 .hero {
   max-width: 900px;
@@ -38,66 +42,6 @@
   line-height: 1.1;
 }
 
-/* Rotating word */
-.rotatingWrap {
-  position: relative;
-  overflow: hidden;
-  height: clamp(5.5rem, 11vw, 9rem);
-  width: 100%;
-  margin-top: 0.15rem;
-}
-
-.rotatingWord {
-  font-family: Montserrat, var(--ifm-font-family-base);
-  font-size: clamp(2.2rem, 5vw, 3.75rem);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  position: absolute;
-  white-space: normal;
-  width: 100%;
-  opacity: 0;
-  transform: translateY(110%);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  color: var(--ifm-font-color-base);
-}
-
-.rotatingWord.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.rotatingWord.exit {
-  opacity: 0;
-  transform: translateY(-110%);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-
-/* Dots */
-.rotateDots {
-  display: flex;
-  gap: 6px;
-  margin-top: 1.25rem;
-  opacity: 0;
-  animation: fadeUp 0.5s ease 0.25s forwards;
-}
-
-.rotateDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--ifm-color-emphasis-300);
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-  border: 1px solid var(--ifm-color-emphasis-300);
-}
-
-.rotateDot.activeDot {
-  background: #4edad8;
-  border-color: #4edad8;
-  transform: scale(1.35);
-}
 
 /* Subtext */
 .subtext {

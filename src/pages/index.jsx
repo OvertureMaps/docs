@@ -1,16 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import Layout from '@theme/Layout';
-import BrowserOnly from '@docusaurus/BrowserOnly';
+import RotatingWord from '@site/src/components/RotatingWord';
 import styles from './index.module.css';
-
-const WORDS = [
-  'free and open map data.',
-  'shared infrastructure.',
-  'extensible schema modules.',
-  'cross-sector collaboration.',
-  'stable UUIDs for the world.',
-  'your invitation to build with us',
-];
 
 const STATS = [
   { number: '4B+',  label: 'map features globally' },
@@ -18,66 +9,6 @@ const STATS = [
   { number: '50+',  label: 'member organizations' },
   { number: 'Free', label: 'under open licenses' },
 ];
-
-function RotatingWord() {
-  const [current, setCurrent] = useState(0);
-  const [exiting, setExiting] = useState(null);
-  const pausedRef = useRef(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (pausedRef.current) return;
-      setCurrent(prev => {
-        const next = (prev + 1) % WORDS.length;
-        setExiting(prev);
-        setTimeout(() => setExiting(null), 400);
-        return next;
-      });
-    }, 3200);
-    return () => clearInterval(interval);
-  }, []);
-
-  function jumpTo(i) {
-    setCurrent(prev => {
-      if (i === prev) return prev;
-      setExiting(prev);
-      setTimeout(() => setExiting(null), 400);
-      return i;
-    });
-  }
-
-  return (
-    <>
-      <div
-        className={styles.rotatingWrap}
-        onMouseEnter={() => { pausedRef.current = true; }}
-        onMouseLeave={() => { pausedRef.current = false; }}
-      >
-        {WORDS.map((word, i) => (
-          <span
-            key={word}
-            className={[
-              styles.rotatingWord,
-              i === current ? styles.active : '',
-              i === exiting ? styles.exit : '',
-            ].filter(Boolean).join(' ')}
-          >
-            {word}
-          </span>
-        ))}
-      </div>
-      <div className={styles.rotateDots}>
-        {WORDS.map((_, i) => (
-          <div
-            key={i}
-            className={`${styles.rotateDot} ${i === current ? styles.activeDot : ''}`}
-            onClick={() => jumpTo(i)}
-          />
-        ))}
-      </div>
-    </>
-  );
-}
 
 export default function Home() {
   return (
@@ -92,15 +23,7 @@ export default function Home() {
             <span className={styles.headlineStatic}>Overture</span>
             <span className={styles.headlineIs}>is</span>
           </div>
-          <BrowserOnly fallback={
-            <div className={styles.rotatingWrap}>
-              <span className={`${styles.rotatingWord} ${styles.active}`}>
-                {WORDS[0]}
-              </span>
-            </div>
-          }>
-            {() => <RotatingWord />}
-          </BrowserOnly>
+          <RotatingWord />
         </div>
 
         <p className={styles.subtext}>
