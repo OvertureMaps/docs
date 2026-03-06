@@ -14,7 +14,7 @@
 .headlineTop {
   display: flex;
   align-items: baseline;
-  gap: 0.4em;
+  gap: 0.75em;
 }
 
 .headlineStatic {

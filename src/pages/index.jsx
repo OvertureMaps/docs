@@ -1,21 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Layout from '@theme/Layout';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import styles from './index.module.css';
 
 const WORDS = [
   'free and open map data.',
-  'a modular, extendable schema.',
-  'stable UUIDs for the world.',
   'shared infrastructure.',
+  'extensible schema modules.',
   'cross-sector collaboration.',
-  'an invitation to build and share.',
+  'stable UUIDs for the world.',
+  'your invitation to build with us',
 ];
 
 const STATS = [
-  { number: '4B+', label: 'map features globally' },
-  { number: '6',     label: 'unified data themes' },
-  { number: '50+',   label: 'member organizations' },
-  { number: 'Free',  label: 'under open licenses' },
+  { number: '4B+',  label: 'map features globally' },
+  { number: '6',    label: 'unified data themes' },
+  { number: '50+',  label: 'member organizations' },
+  { number: 'Free', label: 'under open licenses' },
 ];
 
 function RotatingWord() {
@@ -91,7 +92,15 @@ export default function Home() {
             <span className={styles.headlineStatic}>Overture</span>
             <span className={styles.headlineIs}>is</span>
           </div>
-          <RotatingWord />
+          <BrowserOnly fallback={
+            <div className={styles.rotatingWrap}>
+              <span className={`${styles.rotatingWord} ${styles.active}`}>
+                {WORDS[0]}
+              </span>
+            </div>
+          }>
+            {() => <RotatingWord />}
+          </BrowserOnly>
         </div>
 
         <p className={styles.subtext}>
