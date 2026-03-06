@@ -1,4 +1,3 @@
-
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
@@ -114,15 +113,15 @@
   padding: 0.35rem 1rem;
   border-radius: 8px;
   border: none;
-  background: rgba(58, 72, 184, 0.8);
+  background: #2c2e7f;
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(58, 72, 184, 0.2);
+  box-shadow: 0 2px 8px rgba(44, 46, 127, 0.25);
   transition: all 0.2s ease;
 }
 
 .navbar .DocSearch-Button:hover {
-  background: rgba(58, 72, 184, 0.9);
-  box-shadow: 0 4px 12px rgba(58, 72, 184, 0.3);
+  background: #3a48b8;
+  box-shadow: 0 4px 12px rgba(44, 46, 127, 0.35);
   transform: translateY(-1px);
 }
 
@@ -145,18 +144,18 @@
 }
 
 [data-theme='dark'] .navbar .DocSearch-Button {
-  background: rgba(58, 72, 184, 0.6);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  background: #0ec1bd;
+  color: #1b1b2f;
+  box-shadow: 0 2px 8px rgba(14, 193, 189, 0.3);
 }
 
 [data-theme='dark'] .navbar .DocSearch-Button:hover {
-  background: rgba(83, 98, 209, 0.75);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  background: #4edad8;
+  color: #1b1b2f;
+  box-shadow: 0 4px 12px rgba(14, 193, 189, 0.4);
 }
 
-/* =================================
-   HEADER ICONS
-   ================================= */
+/* header icons */
 
 .github-link {
   width: 32px;
@@ -184,9 +183,7 @@
     0 0 / contain;
 }
 
-/* =================================
-   SMART TABLE STYLING
-   ================================= */
+/* smart table styling */
 
 /* Smart table container */
 .smart-table-container {
@@ -679,3 +676,4 @@
   background-color: var(--ifm-color-primary-dark);
   color: var(--ifm-color-primary-lightest);
 }
+
