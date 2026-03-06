@@ -47,6 +47,7 @@
   position: relative;
   overflow: hidden;
   height: clamp(2.75rem, 5.5vw, 4.5rem);
+  width: 100%;
   margin-top: 0.15rem;
 }
 

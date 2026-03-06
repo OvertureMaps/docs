@@ -1,92 +1,63 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Layout from '@theme/Layout';
 import styles from './index.module.css';
 
 const WORDS = [
-  'free and open map data.',
-  'a modular, extendable schema.',
-  'stable UUIDs for the world.',
+  'open map data.',
   'shared infrastructure.',
-  'cross-sector collaboration.',
-  'an invitation to build and share.',
+  'a cross-sector collaboration.',
 ];
 
 const STATS = [
-  { number: '2.7B+', label: 'map features globally' },
+  { number: '2.4B+', label: 'map features globally' },
   { number: '6',     label: 'unified data themes' },
   { number: '50+',   label: 'member organizations' },
   { number: 'Free',  label: 'under open licenses' },
 ];
 
 function RotatingWord() {
-  const wrapRef = useRef(null);
-  const wordRefs = useRef([]);
-  const dotRefs = useRef([]);
-  const currentRef = useRef(0);
+  const [current, setCurrent] = useState(0);
+  const [exiting, setExiting] = useState(null);
   const timerRef = useRef(null);
 
+  function goTo(next, currentVal) {
+    if (next === currentVal) return;
+    setExiting(currentVal);
+    setTimeout(() => setExiting(null), 400);
+    setCurrent(next);
+  }
+
+  function startTimer() {
+    timerRef.current = setInterval(() => {
+      setCurrent(prev => {
+        const next = (prev + 1) % WORDS.length;
+        setExiting(prev);
+        setTimeout(() => setExiting(null), 400);
+        return next;
+      });
+    }, 3200);
+  }
+
   useEffect(() => {
-    const wordEls = wordRefs.current;
-    const dotEls = dotRefs.current;
-    const wrap = wrapRef.current;
-
-    // Size wrap to widest word
-    let maxW = 0;
-    wordEls.forEach(el => {
-      el.style.visibility = 'hidden';
-      el.style.opacity = '1';
-      el.style.position = 'relative';
-      maxW = Math.max(maxW, el.offsetWidth);
-      el.style.visibility = '';
-      el.style.opacity = '';
-      el.style.position = '';
-    });
-    wrap.style.width = maxW + 'px';
-
-    function goTo(next) {
-      const prev = currentRef.current;
-      if (next === prev) return;
-      wordEls[prev].classList.remove(styles.active);
-      wordEls[prev].classList.add(styles.exit);
-      dotEls[prev].classList.remove(styles.activeDot);
-      currentRef.current = next;
-      setTimeout(() => wordEls[prev].classList.remove(styles.exit), 400);
-      wordEls[next].classList.add(styles.active);
-      dotEls[next].classList.add(styles.activeDot);
-    }
-
-    function advance() {
-      goTo((currentRef.current + 1) % WORDS.length);
-    }
-
-    timerRef.current = setInterval(advance, 3200);
-
-    wrap._goTo = (i) => {
-      clearInterval(timerRef.current);
-      goTo(i);
-      timerRef.current = setInterval(advance, 3200);
-    };
-
-    const pauseTimer = () => clearInterval(timerRef.current);
-    const resumeTimer = () => { timerRef.current = setInterval(advance, 3200); };
-    wrap.addEventListener('mouseenter', pauseTimer);
-    wrap.addEventListener('mouseleave', resumeTimer);
-
-    return () => {
-      clearInterval(timerRef.current);
-      wrap.removeEventListener('mouseenter', pauseTimer);
-      wrap.removeEventListener('mouseleave', resumeTimer);
-    };
+    startTimer();
+    return () => clearInterval(timerRef.current);
   }, []);
 
   return (
     <>
-      <div className={styles.rotatingWrap} ref={wrapRef}>
+      <div
+        className={styles.rotatingWrap}
+        onMouseEnter={() => clearInterval(timerRef.current)}
+        onMouseLeave={() => startTimer()}
+      >
         {WORDS.map((word, i) => (
           <span
             key={word}
-            className={`${styles.rotatingWord} ${i === 0 ? styles.active : ''}`}
-            ref={el => (wordRefs.current[i] = el)}
+            className={[
+              styles.rotatingWord,
+              i === current ? styles.active : '',
+              i === exiting ? styles.exit : '',
+            ].filter(Boolean).join(' ')}
           >
             {word}
           </span>
@@ -96,9 +67,12 @@ function RotatingWord() {
         {WORDS.map((_, i) => (
           <div
             key={i}
-            className={`${styles.rotateDot} ${i === 0 ? styles.activeDot : ''}`}
-            ref={el => (dotRefs.current[i] = el)}
-            onClick={() => wrapRef.current?._goTo(i)}
+            className={`${styles.rotateDot} ${i === current ? styles.activeDot : ''}`}
+            onClick={() => {
+              clearInterval(timerRef.current);
+              goTo(i, current);
+              startTimer();
+            }}
           />
         ))}
       </div>
@@ -110,7 +84,7 @@ export default function Home() {
   return (
     <Layout
       title="Open Map Data for Everyone"
-      description="A project building open, reliable, and interoperable map data for the world."
+      description="A Linux Foundation project building open, reliable, and interoperable map data for the world."
     >
       {/* HERO TEXT */}
       <section className={styles.hero}>
@@ -123,8 +97,9 @@ export default function Home() {
         </div>
 
         <p className={styles.subtext}>
-          A platform for bringing together tech companies, mapping organizations, government agencies, nonprofits, open data communities, and researchers
-          to build open, reliable, and interoperable map data infrastructure.
+          A Linux Foundation project bringing together the world's leading
+          technology companies, mapping organizations, and open data communities
+          to build reliable, open geospatial data.
         </p>
 
         <div className={styles.ctaRow}>
@@ -136,7 +111,7 @@ export default function Home() {
           >
             Explore the data
           </a>
-          <a href="/getting-data/index" className={styles.btnSecondary}>
+          <a href="/getting-data" className={styles.btnSecondary}>
             Read the docs →
           </a>
         </div>
