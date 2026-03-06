@@ -8,7 +8,7 @@ Selects vehicles based on their weight.
 | -----: | :----: | ------------- |
 | `dimension` | `"weight"` | |
 | `comparison` | [`VehicleRelation`](vehicle_relation.md) | |
-| `value` | `float64` | Vehicle weight selection threshold in the given `unit`<br/>*`≥ 0`* |
+| `value` | [`float64`](../../system/primitive/primitives.md) | Vehicle weight selection threshold in the given `unit`<br/><br/>*`≥ 0`* |
 | `unit` | [`WeightUnit`](../weight_unit.md) | Weight unit in which `value` is expressed |
 
 ## Used By

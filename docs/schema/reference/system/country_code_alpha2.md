@@ -11,6 +11,7 @@ Underlying type: `string`
 ## Used By
 
 - [`Address`](../addresses/address.md)
+- [`Address`](../places/types/address.md)
 - [`Division`](../divisions/division.md)
 - [`DivisionArea`](../divisions/division_area.md)
 - [`DivisionBoundary`](../divisions/division_boundary.md)

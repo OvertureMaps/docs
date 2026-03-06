@@ -17,8 +17,8 @@ model of the building.
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | The building's footprint or roofprint (if traced from aerial/satellite imagery).<br/>*Allowed geometry types: MultiPolygon, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | The building's footprint or roofprint (if traced from aerial/satellite imagery).<br/><br/>*Allowed geometry types: MultiPolygon, Polygon* |
 | `theme` | `"buildings"` | |
 | `type` | `"building"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -32,7 +32,7 @@ model of the building.
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
 | `subtype` | [`BuildingSubtype`](types/building_subtype.md) (optional) | A broad classification of the current use and purpose of the building.<br/><br/>If the current use of the building no longer accords with the original built purpose, the current use should be specified. For example, a building built as a train station but later converted into a shopping mall would have the value `"commercial"` rather than `"transportation"`. |
 | `class` | [`BuildingClass`](types/building_class.md) (optional) | A more specific classification of the current use and purpose of the building.<br/><br/>If the current use of the building no longer accords with the original built purpose, the current use should be specified. |
-| `has_parts` | `boolean` (optional) | Whether the building has associated building part features<br/>*`strict=True`* |
+| `has_parts` | `boolean` (optional) | Whether the building has associated building part features<br/><br/>*`strict=True`* |
 | `names` | [`Names`](../core/names.md) (optional) | |
 | `names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
 | `names.common` | [`CommonNames`](../core/common_names.md) (map, optional) | |
@@ -42,31 +42,35 @@ model of the building.
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
-| `height` | `float64` (optional) | Height of the building or part in meters.<br/><br/>This is the distance from the lowest point to the highest point.<br/>*`> 0`* |
-| `is_underground` | `boolean` (optional) | Whether the entire building or part is completely below ground.<br/><br/>The underground flag is useful for display purposes. Buildings and building parts that are entirely below ground can be styled differently or omitted from the rendered image.<br/><br/>This flag is conceptually different from the `level` field, which indicates relative z-ordering and, notably, can be negative even if the building is entirely above-ground.<br/>*`strict=True`* |
-| `num_floors` | `int32` (optional) | Number of above-ground floors of the building or part.<br/>*`> 0`* |
-| `num_floors_underground` | `int32` (optional) | Number of below-ground floors of the building or part.<br/>*`> 0`* |
-| `min_height` | `float64` (optional) | Altitude above ground where the bottom of the building or building part starts.<br/><br/>If present, this value indicates that the lowest part of the building or building part starts is above ground level. |
-| `min_floor` | `int32` (optional) | Start floor of this building or part.<br/><br/>If present, this value indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach down to ground level. An example is a building that has an entry road or driveway at ground level into an interior courtyard, where part of the building bridges above the entry road. This property may sometimes be populated when `min_height` is missing and in these cases can be used as a proxy for `min_height`.<br/>*`> 0`* |
+| `height` | [`float64`](../system/primitive/primitives.md) (optional) | Height of the building or part in meters.<br/><br/>This is the distance from the lowest point to the highest point.<br/><br/>*`> 0`* |
+| `is_underground` | `boolean` (optional) | Whether the entire building or part is completely below ground.<br/><br/>The underground flag is useful for display purposes. Buildings and building parts that are entirely below ground can be styled differently or omitted from the rendered image.<br/><br/>This flag is conceptually different from the `level` field, which indicates relative z-ordering and, notably, can be negative even if the building is entirely above-ground.<br/><br/>*`strict=True`* |
+| `num_floors` | [`int32`](../system/primitive/primitives.md) (optional) | Number of above-ground floors of the building or part.<br/><br/>*`> 0`* |
+| `num_floors_underground` | [`int32`](../system/primitive/primitives.md) (optional) | Number of below-ground floors of the building or part.<br/><br/>*`> 0`* |
+| `min_height` | [`float64`](../system/primitive/primitives.md) (optional) | Altitude above ground where the bottom of the building or building part starts.<br/><br/>If present, this value indicates that the lowest part of the building or building part starts is above ground level. |
+| `min_floor` | [`int32`](../system/primitive/primitives.md) (optional) | Start floor of this building or part.<br/><br/>If present, this value indicates that the building or part is "floating" and its bottom-most floor is above ground level, usually because it is part of a larger building in which some parts do reach down to ground level. An example is a building that has an entry road or driveway at ground level into an interior courtyard, where part of the building bridges above the entry road. This property may sometimes be populated when `min_height` is missing and in these cases can be used as a proxy for `min_height`.<br/><br/>*`> 0`* |
 | `facade_color` | [`HexColor`](../system/hex_color.md) (optional) | Facade color in `#rgb` or `#rrggbb` hex notation |
 | `facade_material` | [`FacadeMaterial`](types/facade_material.md) (optional) | Outer surface material of the facade |
 | `roof_material` | [`RoofMaterial`](types/roof_material.md) (optional) | Outer surface material of the roof |
 | `roof_shape` | [`RoofShape`](types/roof_shape.md) (optional) | Shape of the roof |
-| `roof_direction` | `float64` (optional) | Bearing of the roof ridge line in degrees<br/>*`≥ 0`*<br/>*`< 360`* |
+| `roof_direction` | [`float64`](../system/primitive/primitives.md) (optional) | Bearing of the roof ridge line in degrees<br/><br/>*`≥ 0`*<br/>*`< 360`* |
 | `roof_orientation` | [`RoofOrientation`](types/roof_orientation.md) (optional) | Orientation of the roof shape relative to the footprint shape |
 | `roof_color` | [`HexColor`](../system/hex_color.md) (optional) | The roof color in `#rgb` or `#rrggbb` hex notation |
-| `roof_height` | `float64` (optional) | Height of the roof in meters.<br/><br/>This is the distance from the base of the roof to its highest point. |
+| `roof_height` | [`float64`](../system/primitive/primitives.md) (optional) | Height of the roof in meters.<br/><br/>This is the distance from the base of the roof to its highest point. |
 
 ## Examples
 
 | Column | Value |
 | -------: | ------- |
 | `id` | `148f35b1-7bc1-4180-9280-10d39b13883b` |
-| `geometry` | `POLYGON ((-176.6435004 -43.9938042, -176.6435738 -43.9937107, -176.6437726 -43.9937913, -176.6436992...` |
+| `bbox.xmin` | `-176.643798828125` |
+| `bbox.xmax` | `-176.64349365234375` |
+| `bbox.ymin` | `-43.9938850402832` |
+| `bbox.ymax` | `-43.993709564208984` |
+| `geometry` | `POLYGON ((-176.6435004 -43.9938042, -176.6435738 -43.9937107, -176.6437726 -43.9937913, -176.6436...` |
 | `theme` | `buildings` |
 | `type` | `building` |
 | `version` | `1` |

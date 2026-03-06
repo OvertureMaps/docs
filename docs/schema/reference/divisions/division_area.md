@@ -25,12 +25,12 @@ belongs to.
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | The area covered by the division with which this area feature is associated<br/>*Allowed geometry types: MultiPolygon, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | The area covered by the division with which this area feature is associated<br/><br/>*Allowed geometry types: MultiPolygon, Polygon* |
 | `theme` | `"divisions"` | |
 | `type` | `"division_area"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -44,12 +44,12 @@ belongs to.
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
 | `subtype` | [`PlaceType`](types/place_type.md) | *`admin_level` is required when `subtype` is one of: `county`, `macrocounty`, `region`, `macroregion`, `dependency`, `country`* |
 | `class` | [`AreaClass`](types/division_area/area_class.md) | |
-| `is_land` | `boolean` (optional) | A boolean to indicate whether or not the feature geometry represents the land-clipped, non-maritime boundary. The geometry can be used for map rendering, cartographic display, and similar purposes.<br/>*`strict=True`*<br/>*Exactly one of `is_land`, `is_territorial` must be `true`* |
-| `is_territorial` | `boolean` (optional) | A boolean to indicate whether or not the feature geometry represents Overture's best approximation of this place's maritime boundary. For coastal places, this would tend to include the water area. The geometry can be used for data processing, reverse-geocoding, and similar purposes.<br/>*`strict=True`*<br/>*Exactly one of `is_land`, `is_territorial` must be `true`* |
-| `division_id` | [`Id`](../system/ref/id.md) | Division ID of the division this area belongs to.<br/>*References [`Division`](division.md) (belongs to)* |
+| `is_land` | `boolean` (optional) | A boolean to indicate whether or not the feature geometry represents the land-clipped, non-maritime boundary. The geometry can be used for map rendering, cartographic display, and similar purposes.<br/><br/>*`strict=True`*<br/><br/>*Exactly one of `is_land`, `is_territorial` must be `true`* |
+| `is_territorial` | `boolean` (optional) | A boolean to indicate whether or not the feature geometry represents Overture's best approximation of this place's maritime boundary. For coastal places, this would tend to include the water area. The geometry can be used for data processing, reverse-geocoding, and similar purposes.<br/><br/>*`strict=True`*<br/><br/>*Exactly one of `is_land`, `is_territorial` must be `true`* |
+| `division_id` | [`Id`](../system/ref/id.md) | Division ID of the division this area belongs to.<br/><br/>*References [`Division`](division.md) (belongs to)* |
 | `country` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) | ISO 3166-1 alpha-2 country code of the division this area belongs to. |
 | `region` | [`RegionCode`](../system/region_code.md) (optional) | ISO 3166-2 principal subdivision code of the division this area belongs to. |
-| `admin_level` | [`AdminLevel`](types/admin_level.md) (optional) | Integer representing the division's position in its country's administrative hierarchy, where lower numbers correspond to higher level administrative units.<br/>*`admin_level` is required when `subtype` is one of: `county`, `macrocounty`, `region`, `macroregion`, `dependency`, `country`* |
+| `admin_level` | [`AdminLevel`](types/admin_level.md) (optional) | Integer representing the division's position in its country's administrative hierarchy, where lower numbers correspond to higher level administrative units.<br/><br/>*`admin_level` is required when `subtype` is one of: `county`, `macrocounty`, `region`, `macroregion`, `dependency`, `country`* |
 
 ## Constraints
 
@@ -64,7 +64,11 @@ belongs to.
 | `names.common` | `null` |
 | `names.rules` | `null` |
 | `id` | `eb9b112f-ec3c-47f7-b519-6f9f2e6fc2bd` |
-| `geometry` | `MULTIPOLYGON (((-174.9553949 -21.4730179, -174.9514163 -21.4719978, -174.9520108 -21.4681253, -174.9...` |
+| `bbox.xmin` | `-174.97535705566406` |
+| `bbox.xmax` | `-174.90040588378906` |
+| `bbox.ymin` | `-21.473018646240234` |
+| `bbox.ymax` | `-21.283489227294922` |
+| `geometry` | `MULTIPOLYGON (((-174.9553949 -21.4730179, -174.9514163 -21.4719978, -174.9520108 -21.4681253, -17...` |
 | `theme` | `divisions` |
 | `type` | `division_area` |
 | `version` | `2` |

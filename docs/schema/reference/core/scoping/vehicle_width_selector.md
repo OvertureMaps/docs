@@ -8,7 +8,7 @@ Selects vehicles based on their width.
 | -----: | :----: | ------------- |
 | `dimension` | `"width"` | |
 | `comparison` | [`VehicleRelation`](vehicle_relation.md) | |
-| `value` | `float64` | Vehicle width selection threshold in the given `unit`<br/>*`≥ 0`* |
+| `value` | [`float64`](../../system/primitive/primitives.md) | Vehicle width selection threshold in the given `unit`<br/><br/>*`≥ 0`* |
 | `unit` | [`LengthUnit`](../length_unit.md) | Width unit in which `value` is expressed |
 
 ## Used By

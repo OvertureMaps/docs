@@ -22,8 +22,8 @@ TODO: Update this description when the relationship to `land_cover` is better un
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Geometry of the land feature, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the land feature, which may be a point, line string, polygon, or multi-polygon.<br/><br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"land"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -48,7 +48,7 @@ TODO: Update this description when the relationship to `land_cover` is better un
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
@@ -60,6 +60,10 @@ TODO: Update this description when the relationship to `land_cover` is better un
 | Column | Value |
 | -------: | ------- |
 | `id` | `70fc3596-a987-3fea-820c-c016c0a2f0da` |
+| `bbox.xmin` | `-178.7000274658203` |
+| `bbox.xmax` | `-178.6999969482422` |
+| `bbox.ymin` | `-85.45001220703125` |
+| `bbox.ymax` | `-85.44999694824219` |
 | `geometry` | `POINT (-178.7 -85.45)` |
 | `theme` | `base` |
 | `type` | `land` |
@@ -78,7 +82,5 @@ TODO: Update this description when the relationship to `land_cover` is better un
 | `names.common` | `null` |
 | `names.rules` | `null` |
 | `level` | `null` |
-| `source_tags.natural` | `cliff` |
-| `source_tags.ref:linz:place_id` | `12318` |
-| `source_tags.wikipedia` | `en:Dismal Buttress` |
+| `source_tags` | `{"natural": "cliff", "ref:linz:place_id": "12318", "wikipedia": "en:Dismal Buttress"}` |
 | `wikidata` | `Q5282342` |

@@ -11,8 +11,8 @@ Places are point representations of real-world facilities, businesses, services,
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Position of the place. Places are point geometries.<br/>*Allowed geometry types: Point* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Position of the place. Places are point geometries.<br/><br/>*Allowed geometry types: Point* |
 | `theme` | `"places"` | |
 | `type` | `"place"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -27,17 +27,17 @@ Places are point representations of real-world facilities, businesses, services,
 | `operating_status` | [`OperatingStatus`](types/operating_status.md) | An indication of whether a place is: in continued operation, in a temporary operating hiatus, or closed permanently.<br/><br/>This is not an indication of opening hours or that the place is open/closed at the current time-of-day or day-of-week.<br/><br/>When `operating_status` is `"permanently_closed"`, the `confidence` field will be set to 0. |
 | `categories` | [`Categories`](types/categories.md) (optional) | |
 | `categories.primary` | [`SnakeCaseString`](../system/snake_case_string.md) | The primary or main category of the place. |
-| `categories.alternate` | [`SnakeCaseString`](../system/snake_case_string.md) (list, optional) | Alternate categories of the place.<br/><br/>Some places might fit into two categories, e.g., a book store and a coffee shop. In these cases, the primary category can be augmented with additional categories. |
+| `categories.alternate` | `list<`[`SnakeCaseString`](../system/snake_case_string.md)`>` (optional) | Alternate categories of the place.<br/><br/>Some places might fit into two categories, e.g., a book store and a coffee shop. In these cases, the primary category can be augmented with additional categories. |
 | `basic_category` | [`SnakeCaseString`](../system/snake_case_string.md) (optional) | The basic level category of a place.<br/><br/>This field classifies places into categories at a level that most people find intuitive. The full list of possible values it may hold can be found at (TODO).<br/><br/>The basic level category, or simply basic category, is based on a cognitive science model use in taxonomy and ontology development. The idea is to provide the category name at the level of generality that is preferred by humans in learning and memory tasks. This category to be roughly in the middle of the general-to-specific category hierarchy.<br/><br/>The full list of basic level categories is available at https://docs.overturemaps.org/guides/places/ |
 | `taxonomy` | [`Taxonomy`](types/taxonomy.md) (optional) | A structured representation of the place's category within the Overture taxonomy.<br/><br/>Provides the primary classification, full hierarchy path, and alternate categories. |
 | `taxonomy.primary` | [`SnakeCaseString`](../system/snake_case_string.md) | The primary, or most specific, category known about this place.<br/><br/>The `primary` category value must always equal the last or rightmost entry in the `hierarchy` field. |
-| `taxonomy.hierarchy` | [`SnakeCaseString`](../system/snake_case_string.md) (list) | The full primary hierarchy of categories known for this place, ordered from most general to most specific. An example hierarchy might be: `["food_and_drink", "restaurant", "casual_eatery", "gas_station_sushi"]`.<br/><br/>The rightmost, or most specific, value in the `hierarchy` must always be equal to the `primary` field. The basic level category of the place will typically be found in the middle of the primary hierarchy. The primary hierarchy does not include any of the alternate categories found in the `alternates` field. |
-| `taxonomy.alternates` | [`SnakeCaseString`](../system/snake_case_string.md) (list, optional) | Unordered list of additional categories that are known for this place but that are not part of the primary category hierarchy.<br/><br/>Alternate categories allow a more complete picture of the place to be surfaced when it fits multiple unconnected branches in the taxonomy. For example a gas station that also sells groceries might have primary category of "gas_station" with an alternate of "grocery_store".<br/><br/>Alternate categories are not part of the primary hierarchy or another alternate category's hierarchy. In other words, if a category is a parent in the hierarchy of another category, that category can't be a primary or alternate category itself.<br/><br/>Note as well that this field is an unordered list of extra categories and does not represent a hierarchy. |
+| `taxonomy.hierarchy` | `list<`[`SnakeCaseString`](../system/snake_case_string.md)`>` | The full primary hierarchy of categories known for this place, ordered from most general to most specific. An example hierarchy might be: `["food_and_drink", "restaurant", "casual_eatery", "gas_station_sushi"]`.<br/><br/>The rightmost, or most specific, value in the `hierarchy` must always be equal to the `primary` field. The basic level category of the place will typically be found in the middle of the primary hierarchy. The primary hierarchy does not include any of the alternate categories found in the `alternates` field. |
+| `taxonomy.alternates` | `list<`[`SnakeCaseString`](../system/snake_case_string.md)`>` (optional) | Unordered list of additional categories that are known for this place but that are not part of the primary category hierarchy.<br/><br/>Alternate categories allow a more complete picture of the place to be surfaced when it fits multiple unconnected branches in the taxonomy. For example a gas station that also sells groceries might have primary category of "gas_station" with an alternate of "grocery_store".<br/><br/>Alternate categories are not part of the primary hierarchy or another alternate category's hierarchy. In other words, if a category is a parent in the hierarchy of another category, that category can't be a primary or alternate category itself.<br/><br/>Note as well that this field is an unordered list of extra categories and does not represent a hierarchy. |
 | `confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | A score between 0 and 1 indicating how confident we are that the place exists.<br/><br/>A confidence score of 0 indicates that we are certain the place doesn't exist anymore and will always be paired with an `operating_status` of `"permanently_closed"`.<br/><br/>A confidence score of 1 indicates that we are certain the place does exist.<br/><br/>If there is no value for confidence, it means we don't have enough information on which to estimate our confidence level. |
-| `websites` | `list<HttpUrl>` (optional) | The websites of the place.<br/>*`minimum length: 1`*<br/>*Ensures all items in a collection are unique. (`UniqueItemsConstraint`)* |
-| `socials` | `list<HttpUrl>` (optional) | The social media URLs of the place.<br/>*`minimum length: 1`*<br/>*Ensures all items in a collection are unique. (`UniqueItemsConstraint`)* |
-| `emails` | `list<EmailStr>` (optional) | The email addresses of the place.<br/>*`minimum length: 1`*<br/>*Ensures all items in a collection are unique. (`UniqueItemsConstraint`)* |
-| `phones` | [`PhoneNumber`](../system/phone_number.md) (list, optional) | The phone numbers of the place.<br/>*`minimum length: 1`*<br/>*Ensures all items in a collection are unique. (`UniqueItemsConstraint`)* |
+| `websites` | `list<`[`HttpUrl`](../pydantic/networks/http_url.md)`>` (optional) | The websites of the place.<br/><br/>*Minimum length: 1*<br/>*All items must be unique. (`UniqueItemsConstraint`)* |
+| `socials` | `list<`[`HttpUrl`](../pydantic/networks/http_url.md)`>` (optional) | The social media URLs of the place.<br/><br/>*Minimum length: 1*<br/>*All items must be unique. (`UniqueItemsConstraint`)* |
+| `emails` | `list<`[`EmailStr`](../pydantic/networks/email_str.md)`>` (optional) | The email addresses of the place.<br/><br/>*Minimum length: 1*<br/>*All items must be unique. (`UniqueItemsConstraint`)* |
+| `phones` | `list<`[`PhoneNumber`](../system/phone_number.md)`>` (optional) | The phone numbers of the place.<br/><br/>*Minimum length: 1*<br/>*All items must be unique. (`UniqueItemsConstraint`)* |
 | `brand` | [`Brand`](types/brand.md) (optional) | The brand associated with the place. |
 | `brand.names` | [`Names`](../core/names.md) (optional) | |
 | `brand.names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
@@ -48,11 +48,11 @@ Places are point representations of real-world facilities, businesses, services,
 | `brand.names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `brand.names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `brand.names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `brand.names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `brand.names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `brand.names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `brand.names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `brand.wikidata` | [`WikidataId`](../system/wikidata_id.md) (optional) | A wikidata ID, as found on https://www.wikidata.org/ |
-| `addresses[]` | `list<`[`Address`](../addresses/address.md)`>` (optional) | The address or addresses of the place<br/>*`minimum length: 1`* |
+| `addresses[]` | `list<`[`Address`](types/address.md)`>` (optional) | The address or addresses of the place<br/><br/>*Minimum length: 1* |
 | `addresses[].freeform` | `string` (optional) | Free-form address that contains street name, house number and other address info |
 | `addresses[].locality` | `string` (optional) | City, town, or neighborhood component of the place address |
 | `addresses[].postcode` | `string` (optional) | Postal code component of the place address |
@@ -67,7 +67,7 @@ Places are point representations of real-world facilities, businesses, services,
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 
@@ -76,6 +76,10 @@ Places are point representations of real-world facilities, businesses, services,
 | Column | Value |
 | -------: | ------- |
 | `id` | `99003ee6-e75b-4dd6-8a8a-53a5a716c50d` |
+| `bbox.xmin` | `-150.46875` |
+| `bbox.xmax` | `-150.46875` |
+| `bbox.ymin` | `-79.17134094238281` |
+| `bbox.ymax` | `-79.17133331298828` |
 | `geometry` | `POINT (-150.46875 -79.1713346)` |
 | `theme` | `places` |
 | `type` | `place` |
@@ -90,10 +94,10 @@ Places are point representations of real-world facilities, businesses, services,
 | `categories.primary` | `hotel` |
 | `categories.alternate` | `null` |
 | `confidence` | `0.7337175792507205` |
-| `websites` | `[https://www.superhotel.co.jp/s_hotels/beppu/]` |
-| `socials` | `[https://www.facebook.com/107663894904826]` |
+| `websites` | `["https://www.superhotel.co.jp/s_hotels/beppu/"]` |
+| `socials` | `["https://www.facebook.com/107663894904826"]` |
 | `emails` | `null` |
-| `phones` | `[+81977009000]` |
+| `phones` | `["+81977009000"]` |
 | `brand.wikidata` | `null` |
 | `brand.names.primary` | `SUPER HOTEL` |
 | `brand.names.common` | `null` |
