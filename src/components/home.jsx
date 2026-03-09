@@ -1,9 +1,11 @@
 import React from 'react';
 import RotatingWord from '@site/src/components/RotatingWord';
 import styles from './home.module.css';
-
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 export default function Home() {
+  const quickStartUrl = useBaseUrl('/getting-data/');
+
   return (
     <>
       <section className={styles.hero}>
@@ -22,7 +24,7 @@ export default function Home() {
         </p>
 
         <div className={styles.ctaRow}>
-          <a href="/getting-data/quickstart/" className={styles.btnPrimary}>
+          <a href={quickStartUrl} className={styles.btnPrimary}>
             Quick start
           </a>
           <a href="https://explore.overturemaps.org" className={styles.btnSecondary} target="_blank" rel="noopener noreferrer">
@@ -49,7 +51,6 @@ export default function Home() {
           </a>
         </div>
       </div>
-
     </>
   );
 }
