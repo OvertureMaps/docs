@@ -6,29 +6,12 @@ pagination_label: Explorer
 
 ---
 
-import styles from '@site/src/components/home.module.css';
+import { ExplorerEmbed } from '@site/src/components/home';
 
 
 [Overture Maps Explorer](https://explore.overturemaps.org) is a browser-based tool for browsing and inspecting Overture data. No installation, no account, no SQL — just open the link and start exploring.
 
-<div className={styles.explorerSection}>
-  <div className={styles.explorerFrame}>
-    <iframe
-      src="https://explore.overturemaps.org/#map=12/39.9526/-75.1652"
-      title="Overture Maps Explorer"
-      loading="lazy"
-      allow="fullscreen"
-    />
-    <a
-      className={styles.explorerOpen}
-      href="https://explore.overturemaps.org"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Open full screen ↗
-    </a>
-  </div>
-</div>
+<ExplorerEmbed src="https://explore.overturemaps.org/#map=12/39.9526/-75.1652" />
 
 ## Explore and Inspect modes
 

@@ -1,11 +1,36 @@
 ---
 slug: /
-title: " "
+title: ' '
 sidebar_class_name: hidden
 hide_table_of_contents: true
 className: landing-page
 ---
 
-import Home from '@site/src/components/home';
+import {
+  Hero,
+  HeroHeadline,
+  HeroSubtext,
+  HeroCTAs,
+  PrimaryButton,
+  SecondaryButton,
+  ExplorerEmbed,
+} from '@site/src/components/home';
 
-<Home />
+<Hero>
+  <HeroHeadline />
+
+<HeroSubtext>
+  A platform for bringing together tech companies, mapping organizations, government agencies, open
+  data communities, and researchers to build open, reliable, and interoperable map data
+  infrastructure.
+</HeroSubtext>
+
+  <HeroCTAs>
+    <PrimaryButton to="/getting-data/">Quick start</PrimaryButton>
+    <SecondaryButton href="https://explore.overturemaps.org">
+      Explore the data and schema →
+    </SecondaryButton>
+  </HeroCTAs>
+</Hero>
+
+<ExplorerEmbed />

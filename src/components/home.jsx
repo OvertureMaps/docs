@@ -1,54 +1,72 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import RotatingWord from '@site/src/components/RotatingWord';
+import RotatingWord from './RotatingWord';
 import styles from './home.module.css';
 
-export default function Home() {
+export function Hero({ children }) {
+  return <section className={styles.hero}>{children}</section>;
+}
+
+export function HeroHeadline() {
   return (
-    <>
-      <section className={styles.hero}>
-        <div className={styles.headline}>
-          <div className={styles.headlineTop}>
-            <span className={styles.headlineStatic}>Overture</span>
-            <span className={styles.headlineIs}>is</span>
-          </div>
-          <RotatingWord />
-        </div>
-
-        <p className={styles.subtext}>
-          A platform for bringing together tech companies, mapping organizations,
-          government agencies, open data communities, and researchers to build
-          open, reliable, and interoperable map data infrastructure.
-        </p>
-
-        <div className={styles.ctaRow}>
-          <Link to="/getting-data/" className={styles.btnPrimary}>
-            Quick start
-          </Link>
-          <a href="https://explore.overturemaps.org" className={styles.btnSecondary} target="_blank" rel="noopener noreferrer">
-            Explore the data and schema {'\u2192'}
-          </a>
-        </div>
-      </section>
-
-      <div className={styles.explorerSection}>
-        <div className={styles.explorerFrame}>
-          <iframe
-            src="https://explore.overturemaps.org"
-            title="Overture Maps Explorer"
-            loading="lazy"
-            allow="fullscreen"
-          />
-          <a
-            className={styles.explorerOpen}
-            href="https://explore.overturemaps.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Open full screen {'\u2197'}
-          </a>
-        </div>
+    <div className={styles.headline}>
+      <div className={styles.headlineTop}>
+        <span className={styles.headlineStatic}>Overture</span>
+        <span className={styles.headlineIs}>is</span>
       </div>
-    </>
+      <RotatingWord />
+    </div>
+  );
+}
+
+export function HeroSubtext({ children }) {
+  return <p className={styles.subtext}>{children}</p>;
+}
+
+export function HeroCTAs({ children }) {
+  return <div className={styles.ctaRow}>{children}</div>;
+}
+
+export function PrimaryButton({ to, children }) {
+  return (
+    <Link to={to} className={styles.btnPrimary}>
+      {children}
+    </Link>
+  );
+}
+
+export function SecondaryButton({ href, children }) {
+  return (
+    <a
+      href={href}
+      className={styles.btnSecondary}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {children}
+    </a>
+  );
+}
+
+export function ExplorerEmbed({ src = 'https://explore.overturemaps.org' }) {
+  return (
+    <div className={styles.explorerSection}>
+      <div className={styles.explorerFrame}>
+        <iframe
+          src={src}
+          title="Overture Maps Explorer"
+          loading="lazy"
+          allow="fullscreen"
+        />
+        <a
+          className={styles.explorerOpen}
+          href="https://explore.overturemaps.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open full screen {'\u2197'}
+        </a>
+      </div>
+    </div>
   );
 }
