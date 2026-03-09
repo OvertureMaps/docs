@@ -1,0 +1,47 @@
+---
+title: Explorer
+description: No-code tool for exploring and downloading data
+pagination_label: Explorer
+---
+
+---
+
+import { ExplorerEmbed } from '@site/src/components/home';
+
+
+[Overture Maps Explorer](https://explore.overturemaps.org) is a browser-based tool for browsing and inspecting Overture data. No installation, no account, no SQL — just open the link and start exploring.
+
+<ExplorerEmbed src="https://explore.overturemaps.org/#map=12/39.9526/-75.1652" />
+
+## Explore and Inspect modes
+
+The Explorer has two distinct modes.
+
+**Explore mode** presents the data as a styled, readable map. You can browse places, roads, buildings, land use, and water features with cartographic styling that makes the data easy to understand at a glance. A layers panel lets you toggle feature types on and off, and you can click individual features to see their properties.
+
+**Inspect mode** is closer to the raw data. The layers panel reorganizes to mirror the Overture schema itself: base breaks down into land, water, bathymetry, land cover, and land use; transportation shows segments and connectors; divisions show areas, boundaries, and labels. Every feature type is symbolized uniformly as simple points, lines, and polygons. This is the mode for developers and data users who want to see exactly what's in the tiles.
+
+## Multilingual names
+
+The Explorer surfaces the richness of Overture's `names` property. Toggle between languages to see place names rendered in dozens of scripts and languages. This comes directly from the names field in Overture data, which carries common names, alternate names, and translations contributed by sources around the world.
+
+## How it works
+
+The Explorer is built with [MapLibre GL JS](https://maplibre.org/) and powered by [PMTiles](https://docs.protomaps.com/pmtiles/) vector tile archives generated from each Overture release. The tiles are hosted on S3 and loaded directly in the browser — no tile server required.
+
+The site's styling is built on a token-based design system: primitives (color palette, fonts), semantics (feature-level color assignments), and components (stylesheet properties referencing the semantic values). This architecture makes it straightforward to create new map styles — a dark mode, for example, requires changing just one file.
+
+The Explorer is pinned to a specific Overture release, and updates go through a validation process that audits stylesheets against the current schema and tile metadata before they reach the live site.
+
+The source code is available in the [explore-site](https://github.com/OvertureMaps/explore-site) repository.
+
+## When to use it
+
+The Explorer is the fastest way to answer questions like:
+
+- What does Overture data look like in a specific area?
+- What properties are available on a building or a road segment?
+- How does Overture represent a particular place or address?
+- What's the GERS ID for a specific feature?
+
+It's a good starting point before writing queries with the [Python CLI](/getting-data/overturemaps-py/) or [DuckDB](/getting-data/duckdb/).

@@ -1,4 +1,3 @@
-
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
@@ -6,6 +5,56 @@
  */
 
 /* You can override the default Infima variables here. */
+
+/* Force dark code blocks in light mode (Night Owl) */
+[data-theme='light'] .prism-code {
+  background-color: #1e1e2e !important;
+  color: #cdd6f4 !important;
+}
+
+[data-theme='light'] pre {
+  background-color: #1e1e2e !important;
+  color: #cdd6f4 !important;
+}
+
+[data-theme='light'] code {
+  background-color: #1e1e2e;
+  color: #cdd6f4;
+}
+
+/* Syntax token overrides for dark code blocks in light mode */
+[data-theme='light'] .token.comment,
+[data-theme='light'] .token.prolog,
+[data-theme='light'] .token.doctype { color: #6c7086; font-style: italic; }
+
+[data-theme='light'] .token.keyword,
+[data-theme='light'] .token.operator { color: #cba6f7; }
+
+[data-theme='light'] .token.string,
+[data-theme='light'] .token.attr-value { color: #a6e3a1; }
+
+[data-theme='light'] .token.function { color: #89b4fa; }
+
+[data-theme='light'] .token.number { color: #fab387; }
+
+[data-theme='light'] .token.boolean,
+[data-theme='light'] .token.constant { color: #fab387; }
+
+[data-theme='light'] .token.punctuation { color: #9399b2; }
+
+[data-theme='light'] .token.property,
+[data-theme='light'] .token.tag { color: #89b4fa; }
+
+[data-theme='light'] .token.class-name { color: #f9e2af; }
+
+[data-theme='light'] .token.plain { color: #cdd6f4; }
+
+/* Keep inline code light in light mode */
+[data-theme='light'] :not(pre) > code {
+  background-color: rgba(44, 46, 127, 0.08);
+  color: var(--ifm-font-color-base);
+}
+
 :root {
   --ifm-color-primary: #2c2e7f;
   --ifm-color-primary-dark: #3a48b8;
@@ -114,15 +163,15 @@
   padding: 0.35rem 1rem;
   border-radius: 8px;
   border: none;
-  background: rgba(58, 72, 184, 0.8);
+  background: #2c2e7f;
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(58, 72, 184, 0.2);
+  box-shadow: 0 2px 8px rgba(44, 46, 127, 0.25);
   transition: all 0.2s ease;
 }
 
 .navbar .DocSearch-Button:hover {
-  background: rgba(58, 72, 184, 0.9);
-  box-shadow: 0 4px 12px rgba(58, 72, 184, 0.3);
+  background: #3a48b8;
+  box-shadow: 0 4px 12px rgba(44, 46, 127, 0.35);
   transform: translateY(-1px);
 }
 
@@ -145,18 +194,33 @@
 }
 
 [data-theme='dark'] .navbar .DocSearch-Button {
-  background: rgba(58, 72, 184, 0.6);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  background: #0ec1bd;
+  color: #1b1b2f;
+  box-shadow: 0 2px 8px rgba(14, 193, 189, 0.3);
 }
 
 [data-theme='dark'] .navbar .DocSearch-Button:hover {
-  background: rgba(83, 98, 209, 0.75);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  background: #4edad8;
+  color: #1b1b2f;
+  box-shadow: 0 4px 12px rgba(14, 193, 189, 0.4);
 }
 
-/* =================================
-   HEADER ICONS
-   ================================= */
+/* Teal left accent on h2 headings in docs */
+.theme-doc-markdown h2 {
+  padding-left: 0.75rem;
+  border-left: 3px solid #4edad8;
+}
+
+/* Landing page: remove empty title header and excess padding */
+.docs-doc-id-index .theme-doc-markdown > header {
+  display: none;
+}
+
+.docs-doc-id-index .container.padding-top--md {
+  padding-top: 0;
+}
+
+/* header icons */
 
 .github-link {
   width: 32px;
@@ -184,9 +248,7 @@
     0 0 / contain;
 }
 
-/* =================================
-   SMART TABLE STYLING
-   ================================= */
+/* smart table styling */
 
 /* Smart table container */
 .smart-table-container {
@@ -678,4 +740,71 @@
 [data-theme='dark'] .schema-fields-table .expand-button:hover {
   background-color: var(--ifm-color-primary-dark);
   color: var(--ifm-color-primary-lightest);
+}
+
+/* ── Markdown tables: clean minimal with teal accent (excludes schema smart tables) ── */
+.theme-doc-markdown > table,
+.theme-doc-markdown > div > table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  border-top: 2px solid var(--ifm-color-emphasis-200);
+  margin: 1.5rem 0;
+}
+
+.theme-doc-markdown > table th,
+.theme-doc-markdown > div > table th {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+  text-align: left;
+  border-bottom: 2px solid #4edad8;
+}
+
+.theme-doc-markdown > table td,
+.theme-doc-markdown > div > table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.theme-doc-markdown > table tr:last-child td,
+.theme-doc-markdown > div > table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Quick start: themed tab bar ── */
+.quickstart-tabs .tabs {
+  border-bottom: 2px solid var(--ifm-color-emphasis-200);
+  gap: 0;
+}
+
+.quickstart-tabs .tabs__item {
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-600);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.quickstart-tabs .tabs__item:hover {
+  color: var(--ifm-font-color-base);
+  background: transparent;
+}
+
+.quickstart-tabs .tabs__item--active {
+  border-bottom-color: #4edad8;
+  color: var(--ifm-font-color-base);
+  font-weight: 600;
+  background: transparent;
+}
+
+[data-theme='dark'] .quickstart-tabs .tabs__item--active {
+  border-bottom-color: #4edad8;
 }
