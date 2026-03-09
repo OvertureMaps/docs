@@ -8,7 +8,7 @@ Selects vehicles based on their length.
 | -----: | :----: | ------------- |
 | `dimension` | `"length"` | |
 | `comparison` | [`VehicleRelation`](vehicle_relation.md) | |
-| `value` | `float64` | Vehicle length selection threshold in the given `unit`<br/>*`≥ 0`* |
+| `value` | [`float64`](../../system/primitive/primitives.md) | Vehicle length selection threshold in the given `unit`<br/><br/>*`≥ 0`* |
 | `unit` | [`LengthUnit`](../length_unit.md) | Length unit in which `value` is expressed |
 
 ## Used By

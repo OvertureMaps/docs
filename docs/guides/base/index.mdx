@@ -1,7 +1,6 @@
 ---
 title: Overview
 description: Bathymetry, Infrastructure, Land, Landuse, Landcover, and Water features.
-slug: /guides/base/
 pagination_label: Base Overview
 ---
 
@@ -21,10 +20,10 @@ The Overture Maps base theme provides the land, water, infrastructure, and bathy
 - **`land_use`**: classifications of the human use of a section of land; translates landuse tag from OpenStreetMap.
 - **`water`**: physical representations of inland and ocean marine surfaces; translates natural and waterway tags from OpenStreetMap.
 
-## Understanding the parquet files
+## Data dictionary
 
 <details>
-	<summary>Schema for the GeoParquet files in the base theme</summary>
+	<summary>Column definitions in the base theme</summary>
 <div>
 <Tabs>
 <TabItem value="bathymetry" label="bathymetry" default>
@@ -196,7 +195,7 @@ Overture's base theme data is freely available on both Amazon S3 and Microsoft A
 
 Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a column-oriented spatial data format that is a backwards-compatible extension of [Apache Parquet](https://parquet.apache.org/). Parquet (and GeoParquet) is optimized for "cloud-native" queries, which means you can use many developer-friendly tools to efficiently fetch column "chunks" of cloud-hosted data. We encourage users who are new to GeoParquet to consult [this guide](https://guide.cloudnativegeo.org/geoparquet/).
 
-[The Getting Data section of this documentation](https://docs.overturemaps.org/getting-data/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for addresses.
+[The Getting Data section of this documentation](/getting-data/cloud-sources/) offers instructions for accessing the full Overture catalog.
 
 We recommend querying and downloading only the Overture data you need.
 If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract address data.
@@ -210,9 +209,19 @@ If you have a particular geographic area of interest, there are several options 
 
 ## Schema reference
 
-- [Explore the schema for the bathymetry feature type](/schema/reference/base/bathymetry).
-- [Explore the schema for the infrastructure feature type](/schema/reference/base/infrastructure).
-- [Explore the schema for the land feature type](/schema/reference/base/land).
-- [Explore the schema for the land cover feature type](/schema/reference/base/land_cover).
-- [Explore the schema for the land use feature type](/schema/reference/base/land_use).
-- [Explore the schema for the water feature type](/schema/reference/base/water).
+- [Explore the schema for the bathymetry feature type](/schema/reference/base/bathymetry/).
+- [Explore the schema for the infrastructure feature type](/schema/reference/base/infrastructure/).
+- [Explore the schema for the land feature type](/schema/reference/base/land/).
+- [Explore the schema for the land cover feature type](/schema/reference/base/land_cover/).
+- [Explore the schema for the land use feature type](/schema/reference/base/land_use/).
+- [Explore the schema for the water feature type](/schema/reference/base/water/).
+
+## Get support
+
+Overture is an open project and we welcome feedback, questions, and bug reports through our [public GitHub repositories](https://github.com/OvertureMaps).
+
+**Where to go.** Use [GitHub Discussions](https://github.com/orgs/OvertureMaps/discussions) for general questions, workflow help, feature suggestions, or broader conversations about Overture. Use GitHub Issues in the [data repository](https://github.com/OvertureMaps/data) or the [schema repository](https://github.com/OvertureMaps/schema) for specific bug reports: missing entities, geometry problems, duplicate records, or country-specific data concerns.
+
+**What to expect.** We review incoming issues regularly and try to respond within a few business days, but we can't guarantee a resolution timeline. Issues that affect data integrity or block common workflows get higher priority.
+
+**Filing a good issue.** The more detail you include, the faster we can help. When reporting a data problem, please include: the Overture release version you're using, a query or code snippet that reproduces the issue, specific entity IDs or bounding boxes where you see the problem, and any relevant screenshots or map views. If you can share a minimal reproducible example, that goes a long way.

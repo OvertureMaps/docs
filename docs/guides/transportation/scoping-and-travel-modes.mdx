@@ -1,0 +1,406 @@
+---
+title: Scoping Rules and Travel Modes
+description: How property values are constrained by location, time, and subject in the transportation schema
+pagination_label: Scoping Rules and Travel Modes
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+In the real world, many facts and rules affecting entities have only a partial application, meaning they don't apply everywhere, or they don't apply at all times, or to everyone, or to all sets of external conditions. For example, access restrictions on a road segment might not apply to all people or all kinds of vehicles, or they might vary according to the day of the week.
+
+The Overture schema uses two related concepts to capture the partial application of facts and rules: **scoped values** and **rule-based properties**.
+
+## Scoped values and scoping properties
+
+A *scoped* value is a value which only applies within a limited scope. Most scoped values are rules in the rule lists of [rule-based properties](#rules-and-rule-based-properties). However, scoped values also exist outside of rule-based properties. For example, a `destinations` property belonging to a road segment might be geometrically scoped to its position along the road.
+
+The scope in which a scoped value applies is controlled by one or more special child properties of the value known as *scoping* properties.
+
+### Geometric scoping (linear referencing)
+
+<Tabs>
+  <TabItem value="description" label="Description" default>
+
+The geometric scoping properties `at` and `between` limit the scope of their parent value to a position or range of positions, respectively, along a segment's geometry. When the parent value is a rule object, the rule only matches the position or range of positions specified in the `at` or `between` property.
+
+The value of the `at` property is a single real number `a` where `0` &le; `a`
+&le; `1`. It represents a discrete position along the segment's geometry. The
+value of the `between` property is a pair of numbers `[a, b]` where `0` &le;
+`a` &lt; `b` &le; `1`. It represents a range of positions along the segment's
+geometry. The numbers `a` and `b` are interpreted as percentage displacements
+along the parent segment's geometry starting from the start of the segment.
+(*The terms "start" and "end" are explained in
+[segments and connectors](../segments-and-connectors#start-end-and-orientation).*)
+
+So, for example, the scoping property `"at": 0.15` scopes its parent value
+to the position on the segment that is displaced 15% of the segment length from
+the start.
+
+<div style={{textAlign: 'center'}}>
+
+<figure>
+
+<ThemedImage
+  alt="Diagram showing a single geometrically-scoped position"
+  sources={{
+    light: useBaseUrl('/img/transportation/geometric-scoping-position-light.png'),
+    dark: useBaseUrl('/img/transportation/geometric-scoping-position-dark.png'),
+  }}
+  />
+<figcaption>
+*The position along the segment geometry described by `"at": 0.15`.*
+</figcaption>
+</figure>
+</div>
+
+The scoping property `"between": [0.35, 0.75]` scopes its parent value to the range of positions on the segment beginning at 35% and extending to 75% of the segment length from the start.
+
+<div style={{textAlign: 'center'}}>
+  <ThemedImage
+    alt="Diagram showing a geometrically-scoped range"
+    sources={{
+      light: useBaseUrl('/img/transportation/geometric-scoping-range-light.png'),
+      dark: useBaseUrl('/img/transportation/geometric-scoping-range-dark.png'),
+    }}
+  />
+  <figcaption>
+    *The range on the segment geometry described by `"between": [0.35, 0.75]`.*
+  </figcaption>
+</div>
+</TabItem>
+<TabItem value="example" label="Example" default>
+
+  The example below shows a road segment whose speed limit is defined by two geometrically-scoped speed limit rules:
+  ```yaml
+id: overture:transportation:example:geometric-scoping
+type: Feature
+geometry:
+  type: LineString
+  coordinates: [[0, 0], [1, 1]]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: primary
+  speed_limits:
+    - between: [0, 0.15]
+      max_speed:
+        value: 100
+        unit: km/h
+    - between: [0.15, 1]
+      max_speed:
+        value: 60
+        unit: km/h
+```
+  </TabItem>
+</Tabs>
+
+For details on how linear references are calculated, see the [linear referencing](../linear-referencing) guide.
+
+### Temporal scoping (opening hours)
+
+<Tabs>
+  <TabItem value="description" label="Description" default>
+
+The temporal, or time-based, scoping construct `when: { during: "..." }` limits the scope of its parent value to one or more recurring time ranges. When the parent value is a rule object, the rule only matches the time range or time ranges specified in the `during` property.
+
+The `during` property must contain a string expressed in the OpenStreetMap
+[opening hours specification](https://wiki.openstreetmap.org/wiki/Key:opening_hours/specification).
+
+  </TabItem>
+  <TabItem value="example" label="Example" default>
+
+The example below shows a road segment with a temporally-scoped access restriction rule. The rule states that non-bus travellers are prohibited from access to the segment on weekdays between 3PM and 6PM.
+
+```yaml
+id: overture:transportation:example:temporal-scoping
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-122.90019762265949, 49.20784664905824]
+    - [-122.9003738558948, 49.207833436710956]
+    - [-122.90052986564378, 49.207871186265805]
+properties:
+  theme: transportation
+  type: segment
+  version: 2
+  subtype: road
+  class: unknown
+  access_restrictions:
+    - access_type: denied
+      when:
+        mode: [bus]
+        during: "Mo-Fr 15:00-18:00"
+```
+
+  </TabItem>
+</Tabs>
+
+### Subjective scoping
+
+Subjective scoping means that the scope of a property can be constrained based on subjective factors like *who* or *what* is travelling on the transportation network, or *how* they are doing it.
+
+The Overture transportation schema supports several subjective factors:
+
+#### Travel-mode scoping
+
+A travel mode is a way of moving about the transportation network, for example driving in a motor vehicle, or, more specifically, driving in a high-occupancy vehicle.
+
+The property construct `when: { mode: [...] }` limits the scope of its parent value to apply only to people or things travelling using the listed travel modes. See [travel modes](#travel-modes) below for more detail.
+
+#### Heading
+
+<Tabs>
+  <TabItem value="description" label="Description" default>
+
+Heading scoping limits the scope of a parent value to apply only when the traveller is proceeding along the segment geometry in the named direction, either `forward` or `backward`. (*The directions `forward` and `backward` are defined in [segments and connectors](../segments-and-connectors#heading).*)
+
+The property construct `when: { heading: forward|backward }` applies heading scoping to a parent value.
+
+  </TabItem>
+  <TabItem value="example" label="Example" default>
+
+The example below shows a road segment with multiple heading-scoped access restriction rules. The rules allow all standard travel modes for the segment class to travel in the forward direction, but only allow buses to travel in the backward direction.
+
+```yaml
+id: overture:transportation:example:subjective-heading-scoping
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-1.3023158, 54.5579329]
+    - [-1.3020090, 54.5577898]
+    - [-1.3014511, 54.5575155]
+    - [-1.3009618, 54.5572737]
+    - [-1.3004518, 54.5570288]
+    - [-1.3003009, 54.5569580]
+properties:
+  theme: transportation
+  type: segment
+  version: 2
+  subtype: road
+  class: primary
+  access_restrictions:
+    - access_type: denied
+      when: { heading: backward }
+    - access_type: allowed
+      when:
+        heading: backward
+        mode: [bus]
+```
+  </TabItem>
+</Tabs>
+
+
+#### Purpose of use scoping
+
+<Tabs>
+  <TabItem value="description" label="Description" default>
+
+Usage purpose scoping limits the scope of a parent value to apply only when the user is using the feature for one of the listed purposes. This type of scoping is common when it matters that a person is in the process of doing something like making a delivery or acting as the customer of a business.
+
+The property construct `when: { using: [...] }` applies usage purpose scoping to a parent value.
+
+  </TabItem>
+  <TabItem value="example" label="Example" default>
+
+The example below shows a road segment representing a hotel driveway where through traffic is not permitted (only usage by hotel customers or as a final destination is allowed):
+
+  ```yaml
+id: overture:transportation:example:subjective-usage-purpose-scoping
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-123.12700676422021, 49.279826628301635]
+    - [-123.12680748254229, 49.27995121574301]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: tertiary
+  access_restrictions:
+    - access_type: denied
+    - access_type: allowed
+      when: { using: [as_customer, at_destination] }
+```
+
+  </TabItem>
+</Tabs>
+
+#### Status scoping (membership in a recognized group)
+
+<Tabs>
+  <TabItem value="description" label="Description" default>
+
+Status scoping limits the scope of a parent value to apply only when the user has a certain recognized status or is a member of a recognized group. This type of scoping is useful when it matters whether a person or thing has a recognized characteristic, such as holding a permit or being an employee of a business or student at an academic institution.
+
+The property construct `when: { recognized: [...] }` applies status scoping to a parent value.
+
+  </TabItem>
+  <TabItem value="example" label="Example" default>
+
+The example below shows a road segment modeling a private condominium tower driveway where access is denied to the general public, but allowed to privately-authorized individuals, such as condo unit owners:
+
+```yaml
+id: overture:transportation:example:subjective-status-scoping
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-123.12791513926058, 49.287502049554945]
+    - [-123.12795068403449, 49.287522915661725]
+    - [-123.12797769806272, 49.28756882106529]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: tertiary
+  access_restrictions:
+    - access_type: denied
+    - access_type: allowed
+      when: { recognized: [as_private] }
+```
+
+  </TabItem>
+</Tabs>
+
+### Vehicle attributes scoping
+
+<Tabs>
+  <TabItem value="description" label="Description" default>
+
+Vehicle attribute scoping limits the scope of a parent value to apply only when the vehicle in use meets certain criteria.
+
+The property construct `when: { vehicle: [{ dimension: ..., comparison: ..., value: ... }] }` applies vehicle attributes scoping to a parent value.
+
+Note that vehicle attribute scoping can overlap to some degree with [travel mode scoping](#travel-mode-scoping). For example, some access rules may be scoped to the travel mode "heavy goods vehicle", while another equivalent access rule could be scoped to the vehicle attribute "gross vehicle weight."
+
+  </TabItem>
+  <TabItem value="example" label="Example" default>
+
+```yaml
+id: overture:transportation:example:subjective-vehicle-attributes-scoping
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-123.12791513926058, 49.287502049554945]
+    - [-123.12795068403449, 49.287522915661725]
+    - [-123.12797769806272, 49.28756882106529]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: residential
+  access_restrictions:
+    - access_type: denied
+      when:
+        vehicle:
+          - dimension: weight
+            comparison: greater_than
+            value: 23
+            unit: 't'
+```
+
+  </TabItem>
+</Tabs>
+
+
+## Rules and rule-based properties
+
+A *rule-based* property is a property whose value in a given situation is determined by evaluating a list of rules against the facts applicable to that situation. Each individual rule in the list of rules is itself a scoped value, and the assessment of which rule applies to a given set of facts is done by the rule evaluation algorithm.
+
+### Absolute form
+
+There are cases when specifying a property value using rules makes sense, and cases where doing so is unnecessarily complicated because the real-world entity being modeled has a single unchanging state which is the same in all fact situations. In these cases, most rule-based properties support a simpler absolute form without a list of rules.
+
+### Rule evaluation algorithm
+
+Given a rule-based property, the actual value of the property in a given fact pattern is determined by a three-step process: first, all matching rules are identified; second, the single determining rule is chosen if possible; lastly, if there is no applicable rule, an appropriate default value may be assumed.
+
+1. **Matching rules.** For a given rule and a given set of facts, the rule *matches* the facts if the scope of the rule contains all the facts, *i.e.* the facts fit within all of the scoping properties expressed in the rule. The matching criteria for a rule can be thought of as the logical AND of all the scoping properties expressed in the rule.
+2. **Determining rule.** For a given rule-based property and a given set of facts, *at most* one rule can *determine* the property value. If only one rule matches, that rule determines the property value. If more than one rule matches, the last matching rule in the list determines the value. (This is similar to how OpenStreetMap [conditional restrictions](https://wiki.openstreetmap.org/wiki/Conditional_restrictions) are evaluated.) Therefore it is important to write more general rules before more specific ones in a rule list.
+3. **Fallback to default.** If there are no matching rules, an appropriate default value may apply, depending on the property being evaluated.
+
+## Travel modes
+
+In the real world, a travel mode can be thought of intuitively as a way of getting from point A to point B. Travel modes can include non-vehicle modes (foot), vehicle modes (a bicycle or motor vehicle), and occasionally more granular details, e.g. a motor vehicle classified as a high occupancy vehicle or a heavy goods vehicle.
+
+Within the Overture transportation theme schema model, a travel mode is a recognized mode by which a person or thing may use a [segment](/schema/reference/transportation/segment) feature.
+
+### Implied travel modes
+
+Every segment has an *implied* set of travel modes that are allowed to use the segment. For [road](../roads) segments, this implied set derives from the road class, as well as local rules, norms, and customs operative where the road segment is situated.
+
+Since this implied set depends on locality or jurisdiction, and is susceptible of varying over time, the Overture transportation schema does not try to specify the implied set. Resolution of the implied set is done by the specific application in the case where this level of detail is important for its proper functioning. An accurate routing engine may need this information, whereas a 2D map render or a geocoder likely do not.
+
+### General definitions
+
+Overture's recognized travel modes are defined in general terms that are broadly applicable. For example, `hov` is a high-occupancy vehicle and `hgv` is a heavy goods vehicle. In most jurisdictions, these general terms map to a concept that is in use within the jurisdiction, even though the local name for the concept may vary.
+
+Despite being broadly applicable, travel modes may have different definitions in different places and at different times:
+
+- in one jurisdiction, an `hgv` might mean any vehicle with a gross vehicle weight in excess of 3.5 tonnes (3,500 kg). In another place, an `hgv` might have a gross vehicle weight of at least 10,001 lbs.
+- in one jurisdiction, an `hov` might require a minimum of 2 passengers while in another place it might have a higher minimum passenger count, or include battery-electric vehicles, or exclude certain classes of vehicle or usage.
+
+As a consequence of the variance in definition across place and time, Overture gives only general definitions for travel modes, leaving precise definition to those applications that require them.
+
+### Travel mode scoping in the schema
+
+#### The `mode` scoping property
+
+The scoping property `mode` controls whether a given scoped property applies when a given travel mode is being used for traveling along a road segment.
+
+If `mode` is provided, it must be a non-empty array of string values identifying travel modes, and is interpreted as a set. Values must be unique, but order is not important.
+
+#### Vehicle attribute scoping: `vehicle`
+
+Because travel modes are a fuzzy concept, there are inevitably areas of overlap with the more precise, but more limited, `vehicle` scoping property which is used for [vehicle attributes scoping](#vehicle-attributes-scoping). Where there is potential overlap, the method of scoping used in Overture data releases will depend on how the upstream data source has expressed the equivalent concept. Where there is choice, it is preferable to select the scoping method that most accurately reflects the intention expressed on local signage.
+
+#### Similar scoping properties: `using` and `recognized`
+
+The scoping properties `using` and `recognized` express concepts that are meant to be orthogonal to (completely separate from) travel modes:
+
+- The `using` property indicates [purpose of use](#purpose-of-use-scoping) scoping, which relates to the purpose for which the person or thing travelling is using a given segment of the transportation network. Travel modes should ideally not embed a purpose of use.
+- The `recognized` property indicates [status scoping](#status-scoping-membership-in-a-recognized-group), which relates to a recognized status given to the person or thing traveling, where the recognized status is distinct from the mode of travel itself. Travel modes should ideally not embed a status.
+
+### The travel modes taxonomy
+
+Travel modes in Overture form a shallow taxonomy. Some travel modes are more general, while others are more specific, and a more general travel mode may contain a more specific one. For example, the general travel mode `vehicle` contains the more specific mode `motor_vehicle`.
+
+<figure>
+
+<div style={{textAlign: 'center'}}>
+
+<ThemedImage
+  alt="Overture travel modes taxonomy"
+  sources={{
+    light: useBaseUrl('/img/transportation/travel-modes-light.png'),
+    dark: useBaseUrl('/img/transportation/travel-modes-dark.png'),
+  }}
+/>
+
+</div>
+
+<figcaption>
+
+<div style={{ textAlign: "center" }}>
+
+*The Overture travel modes taxonomy.*
+
+</div>
+
+</figcaption>
+
+</figure>
+
+As many of the above travel modes draw on the body of knowledge accumulated in relation to OpenStreetMap [transport mode access restrictions](https://wiki.openstreetmap.org/wiki/Key:access#Transport_mode_restrictions), Overture Maps would like acknowledge an intellectual debt to the OSM community in relation to travel modes as well as to other aspects of the transportation schema.

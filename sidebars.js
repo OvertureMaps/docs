@@ -1,17 +1,16 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   docs: [
-    'introduction',
     {
       type: 'category',
       label: 'Getting Started',
       collapsed: true,
       items: [
-        'getting-data/index',
-        'getting-data/duckdb',
+        'getting-data/quick-start',
+        'getting-data/cloud-sources',
+        'getting-data/explore',
         'getting-data/overturemaps-py',
-        'getting-data/athena-aws',
-        'getting-data/synapse-azure',
+        'getting-data/duckdb',
         {
           type: 'category',
           label: 'Data Mirrors',
@@ -43,7 +42,10 @@ const sidebars = {
         'examples/QGIS',
         'examples/rapid',
         'examples/spark',
+        'examples/sedona',
         'examples/wherobots',
+        'examples/athena-aws',
+        'examples/synapse-azure',
       ],
     },
     {
@@ -57,7 +59,7 @@ const sidebars = {
           label: 'Addresses',
           collapsed: true,
           items: [
-            'guides/addresses/overview',
+            'guides/addresses/index',
           ],
         },
         {
@@ -65,7 +67,7 @@ const sidebars = {
           label: 'Base',
           collapsed: true,
           items: [
-            'guides/base/overview',
+            'guides/base/index',
           ],
         },
         {
@@ -73,7 +75,7 @@ const sidebars = {
           label: 'Buildings',
           collapsed: true,
           items: [
-            'guides/buildings/overview',
+            'guides/buildings/index',
           ],
         },
         {
@@ -81,7 +83,7 @@ const sidebars = {
           label: 'Divisions',
           collapsed: true,
           items: [
-            'guides/divisions/overview',
+            'guides/divisions/index',
           ],
         },
         {
@@ -89,7 +91,7 @@ const sidebars = {
           label: 'Places',
           collapsed: true,
           items: [
-            'guides/places/overview',
+            'guides/places/index',
             'guides/places/taxonomy',
             'guides/places/taxonomy-browser',
           ],
@@ -99,7 +101,11 @@ const sidebars = {
           label: 'Transportation',
           collapsed: true,
           items: [
-            'guides/transportation/overview',
+            'guides/transportation/index',
+            'guides/transportation/segments-and-connectors',
+            'guides/transportation/scoping-and-travel-modes',
+            'guides/transportation/linear-referencing',
+            'guides/transportation/roads',
           ],
         },
       ],

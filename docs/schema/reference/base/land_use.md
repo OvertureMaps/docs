@@ -17,8 +17,8 @@ TODO: Explain relationship to `Land` features.
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Geometry of the land use area, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the land use area, which may be a point, line string, polygon, or multi-polygon.<br/><br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"land_use"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -43,7 +43,7 @@ TODO: Explain relationship to `Land` features.
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
@@ -55,7 +55,11 @@ TODO: Explain relationship to `Land` features.
 | Column | Value |
 | -------: | ------- |
 | `id` | `1e1f6095-5bd2-3fdb-a422-41351b848e9d` |
-| `geometry` | `POLYGON ((-176.5623454 -43.9567812, -176.5627644 -43.9561272, -176.5626898 -43.9557432, -176.5624297...` |
+| `bbox.xmin` | `-176.56825256347656` |
+| `bbox.xmax` | `-176.56231689453125` |
+| `bbox.ymin` | `-43.96001052856445` |
+| `bbox.ymax` | `-43.95420837402344` |
+| `geometry` | `POLYGON ((-176.5623454 -43.9567812, -176.5627644 -43.9561272, -176.5626898 -43.9557432, -176.5624...` |
 | `theme` | `base` |
 | `type` | `land_use` |
 | `version` | `0` |
@@ -73,8 +77,5 @@ TODO: Explain relationship to `Land` features.
 | `names.common` | `null` |
 | `names.rules` | `null` |
 | `level` | `null` |
-| `source_tags.LINZ:source_version` | `V16` |
-| `source_tags.attribution` | `http://wiki.osm.org/wiki/Attribution#LINZ` |
-| `source_tags.leisure` | `golf_course` |
-| `source_tags.source_ref` | `http://www.linz.govt.nz/topography/topo-maps/` |
+| `source_tags` | `{"LINZ:source_version": "V16", "attribution": "http://wiki.osm.org/wiki/Attribution#LINZ", "leisu...` |
 | `wikidata` | `null` |
