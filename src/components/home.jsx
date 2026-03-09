@@ -22,7 +22,7 @@ export default function Home() {
         </p>
 
         <div className={styles.ctaRow}>
-          <a href="/getting-data/" className={styles.btnPrimary}>
+          <a href="/getting-data/quickstart/" className={styles.btnPrimary}>
             Quick start
           </a>
           <a href="https://explore.overturemaps.org" className={styles.btnSecondary} target="_blank" rel="noopener noreferrer">
