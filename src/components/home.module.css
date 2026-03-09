@@ -124,7 +124,7 @@
     0 2px 4px rgba(44, 46, 127, 0.08),
     0 8px 24px rgba(44, 46, 127, 0.12),
     0 0 0 1px rgba(44, 46, 127, 0.15);
-  height: 480px;
+  height: 600px;
 }
 [data-theme='dark'] .explorerFrame {
   box-shadow:
@@ -164,14 +164,6 @@
   background: rgba(27, 27, 47, 0.88);
   color: #4edad8;
   border-color: rgba(78, 218, 216, 0.2);
-}
-
-.explorerCaption {
-  margin-top: 0.75rem;
-  font-size: 0.72rem;
-  color: var(--ifm-color-emphasis-600);
-  text-align: center;
-  letter-spacing: 0.03em;
 }
 
 /* ── STATS ── */

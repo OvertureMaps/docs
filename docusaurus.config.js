@@ -142,8 +142,7 @@ const config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'docs',
+            to: '/',
             position: 'left',
             label: 'Docs',
           },

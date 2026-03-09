@@ -2,12 +2,6 @@ import React from 'react';
 import RotatingWord from '@site/src/components/RotatingWord';
 import styles from './home.module.css';
 
-const STATS = [
-  { number: '4B+',  label: 'map features globally' },
-  { number: '6',    label: 'unified data themes' },
-  { number: '50+',  label: 'member organizations' },
-  { number: 'Free', label: 'under open licenses' },
-];
 
 export default function Home() {
   return (
@@ -28,16 +22,11 @@ export default function Home() {
         </p>
 
         <div className={styles.ctaRow}>
-          <a
-            href="https://explore.overturemaps.org"
-            className={styles.btnPrimary}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Explore the data
+          <a href="/getting-data/" className={styles.btnPrimary}>
+            Quick start
           </a>
-          <a href="/getting-data/index" className={styles.btnSecondary}>
-            Read the docs {'\u2192'}
+          <a href="https://explore.overturemaps.org" className={styles.btnSecondary} target="_blank" rel="noopener noreferrer">
+            Explore the data and schema {'\u2192'}
           </a>
         </div>
       </section>
@@ -59,22 +48,8 @@ export default function Home() {
             Open full screen {'\u2197'}
           </a>
         </div>
-        <p className={styles.explorerCaption}>
-          Live Overture Maps data — explore buildings, roads, places &amp; more
-        </p>
       </div>
 
-      <div className={styles.statsSection}>
-        <hr className={styles.statsDivider} />
-        <div className={styles.stats}>
-          {STATS.map(({ number, label }) => (
-            <div key={number} className={styles.statItem}>
-              <div className={styles.statNumber}>{number}</div>
-              <div className={styles.statLabel}>{label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
     </>
   );
 }

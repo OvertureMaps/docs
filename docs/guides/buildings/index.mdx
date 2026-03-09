@@ -1,7 +1,6 @@
 ---
 title: Overview
 description: 2.6 billion buildings and counting
-slug: /guides/buildings/
 pagination_label: Buildings Overview
 ---
 
@@ -18,7 +17,7 @@ The Overture Maps buildings theme describes human-made structures with roofs or 
 
 ### Data access and retrieval
 
-Overture's `building` and `building_part` datasets are freely available on both Amazon S3 and Microsoft Azure Blob Storage at the locations listed below. We provide [a comprehensive guide](https://docs.overturemaps.org/getting-data/) to accessing Overture data in our documentation.
+Overture's `building` and `building_part` datasets are freely available on both Amazon S3 and Microsoft Azure Blob Storage at the locations listed below. We provide [a comprehensive guide](/getting-data/cloud-sources/) to accessing the entire Overture catalog in our documentation.
 
 <Tabs>
   <TabItem value="building" label="building" default>
@@ -45,9 +44,9 @@ Our buildings data is intended to support multiple use cases, as defined and pri
 - **Spatial Analysis**: Enable end users to perform analysis to create derivative datasets or train AI models.
 
 
-## Dataset schema
+## Data dictionary
 
-Overture releases its data as GeoParquet files. The `building` and `building_part` datasets have slightly different schemas, and the column definitions for those data files are described below. For more detailed information about the buildings schema see Overture [schema reference documentation](https://docs.overturemaps.org/schema/). 
+Overture releases its data as GeoParquet files. The `building` and `building_part` datasets have slightly different schemas, and the column definitions for those data files are described below. For more detailed information about the buildings schema see Overture [schema reference documentation](/schema/). 
 
 <details>
 	<summary>Column definitions for the `building` and `building_part` datasets</summary>
@@ -169,7 +168,17 @@ The visualization below shows Overture buildings data looking across the US-Mexi
 
 ## Licensing
 
-The Overture Maps buildings theme is provided under the ODbL license, largely because the primary OpenStreetMap data is provided under that license. This requires that other data sources that are included in the buildings theme are also provided under ODbL or a license that is compatible with ODbL, such as CC BY 4.0. Overture Maps determine if potential sources of open data that would expand coverage or improve quality are provided under a license that is compatible with ODbL before adding to the conflation process. For more information, see the [licensing and attribution](https://docs.overturemaps.org/attribution/) section of our documentation.
+The Overture Maps buildings theme is provided under the ODbL license, largely because the primary OpenStreetMap data is provided under that license. This requires that other data sources that are included in the buildings theme are also provided under ODbL or a license that is compatible with ODbL, such as CC BY 4.0. Overture Maps determine if potential sources of open data that would expand coverage or improve quality are provided under a license that is compatible with ODbL before adding to the conflation process. For more information, see the [licensing and attribution](../../attribution) section of our documentation.
+
+## Get support
+
+Overture is an open project and we welcome feedback, questions, and bug reports through our [public GitHub repositories](https://github.com/OvertureMaps).
+
+**Where to go.** Use [GitHub Discussions](https://github.com/orgs/OvertureMaps/discussions) for general questions, workflow help, feature suggestions, or broader conversations about Overture. Use GitHub Issues in the [data repository](https://github.com/OvertureMaps/data) or the [schema repository](https://github.com/OvertureMaps/schema) for specific bug reports: missing entities, geometry problems, duplicate records, or country-specific data concerns.
+
+**What to expect.** We review incoming issues regularly and try to respond within a few business days, but we can't guarantee a resolution timeline. Issues that affect data integrity or block common workflows get higher priority.
+
+**Filing a good issue.** The more detail you include, the faster we can help. When reporting a data problem, please include: the Overture release version you're using, a query or code snippet that reproduces the issue, specific entity IDs or bounding boxes where you see the problem, and any relevant screenshots or map views. If you can share a minimal reproducible example, that goes a long way.
 
 
 

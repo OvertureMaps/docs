@@ -18,7 +18,7 @@ To associate your data with GERS identifiers, we need to:
 
 Joining geospatial datasets is a highly context dependent task. Sometimes you want very precise matches, with little risk of false positives. And other times you want greedy, loose matches, with wide coverage. To demonstrate this context dependency, we’ll be adopting the following use case to frame our decisions:
 
-*We’re building a hyperlocal mobile application that allows people to browse restaurants in Alameda County. Users can search for, browse, bookmark, and share restaurants. We will be using [Overture’s Places theme](https://docs.overturemaps.org/guides/places/) as our foundational dataset, but we want to bring in additional datasets to add details to our restaurant listings.*
+*We’re building a hyperlocal mobile application that allows people to browse restaurants in Alameda County. Users can search for, browse, bookmark, and share restaurants. We will be using [Overture’s Places theme](../../guides/places) as our foundational dataset, but we want to bring in additional datasets to add details to our restaurant listings.*
 
 One dataset we want to add is [Alameda County’s restaurant inspection reports](https://data.acgov.org/datasets/e95ff2829e9d4ea0b3d8266aac37ff14_0/explore), a dataset detailing the health and safety scores for each restaurant. This data will allow our users to filter restaurants by their health scores and present these health scores in our restaurant profiles.
 
@@ -130,7 +130,7 @@ Using these common properties, and a bit of SQL, we can spin up a quick matcher 
 
 ### Staging our datasets
 
-With our inspection data saved as `inspection_records.geojson`, let’s boot up [DuckDB](/getting-data/duckdb), specifying a local database as a cache.
+With our inspection data saved as `inspection_records.geojson`, let’s boot up [DuckDB](/getting-data/duckdb/), specifying a local database as a cache.
 
 ```bash
 $ duckdb inspection_match.ddb

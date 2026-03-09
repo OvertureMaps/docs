@@ -4,7 +4,7 @@ slug: /schema/
 title: Schema Reference
 sidebar_label: Overview
 description: Pydantic schemas for Overture Maps data
-pagination_label: Schema Reference
+pagination_label: Schema Reference Overview
 ---
 
 # Overture Maps Schema {#top-level-properties}
