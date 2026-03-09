@@ -12,8 +12,8 @@ lake beds or ocean floors.
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Shape of the underwater area, which may be a polygon or multi-polygon.<br/>*Allowed geometry types: MultiPolygon, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Shape of the underwater area, which may be a polygon or multi-polygon.<br/><br/>*Allowed geometry types: MultiPolygon, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"bathymetry"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -37,7 +37,11 @@ lake beds or ocean floors.
 | Column | Value |
 | -------: | ------- |
 | `id` | `5d40bd6c-db14-5492-b29f-5e25a59032bc` |
-| `geometry` | `MULTIPOLYGON (((-170.71296928 -76.744313428, -170.719841483 -76.757076376, -170.731061124 -76.761566...` |
+| `bbox.xmin` | `-175.12791442871094` |
+| `bbox.xmax` | `-170.05111694335938` |
+| `bbox.ymin` | `-77.9718246459961` |
+| `bbox.ymax` | `-75.64299774169922` |
+| `geometry` | `MULTIPOLYGON (((-170.71296928 -76.744313428, -170.719841483 -76.757076376, -170.731061124 -76.761...` |
 | `theme` | `base` |
 | `type` | `bathymetry` |
 | `version` | `0` |

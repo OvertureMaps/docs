@@ -30,6 +30,12 @@ overturemaps download \
   -o boston_buildings.geojson
 ```
 
+If you have [uv](https://docs.astral.sh/uv/) installed, you can run overturemaps [with uvx](https://docs.astral.sh/uv/guides/tools/#running-tools) without installing it:
+
+```bash
+uvx overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=building -o boston.parquet
+```
+
 ## Usage
 
 The `overturemaps download` command downloads Overture data with an optional bounding box into the specified file format. When specifying a bounding box, only the minimum data is transferred. The result is streamed and can handle arbitrarily large bounding boxes.

@@ -33,8 +33,8 @@ and `water=*`.
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Geometry of the water feature, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the water feature, which may be a point, line string, polygon, or multi-polygon.<br/><br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"water"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -48,8 +48,8 @@ and `water=*`.
 | `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
 | `class` | [`WaterClass`](types/water_class.md) (optional) | |
 | `subtype` | [`WaterSubtype`](types/water_subtype.md) (optional) | |
-| `is_intermittent` | `boolean` (optional) | Whether the water body exists intermittently, not permanently<br/>*`strict=True`* |
-| `is_salt` | `boolean` (optional) | Whether the water body contains salt water<br/>*`strict=True`* |
+| `is_intermittent` | `boolean` (optional) | Whether the water body exists intermittently, not permanently<br/><br/>*`strict=True`* |
+| `is_salt` | `boolean` (optional) | Whether the water body contains salt water<br/><br/>*`strict=True`* |
 | `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
 | `names` | [`Names`](../core/names.md) (optional) | |
 | `names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
@@ -60,7 +60,7 @@ and `water=*`.
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `source_tags` | [`SourceTags`](types/source_tags.md) (map, optional) | Key/value pairs imported directly from the source data without change.<br/><br/>This field provides access to raw OSM entity tags for features sourced from OpenStreetMap. |
@@ -71,6 +71,10 @@ and `water=*`.
 | Column | Value |
 | -------: | ------- |
 | `id` | `6bbb5fe5-bf26-3efa-b120-0a7079b60840` |
+| `bbox.xmin` | `-177.03179931640625` |
+| `bbox.xmax` | `-177.0317840576172` |
+| `bbox.ymin` | `-84.93480682373047` |
+| `bbox.ymax` | `-84.9347915649414` |
 | `geometry` | `POINT (-177.031799 -84.934793)` |
 | `theme` | `base` |
 | `type` | `water` |
@@ -89,6 +93,5 @@ and `water=*`.
 | `names.primary` | `Thanksgiving Point` |
 | `names.common` | `null` |
 | `names.rules` | `null` |
-| `source_tags.natural` | `cape` |
-| `source_tags.ref:linz:place_id` | `13433` |
+| `source_tags` | `{"natural": "cape", "ref:linz:place_id": "13433"}` |
 | `wikidata` | `Q33140589` |

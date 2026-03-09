@@ -19,8 +19,8 @@ TODO: Explain relationship to `Land` features.
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Shape of the covered land area, which may be a polygon or multi-polygon.<br/>*Allowed geometry types: MultiPolygon, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Shape of the covered land area, which may be a polygon or multi-polygon.<br/><br/>*Allowed geometry types: MultiPolygon, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"land_cover"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -44,7 +44,11 @@ TODO: Explain relationship to `Land` features.
 | Column | Value |
 | -------: | ------- |
 | `id` | `c347312d-012b-5e73-8bd3-a10d04b2981d` |
-| `geometry` | `POLYGON ((-179.99877531181616 65.95172539425603, -179.99740705536922 65.95265577758867, -179.9975172...` |
+| `bbox.xmin` | `-180.0001983642578` |
+| `bbox.xmax` | `-179.99313354492188` |
+| `bbox.ymin` | `65.95172119140625` |
+| `bbox.ymax` | `65.96218872070312` |
+| `geometry` | `POLYGON ((-179.99877531181616 65.95172539425603, -179.99740705536922 65.95265577758867, -179.9975...` |
 | `theme` | `base` |
 | `type` | `land_cover` |
 | `version` | `0` |

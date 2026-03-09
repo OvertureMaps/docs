@@ -6,8 +6,8 @@ Underlying type: `list<`[`RoadFlagRule`](road_flag_rule.md)`>`
 
 ## Constraints
 
-- `minimum length: 1`
-- Ensures all items in a collection are unique. (`UniqueItemsConstraint`)
+- Minimum length: 1
+- All items must be unique. (`UniqueItemsConstraint`)
 
 ## Used By
 

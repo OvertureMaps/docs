@@ -4,7 +4,7 @@
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `sequence[]` | `list<`[`SequenceEntry`](sequence_entry.md)`>` | Ordered sequence of connector/segment pairs that it is prohibited to follow from this segment.<br/>*`minimum length: 1`*<br/>*Ensures all items in a collection are unique. (`UniqueItemsConstraint`)* |
+| `sequence[]` | `list<`[`SequenceEntry`](sequence_entry.md)`>` | Ordered sequence of connector/segment pairs that it is prohibited to follow from this segment.<br/><br/>*Minimum length: 1*<br/>*All items must be unique. (`UniqueItemsConstraint`)* |
 | `sequence[].connector_id` | [`Id`](../../system/ref/id.md) | Identifies the point of physical connection between the previous segment in the sequence and the segment in this sequence entry. |
 | `sequence[].segment_id` | [`Id`](../../system/ref/id.md) | Identifies the segment that the previous segment in the sequence is physically connected to via the sequence entry's connector. |
 | `final_heading` | [`Heading`](../../core/scoping/heading.md) | Direction of travel that is prohibited on the destination segment of the sequence. |

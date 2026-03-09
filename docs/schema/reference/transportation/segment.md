@@ -9,8 +9,8 @@ sidebar_position: 1
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Segment centerline<br/>*Allowed geometry types: LineString* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Segment centerline<br/><br/>*Allowed geometry types: LineString* |
 | `theme` | `"transportation"` | |
 | `type` | `"segment"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -33,7 +33,7 @@ sidebar_position: 1
 | `access_restrictions[].when.using` | `list<`[`PurposeOfUse`](../core/scoping/purpose_of_use.md)`>` (optional) | A list of one or more usage purposes, such as delivery or arrival at final destination, that the containing AccessRestrictionRule applies to. |
 | `access_restrictions[].when.recognized` | `list<`[`RecognizedStatus`](../core/scoping/recognized_status.md)`>` (optional) | A list of one or more recognized status values, such as employee or student, that the containing AccessRestrictionRule applies to. |
 | `access_restrictions[].when.vehicle` | [`VehicleAxleCountSelector`](../core/scoping/vehicle_axle_count_selector.md) \| [`VehicleHeightSelector`](../core/scoping/vehicle_height_selector.md) \| [`VehicleLengthSelector`](../core/scoping/vehicle_length_selector.md) \| [`VehicleWeightSelector`](../core/scoping/vehicle_weight_selector.md) \| [`VehicleWidthSelector`](../core/scoping/vehicle_width_selector.md) (list, optional) | A list of one or more vehicle parameters that limit the vehicles the containing AccessRestrictionRule applies to. |
-| `connectors[]` | `list<`[`ConnectorReference`](types/connector_reference.md)`>` (optional) | List of connectors which this segment is physically connected to and their relative location. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector.<br/>*`minimum length: 2`*<br/>*Ensures all items in a collection are unique. (`UniqueItemsConstraint`)* |
+| `connectors[]` | `list<`[`ConnectorReference`](types/connector_reference.md)`>` (optional) | List of connectors which this segment is physically connected to and their relative location. Each connector is a possible routing decision point, meaning it defines a place along the segment in which there is possibility to transition to other segments which share the same connector.<br/><br/>*Minimum length: 2*<br/>*All items must be unique. (`UniqueItemsConstraint`)* |
 | `connectors[].connector_id` | [`Id`](../system/ref/id.md) | A unique identifier |
 | `connectors[].at` | [`LinearlyReferencedPosition`](../core/scoping/linearly_referenced_position.md) (optional) | The linearly-referenced position on the geometry, specified as a percentage displacement from the start of the geometry, that the containing ConnectorReference applies to. |
 | `level_rules[]` | [`LevelRules`](types/level_rules.md) (list, optional) | Defines the Z-order, i.e. stacking order, of the road segment. |
@@ -58,7 +58,7 @@ sidebar_position: 1
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `class` *(Road)* | [`RoadClass`](types/road_class.md) | |
@@ -122,7 +122,11 @@ sidebar_position: 1
 | Column | Value |
 | -------: | ------- |
 | `id` | `1bc62f3b-08b5-42b8-89fe-36f685f60455` |
-| `geometry` | `LINESTRING (-176.5636191 -43.954404, -176.5643637 -43.9538145, -176.5647264 -43.9535274, -176.564994...` |
+| `bbox.xmin` | `-176.5650177001953` |
+| `bbox.xmax` | `-176.56361389160156` |
+| `bbox.ymin` | `-43.954410552978516` |
+| `bbox.ymax` | `-43.953250885009766` |
+| `geometry` | `LINESTRING (-176.5636191 -43.954404, -176.5643637 -43.9538145, -176.5647264 -43.9535274, -176.564...` |
 | `theme` | `transportation` |
 | `type` | `segment` |
 | `version` | `1` |

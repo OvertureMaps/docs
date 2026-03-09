@@ -12,7 +12,7 @@ An individual speed limit rule.
 | `min_speed` | [`Speed`](speed.md) (optional) | *At least one of `max_speed`, `min_speed` must be set* |
 | `min_speed.value` | [`SpeedValue`](speed_value.md) | Speed value |
 | `min_speed.unit` | [`SpeedUnit`](../../core/speed_unit.md) | |
-| `is_max_speed_variable` | `boolean` (optional) | Indicates a variable speed corridor<br/>*`strict=True`* |
+| `is_max_speed_variable` | `boolean` (optional) | Indicates a variable speed corridor<br/><br/>*`strict=True`* |
 | `between` | [`LinearlyReferencedRange`](../../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SpeedLimitRule applies to. |
 | `when` | [`SpeedLimitRule.When`](speed_limit_rule.when.md) (optional) | Scopes for SpeedLimitRule: Scope.HEADING, Scope.TEMPORAL, Scope.TRAVEL MODE, Scope.PURPOSE OF USE, Scope.RECOGNIZED STATUS and Scope.VEHICLE |
 | `when.heading` | [`Heading`](../../core/scoping/heading.md) (optional) | The heading, either forward or backward, that the containing SpeedLimitRule applies to. |

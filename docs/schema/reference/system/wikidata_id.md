@@ -10,7 +10,7 @@ Underlying type: `string`
 
 ## Constraints
 
-- Constraint for Wikidata identifiers (Q followed by digits). (`WikidataIdConstraint`, pattern: `^Q\d+$`)
+- Allows only Wikidata identifiers (Q followed by digits). (`WikidataIdConstraint`, pattern: `^Q\d+$`)
 
 ## Used By
 

@@ -101,6 +101,10 @@ const sidebars = {
           collapsed: true,
           items: [
             'guides/transportation/index',
+            'guides/transportation/segments-and-connectors',
+            'guides/transportation/scoping-and-travel-modes',
+            'guides/transportation/linear-referencing',
+            'guides/transportation/roads',
           ],
         },
       ],

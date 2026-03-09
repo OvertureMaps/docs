@@ -8,7 +8,7 @@ Selects vehicles based on the number of axles they have.
 | -----: | :----: | ------------- |
 | `dimension` | `"axle_count"` | |
 | `comparison` | [`VehicleRelation`](vehicle_relation.md) | |
-| `value` | `uint8` | Number of axles on the vehicle |
+| `value` | [`uint8`](../../system/primitive/primitives.md) | Number of axles on the vehicle |
 
 ## Used By
 

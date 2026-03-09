@@ -12,8 +12,8 @@ such as bridges, airports, runways, aerialways, communication towers, and power 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
 | `id` | [`Id`](../system/ref/id.md) | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| `bbox` | `bbox` (optional) | An optional bounding box for the feature |
-| `geometry` | `geometry` | Geometry of the infrastructure feature, which may be a point, line string, polygon, or multi-polygon.<br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
+| `bbox` | [`bbox`](../system/primitive/geometry.md) (optional) | An optional bounding box for the feature |
+| `geometry` | [`geometry`](../system/primitive/geometry.md) | Geometry of the infrastructure feature, which may be a point, line string, polygon, or multi-polygon.<br/><br/>*Allowed geometry types: LineString, MultiPolygon, Point, Polygon* |
 | `theme` | `"base"` | |
 | `type` | `"infrastructure"` | |
 | `version` | [`FeatureVersion`](../core/feature_version.md) | |
@@ -38,7 +38,7 @@ such as bridges, airports, runways, aerialways, communication towers, and power 
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
 | `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
 | `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
-| `names.rules[].perspectives.countries` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) (list) | Countries holding the given mode of perspective. |
+| `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
@@ -50,6 +50,10 @@ such as bridges, airports, runways, aerialways, communication towers, and power 
 | Column | Value |
 | -------: | ------- |
 | `id` | `e9e3d506-89c0-3473-8cee-5e5ac6596d6c` |
+| `bbox.xmin` | `-180.0` |
+| `bbox.xmax` | `-179.99998474121094` |
+| `bbox.ymin` | `-82.42408752441406` |
+| `bbox.ymax` | `-82.42407989501953` |
 | `geometry` | `POINT (-179.9999994 -82.42408)` |
 | `theme` | `base` |
 | `type` | `infrastructure` |
@@ -68,10 +72,5 @@ such as bridges, airports, runways, aerialways, communication towers, and power 
 | `names.common` | `null` |
 | `names.rules` | `null` |
 | `level` | `null` |
-| `source_tags.description` | `1036 km to South Pole.` |
-| `source_tags.information` | `route_marker` |
-| `source_tags.note` | `The road continue in west side of the map` |
-| `source_tags.start_date` | `2007` |
-| `source_tags.tourism` | `information` |
-| `source_tags.wikipedia` | `en:South Pole Traverse` |
+| `source_tags` | `{"description": "1036 km to South Pole.", "information": "route_marker", "note": "The road contin...` |
 | `wikidata` | `Q800558` |
