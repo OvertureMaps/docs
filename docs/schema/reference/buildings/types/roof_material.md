@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 # RoofMaterial
 
 The outermost material of the roof.

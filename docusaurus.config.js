@@ -107,6 +107,7 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           showLastUpdateTime: true,
+          breadcrumbs: false,  
         },
         blog: {
           blogTitle: 'Overture Maps Engineering Blog',
@@ -131,9 +132,13 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
-      image: 'img/omf_logo_transparent.png',
-      navbar: {
+      docs: {
+        sidebar: {
+          hideable: true,
+         },
+        },
+        image: 'img/omf_logo_transparent.png',
+        navbar: {
         title: 'Overture Maps',
         logo: {
           alt: 'Overture Maps Foundation Logo',

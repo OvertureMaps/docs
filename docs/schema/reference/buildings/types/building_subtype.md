@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 # BuildingSubtype
 
 Broadest classification of the type and purpose of a building.

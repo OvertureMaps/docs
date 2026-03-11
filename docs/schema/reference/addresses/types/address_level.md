@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 # AddressLevel
 
 A sub-country addressing unit, such as a region, city, or neighborhood, that is less specific
