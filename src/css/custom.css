@@ -220,6 +220,31 @@
   padding-top: 0;
 }
 
+.screenshot-frame {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 8px;
+  background: #fafafa;
+}
+
+.screenshot-frame figcaption {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+  font-style: italic;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem 0;
+  line-height: 1.5;
+}
+
+.screenshot-frame--narrow {
+  max-width: 420px;
+}
+
+[data-theme='dark'] .screenshot-frame {
+  border-color: #3a3a3a;
+  background: #1e1e1e;
+}
+
 /* header icons */
 
 .github-link {

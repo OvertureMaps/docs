@@ -4,14 +4,14 @@ import styles from './RotatingWord.module.css';
 const WORDS = [
   'free and open map data.',
   'modular, extensible schemas.',
-  'stable UUIDs for the world.',
+  'stable IDs for the world.',
   'shared infrastructure.',
   'global, cross-sector collaboration.',
   'an invitation to build together.',
 ];
 
 const EASTER_EGG = 'Jennings Anderson.';
-const LOOPS_BEFORE_EGG = 10;
+const LOOPS_BEFORE_EGG = 100;
 
 export default function RotatingWord() {
   const [index, setIndex] = useState(0);

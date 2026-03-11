@@ -8,11 +8,13 @@ pagination_label: Quickstart
 
 ## Explore in the browser
 
-The fastest way to dig into the data and schema is the [Explorer site](./explore). No installation, no account. Start browsing buildings, roads, places, addresses, and more. Click any feature to inspect its properties and schema. Download visible data as GeoJSON files. 
+The [Explorer site](./explore) is the fastest way to browse Overture data and inspect the schema. No installation, no account. Click any feature to view its properties. Download visible data as GeoJSON. 
 
-## Download by area of interest with Python client
 
-Install Overture's [Python client](https://github.com/OvertureMaps/overturemaps-py) and download building footprints for a specific area:
+## Download by area of interest
+
+Install Overture's [Python client](./overturemaps-py) and download building footprints for a specific area:
+
 
 ```bash
 pip install overturemaps
@@ -24,11 +26,11 @@ overturemaps download \
   -o boston_buildings.geojson
 ```
 
-The tool reads directly from Overture's S3 bucket and transfers only the data inside your bounding box. See the [Python Client page](./overturemaps-py) for the full list of options and feature types.
+The tool reads directly from Overture's cloud-hosted GeoParquet and transfers only the data inside your bounding box.
 
 ## Query with DuckDB
 
-[DuckDB](https://duckdb.org/) lets you query Overture's cloud-hosted GeoParquet files directly. [Install DuckDB](https://duckdb.org/docs/installation/), then run:
+[DuckDB](./duckdb) lets you query Overture's GeoParquet files with SQL. [Install DuckDB](https://duckdb.org/docs/installation/), then:
 
 ```sql
 INSTALL spatial;
@@ -55,11 +57,11 @@ COPY(
 ) TO 'wawa_stores.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
 ```
 
-This extracts all Wawa convenience stores in the Philadelphia area and saves them as GeoJSON. See the [DuckDB page](./duckdb) for more examples across all six themes.
+This extracts Wawa convenience stores in the Philadelphia area and saves them as GeoJSON.
 
 ## Get the latest release
 
-Overture publishes a [STAC catalog](https://stac.overturemaps.org/catalog.json) that always points to the latest release. Instead of hardcoding release paths, you can query the catalog. See an example with DuckDB:
+Overture publishes a [STAC catalog](https://stac.overturemaps.org/catalog.json) that always points to the latest release. Query it with DuckDB instead of hardcoding release paths:
 
 ```sql
 SET VARIABLE latest = (
@@ -67,14 +69,11 @@ SET VARIABLE latest = (
 );
 ```
 
-Browse all release artifacts in the [STAC browser](https://radiantearth.github.io/stac-browser/#/external/stac.overturemaps.org/catalog.json), hosted by Radiant Earth. The Python Client uses the STAC catalog automatically.
+Browse all release artifacts in the [STAC viewer](https://stac.overturemaps.org/). The Python client uses the STAC catalog automatically.
 
 ## Next steps
 
-- [Explore the data](./explore) in the browser
-- [Download data with the Python CLI](./overturemaps-py)
-- [Query with DuckDB](./duckdb)
-- [Access the full Overture catalog](./cloud-sources) — storage paths, PMTiles, STAC, GERS artifacts, and data mirrors
-- [Guides](../guides/) — understand how Overture organizes its six themes
-- [Schema reference](../schema/) — column definitions and data types
-- [Examples](../examples/) — QGIS, kepler.gl, Pandas, Spark, and more
+- [Access the full Overture catalog](./cloud-sources) — storage paths, PMTiles, STAC, and GERS artifacts
+- [Guides](../guides/) — understanding and working with Overture data and schema properties
+- [Schema reference](../schema/) — schema modules, column definitions, and data types
+- [Examples](../examples/) — QGIS, Athena, Spark, Pandas, and more

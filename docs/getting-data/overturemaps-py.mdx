@@ -4,13 +4,9 @@ description: Overture's official Python CLI and library
 pagination_label: Python Client
 ---
 
-# Python CLI
 
-Overture's [Python command-line tool](https://github.com/OvertureMaps/overturemaps-py) downloads data within a region of interest and converts it to several common geospatial file formats. It reads directly from Overture's S3 bucket using the [STAC catalog](https://stac.overturemaps.org/catalog.json) to always target the latest release.
+Overture's [Python client](https://github.com/OvertureMaps/overturemaps-py) provides a command-line interface and a Python library for downloading data within a bounding box and converting it to common geospatial file formats. It reads directly from Overture's cloud-hosted GeoParquet and uses the [STAC catalog](https://stac.overturemaps.org/catalog.json) to target the latest release automatically.
 
-:::note
-This project is experimental and likely to change. See the [overturemaps-py repository](https://github.com/OvertureMaps/overturemaps-py) for timely updates.
-:::
 
 ## Installation
 
@@ -18,9 +14,23 @@ This project is experimental and likely to change. See the [overturemaps-py repo
 pip install overturemaps
 ```
 
-## Quick example
+The package is also available on [conda-forge](https://anaconda.org/conda-forge/overturemaps):
 
-Download building footprints for a specific bounding box as GeoJSON:
+```bash
+conda install -c conda-forge overturemaps
+```
+
+If you have [uv](https://docs.astral.sh/uv/) installed, you can run overturemaps [with uvx](https://docs.astral.sh/uv/guides/tools/#running-tools) without installing it:
+
+```bash
+uvx overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=building -o boston.geojson
+```
+
+## Usage
+
+### download
+
+The `overturemaps download` command downloads Overture data with an optional bounding box into the specified file format. When a bounding box is specified, only the minimum data is transferred. Results are streamed, so arbitrarily large areas work.
 
 ```bash
 overturemaps download \
@@ -30,16 +40,6 @@ overturemaps download \
   -o boston_buildings.geojson
 ```
 
-If you have [uv](https://docs.astral.sh/uv/) installed, you can run overturemaps [with uvx](https://docs.astral.sh/uv/guides/tools/#running-tools) without installing it:
-
-```bash
-uvx overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=building -o boston.parquet
-```
-
-## Usage
-
-The `overturemaps download` command downloads Overture data with an optional bounding box into the specified file format. When specifying a bounding box, only the minimum data is transferred. The result is streamed and can handle arbitrarily large bounding boxes.
-
 **Options:**
 
 | Flag | Description |
@@ -48,18 +48,29 @@ The `overturemaps download` command downloads Overture data with an optional bou
 | `-f` | Output format: `geojson`, `geojsonseq`, or `geoparquet` |
 | `--type/-t` | Feature type to download, e.g. `building`, `place`, `segment`, `address`. Run `overturemaps download --help` for the complete list. |
 | `--output/-o` | Output file path. Omit to write to stdout. |
-| `--stac/--no-stac` | By default, the reader uses Overture's STAC catalog to speed up queries. Use `--no-stac` to read data without it. |
-
-This downloads data directly from Overture's S3 bucket without interacting with any other servers. By including bounding box extents on each row in the Overture distribution, the underlying Parquet readers use the summary statistics to download the minimum amount of data necessary to extract data from the desired region.
+| `--stac/--no-stac` | Use Overture's STAC catalog to speed up queries (default: on). |
 
 :::tip
 Use [this bounding box tool](https://boundingbox.klokantech.com/) to find coordinates for your area of interest. Choose CSV format and copy the value directly into the `--bbox` field.
 :::
 
+### gers
+
+The `overturemaps gers` command looks up a [GERS](/gers/) ID in the registry. If the feature is present in the latest release, it downloads the feature and writes it in the specified format.
+
+```bash
+overturemaps gers d4e59dbf-fda4-47eb-bf05-f7576f17e2c1 -f geojson -o feature.geojson
+```
+
+**Options:**
+
+| Flag | Description |
+|---|---|
+| `-f` | Output format: `geojson`, `geojsonseq`, or `geoparquet`. Defaults to `geojsonseq`. |
+| `--output/-o` | Output file path. Omit to write to stdout. |
+
 ## Next steps
 
-- Contribute to [overturemaps-py](https://github.com/OvertureMaps/overturemaps-py)
 - Visualize the data in [QGIS](/examples/QGIS/) or [kepler.gl](/examples/kepler-gl/)
 - [Make an interactive map](/examples/build-a-map/)
-- Check out our [community projects](/community/)
-- Dig into the [Overture schema](/schema/)
+- Explore the [schema reference](/schema/)
