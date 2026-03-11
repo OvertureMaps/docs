@@ -1,39 +1,38 @@
 ---
 title: Accessing the Overture Catalog
 description: All of Overture's data offerings
-pagination_label: Full Data Catalog
+pagination_label: Overture Catalog
 ---
 
-
-Overture publishes global map data, vector tiles, a STAC catalog, a GERS registry, bridge files, and a changelog. Everything is hosted on Amazon S3 and Microsoft Azure Blob Storage with no account or credentials required. Databases, other cloud providers, overture tools, community tools, plugins for ArcGIS and QGIS
+Overture publishes a full catalog of aassets in each monthly release: global map data, vector tiles, a STAC catalog, a GERS registry, bridge files, and a changelog. Everything is hosted on Amazon S3 and Microsoft Azure Blob Storage.
 
 ## Published datasets
 
-Overture distributes its core datasets as [GeoParquet](https://geoparquet.org/) files, a column-oriented spatial data format optimized for cloud-native queries. You can scan across the files and pull only the data you need without downloading everything. To learn more about GeoParquet, consult [this guide](https://guide.cloudnativegeo.org/geoparquet/) from the Cloud Native Geospatial Forum.
+Overture distributes its core map data as [GeoParquet](https://geoparquet.org/) files, a column-oriented spatial data format optimized for cloud-native queries. You can scan across the files and pull only the data you need without downloading everything. See [this guide](https://guide.cloudnativegeo.org/geoparquet/) from the Cloud Native Geospatial Forum for more on GeoParquet.
 
 | Provider | Path |
 |---|---|
 | Amazon S3 | `s3://overturemaps-us-west-2/release/<RELEASE>` |
 | Microsoft Azure | `https://overturemapswestus2.blob.core.windows.net/release/<RELEASE>` |
 
-You can find the latest `<RELEASE>` value in the [STAC catalog](https://stac.overturemaps.org/catalog.json) or the [STAC viewer](https://stac.overturemaps.org/). See the [quick start](/getting-data/) for how to query the catalog programmatically.
+Find the latest `<RELEASE>` value in the [STAC catalog](https://stac.overturemaps.org/catalog.json) or the [STAC viewer](https://stac.overturemaps.org/). See the [quickstart](/getting-data/) for how to query the catalog programmatically.
 
 ### Path structure
 
-The base paths above point to all of the data in a particular release — about 500 GB. Overture partitions the data by `theme` and `type`; specifying those directories in your path will significantly narrow the data you access.
+The base paths above point to the core map datasets in a release. Overture partitions the data by `theme` and `type`; specifying those directories narrows the data you access.
 
-Here's an example S3 path to the `infrastructure` feature type in the `base` theme:
+Example S3 path to the `infrastructure` feature type in the `base` theme:
 
 ```
 s3://overturemaps-us-west-2/release/2026-02-18.0/theme=base/type=infrastructure/*.parquet
 ```
 
-The components in that path:
+Path components:
 
-- **`<RELEASE>`**: Overture releases data monthly following a date-based versioning scheme in the format `yyyy-mm-dd.x`. An archive of releases is maintained on both Amazon S3 and Azure Blob Storage.
-- **`<theme>`**: one of Overture's six data themes — addresses, base, buildings, divisions, places, and transportation — and the first level of partitioning of the data.
-- **`<type>`**: a feature type within a theme, e.g. `infrastructure` within `base`, and the second level of partitioning of the data.
-- **`*.parquet`**: the file type Overture uses to store and deliver the data. The `*` indicates you want all of the Parquet files in a particular directory.
+- **`<RELEASE>`**: date-based version in the format `yyyy-mm-dd.x`. An archive of releases is maintained on both S3 and Azure.
+- **`<theme>`**: one of Overture's six themes — addresses, base, buildings, divisions, places, and transportation.
+- **`<type>`**: a feature type within a theme, e.g. `infrastructure` within `base`.
+- **`*.parquet`**: the `*` indicates all Parquet files in the directory.
 
 ### Theme and type mapping
 
@@ -46,18 +45,20 @@ The components in that path:
 | [Places](/guides/places/) | place |
 | [Transportation](/guides/transportation/) | segment, connector |
 
-### Downloading with the AWS CLI
+## Accessing the files
 
-You can install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to download Parquet files from S3 at the command line. In this example, you download all nine Parquet files (about one GB) in the `infrastructure` feature type:
+The [Python CLI](/getting-data/overturemaps-py/) and [DuckDB](/getting-data/duckdb/) are the most common ways to query and download Overture data. Both read directly from the cloud and transfer only the data you need. See the [quickstart](/getting-data/) to get started with either tool.
+
+For bulk downloads, use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) or [AzCopy](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10) to copy full Parquet directories to your local machine.
+
+**AWS CLI** — download all files in the `infrastructure` type:
 
 ```bash
 aws s3 cp --no-sign-request --recursive \
   s3://overturemaps-us-west-2/release/2026-02-18.0/theme=base/type=infrastructure/ .
 ```
 
-### Downloading with AzCopy
-
-You can download files from Azure Blob Storage using [AzCopy](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10). Here's how to grab all of the `place` data:
+**AzCopy** — download all `place` data from Azure:
 
 ```bash
 azcopy copy \
@@ -65,38 +66,35 @@ azcopy copy \
   "<local directory path>" --recursive
 ```
 
+You can also access Overture data through Amazon Athena, Microsoft Synapse, Sedona, and other tools. See the [examples](/examples/) for walkthroughs.
+
 ## PMTiles
 
-Overture generates [PMTiles](https://docs.protomaps.com/pmtiles/) vector tile archives with each release. Each theme is stored as a separate archive containing geometry and tags in MVT format. These tiles power the [Explore site](https://explore.overturemaps.org) and are designed for data inspection rather than production cartography.
+Overture generates [PMTiles](https://docs.protomaps.com/pmtiles/) vector map tiles with each release. These tiles power the [Explorer site](https://explore.overturemaps.org) and are designed for data inspection rather than production cartography.
 
 | Provider | Path |
 |---|---|
-| Amazon S3 | `s3://overturemaps-tiles-us-west-2-beta/<RELEASE>/<THEME>.pmtiles` |
-| HTTP | `https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/<RELEASE>/<THEME>.pmtiles` |
+| Amazon S3 | `s3://overturemaps-extras-us-west-2/tiles/<RELEASE>/<THEME>.pmtiles` |
+| HTTP | `https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/tiles/<RELEASE>/<THEME>.pmtiles` |
 
-:::note
-The `<RELEASE>` in the tiles path uses the date only without the minor version, e.g. `2026-02-18` instead of `2026-02-18.0`.
-:::
 
-You can preview any PMTiles URL at [pmtiles.io](https://pmtiles.io). To create your own tiles from Overture data, see the [PMTiles example](/examples/overture-tiles/) and the [overture-tiles](https://github.com/OvertureMaps/overture-tiles) repository.
+Preview any PMTiles URL at [pmtiles.io](https://pmtiles.io). To create your own tiles from Overture data, see the [PMTiles example](/examples/overture-tiles/) and the [overture-tiles](https://github.com/OvertureMaps/overture-tiles) repository.
 
 ## STAC catalog
 
-Overture publishes a [STAC catalog](https://stac.overturemaps.org/catalog.json) that serves as the machine-readable index for all releases. It always points to the latest release and includes metadata for every theme and feature type: spatial extents, feature counts, column names, links to GeoParquet files on AWS and Azure, and links to PMTiles. Browse it in the [STAC viewer](https://stac.overturemaps.org/).
-
-See the [quick start](/getting-data/) for examples of querying the STAC catalog in Python and DuckDB.
+Overture's [STAC catalog](https://stac.overturemaps.org/catalog.json) is the machine-readable index for all releases. It always points to the latest release and includes metadata for every theme and type: spatial extents, feature counts, column names, links to GeoParquet files on AWS and Azure, and links to PMTiles. Browse it in the [STAC viewer](https://stac.overturemaps.org/).
 
 ## GERS registry, bridge files, and changelog
 
 Each release includes artifacts from the [Global Entity Reference System (GERS)](/gers/):
 
-- **[GERS Registry](/gers/registry/)**: a lookup service for GERS IDs that maps stable identifiers to their current feature data across releases.
-- **[Bridge files](/gers/bridge-files/)**: files that track how GERS IDs change between releases — additions, removals, and geometry updates.
-- **[Changelog](/gers/changelog/)**: a record of schema and data changes across releases.
+- **[GERS registry](/gers/registry/)**: maps stable GERS IDs to current feature data across releases.
+- **[Bridge files](/gers/bridge-files/)**: tracks how GERS IDs change between releases — additions, removals, and geometry updates.
+- **[Data changelog](/gers/changelog/)**: records schema and data changes across releases.
 
 ## Data mirrors
 
-In addition to the official sources, several partners maintain mirrors of the data on these platforms:
+Several partners maintain mirrors on these platforms:
 
 - [BigQuery](/getting-data/data-mirrors/bigquery/)
 - [Databricks](/getting-data/data-mirrors/databricks/)
@@ -105,4 +103,4 @@ In addition to the official sources, several partners maintain mirrors of the da
 - [Snowflake](/getting-data/data-mirrors/snowflake/)
 - [Wherobots](/getting-data/data-mirrors/wherobots/)
 
-These are community-maintained resources that may offer different access patterns, additional tooling, or other platform-specific benefits.
+These are community-maintained resources that may offer different access patterns or platform-specific tooling.
