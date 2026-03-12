@@ -1,8 +1,8 @@
 /* ── HERO TEXT ── */
 .hero {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 5rem 2rem 3.5rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 4rem 0 3rem;
 }
 
 .headline {
@@ -37,7 +37,6 @@
   white-space: nowrap;
   line-height: 1.1;
 }
-
 
 /* Subtext */
 .subtext {
@@ -109,9 +108,9 @@
 /* ── EXPLORER EMBED ── */
 .explorerSection {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
   opacity: 0;
   animation: fadeUp 0.6s ease 0.55s forwards;
 }
@@ -168,9 +167,9 @@
 
 /* ── STATS ── */
 .statsSection {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 3.5rem 2rem 5rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 3.5rem 0 5rem;
   opacity: 0;
   animation: fadeUp 0.5s ease 0.75s forwards;
 }
@@ -219,8 +218,12 @@
 }
 
 /* ── RESPONSIVE ── */
+@media (max-width: 996px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .explorerFrame { height: 400px; }
+}
+
 @media (max-width: 640px) {
   .explorerFrame { height: 320px; }
-  .explorerSection { padding: 0 1rem; }
   .stats { grid-template-columns: repeat(2, 1fr); }
 }
