@@ -7,7 +7,7 @@ hide_table_of_contents: true
 
 Land features are representations of physical land surfaces.
 
-In Overture data releases, land features are sourced from OpenStreetMap. TODO. Finish this when
+In Overture data releases, land features are sourced from OpenStreetMap. Todo. Finish this when
 I get more info from Jennings.
 
 
@@ -53,7 +53,7 @@ TODO: Update this description when the relationship to `land_cover` is better un
 | `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
 | `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
 | `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
-| `source_tags` | [`SourceTags`](types/source_tags.md) (map, optional) | Key/value pairs imported directly from the source data without change.<br/><br/>This field provides access to raw OSM entity tags for features sourced from OpenStreetMap. |
+| `source_tags` | [`SourceTags`](types/source_tags.md) (map, optional) | Key-value pairs imported directly from the source data without change.<br/><br/>This field provides access to raw OSM entity tags for features sourced from OpenStreetMap. |
 | `wikidata` | [`WikidataId`](../system/wikidata_id.md) (optional) | A wikidata ID, as found on https://www.wikidata.org/ |
 
 ## Examples
