@@ -28,10 +28,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version-file: package.json
+
+      - name: Configure sustainable npm
+        uses: lowlydba/sustainable-npm@ed089bd92235c2af803a951fba2bd42c59fbcd73 # v2.0.0
 
       - name: Install NPM dependencies
-        run: npm install --prefer-dedupe
+        run: npm ci --prefer-dedupe
 
       - name: Build Docusaurus Pages 🔧
         run: npm run build
