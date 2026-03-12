@@ -13,8 +13,7 @@ pagination_label: Schema Reference Overview
 This section has been recently updated to reflect changes in our schema modeling. We welcome your feedback in [GitHub Discussions](https://github.com/OvertureMaps/data/discussions).
 :::
 
-
-The Overture Maps schema defines the structure, properties, and constraints for all features across six themes: addresses, base, buildings, divisions, places, and transportation. The reference pages in this section document the theme-based and shared modules in the schema. 
+The Overture Maps schema defines the structure, properties, and constraints for all features across six themes: addresses, base, buildings, divisions, places, and transportation. The reference pages in this section document the theme-based and shared modules in the schema.
 
 The schema is authored as [Pydantic](https://docs.pydantic.dev/) models and the reference documentation is generated from those models. The source code lives in the [OvertureMaps/schema](https://github.com/OvertureMaps/schema) repository on GitHub.
 
