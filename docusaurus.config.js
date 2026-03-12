@@ -9,6 +9,12 @@ const darkCodeTheme = themes.nightOwl;
 const defaultUrl = 'https://docs.overturemaps.org';
 const defaultBaseUrl = '/';
 
+// SCHEMA_PREVIEW is set by the schema repo's CI when building a PR preview of the
+// schema reference docs (see OvertureMaps/schema/.github/workflows/schema-pr-preview.yml).
+// When true, only the schema reference section is built — blog, community pages, and
+// navbar items unrelated to the schema are excluded to keep the preview fast and focused.
+const isSchemaPreview = process.env.SCHEMA_PREVIEW === 'true';
+
 function getFromEnvironment(variableName, defaultValue) {
   const environmentValue = process.env[variableName];
   return environmentValue ? environmentValue : defaultValue;
@@ -67,6 +73,7 @@ const config = {
   projectName: 'docs', // Usually your repo name.
 
   onBrokenLinks: 'throw',
+  onBrokenAnchors: 'throw',
 
   markdown: {
     hooks: {
@@ -86,17 +93,19 @@ const config = {
 
   themes: [],
 
-  plugins: [
-    [
-      '@docusaurus/plugin-content-pages',
-      {
-        id: 'community',
-        path: './community',
-        routeBasePath: 'community',
-        showLastUpdateTime: true,
-      },
-    ],
-  ],
+  plugins: isSchemaPreview
+    ? []
+    : [
+        [
+          '@docusaurus/plugin-content-pages',
+          {
+            id: 'community',
+            path: './community',
+            routeBasePath: 'community',
+            showLastUpdateTime: true,
+          },
+        ],
+      ],
 
   presets: [
     [
@@ -109,12 +118,14 @@ const config = {
           showLastUpdateTime: true,
           breadcrumbs: false,  
         },
-        blog: {
-          blogTitle: 'Overture Maps Engineering Blog',
-          blogDescription: 'Building Overture Maps',
-          blogSidebarTitle: 'Posts from the Overture Maps engineering team',
-          blogSidebarCount: 20,
-        },
+        blog: isSchemaPreview
+          ? false
+          : {
+              blogTitle: 'Overture Maps Engineering Blog',
+              blogDescription: 'Building Overture Maps',
+              blogSidebarTitle: 'Posts from the Overture Maps engineering team',
+              blogSidebarCount: 20,
+            },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -151,16 +162,20 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
-          {
-            to: 'blog',
-            label: 'Blog',
-            position: 'left',
-          },
-          {
-            to: 'community',
-            label: 'Community',
-            position: 'left',
-          },
+          ...(!isSchemaPreview
+            ? [
+                {
+                  to: 'blog',
+                  label: 'Blog',
+                  position: 'left',
+                },
+                {
+                  to: 'community',
+                  label: 'Community',
+                  position: 'left',
+                },
+              ]
+            : []),
           {
             to: 'https://github.com/OvertureMaps/docs',
             position: 'right',
