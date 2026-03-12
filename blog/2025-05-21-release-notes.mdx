@@ -48,7 +48,7 @@ s3://overturemaps-us-west-2/bridgefiles/2025-05-21.0
 
 ## GERS IDs will become UUIDs in June
 
-In next month's release (late June), Overture is standardizing the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings.
+In next month's release (late June), Overture is standardizing the [`id` property](/schema/) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings.
 
 Currently the structure of our IDs varies slightly across datasets, with some themes embedding metadata (e.g. [H3](https://h3geo.org/)) in the `id` property. The new UUIDs will be randomly-generated identifiers with no encoded information. Moving to UUIDs enables consistent ID generation and registration across our data pipelines, which is necessary for the successful implementation of [GERS](/gers).
 
