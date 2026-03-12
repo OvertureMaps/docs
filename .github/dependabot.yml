@@ -2,6 +2,18 @@
 version: 2
 updates:
 
+  # Maintain npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "bot"
+    commit-message:
+      prefix: "[CHORE](deps)"
+      include: "scope"
+
   # Maintain GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
