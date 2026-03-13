@@ -7,10 +7,8 @@ hide_table_of_contents: true
 
 Land features are representations of physical land surfaces.
 
-In Overture data releases, land features are sourced from OpenStreetMap. Todo. Finish this when
-I get more info from Jennings.
-
-
+In Overture data releases, land features are sourced from OpenStreetMap.
+TODO. Finish this whenI get more info from Jennings.
 
 Physical representations of land surfaces.
 
