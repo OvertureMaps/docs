@@ -13,8 +13,7 @@ pagination_label: Schema Reference Overview
 This section has been recently updated to reflect changes in our schema modeling. We welcome your feedback in [GitHub Discussions](https://github.com/OvertureMaps/data/discussions).
 :::
 
-
-The Overture Maps schema defines the structure, properties, and constraints for all features across six themes: addresses, base, buildings, divisions, places, and transportation. The reference pages in this section document the theme-based and shared modules in the schema. 
+The Overture Maps schema defines the structure, properties, and constraints for all features across six themes: addresses, base, buildings, divisions, places, and transportation. The reference pages in this section document the theme-based and shared modules in the schema.
 
 The schema is authored as [Pydantic](https://docs.pydantic.dev/) models and the reference documentation is generated from those models. The source code lives in the [OvertureMaps/schema](https://github.com/OvertureMaps/schema) repository on GitHub.
 
@@ -26,7 +25,7 @@ This project addresses a fundamental challenge in data consumption: bridging the
 
 Take a column like `pop_2020`. Is it total population? Population density per square kilometer? Working-age population? Without a schema, you're left sampling values and guessing from column names.
 
-Compare this to OpenStreetMap's approach: features use well-known key/value pairs like `building=residential` or `addr:housenumber=42` that have semantic meaning and can be looked up on the OSM wiki. This creates a step toward a schema — shared vocabulary with documented semantics used across a vast dataset. However, OSM tags remain free-form: multiple valid ways to express the same concept, no built-in validation, and complex downstream validation because of undocumented keys that might have meaning to someone, somewhere. A schema provides the structured alternative: explicit types, clear validation rules, and semantic meaning that both humans and systems can rely on.
+Compare this to OpenStreetMap's approach: features use well-known key-value pairs like `building=residential` or `addr:housenumber=42` that have semantic meaning and can be looked up on the OSM wiki. This creates a step toward a schema — shared vocabulary with documented semantics used across a vast dataset. However, OSM tags remain free-form: multiple valid ways to express the same concept, no built-in validation, and complex downstream validation because of undocumented keys that might have meaning to someone, somewhere. A schema provides the structured alternative: explicit types, clear validation rules, and semantic meaning that both humans and systems can rely on.
 
 Data files containing only column names and values aren't fully documented. External metadata files typically focus on how data was collected and encoded, not on semantic meaning or validation rules. Data consumers struggle to understand what datasets contain and which columns they need for their goals.
 
