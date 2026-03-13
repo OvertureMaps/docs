@@ -36,4 +36,5 @@ jobs:
           # other linters to default to false.
           VALIDATE_MARKDOWN: true
           VALIDATE_NATURAL_LANGUAGE: true
+          NATURAL_LANGUAGE_CONFIG_FILE: .github/linters/.textlintrc.json
           VALIDATE_SQLFLUFF: true
