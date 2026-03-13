@@ -4,7 +4,7 @@
   },
   "rules": {
     "terminology": {
-      "exclude": ["TODO"]
+      "exclude": ["to-?do(s)?(?=[ ,.])"]
     }
   }
 }
