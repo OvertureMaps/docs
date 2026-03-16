@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
-import BrowserOnly from '@docusaurus/BrowserOnly';
 import RotatingWord from './RotatingWord';
 import styles from './home.module.css';
 
@@ -15,7 +14,7 @@ export function HeroHeadline() {
         <span className={styles.headlineStatic}>Overture</span>
         <span className={styles.headlineIs}>is</span>
       </div>
-      <BrowserOnly>{() => <RotatingWord />}</BrowserOnly>
+      <RotatingWord />
     </div>
   );
 }
