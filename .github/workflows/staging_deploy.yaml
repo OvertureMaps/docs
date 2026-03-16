@@ -41,11 +41,11 @@ jobs:
           output-dir: ${{ github.workspace }}/docs/schema/reference
 
       - name: Build Docusaurus website
+        run: npm run build
         env:
           DOCUSAURUS_URL: ${{ env.STAGING_URL }}/
           DOCUSAURUS_BASE_URL: ${{ env.PREVIEW_PATH }}/
           SCHEMA_PREVIEW: ${{ env.SCHEMA_PREVIEW }}
-        run: npm run build
 
       - name: Upload docs build as an artifact 📦
         uses: actions/upload-artifact@v7
@@ -66,7 +66,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
-          aws-region: us-west-2
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Download artifacts 📥
         uses: actions/download-artifact@v8
@@ -85,10 +85,10 @@ jobs:
         run: echo "time=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@70d2764d1a7d5d9560b100cbea0077fc8f633987 # v3.0.2
         with:
           message: |
-            ## 🚀 OMF Docs preview is live!
+            ## 🗺️ OMF Docs preview is live!
 
             | | |
             |---|---|
