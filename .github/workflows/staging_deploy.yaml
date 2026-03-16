@@ -105,10 +105,10 @@ jobs:
 
             |                 |                                                          |
             |-----------------|----------------------------------------------------------|
-            | **Preview**     | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
-            | **Updated**     | ${{ steps.deploy-metadata.outputs.time }} |
-            | **Commit**      | [${{ steps.deploy-metadata.outputs.short-sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
-            | **Schema Ref**  | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ steps.deploy-metadata.outputs.schema-short-sha }}](https://github.com/OvertureMaps/schema/commit/${{ needs.build.outputs.schema-sha }}) |
+            | 🌍 **Preview**  | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
+            | 🕐 **Updated**  | ${{ steps.deploy-metadata.outputs.time }} |
+            | 📝 **Commit**   | [${{ steps.deploy-metadata.outputs.short-sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
+            | 🗂️ **Schema Ref**   | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ steps.deploy-metadata.outputs.schema-short-sha }}](https://github.com/OvertureMaps/schema/commit/${{ needs.build.outputs.schema-sha }}) |
 
             > [!NOTE]
-            > This preview updates automatically with each push to this PR.
+            > ♻️ This preview updates automatically with each push to this PR.

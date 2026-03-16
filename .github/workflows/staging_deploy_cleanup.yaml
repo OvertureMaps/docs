@@ -1,6 +1,6 @@
 ---
 name: Staging Deploy Cleanup
-run-name: Clean up staging preview for PR #${{ github.event.number }}
+run-name: ♻️ Clean up staging preview for PR #${{ github.event.number }}
 
 on:
   pull_request:
