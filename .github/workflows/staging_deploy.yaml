@@ -77,6 +77,7 @@ jobs:
       - name: Copy to S3
         run: |
           aws s3 sync --delete --quiet build s3://overture-managed-staging-usw2/gh-pages${{ env.PREVIEW_PATH }}/
+
       - name: Bust the Cache
         run: aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "${{ env.PREVIEW_PATH }}/*"
 
@@ -93,10 +94,10 @@ jobs:
             ## 🗺️ OMF Docs preview is live!
 
             | | |
-            |-------------|---|
+            |-------------|----------------------------------------------------------|
             | **Preview** | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
             | **Updated** | ${{ steps.timestamp.outputs.time }} |
-            | **Commit** | [${{ steps.timestamp.outputs.short_sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
+            | **Commit**  | [${{ steps.timestamp.outputs.short_sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
 
             > [!NOTE]
             > This preview updates automatically with each push to this PR.
