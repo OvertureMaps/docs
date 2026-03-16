@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: staging-deploy-${{ github.event.number }}
+  cancel-in-progress: true
+
 permissions:
   id-token: write
   contents: read
@@ -103,7 +107,7 @@ jobs:
             | **Preview** | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
             | **Updated** | ${{ steps.deploy-metadata.outputs.time }} |
             | **Commit**  | [${{ steps.deploy-metadata.outputs.short_sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
-            | **Schema**  | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ needs.build.outputs.schema-sha }}](https://github.com/OvertureMaps/schema/commit/${{ needs.build.outputs.schema-sha }}) |
+            | **Schema Ref**  | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ needs.build.outputs.schema-sha }}](https://github.com/OvertureMaps/schema/commit/${{ needs.build.outputs.schema-sha }}) |
 
             > [!NOTE]
             > This preview updates automatically with each push to this PR.
