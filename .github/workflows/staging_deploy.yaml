@@ -22,6 +22,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    outputs:
+      schema-sha: ${{ steps.schema-docs.outputs.schema-sha }}
+      schema-ref: ${{ steps.schema-docs.outputs.schema-ref }}
     steps:
       - name: Check out the main docs repo repository and build.
         uses: actions/checkout@v6
@@ -36,6 +39,7 @@ jobs:
       - run: npm ci --omit=dev
 
       - name: Generate schema markdown docs
+        id: schema-docs
         uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@main
         with:
           output-dir: ${{ github.workspace }}/docs/schema/reference
@@ -98,6 +102,7 @@ jobs:
             | **Preview** | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
             | **Updated** | ${{ steps.timestamp.outputs.time }} |
             | **Commit**  | [${{ steps.timestamp.outputs.short_sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
+            | **Schema**  | [${{ needs.build.outputs.schema-ref }}@${{ needs.build.outputs.schema-sha }}](https://github.com/OvertureMaps/schema/commit/${{ needs.build.outputs.schema-sha }}) |
 
             > [!NOTE]
             > This preview updates automatically with each push to this PR.
