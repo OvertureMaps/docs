@@ -11,6 +11,13 @@ permissions:
   contents: read
   pull-requests: write
 
+env:
+  DOCS_PATH: docs
+  PREVIEW_PATH: /${{ github.event.repository.name }}/pr/${{ github.event.number }}
+  STAGING_URL: https://staging.overturemaps.org
+  SCHEMA_PREVIEW: false # Set to true to only publish Schema reference docs
+  AWS_ROLE_ARN: arn:aws:iam::763944545891:role/pages-staging-oidc-overturemaps
+  AWS_REGION: us-west-2
 jobs:
   build:
     name: Build
@@ -24,16 +31,20 @@ jobs:
         with:
           node-version-file: 'package.json'
 
-      - name: Sustainable npm
-        uses: lowlydba/sustainable-npm@v2
+      - uses: lowlydba/sustainable-npm@v2
 
-      - name: Install NPM dependencies
-        run: npm ci --omit=dev
+      - run: npm ci --omit=dev
+
+      - name: Generate schema markdown docs
+        uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@main
+        with:
+          output-dir: ${{ github.workspace }}/docs/schema/reference
 
       - name: Build Docusaurus website
         env:
-          DOCUSAURUS_URL: https://staging.overturemaps.org/
-          DOCUSAURUS_BASE_URL: /${{ github.event.repository.name }}/pr/${{ github.event.number }}/
+          DOCUSAURUS_URL: ${{ env.STAGING_URL }}/
+          DOCUSAURUS_BASE_URL: ${{ env.PREVIEW_PATH }}/
+          SCHEMA_PREVIEW: ${{ env.SCHEMA_PREVIEW }}
         run: npm run build
 
       - name: Upload docs build as an artifact 📦
@@ -44,17 +55,17 @@ jobs:
 
   deploy:
     name: Deploy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: build
     environment:
       name: staging
-      url: https://staging.overturemaps.org/${{ github.event.repository.name }}/pr/${{ github.event.number }}/index.html
+      url: ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html
 
     steps:
       - name: Configure AWS credentials 🔐
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::763944545891:role/pages-staging-oidc-overturemaps
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: us-west-2
 
       - name: Download artifacts 📥
@@ -65,9 +76,9 @@ jobs:
 
       - name: Copy to S3
         run: |
-          aws s3 sync --delete build s3://overture-managed-staging-usw2/gh-pages/${{ github.event.repository.name }}/pr/${{ github.event.number }}/
+          aws s3 sync --delete build s3://overture-managed-staging-usw2/gh-pages${{ env.PREVIEW_PATH }}/
       - name: Bust the Cache
-        run: aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "/${{ github.event.repository.name }}/pr/${{ github.event.number }}/*"
+        run: aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "${{ env.PREVIEW_PATH }}/*"
 
       - name: Get deploy timestamp
         id: timestamp
@@ -77,9 +88,13 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            ## 🚀 Overture Maps docs branch preview deployed!
+            ## 🚀 OMF Docs preview is live!
 
-            You can review your changes at https://staging.overturemaps.org/${{ github.event.repository.name }}/pr/${{ github.event.number }}/index.html
+            | | |
+            |---|---|
+            | **Preview** | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
+            | **Updated** | ${{ steps.timestamp.outputs.time }} |
+            | **Commit** | [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) |
 
-            ---
-            <sub>♻️ Last refreshed: ${{ steps.timestamp.outputs.time }}</sub>
+            > [!NOTE]
+            > This preview updates automatically with each push to this PR.
