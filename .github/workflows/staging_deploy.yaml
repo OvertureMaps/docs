@@ -93,8 +93,9 @@ jobs:
         id: deploy-metadata
         run: |
           echo "time=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
-          echo "short_sha=$(echo '${{ github.event.pull_request.head.sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
+          echo "short-sha=$(echo '${{ github.event.pull_request.head.sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
           echo "schema-ref-short=$(echo '${{ needs.build.outputs.schema-ref }}' | sed 's|refs/heads/||;s|refs/tags/||')" >> $GITHUB_OUTPUT
+          echo "schema-short-sha=$(echo '${{ needs.build.outputs.schema-sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
         uses: marocchino/sticky-pull-request-comment@70d2764d1a7d5d9560b100cbea0077fc8f633987 # v3.0.2
@@ -102,12 +103,12 @@ jobs:
           message: |
             ## 🗺️ OMF Docs preview is live!
 
-            | | |
-            |-------------|----------------------------------------------------------|
-            | **Preview** | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
-            | **Updated** | ${{ steps.deploy-metadata.outputs.time }} |
-            | **Commit**  | [${{ steps.deploy-metadata.outputs.short_sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
-            | **Schema Ref**  | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ needs.build.outputs.schema-sha }}](https://github.com/OvertureMaps/schema/commit/${{ needs.build.outputs.schema-sha }}) |
+            |                 |                                                          |
+            |-----------------|----------------------------------------------------------|
+            | **Preview**     | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
+            | **Updated**     | ${{ steps.deploy-metadata.outputs.time }} |
+            | **Commit**      | [${{ steps.deploy-metadata.outputs.short-sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
+            | **Schema Ref**  | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ steps.deploy-metadata.outputs.schema-short-sha }}](https://github.com/OvertureMaps/schema/commit/${{ needs.build.outputs.schema-sha }}) |
 
             > [!NOTE]
             > This preview updates automatically with each push to this PR.
