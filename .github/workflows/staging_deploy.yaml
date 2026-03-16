@@ -91,7 +91,7 @@ jobs:
             ## 🗺️ OMF Docs preview is live!
 
             | | |
-            |---|---|
+            |-------------|---|
             | **Preview** | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html |
             | **Updated** | ${{ steps.timestamp.outputs.time }} |
             | **Commit** | [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) |
