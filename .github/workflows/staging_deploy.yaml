@@ -1,6 +1,6 @@
 ---
 name: Staging Deploy
-run-name: Publish docs to staging website (for PR)
+run-name: Publish docs to staging website
 
 on:
   pull_request:
