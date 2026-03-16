@@ -23,9 +23,20 @@ env:
   AWS_ROLE_ARN: arn:aws:iam::763944545891:role/pages-staging-oidc-overturemaps
   AWS_REGION: us-west-2
 jobs:
+  check-fork:
+    name: Check fork
+    runs-on: ubuntu-slim
+    steps:
+      - name: Staging deploy is not supported for fork PRs
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::warning title=Staging deploy not supported for fork PRs::Staging previews are only available for PRs from branches within this repository, not forks. Please open your PR from a branch in OvertureMaps/docs instead."
+          exit 1
+
   build:
     name: Build
     runs-on: ubuntu-latest
+    needs: check-fork
     outputs:
       schema-sha: ${{ steps.schema-docs.outputs.schema-sha }}
       schema-ref: ${{ steps.schema-docs.outputs.schema-ref }}
@@ -64,7 +75,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-slim
-    needs: build
+    needs: [check-fork, build]
     environment:
       name: staging
       url: ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html
