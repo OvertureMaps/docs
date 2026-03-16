@@ -103,7 +103,7 @@ jobs:
       - name: Gather metadata for PR comment
         id: deploy-metadata
         run: |
-          echo "time=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+          echo "time=$(date -u +'%b %d, %Y %H:%M UTC')" >> $GITHUB_OUTPUT
           echo "short-sha=$(echo '${{ github.event.pull_request.head.sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
           echo "schema-ref-short=$(echo '${{ needs.build.outputs.schema-ref }}' | sed 's|refs/heads/||;s|refs/tags/||')" >> $GITHUB_OUTPUT
           echo "schema-short-sha=$(echo '${{ needs.build.outputs.schema-sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
