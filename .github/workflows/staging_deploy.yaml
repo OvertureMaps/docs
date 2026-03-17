@@ -58,6 +58,7 @@ jobs:
         uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@main
         with:
           output-dir: ${{ github.workspace }}/docs/schema/reference
+          schema-ref: 'main'
 
       - name: Build Docusaurus website
         run: npm run build
