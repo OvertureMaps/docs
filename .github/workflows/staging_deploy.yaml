@@ -35,7 +35,7 @@ jobs:
           echo "::warning title=Staging deploy not supported for fork PRs::Staging previews are only available for PRs from branches within this repository, not forks. Please open your PR from a branch in OvertureMaps/docs instead."
 
   build-auto-gen:
-    name: build
+    name: Build (auto-gen schema)
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     needs: check-fork
@@ -76,7 +76,8 @@ jobs:
           name: build-artifact
 
   build-repo-schema:
-    name: build
+    # Branch ruleset set to this job name to require this status check
+    name: Build
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     needs: check-fork
