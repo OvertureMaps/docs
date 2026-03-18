@@ -32,6 +32,8 @@ jobs:
         run: |
           aws s3 rm --recursive \
             s3://overture-managed-staging-usw2/gh-pages/${{ github.event.repository.name }}/pr/${{ github.event.number }}/ || true
+          aws s3 rm --recursive \
+            s3://overture-managed-staging-usw2/gh-pages/${{ github.event.repository.name }}/pr/${{ github.event.number }}-no-autogen/ || true
 
       - name: Bust the cache
         run: |
