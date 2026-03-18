@@ -1,3 +1,0 @@
-Schema reference documentation files are generated at build time from overture-schema-codegen and dropped here.
-
-If you need a *complete* test build, open a pull request to trigger a docs build that will include the latest schema documentation.
