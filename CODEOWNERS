@@ -1,4 +1,7 @@
 # Default owners for everything in the repo
 * @overturemaps/omf-public-reviewers
 
+# Devops
 /.github @lowlydba @overturemaps/omf-public-reviewers
+/package.json @lowlydba @overturemaps/omf-public-reviewers
+/package-lock.json @lowlydba @overturemaps/omf-public-reviewers
