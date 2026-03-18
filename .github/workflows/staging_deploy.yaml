@@ -165,13 +165,8 @@ jobs:
             | 🕐 **Updated**          | ${{ steps.deploy-metadata.outputs.time }}                            |
             | 📝 **Commit**           | [${{ steps.deploy-metadata.outputs.short-sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
 
-            Auto-gen schema site is now available for testing and feedback!
-            This is an early preview of a future workflow where we will automatically generate and
-            publish reference docs for the Overture Maps Format schema with every change to the schema repo,
-            without needing to manually review and merge changes to the docs repo.
-            The auto-gen schema site may contain incomplete or inaccurate information as we are still refining the
-            generation process, so please compare against the repo schema site and refer to the linked commit for the
-            most up-to-date source of truth.
+            Auto-gen schema site is now available. This is an early preview of a future workflow where we will automatically generate and publish reference docs for the Overture Maps Format schema with every change to the schema repo.
+            The auto-gen schema site may contain incomplete or inaccurate information as we are still refining the generation process, so please compare against the repo schema site and refer to the linked commit for the most up-to-date source of truth.
 
             > [!NOTE]
             > ♻️ This preview updates automatically with each push to this PR.
