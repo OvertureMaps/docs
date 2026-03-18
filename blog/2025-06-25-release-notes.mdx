@@ -66,7 +66,7 @@ You can access the datasets by following the process outlined [here](/getting-da
 
 ## What's new? Big changes to GERS.
 
-In this release, Overture has standardized the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings. This is a **one-time** breaking change for our ID system. For this release only, we are offering Parquet files, partioned by `theme` and `type` that map the old May IDs to the new June UUIDs. You can find that file here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
+In this release, Overture has standardized the [`id` property](/schema/) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings. This is a **one-time** breaking change for our ID system. For this release only, we are offering Parquet files, partioned by `theme` and `type` that map the old May IDs to the new June UUIDs. You can find that file here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
 
 Overture is now producing [bridge files](https://docs.overturemaps.org/gers/bridge-files/) with each release. You can find the latest bridge files here, partitioned by `dataset`, `theme`, and `type`:
 
