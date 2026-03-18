@@ -3,6 +3,7 @@ title: 2025-06-25 release notes
 tags:
   - releases
 ---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
@@ -16,27 +17,31 @@ The datasets and release artifacts are available as GeoParquet files stored on b
 ### Release data
 
 **Microsoft Azure:**
+
 ```
 az://overturemapswestus2.blob.core.windows.net/release/2025-06-25.0/
 ```
 
 **Amazon S3:**
+
 ```
 s3://overturemaps-us-west-2/release/2025-06-25.0/
 ```
+
 ### Data changelog
 
 No changelog for the June release
 
-
 ### Bridge files
 
 **Microsoft Azure:**
+
 ```
 az://overturemapswestus2.blob.core.windows.net/bridgefiles/2025-06-25.0/
 ```
 
 **Amazon S3:**
+
 ```
 s3://overturemaps-us-west-2/bridgefiles/2025-06-25.0/
 ```
@@ -44,16 +49,16 @@ s3://overturemaps-us-west-2/bridgefiles/2025-06-25.0/
 ### GERS Registry
 
 **Microsoft Azure:**
+
 ```
 az://overturemapswestus2.blob.core.windows.net/registry/
 ```
 
 **Amazon S3:**
+
 ```
 s3://overturemaps-us-west-2/registry/
 ```
-
-
 
 <!-- truncate -->
 
@@ -61,7 +66,7 @@ You can access the datasets by following the process outlined [here](/getting-da
 
 ## What's new? Big changes to GERS.
 
-In this release, Overture has standardized the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings. This is a **one-time** breaking change for our ID system. For this release only, we are offering Parquet files, partioned by `theme` and `type` that map the old May IDs to the new June UUIDs.  You can find that file here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
+In this release, Overture has standardized the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings. This is a **one-time** breaking change for our ID system. For this release only, we are offering Parquet files, partioned by `theme` and `type` that map the old May IDs to the new June UUIDs. You can find that file here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
 
 Overture is now producing [bridge files](https://docs.overturemaps.org/gers/bridge-files/) with each release. You can find the latest bridge files here, partitioned by `dataset`, `theme`, and `type`:
 
@@ -102,13 +107,12 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 - added new Greenland data source: OpenAddresses/Asiaq, Greenland Survey
 - added new Singapore data source: OpenAddresses/Singapore Land Authority
 - added several new data sources in the United States
-    - Clarke County, GA: OpenAddresses/GA/Athens-Clarke County GIS
-    - State of Minnesota: OpenAddresses/MN/Department of Public Safety
-    - State of Colorado: OpenAddresses/CO/Governor's Office of Information Technology
-    - Lackawanna County, PA: OpenAddresses/PA/City of Scranton GIS
+  - Clarke County, GA: OpenAddresses/GA/Athens-Clarke County GIS
+  - State of Minnesota: OpenAddresses/MN/Department of Public Safety
+  - State of Colorado: OpenAddresses/CO/Governor's Office of Information Technology
+  - Lackawanna County, PA: OpenAddresses/PA/City of Scranton GIS
 - made improvements to existing Mexico and Australia address data
 - made improvements to existing US data and Australia address data
-
 
 ### Base
 
@@ -117,8 +121,8 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 - addded all upstream source tages from OSM to the `source_tags` property
 
 ### Buildings
- - added a new data provider: City of Vancouver, CA
 
+- added a new data provider: City of Vancouver, CA
 
 ### Divisions
 
@@ -139,7 +143,7 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 ## Data changelog
 
 :::note
-Because of the switch to GERS UUIDs this month, we are not release a changelog. See below for paths to the May changelog, with relies on the "old" GERS IDs. For the June release only, we are offering Parquet files, partioned by `theme` and `type` that map the old May IDs to the new June UUIDs.  You can find that file here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
+Because of the switch to GERS UUIDs this month, we are not release a changelog. See below for paths to the May changelog, with relies on the "old" GERS IDs. For the June release only, we are offering Parquet files, partioned by `theme` and `type` that map the old May IDs to the new June UUIDs. You can find that file here: `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/`.
 
 :::
 
@@ -149,7 +153,9 @@ The [data changelog](https://docs.overturemaps.org/gers/changelog/) captures any
 az://overturemapswestus2.blob.core.windows.net/changelog/2025-06-25.0/
 
 ```
+
 s3://overturemaps-us-west-2/changelog/2025-06-25.0/
+
 ```
 
 You can find more information about [the data changelog in our documentation](https://docs.overturemaps.org/gers/changelog/).
@@ -161,3 +167,4 @@ The changelog for Overture schema `v1.10.0` is [here](https://github.com/Overtur
 ## Attribution
 
 You'll find information about attribution and licensing [here](/attribution).
+```

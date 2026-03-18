@@ -1,0 +1,606 @@
+---
+title: Roads
+description: Road-specific properties in the Overture transportation schema
+pagination_label: Roads
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+In the Overture transportation theme, a road is any kind of road, street, or path, including a dedicated path for walking or cycling. (Railways and waterways are separate subtypes in the transportation schema.) Road segments comprise the majority of ground-based transportation segments. Roads are modeled using [segment](/schema/reference/transportation/segment) features with the `subtype` property value set to `road`.
+
+This document describes properties specific to the `road` subtype. For more general information regarding segments, please refer to [segments and connectors](../segments-and-connectors).
+
+## Subclass
+
+The subclass property refines the descriptions of segments by:
+
+- clearly specifying the usage of a length of road, and using linear referencing instead of further segmentation to pinpoint a change in how the road is used
+- properly classifying detailed information from OpenStreetMap
+
+Subclasses require non-overlapping geometries, which will make it easier for routing engines to consume our road data and generate turn-by-turn directions. The class and subclass structures allow us to capture more information about roads from our data sources. For example, we've been able to move more than 30 million "unknown" road segments from OSM into subclasses, laying the groundwork for richer and more detailed map displays with Overture data.
+
+## Surface
+
+The `road_surface` property of a road indicates its physical surface. If omitted, a reasonable default value should be assumed based on the `class` and `subclass`.
+
+Like many road segment properties, the `road_surface` property supports [geometric scoping](../scoping-and-travel-modes#geometric-scoping-linear-referencing) (linear referencing). Consequently, the effective road surface may vary along different sub-ranges of a road segment's geometry.
+
+
+## Restrictions
+
+### Access restrictions
+
+Access restrictions on a road segment specify who is allowed to use the road, and under what circumstances.
+
+Every road segment has an *implied* set of access restrictions defined by its road class and local rules, norms, and customs. (The Overture transportation schema does not specify these implied access restrictions, which are left to the specific application to resolve.)
+
+The implied access restrictions may be modified for the road segment as a whole by providing an explicit value for the property `access_restrictions`.
+
+It is technically possible to specify a blanket access grant or refusal of access applying to everyone and everything; but where, as is typical, a more precise outcome is needed, one or more [rules](../scoping-and-travel-modes#rules-and-rule-based-properties) will be used to specify access restrictions. As with all rule-based properties, if no rule matches the specific facts, then the default restrictions for the road class govern.
+
+<Tabs>
+  <TabItem value="blanketDenial" label="Blanket denial of access." default>
+
+```yaml
+id: access-restrictions-segment-blanket
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [0, 0]
+    - [0, 1]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: residential
+  access_restrictions:
+    - access_type: denied
+```
+
+  </TabItem>
+
+  <TabItem value="businessHoursDelivery" label="Private access, deliveries OK during business hours." default>
+
+```yaml
+id: access-restrictions-segment-private-with-deliveries
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [0, 0]
+    - [0, 1]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: residential
+  access_restrictions:
+    - access_type: denied
+    - access_type: allowed
+      when: { recognized: [as_private] }
+    - access_type: allowed
+      when:
+        using: [to_deliver]
+        during: Mo-Fr 08:30-16:30
+```
+
+  </TabItem>
+
+  <TabItem value="noMotorVehiclesExceptDestination" label="No motor vehicles except to destination." default>
+
+```yaml
+id: access-restrictions-segment-motor-vehicles-destination-only
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [0, 0]
+    - [0, 1]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: residential
+  access_restrictions:
+    - access_type: denied
+      when: { mode: [motor_vehicle] }
+    - access_type: allowed
+      when: { using: [at_destination] }
+```
+
+  </TabItem>
+
+  <TabItem value="noNorthboundTrucks" label="No trucks with &ge; 5 axles." default>
+
+```yaml
+id: access-restrictions-segment-axle-limit
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [0, 0]
+    - [0, 1]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: motorway
+  access_restrictions:
+    - access_type: denied
+      when:
+        mode: [hgv]
+        vehicle:
+          - dimension: axle_count
+            comparison: greater_than_equal
+            value: 5
+```
+
+  </TabItem>
+</Tabs>
+
+### Turn restrictions
+
+Turn restrictions on a road segment limit the transitions which are allowed from that segment into other [physically connected](../segments-and-connectors#physical-connectivity) segments.
+
+Every road segment has an implied set of allowed transitions defined by its [access restrictions](#access-restrictions) as well as local rules, norms, and customs. An example of a transition restriction implied by an access restriction: if the segment can only be used along the `forward` [heading](../segments-and-connectors#heading), then it is implied that no transitions are allowed to any connected segments if travelling along the `backward` heading. An example of a transition restriction implied by a local rule or norm would be a blanket prohibition on U-turns in a given jurisdiction.
+
+Overture takes a permissive-by-default approach to transition restrictions. By default, all implied transitions are allowed. The set of allowed transitions may be reduced by adding explicit transition restrictions in the `prohibited_transitions` property.
+
+Turn restrictions come in two flavors: **simple** and **via**. A simple turn restriction allows a simple regulation to be stated, such as "No right turn onto Elm Street"; a via restriction covers more elaborate cases where the sequence of maneuvers is important.
+
+<Tabs>
+  <TabItem value="simple" label="Simple restriction." default>
+
+<div style={{ width: "40.5%", float: "left" }}>
+
+<figure>
+
+<ThemedImage
+  alt="A simple transition restriction prohibiting a right turn."
+  sources={{
+    light: useBaseUrl('/img/transportation/turn-restriction-01-light.png'),
+    dark: useBaseUrl('/img/transportation/turn-restriction-01-dark.png'),
+  }}
+/>
+
+<figcaption>
+
+*Prohibited right turn from "source" to "target" segment at connector 2.*
+
+</figcaption>
+
+</figure>
+
+</div>
+
+<div style={{ width: "59.5%", float: "right" }}>
+
+<details>
+<summary>Source segment</summary>
+```yaml
+id: overture:transportation:example:simple-turn-restriction-source
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-113.57822030759499, 50.01868388494378]
+    - [-113.57831482025354, 50.018860947117304]
+    - [-113.57851814418316, 50.01923724443006]
+properties:
+  theme: transportation
+  type: segment
+  version: 5
+  subtype: road
+  class: secondary
+  connectors:
+    - connector_id: overture:transportation:example:via-turn-restriction-connector1
+      at: 0
+    - connector_id: overture:transportation:example:via-turn-restriction-connector2
+      at: 1
+  prohibited_transitions:
+      - sequence:
+        - segment_id: overture:transportation:example:simple-turn-restriction-target
+          connector_id: overture:transportation:example:simple-turn-restriction-connector2
+        final_heading: forward
+        when: {heading: forward}
+```
+</details>
+
+<details>
+<summary>Connector 1</summary>
+
+*This connector is not an important part of the example, since it does
+not participate in the turn restriction, but it is included to bring
+real-world context to the example.*
+
+```yaml
+id: overture:transportation:example:simple-turn-restriction-connector1
+type: Feature
+geometry:
+  type: Point
+  coordinates:  [-113.57831482025354, 50.018860947117304]
+properties:
+  theme: transportation
+  type: connector
+  version: 0
+```
+</details>
+
+<details>
+<summary>Exit segment</summary>
+
+*This segment is not an important part of the example, since all implied
+transitions are allowed on it. We include it to bring real-world context
+to the example.*
+
+```yaml
+id: overture:transportation:example:simple-turn-restriction-exit
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-113.57831482025354, 50.018860947117304]
+    - [-113.5783121688577, 50.019016827708754]
+    - [-113.57829228338763, 50.019079861246865]
+    - [-113.57826444373009, 50.019121599625294]
+    - [-113.57816369068271, 50.01919400284882]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: secondary
+  connectors:
+    - connector_id: overture:transportation:example:via-turn-restriction-connector1
+      at: 0
+    - connector_id: overture:transportation:example:via-turn-restriction-connector2
+      at: 1
+```
+
+</details>
+
+<details>
+<summary>Connector 2</summary>
+
+*The right turn from the source segment (`forward` heading) to the
+target segment (`forward` heading) is prohibited at this connector.*
+
+```yaml
+id: overture:transportation:example:simple-turn-restriction-connector2
+type: Feature
+geometry:
+  type: Point
+  coordinates: [-113.57851814418316, 50.01923724443006]
+properties:
+  theme: transportation
+  type: connector
+  version: 1
+```
+</details>
+
+<details>
+<summary>Target segment</summary>
+
+*Traffic heading `forward` on the source segment may not enter this
+segment heading `forward`, i.e. the right turn from the source segment
+to this segment is prohibited.*
+
+```yaml
+id: overture:transportation:example:simple-turn-restriction-target
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-113.57851814418316, 50.01923724443006]
+    - [-113.57837460847787, 50.01919574268962]
+    - [-113.57812342099429, 50.01919343703648]
+    - [-113.57803729957116, 50.01923263312719]
+    - [-113.57766410673773, 50.01923263312719]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: secondary
+  connectors:
+    - connector_id: overture:transportation:example:via-turn-restriction-connector1
+      at: 0
+    - connector_id: overture:transportation:example:via-turn-restriction-connector2
+      at: 1
+```
+</details>
+
+<details>
+<summary>Connector 3</summary>
+
+*This connector is not an important part of the example, since it does
+not participate in the turn restriction, but it is included to bring
+real-world context to the example.*
+
+```yaml
+id: overture:transportation:example:simple-turn-restriction-connector3
+type: Feature
+geometry:
+  type: Point
+  coordinates: [-113.57816369068271, 50.01919400284882]
+properties:
+  theme: transportation
+  type: connector
+  version: 1
+```
+</details>
+
+
+</div>
+
+<div style={{ clear: "both" }}/>
+
+  </TabItem>
+
+  <TabItem value="via" label="Via restriction" default>
+
+<div style={{ width: "40.5%", float: "left" }}>
+
+<figure>
+
+<ThemedImage
+  alt="A via restriction."
+  sources={{
+    light: useBaseUrl('/img/transportation/turn-restriction-02-light.png'),
+    dark: useBaseUrl('/img/transportation/turn-restriction-02-dark.png'),
+  }}
+/>
+
+<figcaption>
+
+*Prohibited transition from "source" to "target" through `via` segment.*
+
+</figcaption>
+
+</figure>
+
+</div>
+
+<div style={{ width: "59.5%", float: "right" }}>
+
+<details>
+<summary>Source segment</summary>
+```yaml
+id: overture:transportation:example:via-turn-restriction-source
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-71.1100226929593, 42.30156668552357]
+    - [-71.11055493812631, 42.30157222996385]
+    - [-71.11102971081017, 42.30157407811038]
+    - [-71.11143701579662, 42.30156114108277]
+    - [-71.11197425857047, 42.30152602627953]
+    - [-71.11234408150312, 42.30149091145671]
+    - [-71.1126589307566, 42.30147612626226]
+    - [-71.11301376086777, 42.301494607754876]
+    - [-71.11320616874515, 42.301516785538524]
+properties:
+  theme: transportation
+  type: segment
+  version: 5
+  subtype: road
+  class: primary
+  connectors:
+    - connector_id: overture:transportation:example:via-turn-restriction-connector1
+      at: 0
+    - connector_id: overture:transportation:example:via-turn-restriction-connector2
+      at: 1
+  names:
+    primary: Arborway
+  prohibited_transitions:
+    - sequence:
+        - segment_id: overture:transportation:example:via-turn-restriction-target
+          connector_id: overture:transportation:example:via-turn-restriction-connector2
+        - segment_id: overture:transportation:example:via-turn-restriction-via
+          connector_id: overture:transportation:example:via-turn-restriction-connector1
+      final_heading: forward
+      when:
+        heading: forward
+        during: Mo-Fr 06:00-09:00, 15:00-19:00
+  road_surface:
+    - value: paved
+```
+</details>
+
+<details>
+<summary>Connector 1</summary>
+```yaml
+id: overture:transportation:example:via-turn-restriction-connector1
+type: Feature
+geometry:
+  type: Point
+  coordinates: [-71.11234408150312, 42.30149091145671]
+properties:
+  theme: transportation
+  type: connector
+  version: 1
+```
+</details>
+
+<details>
+<summary>Via segment</summary>
+```yaml
+id: overture:transportation:example:simple-road2
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-71.11213418200086, 42.3017182333833]
+    - [-71.11234408150312, 42.30149091145671]
+    - [-71.11248901211202, 42.3013264259736]
+    - [-71.11283634581244, 42.30093831245662]
+properties:
+  theme: transportation
+  type: segment
+  version: 5
+  subtype: road
+  class: secondary
+  connectors:
+    - connector_id: overture:transportation:example:via-turn-restriction-connector1
+      at: 0
+    - connector_id: overture:transportation:example:via-turn-restriction-connector2
+      at: 1
+  names:
+    primary: Washington Street
+  road_surface:
+    - value: paved
+```
+</details>
+
+<details>
+<summary>Connector 2</summary>
+```yaml
+id: overture:transportation:example:via-turn-restriction-connector2
+type: Feature
+geometry:
+  type: Point
+  coordinates: [-71.11248901211202, 42.3013264259736]
+properties:
+  theme: transportation
+  type: connector
+  version: 1
+```
+</details>
+
+<details>
+<summary>Target segment</summary>
+```yaml
+id: overture:transportation:example:turn-restriction-target
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-71.11325364601365, 42.301374477956756]
+    - [-71.11278137213321, 42.3013264259736]
+    - [-71.11248901211202, 42.3013264259736]
+    - [-71.11157195119078, 42.30139295947919]
+    - [-71.1109997251666, 42.301428074356636]
+    - [-71.11058492376937, 42.30143177065813]
+    - [-71.11002519176327, 42.301415137298676]
+properties:
+  theme: transportation
+  type: segment
+  version: 5
+  subtype: road
+  class: primary
+  connectors:
+    - connector_id: overture:transportation:example:via-turn-restriction-connector1
+      at: 0
+    - connector_id: overture:transportation:example:via-turn-restriction-connector2
+      at: 1
+  names:
+    primary: Arborway
+  road_surface:
+    - value: paved
+```
+</details>
+
+</div>
+
+<div style={{ clear: "both" }}/>
+
+  </TabItem>
+</Tabs>
+
+### Speed limits
+
+Speed limits restrict the speed at which travel is permitted on a road. Typically speed limits specify maximum allowed speeds, but the Overture schema also allows minimum speed limits to be set and variable speed corridors to be indicated.
+
+Every road segment has an implied speed limit or set of speed limits defined by its road class and local rules, norms, and customs. As with access and turn restrictions, the Overture transportation schema does not attempt to specify these implied speed limits.
+
+The implied speed limits may be configured for the whole road segment by providing an explicit value for the property `speed_limits`.
+
+As with access restrictions and turn restrictions, speed limits can be specified using [rules](../scoping-and-travel-modes#rules-and-rule-based-properties).
+
+<Tabs>
+  <TabItem value="speedLimitSimple" label="Simple speed limit" default>
+
+```yaml
+id: speed-limits-simple
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-123.09348187774302, 49.280278741717865]
+    - [-123.0895720621171, 49.280195795155265]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: residential
+  speed_limits:
+    - max_speed:
+        value: 30
+        unit: km/h
+```
+
+  </TabItem>
+
+  <TabItem value="speedLimitDirectional" label="Different speed limit for northbound trucks" default>
+
+```yaml
+id: speed-limits-variable-max
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [0, 0]
+    - [0, 1]
+properties:
+  theme: transportation
+  type: segment
+  version: 2
+  subtype: road
+  class: secondary
+  speed_limits:
+    - max_speed: {value: 70, unit: "mph"}
+    - when:
+        mode: [hgv]
+        heading: forward
+      max_speed: {value: 65, unit: "mph"}
+```
+
+  </TabItem>
+
+  <TabItem value="speedLimitVariable" label="Variable speed corridor" default>
+
+```yaml
+id: speed-limits-variable-max
+type: Feature
+geometry:
+  type: LineString
+  coordinates:
+    - [-123.12895930023527, 50.007761789070344]
+    - [-123.12637500433082, 50.00945836227345]
+    - [-123.12506896231434, 50.011762034223324]
+    - [-123.12415195409014, 50.01351203677902]
+properties:
+  theme: transportation
+  type: segment
+  version: 1
+  subtype: road
+  class: motorway
+  speed_limits:
+    - max_speed:
+        value: 100
+        unit: km/h
+      is_max_speed_variable: true
+```
+
+  </TabItem>
+</Tabs>

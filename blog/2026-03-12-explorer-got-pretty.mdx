@@ -1,0 +1,83 @@
+---
+title: The Day Explorer Turned Pretty
+authors: [jonah, dana]
+hide_table_of_contents: true
+tags:
+  - tools
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+When we launched [Explorer](https://explore.overturemaps.org) back in the summer of 2024, we described it as an "x-ray data inspector" and made a deliberate choice to show everything at once — all themes, all feature types, all properties — with minimal cartographic polish. The goal was transparency, not beauty. We wanted you to see the data as it really is.
+
+That was the right call for a launch. But as Explorer has matured and more people have come to rely on it, we've learned that "useful data tool" and "thing you actually enjoy looking at" don't have to be mutually exclusive. The person most responsible for closing that gap is Jonah Adkins, Cartography Lead at Meta. "I didn't have the intention of just redoing the whole thing," Jonah says, "but I was curious what I could get Claude to do." He came up with a plan, and it was, in his words, probably 5 to 6 hours of work total over a few days. By end of day one, Explorer looked like a different site. Dana let him keep going.
+
+("I would have felt better with a heads up," Dana says. "But it's so pretty now.")
+
+<figure className="screenshot-frame">
+  <iframe
+    src="https://explore.overturemaps.org"
+    width="100%"
+    height="500"
+    style={{ border: 'none', borderRadius: '8px' }}
+    loading="lazy"
+    allow="fullscreen"
+  />
+  <figcaption>
+    <a href="https://explore.overturemaps.org" target="_blank">Open in full screen ↗</a>
+  </figcaption>
+</figure>
+
+<!-- truncate -->
+
+:::danger[Shoutout!]
+ 
+Explorer has had many hands on it over the years. Huge thanks to Ben Clark, who first brought it to life, and to Brandon Liu, Charlie McGrady, Ethan Iannicelli, Jennings Anderson, Kyle Barron, and everyone else who has contributed to making it what it is today.
+ 
+:::
+
+## Two modes: Explore and Inspect
+
+The biggest change to Explorer is the introduction of two distinct modes, accessible from the navigation bar at the top of the page.
+
+**Explore mode** is the new default. The data is styled, readable, and cartographically opinionated. Places have icons. Highways look different from residential streets. Buildings have fill colors. If you want to quickly orient yourself in an area, understand what Overture covers, or demo the data to someone who's never seen it, Explore mode is where you want to be. The layers panel on the left toggles Overture's six themes on and off. Click any feature to see its properties.
+
+**Inspect mode** is the spiritual successor to the original Explorer experience: show as much of the data as possible, as directly as possible. The layers panel reorganizes to mirror the Overture schema itself — base breaks down into land, water, bathymetry, land cover, and land use; transportation shows segments and connectors; divisions shows areas, boundaries, and labels. Every feature type is symbolized uniformly as simple points, lines, and polygons. Little to no filtering, very few cartographic opinions.
+
+Think of it this way: Explore mode asks _what does this place look like?_ Inspect mode asks _what's actually in the data?_ Both questions are worth asking.
+
+## Globe
+
+When you open Explorer, you're now looking at a globe. "The globe thing is kind of stupid," Jonah admits, "but it's too easy not to do." Dana disagrees on the stupid part. The previous default dropped you in Washington, DC. The globe communicates something truer: Overture is a global dataset. Go find your place in it.
+
+## Search
+
+Explorer now has a search bar, a feature people have been asking for in every uesr testing session since 2024. Use the **Search Type** dropdown to switch between three modes:
+
+**Locality** and **Country** searches are powered by a [geocoding service](https://github.com/brad-richardson/overture-geocoder) built entirely from Overture's own divisions data. It covers 450,000+ cities, neighborhoods, and administrative areas worldwide, with full-text search and autocomplete. It's a nice demonstration of what you can build on Overture data.
+
+**GERS search** is the one that excites us most. Paste any GERS ID into the search bar and Explorer will fly directly to that feature on the map. This is powered by the GERS manifest in the [Overture STAC catalog](/getting-data/cloud-sources/), which maps every GERS ID to a bounding box. If you've been writing queries and want to visually verify a feature — or if someone hands you a GERS ID and you want to know what it is — this is now a one-step operation. 
+
+## Multilingual names
+
+Toggle between languages using the language selector to see place names rendered in dozens of languages. This comes directly from the `names` field in Overture data, which carries common names, alternate names, and translations from our source datasets. The richness packed into that property is easy to miss when you're writing queries; Explorer makes it visible.
+
+## Under the hood
+
+The styling refresh is powered by a token-based design system Jonah built for Explorer: primitives (color palette, fonts), semantics (feature-level color assignments), and components (stylesheet properties referencing the semantic values). The practical upshot is that adding a new map style — dark mode, for example — means changing one file. Explorer is also built on Next.js, which sets up a better foundation for adding features and making it easier for contributors to build on top of.
+
+Explorer is pinned to a specific Overture release. Updates go through a validation process — a script called, yes, `dont-dream-its-overture` — that audits stylesheets against the current schema and tile metadata before changes reach the live site. This means Explorer doesn't silently drift out of sync with the data. When you see a property in the inspector panel, it's a property that's actually in the schema.
+
+We also want to be clear: Explorer is still fundamentally a data and schema inspector, not a finished cartographic product. But it's also proof of what's possible with Overture data. The components are open source and the design system is built to be extended. We hope people take it and run with it.
+
+Source code is in the [explore-site](https://github.com/OvertureMaps/explore-site) repository. Issues and PRs welcome.
+
+## What's next
+
+Explorer is a tool for getting oriented with Overture data. Once you know what you're looking for, the [Python CLI](/getting-data/overturemaps-py/) and [DuckDB](/getting-data/duckdb/) are your next steps for downloading and querying at scale. The [schema reference](/schema/) is the place to go when you want to understand what those properties in the inspector panel actually mean.
+
+:::tip[Talk to us]
+
+We want to hear about your experience using Overture Maps. Share your ideas and questions on our [GitHub Discussion Forum](https://github.com/orgs/OvertureMaps/discussions) or reach out to us at community@overturemaps.org.
+
+:::

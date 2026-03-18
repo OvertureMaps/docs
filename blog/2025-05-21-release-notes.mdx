@@ -3,22 +3,25 @@ title: 2025-05-21 release notes
 tags:
   - releases
 ---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Overview
 
-**The `2025-05-21.0` release of Overture data and `v1.9.0` of the Overture schema are now available.** This month we added [PinMeTo](/attribution/#places) as a new data provider for `places`, improved the taxonomy of the `categories` property, added new data sources for `addresses`, and fixed bugs. Also in this release, we're introducing bridge files and announcing a major change to how we generate GERS IDs starting with the June release. 
+**The `2025-05-21.0` release of Overture data and `v1.9.0` of the Overture schema are now available.** This month we added [PinMeTo](/attribution/#places) as a new data provider for `places`, improved the taxonomy of the `categories` property, added new data sources for `addresses`, and fixed bugs. Also in this release, we're introducing bridge files and announcing a major change to how we generate GERS IDs starting with the June release.
 
 The datasets are available as GeoParquet files stored on both AWS and Azure. The release paths are:
 
 #### Microsoft Azure:
+
 ```
 wasbs://release@overturemapswestus2.blob.core.windows.net/2025-05-21.0
 ```
 
 #### Amazon S3:
+
 ```
 s3://overturemaps-us-west-2/release/2025-05-21.0
 ```
@@ -38,23 +41,23 @@ You can find the latest bridge files here, partitioned by dataset, theme, and ty
 ```
 wasbs://bridgefiles@overturemapswestus2.blob.core.windows.net/2025-05-21.0
 ```
+
 ```
 s3://overturemaps-us-west-2/bridgefiles/2025-05-21.0
 ```
 
 ## GERS IDs will become UUIDs in June
 
-In next month's release (late June), Overture is standardizing the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings. 
+In next month's release (late June), Overture is standardizing the [`id` property](/schema/#top-level-properties) across all themes by adopting [UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html), stored as strings.
 
-Currently the structure of our IDs varies slightly across datasets, with some themes embedding metadata (e.g. [H3](https://h3geo.org/)) in the `id` property. The new UUIDs will be randomly-generated identifiers with no encoded information. Moving to UUIDs enables consistent ID generation and registration across our data pipelines, which is necessary for the successful implementation of [GERS](/gers). 
+Currently the structure of our IDs varies slightly across datasets, with some themes embedding metadata (e.g. [H3](https://h3geo.org/)) in the `id` property. The new UUIDs will be randomly-generated identifiers with no encoded information. Moving to UUIDs enables consistent ID generation and registration across our data pipelines, which is necessary for the successful implementation of [GERS](/gers).
 
 This is a **one-time** breaking change for our ID system. We plan to support our users by providing a file that maps the old IDs to the new UUIDs.
-
 
 ## Theme-specific updates
 
 :::info
-The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha.
 :::
 
 ### Addresses
@@ -62,25 +65,37 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 - added new data sources for Waupaca County, WI and Sierra County, CA
 - added a new data source for Italy that will replace the existing regional/municipal datasets
 
- <table>
-    <thead>
-            <tr>
-                <th></th>
-                <th><code>added</code></th>
-                <th><code>data_changed</code></th>
-                <th><code>removed</code></th>
-                <th><code>unchanged</code></th>
-            </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b><code>address</code></b></td>
-            <td>446,766,672</td>
-            <td>0</td>
-            <td>429,683,781</td>
-            <td>0</td>
-        </tr>
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>
+        <code>added</code>
+      </th>
+      <th>
+        <code>data_changed</code>
+      </th>
+      <th>
+        <code>removed</code>
+      </th>
+      <th>
+        <code>unchanged</code>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <b>
+          <code>address</code>
+        </b>
+      </td>
+      <td>446,766,672</td>
+      <td>0</td>
+      <td>429,683,781</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 
 ### Base
@@ -88,60 +103,92 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 - improved coverage of state park, forest, and taxiline `class` values
 - improved processing of `bathymetry` geometries
 
- <table>
-    <thead>
-            <tr>
-                <th></th>
-                <th><code>added</code></th>
-                <th><code>data_changed</code></th>
-                <th><code>removed</code></th>
-                <th><code>unchanged</code></th>
-            </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b><code>bathymetry</code></b></td>
-            <td>0</td>
-            <td>60,057</td>
-            <td>0</td>
-            <td>3</td>
-        </tr>
-        <tr>
-             <td><b><code>infrastructure</code></b></td>
-            <td>122,924,152</td>
-            <td>0</td>
-            <td>121,608,805</td>
-            <td>0</td>
-        </tr>
-         <tr>
-             <td><b><code>land</code></b></td>
-            <td>65,191,767</td>
-            <td>0</td>
-            <td>64,726,006</td>
-            <td>0</td>
-        </tr>
-         <tr>
-             <td><b><code>land_cover</code></b></td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>123,302,114</td>
-        </tr>
-         <tr>
-             <td><b><code>land_use</code></b></td>
-            <td>49,625,405</td>
-            <td>0</td>
-            <td>49,366,015</td>
-            <td>0</td>
-        </tr>
-         <tr>
-             <td><b><code>water</code></b></td>
-            <td>57,802,549</td>
-            <td>0</td>
-            <td>56,753,269</td>
-            <td>0</td>
-        </tr>
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>
+        <code>added</code>
+      </th>
+      <th>
+        <code>data_changed</code>
+      </th>
+      <th>
+        <code>removed</code>
+      </th>
+      <th>
+        <code>unchanged</code>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <b>
+          <code>bathymetry</code>
+        </b>
+      </td>
+      <td>0</td>
+      <td>60,057</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>infrastructure</code>
+        </b>
+      </td>
+      <td>122,924,152</td>
+      <td>0</td>
+      <td>121,608,805</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>land</code>
+        </b>
+      </td>
+      <td>65,191,767</td>
+      <td>0</td>
+      <td>64,726,006</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>land_cover</code>
+        </b>
+      </td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>123,302,114</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>land_use</code>
+        </b>
+      </td>
+      <td>49,625,405</td>
+      <td>0</td>
+      <td>49,366,015</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>water</code>
+        </b>
+      </td>
+      <td>57,802,549</td>
+      <td>0</td>
+      <td>56,753,269</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 
 ### Buildings
@@ -149,73 +196,108 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 - fixed an issue with duplicate IDs on IGN Spain buildings
 - added `names` property to the `building_part` type
 
- <table>
-    <thead>
-            <tr>
-                <th></th>
-                <th><code>added</code></th>
-                <th><code>data_changed</code></th>
-                <th><code>removed</code></th>
-                <th><code>unchanged</code></th>
-            </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b><code>building</code></b></td>
-            <td>16,659,007</td>
-            <td>10,851,887</td>
-            <td>8,205,143</td>
-            <td>2,594,721,648</td>
-        </tr>
-        <tr>
-             <td><b><code>building_part</code></b></td>
-            <td>86,713</td>
-            <td>3,184,622</td>
-            <td>8,949</td>
-            <td>45,816</td>
-        </tr>
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>
+        <code>added</code>
+      </th>
+      <th>
+        <code>data_changed</code>
+      </th>
+      <th>
+        <code>removed</code>
+      </th>
+      <th>
+        <code>unchanged</code>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <b>
+          <code>building</code>
+        </b>
+      </td>
+      <td>16,659,007</td>
+      <td>10,851,887</td>
+      <td>8,205,143</td>
+      <td>2,594,721,648</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>building_part</code>
+        </b>
+      </td>
+      <td>86,713</td>
+      <td>3,184,622</td>
+      <td>8,949</td>
+      <td>45,816</td>
+    </tr>
+  </tbody>
 </table>
-
 
 ### Divisions
 
-- generated the point geometries for the `division` type from OpenStreetMap nodes instead of using centroids calculated from of `division_area` polygons 
+- generated the point geometries for the `division` type from OpenStreetMap nodes instead of using centroids calculated from of `division_area` polygons
 - fixed a bug in `capital_of_divisions` ID assignments
 
- <table>
-    <thead>
-           <tr>
-                <th></th>
-                <th><code>added</code></th>
-                <th><code>data_changed</code></th>
-                <th><code>removed</code></th>
-                <th><code>unchanged</code></th>
-            </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b><code>division</code></b></td>
-            <td>40,068</td>
-            <td>263,440</td>
-            <td>16,238</td>
-            <td>4,090,114</td>
-        </tr>
-        <tr>
-             <td><b><code>division_area</code></b></td>
-            <td>19,582</td>
-            <td>57,077</td>
-            <td>11,716</td>
-            <td>947,086</td>
-        </tr>
-         <tr>
-             <td><b><code>division_boundary</code></b></td>
-            <td>475</td>
-            <td>2,895</td>
-            <td>44</td>
-            <td>84,330</td>
-        </tr>
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>
+        <code>added</code>
+      </th>
+      <th>
+        <code>data_changed</code>
+      </th>
+      <th>
+        <code>removed</code>
+      </th>
+      <th>
+        <code>unchanged</code>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <b>
+          <code>division</code>
+        </b>
+      </td>
+      <td>40,068</td>
+      <td>263,440</td>
+      <td>16,238</td>
+      <td>4,090,114</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>division_area</code>
+        </b>
+      </td>
+      <td>19,582</td>
+      <td>57,077</td>
+      <td>11,716</td>
+      <td>947,086</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>division_boundary</code>
+        </b>
+      </td>
+      <td>475</td>
+      <td>2,895</td>
+      <td>44</td>
+      <td>84,330</td>
+    </tr>
+  </tbody>
 </table>
 
 ### Places
@@ -224,59 +306,86 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 - improved the taxonomy of the `categories` property by fixing inconsistencies in the hierarchy
 - made improvements to the data matching tools
 
- <table>
-    <thead>
-            <tr>
-                <th></th>
-                <th><code>added</code></th>
-                <th><code>data_changed</code></th>
-                <th><code>removed</code></th>
-                <th><code>unchanged</code></th>
-            </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b><code>place</code></b></td>
-            <td>6,490,353</td>
-            <td>18,049,066</td>
-            <td>10,853,004</td>
-            <td>37,142,400</td>
-        </tr>
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>
+        <code>added</code>
+      </th>
+      <th>
+        <code>data_changed</code>
+      </th>
+      <th>
+        <code>removed</code>
+      </th>
+      <th>
+        <code>unchanged</code>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <b>
+          <code>place</code>
+        </b>
+      </td>
+      <td>6,490,353</td>
+      <td>18,049,066</td>
+      <td>10,853,004</td>
+      <td>37,142,400</td>
+    </tr>
+  </tbody>
 </table>
 
 ### Transportation
 
-- released the same data that was in the `2025-04-23.0` release; stats reflect changes from `2025-03-19.1` to `2025-04-23.0` 
+- released the same data that was in the `2025-04-23.0` release; stats reflect changes from `2025-03-19.1` to `2025-04-23.0`
 
- <table>
-    <thead>
-            <tr>
-                <th></th>
-                <th><code>added</code></th>
-                <th><code>data_changed</code></th>
-                <th><code>removed</code></th>
-                <th><code>unchanged</code></th>
-            </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b><code>segment</code></b></td>
-            <td>0</td>
-            <td>1,592,251</td>
-            <td>1</td>
-            <td>319,936,718</td>
-        </tr>
-        <tr>
-             <td><b><code>connector</code></b></td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>375,247,444</td>
-        </tr>
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>
+        <code>added</code>
+      </th>
+      <th>
+        <code>data_changed</code>
+      </th>
+      <th>
+        <code>removed</code>
+      </th>
+      <th>
+        <code>unchanged</code>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <b>
+          <code>segment</code>
+        </b>
+      </td>
+      <td>0</td>
+      <td>1,592,251</td>
+      <td>1</td>
+      <td>319,936,718</td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <code>connector</code>
+        </b>
+      </td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>375,247,444</td>
+    </tr>
+  </tbody>
 </table>
-
 
 ## Data changelog
 
@@ -285,6 +394,7 @@ The data changelog captures any changes in Overture features between this releas
 ```
 wasbs://changelog@overturemapswestus2.blob.core.windows.net/2025-05-21.0
 ```
+
 ```
 s3://overturemaps-us-west-2/changelog/2025-05-21.0
 ```
@@ -293,8 +403,8 @@ You can find more information about [the data changelog in our documentation](ht
 
 ## Schema changelog
 
-The changelog for Overture schema `v1.9.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.9.0). 
+The changelog for Overture schema `v1.9.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.9.0).
 
-## Attribution  
+## Attribution
 
 You'll find information about attribution and licensing [here](/attribution).

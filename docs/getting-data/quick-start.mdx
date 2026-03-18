@@ -1,0 +1,79 @@
+---
+title: Quickstart
+description: Concise guide to get started with Overture data in a few minutes
+slug: /getting-data/
+pagination_label: Quickstart
+---
+
+
+## Explore in the browser
+
+The [Explorer site](./explore) is the fastest way to browse Overture data and inspect the schema. No installation, no account. Click any feature to view its properties. Download visible data as GeoJSON. 
+
+
+## Download by area of interest
+
+Install Overture's [Python client](./overturemaps-py) and download building footprints for a specific area:
+
+
+```bash
+pip install overturemaps
+
+overturemaps download \
+  --bbox=-71.068,42.353,-71.058,42.363 \
+  -f geojson \
+  --type=building \
+  -o boston_buildings.geojson
+```
+
+The tool reads directly from Overture's cloud-hosted GeoParquet and transfers only the data inside your bounding box.
+
+## Query with DuckDB
+
+[DuckDB](./duckdb) lets you query Overture's GeoParquet files with SQL. [Install DuckDB](https://duckdb.org/docs/installation/), then:
+
+```sql
+INSTALL spatial;
+INSTALL httpfs;
+
+LOAD spatial;
+
+SET s3_region = 'us-west-2';
+
+COPY(
+  SELECT
+    id,
+    names.primary as name,
+    categories.primary as category,
+    addresses[1].freeform as address,
+    geometry
+  FROM read_parquet(
+    's3://overturemaps-us-west-2/release/2026-02-18.0/theme=places/type=place/*',
+    filename=true, hive_partitioning=1)
+  WHERE
+    names.primary ILIKE '%wawa%'
+    AND bbox.xmin BETWEEN -76.5 AND -74.5
+    AND bbox.ymin BETWEEN 39.5 AND 40.5
+) TO 'wawa_stores.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
+```
+
+This extracts Wawa convenience stores in the Philadelphia area and saves them as GeoJSON.
+
+## Get the latest release
+
+Overture publishes a [STAC catalog](https://stac.overturemaps.org/catalog.json) that always points to the latest release. Query it with DuckDB instead of hardcoding release paths:
+
+```sql
+SET VARIABLE latest = (
+    SELECT latest FROM 'https://stac.overturemaps.org/catalog.json'
+);
+```
+
+Browse all release artifacts in the [STAC viewer](https://stac.overturemaps.org/). The Python client uses the STAC catalog automatically.
+
+## Next steps
+
+- [Access the full Overture catalog](./cloud-sources) — storage paths, PMTiles, STAC, and GERS artifacts
+- [Guides](../guides/) — understanding and working with Overture data and schema properties
+- [Schema reference](../schema/) — schema modules, column definitions, and data types
+- [Examples](../examples/) — QGIS, Athena, Spark, Pandas, and more
