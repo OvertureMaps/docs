@@ -20,7 +20,7 @@ export function HeroHeadline() {
 }
 
 export function HeroSubtext({ children }) {
-  return <p className={styles.subtext}>{children}</p>;
+  return <div className={styles.subtext}>{children}</div>;
 }
 
 export function HeroCTAs({ children }) {
