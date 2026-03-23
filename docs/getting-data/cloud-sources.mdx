@@ -24,7 +24,7 @@ The base paths above point to the core map datasets in a release. Overture parti
 Example S3 path to the `infrastructure` feature type in the `base` theme:
 
 ```
-s3://overturemaps-us-west-2/release/2026-02-18.0/theme=base/type=infrastructure/*.parquet
+s3://overturemaps-us-west-2/release/<RELEASE>/theme=base/type=infrastructure/*.parquet
 ```
 
 Path components:
@@ -55,14 +55,14 @@ For bulk downloads, use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/use
 
 ```bash
 aws s3 cp --no-sign-request --recursive \
-  s3://overturemaps-us-west-2/release/2026-02-18.0/theme=base/type=infrastructure/ .
+  s3://overturemaps-us-west-2/release/<RELEASE>/theme=base/type=infrastructure/ .
 ```
 
 **AzCopy** — download all `place` data from Azure:
 
 ```bash
 azcopy copy \
-  "https://overturemapswestus2.dfs.core.windows.net/release/2026-02-18.0/theme=places/type=place/" \
+  "https://overturemapswestus2.dfs.core.windows.net/release/<RELEASE>/theme=places/type=place/" \
   "<local directory path>" --recursive
 ```
 
