@@ -5,6 +5,11 @@ slug: /getting-data/
 pagination_label: Quickstart
 ---
 
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+import Peaks from '!!raw-loader!@site/src/queries/duckdb/mountain_peaks.sql';
+import PlacesWawa from '!!raw-loader!@site/src/queries/duckdb/places_wawa.sql';
+
 
 ## Explore in the browser
 
@@ -32,30 +37,9 @@ The tool reads directly from Overture's cloud-hosted GeoParquet and transfers on
 
 [DuckDB](./duckdb) lets you query Overture's GeoParquet files with SQL. [Install DuckDB](https://duckdb.org/docs/installation/), then:
 
-```sql
-INSTALL spatial;
-INSTALL httpfs;
 
-LOAD spatial;
+<QueryBuilder query={PlacesWawa}></QueryBuilder>
 
-SET s3_region = 'us-west-2';
-
-COPY(
-  SELECT
-    id,
-    names.primary as name,
-    categories.primary as category,
-    addresses[1].freeform as address,
-    geometry
-  FROM read_parquet(
-    's3://overturemaps-us-west-2/release/2026-02-18.0/theme=places/type=place/*',
-    filename=true, hive_partitioning=1)
-  WHERE
-    names.primary ILIKE '%wawa%'
-    AND bbox.xmin BETWEEN -76.5 AND -74.5
-    AND bbox.ymin BETWEEN 39.5 AND 40.5
-) TO 'wawa_stores.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
-```
 
 This extracts Wawa convenience stores in the Philadelphia area and saves them as GeoJSON.
 
