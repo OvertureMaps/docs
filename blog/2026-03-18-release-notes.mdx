@@ -9,7 +9,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 :::note
 
-The `bbox` column fields (`bbox.xmin`, `bbox.ymin`, `bbox.xmax`, `bbox.ymax`) have changed to [Parquet Double](https://parquet.apache.org/docs/file-format/types/) instead of 32-bit Floats. This change works around an outstanding Athena bug affecting queries on nested float fields.
+The `bbox` column fields (`bbox.xmin`, `bbox.ymin`, `bbox.xmax`, `bbox.ymax`) have changed to the [Parquet physical type `DOUBLE` (64-bit floating point)](https://parquet.apache.org/docs/file-format/types/) instead of 32-bit `FLOAT`. This change works around an outstanding Athena bug affecting queries on nested float fields.
 
 :::
 
