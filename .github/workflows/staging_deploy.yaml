@@ -51,7 +51,7 @@ jobs:
         with:
           node-version-file: 'package.json'
 
-      - uses: lowlydba/sustainable-npm@v2
+      - uses: lowlydba/sustainable-npm@v3
 
       - run: npm ci --omit=dev
 
@@ -90,7 +90,7 @@ jobs:
         with:
           node-version-file: 'package.json'
 
-      - uses: lowlydba/sustainable-npm@v2
+      - uses: lowlydba/sustainable-npm@v3
 
       - run: npm ci --omit=dev
 
