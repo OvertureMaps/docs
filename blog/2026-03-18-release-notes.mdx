@@ -7,6 +7,12 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QueryBuilder from '@site/src/components/queryBuilder';
 
+:::note
+
+The `bbox` column fields (`bbox.xmin`, `bbox.ymin`, `bbox.xmax`, `bbox.ymax`) have changed to the [Parquet physical type `DOUBLE` (64-bit floating point)](https://parquet.apache.org/docs/file-format/types/) instead of 32-bit `FLOAT`. This change works around an outstanding Athena bug affecting queries on nested float fields.
+
+:::
+
 ## Overview
 
 **The `2026-03-18.0` release of Overture data and `v1.16.0` of the Overture schema are now available.** You can access the datasets, changelog, GERS registry, bridge files, and PMTiles on AWS and Azure at the paths listed below. 
