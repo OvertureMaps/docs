@@ -25,7 +25,7 @@ export default [
     },
     settings: {
       react: {
-        version: '18.0.0',
+        version: '18.2.0',
       },
     },
     rules: {
