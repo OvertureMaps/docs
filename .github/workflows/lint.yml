@@ -38,3 +38,4 @@ jobs:
           VALIDATE_NATURAL_LANGUAGE: true
           NATURAL_LANGUAGE_CONFIG_FILE: .textlintrc.json # Literal path is .github/linters/.textlintrc.json
           VALIDATE_SQLFLUFF: true
+          VALIDATE_JAVASCRIPT_ES: true
