@@ -47,16 +47,15 @@ export default function CommunityTable() {
           <div key={group.label} className={styles.group}>
             <span className={styles.groupLabel}>{group.label}</span>
             {group.tags.map((tag) => (
-              <span
+              <button
                 key={tag}
+                type="button"
                 className={`${styles.pill} ${activeTags.has(tag) ? styles.pillActive : ''}`}
                 onClick={() => toggle(tag)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && toggle(tag)}
+                aria-pressed={activeTags.has(tag)}
               >
                 {tag}
-              </span>
+              </button>
             ))}
           </div>
         ))}
