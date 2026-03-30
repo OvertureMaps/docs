@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import ENTRIES from '../../community/community-projects.json';
+import ENTRIES from '@site/community/community-projects.json';
 import styles from './CommunityTable.module.css';
 
 // Ordered groups for the filter UI
@@ -18,8 +18,6 @@ const TAG_GROUPS = [
   },
 ];
 
-const ALL_TAGS = TAG_GROUPS.flatMap((g) => g.tags);
-
 export default function CommunityTable() {
   const [activeTags, setActiveTags] = useState(new Set());
 
@@ -37,7 +35,8 @@ export default function CommunityTable() {
 
   const filtered = useMemo(() => {
     if (activeTags.size === 0) return ENTRIES;
-    return ENTRIES.filter((e) => [...activeTags].every((t) => e.tags.includes(t)));
+    const selectedTags = [...activeTags];
+    return ENTRIES.filter((e) => selectedTags.every((t) => e.tags.includes(t)));
   }, [activeTags]);
 
   return (
@@ -47,16 +46,15 @@ export default function CommunityTable() {
           <div key={group.label} className={styles.group}>
             <span className={styles.groupLabel}>{group.label}</span>
             {group.tags.map((tag) => (
-              <span
+              <button
                 key={tag}
+                type="button"
                 className={`${styles.pill} ${activeTags.has(tag) ? styles.pillActive : ''}`}
                 onClick={() => toggle(tag)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && toggle(tag)}
+                aria-pressed={activeTags.has(tag)}
               >
                 {tag}
-              </span>
+              </button>
             ))}
           </div>
         ))}
