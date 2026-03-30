@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import ENTRIES from '../../community/community-projects.json';
+import ENTRIES from '@site/community/community-projects.json';
 import styles from './CommunityTable.module.css';
 
 // Ordered groups for the filter UI
