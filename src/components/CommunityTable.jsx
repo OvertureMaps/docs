@@ -35,7 +35,8 @@ export default function CommunityTable() {
 
   const filtered = useMemo(() => {
     if (activeTags.size === 0) return ENTRIES;
-    return ENTRIES.filter((e) => [...activeTags].every((t) => e.tags.includes(t)));
+    const selectedTags = [...activeTags];
+    return ENTRIES.filter((e) => selectedTags.every((t) => e.tags.includes(t)));
   }, [activeTags]);
 
   return (
