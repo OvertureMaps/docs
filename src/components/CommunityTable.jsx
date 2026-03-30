@@ -18,8 +18,6 @@ const TAG_GROUPS = [
   },
 ];
 
-const ALL_TAGS = TAG_GROUPS.flatMap((g) => g.tags);
-
 export default function CommunityTable() {
   const [activeTags, setActiveTags] = useState(new Set());
 
