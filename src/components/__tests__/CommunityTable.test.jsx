@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { describe, it, expect, afterEach } from 'vitest';
-import { render, screen, cleanup, fireEvent, within } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import CommunityTable from '../CommunityTable';
 import ENTRIES from '../../../community/community-projects.json';
 
