@@ -57,10 +57,7 @@ const config = {
       swcJsMinimizer: true,
       swcHtmlMinimizer: true,
       lightningCssMinimizer: true,
-      // Rspack mishandles dynamic publicPath with non-root baseUrls (e.g. PR
-      // staging previews), causing React hydration errors #418/#423. Disable
-      // for any non-root deployment so webpack handles those builds instead.
-      rspackBundler: getFromEnvironment('DOCUSAURUS_BASE_URL', '/') === '/',
+      rspackBundler: true,
     },
   },
 
