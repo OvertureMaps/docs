@@ -390,21 +390,6 @@ function TreeNode({ node, depth, expanded, onToggle, selected, onSelect }) {
   );
 }
 
-// function Breadcrumb({ hierarchy }) {
-//   if (!hierarchy) return null;
-//   const parts = hierarchy.split(' > ').map(p => p.replace(/_/g, ' '));
-//   return (
-//     <div className="taxonomy-detail-breadcrumb">
-//       {parts.map((part, i) => (
-//         <span key={i}>
-//           {i > 0 && <span className="taxonomy-detail-arrow"> &#x203A; </span>}
-//           <span className="taxonomy-detail-crumb">{part}</span>
-//         </span>
-//       ))}
-//     </div>
-//   );
-// }
-
 function CollapsibleSection({ title, defaultOpen, noMatch, note, children }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
