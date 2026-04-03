@@ -1,4 +1,3 @@
-import React from 'react';
 import Link from '@docusaurus/Link';
 import RotatingWord from './RotatingWord';
 import styles from './home.module.css';

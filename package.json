@@ -1,6 +1,6 @@
 {
   "name": "overture-documentation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -29,7 +29,7 @@
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.1.1",
     "js-yaml": "^4.1.0",
-    "maplibre-gl": "^5.21.0",
+    "maplibre-gl": "^5.21.1",
     "pmtiles": "^4.3.0",
     "prism-react-renderer": "^2.1.0",
     "raw-loader": "^4.0.2",
@@ -39,18 +39,19 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.9.2",
     "@docusaurus/types": "^3.9.2",
-    "@eslint/js": "^9.19.0",
+    "@eslint/js": "^10.0.0",
+    "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "eslint": "^9.19.0",
+    "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^17.4.0",
     "jsdom": "^29.0.1",
-    "markdownlint-cli": "^0.43.0",
+    "markdownlint-cli": "^0.48.0",
     "prettier": "^3.4.2",
     "typescript": "^6.0.2",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.2"
   },
   "browserslist": {
     "production": [

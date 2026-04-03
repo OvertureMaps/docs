@@ -145,7 +145,7 @@ function SmartTable({ children, ...props }) {
           ) : (
             <tr>
               <td colSpan={tableData.headers.length} className="no-results">
-                No fields found matching "{searchTerm}"
+                No fields found matching &ldquo;{searchTerm}&rdquo;
               </td>
             </tr>
           )}
