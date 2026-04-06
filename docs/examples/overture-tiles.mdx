@@ -82,14 +82,14 @@ npm run cdk deploy
 
   * Add three **Environment Variables**:
 
-    * `OUTPUT`: The bucket name, e.g. `your-bucket-name`
+    * `OUTPUT`: The path to the output on S3, such as `s3://your-bucket-name/2026-02-18.0/`
 
     * `THEME`: e.g. `places`
 
     * `RELEASE`: The Overture release, e.g. `2026-02-18.0`
 
 
-  * Once the job is complete, the tileset will be available at `s3://BUCKET_NAME/RELEASE/THEME.pmtiles`, e.g. `s3://your-bucket-name/2026-02-18/places.pmtiles`
+  * Once the job is complete, the tileset will be available at `OUTPUT/THEME.pmtiles`, e.g. `s3://your-bucket-name/2026-02-18.0/places.pmtiles`
 
 ## On Your Workstation
 
