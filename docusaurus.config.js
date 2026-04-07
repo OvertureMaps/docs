@@ -80,6 +80,11 @@ const config = {
     hooks: {
       onBrokenMarkdownLinks: 'throw',
     },
+    mdx1Compat: {
+      comments: true,
+      admonitions: true,
+      headingIds: true,
+    },
   },
 
   trailingSlash: true,
