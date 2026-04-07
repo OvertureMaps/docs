@@ -37,7 +37,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.9.2",
+    "@docusaurus/module-type-aliases": "^3.10.0",
     "@docusaurus/types": "^3.9.2",
     "@eslint/js": "^10.0.0",
     "@testing-library/dom": "^10.0.0",
