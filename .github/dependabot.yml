@@ -13,6 +13,10 @@ updates:
     commit-message:
       prefix: "[CHORE](deps)"
       include: "scope"
+    groups:
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
 
   # Maintain GitHub Actions dependencies
   - package-ecosystem: "github-actions"
