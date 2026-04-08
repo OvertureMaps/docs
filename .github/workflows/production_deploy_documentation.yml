@@ -9,10 +9,12 @@ on:
   # Allow running from the actions tab
   workflow_dispatch:
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 permissions:
-  id-token: write # required to use OIDC authentication
   contents: read # required to checkout the code from the repo
-  pages: write # for actions/deploy-pages
 
 jobs:
   build:
@@ -21,13 +23,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the docs repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.0
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.0.0
         with:
           node-version-file: package.json
 
@@ -41,11 +43,11 @@ jobs:
         run: npm run build
 
       - name: Setup Pages 🗂️
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
       - name: Upload static files as GH-Pages artifact 📦
         id: docs-website
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
         with:
           path: build
 
@@ -56,8 +58,11 @@ jobs:
       name: github-pages
       url: https://docs.overturemaps.org/
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # required for OIDC authentication with GitHub Pages
+      pages: write # for actions/deploy-pages
 
     steps:
       - name: Deploy to GitHub Pages 🚀
         id: docs-website
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0

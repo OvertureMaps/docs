@@ -5,27 +5,32 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
-  packages: read
-  issues: write
-  pull-requests: write
-  statuses: write
+  packages: read # for reading GitHub Packages registry images used by super-linter
 
 jobs:
   lint:
     name: Super-Linter
     runs-on: ubuntu-latest
+    permissions:
+      issues: write # for super-linter to create issue annotations
+      pull-requests: write # for super-linter PR summary comments
+      statuses: write # for super-linter commit status updates
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           # Required for super-linter to detect changed files
           fetch-depth: 0
           persist-credentials: false
 
       - name: Super-Linter
-        uses: super-linter/super-linter/slim@v8.6.0
+        uses: super-linter/super-linter/slim@9e863354e3ff62e0727d37183162c4a88873df41 # v8.6.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SAVE_SUPER_LINTER_SUMMARY: true
