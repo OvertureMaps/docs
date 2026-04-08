@@ -152,9 +152,11 @@ jobs:
         id: deploy-metadata
         run: |
           echo "time=$(date -u +'%b %d, %Y %H:%M UTC')" >> $GITHUB_OUTPUT
-          echo "short-sha=$(echo "${PR_HEAD_SHA}" | cut -c1-7)" >> $GITHUB_OUTPUT
-          echo "schema-ref-short=$(echo '${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF}' | sed 's|refs/heads/||;s|refs/tags/||')" >> $GITHUB_OUTPUT
-          echo "schema-short-sha=$(echo '${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA}' | cut -c1-7)" >> $GITHUB_OUTPUT
+          echo "short-sha=${PR_HEAD_SHA:0:7}" >> $GITHUB_OUTPUT
+          schema_ref="${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF#refs/heads/}"
+          schema_ref="${schema_ref#refs/tags/}"
+          echo "schema-ref-short=$schema_ref" >> $GITHUB_OUTPUT
+          echo "schema-short-sha=${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA:0:7}" >> $GITHUB_OUTPUT
         env:
           NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF: ${{ needs.build-auto-gen.outputs.schema-ref }}
           NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA: ${{ needs.build-auto-gen.outputs.schema-sha }}
