@@ -52,7 +52,7 @@ const config = {
 
   future: {
     v4: true,
-    experimental_faster: {
+    faster: {
       swcJsLoader: true,
       swcJsMinimizer: true,
       swcHtmlMinimizer: true,
@@ -79,6 +79,11 @@ const config = {
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: 'throw',
+    },
+    mdx1Compat: {
+      comments: true,
+      admonitions: true,
+      headingIds: true,
     },
   },
 
