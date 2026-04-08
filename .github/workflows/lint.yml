@@ -22,6 +22,7 @@ jobs:
         with:
           # Required for super-linter to detect changed files
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Super-Linter
         uses: super-linter/super-linter/slim@v8.6.0

@@ -17,6 +17,8 @@ updates:
       docusaurus:
         patterns:
           - "@docusaurus/*"
+    cooldown:
+      default-days: 7
 
   # Maintain GitHub Actions dependencies
   - package-ecosystem: "github-actions"
@@ -29,3 +31,5 @@ updates:
     commit-message:
       prefix: "[CHORE](deps)"
       include: "scope"
+    cooldown:
+      default-days: 7

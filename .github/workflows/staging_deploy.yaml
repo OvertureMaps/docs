@@ -45,6 +45,8 @@ jobs:
     steps:
       - name: Check out the main docs repo repository and build.
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -84,6 +86,8 @@ jobs:
     steps:
       - name: Check out the main docs repo repository and build.
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -136,20 +140,23 @@ jobs:
 
       - name: Copy to S3
         run: |
-          aws s3 sync --delete --quiet build-autogen s3://overture-managed-staging-usw2/gh-pages${{ env.PREVIEW_PATH }}/
-          aws s3 sync --delete --quiet build-no-autogen s3://overture-managed-staging-usw2/gh-pages${{ env.PREVIEW_PATH_NO_AUTOGEN }}/
+          aws s3 sync --delete --quiet build-autogen s3://overture-managed-staging-usw2/gh-pages${PREVIEW_PATH}/
+          aws s3 sync --delete --quiet build-no-autogen s3://overture-managed-staging-usw2/gh-pages${PREVIEW_PATH_NO_AUTOGEN}/
 
       - name: Bust the Cache
         run: |
-          aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "${{ env.PREVIEW_PATH }}/*" "${{ env.PREVIEW_PATH_NO_AUTOGEN }}/*"
+          aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "${PREVIEW_PATH}/*" "${PREVIEW_PATH_NO_AUTOGEN}/*"
 
       - name: Gather metadata for PR comment
         id: deploy-metadata
         run: |
           echo "time=$(date -u +'%b %d, %Y %H:%M UTC')" >> $GITHUB_OUTPUT
           echo "short-sha=$(echo '${{ github.event.pull_request.head.sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
-          echo "schema-ref-short=$(echo '${{ needs.build-auto-gen.outputs.schema-ref }}' | sed 's|refs/heads/||;s|refs/tags/||')" >> $GITHUB_OUTPUT
-          echo "schema-short-sha=$(echo '${{ needs.build-auto-gen.outputs.schema-sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
+          echo "schema-ref-short=$(echo '${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF}' | sed 's|refs/heads/||;s|refs/tags/||')" >> $GITHUB_OUTPUT
+          echo "schema-short-sha=$(echo '${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA}' | cut -c1-7)" >> $GITHUB_OUTPUT
+        env:
+          NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF: ${{ needs.build-auto-gen.outputs.schema-ref }}
+          NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA: ${{ needs.build-auto-gen.outputs.schema-sha }}
 
       - name: Comment on PR
         uses: marocchino/sticky-pull-request-comment@d4d6b0936434b21bc8345ad45a440c5f7d2c40ff # v3.0.3

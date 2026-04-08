@@ -31,12 +31,16 @@ jobs:
       - name: Delete from S3
         run: |
           aws s3 rm --recursive \
-            s3://overture-managed-staging-usw2/gh-pages/${{ github.event.repository.name }}/pr/${{ github.event.number }}/ || true
+            s3://overture-managed-staging-usw2/gh-pages/${GITHUB_EVENT_REPOSITORY_NAME}/pr/${{ github.event.number }}/ || true
           aws s3 rm --recursive \
-            s3://overture-managed-staging-usw2/gh-pages/${{ github.event.repository.name }}/pr/${{ github.event.number }}-no-autogen/ || true
+            s3://overture-managed-staging-usw2/gh-pages/${GITHUB_EVENT_REPOSITORY_NAME}/pr/${{ github.event.number }}-no-autogen/ || true
+        env:
+          GITHUB_EVENT_REPOSITORY_NAME: ${{ github.event.repository.name }}
 
       - name: Bust the cache
         run: |
           aws cloudfront create-invalidation \
             --distribution-id E1KP2IN0H2RGGT \
-            --paths "/${{ github.event.repository.name }}/pr/${{ github.event.number }}/*" || true
+            --paths "/${GITHUB_EVENT_REPOSITORY_NAME}/pr/${{ github.event.number }}/*" || true
+        env:
+          GITHUB_EVENT_REPOSITORY_NAME: ${{ github.event.repository.name }}
