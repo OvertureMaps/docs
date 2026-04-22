@@ -17,6 +17,11 @@ updates:
       docusaurus:
         patterns:
           - "@docusaurus/*"
+      react:
+        patterns:
+          - "react*"
+          - "@testing-library/react"
+          - "@mdx-js/react"
     cooldown:
       default-days: 7
 
