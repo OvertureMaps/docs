@@ -7,7 +7,7 @@ description: Pydantic schemas for Overture Maps data
 pagination_label: Schema Reference Overview
 ---
 
-# Overture Maps Schema {#top-level-properties}
+# Overture Maps Schema {/* #top-level-properties */}
 
 :::note
 This section has been recently updated to reflect changes in our schema modeling. We welcome your feedback in [GitHub Discussions](https://github.com/OvertureMaps/data/discussions).
