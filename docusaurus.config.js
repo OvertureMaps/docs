@@ -81,8 +81,8 @@ const config = {
       onBrokenMarkdownLinks: 'throw',
     },
     mdx1Compat: {
-      comments: true,
-      admonitions: true,
+      comments: false,
+      admonitions: false,
       headingIds: true,
     },
   },
