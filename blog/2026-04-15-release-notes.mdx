@@ -1,0 +1,154 @@
+---
+title: 2026-04-15 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+
+## Overview
+
+**The `2026-04-15.0` release of Overture data and `v1.16.0` of the Overture schema are now available.** You can access the datasets, changelog, GERS registry, bridge files, and PMTiles on AWS and Azure at the paths listed below. 
+
+
+## Deprecations
+The `categories` property in the places schema is now deprecated and will be removed in the June 2026 release, replaced by the new `basic_category` and `taxonomy` properties. All three properties will be available until then to ease the transition for our users. The taxonomy documentation is [here](https://docs.overturemaps.org/guides/places/taxonomy/).
+
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined [here](/getting-data). The paths to the data and release artifacts are listed below. We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at community@overturemaps.org. We’d love to hear from you.
+
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2026-04-15.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2026-04-15.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2026-04-15.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2026-04-15.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2026-04-15.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2026-04-15.0/
+```
+
+### GERS registry
+
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+### PMTiles
+
+**Amazon S3:**
+```
+s3://overturemaps-extras-us-west-2/tiles/2026-04-15.0/
+```
+
+{/* truncate */}
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- refreshed the NAD data source: now using v22
+- de-duplicated data from the Državna geodetska uprava source, used for Croatian addresses
+
+
+### Base
+- made minor, incremental updates to the data
+
+
+### Buildings
+- removed ~98M Google and Zenodo sourced building features with small areas
+
+
+### Divisions
+- no changes
+
+
+### Places
+- confidence score updates: The March release contained unexpected changes to our confidence score normalization in Meta-sourced place data. This April release rolls back those changes. We have also increased the number of signals to our places data; ~10M places now receive updated confidence scores based on third-party signal data.
+
+
+### Transportation
+
+- OSM Cut-Off Date: 2026-03-31
+
+| Dataset | Feature Count | Length (km) |
+|---|---|---|
+| OpenStreetMap | 744,477,991 | 93,712,547 |
+| TomTom | 8,776,616 | 1,528,190 |
+
+| Subtype | Length (km) |
+|---|---|
+| road | 91,800,093 |
+| rail | 2,859,209 |
+| water | 581,435 |
+
+#### Change Summary
+
+##### Count Changes
+
+| Dataset | Type | Diff | Diff (%) |
+|---|---|---|---|
+| TomTom | segment | 71,266.00 | 0.82% |
+| OpenStreetMap | connector | 1,417,834.00 | 0.35% |
+| OpenStreetMap | segment | 823,258.00 | 0.25% |
+
+##### Length Changes
+
+| Subtype | Diff (km) | Diff (%) |
+|---|---|---|
+| road | 203,876.72 | 0.22% |
+| rail | 3,115.22 | 0.11% |
+| water | 460.68 | 0.08% |
+
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.16.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.16.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).

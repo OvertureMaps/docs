@@ -11,9 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  id-token: write
   contents: read
-  pull-requests: write
 
 env:
   DOCS_PATH: docs
@@ -44,20 +42,22 @@ jobs:
       schema-ref: ${{ steps.schema-docs.outputs.schema-ref }}
     steps:
       - name: Check out the main docs repo repository and build.
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: 'package.json'
 
-      - uses: lowlydba/sustainable-npm@v3
+      - uses: lowlydba/sustainable-npm@31d51025884f424f58f22e4e6578178bb4e79632 # v3.0.0
 
       - run: npm ci --omit=dev
 
       - name: Generate schema markdown docs
         id: schema-docs
-        uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@main
+        uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@faa3fa4bbe01d85dc2e2139ff1f74ce70feb7df9 # zizmor: ignore[stale-action-refs] - main
         with:
           output-dir: ${{ github.workspace }}/docs/schema/reference
           schema-ref: 'dev' # Temporary until we feel confident in the generated schema sans human review, then should be 'main'
@@ -70,7 +70,7 @@ jobs:
           SCHEMA_PREVIEW: ${{ env.SCHEMA_PREVIEW }}
 
       - name: Upload docs build as an artifact 📦
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           path: build
           name: build-artifact
@@ -83,14 +83,16 @@ jobs:
     needs: check-fork
     steps:
       - name: Check out the main docs repo repository and build.
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: 'package.json'
 
-      - uses: lowlydba/sustainable-npm@v3
+      - uses: lowlydba/sustainable-npm@31d51025884f424f58f22e4e6578178bb4e79632 # v3.0.0
 
       - run: npm ci --omit=dev
 
@@ -102,7 +104,7 @@ jobs:
           SCHEMA_PREVIEW: ${{ env.SCHEMA_PREVIEW }}
 
       - name: Upload docs build as an artifact 📦
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           path: build
           name: build-artifact-no-autogen
@@ -114,45 +116,54 @@ jobs:
     environment:
       name: staging
       url: ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html
+    permissions:
+      id-token: write # for AWS OIDC authentication
+      pull-requests: write # for posting staging preview PR comments
 
     steps:
       - name: Configure AWS credentials 🔐
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
         with:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Download auto-gen artifact 📥
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: build-artifact
           path: build-autogen
 
       - name: Download repo schema artifact 📥
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: build-artifact-no-autogen
           path: build-no-autogen
 
       - name: Copy to S3
         run: |
-          aws s3 sync --delete --quiet build-autogen s3://overture-managed-staging-usw2/gh-pages${{ env.PREVIEW_PATH }}/
-          aws s3 sync --delete --quiet build-no-autogen s3://overture-managed-staging-usw2/gh-pages${{ env.PREVIEW_PATH_NO_AUTOGEN }}/
+          aws s3 sync --delete --quiet build-autogen s3://overture-managed-staging-usw2/gh-pages${PREVIEW_PATH}/
+          aws s3 sync --delete --quiet build-no-autogen s3://overture-managed-staging-usw2/gh-pages${PREVIEW_PATH_NO_AUTOGEN}/
 
       - name: Bust the Cache
         run: |
-          aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "${{ env.PREVIEW_PATH }}/*" "${{ env.PREVIEW_PATH_NO_AUTOGEN }}/*"
+          aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "${PREVIEW_PATH}/*" "${PREVIEW_PATH_NO_AUTOGEN}/*"
 
       - name: Gather metadata for PR comment
         id: deploy-metadata
         run: |
           echo "time=$(date -u +'%b %d, %Y %H:%M UTC')" >> $GITHUB_OUTPUT
-          echo "short-sha=$(echo '${{ github.event.pull_request.head.sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
-          echo "schema-ref-short=$(echo '${{ needs.build-auto-gen.outputs.schema-ref }}' | sed 's|refs/heads/||;s|refs/tags/||')" >> $GITHUB_OUTPUT
-          echo "schema-short-sha=$(echo '${{ needs.build-auto-gen.outputs.schema-sha }}' | cut -c1-7)" >> $GITHUB_OUTPUT
+          echo "short-sha=${PR_HEAD_SHA:0:7}" >> $GITHUB_OUTPUT
+          schema_ref="${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF#refs/heads/}"
+          schema_ref="${schema_ref#refs/tags/}"
+          echo "schema-ref-short=$schema_ref" >> $GITHUB_OUTPUT
+          echo "schema-short-sha=${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA:0:7}" >> $GITHUB_OUTPUT
+        env:
+          NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF: ${{ needs.build-auto-gen.outputs.schema-ref }}
+          NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA: ${{ needs.build-auto-gen.outputs.schema-sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
       - name: Comment on PR
-        uses: marocchino/sticky-pull-request-comment@70d2764d1a7d5d9560b100cbea0077fc8f633987 # v3.0.2
+        uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
         with:
           message: |
             ## 🗺️ OMF Docs previews are live!

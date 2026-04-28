@@ -6,6 +6,10 @@ on:
   pull_request:
     types: [closed]
 
+concurrency:
+  group: staging-cleanup-${{ github.event.number }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -15,14 +19,14 @@ jobs:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-slim
     permissions:
-      id-token: write
+      id-token: write # for AWS OIDC authentication
     env:
       AWS_ROLE_ARN: arn:aws:iam::763944545891:role/pages-staging-oidc-overturemaps
       AWS_REGION: us-west-2
 
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
         with:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
@@ -31,12 +35,18 @@ jobs:
       - name: Delete from S3
         run: |
           aws s3 rm --recursive \
-            s3://overture-managed-staging-usw2/gh-pages/${{ github.event.repository.name }}/pr/${{ github.event.number }}/ || true
+            s3://overture-managed-staging-usw2/gh-pages/${GITHUB_EVENT_REPOSITORY_NAME}/pr/${GITHUB_EVENT_NUMBER}/ || true
           aws s3 rm --recursive \
-            s3://overture-managed-staging-usw2/gh-pages/${{ github.event.repository.name }}/pr/${{ github.event.number }}-no-autogen/ || true
+            s3://overture-managed-staging-usw2/gh-pages/${GITHUB_EVENT_REPOSITORY_NAME}/pr/${GITHUB_EVENT_NUMBER}-no-autogen/ || true
+        env:
+          GITHUB_EVENT_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          GITHUB_EVENT_NUMBER: ${{ github.event.number }}
 
       - name: Bust the cache
         run: |
           aws cloudfront create-invalidation \
             --distribution-id E1KP2IN0H2RGGT \
-            --paths "/${{ github.event.repository.name }}/pr/${{ github.event.number }}/*" || true
+            --paths "/${GITHUB_EVENT_REPOSITORY_NAME}/pr/${GITHUB_EVENT_NUMBER}/*" || true
+        env:
+          GITHUB_EVENT_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          GITHUB_EVENT_NUMBER: ${{ github.event.number }}

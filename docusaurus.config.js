@@ -21,7 +21,7 @@ function getFromEnvironment(variableName, defaultValue) {
 }
 
 function getLatestOvertureRelease() {
-  const fallback = '2026-03-18.0';
+  const fallback = '2026-04-15.0';
   try {
     const { execSync } = require('child_process');
     const response = execSync('curl -s https://stac.overturemaps.org/catalog.json', {
@@ -52,7 +52,7 @@ const config = {
 
   future: {
     v4: true,
-    experimental_faster: {
+    faster: {
       swcJsLoader: true,
       swcJsMinimizer: true,
       swcHtmlMinimizer: true,

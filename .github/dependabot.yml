@@ -13,6 +13,26 @@ updates:
     commit-message:
       prefix: "[CHORE](deps)"
       include: "scope"
+    groups:
+      dev-deps:
+        dependency-type: "development"
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@docusaurus/*"
+          - "react*"
+          - "@testing-library/react"
+          - "@mdx-js/react"
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
+      react:
+        patterns:
+          - "react*"
+          - "@testing-library/react"
+          - "@mdx-js/react"
+    cooldown:
+      default-days: 7
 
   # Maintain GitHub Actions dependencies
   - package-ecosystem: "github-actions"
@@ -25,3 +45,5 @@ updates:
     commit-message:
       prefix: "[CHORE](deps)"
       include: "scope"
+    cooldown:
+      default-days: 7
