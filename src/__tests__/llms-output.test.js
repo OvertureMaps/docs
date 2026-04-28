@@ -7,9 +7,10 @@
  */
 import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync } from 'fs';
-import { resolve, join } from 'path';
+import { join } from 'path';
+import { fileURLToPath } from 'url';
 
-const BUILD_DIR = resolve(import.meta.dirname, '../../build');
+const BUILD_DIR = fileURLToPath(new URL('../../build', import.meta.url));
 const LLMS_TXT = join(BUILD_DIR, 'llms.txt');
 const LLMS_FULL_TXT = join(BUILD_DIR, 'llms-full.txt');
 const LLMS_SCHEMA_TXT = join(BUILD_DIR, 'llms-schema.txt');
