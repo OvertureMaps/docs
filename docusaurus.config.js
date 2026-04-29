@@ -106,6 +106,38 @@ const config = {
             showLastUpdateTime: true,
           },
         ],
+        [
+          'docusaurus-plugin-llms',
+          {
+            generateLLMsTxt: true,
+            generateLLMsFullTxt: true,
+            excludeImports: true,
+            removeDuplicateHeadings: true,
+            includeBlog: true,
+            // Order docs from most introductory to most detailed
+            includeOrder: [
+              'getting-data/**',
+              'guides/**',
+              'schema/**',
+              'examples/**',
+              'gers/**',
+            ],
+            includeUnmatchedLast: true,
+            // Playground pages are interactive components, not useful for LLMs
+            ignoreFiles: ['playground/**'],
+            // Schema-only subset for LLMs focused on the data model
+            customLLMFiles: [
+              {
+                filename: 'llms-schema.txt',
+                includePatterns: ['schema/**'],
+                fullContent: true,
+                title: 'Overture Maps Schema Reference',
+                description:
+                  'Schema reference for all Overture Maps data types: addresses, base, buildings, divisions, places, and transportation.',
+              },
+            ],
+          },
+        ],
       ],
 
   presets: [
@@ -117,7 +149,7 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           showLastUpdateTime: true,
-          breadcrumbs: false,  
+          breadcrumbs: false,
         },
         blog: isSchemaPreview
           ? false
