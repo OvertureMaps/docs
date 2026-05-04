@@ -134,6 +134,7 @@ const sidebars = {
     },
     'attribution',
     'release-calendar',
+    'support',
     
   ],
 };
