@@ -1,0 +1,322 @@
+[
+  {
+    "title": "city2graph: A Python package to construct a morphological Graph from Overture Maps",
+    "url": "https://city2graph.net/examples/morphological_graph_from_overturemaps.html",
+    "creator": "Yuta Sato, Geographic Data Science Lab",
+    "creatorUrl": "https://www.linkedin.com/in/yuta-sato-633750161/",
+    "release": "July 2025",
+    "tags": ["python", "buildings", "analysis", "visualization"]
+  },
+  {
+    "title": "Enrich Your Dataset With GERS and Create a Tile Server",
+    "url": "https://docs.fused.io/blog/overture-tiles/",
+    "creator": "Plinio Guzman (Fused) and Jennings Anderson (Meta)",
+    "creatorUrl": null,
+    "release": "September 2024",
+    "tags": ["gers", "tiles", "tutorial"]
+  },
+  {
+    "title": "AI-Extracted Asian Building Footprints",
+    "url": "https://tech.marksblogg.com/asian-building-footprints-from-google-maps.html",
+    "creator": "Mark Litwintschik",
+    "creatorUrl": "https://www.linkedin.com/in/marklitwintschik/",
+    "release": "August 2024",
+    "tags": ["buildings", "analysis"]
+  },
+  {
+    "title": "PostGIS Meets DuckDB: Crunchy Bridge for Analytics Goes Spatial",
+    "url": "https://www.crunchydata.com/blog/postgis-meets-duckdb-crunchy-bridge-for-analytics-goes-spatial",
+    "creator": "Mark Slot, Crunchy Data",
+    "creatorUrl": "https://www.crunchydata.com/",
+    "release": "August 2024",
+    "tags": ["postgis", "duckdb", "tutorial"]
+  },
+  {
+    "title": "Overture Maps GPT",
+    "url": "https://chatgpt.com/g/g-onSLtzQQB-overture-maps-gpt",
+    "creator": "Volodymyr Bilonenko, Vay",
+    "creatorUrl": "https://vay.io/",
+    "release": "August 2024",
+    "tags": ["places", "tools"]
+  },
+  {
+    "title": "Fetch Overture: a Node.js Data Downloader",
+    "url": "https://github.com/Krizz/fetch_overture",
+    "creator": "Kristjan",
+    "creatorUrl": "https://github.com/Krizz",
+    "release": "August 2024",
+    "tags": ["javascript", "library"]
+  },
+  {
+    "title": "Translation of Overture Documentation to Traditional Chinese (zh-Hant)",
+    "url": "https://overture-maps-docs.vercel.app/zh-Hant",
+    "creator": "Each Chen",
+    "creatorUrl": "https://github.com/iach526526",
+    "release": "July 2024",
+    "tags": ["docs"]
+  },
+  {
+    "title": "Using Vector Embeddings to Resolve Duplicates in Place/Venue Datasets",
+    "url": "https://whosonfirst.org/blog/2024/08/16/dedupe/",
+    "creator": "Aaron Straup Cope",
+    "creatorUrl": "https://github.com/thisisaaronland",
+    "release": "July 2024",
+    "tags": ["places", "analysis"]
+  },
+  {
+    "title": "overtureR: Load Overture Datasets as dbplyr and sf-Ready Data Frames",
+    "url": "https://github.com/arthurgailes/overtureR",
+    "creator": "Arthur Gailes",
+    "creatorUrl": "https://github.com/arthurgailes/",
+    "release": "July 2024",
+    "tags": ["r", "library"]
+  },
+  {
+    "title": "Generate Vector Tiles from Open Map Data with PostGIS and Supabase",
+    "url": "https://supabase.com/blog/postgis-generate-vector-tiles",
+    "creator": "Brandon Liu & Thor Schaeff",
+    "creatorUrl": null,
+    "release": "June 2024",
+    "tags": ["tiles", "postgis", "tutorial"]
+  },
+  {
+    "title": "Using DuckDB to Map Overture GERS IDs to US Census FIPS Codes",
+    "url": "https://www.dbreunig.com/2024/06/25/using-duckdb-spatial-joins-to-map-overture-gers-ids-to-us-census-fips-codes.html",
+    "creator": "Drew Breunig",
+    "creatorUrl": null,
+    "release": "June 2024",
+    "tags": ["duckdb", "gers", "analysis"]
+  },
+  {
+    "title": "Overture Maps R Library",
+    "url": "https://github.com/denironyx/overturemapsr",
+    "creator": "Dennis Irorere",
+    "creatorUrl": null,
+    "release": "May 2024",
+    "tags": ["r", "library"]
+  },
+  {
+    "title": "Getting and Visualizing Overture Maps Buildings Data in R",
+    "url": "https://walker-data.com/posts/overture-buildings/",
+    "creator": "Kyle Walker",
+    "creatorUrl": null,
+    "release": "May 2024",
+    "tags": ["r", "buildings", "visualization", "tutorial"]
+  },
+  {
+    "title": "Exploring Overture Map Data: a Qualitative and Quantitative Analysis",
+    "url": "https://www.openstreetmap.org/user/Kshitijraj%20Sharma/diary",
+    "creator": "Kshitij Raj Sharma, Humanitarian OpenStreetMap",
+    "creatorUrl": "https://github.com/kshitijrajsharma",
+    "release": "May 2024",
+    "tags": ["analysis", "buildings", "places"]
+  },
+  {
+    "title": "Using the Overture Maps Python Library With Lonboard",
+    "url": "https://developmentseed.org/lonboard/latest/examples/overture-maps/",
+    "creator": "Kyle Barron, Development Seed",
+    "creatorUrl": null,
+    "release": "April 2024",
+    "tags": ["python", "visualization"]
+  },
+  {
+    "title": "Overture Maps Data in Big Query and Snowflake: How to Use it With Carto",
+    "url": "https://carto.com/blog/overture-maps-data-now-on-the-cloud-use-it-with-carto",
+    "creator": "Javier de la Torre & Helen McKenzie, Carto",
+    "creatorUrl": null,
+    "release": "April 2024",
+    "tags": ["tutorial", "analysis"]
+  },
+  {
+    "title": "Making Overture Maps Data More Efficient With GeoParquet and Apache Sedona",
+    "url": "https://wherobots.com/overture-maps-data-cloud-native-geoparquet-apache-sedona/",
+    "creator": "Feng Jiang, Microsoft; Jia Yu and William Lyon, Wherobots",
+    "creatorUrl": null,
+    "release": "April 2024",
+    "tags": ["spark", "tutorial"]
+  },
+  {
+    "title": "Overture Maps Downloader",
+    "url": "https://pypi.org/project/overturemapsdownloader/",
+    "creator": "Youssef Harby",
+    "creatorUrl": null,
+    "release": "April 2024",
+    "tags": ["python", "library"]
+  },
+  {
+    "title": "Exploring Overture Buildings in Fused",
+    "url": "https://docs.fused.io/basics/tutorials/overture/",
+    "creator": "Fused.io team",
+    "creatorUrl": "https://www.fused.io/",
+    "release": "March 2024",
+    "tags": ["buildings", "visualization"]
+  },
+  {
+    "title": "Go Cloud Native! Overture GeoParquet, From Object Store to Feature Layer via Online Notebook",
+    "url": "https://community.esri.com/t5/arcgis-data-interoperability-blog/go-cloud-native-overture-geoparquet-from-object/ba-p/1371965",
+    "creator": "Bruce Harold, Esri",
+    "creatorUrl": null,
+    "release": "January 2024",
+    "tags": ["tutorial", "arcgis"]
+  },
+  {
+    "title": "Getting Overture Maps Data Into PostGIS",
+    "url": "https://python.plainenglish.io/downloading-overture-map-foundations-buildings-data-using-apache-sedona-with-docker-python-and-473f5175f241",
+    "creator": "Pavlos Demetriades",
+    "creatorUrl": null,
+    "release": "January 2024",
+    "tags": ["postgis", "buildings", "tutorial"]
+  },
+  {
+    "title": "Tokyo Walking Guide Tour",
+    "url": "https://tech.marksblogg.com/tokyo-walking-tour-guide.html",
+    "creator": "Mark Litwintschik, Consultant",
+    "creatorUrl": null,
+    "release": "January 2024",
+    "tags": ["places", "visualization"]
+  },
+  {
+    "title": "Planetiler Overture Demo",
+    "url": "https://msbarry.github.io/planetiler-overture-demo/#13.99/42.35625/-71.06989",
+    "creator": "Michael Barry",
+    "creatorUrl": null,
+    "release": "December 2023",
+    "tags": ["tiles", "visualization"]
+  },
+  {
+    "title": "Mapping the Future: How Overture Transportation Network Data Model Enhances Geospatial Applications",
+    "url": "https://engineering.tomtom.com/overture-transportation-network-linear-referencing/",
+    "creator": "Siavash Shakeri, TomTom",
+    "creatorUrl": null,
+    "release": "November 2023",
+    "tags": ["transportation", "analysis"]
+  },
+  {
+    "title": "How to Query Overture Maps Data in ArcGIS Pro With DuckDB",
+    "url": "https://www.spatialnode.net/articles/how-to-query-overture-maps-foundation-data-in-arcgis-pro-with-duck-dbc094f9",
+    "creator": "Emmanuel Jolaiya Ayodele",
+    "creatorUrl": null,
+    "release": "November 2023",
+    "tags": ["duckdb", "arcgis", "tutorial"]
+  },
+  {
+    "title": "Overture's Global Geospatial Datasets",
+    "url": "https://tech.marksblogg.com/overture-gis-data.html",
+    "creator": "Mark Litwintschik, Consultant",
+    "creatorUrl": null,
+    "release": "November 2023",
+    "tags": ["analysis"]
+  },
+  {
+    "title": "Enriching Overture Data With GERS",
+    "url": "https://www.esri.com/arcgis-blog/products/arcgis-online/mapping/enriching-overture-data-with-gers/",
+    "creator": "Deane Kensok, Esri",
+    "creatorUrl": null,
+    "release": "October 2023",
+    "tags": ["gers", "arcgis", "tutorial"]
+  },
+  {
+    "title": "Creating Map Tiles From Overture Data",
+    "url": "https://github.com/bdon/overture-tiles",
+    "creator": "Brandon Liu, Protomaps",
+    "creatorUrl": "https://protomaps.com/",
+    "release": "October 2023",
+    "tags": ["tiles"]
+  },
+  {
+    "title": "A Workflow for Using Overture Places Data in OSM",
+    "url": "https://www.openstreetmap.org/user/mikelmaron/diary/402600",
+    "creator": "Mikel Maron, Earth Genome",
+    "creatorUrl": "https://www.earthgenome.org/",
+    "release": "October 2023",
+    "tags": ["places", "tutorial"]
+  },
+  {
+    "title": "Using Overture Maps Data in GeoAnalytics Engine",
+    "url": "https://community.esri.com/t5/geoanalytics-engine-blog/using-overture-maps-data-in-geoanalytics-engine/ba-p/1341493",
+    "creator": "Sarah Battersby, Esri",
+    "creatorUrl": null,
+    "release": "October 2023",
+    "tags": ["arcgis", "analysis"]
+  },
+  {
+    "title": "Tools for Working With Open Building Datasets",
+    "url": "https://open.gishub.org/open-buildings/",
+    "creator": "Chris Holmes, Radiant Earth",
+    "creatorUrl": null,
+    "release": "October 2023",
+    "tags": ["buildings", "tools"]
+  },
+  {
+    "title": "Let's Explore Overture Maps",
+    "url": "https://medium.com/@singh.tanya3298/lets-explore-overture-maps-3209c25d6c97",
+    "creator": "Tanya Singh, unicube geospatial solutions",
+    "creatorUrl": null,
+    "release": "October 2023",
+    "tags": ["tutorial", "places", "buildings"]
+  },
+  {
+    "title": "Importing Overture Maps Data Into Neo4j",
+    "url": "https://lyonwj.com/blog/importing-overture-maps-neo4j-aws-athena-spatial-sql-query",
+    "creator": "William Lyon, Wherobots",
+    "creatorUrl": null,
+    "release": "July 2023",
+    "tags": ["analysis", "places"]
+  },
+  {
+    "title": "Overture Maps Data for Japan",
+    "url": "https://shi-works.github.io/Overture-Maps-Data-for-GIS/#16.18/35.680945/139.767552/-12.7/60",
+    "creator": "@shi_works",
+    "creatorUrl": "https://twitter.com/shi__works",
+    "release": "July 2023",
+    "tags": ["visualization"]
+  },
+  {
+    "title": "Overture Places Quality Analysis",
+    "url": "https://observablehq.com/d/9847c08c46f56ed6",
+    "creator": "Willie Marcel, Development Seed",
+    "creatorUrl": "https://developmentseed.org/",
+    "release": "July 2023",
+    "tags": ["places", "analysis"]
+  },
+  {
+    "title": "Harnessing Overture Maps Data: Apache Sedona's Journey From Parquet to GeoParquet",
+    "url": "https://medium.com/@dr.jiayu/harnessing-overture-maps-data-apache-sedonas-journey-from-parquet-to-geoparquet-d99f7767a499",
+    "creator": "Jia Yu, Wherobots",
+    "creatorUrl": null,
+    "release": "July 2023",
+    "tags": ["spark", "tutorial"]
+  },
+  {
+    "title": "Overture Cheat Sheet, work in progress",
+    "url": "https://www.postholer.com/articles/Overature-Cheat-Sheet",
+    "creator": "Scott Parks, postholer.com",
+    "creatorUrl": "https://www.postholer.com/",
+    "release": "July 2023",
+    "tags": ["docs"]
+  },
+  {
+    "title": "Accessing Overture Maps' Global Dataset Using Athena (AWS)",
+    "url": "https://feyeandal.me/blog/access_overture_data_using_athena",
+    "creator": "Feye Andal, Humanitarian OpenStreetMap Team",
+    "creatorUrl": "https://www.hotosm.org/",
+    "release": "July 2023",
+    "tags": ["tutorial", "analysis"]
+  },
+  {
+    "title": "Exploring the Overture Maps Places Data Using DuckDB, sqlite-utils and Datasette",
+    "url": "https://til.simonwillison.net/overture-maps/overture-maps-parquet",
+    "creator": "Simon Willison, Datasette",
+    "creatorUrl": "https://datasette.io/",
+    "release": "July 2023",
+    "tags": ["duckdb", "places", "tutorial"]
+  },
+  {
+    "title": "Overture Buildings and Places (Cloud-Native Geo Experiments)",
+    "url": "https://beta.source.coop/repositories/cholmes/overture/description/",
+    "creator": "Chris Holmes, Radiant Earth",
+    "creatorUrl": null,
+    "release": "July 2023",
+    "tags": ["buildings", "places"]
+  }
+]

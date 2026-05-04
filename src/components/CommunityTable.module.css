@@ -1,0 +1,68 @@
+.filterBar {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.groupLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+  margin-right: 0.25rem;
+  min-width: 5rem;
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background-color: transparent;
+  color: var(--ifm-color-emphasis-700);
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.pillActive {
+  border-color: var(--ifm-color-primary);
+  background-color: var(--ifm-color-primary);
+  color: #fff;
+}
+
+.clearBtn {
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: var(--ifm-color-primary);
+  background: none;
+  border: none;
+  padding: 0.2rem 0;
+  text-decoration: underline;
+}
+
+.count {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-top: 0.25rem;
+}
+
+.entryTag {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 0.75rem;
+  font-size: 0.7rem;
+  background-color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-700);
+  margin-right: 0.25rem;
+  margin-top: 0.15rem;
+}
