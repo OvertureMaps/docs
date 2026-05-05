@@ -1,0 +1,108 @@
+---
+description: query and visualize Overture data with Ibis and DuckDB
+title: Ibis
+---
+
+[Ibis](https://ibis-project.org/) is a Python dataframe library that provides a unified interface to many query backends. With its default [DuckDB](https://duckdb.org/) backend, you can query Overture's GeoParquet files directly from S3 — with filter and projection pushdown so you only download the data you need.
+
+:::info
+This example requires `duckdb>=1.1.1` for GeoParquet support. See the [Ibis blog post](https://ibis-project.org/posts/ibis-overturemaps/index.html) for an extended walkthrough including visualization with Lonboard.
+:::
+
+<details>
+
+    <summary>
+    **Installation requirements**
+
+    </summary>
+
+```bash
+pip install 'duckdb>=1.1.1'
+pip install 'ibis-framework[duckdb,geospatial]'
+```
+
+</details>
+
+## Query Overture data with Ibis
+
+### Read and filter data
+
+Use `ibis.read_parquet()` to point Ibis at an Overture release on S3. Ibis spins up a DuckDB connection automatically. Here we query the `base/infrastructure` type and filter to power infrastructure within a bounding box around Washington, D.C.:
+
+```python
+import ibis
+from ibis import _
+
+t = ibis.read_parquet(
+    "s3://overturemaps-us-west-2/release/2024-09-18.0/theme=base/type=infrastructure/*",
+    table_name="infra",
+)
+
+# Filter and project — DuckDB pushes these down to S3, so only matching data is downloaded
+expr = t.filter(
+    _.bbox.xmin > -77.119795,
+    _.bbox.xmax < -76.909366,
+    _.bbox.ymin > 38.791631,
+    _.bbox.ymax < 38.995968,
+    _.subtype == "power",
+).select(["names", "geometry", "sources", "class"])
+```
+
+:::tip
+Ibis uses lazy evaluation — `expr` is just an expression tree and no data is fetched until you execute it. DuckDB pushes the filters and column projections down to the parquet reader, minimizing data transfer.
+:::
+
+### Save results locally
+
+```python
+expr.get_backend().to_parquet(expr, "infra-power-dc.geoparquet")
+```
+
+### Explore interactively
+
+Load the saved file and turn on interactive mode to preview results inline:
+
+```python
+ibis.options.interactive = True
+
+power_dc = ibis.read_parquet("infra-power-dc.geoparquet")
+
+# Rename 'class' — reserved word that causes issues with the deferred operator
+power_dc = power_dc.rename(infra_class="class")
+
+# Count by infrastructure class
+power_dc.infra_class.value_counts().order_by(ibis.desc("infra_class_count"))
+```
+
+Filter to a specific class:
+
+```python
+power_lines = power_dc.filter(_.infra_class == "power_line")
+power_lines["names", "geometry", "infra_class"]
+```
+
+### Visualize with Lonboard
+
+Convert to a GeoDataFrame to visualize with [Lonboard](https://developmentseed.org/lonboard/latest/):
+
+```python
+import geopandas as gpd
+import lonboard
+from lonboard.basemap import CartoBasemap
+
+gdf = gpd.GeoDataFrame(power_lines.to_pandas(), geometry="geometry", crs="EPSG:4326")
+
+lonboard.viz(
+    gdf,
+    map_kwargs={
+        "basemap_style": CartoBasemap.Positron,
+        "view_state": {"longitude": -77.01, "latitude": 38.9, "zoom": 10},
+    },
+)
+```
+
+## Next steps
+
+- Full walkthrough with maps: [Ibis blog — Exploring GeoParquet Overture Maps with Ibis, DuckDB, and Lonboard](https://ibis-project.org/posts/ibis-overturemaps/index.html)
+- Reading parquet files with Ibis: [Ibis how-to guide](https://ibis-project.org/how-to/input-output/duckdb-parquet)
+- Lonboard visualization: [Lonboard + Overture example](https://developmentseed.org/lonboard/latest/examples/overture-maps/)
