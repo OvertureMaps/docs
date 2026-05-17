@@ -6,31 +6,52 @@ hide_table_of_contents: true
 className: landing-page
 ---
 
-import {
-  Hero,
-  HeroHeadline,
-  HeroSubtext,
-  HeroCTAs,
-  PrimaryButton,
-  SecondaryButton,
-  ExplorerEmbed,
-} from '@site/src/components/home';
+import { LandingTitle, FeaturedLink, DocSection, DocLink } from '@site/src/components/home';
 
-<Hero>
-  <HeroHeadline />
+<LandingTitle>Overture Documentation</LandingTitle>
 
-<HeroSubtext>
-  A platform for bringing together tech companies, mapping organizations, government agencies, open
-  data communities, and researchers to build open, reliable, and interoperable map data
-  infrastructure.
-</HeroSubtext>
+<FeaturedLink to="/getting-data/" title="Quickstart" icon="⚡︎">
+  The fastest ways to get started. Browse features in [Overture Explorer](https://explore.overturemaps.org), download data with the [Overture Python CLI](/getting-data/overturemaps-py/), query with [DuckDB](/getting-data/duckdb/), or pull Overture data into [ArcGIS](https://livingatlas.arcgis.com/en/home/) and [QGIS](/examples/QGIS/).
+</FeaturedLink>
 
-  <HeroCTAs>
-    <PrimaryButton to="/getting-data/">Quickstart</PrimaryButton>
-    <SecondaryButton href="https://explore.overturemaps.org">
-      Explore the data and schema →
-    </SecondaryButton>
-  </HeroCTAs>
-</Hero>
+<DocSection title="Where to get the data">
+  <DocLink to="/getting-data/cloud-sources/" title="Official Overture sources">
+    Direct access to Overture releases on Amazon S3 and Microsoft Azure.
+  </DocLink>
+  <DocLink to="/getting-data/data-mirrors/" title="Data mirrors">
+    Overture data hosted by partners: BigQuery, Databricks, Fused, Snowflake, and Wherobots.
+  </DocLink>
+  <DocLink href="https://livingatlas.arcgis.com/en/home/" title="ArcGIS" hideArrow>
+    Find Overture data in the Esri ArcGIS Living Atlas.
+  </DocLink>
+  <DocLink to="/release-calendar/" title="Release calendar">
+    Upcoming Overture data releases and what's included in each one.
+  </DocLink>
+</DocSection>
 
-<ExplorerEmbed />
+<DocSection title="Reference">
+  <DocLink to="/schema/" title="Schema reference">
+    Full schema reference for Overture datasets.
+  </DocLink>
+  <DocLink to="/gers/" title="Global Entity Reference System">
+    Stable identifiers (GERS IDs) that let you join Overture data to your own datasets and track features over time.
+  </DocLink>
+</DocSection>
+
+<DocSection title="Guides and Examples">
+  <DocLink to="/guides/" title="Guides">
+    Theme-by-theme guides for addresses, base, buildings, divisions, places, and transportation.
+  </DocLink>
+  <DocLink to="/examples/" title="Examples">
+    End-to-end walkthroughs using DuckDB, Athena, QGIS, CARTO, Fused, Sedona, Spark, and more.
+  </DocLink>
+  <DocLink to="/attribution/" title="Attribution and Licensing">
+    How to cite Overture data and meet attribution requirements for upstream sources.
+  </DocLink>
+</DocSection>
+
+<DocSection title="Support">
+  <DocLink to="/support/" title="Support">
+    GitHub Discussions, issue trackers, and other ways to get help.
+  </DocLink>
+</DocSection>
