@@ -30,7 +30,7 @@ jobs:
       - name: Staging deploy is not supported for fork PRs
         if: github.event.pull_request.head.repo.full_name != github.repository
         run: |
-          echo "::warning title=Staging deploy not supported for fork PRs::Staging previews are only available for PRs from branches within this repository, not forks. Please open your PR from a branch in OvertureMaps/docs instead."
+          echo "::warning title=Staging deploy not supported for fork PRs::Staging previews are only available for PRs from branches within this repository, not forks. Please open your PR from a branch in OvertureMaps/docs."
 
   build-auto-gen:
     name: Build (auto-gen schema)
@@ -60,7 +60,7 @@ jobs:
         uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@faa3fa4bbe01d85dc2e2139ff1f74ce70feb7df9 # zizmor: ignore[stale-action-refs] - main
         with:
           output-dir: ${{ github.workspace }}/docs/schema/reference
-          schema-ref: 'dev' # Temporary until we feel confident in the generated schema sans human review, then should be 'main'
+          schema-ref: 'main'
 
       - name: Build Docusaurus website
         run: npm run build
@@ -171,13 +171,14 @@ jobs:
             |                         |                                                                      |
             |-------------------------|----------------------------------------------------------------------|
             | 🆕 **Auto-gen schema site (beta)**  | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html           |
-            | 🗂️ **Auto-gen schema ref** | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ steps.deploy-metadata.outputs.schema-short-sha }}](https://github.com/OvertureMaps/schema/commit/${{ needs.build-auto-gen.outputs.schema-sha }}) |
+            | 🗂️ **Auto-gen schema ref** | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ steps.deploy-metadata.outputs.schema-short-sha }}](https://github.com/OvertureMaps/schema/tree/${{ needs.build-auto-gen.outputs.schema-ref }}) |
             | 🌍 **Repo schema site**      | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH_NO_AUTOGEN }}/index.html |
             | 🕐 **Updated**          | ${{ steps.deploy-metadata.outputs.time }}                            |
             | 📝 **Commit**           | [${{ steps.deploy-metadata.outputs.short-sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
 
-            Auto-gen schema site is now available. This is an early preview of a future workflow where we will automatically generate and publish reference docs for the Overture Maps Format schema with every change to the schema repo.
-            The auto-gen schema site may contain incomplete or inaccurate information as we are still refining the generation process, so please compare against the repo schema site and refer to the linked commit for the most up-to-date source of truth.
+            Auto-gen schema site is now available. This is an early preview of a future workflow where we will automatically generate and publish reference docs for the Overture Maps Format schema.
+
+            The auto-gen schema site may contain incomplete or inaccurate information as we are still refining the generation process, so please compare against the repo schema site and refer to the official Overture documentation for authoritative information.
 
             > [!NOTE]
             > ♻️ This preview updates automatically with each push to this PR.
