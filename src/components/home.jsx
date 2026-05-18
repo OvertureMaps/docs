@@ -1,71 +1,50 @@
 import Link from '@docusaurus/Link';
-import RotatingWord from './RotatingWord';
 import styles from './home.module.css';
 
-export function Hero({ children }) {
-  return <section className={styles.hero}>{children}</section>;
+export function LandingTitle({ children }) {
+  return <h1 className={styles.introTitle}>{children}</h1>;
 }
 
-export function HeroHeadline() {
+export function FeaturedLink({ to, href, title, icon, children }) {
+  const isExternal = !!href;
+  const linkProps = isExternal
+    ? { href, target: '_blank', rel: 'noopener noreferrer' }
+    : { to };
+  const Component = isExternal ? 'a' : Link;
   return (
-    <div className={styles.headline}>
-      <div className={styles.headlineTop}>
-        <span className={styles.headlineStatic}>Overture</span>
-        <span className={styles.headlineIs}>is</span>
-      </div>
-      <RotatingWord />
+    <div className={styles.featured}>
+      <Component className={styles.featuredTitle} {...linkProps}>
+        {icon && <span className={styles.featuredIcon} aria-hidden="true">{icon}</span>}
+        {title}
+        {isExternal && <span className={styles.docLinkExternal}>{'↗'}</span>}
+      </Component>
+      <div className={styles.featuredDesc}>{children}</div>
     </div>
   );
 }
 
-export function HeroSubtext({ children }) {
-  return <div className={styles.subtext}>{children}</div>;
-}
-
-export function HeroCTAs({ children }) {
-  return <div className={styles.ctaRow}>{children}</div>;
-}
-
-export function PrimaryButton({ to, children }) {
+export function DocSection({ title, children }) {
   return (
-    <Link to={to} className={styles.btnPrimary}>
-      {children}
-    </Link>
+    <section className={styles.docSection}>
+      <h2 className={styles.docSectionTitle}>{title}</h2>
+      <ul className={styles.docLinks}>{children}</ul>
+    </section>
   );
 }
 
-export function SecondaryButton({ href, children }) {
+export function DocLink({ to, href, title, hideArrow, children }) {
+  const isExternal = !!href;
+  const linkProps = isExternal
+    ? { href, target: '_blank', rel: 'noopener noreferrer' }
+    : { to };
+  const Component = isExternal ? 'a' : Link;
   return (
-    <a
-      href={href}
-      className={styles.btnSecondary}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {children}
-    </a>
-  );
-}
-
-export function ExplorerEmbed({ src = 'https://explore.overturemaps.org' }) {
-  return (
-    <div className={styles.explorerSection}>
-      <div className={styles.explorerFrame}>
-        <iframe
-          src={src}
-          title="Overture Maps Explorer"
-          loading="lazy"
-          allow="fullscreen"
-        />
-        <a
-          className={styles.explorerOpen}
-          href="https://explore.overturemaps.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Open full screen {'\u2197'}
-        </a>
-      </div>
-    </div>
+    <li className={styles.docLinkItem}>
+      <Component className={styles.docLinkTitle} {...linkProps}>
+        {title}
+        {isExternal && !hideArrow && <span className={styles.docLinkExternal}>{'↗'}</span>}
+      </Component>
+      <span className={styles.docLinkDesc}>{children}</span>
+    </li>
   );
 }
