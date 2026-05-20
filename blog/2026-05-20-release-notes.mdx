@@ -107,13 +107,42 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ### Places
 - added BrightQuery as a new POI data provider, introducing +250k new US locations and +1 million in signals to existing features
-- changed the value of the `operating_status` property to null instead of open
-- updated to default confidence values of existing providers
+- changed the default value of the `operating_status` property to null instead of open
+- updates to default confidence values of existing providers
 
 
 ### Transportation
 
-- made minor, incremental updates to the data
+- OSM Cut-Off Date: `2026-05-10`
+
+| Dataset | Feature Count | Length (km) |
+|---|---|---|
+| OpenStreetMap | 748,646,121 | 94,033,027 |
+| TomTom | 	8,875,123 | 1,537,447 |
+
+| Subtype | Length (km) |
+|---|---|
+| road | 92,121,986 |
+| rail | 2,864,434 |
+| water | 584,055 |
+
+#### Change Summary
+
+##### Count Changes
+
+| Dataset | Type | Diff | Diff (%) |
+|---|---|---|---|
+| TomTom | segment | 116,650 | 1.33% |
+| OpenStreetMap | connector | 2,209,065 | 0.54% |
+| OpenStreetMap | segment | 1,290,304 | 0.38% |
+
+##### Length Changes
+
+| Subtype | Diff (km) | Diff (%) |
+|---|---|---|
+| road | 267,644.99 | 0.29% |
+| rail | 4,446.43 | 0.16% |
+| water | 2,750.14 | 0.47% |
 
 
 
