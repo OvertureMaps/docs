@@ -1,0 +1,155 @@
+---
+title: 2026-05-20 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+
+## Overview
+
+**The `2026-05-20.0` release of Overture data and `v1.17.0` of the Overture schema are now available.** This month we added BrightQuery as a new POI data provider, introducing more than 250,000 new places in the United States. We made minor changes to the schema.
+
+
+## Deprecations
+The `categories` property in the places schema has been deprecated and will be removed in the **September 2026** release, replaced by the new `basic_category` and `taxonomy` properties. All three properties will be available until then to ease the transition for our users. The taxonomy documentation is [here](https://docs.overturemaps.org/guides/places/taxonomy/).
+
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined in our [docs](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at community@overturemaps.org. We’d love to hear from you.
+
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/release/2026-05-20.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2026-05-20.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/changelog/2026-05-20.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2026-05-20.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/bridgefiles/2026-05-20.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2026-05-20.0/
+```
+
+### GERS registry
+
+
+**Microsoft Azure:**
+```
+az://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+### PMTiles
+
+**Amazon S3:**
+```
+s3://overturemaps-extras-us-west-2/tiles/2026-05-20.0/
+```
+
+{/* truncate */}
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- made minor, incremental updates to the data
+
+
+### Base
+- made minor, incremental updates to the data
+
+
+### Buildings
+- made minor, incremental updates to the data
+
+
+### Divisions
+- no changes, re-promoted the data from the March release
+
+
+### Places
+- added BrightQuery as a new POI data provider, introducing +250k new US locations and +1 million in signals to existing features
+- changed the default value of the `operating_status` property to null instead of open
+- updates to default confidence values of existing providers
+
+
+### Transportation
+
+- OSM Cut-Off Date: `2026-05-10`
+
+| Dataset | Feature Count | Length (km) |
+|---|---|---|
+| OpenStreetMap | 748,646,121 | 94,033,027 |
+| TomTom | 	8,875,123 | 1,537,447 |
+
+| Subtype | Length (km) |
+|---|---|
+| road | 92,121,986 |
+| rail | 2,864,434 |
+| water | 584,055 |
+
+#### Change Summary
+
+##### Count Changes
+
+| Dataset | Type | Diff | Diff (%) |
+|---|---|---|---|
+| TomTom | segment | 116,650 | 1.33% |
+| OpenStreetMap | connector | 2,209,065 | 0.54% |
+| OpenStreetMap | segment | 1,290,304 | 0.38% |
+
+##### Length Changes
+
+| Subtype | Diff (km) | Diff (%) |
+|---|---|---|
+| road | 267,644.99 | 0.29% |
+| rail | 4,446.43 | 0.16% |
+| water | 2,750.14 | 0.47% |
+
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.17.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.17.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
