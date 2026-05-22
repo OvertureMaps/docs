@@ -21,21 +21,19 @@ The individual tiles contain geometry and tags in the open [MVT](https://github.
 
 ## Accessing Tiles
 
-Overture Tiles are generated with each release. The current beta distribution of tiles are at this url:
+Overture Tiles are generated with each release. The current distribution of tiles are at this url:
 
-`s3://overturemaps-tiles-us-west-2-beta/RELEASE/THEME.pmtiles`
-
-Where `RELEASE` has the data minor version trimmed, e.g. `2024-08-20`, instead of `2024-08-20.0`.
+`s3://overturemaps-extras-us-west-2/tiles/<RELEASE>/<THEME>.pmtiles`
 
 These public S3 URLs can also be accessed via HTTP:
 
-`https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/RELEASE/THEME.pmtiles`
+`https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/tiles/<RELEASE>/<THEME>.pmtiles`
 
 ### Viewing Tiles
 
 Local and remote HTTP URLs can be previewed at [pmtiles.io](https://pmtiles.io).
 
-[View 2024-08-20/places.pmtiles on pmtiles.io](https://pmtiles.io/?url=https%3A%2F%2Foverturemaps-tiles-us-west-2-beta.s3.amazonaws.com%2F2024-08-20%2Fplaces.pmtiles)
+[View 2026-05-20.0/base.pmtiles on pmtiles.io](https://pmtiles.io/#url=https%3A%2F%2Foverturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com%2Ftiles%2F2026-05-20.0%2Fbase.pmtiles&map=0.39/0/0)
 
 ### Area Extracts
 
@@ -44,33 +42,27 @@ To create a new tileset for only part of the world, use the `extract` command of
 To get all `buildings` tiles around Ghent, Belgium:
 
 ```
-pmtiles extract https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2024-08-20/buildings.pmtiles ghent.pmtiles --bbox=3.660507,51.004250,3.784790,51.065996
+pmtiles extract https://overturemaps-extras-us-west-2.s3.amazonaws.com/tiles/2026-05-20.0/buildings.pmtiles ghent.pmtiles --bbox=3.660507,51.004250,3.784790,51.065996
 ```
 
 ## On AWS
 
-The `overture-tiles` scripts can be automated with [AWS Batch](https://docs.aws.amazon.com/batch/), which generates the largest global tilesets in ~90 minutes using `c7gd.16xlarge` Ec2 instances on demand. Costs incurred include on-demand instances and S3 storage + transaction costs.
+The `overture-tiles` scripts can be automated with [AWS Batch](https://docs.aws.amazon.com/batch/), which generates the largest global tilesets in ~90 minutes using `c7gd.16xlarge` EC2 instances on demand. Costs incurred include on-demand instances and S3 storage + transaction costs.
 
 ### Prerequisites
 
 * [AWS CLI](https://docs.aws.amazon.com/cli/)
-* [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) `npm install -g aws-cdk`
+* [OpenTofu](https://opentofu.org) or [Terraform](https://developer.hashicorp.com/terraform) version 1.8 or later
 * Docker Desktop
 
 ### Setup
 
-1. Modify `bin/overture-tiles-cdk.ts`, specifying a different S3 bucket name.
-
-2. From the `overture-tiles-cdk` repository:
+2. From the `examples/complete` directory of the [https://github.com/OvertureMaps/terraform-aws-overture-tiles](terraform-aws-overture-tiles) repository:
 
 ```
-npm run cdk bootstrap
-npm run cdk deploy
+tofu init
+tofu apply -var="bucket_name=my-overture-tiles"
 ```
-
-3. Authenticate your Docker client with the provisioned AWS Elastic Container Registry (ECR) in the web console. Use **View Push Commands** to build the `Dockerfile` in the `overture-tiles` repository and push to ECR:
-
-![explore.overturemaps.org](/img/overture-tiles-view-push-commands.png)
 
 4. Submit jobs from the [AWS Batch](https://console.aws.amazon.com/batch/home#jobs) console. 
 
@@ -82,29 +74,34 @@ npm run cdk deploy
 
   * Add three **Environment Variables**:
 
-    * `OUTPUT`: The path to the output on S3, such as `s3://your-bucket-name/2026-02-18.0/`
+    * `OUTPUT`: The path to the output on S3, such as `s3://your-bucket-name/2026-05-20.0/`
 
     * `THEME`: e.g. `places`
 
-    * `RELEASE`: The Overture release, e.g. `2026-02-18.0`
+    * `RELEASE`: The Overture release, e.g. `2026-05-20.0`
 
 
-  * Once the job is complete, the tileset will be available at `OUTPUT/THEME.pmtiles`, e.g. `s3://your-bucket-name/2026-02-18.0/places.pmtiles`
+  * Once the job is complete, the tileset will be available at `<OUTPUT>/<THEME>.pmtiles`, e.g. `s3://your-bucket-name/2026-05-20.0/places.pmtiles`
+
+To provide a modified image to AWS Batch, upload the image to [Elastic Container Registry](https://aws.amazon.com/ecr/) and provide the `container_image` variable:
+
+```
+tofu apply -var="bucket_name=my-overture-tiles" -var="container_image=123456789012.dkr.ecr.us-east-1.amazonaws.com/overture-tiles:v2.0.0"
+```
 
 ## On Your Workstation
 
 ### Requirements
 
-* a Java Runtime Environment, version 22+, to build the `addresses`, `base`, `buildings` and `transportation` themes, along with `planetiler.jar` from [onthegomap/planetiler Releases](https://github.com/onthegomap/planetiler/releases).
-* the [felt/tippecanoe](https://github.com/felt/tippecanoe?tab=readme-ov-file#installation) tool and the [DuckDB CLI](https://duckdb.org/docs/installation/) for other themes.
-* the [aws CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) for downloading Overture data.
+* a Java Runtime Environment, version 22+ along with `planetiler.jar` from [onthegomap/planetiler Releases](https://github.com/onthegomap/planetiler/releases).
+* [s5cmd](https://github.com/peak/s5cmd) for downloading Overture data.
 
 ### Scripts
 
 * Copy the Overture Parquet dataset to your local machine
   [using these docs](https://github.com/OvertureMaps/data/blob/main/README.md#how-to-access-overture-maps-data). If you want to only run on a small sample of data, you can use only the first `.parquet` file instead of all in the directory.
 
-* for the `base`, `buildings` and `transportation` themes, generate the tileset with java:
+* for each theme, generate the tileset with java:
 
 ```sh
 # --data indicates where your Overture data is (overture/theme=base/...)
@@ -113,17 +110,9 @@ java -cp planetiler.jar profiles/Base.java --data=overture
 
 The above command outputs `base.pmtiles` in the `data` dir.
 
-* for other themes, run the theme script in `themes/`:
-
-```sh
-scripts/2024-08-20/places.sh overture places.pmtiles
-```
-
-This reads from Overture data in `overture` and writes `places.pmtiles`.
-
 ## Customization
 
-The tilesets accompanying Overture releases are primarily for powering explore.overturemaps.org. For your own application, you may want to:
+The tilesets accompanying Overture releases are primarily for powering the [Overture Explorer](https://explore.overturemaps.org). For your own application, you may want to:
 
 * Limit or modify the properties of each feature, to reduce the tile sizes.
 * Change what features or properties are included at generalized lower zoom levels.
@@ -133,27 +122,30 @@ In these examples we'll work with a small area extract of Boston in the `boston/
 ```sh
 mkdir -p boston/theme=buildings/type=building
 mkdir -p boston/theme=places/type=place
-overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geoparquet --type=building -o boston/theme=buildings/type=building/0.geoparquet
-overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geoparquet --type=place -o boston/theme=places/type=place/0.geoparquet
+overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geoparquet --type=building -o boston/theme=buildings/type=building/0.parquet
+overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geoparquet --type=place -o boston/theme=places/type=place/0.parquet
 ```
 
 ### Example: Places
 
-The default `places.sh` script includes all Overture properties to aid inspection. To slim down the tile sizes, you can remove all the primary name in the `@name` field.
+The default `Places.java` profile includes all Overture properties to aid inspection. To slim down the tile sizes, you can include only the name field, stored at the key `@name`.
 
-Modify [places.sh](https://github.com/OvertureMaps/overture-tiles/blob/main/scripts/2024-07-22/places.sh) for the release matching your Overture data:
+Modify [Places.java](https://github.com/OvertureMaps/overture-tiles/blob/main/profiles/Places.java):
 
-```sql
+```java
   ...
-  json_object(
-      'id', id,
-      '@name', json_extract_string(names, '$.primary')
-  ) AS properties,
+  @Override
+  public void processFeature(SourceFeature source, FeatureCollector features) {
+      String layer = source.getSourceLayer();
+      var point = features.point(layer).setMinZoom(14);
+      var primaryName = source.getStruct("names").get("primary");
+      point.setAttr("@name", primaryName);
+  }
   ...
 ```
 
 ```sh
-./scripts/2024-07-22/places.sh boston boston_places.pmtiles
+java -cp planetiler.jar profiles/Places.java --data=boston
 ```
 
 Inspect the created `boston_places.pmtiles` on [pmtiles.io](https://pmtiles.io) to see the slimmed-down properties:
@@ -164,11 +156,11 @@ Inspect the created `boston_places.pmtiles` on [pmtiles.io](https://pmtiles.io) 
 
 To reduce the size of tiles, the default Buildings script includes all properties only at zoom 13. Your own application may need this data at a lower zoom level.
 
-Modify [`profile/Buildings.java`](https://github.com/OvertureMaps/overture-tiles/blob/main/profiles/Buildings.java) to populate all Overture properties on zoom 12 instead of zoom 13:
+Modify [`profile/Buildings.java`](https://github.com/OvertureMaps/overture-tiles/blob/main/profiles/Buildings.java) to populate all Overture properties on zoom 13 instead of zoom 14:
 
 ```java
 ...
-OvertureProfile.addFullTags(source, polygon, 12);
+OvertureProfile.addFullTags(source, polygon, 13);
 ...
 ```
 
