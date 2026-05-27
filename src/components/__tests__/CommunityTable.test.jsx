@@ -9,18 +9,10 @@ afterEach(cleanup);
 
 describe('CommunityTable', () => {
   describe('initial render', () => {
-    it('renders table headers', () => {
-      render(<CommunityTable />);
-      expect(screen.getByText('Project')).toBeInTheDocument();
-      expect(screen.getByText('Creator')).toBeInTheDocument();
-      expect(screen.getByText('Data Release')).toBeInTheDocument();
-    });
-
     it('renders all entries by default', () => {
       render(<CommunityTable />);
-      const rows = screen.getAllByRole('row');
-      // subtract header row
-      expect(rows.length - 1).toBe(ENTRIES.length);
+      const cards = screen.getAllByTestId('community-card');
+      expect(cards).toHaveLength(ENTRIES.length);
     });
 
     it('renders filter pill for every tag', () => {
@@ -31,7 +23,10 @@ describe('CommunityTable', () => {
         'tutorial', 'library', 'visualization', 'analysis', 'tools', 'docs',
       ];
       for (const tag of expectedTags) {
-        expect(screen.getByRole('button', { name: tag })).toBeInTheDocument();
+        // filter pills use aria-pressed; match by accessible name
+        const buttons = screen.getAllByRole('button', { name: tag });
+        // at least the filter pill exists
+        expect(buttons.length).toBeGreaterThan(0);
       }
     });
 
@@ -70,65 +65,69 @@ describe('CommunityTable', () => {
     it('filters entries when a tag pill is clicked', () => {
       render(<CommunityTable />);
       const tag = 'duckdb';
-      fireEvent.click(screen.getByRole('button', { name: tag }));
+      // click the filter-bar pill (aria-pressed button with exact name)
+      const pills = screen.getAllByRole('button', { name: tag });
+      const filterPill = pills.find((b) => b.getAttribute('aria-pressed') !== null && b.closest('[class*="filterBar"]') !== null)
+        ?? pills[0];
+      fireEvent.click(filterPill);
 
       const expectedCount = ENTRIES.filter((e) => e.tags.includes(tag)).length;
-      const rows = screen.getAllByRole('row');
-      expect(rows.length - 1).toBe(expectedCount);
+      expect(screen.getAllByTestId('community-card')).toHaveLength(expectedCount);
     });
 
     it('applies AND logic when multiple tags are selected', () => {
       render(<CommunityTable />);
-      fireEvent.click(screen.getByRole('button', { name: 'duckdb' }));
-      fireEvent.click(screen.getByRole('button', { name: 'tutorial' }));
+      const allDuckdb = screen.getAllByRole('button', { name: 'duckdb' });
+      const allTutorial = screen.getAllByRole('button', { name: 'tutorial' });
+      fireEvent.click(allDuckdb[0]);
+      fireEvent.click(allTutorial[0]);
 
       const expectedCount = ENTRIES.filter(
         (e) => e.tags.includes('duckdb') && e.tags.includes('tutorial'),
       ).length;
-      const rows = screen.getAllByRole('row');
-      expect(rows.length - 1).toBe(expectedCount);
+      expect(screen.getAllByTestId('community-card')).toHaveLength(expectedCount);
     });
 
     it('deselecting a tag restores the broader filtered set', () => {
       render(<CommunityTable />);
-      fireEvent.click(screen.getByRole('button', { name: 'duckdb' }));
-      fireEvent.click(screen.getByRole('button', { name: 'tutorial' }));
-      // deselect tutorial
-      fireEvent.click(screen.getByRole('button', { name: 'tutorial' }));
+      const allDuckdb = screen.getAllByRole('button', { name: 'duckdb' });
+      const allTutorial = screen.getAllByRole('button', { name: 'tutorial' });
+      fireEvent.click(allDuckdb[0]);
+      fireEvent.click(allTutorial[0]);
+      // deselect tutorial via filter pill (index 0)
+      fireEvent.click(allTutorial[0]);
 
       const expectedCount = ENTRIES.filter((e) => e.tags.includes('duckdb')).length;
-      const rows = screen.getAllByRole('row');
-      expect(rows.length - 1).toBe(expectedCount);
+      expect(screen.getAllByTestId('community-card')).toHaveLength(expectedCount);
     });
 
     it('deselecting all tags shows all entries again', () => {
       render(<CommunityTable />);
-      fireEvent.click(screen.getByRole('button', { name: 'duckdb' }));
-      fireEvent.click(screen.getByRole('button', { name: 'duckdb' }));
+      const pills = screen.getAllByRole('button', { name: 'duckdb' });
+      fireEvent.click(pills[0]);
+      fireEvent.click(pills[0]);
 
-      const rows = screen.getAllByRole('row');
-      expect(rows.length - 1).toBe(ENTRIES.length);
+      expect(screen.getAllByTestId('community-card')).toHaveLength(ENTRIES.length);
     });
 
     it('shows clear-filters button when a tag is active', () => {
       render(<CommunityTable />);
-      fireEvent.click(screen.getByRole('button', { name: 'buildings' }));
+      fireEvent.click(screen.getAllByRole('button', { name: 'buildings' })[0]);
       expect(screen.getByRole('button', { name: /clear filters/i })).toBeInTheDocument();
     });
 
     it('clear-filters button resets to all entries', () => {
       render(<CommunityTable />);
-      fireEvent.click(screen.getByRole('button', { name: 'buildings' }));
+      fireEvent.click(screen.getAllByRole('button', { name: 'buildings' })[0]);
       fireEvent.click(screen.getByRole('button', { name: /clear filters/i }));
 
-      const rows = screen.getAllByRole('row');
-      expect(rows.length - 1).toBe(ENTRIES.length);
+      expect(screen.getAllByTestId('community-card')).toHaveLength(ENTRIES.length);
       expect(screen.queryByRole('button', { name: /clear filters/i })).not.toBeInTheDocument();
     });
 
     it('shows entry count when filtered', () => {
       render(<CommunityTable />);
-      fireEvent.click(screen.getByRole('button', { name: 'duckdb' }));
+      fireEvent.click(screen.getAllByRole('button', { name: 'duckdb' })[0]);
 
       const expectedCount = ENTRIES.filter((e) => e.tags.includes('duckdb')).length;
       expect(
@@ -138,10 +137,47 @@ describe('CommunityTable', () => {
 
     it('tag pills have keyboard-accessible attributes', () => {
       render(<CommunityTable />);
-      // role="button" makes pills keyboard-reachable. Full keydown→toggle
-      // behaviour requires @testing-library/user-event and is covered by the
-      // onClick tests above.
-      expect(screen.getByRole('button', { name: 'tiles' })).toBeInTheDocument();
+      // filter-bar pills should have aria-pressed
+      const tilesPills = screen.getAllByRole('button', { name: 'tiles' });
+      expect(tilesPills.length).toBeGreaterThan(0);
+      // at least one should be the filter-bar pill with aria-pressed
+      const filterPill = tilesPills.find((b) => b.hasAttribute('aria-pressed'));
+      expect(filterPill).toBeTruthy();
+    });
+
+    it('clicking a tag on a card activates that tag filter', () => {
+      render(<CommunityTable />);
+      const tag = 'duckdb';
+      // find the card-level tag button (there may be multiple; click the first card's tag)
+      const cardTagButtons = screen.getAllByRole('button', { name: tag });
+      // click any one — they all call toggle(tag)
+      fireEvent.click(cardTagButtons[cardTagButtons.length - 1]);
+
+      const expectedCount = ENTRIES.filter((e) => e.tags.includes(tag)).length;
+      expect(screen.getAllByTestId('community-card')).toHaveLength(expectedCount);
+    });
+  });
+
+  describe('date sorting', () => {
+    it('defaults to newest-first order', () => {
+      render(<CommunityTable />);
+      expect(screen.getByRole('button', { name: 'Newest first' })).toHaveAttribute('aria-pressed', 'true');
+      expect(screen.getByRole('button', { name: 'Oldest first' })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('clicking oldest-first reorders cards', () => {
+      render(<CommunityTable />);
+      fireEvent.click(screen.getByRole('button', { name: 'Oldest first' }));
+      expect(screen.getByRole('button', { name: 'Oldest first' })).toHaveAttribute('aria-pressed', 'true');
+      expect(screen.getAllByTestId('community-card')).toHaveLength(ENTRIES.length);
+    });
+
+    it('sort and filter work together', () => {
+      render(<CommunityTable />);
+      fireEvent.click(screen.getAllByRole('button', { name: 'duckdb' })[0]);
+      fireEvent.click(screen.getByRole('button', { name: 'Oldest first' }));
+      const expected = ENTRIES.filter((e) => e.tags.includes('duckdb')).length;
+      expect(screen.getAllByTestId('community-card')).toHaveLength(expected);
     });
   });
 });

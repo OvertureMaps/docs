@@ -3,6 +3,7 @@
   "version": "0.2.1",
   "private": true,
   "scripts": {
+    "fetch-og": "node scripts/fetch-og-images.mjs",
     "docusaurus": "docusaurus",
     "start": "npm run docusaurus start",
     "build": "npm run docusaurus build",
