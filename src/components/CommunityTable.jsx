@@ -74,7 +74,7 @@ function ProjectCard({ entry, activeTags, onTagClick }) {
             <button
               key={tag}
               type="button"
-              className={`${styles.entryTag} ${activeTags.has(tag) ? styles.entryTagActive : ''}`}
+              className={`${styles.entryTag} ${styles[TAG_COLOR_CLASS[tag]] ?? ''} ${activeTags.has(tag) ? styles.entryTagActive : ''}`}
               onClick={() => onTagClick(tag)}
               aria-pressed={activeTags.has(tag)}
               title={`Filter by ${tag}`}
@@ -88,8 +88,12 @@ function ProjectCard({ entry, activeTags, onTagClick }) {
   );
 }
 
-export default function CommunityTable() {
-  const [activeTags, setActiveTags] = useState(new Set());
+/** Map every tag to the colorClass of its group for use on card tag badges. */
+const TAG_COLOR_CLASS = Object.fromEntries(
+  TAG_GROUPS.flatMap(({ tags, colorClass }) => tags.map((tag) => [tag, colorClass])),
+);
+
+export default function CommunityTable() {  const [activeTags, setActiveTags] = useState(new Set());
   const [sortOrder, setSortOrder] = useState('newest');
 
   const toggle = (tag) => {
