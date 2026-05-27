@@ -246,6 +246,13 @@
   filter: brightness(0.88);
 }
 
+/* Type group: lime border but dark text for readability on light bg */
+.pillType.entryTag {
+  color: var(--om-dark);
+}
+.pillType.entryTag:hover {
+  color: var(--om-dark);
+}
 /* Type group: dark text on lime for WCAG contrast */
 .pillType.entryTagActive,
 .pillType.entryTagActive:hover {
