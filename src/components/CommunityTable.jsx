@@ -23,12 +23,13 @@ const TAG_GROUPS = [
 ];
 
 function ProjectCard({ entry, activeTags, onTagClick }) {
+  const [imageError, setImageError] = useState(false);
   const image = entry.image || OG_CACHE[entry.url] || null;
   return (
     <div className={styles.card} data-testid="community-card">
-      {image ? (
+      {image && !imageError ? (
         <a href={entry.url} target="_blank" rel="noopener noreferrer" className={styles.cardImageLink}>
-          <img src={image} alt={entry.title} className={styles.cardImage} loading="lazy" onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }} />
+          <img src={image} alt={entry.title} className={styles.cardImage} loading="lazy" onError={() => setImageError(true)} />
         </a>
       ) : (
         <a href={entry.url} target="_blank" rel="noopener noreferrer" className={`${styles.cardImageLink} ${styles.cardImagePlaceholder}`} aria-hidden="true" />
