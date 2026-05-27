@@ -6,6 +6,8 @@ This repository uses [Docusaurus](https://docusaurus.io/) to publish the documen
 
 - `blog/`: Entries for the Overture engineering blog available at docs.overturemaps.org/blog
 - `community/`: The community page that showcases Overture data being used in the wild.
+  - `community-projects.json` - source data for all community project cards
+  - `og-image-cache.json` - cached `og:image` URLs for entries without an explicit `image` field (see [OG Image Cache](#og-image-cache) below)
 - `docs/`: The main documentation pages available at docs.overturemaps.org/. The sidebar for these pages is manually curated in the `sidebars.js` file.
 - `release-blog/`: Release notes for every Overture data release. The latest release is always available at <https://docs.overturemaps.org/release/latest/>
 - Notice there is no `schema reference` folder. See below.
@@ -41,10 +43,30 @@ Now navigate to <http://localhost:3000> to see the live preview.
 - `npm run build` - Build the production site (also shows locale/translation warnings and broken link checks)
 - `npm run serve` - Serve the built site locally
 - `npm run deploy` - Deploy the site
-- `npm run clear` - Clear the Docusaurus cache
+- `npm run fetch-og` - Fetch and cache `og:image` metadata for community project entries (see [OG Image Cache](#og-image-cache) below)
 - `npm run swizzle` - Customize Docusaurus components by "ejecting" them for modification
 - `npm run write-translations` - Generate translation files for internationalization
 - `npm run write-heading-ids` - Auto-generate heading IDs for better linking
+
+## OG Image Cache
+
+The community page displays project cards with images. Each entry in `community/community-projects.json` can include an optional `"image"` field. For entries without one, the site falls back to a cached `og:image` fetched from the project's URL.
+
+The cache lives in `community/og-image-cache.json` and is committed to the repo so CI builds never make external HTTP requests.
+
+**When to run it:** after adding or updating entries in `community-projects.json`.
+
+```shell
+npm run fetch-og
+```
+
+The script (`scripts/fetch-og-images.mjs`):
+1. Skips entries that already have an explicit `"image"` field
+2. Re-validates any previously cached non-empty URLs via a HEAD request (`Content-Type: image/*`) and clears invalid ones
+3. Fetches the HTML for uncached entries, extracts `og:image`, and validates the URL before writing it to the cache
+4. Is idempotent - safe to re-run at any time
+
+Cards with no image (neither explicit nor cached) display a branded gradient placeholder.
 
 ## LLM-Friendly Content
 
