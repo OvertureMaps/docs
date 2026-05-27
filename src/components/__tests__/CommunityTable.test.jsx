@@ -169,7 +169,16 @@ describe('CommunityTable', () => {
       render(<CommunityTable />);
       fireEvent.click(screen.getByRole('button', { name: 'Oldest first' }));
       expect(screen.getByRole('button', { name: 'Oldest first' })).toHaveAttribute('aria-pressed', 'true');
-      expect(screen.getAllByTestId('community-card')).toHaveLength(ENTRIES.length);
+
+      // Oldest entry should appear first
+      const sorted = [...ENTRIES].sort((a, b) => {
+        const months = {january:0,february:1,march:2,april:3,may:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11};
+        const parse = (s) => { const [m,y]=(s??'').trim().toLowerCase().split(/\s+/); return Date.UTC(+y, months[m]??0, 1); };
+        return parse(a.release) - parse(b.release);
+      });
+      const cards = screen.getAllByTestId('community-card');
+      const firstCardLink = cards[0].querySelector('a[href]');
+      expect(firstCardLink).toHaveAttribute('href', sorted[0].url);
     });
 
     it('sort and filter work together', () => {

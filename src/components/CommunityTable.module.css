@@ -58,7 +58,10 @@
 /* Per-group color tokens — Theme: navy, Tool: teal, Type: lime */
 .pillTheme  { --pill-color: var(--om-primary-navy);        --pill-bg-hover: rgba(44,46,127,0.08); }
 .pillTool   { --pill-color: var(--om-secondary-teal-dark); --pill-bg-hover: rgba(5,165,175,0.1);  }
-.pillType   { --pill-color: var(--om-accent-lime);         --pill-bg-hover: rgba(150,201,61,0.12); }
+/* Type uses lime — active state needs dark text for WCAG contrast */
+.pillType   { --pill-color: var(--om-accent-lime); --pill-bg-hover: rgba(150,201,61,0.12); }
+.pillType.pillActive       { color: var(--om-dark); }
+.pillType.pillActive:hover { color: var(--om-dark); }
 
 .filterStatus {
   display: flex;

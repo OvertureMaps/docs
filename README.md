@@ -52,7 +52,7 @@ Now navigate to <http://localhost:3000> to see the live preview.
 
 The community page displays project cards with images. Each entry in `community/community-projects.json` can include an optional `"image"` field. For entries without one, the site falls back to a cached `og:image` fetched from the project's URL.
 
-The cache lives in `community/og-image-cache.json` and is committed to the repo so CI builds never make external HTTP requests.
+The cache lives in `community/og-image-cache.json` and is committed to the repository so CI builds never make external HTTP requests.
 
 **When to run it:** after adding or updating entries in `community-projects.json`.
 

@@ -3,6 +3,20 @@ import ENTRIES from '@site/community/community-projects.json';
 import OG_CACHE from '@site/community/og-image-cache.json';
 import styles from './CommunityTable.module.css';
 
+const MONTHS = {
+  january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+  july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+};
+
+/** Parse "Month YYYY" strings to a UTC timestamp. Returns 0 for unrecognised formats. */
+function parseRelease(str) {
+  const [month, year] = (str ?? '').trim().toLowerCase().split(/\s+/);
+  const m = MONTHS[month];
+  const y = parseInt(year, 10);
+  if (m === undefined || isNaN(y)) return 0;
+  return Date.UTC(y, m, 1);
+}
+
 // Ordered groups for the filter UI
 const TAG_GROUPS = [
   {
@@ -32,7 +46,7 @@ function ProjectCard({ entry, activeTags, onTagClick }) {
           <img src={image} alt={entry.title} className={styles.cardImage} loading="lazy" onError={() => setImageError(true)} />
         </a>
       ) : (
-        <a href={entry.url} target="_blank" rel="noopener noreferrer" className={`${styles.cardImageLink} ${styles.cardImagePlaceholder}`} aria-hidden="true" />
+        <div className={`${styles.cardImageLink} ${styles.cardImagePlaceholder}`} />
       )}
       <div className={styles.cardBody}>
         <a
@@ -96,8 +110,8 @@ export default function CommunityTable() {
       : ENTRIES.filter((e) => [...activeTags].every((t) => e.tags.includes(t)));
 
     return [...results].sort((a, b) => {
-      const da = new Date(a.release);
-      const db = new Date(b.release);
+      const da = parseRelease(a.release);
+      const db = parseRelease(b.release);
       return sortOrder === 'newest' ? db - da : da - db;
     });
   }, [activeTags, sortOrder]);
