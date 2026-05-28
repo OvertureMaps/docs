@@ -68,6 +68,21 @@
   --ifm-code-font-size: 90%;
   --ifm-font-family-base: Montserrat, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* ── Overture Maps brand palette ── */
+  /* Primary */
+  --om-primary-navy:  #2C2E7F;
+  --om-primary-teal:  #0EC1BD;
+  --om-primary-blue:  #4051CC;
+  /* Secondary */
+  --om-secondary-teal-dark:  #05A5AF;
+  --om-secondary-cyan:       #4EDAD8;
+  --om-secondary-green-teal: #00A790;
+  /* Accent */
+  --om-accent-lime: #96C93D;
+  /* Neutral */
+  --om-light: #FFFFFF;
+  --om-dark:  #001A39;
 }
 
 [data-theme='light'] {
