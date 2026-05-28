@@ -98,6 +98,17 @@ const config = {
     ? []
     : [
         [
+          '@docusaurus/plugin-client-redirects',
+          {
+            redirects: [
+              {
+                from: '/releases',
+                to: '/release-calendar/',
+              },
+            ],
+          },
+        ],
+        [
           '@docusaurus/plugin-content-pages',
           {
             id: 'community',
