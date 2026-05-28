@@ -1,6 +1,6 @@
 dana:
   name: Dana Bauer
-  title: Technical Product Manager, Overture Maps
+  title: Technical Product Manager, Overture 
   email: dana@overturemaps.org
 
 jonah:
@@ -8,3 +8,16 @@ jonah:
   title: Cartography Lead, Meta
   email: jonahadkins@meta.com
 
+amy:
+  name: Amy Rose
+  title: CTO, Overture
+  email: amy@overturemaps.org
+
+eric:
+  name: Eric Godwin
+  title: Principal Engineer
+  email: eric@overturemaps.org
+
+staff:
+  name: Overture Staff
+  email: info@overturemaps.org

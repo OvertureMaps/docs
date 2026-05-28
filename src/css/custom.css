@@ -7,19 +7,11 @@
 /* You can override the default Infima variables here. */
 
 /* Force dark code blocks in light mode (Night Owl) */
-[data-theme='light'] .prism-code {
-  background-color: #1e1e2e !important;
-  color: #cdd6f4 !important;
-}
-
-[data-theme='light'] pre {
-  background-color: #1e1e2e !important;
-  color: #cdd6f4 !important;
-}
-
+[data-theme='light'] .prism-code,
+[data-theme='light'] pre,
 [data-theme='light'] code {
-  background-color: #1e1e2e;
-  color: #cdd6f4;
+  background-color: #1e1e2e !important;
+  color: #cdd6f4 !important;
 }
 
 /* Syntax token overrides for dark code blocks in light mode */
@@ -86,18 +78,9 @@
 }
 
 [data-theme='light'] {
-  --ifm-color-primary: #2c2e7f;
-  --ifm-color-primary-dark: #3a48b8;
-  --ifm-color-primary-darker: #3340a3;
-  --ifm-color-primary-darkest: #2d388f;
-  --ifm-color-primary-light: #5362d1;
-  --ifm-color-primary-lighter: #6673d6;
-  --ifm-color-primary-lightest: #7985db;
   --ifm-link-color: #4051cc;
   --ifm-link-hover-color: #4051cc;
-  --ifm-code-font-size: 90%;
   --ifm-font-family-base: Noto Sans, Montserrat, Segoe UI, Roboto, Ubuntu, Cantarell, sans-serif;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme='dark'] {
@@ -116,7 +99,7 @@
 }
 
 [data-theme='light'] .DocSearch {
-  --docsearch-primary-color: #3a48b8;
+  --docsearch-primary-color: var(--ifm-color-primary-dark);
   --docsearch-text-color: #1a1a2e;
   --docsearch-muted-color: #495057;
   --docsearch-container-background: rgba(0, 0, 0, 0.6);
@@ -178,14 +161,14 @@
   padding: 0.35rem 1rem;
   border-radius: 8px;
   border: none;
-  background: #2c2e7f;
+  background: var(--om-primary-navy);
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(44, 46, 127, 0.25);
   transition: all 0.2s ease;
 }
 
 .navbar .DocSearch-Button:hover {
-  background: #3a48b8;
+  background: var(--ifm-color-primary-dark);
   box-shadow: 0 4px 12px rgba(44, 46, 127, 0.35);
   transform: translateY(-1px);
 }
@@ -209,13 +192,13 @@
 }
 
 [data-theme='dark'] .navbar .DocSearch-Button {
-  background: #0ec1bd;
+  background: var(--om-primary-teal);
   color: #1b1b2f;
   box-shadow: 0 2px 8px rgba(14, 193, 189, 0.3);
 }
 
 [data-theme='dark'] .navbar .DocSearch-Button:hover {
-  background: #4edad8;
+  background: var(--om-secondary-cyan);
   color: #1b1b2f;
   box-shadow: 0 4px 12px rgba(14, 193, 189, 0.4);
 }
@@ -223,7 +206,7 @@
 /* Teal left accent on h2 headings in docs */
 .theme-doc-markdown h2 {
   padding-left: 0.75rem;
-  border-left: 3px solid #4edad8;
+  border-left: 3px solid var(--om-secondary-cyan);
 }
 
 /* Landing page: remove empty title header and excess padding */
@@ -801,7 +784,7 @@
   letter-spacing: 0.05em;
   color: var(--ifm-color-emphasis-600);
   text-align: left;
-  border-bottom: 2px solid #4edad8;
+  border-bottom: 2px solid var(--om-secondary-cyan);
 }
 
 .theme-doc-markdown > table td,
@@ -839,14 +822,10 @@
 }
 
 .quickstart-tabs .tabs__item--active {
-  border-bottom-color: #4edad8;
+  border-bottom-color: var(--om-secondary-cyan);
   color: var(--ifm-font-color-base);
   font-weight: 600;
   background: transparent;
-}
-
-[data-theme='dark'] .quickstart-tabs .tabs__item--active {
-  border-bottom-color: #4edad8;
 }
 
 /* Blog post author bylines */
@@ -890,4 +869,252 @@
   font-size: 0.8rem;
   color: var(--ifm-color-emphasis-500);
   margin-top: 0.2rem;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Blog styles — match the Overture brand system used in docs
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Blog post layout ── */
+
+/* Give the blog the same H2 teal accent as docs */
+.theme-blog-post-page .markdown h2,
+.blog-post-page .markdown h2 {
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--om-secondary-cyan);
+  margin-top: 2.5rem;
+}
+
+/* Tighten H1 / metadata spacing on post pages */
+.theme-blog-post-page .markdown > header h1,
+.blog-post-page article header h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+
+/* Post date / read time row */
+.theme-blog-post-page time,
+.blog-post-page time {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.875rem;
+}
+
+/* ── Post header divider ── */
+.theme-blog-post-page article > header,
+.blog-post-page article > header {
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--om-secondary-cyan);
+}
+
+/* ── Author bylines: card-style ── */
+/* The avatar-list rules already exist in custom.css; these extend them
+   for the blog post header specifically */
+.theme-blog-post-page .avatar-list,
+.blog-post-page .avatar-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 0rem;
+}
+
+.theme-blog-post-page .avatar-list .avatar,
+.blog-post-page .avatar-list .avatar {
+  padding: 0.75rem 1rem;
+  background: var(--ifm-color-emphasis-50);
+  border-left: 2px solid var(--om-secondary-cyan);
+  border-radius: 4px;
+}
+
+[data-theme='dark'] .theme-blog-post-page .avatar-list .avatar,
+[data-theme='dark'] .blog-post-page .avatar-list .avatar {
+  background: var(--ifm-color-emphasis-100);
+}
+
+/* ── Blog sidebar (the post list on the left) ── */
+.theme-blog-sidebar-item-title,
+.theme-blog-sidebar .sidebar-title,
+nav[aria-label="Blog recent posts navigation"] > div:first-child,
+nav.theme-blog-sidebar > div:first-child {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--ifm-color-emphasis-800);
+  padding-bottom: 0.5rem;
+}
+
+/* Year headings in sidebar ("2026", "2025") with short teal underline */
+nav.theme-blog-sidebar h3,
+nav[aria-label*="blog"] h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+  margin: 1.5rem 0 0.5rem;
+  padding-bottom: 0.4rem;
+  position: relative;
+}
+
+nav.theme-blog-sidebar h3::after,
+nav[aria-label*="blog"] h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--om-secondary-cyan);
+}
+
+nav.theme-blog-sidebar h3:first-of-type,
+nav[aria-label*="blog"] h3:first-of-type {
+  margin-top: 0;
+}
+
+/* Sidebar links */
+nav.theme-blog-sidebar a,
+nav[aria-label*="blog"] a {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-700);
+  text-decoration: none;
+  padding: 0.4rem 0.5rem;
+  display: block;
+  border-radius: 4px;
+  border-left: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+
+nav.theme-blog-sidebar a:hover,
+nav[aria-label*="blog"] a:hover {
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-primary);
+  border-left-color: var(--om-secondary-cyan);
+}
+
+nav.theme-blog-sidebar a.menu__link--active,
+nav.theme-blog-sidebar a[aria-current="page"],
+nav[aria-label*="blog"] a[aria-current="page"] {
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-primary);
+  border-left-color: var(--om-secondary-cyan);
+  font-weight: 600;
+}
+
+/* ── Right-side TOC (table of contents) ── */
+.theme-blog-post-page .table-of-contents,
+.blog-post-page .table-of-contents {
+  font-size: 0.85rem;
+}
+
+.theme-blog-post-page .table-of-contents__link--active,
+.blog-post-page .table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+.theme-blog-post-page .table-of-contents .table-of-contents__link:hover,
+.blog-post-page .table-of-contents .table-of-contents__link:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* ── Blog list page (the /blog index) ── */
+.blog-list-page article {
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.blog-list-page article:last-child {
+  border-bottom: none;
+}
+
+.blog-list-page article h2 {
+  margin-bottom: 0.5rem;
+}
+
+.blog-list-page article h2 a {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.blog-list-page article h2 a:hover {
+  color: var(--ifm-color-primary-dark);
+  text-decoration: underline;
+  text-decoration-color: var(--om-secondary-cyan);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* "Read more" link */
+.blog-list-page .button--secondary,
+.theme-blog-post-page .button--secondary {
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  color: var(--ifm-color-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.4rem 0.9rem;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.blog-list-page .button--secondary:hover,
+.theme-blog-post-page .button--secondary:hover {
+  background: var(--ifm-color-primary);
+  color: white;
+  border-color: var(--ifm-color-primary);
+}
+
+/* ── Tags ── */
+.theme-blog-post-page .badge,
+.blog-list-page .badge,
+.blog-post-page .badge {
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-800);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.theme-blog-post-page .badge:hover,
+.blog-list-page .badge:hover {
+  background: var(--om-secondary-cyan);
+  color: var(--om-dark);
+  border-color: var(--om-secondary-cyan);
+}
+
+/* ── Pagination ── */
+.pagination-nav__link {
+  border-radius: 6px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  transition: all 0.15s ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--om-secondary-cyan);
+  background: var(--ifm-color-emphasis-50);
+}
+
+.pagination-nav__label {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* ── Pull quote treatment for blockquotes inside posts ── */
+.theme-blog-post-page blockquote,
+.blog-post-page blockquote {
+  border-left: 3px solid var(--om-secondary-cyan);
+  background: var(--ifm-color-emphasis-50);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 0 4px 4px 0;
+  font-style: normal;
+  color: var(--ifm-color-emphasis-800);
+}
+
+[data-theme='dark'] .theme-blog-post-page blockquote,
+[data-theme='dark'] .blog-post-page blockquote {
+  background: var(--ifm-color-emphasis-100);
 }
