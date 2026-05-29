@@ -41,7 +41,7 @@ const latestOvertureRelease = getLatestOvertureRelease();
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Overture Maps Documentation',
+  title: 'Overture Documentation',
   tagline: '',
   favicon: 'img/favicon.png',
 
@@ -165,9 +165,9 @@ const config = {
         blog: isSchemaPreview
           ? false
           : {
-              blogTitle: 'Overture Maps Engineering Blog',
+              blogTitle: 'Overture Engineering Blog',
               blogDescription: 'Building Overture Maps',
-              blogSidebarTitle: 'Posts from the Overture Maps engineering team',
+              blogSidebarTitle: 'Posts from the Overture engineering team',
               blogSidebarCount: 20,
             },
         theme: {
