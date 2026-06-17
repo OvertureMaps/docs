@@ -38,10 +38,11 @@ _USE_COLOR = (sys.stdout.isatty() or bool(os.environ.get("CI"))) and not os.envi
 def cyan(s: str) -> str:
     return f"\033[36m{s}\033[0m" if _USE_COLOR else s
 
-# Lines handled by the shared connection setup — strip before classification
+# Lines handled by the shared connection setup — strip before classification.
+# Tolerates a trailing line comment (e.g. "LOAD spatial; --noqa").
 _PREAMBLE = re.compile(
-    r"^\s*(LOAD|INSTALL)\s+\S+\s*;?\s*$"
-    r"|^\s*SET\s+s3_region\s*=\s*[^;]+;\s*$",
+    r"^\s*(LOAD|INSTALL)\s+\S+\s*;?\s*(--[^\n]*)?$"
+    r"|^\s*SET\s+s3_region\s*=\s*[^;]+;\s*(--[^\n]*)?$",
     re.IGNORECASE | re.MULTILINE,
 )
 
