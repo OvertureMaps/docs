@@ -89,10 +89,6 @@ def prepare(raw: str, release: str) -> tuple[str, bool]:
     return sql, True
 
 
-def run_single(con: duckdb.DuckDBPyConnection, sql: str) -> None:
-    con.execute(f"SELECT * FROM (\n{sql}\n) _q LIMIT 1")
-
-
 def run_multi(con: duckdb.DuckDBPyConnection, sql: str) -> None:
     # chdir into tmpdir so COPY...TO writes go to scratch space
     prev = os.getcwd()
@@ -132,16 +128,18 @@ def main() -> None:
             print(f"  skip   {path.name}")
             continue
 
+        # Print exactly what runs: single statements execute wrapped in a LIMIT 1
+        exec_sql = sql if is_multi else f"SELECT * FROM (\n{sql}\n) _q LIMIT 1"
         label = "script" if is_multi else "query "
         print(f"\n  {label} {path.name}")
-        for line in sql.splitlines():
+        for line in exec_sql.splitlines():
             print(f"    {cyan(line)}")
         t0 = time.perf_counter()
         try:
             if is_multi:
                 run_multi(con, sql)
             else:
-                run_single(con, sql)
+                con.execute(exec_sql)
             print(f"  -> ok ({time.perf_counter() - t0:.2f}s)")
         except Exception as exc:
             print(f"  -> FAIL ({time.perf_counter() - t0:.2f}s): {exc}")
