@@ -46,9 +46,10 @@ _PREAMBLE = re.compile(
     re.IGNORECASE | re.MULTILINE,
 )
 
-# COPY(<select>) TO '<file>' [WITH (...)] — unwrap to just the inner SELECT
+# COPY(<select>) TO '<file>' [WITH (...)] — unwrap to just the inner SELECT.
+# Tolerates leading comment lines (left behind after the SET preamble is stripped).
 _COPY_WRAP = re.compile(
-    r"\ACOPY\s*\((.+)\)\s+TO\s+'[^']+?'[^;]*\Z",
+    r"\A(?:\s*--[^\n]*\n)*\s*COPY\s*\((.+)\)\s+TO\s+'[^']+?'[^;]*\Z",
     re.DOTALL | re.IGNORECASE,
 )
 
@@ -104,21 +105,34 @@ def run_multi(con: duckdb.DuckDBPyConnection, sql: str) -> None:
 
 def main() -> None:
     sys.stdout.reconfigure(line_buffering=True)  # flush each line so CI shows live progress
+    dry_run = "--dry-run" in sys.argv or "-n" in sys.argv
 
     release = fetch_release()
     print(f"Release: {release}\n")
 
-    con = duckdb.connect()
-    for stmt in [
-        "INSTALL httpfs", "LOAD httpfs",
-        "INSTALL spatial", "LOAD spatial",
-        "SET s3_region='us-west-2'",
-    ]:
-        print(f"  setup  {stmt} ... ", end="", flush=True)
-        t0 = time.perf_counter()
-        con.execute(stmt)
-        print(f"ok ({time.perf_counter() - t0:.2f}s)")
-    print()
+    con = None
+    if not dry_run:
+        con = duckdb.connect()
+        for stmt in [
+            "INSTALL httpfs", "LOAD httpfs",
+            "INSTALL spatial", "LOAD spatial",
+            "SET s3_region='us-west-2'",
+        ]:
+            print(f"  setup  {stmt} ... ", end="", flush=True)
+            t0 = time.perf_counter()
+            # INSTALL hits extensions.duckdb.org and can time out transiently; retry it.
+            retries = 3 if stmt.upper().startswith("INSTALL") else 1
+            for attempt in range(1, retries + 1):
+                try:
+                    con.execute(stmt)
+                    break
+                except Exception as exc:
+                    if attempt == retries:
+                        raise
+                    print(f"retry {attempt} ({exc.__class__.__name__}) ", end="", flush=True)
+                    time.sleep(2 * attempt)
+            print(f"ok ({time.perf_counter() - t0:.2f}s)")
+        print()
 
     queries = sorted(QUERIES_DIR.glob("*.sql"))
     failures: list[tuple[str, str]] = []
@@ -138,6 +152,8 @@ def main() -> None:
         print(f"\n  {label} {path.name}")
         for line in exec_sql.splitlines():
             print(f"    {cyan(line)}")
+        if dry_run:
+            continue
         t0 = time.perf_counter()
         try:
             if is_multi:
@@ -150,6 +166,9 @@ def main() -> None:
             failures.append((path.name, str(exc)))
 
     print()
+    if dry_run:
+        print(f"Dry run: printed {len(queries)} queries (nothing executed).")
+        return
     if failures:
         print(f"{len(failures)} failure(s):")
         for name, err in failures:
