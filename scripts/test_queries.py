@@ -2,8 +2,8 @@
 """
 Execute every DuckDB query in src/queries/duckdb/ against live Overture S3 data.
 
-Single-statement queries (SELECT / COPY wrappers) run as SELECT * FROM (...) LIMIT 1
-to validate paths and schema with minimal data transfer.
+Single-statement queries (SELECT / COPY wrappers) run as SELECT * FROM (...) LIMIT 0
+to validate S3 paths and schema (parse + bind) with no row data transfer.
 
 Multi-statement scripts (SET VARIABLE, CREATE TABLE chains) run in full inside a
 temporary directory so any COPY ... TO 'file' output is cleaned up automatically.
@@ -129,8 +129,11 @@ def main() -> None:
             print(f"  skip   {path.name}")
             continue
 
-        # Print exactly what runs: single statements execute wrapped in a LIMIT 1
-        exec_sql = sql if is_multi else f"SELECT * FROM (\n{sql}\n) _q LIMIT 1"
+        # Print exactly what runs: single statements execute wrapped in LIMIT 0,
+        # which still resolves the S3 glob and binds the schema (catching bad
+        # releases and column drift) but skips reading row data — ~27x faster
+        # than LIMIT 1, which scans row groups to find a matching row.
+        exec_sql = sql if is_multi else f"SELECT * FROM (\n{sql}\n) _q LIMIT 0"
         label = "script" if is_multi else "query "
         print(f"\n  {label} {path.name}")
         for line in exec_sql.splitlines():
