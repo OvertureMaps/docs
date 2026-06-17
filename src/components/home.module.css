@@ -32,7 +32,7 @@
 
 .featuredIcon {
   display: inline-block;
-  /* ponytail: #c2410c is orange-700, 5.1:1 on white — passes WCAG AA (4.5:1) */
+  /* #c2410c is orange-700, 5.1:1 on white — passes WCAG AA (4.5:1) */
   color: #c2410c;
   margin-right: 0.4em;
   font-style: normal;

@@ -86,7 +86,7 @@ def run_single(con: duckdb.DuckDBPyConnection, sql: str) -> None:
 
 
 def run_multi(con: duckdb.DuckDBPyConnection, sql: str) -> None:
-    # ponytail: chdir into tmpdir so COPY...TO writes go to scratch space
+    # chdir into tmpdir so COPY...TO writes go to scratch space
     prev = os.getcwd()
     with tempfile.TemporaryDirectory() as tmpdir:
         os.chdir(tmpdir)

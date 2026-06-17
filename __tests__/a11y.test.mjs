@@ -36,11 +36,11 @@ before(async () => {
     throw new Error(`build/index.html not found — run 'npm run build' before running accessibility tests`);
   });
 
-  // ponytail: minimal static file server, falls back to index.html for Docusaurus client-side routing
+  // minimal static file server, falls back to index.html for Docusaurus client-side routing
   server = createServer(async (req, res) => {
     const urlPath = req.url.split('?')[0];
     const filePath = resolve(join(BUILD_DIR, urlPath === '/' ? 'index.html' : urlPath));
-    // ponytail: relative() is cross-platform; startsWith(BUILD_DIR + '/') broke on Windows backslashes
+    // relative() is cross-platform; startsWith(BUILD_DIR + '/') broke on Windows backslashes
     const rel = relative(BUILD_DIR, filePath);
     if (rel.startsWith('..') || isAbsolute(rel)) {
       res.writeHead(403);

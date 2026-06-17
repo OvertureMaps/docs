@@ -3,7 +3,7 @@
 
 const { themes } = require('prism-react-renderer');
 
-// ponytail: both modes use the dark palette — code blocks are forced dark bg in
+// both modes use the dark palette — code blocks are forced dark bg in
 // light mode too (see custom.css), so light-theme token colors fail contrast.
 const codeTheme = themes.nightOwl;
 
