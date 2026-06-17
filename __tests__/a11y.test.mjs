@@ -8,7 +8,7 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFile, access } from 'node:fs/promises';
-import { extname, join } from 'node:path';
+import { extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
@@ -39,7 +39,12 @@ before(async () => {
   // ponytail: minimal static file server, falls back to index.html for Docusaurus client-side routing
   server = createServer(async (req, res) => {
     const urlPath = req.url.split('?')[0];
-    const filePath = join(BUILD_DIR, urlPath === '/' ? 'index.html' : urlPath);
+    const filePath = resolve(join(BUILD_DIR, urlPath === '/' ? 'index.html' : urlPath));
+    if (!filePath.startsWith(BUILD_DIR + '/') && filePath !== BUILD_DIR) {
+      res.writeHead(403);
+      res.end('Forbidden');
+      return;
+    }
     try {
       const data = await readFile(filePath);
       res.writeHead(200, { 'Content-Type': MIME[extname(filePath)] ?? 'application/octet-stream' });
