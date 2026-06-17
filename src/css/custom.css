@@ -19,6 +19,12 @@
 [data-theme='light'] .token.prolog,
 [data-theme='light'] .token.doctype { color: #6c7086; font-style: italic; }
 
+/* nightOwl's #637777 comment is only 3.46:1 on the forced-dark bg; prism sets
+   it inline, so !important is required. Lighter gray passes AA in both themes. */
+.token.comment,
+.token.prolog,
+.token.doctype { color: #8b9d9d !important; }
+
 [data-theme='light'] .token.keyword,
 [data-theme='light'] .token.operator { color: #cba6f7; }
 
@@ -211,9 +217,16 @@
 
 /* Underline inline links so they pass link-in-text-block (WCAG 1.4.1) */
 .markdown p a,
-article p a {
+.markdown li a,
+article p a,
+article li a {
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+/* Blog author email byline — default #8d949e is only 3.06:1 on white */
+[class*='authorEmail'] {
+  color: var(--ifm-color-emphasis-700) !important;
 }
 
 /* Landing page: remove empty title header and excess padding */

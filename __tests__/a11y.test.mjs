@@ -8,7 +8,7 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFile, access } from 'node:fs/promises';
-import { extname, join, resolve } from 'node:path';
+import { extname, join, resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
@@ -40,7 +40,9 @@ before(async () => {
   server = createServer(async (req, res) => {
     const urlPath = req.url.split('?')[0];
     const filePath = resolve(join(BUILD_DIR, urlPath === '/' ? 'index.html' : urlPath));
-    if (!filePath.startsWith(BUILD_DIR + '/') && filePath !== BUILD_DIR) {
+    // ponytail: relative() is cross-platform; startsWith(BUILD_DIR + '/') broke on Windows backslashes
+    const rel = relative(BUILD_DIR, filePath);
+    if (rel.startsWith('..') || isAbsolute(rel)) {
       res.writeHead(403);
       res.end('Forbidden');
       return;
@@ -74,7 +76,10 @@ function formatViolations(violations, label) {
   const detail = violations
     .map((v) =>
       `[${v.impact}] ${v.id}: ${v.description}\n` +
-      v.nodes.map((n) => `  • ${n.target}`).join('\n')
+      v.nodes.map((n) =>
+        `  • ${n.target}` +
+        (n.failureSummary ? `\n    ${n.failureSummary.replace(/\n/g, '\n    ')}` : '')
+      ).join('\n')
     )
     .join('\n\n');
   assert.fail(`${violations.length} WCAG 2.2 AA violation(s) — ${label}:\n\n${detail}`);
