@@ -98,6 +98,8 @@ def run_multi(con: duckdb.DuckDBPyConnection, sql: str) -> None:
 
 
 def main() -> None:
+    sys.stdout.reconfigure(line_buffering=True)  # flush each line so CI shows live progress
+
     release = fetch_release()
     print(f"Release: {release}\n")
 
@@ -107,7 +109,11 @@ def main() -> None:
         "INSTALL spatial", "LOAD spatial",
         "SET s3_region='us-west-2'",
     ]:
+        print(f"  setup  {stmt} ... ", end="", flush=True)
+        t0 = time.perf_counter()
         con.execute(stmt)
+        print(f"ok ({time.perf_counter() - t0:.2f}s)")
+    print()
 
     queries = sorted(QUERIES_DIR.glob("*.sql"))
     failures: list[tuple[str, str]] = []
@@ -128,9 +134,9 @@ def main() -> None:
                 run_multi(con, sql)
             else:
                 run_single(con, sql)
-            print(f"  → ok ({time.perf_counter() - t0:.2f}s)")
+            print(f"  -> ok ({time.perf_counter() - t0:.2f}s)")
         except Exception as exc:
-            print(f"  → FAIL ({time.perf_counter() - t0:.2f}s): {exc}")
+            print(f"  -> FAIL ({time.perf_counter() - t0:.2f}s): {exc}")
             failures.append((path.name, str(exc)))
 
     print()
