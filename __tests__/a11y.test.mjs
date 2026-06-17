@@ -98,6 +98,11 @@ async function runAxe(url) {
 const PAGES = [
   { path: '/', label: 'homepage' },
   { path: '/docs/', label: 'docs index' },
+  { path: '/getting-data/', label: 'quickstart (QueryBuilder)' },
+  { path: '/guides/', label: 'guides index' },
+  { path: '/examples/', label: 'examples index' },
+  { path: '/blog/', label: 'blog index' },
+  { path: '/community/', label: 'community (custom table)' },
 ];
 
 for (const { path, label } of PAGES) {
