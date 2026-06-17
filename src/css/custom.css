@@ -209,6 +209,13 @@
   border-left: 3px solid var(--om-secondary-cyan);
 }
 
+/* Underline inline links so they pass link-in-text-block (WCAG 1.4.1) */
+.markdown p a,
+article p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* Landing page: remove empty title header and excess padding */
 .docs-doc-id-index .theme-doc-markdown > header {
   display: none;

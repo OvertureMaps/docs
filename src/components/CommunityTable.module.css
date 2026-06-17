@@ -18,7 +18,7 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ifm-color-emphasis-600);
+  color: var(--ifm-color-emphasis-700); /* ponytail: was 600 (~4.3:1), 700 (~9.7:1) passes AA */
   margin-right: 0.25rem;
   min-width: 5rem;
 }
@@ -57,7 +57,8 @@
 
 /* Per-group color tokens — Theme: navy, Tool: teal, Type: lime */
 .pillTheme  { --pill-color: var(--om-primary-navy);        --pill-bg-hover: rgba(44,46,127,0.08); }
-.pillTool   { --pill-color: var(--om-secondary-teal-dark); --pill-bg-hover: rgba(5,165,175,0.1);  }
+/* ponytail: #05A5AF was 2.5:1 on light bg; #056B73 gives 5.7:1 on #f1f3f5 and 6.3:1 white-on-teal */
+.pillTool   { --pill-color: #056B73;                       --pill-bg-hover: rgba(5,107,115,0.1);  }
 /* Type uses primary bright blue — distinct from navy and teal */
 .pillType   { --pill-color: var(--om-primary-blue); --pill-bg-hover: rgba(64,81,204,0.08); }
 
@@ -187,7 +188,7 @@
   flex-direction: column;
   gap: 0.15rem;
   font-size: 0.8rem;
-  color: var(--ifm-color-emphasis-600);
+  color: var(--ifm-color-emphasis-700); /* ponytail: was 600, fails AA; 700 passes */
   margin-top: auto;
 }
 
@@ -203,7 +204,7 @@
 
 .cardRelease {
   font-size: 0.75rem;
-  color: var(--ifm-color-emphasis-500);
+  color: var(--ifm-color-emphasis-700); /* ponytail: was 500, very low contrast; 700 passes AA */
 }
 
 .cardTags {
