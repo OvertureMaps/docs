@@ -38,7 +38,7 @@ before(async () => {
 
   // minimal static file server, falls back to index.html for Docusaurus client-side routing
   server = createServer(async (req, res) => {
-    const urlPath = req.url.split('?')[0];
+    const urlPath = (req.url ?? '/').split('?')[0];
     const filePath = resolve(join(BUILD_DIR, urlPath === '/' ? 'index.html' : urlPath));
     // relative() is cross-platform; startsWith(BUILD_DIR + '/') broke on Windows backslashes
     const rel = relative(BUILD_DIR, filePath);
@@ -52,14 +52,18 @@ before(async () => {
       res.writeHead(200, { 'Content-Type': MIME[extname(filePath)] ?? 'application/octet-stream' });
       res.end(data);
     } catch {
-      try {
-        const data = await readFile(join(BUILD_DIR, 'index.html'));
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(data);
-      } catch {
-        res.writeHead(404);
-        res.end('Not found');
+      // SPA fallback only for route-like requests (no extension); a missing
+      // asset (.js/.css/.png) must 404 so broken builds aren't masked.
+      if (extname(filePath) === '') {
+        try {
+          const data = await readFile(join(BUILD_DIR, 'index.html'));
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(data);
+          return;
+        } catch { /* fall through to 404 */ }
       }
+      res.writeHead(404);
+      res.end('Not found');
     }
   });
   await new Promise((resolve) => server.listen(PORT, resolve));
@@ -68,7 +72,7 @@ before(async () => {
 
 after(async () => {
   await browser?.close();
-  await new Promise((resolve) => server.close(resolve));
+  if (server) await new Promise((resolve) => server.close(resolve));
 });
 
 function formatViolations(violations, label) {
