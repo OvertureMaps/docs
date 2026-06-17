@@ -225,6 +225,7 @@ const config = {
             position: 'right',
             target: '_blank',
             className: 'github-link',
+            'aria-label': 'View source on GitHub',
           },
         ],
       },
