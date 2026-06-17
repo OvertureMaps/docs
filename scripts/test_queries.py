@@ -20,6 +20,7 @@ import os
 import re
 import sys
 import tempfile
+import time
 from pathlib import Path
 from urllib.request import urlopen
 
@@ -118,16 +119,18 @@ def main() -> None:
             continue
 
         label = "script" if is_multi else "query "
-        print(f"  {label} {path.name} ... ", end="", flush=True)
+        print(f"\n  {label} {path.name}")
+        for line in sql.splitlines():
+            print(f"    {line}")
+        t0 = time.perf_counter()
         try:
             if is_multi:
                 run_multi(con, sql)
             else:
                 run_single(con, sql)
-            print("ok")
+            print(f"  → ok ({time.perf_counter() - t0:.2f}s)")
         except Exception as exc:
-            print("FAIL")
-            print(f"         {exc}")
+            print(f"  → FAIL ({time.perf_counter() - t0:.2f}s): {exc}")
             failures.append((path.name, str(exc)))
 
     print()
