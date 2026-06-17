@@ -30,6 +30,14 @@ STAC_URL = "https://stac.overturemaps.org/catalog.json"
 FALLBACK_RELEASE = "2026-05-20.0"
 QUERIES_DIR = Path(__file__).parent.parent / "src" / "queries" / "duckdb"
 
+# Colorize SQL in the log to set it apart from status lines (GitHub Actions
+# renders ANSI; honor NO_COLOR and skip when piped to a file).
+_USE_COLOR = (sys.stdout.isatty() or bool(os.environ.get("CI"))) and not os.environ.get("NO_COLOR")
+
+
+def cyan(s: str) -> str:
+    return f"\033[36m{s}\033[0m" if _USE_COLOR else s
+
 # Lines handled by the shared connection setup — strip before classification
 _PREAMBLE = re.compile(
     r"^\s*(LOAD|INSTALL)\s+\S+\s*;?\s*$"
@@ -127,7 +135,7 @@ def main() -> None:
         label = "script" if is_multi else "query "
         print(f"\n  {label} {path.name}")
         for line in sql.splitlines():
-            print(f"    {line}")
+            print(f"    {cyan(line)}")
         t0 = time.perf_counter()
         try:
             if is_multi:
