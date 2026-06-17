@@ -53,6 +53,26 @@ _COPY_WRAP = re.compile(
     re.DOTALL | re.IGNORECASE,
 )
 
+# COPY ( <select> ) TO <rest> — split into prefix / inner / suffix so the inner
+# SELECT can be wrapped in LIMIT 0. Greedy inner backtracks to the last ") TO".
+_COPY_STMT = re.compile(
+    r"\A((?:\s*--[^\n]*\n)*\s*COPY\s*\()(.+)(\)\s+TO\s+.+)\Z",
+    re.DOTALL | re.IGNORECASE,
+)
+
+
+def limit_copy(stmt: str) -> str:
+    """
+    Wrap a COPY's inner SELECT in LIMIT 0 so the file is still written (correct
+    schema, zero rows) without scanning S3. Non-COPY statements pass through, so
+    SET/CREATE steps that resolve variables still run for real.
+    """
+    m = _COPY_STMT.match(stmt)
+    if not m:
+        return stmt
+    prefix, inner, suffix = m.groups()
+    return f"{prefix}SELECT * FROM (\n{inner}\n) _q LIMIT 0{suffix}"
+
 
 def fetch_release() -> str:
     try:
@@ -98,7 +118,7 @@ def run_multi(con: duckdb.DuckDBPyConnection, sql: str) -> None:
         os.chdir(tmpdir)
         try:
             for stmt in split_statements(sql):
-                con.execute(stmt)
+                con.execute(limit_copy(stmt))
         finally:
             os.chdir(prev)
 
