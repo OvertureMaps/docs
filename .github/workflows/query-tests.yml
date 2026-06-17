@@ -2,13 +2,13 @@
 name: Query Tests
 
 on:
-  pull_request:
+  workflow_call: # reusable — called from ci.yml on PRs
   schedule:
     - cron: '0 6 * * 1' # Monday 06:00 UTC — catches data-side breakage between releases
   workflow_dispatch:
 
 concurrency:
-  group: query-tests-${{ github.event.number || github.ref }}
+  group: query-tests-${{ github.run_id }}
   cancel-in-progress: true
 
 permissions:
