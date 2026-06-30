@@ -1,0 +1,51 @@
+---
+title: Speeding Up Overture Tiles
+authors: [bdon]
+tags:
+  - tools
+---
+
+Each [Overture Release](/blog/2026/06/17/release-notes/) includes the core dataset of GeoParquet features, the GERS registry, GERS bridge files, and data changelogs.
+
+In addition, the Overture Maps project distributes tilesets in the [PMTiles format](https://github.com/protomaps/PMTiles). This doesn't contain any additional data beyond the GeoParquet datasets. The tileset is useful for interactive visualization of Overture features, since geographic objects are clipped to tiles and simplified to many levels of detail. It's used by the [Overture Explorer](https://explore.overturemaps.org), as well as internal tools. 
+
+Overture Maps produces data products and not platforms or APIs, so the PMTiles tileset format lets Overture distribute tilesets using only an S3 bucket. You can find the tilesets powering the Explorer in [the overturemaps-extras-us-west-2 bucket](https://docs.overturemaps.org/getting-data/cloud-sources/#pmtiles).
+
+{/* truncate */}
+
+## Data Growth
+
+As Overture has grown, these tilesets have grown in size and take longer to generate. Prior to the April release, the tilesets for the places and divisions themes were created using the [tippecanoe](https://github.com/felt/tippecanoe) tool. 
+
+Tippecanoe is a powerful C++ command line utility for creating tilesets. Tippecanoe's algorithms adaptively create low-zoom tiles by processing all features. This makes it convenient for visualizing data without configuration, but means that the large themes like Places took over one hour to generate.
+
+From the April release onward, tilesets are created with Java code using the [planetiler](https://github.com/onthegomap/planetiler) library. Instead of considering all features at each zoom, features are filtered to zoom levels by type. This requires more explicit feature selection, but means tilesets can be generated in a fraction of the time.
+
+![divisions](/img/blog/overture-tiles-divisions.jpg)
+*Overture Divisions tileset in [Overture Explorer](https://explore.overturemaps.org)*
+
+![places](/img/blog/overture-tiles-places.jpg)
+*Overture Places tileset in [Overture Explorer](https://explore.overturemaps.org)*
+
+### Results
+
+The Places theme tileset creation went from over 2 hours to **~5 minutes.** The Divisions tileset creation went from 48 minutes to **under 20 minutes.**
+
+Because the tilesets require a complete local copy of the GeoParquet data, it's faster to run the tileset generation close to the source buckets on Azure or AWS.
+
+## Adopting Terraform/Tofu
+
+The [overture-tiles](https://github.com/OvertureMaps/overture-tiles) project was previously using the AWS Cloud Development Kit (CDK) to provision resources for creating tilesets. We switched this project instead to Terraform/Tofu, and host it as a standalone module in the [terraform-aws-overture-tiles](https://github.com/OvertureMaps/terraform-aws-overture-tiles) repository.
+
+This makes tileset creation accessible to the wider Terraform/Tofu audience.
+
+## Bring Your Own Data
+
+Since both the AWS provisioning and the tileset generation code is open source, any developer can use the `overture-tiles` project as a starting point for creating tilesets from Overture data. Ideas include:
+
+* Making different choices for which themes appear at certain zoom levels
+* Creating tilesets for only a specific region
+* Integrating private datasets into an Overture tileset with GERS
+
+The Overture Documentation guide on [PMTiles](/examples/overture-tiles) has examples for how to modify and run the tileset generation on AWS.
+
