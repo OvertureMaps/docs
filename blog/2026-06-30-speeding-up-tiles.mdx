@@ -1,7 +1,6 @@
 ---
 title: Speeding Up Overture Tiles
 authors: [bdon]
-hide_table_of_contents: true
 tags:
   - tools
 ---
@@ -34,7 +33,7 @@ The Places theme tileset creation went from over 2 hours to **~5 minutes.** The 
 
 Because the tilesets require a complete local copy of the GeoParquet data, it's faster to run the tileset generation close to the source buckets on Azure or AWS.
 
-## Adopting Terraform
+## Adopting Terraform/Tofu
 
 The [overture-tiles](https://github.com/OvertureMaps/overture-tiles) project was previously using the AWS Cloud Development Kit (CDK) to provision resources for creating tilesets. We switched this project instead to Terraform/Tofu, and host it as a standalone module in the [terraform-aws-overture-tiles](https://github.com/OvertureMaps/terraform-aws-overture-tiles) repository.
 
