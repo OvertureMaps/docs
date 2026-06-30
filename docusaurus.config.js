@@ -3,8 +3,9 @@
 
 const { themes } = require('prism-react-renderer');
 
-const lightCodeTheme = themes.nightOwlLight;
-const darkCodeTheme = themes.nightOwl;
+// both modes use the dark palette — code blocks are forced dark bg in
+// light mode too (see custom.css), so light-theme token colors fail contrast.
+const codeTheme = themes.nightOwl;
 
 const defaultUrl = 'https://docs.overturemaps.org';
 const defaultBaseUrl = '/';
@@ -225,6 +226,7 @@ const config = {
             position: 'right',
             target: '_blank',
             className: 'github-link',
+            'aria-label': 'View source on GitHub',
           },
         ],
       },
@@ -249,8 +251,8 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Overture Maps Foundation.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: codeTheme,
+        darkTheme: codeTheme,
         additionalLanguages: ['bash', 'diff', 'json', 'sql', 'python'],
       },
     }),

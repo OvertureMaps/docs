@@ -11,5 +11,8 @@ export default defineConfig({
   test: {
     include: ['src/**/__tests__/**/*.test.{js,jsx}'],
     setupFiles: ['./src/setupTests.js'],
+    // CI runners are slower under load; the render-heavy CommunityTable tests
+    // can exceed the 5s default and flake. 20s gives ample headroom.
+    testTimeout: 20000,
   },
 });

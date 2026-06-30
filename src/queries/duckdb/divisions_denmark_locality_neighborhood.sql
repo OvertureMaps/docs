@@ -10,7 +10,7 @@ COPY (
     subtype,
     geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
   FROM
-    read_parquet('s3://overturemaps-us-west-2/release/2024-07-22.0/theme=divisions/type=division/*', filename=true, hive_partitioning=1)
+    read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=divisions/type=division/*', filename=true, hive_partitioning=1)
   WHERE
     country = 'DK'
     AND subtype IN ('locality','neighborhood')

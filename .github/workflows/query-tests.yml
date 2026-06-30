@@ -1,0 +1,37 @@
+---
+name: Query Tests
+
+on:
+  workflow_call: # reusable — called from ci.yml on PRs
+  schedule:
+    - cron: '0 6 * * 1' # Monday 06:00 UTC — catches data-side breakage between releases
+  workflow_dispatch:
+
+concurrency:
+  group: query-tests-${{ github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  duckdb:
+    name: DuckDB query smoke tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+
+      - name: Install duckdb
+        run: pip install duckdb
+
+      - name: Run query smoke tests
+        run: python scripts/test_queries.py
