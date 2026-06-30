@@ -22,6 +22,12 @@ Tippecanoe is a powerful C++ command line utility for creating tilesets. Tippeca
 
 From the April release onward, tilesets are created with Java code using the [planetiler](https://github.com/onthegomap/planetiler) library. Instead of considering all features at each zoom, features are filtered to zoom levels by type. This requires more explicit feature selection, but means tilesets can be generated in a fraction of the time.
 
+![divisions](/img/blog/overture-tiles-divisions.jpg)
+*Overture Divisions tileset in [Overture Explorer](https://explore.overturemaps.org)*
+
+![places](/img/blog/overture-tiles-places.jpg)
+*Overture Places tileset in [Overture Explorer](https://explore.overturemaps.org)*
+
 ### Results
 
 The Places theme tileset creation went from over 2 hours to **~5 minutes.** The Divisions tileset creation went from 48 minutes to **under 20 minutes.**
@@ -30,9 +36,9 @@ Because the tilesets require a complete local copy of the GeoParquet data, it's 
 
 ## Adopting Terraform
 
-The [overture-tiles](https://github.com/OvertureMaps/overture-tiles) project was previously using the AWS Cloud Development Kit (CDK) to provision resources for creating tilesets. We switched this project instead to Terraform, and host it as a standalone module in the [terraform-aws-overture-tiles](https://github.com/OvertureMaps/terraform-aws-overture-tiles) repository.
+The [overture-tiles](https://github.com/OvertureMaps/overture-tiles) project was previously using the AWS Cloud Development Kit (CDK) to provision resources for creating tilesets. We switched this project instead to Terraform/Tofu, and host it as a standalone module in the [terraform-aws-overture-tiles](https://github.com/OvertureMaps/terraform-aws-overture-tiles) repository.
 
-This makes tileset creation accessible to the wider Terraform audience.
+This makes tileset creation accessible to the wider Terraform/Tofu audience.
 
 ## Bring Your Own Data
 
