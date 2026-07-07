@@ -77,6 +77,6 @@ jobs:
     needs: [unit-tests, a11y, query-tests]
     if: always()
     steps:
-      - uses: lowlydba/are-we-good@bb8ee9e793e4233fac1992bb880e2a28bed7f42f # v1.0.3
+      - uses: lowlydba/are-we-good@4b62765391e357e78d0572113ab8b1c7d6b8d12a # v1.0.4
         with:
           jobs: ${{ toJSON(needs) }}
