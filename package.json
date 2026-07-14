@@ -32,7 +32,7 @@
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.1.1",
     "docusaurus-plugin-llms": "^0.4.0",
-    "js-yaml": "^5.2.0",
+    "js-yaml": "^5.2.1",
     "maplibre-gl": "^5.24.0",
     "pmtiles": "^4.4.1",
     "prism-react-renderer": "^2.1.0",
