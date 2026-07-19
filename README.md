@@ -11,7 +11,6 @@ This repository uses [Docusaurus](https://docusaurus.io/) to publish the documen
   - `community-projects.json` - source data for all community project cards
   - `og-image-cache.json` - cached `og:image` URLs for entries without an explicit `image` field (see [OG Image Cache](#og-image-cache) below)
 - `docs/`: The main documentation pages available at docs.overturemaps.org/. The sidebar for these pages is manually curated in the `sidebars.js` file.
-- `release-blog/`: Release notes for every Overture data release. The latest release is always available at <https://docs.overturemaps.org/release/latest/>
 - Notice there is no `schema reference` folder. See below.
 
 ## Schema Reference (`docs.overturemaps.org/schema`)
