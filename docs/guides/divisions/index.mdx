@@ -23,7 +23,7 @@ import PhillyPlaces from '!!raw-loader!@site/src/queries/duckdb/divisions_philly
 
 # Divisions Guide
 
-The Overture divisions theme has more than 5.5 million point, line, and polygon representations of human settlements, such as countries, regions, states, cities, and even neighborhoods. The theme is derived from a conflation of [OpenStreetMap](https://www.openstreetmap.org/) data and [geoBoundaries](https://www.geoboundaries.org/) data and is available under an [ODbL](https://opendatacommons.org/licenses/odbl/) license. (See the [attribution page](../../attribution) for more information.)
+The Overture divisions theme has more than 5.5 million point, line, and polygon representations of human settlements, such as countries, regions, states, cities, and even neighborhoods. Divisions represent recognized areas for governance, culture, or organization.
 
 Divisions data can be used for many purposes, which can include, but are not limited to:
 - reverse-geocoding
@@ -41,18 +41,18 @@ Divisions data can be used for many purposes, which can include, but are not lim
 
 ### Feature type descriptions
 
-A division is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a point geometry which gives an approximate location of the position most commonly associated with the feature. 
+A **division** is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a point geometry which gives an approximate location of the position most commonly associated with the feature. 
 
-A division_area is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a division feature. It has a polygon or multipolygon geometry. 
+A **division_area** is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a division feature. It has a polygon or multipolygon geometry. 
 
-A division_boundary is a feature type that represents a shared border between two division features. It has a linestring geometry. The geometry of a divison_boundary is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. 
+A **division_boundary** is a feature type that represents a shared border between two division features. It has a linestring geometry. The geometry of a divison_boundary is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. 
 
 ### Subtype descriptions
 
 Subtypes can represent each feature's administrative level, from country down to microhood. Subtypes can also represent a place hierarchy within a country and offer a standardized place definition for divisions. See below for a list of subtypes and their descriptions in the divisions theme:
 
 <details>
-	<summary>List of all subtypes in the divisions theme</summary>
+  <summary>List of all subtypes in the divisions theme</summary>
 
 | subtype | description | example |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ Subtypes can represent each feature's administrative level, from country down to
 
 </details>
 
-## Column definitions
+### Column definitions
 
 The column definitions for the properties in each feature type in the divisions theme are generated from the schema and live in the schema reference:
 
@@ -79,6 +79,36 @@ The column definitions for the properties in each feature type in the divisions 
 - [division_area](/schema/reference/divisions/division_area)
 - [division_boundary](/schema/reference/divisions/division_boundary)
 
+## Sources and licensing
+
+The divisions theme is derived from a conflation of two community sources: [OpenStreetMap](https://www.openstreetmap.org/), its primary source, and [geoBoundaries](https://www.geoboundaries.org/). Because it includes OpenStreetMap data, the divisions theme is published under the [ODbL](https://opendatacommons.org/licenses/odbl/) license. See the [licensing and attribution page](../../attribution) for more information.
+
+## How we build the dataset
+
+**Filtering.** Divisions are **deduplicated**, and topological overlap rules depend on subtype: overlap is allowed at lower subtypes (for example, locality) but not allowed for others (for example, country).
+
+**Matching.** No cross-source matching step is documented for the divisions theme.
+
+**Merging.** No cross-source attribute merging step is documented for the divisions theme.
+
+## Coverage and data quality
+
+**Coverage.** The divisions theme provides **global** coverage. Coverage generally aligns with the `admin_level` tags in the OSM and geoBoundaries datasets:
+
+- Global coverage of country, dependency, region, and county.
+- Macroregion and macrocounty should be present, but are currently miscategorized as other subtypes.
+- Subtypes below county (locality, borough, neighborhood, microhood) should be present in every country, but coverage is often spotty.
+
+**Known quality issues.** There are minor macroregion categorization issues, and sub-county coverage is spotty as noted above.
+
+## Release artifacts and updates
+
+The divisions theme is released on a **monthly** cadence. Alongside the data, the following release artifacts are provided:
+
+- **GERS registry**: Division features are included in the GERS registry.
+- **GERS IDs**: Assigned to division features.
+- **Bridge files**: Provided.
+- **Data changelog**: A changelog accompanies each release.
 
 ## Data access and retrieval
 
@@ -105,33 +135,7 @@ Overture's divisions theme data is freely available on both Amazon S3 and Micros
   </TabItem>
 </Tabs>
 
-[The Getting Data section of this documentation](/getting-data/cloud-sources/) offers instructions accessing the full Overture catalog. See examples below for divisions.
-
-<Tabs>
-
-<TabItem value="Python Client" label="Python Client" default>
-You can find Overture's official Python command-line tool [here](https://github.com/OvertureMaps/overturemaps-py).
-
-This tool helps to download Overture data within a region of interest and converts it to a few different file formats. In this example, a bounding box is passed to obtain all divisions data around Boston, MA:
-
-```
-overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=division -o boston.geojson
-```
-
-</TabItem>
-
-<TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](../../getting-data/duckdb).
-<QueryBuilder query={ToParquet}></QueryBuilder>
-Note: Running this query will result in a ~6.4GB file.
-</TabItem>
-
-</Tabs>
-
-## Data usage guidelines
-
-We recommend querying and downloading only the Overture data you need.
-If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract divisions data.
+[The Getting Data section of this documentation](/getting-data/cloud-sources/) offers instructions accessing the full Overture catalog. We recommend querying and downloading only the Overture data you need. If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract divisions data.
 
 <Tabs>
 
@@ -155,25 +159,27 @@ This will download the area visible on your screen.
 <TabItem value="Python Client" label="Python Client" default>
 First, follow the [setup guide for the Python Client](../../getting-data/overturemaps-py).
 
-You can alter the `bbox` value to download a particular area.
+This tool helps to download Overture data within a region of interest and converts it to a few different file formats. You can alter the `bbox` value to download a particular area. In this example, a bounding box is passed to obtain all divisions data around Boston, MA:
 
 ```
 overturemaps download --bbox=-71.068,42.353,-71.058,42.363 -f geojson --type=division -o boston.geojson
 ```
+
 </TabItem>
 
 <TabItem value="DuckDB" label="DuckDB" default>
 First, follow the [setup guide for DuckDB](../../getting-data/duckdb).
 
-DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area.
-
-This example returns results for the country boundary between the US and Mexico:
+DuckDB allows you to pass a bounding box in your query to select features in a specified geogrpahic area. This example returns results for the country boundary between the US and Mexico:
 <QueryBuilder query={BorderUSMX}></QueryBuilder>
+
+To download the full theme as parquet instead, use the following query (note: running it will result in a ~6.4GB file):
+<QueryBuilder query={ToParquet}></QueryBuilder>
 </TabItem>
 
 </Tabs>
 
-## Data manipulation and analysis
+## Querying and analysis
 
 Using these queries, you can get counts for each feature type in divisions.
 
@@ -205,6 +211,8 @@ Using these queries, you can get counts for each feature type in divisions.
 
 </Tabs>
 
+You can also look up individual features by ID:
+
 <Tabs>
 
 <TabItem value="query using an Overture ID" label="query using an Overture ID" default>
@@ -221,18 +229,11 @@ Using these queries, you can get counts for each feature type in divisions.
 
 This query will return a subset of fields and the geometry for each locality and neighborhood division entity in Denmark.
 
-<details>
-	<summary>Query</summary>
 <QueryBuilder query={DenmarkLocalityNeighborhood}></QueryBuilder>
-</details>
+
 
 #### Exporting places data within Philadelphia to a local Parquet file
 
 This query will return Places theme data for any place within the locality of Philadelphia
 
-<details>
-	<summary>Query</summary>
 <QueryBuilder query={PhillyPlaces}></QueryBuilder>
-</details>
-
-

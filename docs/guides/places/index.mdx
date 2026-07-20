@@ -18,28 +18,21 @@ import PlacesInBuildingsQuery from '!!raw-loader!@site/src/queries/duckdb/places
 
 # Places Guide 
 
-The Overture places theme contains more than 75 million point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more.
+The Overture places theme contains more than 75 million point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. Places are concrete, physically identifiable, stationary destinations.
 
-| ![Overture places theme coverage](/img/places/places-coverage-h3-june.png) |
-|:--:|
-| *Overture places data, June 2026* |
 
+
+## In this guide
+
+This overview covers the feature type, dataset construction, and access for the places theme. A dedicated tool covers the category taxonomy in depth:
+
+- **[Taxonomy Browser](./taxonomy-browser):** An interactive tool for exploring and comparing releases of the Overture Places category taxonomy hierarchy.
 
 ## Dataset description
 
-### Sources 
+### Feature type descriptions
 
-| Sources | License | feature count, June 2026 |
-| --- | --- | --- |
-| AllThePlaces, Overture | CC0-1.0              | 1,860,091    |
-| BrightQuery, Overture  | CDLA-Permissive-2.0  | 472,412      |
-| DAC, Overture          | CDLA-Permissive-2.0  | 153,966      |
-| Foursquare, Overture   | Apache-2.0           | 6,630,199    |
-| Krick, Overture        | CDLA-Permissive-2.0  | 16,666       |
-| Microsoft, Overture    | CDLA-Permissive-2.0  | 7,397,080    |
-| PinMeTo, Overture      | CDLA-Permissive-2.0  | 161,637      |
-| RenderSEO, Overture    | CDLA-Permissive-2.0  | 5,137        |
-| meta, Overture         | CDLA-Permissive-2.0  | 58,945,101   |
+The places theme defines a single feature type, **place**, a point representation of a real-world entity — a school, business, hospital, landmark, and so on — carrying attributes such as name, categories, address, and a confidence score along with a point geometry.
 
 ### Taxonomy
 
@@ -61,9 +54,55 @@ The Overture places theme contains more than 75 million point representations of
 
 ### Column definitions
 
-The column definitions for the properties in places are generated from the schema and live in the schema reference:
-- [place](/schema/reference/places/place)
+Column definitions for the `place` type are generated from the schema and live in the [schema reference](/schema/reference/places/place).
 
+## Sources and licensing
+
+The places theme is built entirely from commercial data providers. Its primary source is Meta, which contributes the large majority of place records (roughly 59 million of the ~75 million total), alongside Microsoft, Foursquare, and PinMeTo, together with a number of smaller aggregators and providers such as AllThePlaces, BrightQuery, DAC, Krick, and RenderSEO. The theme does not include OpenStreetMap data.
+
+Places is published under the [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) and [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) licenses, depending on the source. For full per-source licensing information, see the [licensing and attribution page](../../attribution).
+
+Note: Joining CDLA Permissive 2.0 data to OpenStreetMap is permitted, but the resulting data may need to carry the Open Database License (ODbL) if it is a derivative database. See the [OSM Collective Database Guideline](https://osmfoundation.org/wiki/Licence/Community_Guidelines/Collective_Database_Guideline_Guideline) for more information.
+
+## How we build the dataset
+
+**Filtering.** No theme-wide filtering is applied beyond an existence threshold: places with a `confidence` score of 0.2 or less are removed.
+
+**Matching.** Places use **ML-based matching with clustering**. Potential matching pairs are first identified based on quadkey, then matched using an ML model based on attribute similarity. The properties considered include `name`, `address`, `phone number`, `house number`, `website`, and `spatial distance`.
+
+**Merging.** For matched places, a single source is promoted rather than combining attributes. Matched places are clustered, the place from the source with the highest match count is promoted, and no attributes are merged between matches.
+
+### Confidence score
+
+The places theme includes a **confidence score** for each feature, representing the likelihood that the place exists and is accurate. You can use the `confidence` score to filter out data below a certain threshold to remove suspect data.
+
+## Coverage and data quality
+
+**Coverage.** The places theme provides **global** coverage, with US coverage around 73%.
+
+| ![Overture places theme coverage](/img/places/places-coverage-h3-june.png) |
+|:--:|
+| *Overture places data, June 2026* |
+
+**Known quality issues.** Places is known to contain duplicates, a high junk rate, and low attribute completeness. The confidence score (above) is the primary tool for filtering suspect data.
+
+### Excluded by design
+
+The definition of a place — *concrete, physically identifiable, stationary destination* — is used to deliberately exclude certain entities:
+
+- **Concrete and physically identifiable**: to exclude divisions and addresses.
+- **Stationary**: to exclude noise from UGC datasets for things like food carts or vehicles/boats/aircraft.
+- **Destination**: to exclude bus stops, train platforms, and other intermediate waypoints.
+- **Private**: only places that do not include PII are included.
+
+## Release artifacts and updates
+
+The places theme is released on a **monthly** cadence. Alongside the data, the following release artifacts are provided:
+
+- **GERS registry**: Place features are included in the GERS registry.
+- **GERS IDs**: Assigned to place features.
+- **Bridge files**: Provided.
+- **Data changelog**: A changelog accompanies each release.
 
 ## Data access and retrieval
 
@@ -75,25 +114,6 @@ Overture's places theme data is freely available on both Amazon S3 and Microsoft
 | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder> |
 
 More information can be found in the [Getting Overture Data](/getting-data/cloud-sources/) section of this documentation. You can download the entire dataset directly from the S3 or Azure locations above. Warning: the output will be a very large file.
-
-Depending on your use case, these methods might be more practical for you:
-
-<Tabs>
-<TabItem value="Python Client" label="Python Client" default>
-First, follow the [setup guide for the Python Client](/getting-data/overturemaps-py/).
-
-```
-overturemaps download -f geoparquet --type=place -o places.geoparquet
-```
-</TabItem>
-<TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
-
-<QueryBuilder query={PlacesQuery}></QueryBuilder>
-</TabItem>
-</Tabs>
-
-## Data usage guidelines
 
 We recommend downloading only the Overture data you need. If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract places data and output a GeoJSON file.
 
@@ -121,7 +141,7 @@ Replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run th
 </TabItem>
 </Tabs>
 
-## Data manipulation and analysis
+## Querying and analysis
 
 ### Querying by properties
 
@@ -134,7 +154,6 @@ The `address` column can be used to quickly filter data down to a particular pol
 <TabItem value="Query by category" label="Query by category" default>
 For filtering data by a particular type of place we can use the `categories` column. In this example we'll extract all the places with categories of `rice_mill` or `flour_mill`
 
-The full category list is available [here](https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv).
 <QueryBuilder query={MillQuery}></QueryBuilder>
 </TabItem>
 <TabItem value="Query by confidence score" label="Query by confidence score" default>
@@ -177,7 +196,3 @@ The places theme has wide coverage and many of the place point features have add
 </details>
 </TabItem>
 </Tabs>
-
-
-
-

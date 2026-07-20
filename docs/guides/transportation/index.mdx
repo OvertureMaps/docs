@@ -6,6 +6,7 @@ pagination_label: Transportation Overview
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DocCardList from '@theme/DocCardList';
 import QueryBuilder from '@site/src/components/queryBuilder';
 import SegmentBBOX from '!!raw-loader!@site/src/queries/duckdb/segment_bbox.sql';
 import ParkingAisles from '!!raw-loader!@site/src/queries/duckdb/transportation_parking.sql';
@@ -15,24 +16,24 @@ import ConnectingSegments from '!!raw-loader!@site/src/queries/athena/transporta
 
 # Transportation Guide
 
-import DocCardList from '@theme/DocCardList';
-
-Every time you ask for directions, hail a ride, or check a map, you're relying on a model of how the world's roads, rails, and waterways connect. The Overture transportation theme is such a model: a global, open dataset of paths people and vehicles travel, built from OpenStreetMap and enhanced with data from TomTom and other local and regional authoritative data sources.
+Every time you ask for directions, hail a ride, or check a map, you're relying on a model of how the world's roads, rails, and waterways connect. The Overture transportation theme is such a model: a global, open dataset of traversable segments (roads, railways, ferries) and connectors (intersections) representing how people and objects travel, built from OpenStreetMap and enhanced with data from TomTom and other local and regional authoritative data sources.
 
 The dataset is simple at its core but expressive enough to capture highway speed limits that change by time of day, one-way streets that allow buses to go the wrong way, and weight-restricted bridges with axle limits. 
 
-The rest of this page covers the feature types and subtypes in the transportation theme, describes the dataset and how to access it, and points to tools and libraries for working with the data. The deeper topics are covered in the rest of the guide:
+You might use Overture transportation data for mapping, routing, navigation, or geocoding street intersections. For the full schema details, see the reference documentation.
+
+## In this guide
+
+This overview covers the feature types, dataset construction, and access for the transportation theme. The deeper topics are covered in the rest of the guide:
 
 - **[Segments and connectors](./segments-and-connectors):** The building blocks of the network. Segments are the paths; connectors are the junctions where they meet. This page covers how they combine to form a routable graph, along with orientation, heading, and how Overture decides where to split a road.
 - **[Linear referencing](./linear-referencing):** How properties can apply to just *part* of a segment — say, the first 500 meters — without chopping the geometry in two. Includes calculation methods and code examples.
 - **[Scoping and travel modes](./scoping-and-travel-modes):** The rule system that makes properties conditional. A speed limit might apply only to trucks, only on weekdays, or only in the forward direction. Scoping is how all of that gets expressed.
 - **[Roads](./roads):** The details specific to road segments — access restrictions, turn restrictions, speed limits, and more.
 
-You might use Overture transportation data for mapping, routing, navigation, or geocoding street intersections. For the full schema details, see the reference documentation.
-
 ## Dataset description
 
-### Feature types
+### Feature type descriptions
 
 The Overture transportation schema defines two feature types:
 
@@ -98,11 +99,51 @@ Transportation segments are divided into three subtypes: **rail**, **water**, an
 
 ### Column definitions
 
-The column definitions for the properties in the transportation theme are generated from the schema and live in the schema reference:
+Column definitions for the transportation theme are generated from the schema and live in the schema reference: [segment](/schema/reference/transportation/segment/) and [connector](/schema/reference/transportation/connector/).
 
-- [segment](/schema/reference/transportation/segment/)
-- [connector](/schema/reference/transportation/connector/)
+## Sources and licensing
 
+The transportation theme's primary source is [OpenStreetMap](https://www.openstreetmap.org/), enhanced with commercial road data from [TomTom](https://www.tomtom.com/) and other local and regional authoritative sources. Because it includes OpenStreetMap data, the transportation theme is published under the [ODbL](https://opendatacommons.org/licenses/odbl/) license. See the [licensing and attribution page](../../attribution) for more information.
+
+## How we build the dataset
+
+**Filtering.** Duplicate nodes are removed based on location and properties, and OSM segments are filtered to the specific highway values currently in scope. The highway values in scope are:
+
+`railway`, `construction`, `cycleway`, `footway`, `living_street`, `motorway`, `motorway_link`, `path`, `pedestrian`, `primary`, `primary_link`, `residential`, `road`, `secondary`, `secondary_link`, `service`, `steps`, `tertiary`, `tertiary_link`, `track`, `trunk`, `trunk_link`, `unclassified`.
+
+**Matching.** TomTom roads are matched to OSM using Orbis as part of OSM ingestion. If public OSM needs updating (e.g., a road is removed or rerouted), the road must be reassigned or removed from the TomTom road, and public OSM will be updated directly.
+
+**Merging.** OSM segments are merged into Orbis as part of ingestion, with ongoing integration of the TomTom legacy network.
+
+## Coverage and data quality
+
+**Coverage.** The transportation theme provides **global** coverage.
+
+**Quality assurance.** The theme is checked and normalized against a number of quality signals, including:
+
+- Presence of navigational islands
+- Road name gap detection
+- Road sharp turn detection
+- Normalization of data, including dropping unrealistic outliers
+- Overlap/duplicate highway detection
+- Invalid intersection detection
+
+### Excluded by design
+
+The transportation theme deliberately excludes:
+
+- Open, navigable spaces like fields, parks, or oceans
+- Aerial paths, such as flight paths or geostationary satellite orbits
+- Paths traversed by continuous entities: oil pipelines, electric lines
+
+## Release artifacts and updates
+
+The transportation theme is released on a **monthly** cadence. Alongside the data, the following release artifacts are provided:
+
+- **GERS registry**: Transportation features are included in the GERS registry.
+- **GERS IDs**: Assigned to segment and connector features.
+- **Bridge files**: Provided.
+- **Data changelog**: A changelog accompanies each release.
 
 ## Data access and retrieval
 
@@ -135,7 +176,7 @@ overturemaps download --bbox=12.46,41.89,12.48,41.91 -f geojson --type=segment -
 ```
 </TabItem>
 <TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB (/getting-data/duckdb/).
+First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
 
 Set the parquet link to either the **connector** or **segment** url depending on your needs.
 
@@ -144,7 +185,7 @@ Replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run th
 </TabItem>
 </Tabs>
 
-## Querying transportation data
+## Querying and analysis
 
 ### Querying by properties in DuckDB
 
@@ -218,6 +259,3 @@ To help visualize this process better, here is a real-world example of a residen
 The tool requires a Spark environment to run and has been tested using Azure Databricks and AWS Glue. For setup information the [transportation-spitter GitHub](https://github.com/OvertureMaps/transportation-splitter) will contain the most up-to-date information as the tool is in active development still.
 
 If you have feedback, questions, etc. on the tool you can create an [issue](https://github.com/OvertureMaps/transportation-splitter/issues) on the GitHub.
-
-
-

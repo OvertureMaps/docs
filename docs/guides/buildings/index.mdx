@@ -19,8 +19,7 @@ Our buildings data is intended to support multiple use cases, as defined and pri
 - **Data Enrichment**: Enable end users to enrich the buildings with additional attributes using GERS ID.
 - **Spatial Analysis**: Enable end users to perform analysis to create derivative datasets or train AI models.
 
-
-## Dataset descriptions
+## Dataset description
 
 ### Feature type descriptions
 
@@ -29,14 +28,85 @@ The theme includes two feature types:
 - **building**: The most basic form of a building feature. The geometry is expected to be the most outer footprint&mdash;roofprint if traced from satellite/aerial imagery&mdash;of a building. Buildings have a boolean attribute `has_parts` that describe whether there are any associated building parts.
 - **building_part**: A single part of a building. Building parts may share the same properties as buildings. A building part is associated with a parent building via a building_id.
 
-
 ### Column definitions 
 
-The column definitions for the properties in the building and building_part types are generated from the schema and live in the schema reference:
+Column definitions for the building and building_part types are generated from the schema and live in the schema reference: [building](/schema/reference/buildings/building/) and [building_part](/schema/reference/buildings/building_part/).
 
-- [building](/schema/reference/buildings/building/).
-- [building_part](/schema/reference/buildings/building_part/).
 
+## Sources and licensing
+ 
+The buildings theme combines several open datasets. Its primary source is [OpenStreetMap](//osm.org), which is given the highest conflation priority so that community knowledge and manual edits are always preferred. Around it, Overture layers other community-contributed data ([Esri Community Maps](https://communitymaps.arcgis.com/home)), authoritative national and municipal datasets (the [Instituto Geográfico Nacional](https://www.ign.es/) in Spain and the [City of Vancouver](https://opendata.vancouver.ca/)), and ML-derived roofprints ([Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints), [Google Open Buildings](https://sites.research.google/open-buildings/), and a [dataset covering East Asian countries](https://zenodo.org/records/8174931)) to fill in coverage. The `building_part` dataset comes from a single source, OpenStreetMap.
+ 
+Because it includes OpenStreetMap data, the buildings theme is published under the [ODbL](https://opendatacommons.org/licenses/odbl/) license. This requires that any other source included in the theme also be provided under ODbL or a compatible license, such as CC BY 4.0; Overture verifies license compatibility before adding a source to the conflation process. See the [licensing and attribution page](../../attribution) for more information.
+
+## How we build the dataset
+
+### Filtering
+
+The buildings theme applies several filtering rules before and during conflation:
+
+- **Topological**: Overlap is allowed within a single source, but not between sources.
+- **Location**: Buildings in water are excluded.
+- **Geometrical**: Geometry is kept identical to the source; (multi)polygons with too many sharp angles are excluded; and for ML-derived sources, a footprint area greater than 10m is required.
+- **Properties**: Features with a `height` of 900m or more are excluded.
+
+To remove invalid detections, the conflation process excludes ML features below a certain size that are unlikely to be valid buildings. These ML datasets are known to include some detections that do not qualify as building structures as defined above — shipping containers, car ports, solar panels, or other objects that resemble buildings in satellite or aerial imagery. These exclusion rules might result in some valid features being missed but, on balance, improve the quality of the buildings theme. Missing features can be added through OpenStreetMap editing (e.g. Rapid editor accessing ML features).
+
+### Matching
+
+The matching step in the conflation process is based on the geometry of the building features, using a metric called **Intersection over Union (IoU)**. Buildings are considered a match if the IoU score exceeds **50%** (0.5). The score is calculated by dividing the area where the two building shapes overlap by the total area they cover combined. On this scale, a 100% score signifies a perfect overlap, whereas disconnected (non-overlapping) geometries score 0%.
+
+As part of the conflation process, features in the open data sources are matched and assigned a GERS ID. The intent is to have a single, stable GERS ID for each building feature. If there are multiple sources for an individual building feature (e.g. the Lincoln Memorial), then that building feature in each data source should be assigned the same GERS ID, whether that feature is included in the Overture buildings theme that is released or not. 
+
+To help ensure quality as well as quantity, the conflation process prioritizes community contributed data over machine learning (ML) generated data. The highest priority dataset used in conflation is OpenStreetMap. This ensures that any data added to OpenStreetMap based on local knowledge or manual editing of ML data is prioritized with each update of Overture Maps buildings. If there is a quality issue in one of the Overture Maps buildings, it can be addressed by adding, updating, or deleting that same building structure in OpenStreetMap and it will be reflected in the next Overture Maps release.
+
+### Merging
+
+Non-overlapping building footprints are combined through **hierarchical merging**, and **height attributes are merged between matches**. Merging is subject to two constraints: there must be no spatial overlap for footprint merging, and an IoU greater than 0.5 for attribute merging.
+
+The visualization below shows Overture buildings data looking across the US-Mexico border toward San Diego. Notice how Esri and OSM buildings appear in big blocks while the Google and Microsoft buildings appear to mix together. This is a product of our conflation process that prioritizes community contributed data first and then "fills in" the rest of the map with the best ML data available.
+
+<figure>
+  <BuildingsMap></BuildingsMap>
+  <figcaption>
+  <div style={{'textAlign':'center'}}>
+    <span style={{'backgroundColor':'rgb(36,39,47)', padding:2}}>
+    <span style={{color:'rgb(194,42,87)'}}>&#x25AC;   <span style={{color:'white'}}>OpenStreetMap | </span></span>
+    <span style={{color:'rgb(4,151,188)'}}>&#x25AC;   <span style={{color:'white'}}>Esri Community Maps | </span></span>
+    <span style={{color:'rgb(243,175,102)'}}>&#x25AC; <span style={{color:'white'}}>Microsoft ML Buildings | </span></span>
+    <span style={{color:'rgb(236,253,188)'}}>&#x25AC; <span style={{color:'white'}}>Google Open Buildings </span></span>
+    </span>
+  </div>
+  </figcaption>
+</figure>
+*© OpenStreetMap contributors, OvertureMaps Foundation*
+
+## Coverage and data quality
+
+**Coverage.** The buildings theme provides **global** coverage.
+
+**Known quality issues.** Many Overture Maps buildings are derived from ML sources (e.g. Microsoft and Google Open Buildings), which have lower footprint precision. This is most pronounced in the Global South, due to the high share of ML-derived buildings there.
+
+**Validation violations.** The buildings theme is checked against a set of validation rules:
+
+- **Pre-match violations**: `building_tiny`, `building_large`, `building_huge`, `building_invalid_geometry`, `building_duplicate_record_id`.
+- **Post-merge violations**: `building_transportation_intersection`, `building_water_intersection`, `building_invalid_area`, `building_too_many_small_angles`.
+
+### Excluded by design
+
+The buildings theme excludes features that are well defined in other themes. Examples include:
+
+- Physical "regions"
+- Places of business
+
+## Release artifacts and updates
+
+The buildings theme is released on a **monthly** cadence. Alongside the data, the following release artifacts are provided:
+
+- **GERS registry**: Building features are included in the GERS registry.
+- **GERS IDs**: Assigned to `building` features (not `building_part`).
+- **Bridge files**: Provided for one-to-one matches only.
+- **Data changelog**: A changelog accompanies each release.
 
 ## Data access and retrieval
 
@@ -56,57 +126,3 @@ Overture's building and building_part datasets are freely available on both Amaz
     | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=buildings/type=building_part/*" language="text"></QueryBuilder> |
   </TabItem>
 </Tabs>
-
-## How we build the dataset
-
-### Sources
-
-Currently, the Overture `building` dataset is a combination of the following open building datasets. (The `building_part` dataset comes from one source: OpenStreetMap.)
-
-| Source | Type | Conflation Priority | Count |
-|--------|------|-------------------|--------|
-| [OpenStreetMap](//osm.org) | Community-contributed | 1 | ~703 Million |
-| [Esri Community Maps](https://communitymaps.arcgis.com/home) | Community-contributed | 2 | ~17 Million |
-| [Instituto Geográfico Nacional (España)](https://www.ign.es/) | National dataset | 3 | ~12.4 Million |
-| [City of Vancouver, Canada](https://opendata.vancouver.ca/) | Municipal dataset | 4 | ~17 Thousand |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (>90% precision) | 5 | ~340 Million |
-| [Microsoft](https://github.com/microsoft/GlobalMLBuildingFootprints) | ML-derived roofprints | 6 | ~700 Million |
-| [Google Open Buildings](https://sites.research.google/open-buildings/) | ML-derived roofprints (\<90  % precision) | 7 | ~640 Million |
-| [Buildings in East Asian Countries](https://zenodo.org/records/8174931) | ML-derived roofprints | 8 | ~213 Million |
-
-### Quality and prioritization
-
-To help ensure quality as well as quantity, the conflation process for the building dataset prioritizes community contributed data over machine learning (ML) generated data. The highest priority dataset used in conflation is OpenStreetMap. This ensures that any data added to OpenStreetMap based on local knowledge or manual editing of ML data is prioritized with each update of Overture Maps buildings. If there is a quality issue in one of the Overture Maps buildings, it can be addressed by adding, updating, or deleting that same building structure in OpenStreetMap and it will be reflected in the next Overture Maps release.
-
-Many Overture Maps buildings are derived from ML sources (e.g. Microsoft and Google Open Buildings). These ML datasets are known to include some detections that do not qualify as building structures as defined above. These might be shipping containers, car ports, solar panels, or other objects that resemble buildings in satellite or aerial imagery. To remove most of these invalid features from the buildings theme, the Overture Maps conflation process excludes ML features below a certain size that are unlikely to be valid buildings. These exclusion rules might result in some valid features being missed but, on balance, improve the quality of the buildings theme. Missing features can be added through OpenStreetMap editing (e.g. Rapid editor accessing ML features).
-
-### Conflation and matching
-
-As part of the conflation process, features in the open data sources are matched and assigned a GERS ID. The intent is to have a single, stable GERS ID for each building feature. If there are multiple sources for an individual building feature (e.g. the Lincoln Memorial), then that building feature in each data source should be assigned the same GERS ID, whether that feature is included in the Overture buildings theme that is released or not. 
-
-The matching step in the conflation process is based on the geometry of the building features, using a metric called Intersection over Union (IoU). Buildings are considered a match if the IoU score exceeds 50%. The score is calculated by dividing the area where the two building shapes overlap by the total area they cover combined. On this scale, a 100% score signifies a perfect overlap, whereas disconnected (non-overlapping) geometries score 0%.
-
-The visualization below shows Overture buildings data looking across the US-Mexico border toward San Diego. Notice how Esri and OSM buildings appear in big blocks while the Google and Microsoft buildings appear to mix together. This is a product of our conflation process that prioritizes community contributed data first and then "fills in" the rest of the map with the best ML data available.
-
-<figure>
-  <BuildingsMap></BuildingsMap>
-  <figcaption>
-  <div style={{'textAlign':'center'}}>
-    <span style={{'backgroundColor':'rgb(36,39,47)', padding:2}}>
-    <span style={{color:'rgb(194,42,87)'}}>&#x25AC;   <span style={{color:'white'}}>OpenStreetMap | </span></span>
-    <span style={{color:'rgb(4,151,188)'}}>&#x25AC;   <span style={{color:'white'}}>Esri Community Maps | </span></span>
-    <span style={{color:'rgb(243,175,102)'}}>&#x25AC; <span style={{color:'white'}}>Microsoft ML Buildings | </span></span>
-    <span style={{color:'rgb(236,253,188)'}}>&#x25AC; <span style={{color:'white'}}>Google Open Buildings </span></span>
-    </span>
-  </div>
-  </figcaption>
-</figure>
-*© OpenStreetMap contributors, OvertureMaps Foundation*
-
-## Licensing
-
-The Overture Maps buildings theme is provided under the ODbL license, largely because the primary OpenStreetMap data is provided under that license. This requires that other data sources that are included in the buildings theme are also provided under ODbL or a license that is compatible with ODbL, such as CC BY 4.0. Overture Maps determine if potential sources of open data that would expand coverage or improve quality are provided under a license that is compatible with ODbL before adding to the conflation process. For more information, see the [licensing and attribution](../../attribution) section of our documentation.
-
-
-
-

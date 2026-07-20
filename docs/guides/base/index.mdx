@@ -10,7 +10,7 @@ import QueryBuilder from '@site/src/components/queryBuilder';
 
 # Base Guide 
 
-The base theme includes land, water, and other natural features. The theme also includes infrastructure features. The majority of these features come from OpenStreetMap, translated into the Overture schema.  We often refer to the base theme as "everything else" you might need to make a complete map. 
+The base theme includes land, water, and other natural features. The theme also includes infrastructure features. The majority of these features come from OpenStreetMap, translated into the Overture schema. We often refer to the base theme as "everything else" you might need to make a complete map. 
 
 Some of our schema design choices include:
 - basic classification of features into type, subtype and class where appropriate.
@@ -22,7 +22,7 @@ Some of our schema design choices include:
 
 ### Feature type descriptions
 
-There are six feature types in the base theme
+There are six feature types in the base theme:
 
 #### Bathymetry 
 Bathymetry features provide topographic representations of underwater areas, such as parts of lake beds or ocean floors. The geometries are derived vectorized bathymetric data products from [ETOPO1](https://www.ncei.noaa.gov/products/etopo-global-relief-model) and [GLOBathy](https://www.nature.com/articles/s41597-022-01132-9) data.
@@ -40,13 +40,11 @@ Land cover features indicate the primary natural or artificial surface material 
 Land use features specify the predominant human use of an area of land, for example commercial activity, recreation, farming, housing, education, or military use. Overture's land use data is a translation of the landuse tag from OpenStreetMap. 
 
 #### Water 
-Water features represent ocean and inland water bodies. In Overture data releases, water features are sourced from OpenStreetMap. There are two main categories of water feature: ocean and inland water bodies. ter`**: physical representations of inland and ocean marine surfaces; translates natural and waterway tags from OpenStreetMap.
-
-
+Water features represent ocean and inland water bodies. In Overture data releases, water features are sourced from OpenStreetMap. There are two main categories of water feature: ocean and inland water bodies — physical representations of inland and ocean marine surfaces, translating natural and waterway tags from OpenStreetMap.
 
 ### Column definitions 
 
-The column definitions for the all types in the base theme are generated from the schema and live in the schema reference:
+The column definitions for every type in the base theme are generated from the schema and live in the schema reference:
 
 - [bathymetry](/schema/reference/base/bathymetry/)
 - [infrastructure](/schema/reference/base/infrastructure/)
@@ -55,6 +53,34 @@ The column definitions for the all types in the base theme are generated from th
 - [land_use](/schema/reference/base/land_use/)
 - [water](/schema/reference/base/water/)
 
+
+## Sources and licensing
+ 
+Most base features — land, water, and infrastructure — come from [OpenStreetMap](https://www.openstreetmap.org/) and are translated into the Overture schema. The remaining feature types are drawn from dedicated global products: bathymetry from [ETOPO1](https://www.ncei.noaa.gov/products/etopo-global-relief-model) and [GLOBathy](https://www.nature.com/articles/s41597-022-01132-9), and land cover from [ESA WorldCover](https://esa-worldcover.org/en). Because it includes OpenStreetMap data, the base theme is published under the [ODbL](https://opendatacommons.org/licenses/odbl/) license. See the [licensing and attribution page](../../attribution) for more information.
+
+## How we build the dataset
+
+Base is a single-source, pass-through theme: each feature type is drawn from one source and translated into the Overture schema. There is no matcher and no conflation process.
+
+**Filtering.** Non-bathymetry base features are produced through **tag-based filtering** of OpenStreetMap: relevant OSM tags are selected, normalized, and translated into the Overture schema, with remaining relevant tags passed through directly.
+
+**Matching.** Not applicable — each feature type comes from a single source, so there is no matching step.
+
+**Merging.** Not applicable — with a single source per feature type, there is no merging or conflation between sources.
+
+## Coverage and data quality
+
+**Coverage.** The base theme provides **global** coverage. Its features come directly from their source datasets — OpenStreetMap for land, water, and infrastructure, and dedicated global products for bathymetry and land cover.
+
+**Known quality issues.** Because base features are translated directly from their sources with no conflation, their accuracy and completeness mirror the upstream data — primarily OpenStreetMap.
+
+## Release artifacts and updates
+
+The base theme is released on a **monthly** cadence. Alongside the data, the following release artifacts are provided:
+
+- **GERS registry**: Base features are **not** included in the GERS registry. Base is a single-source, pass-through theme with no matcher, so its features are not assigned registry IDs.
+- **Data changelog**: A changelog accompanies each release.
+- **Bridge files**: Not currently provided for the base theme.
 
 ## Data access and retrieval
 
@@ -99,15 +125,4 @@ Overture's base theme data is freely available on both Amazon S3 and Microsoft A
   </TabItem>
 </Tabs>
 
-
 [The Getting Started section of this documentation](/getting-data/cloud-sources/) offers instructions for accessing the full Overture catalog.
-
-
-
-
-
-
-
-
-
-
