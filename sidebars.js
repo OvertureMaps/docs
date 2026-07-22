@@ -58,6 +58,7 @@ const sidebars = {
           collapsed: true,
           items: [
             'guides/base/index',
+            'guides/base/infrastructure',
           ],
         },
         {
@@ -82,7 +83,6 @@ const sidebars = {
           collapsed: true,
           items: [
             'guides/places/index',
-            'guides/places/taxonomy',
             'guides/places/taxonomy-browser',
           ],
         },

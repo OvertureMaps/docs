@@ -2,480 +2,107 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Overture Maps - Theme Definitions Table</title>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
 
       body {
-        font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         line-height: 1.6;
         color: #2c3e50;
         background: #fff;
       }
 
-      .header {
-        background: #f8f9fa;
-        border-bottom: 1px solid #e9ecef;
-        padding: 1.5rem 2rem;
-      }
+      .header { background: #f8f9fa; border-bottom: 1px solid #e9ecef; padding: 1.5rem 2rem; }
+      .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+      h1 { font-size: 1.5rem; font-weight: 600; }
+      .back-link { color: #0066cc; text-decoration: none; font-size: 0.875rem; display: flex; align-items: center; gap: 0.25rem; }
+      .back-link:hover { text-decoration: underline; }
 
-      .header-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+      .container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+      .description { margin-bottom: 1rem; color: #6c757d; }
+      .hint { margin-bottom: 1rem; padding: 0.5rem 0.75rem; background: #e7f3ff; border-left: 3px solid #0066cc; border-radius: 4px; font-size: 0.875rem; color: #004080; }
 
-      h1 {
-        font-size: 1.5rem;
-        font-weight: 600;
-      }
+      .table-wrapper { overflow-x: auto; margin: 0 -2rem; padding: 0 2rem; }
+      table { width: 100%; min-width: 900px; border-collapse: collapse; background: white; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+      th { background: #f8f9fa; border: 1px solid #dee2e6; padding: 0.875rem; text-align: left; font-weight: 600; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.025em; position: sticky; top: 0; z-index: 10; }
+      td { border: 1px solid #dee2e6; padding: 0.875rem; vertical-align: top; font-size: 0.875rem; line-height: 1.5; }
 
-      .back-link {
-        color: #0066cc;
-        text-decoration: none;
-        font-size: 0.875rem;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-      }
+      tr.theme-row { cursor: pointer; transition: background-color 0.15s ease; }
+      tr.theme-row:hover { background: #f0f8ff; }
+      tr.theme-row.expanded { background: #e7f3ff; }
 
-      .back-link:hover {
-        text-decoration: underline;
-      }
+      .theme-name { font-weight: 600; color: #0066cc; position: sticky; left: 0; background: white; z-index: 5; display: flex; align-items: center; gap: 0.5rem; }
+      .expand-icon { font-size: 0.75rem; opacity: 0.6; transition: transform 0.2s ease; }
+      tr.theme-row.expanded .expand-icon { transform: rotate(90deg); }
+      tr.theme-row:hover .theme-name { background: #f0f8ff; }
+      tr.theme-row.expanded .theme-name { background: #e7f3ff; }
+      th:first-child { position: sticky; left: 0; z-index: 11; }
+      .theme-guide-link { font-weight: 500; font-size: 0.8rem; }
 
-      .container {
-        max-width: 1400px;
-        margin: 2rem auto;
-        padding: 0 2rem;
-      }
+      .status-grid { display: flex; gap: 0.25rem; align-items: center; flex-wrap: wrap; }
+      .status-indicator { display: inline-flex; align-items: center; gap: 0.125rem; padding: 0.25rem 0.5rem; background: #f0f0f0; border-radius: 3px; font-size: 0.75rem; white-space: nowrap; }
+      .status-indicator.active { background: #d4f4dd; color: #0a6c2e; }
 
-      .description {
-        margin-bottom: 2rem;
-        color: #6c757d;
-      }
+      .source-count { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5rem; padding: 0.25rem 0.5rem; background: #0066cc; color: white; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
 
-      .hint {
-        margin-bottom: 1rem;
-        padding: 0.5rem 0.75rem;
-        background: #e7f3ff;
-        border-left: 3px solid #0066cc;
-        border-radius: 4px;
-        font-size: 0.875rem;
-        color: #004080;
-      }
+      .badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 500; }
+      .badge-global { background: #d4f4dd; color: #0a6c2e; }
+      .badge-regional { background: #fff3cd; color: #856404; }
+      .badge-quality { background: #f0f0f0; color: #495057; }
 
-      .table-wrapper {
-        overflow-x: auto;
-        margin: 0 -2rem;
-        padding: 0 2rem;
-      }
+      .processing-summary { font-size: 0.8rem; color: #6c757d; max-width: 220px; }
 
-      table {
-        width: 100%;
-        min-width: 900px;
-        border-collapse: collapse;
-        background: white;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      }
+      tr.details-row { display: none; }
+      tr.details-row.show { display: table-row; }
+      .details-content { padding: 2rem; background: linear-gradient(to bottom, #f0f8ff, #ffffff); border-top: 2px solid #0066cc; }
+      .details-section { margin-bottom: 1.5rem; }
+      .details-section h3 { font-size: 1rem; margin-bottom: 0.75rem; color: #0066cc; }
+      .detail-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-bottom: 2rem; }
+      .detail-box { border: 1px solid #dee2e6; background: #f8f9fa; padding: 1rem; border-radius: 6px; }
+      .detail-box h4 { font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.025em; color: #495057; }
 
-      th {
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        padding: 0.875rem;
-        text-align: left;
-        font-weight: 600;
-        font-size: 0.8125rem;
-        text-transform: uppercase;
-        letter-spacing: 0.025em;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-      }
+      ul { margin: 0; padding-left: 1.25rem; list-style-type: disc; }
+      li { margin-bottom: 0.25rem; }
+      .detail-list { list-style-type: none; padding-left: 0; }
+      .detail-list li { padding: 0.5rem; background: white; margin-bottom: 0.5rem; border-left: 3px solid #0066cc; }
 
-      td {
-        border: 1px solid #dee2e6;
-        padding: 0.875rem;
-        vertical-align: top;
-        font-size: 0.875rem;
-        line-height: 1.5;
-      }
+      a { color: #0066cc; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code { background: #f4f4f4; padding: 0.125rem 0.25rem; border-radius: 3px; font-size: 0.85em; font-family: 'Courier New', monospace; }
 
-      tr.theme-row {
-        cursor: pointer;
-        transition: background-color 0.15s ease;
-      }
+      .guide-cta { display: inline-block; margin-top: 0.5rem; padding: 0.4rem 0.75rem; background: #0066cc; color: #fff; border-radius: 4px; font-size: 0.85rem; font-weight: 500; }
+      .guide-cta:hover { background: #0052a3; text-decoration: none; }
 
-      tr.theme-row:hover {
-        background: #f0f8ff;
-      }
-
-      tr.theme-row.expanded {
-        background: #e7f3ff;
-      }
-
-      .theme-name {
-        font-weight: 600;
-        color: #0066cc;
-        position: sticky;
-        left: 0;
-        background: white;
-        z-index: 5;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .expand-icon {
-        font-size: 0.75rem;
-        opacity: 0.6;
-        transition: transform 0.2s ease;
-      }
-
-      tr.theme-row.expanded .expand-icon {
-        transform: rotate(90deg);
-      }
-
-      tr.theme-row:hover .theme-name {
-        background: #f0f8ff;
-      }
-
-      tr.theme-row.expanded .theme-name {
-        background: #e7f3ff;
-      }
-
-      th:first-child {
-        position: sticky;
-        left: 0;
-        z-index: 11;
-      }
-
-      /* Compact status indicators */
-      .status-grid {
-        display: flex;
-        gap: 0.25rem;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-
-      .status-indicator {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.125rem;
-        padding: 0.25rem 0.5rem;
-        background: #f0f0f0;
-        border-radius: 3px;
-        font-size: 0.75rem;
-        white-space: nowrap;
-      }
-
-      .status-indicator.active {
-        background: #d4f4dd;
-        color: #0a6c2e;
-      }
-
-      .status-indicator.inactive {
-        background: #fce4e4;
-        color: #a91e1e;
-      }
-
-      .status-indicator.partial {
-        background: #fff3cd;
-        color: #856404;
-      }
-
-      /* Source count badge */
-      .source-count {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 1.5rem;
-        padding: 0.25rem 0.5rem;
-        background: #0066cc;
-        color: white;
-        border-radius: 10px;
-        font-size: 0.75rem;
-        font-weight: 600;
-      }
-
-      /* Types summary */
-      .types-summary {
-        font-size: 0.85rem;
-        color: #495057;
-        font-style: italic;
-      }
-
-      /* Coverage and quality badges */
-      .badge {
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-weight: 500;
-      }
-
-      .badge-global {
-        background: #d4f4dd;
-        color: #0a6c2e;
-      }
-
-      .badge-regional {
-        background: #fff3cd;
-        color: #856404;
-      }
-
-      .badge-quality {
-        background: #f0f0f0;
-        color: #495057;
-      }
-
-      /* Processing summary */
-      .processing-summary {
-        font-size: 0.8rem;
-        color: #6c757d;
-        max-width: 200px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      /* Expanded details row */
-      tr.details-row {
-        display: none;
-      }
-
-      tr.details-row.show {
-        display: table-row;
-      }
-
-      .details-content {
-        padding: 2rem;
-        background: linear-gradient(to bottom, #f0f8ff, #ffffff);
-        border-top: 2px solid #0066cc;
-      }
-
-      .details-section {
-        margin-bottom: 1.5rem;
-      }
-
-      .details-section h3 {
-        font-size: 1rem;
-        margin-bottom: 0.75rem;
-        color: #0066cc;
-      }
-
-      .detail-grid {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        margin-bottom: 2rem;
-      }
-
-      .detail-box {
-        border: 1px solid #dee2e6;
-        background: #f8f9fa;
-        padding: 1rem;
-        border-radius: 6px;
-      }
-
-      .detail-box h4 {
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.025em;
-        color: #495057;
-      }
-
-      /* Lists */
-      ul {
-        margin: 0;
-        padding-left: 1.25rem;
-        list-style-type: disc;
-      }
-
-      li {
-        margin-bottom: 0.25rem;
-      }
-
-      .detail-list {
-        list-style-type: none;
-        padding-left: 0;
-      }
-
-      .detail-list li {
-        padding: 0.5rem;
-        background: white;
-        margin-bottom: 0.5rem;
-        border-left: 3px solid #0066cc;
-      }
-
-      /* Links */
-      a {
-        color: #0066cc;
-        text-decoration: none;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-
-      /* Code */
-      code {
-        background: #f4f4f4;
-        padding: 0.125rem 0.25rem;
-        border-radius: 3px;
-        font-size: 0.85em;
-        font-family: 'Courier New', monospace;
-      }
-
-      /* Loading */
-      .loading {
-        text-align: center;
-        padding: 4rem;
-        color: #6c757d;
-      }
-
-      /* Error */
-      .error {
-        text-align: center;
-        padding: 4rem;
-        color: #dc3545;
-      }
-
-      /* Responsive */
       @media (max-width: 768px) {
-        .header-content {
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .container {
-          padding: 0 1rem;
-        }
-
-        .table-wrapper {
-          margin: 0 -1rem;
-          padding: 0 1rem;
-        }
-
-        .detail-grid {
-          grid-template-columns: 1fr;
-        }
+        .header-content { flex-direction: column; gap: 1rem; }
+        .container { padding: 0 1rem; }
+        .table-wrapper { margin: 0 -1rem; padding: 0 1rem; }
+        .detail-grid { grid-template-columns: 1fr; }
       }
 
-      /* Dark mode support */
       @media (prefers-color-scheme: dark) {
-        body {
-          background: #1a1a1a;
-          color: #e4e4e4;
-        }
-
-        .header {
-          background: #252525;
-          border-bottom-color: #3a3a3a;
-        }
-
-        .hint {
-          background: #2a3644;
-          border-left-color: #5a8bb8;
-          color: #a8c4db;
-        }
-
-        table {
-          background: #252525;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        th {
-          background: #2d2d2d;
-          border-color: #3a3a3a;
-          color: #d4d4d4;
-        }
-
-        td {
-          border-color: #3a3a3a;
-        }
-
-        tr.theme-row:hover {
-          background: #2d3844;
-        }
-
-        tr.theme-row.expanded {
-          background: #2a3644;
-        }
-
-        .theme-name {
-          background: #252525;
-        }
-
-        tr.theme-row:hover .theme-name {
-          background: #2d3844;
-        }
-
-        tr.theme-row.expanded .theme-name {
-          background: #2a3644;
-        }
-
-        .details-content {
-          background: linear-gradient(to bottom, #2a3644, #252525);
-        }
-
-        .detail-box {
-          background: #2d2d2d;
-          border-color: #3a3a3a;
-        }
-
-        .detail-list li {
-          background: #2d2d2d;
-          border-left-color: #5a8bb8;
-        }
-
-        code {
-          background: #2d2d2d;
-          color: #e4e4e4;
-        }
-
-        .status-indicator {
-          background: #2d2d2d;
-        }
-
-        .status-indicator.active {
-          background: #2a4d3a;
-          color: #7ec699;
-        }
-
-        .status-indicator.inactive {
-          background: #4d2a2a;
-          color: #db8585;
-        }
-
-        .status-indicator.partial {
-          background: #4d4330;
-          color: #d4b377;
-        }
-
-        .badge-global {
-          background: #2a4d3a;
-          color: #7ec699;
-        }
-
-        .badge-regional {
-          background: #4d4330;
-          color: #d4b377;
-        }
-
-        .badge-quality {
-          background: #2d2d2d;
-          color: #d4d4d4;
-        }
+        body { background: #1a1a1a; color: #e4e4e4; }
+        .header { background: #252525; border-bottom-color: #3a3a3a; }
+        .hint { background: #2a3644; border-left-color: #5a8bb8; color: #a8c4db; }
+        table { background: #252525; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+        th { background: #2d2d2d; border-color: #3a3a3a; color: #d4d4d4; }
+        td { border-color: #3a3a3a; }
+        tr.theme-row:hover { background: #2d3844; }
+        tr.theme-row.expanded { background: #2a3644; }
+        .theme-name { background: #252525; }
+        tr.theme-row:hover .theme-name { background: #2d3844; }
+        tr.theme-row.expanded .theme-name { background: #2a3644; }
+        .details-content { background: linear-gradient(to bottom, #2a3644, #252525); }
+        .detail-box { background: #2d2d2d; border-color: #3a3a3a; }
+        .detail-list li { background: #2d2d2d; border-left-color: #5a8bb8; }
+        code { background: #2d2d2d; color: #e4e4e4; }
+        .status-indicator { background: #2d2d2d; }
+        .status-indicator.active { background: #2a4d3a; color: #7ec699; }
+        .badge-global { background: #2a4d3a; color: #7ec699; }
+        .badge-regional { background: #4d4330; color: #d4b377; }
+        .badge-quality { background: #2d2d2d; color: #d4d4d4; }
       }
     </style>
   </head>
@@ -488,36 +115,711 @@
     </div>
 
     <div class="container">
-      <div class="hint">Click any row to view detailed information about each data theme.</div>
-
-      <div id="table-container" class="loading">
-        <div class="error">Error loading theme definitions: Failed to fetch</div>
-      </div>
+      <p class="description">A side-by-side comparison of every Overture theme: definition, feature types, coverage, sources, release artifacts, and how each dataset is built. Each theme links to its full guide.</p>
+      <div class="hint">Click any row to view detailed information about each data theme. Click a theme name to open its full guide.</div>
+      <div id="table-container"></div>
     </div>
 
     <script>
-      // Track expanded rows
-      let expandedRows = new Set();
+      // ---------------------------------------------------------------------
+      // Single source of truth. This object is inlined at build time so the
+      // page never depends on a runtime fetch (which is what broke the old
+      // version). To publish inside the docs site, import this same object
+      // from theme_definitions.json instead of duplicating it.
+      // Each theme carries a `guide` path linking to its guide page.
+      // ---------------------------------------------------------------------
+      const THEME_DATA = {
+  "themes": {
+    "Addresses": {
+      "guide": "./addresses",
+      "brief_description": "Unique geographic points representing a physical address location.",
+      "licenses": [
+        {
+          "name": "Various licenses",
+          "url": "https://docs.overturemaps.org/attribution/#addresses"
+        }
+      ],
+      "sources": [
+        {
+          "name": "OpenAddresses",
+          "freshness": "",
+          "type": "community",
+          "url": "https://openaddresses.io/"
+        },
+        {
+          "name": "AddressForAll",
+          "freshness": "",
+          "type": "community",
+          "url": "https://www.addressforall.org/en/"
+        },
+        {
+          "name": "City of New York",
+          "freshness": "",
+          "type": "authoritative",
+          "url": "https://data.cityofnewyork.us/City-Government/NYC-Address-Points/g6pj-hd8k"
+        },
+        {
+          "name": "U.S. Department of Transportation",
+          "freshness": "",
+          "type": "authoritative",
+          "url": "https://www.transportation.gov/gis/national-address-database"
+        }
+      ],
+      "gers": {
+        "gersified": {
+          "flag": false,
+          "note": ""
+        },
+        "bridge_files": {
+          "flag": false,
+          "note": ""
+        },
+        "GERS_registry": {
+          "flag": false,
+          "note": "Addresses do not yet have a stable matcher, so address feature IDs are not included in the GERS registry. Overture is seeking engineering support to build one."
+        },
+        "data_changelog": {
+          "flag": true,
+          "note": ""
+        }
+      },
+      "signal_confidence_score": {
+        "flag": false,
+        "note": ""
+      },
+      "excluded_by_design": [],
+      "freshness": {
+        "release_frequency": "monthly",
+        "last_updated": ""
+      },
+      "quality_assurance": {
+        "coverage_summary": "Countries",
+        "coverage": [
+          "Coverage in 39 countries",
+          "Several countries with partial coverage: US, Germany, Taiwan",
+          "Datasets have varying levels of completeness in their attributes. A dataset may be missing postcodes or only have partial coverage for `address_levels` for example."
+        ],
+        "quality_summary": "Limited GERS ID stability and variable point location accuracy",
+        "quality": [
+          "Address point locations vary from dataset to dataset but most often represent either building centroids, building entrances, points on road, or parcel centroids.",
+          "GERS IDs are not very stable because of identical matching. Any change to an attribute or location will result in a new GERS ID."
+        ],
+        "violations": []
+      },
+      "filtering": {
+        "summary": "",
+        "location": [],
+        "topological": [],
+        "geometrical": [],
+        "properties": [],
+        "others": []
+      },
+      "matching": {
+        "summary": "Exact matching",
+        "logic": "Matching based on exact point geometry and address properties",
+        "properties": [
+          "All properties incl. geometry"
+        ]
+      },
+      "merging": {
+        "summary": [
+          "Promotion of single source for matched addresses",
+          "No merging of attributes"
+        ],
+        "logic": [
+          "All addresses, except for perfect duplicates/matches, are released",
+          "No merging of attributes between sources"
+        ],
+        "constraints": []
+      },
+      "types": [
+        "address"
+      ]
+    },
+    "Base": {
+      "guide": "./base",
+      "brief_description": "Foundational layers such as land, water, infrastructure, and bathymetry.",
+      "licenses": [
+        {
+          "name": "ODbL",
+          "url": "https://opendatacommons.org/licenses/odbl/"
+        }
+      ],
+      "sources": [
+        {
+          "name": "Daylight Coastlines (OSM)",
+          "freshness": "",
+          "type": "community",
+          "url": "https://daylightmap.org/coastlines.html"
+        },
+        {
+          "name": "ETOPO1",
+          "freshness": "",
+          "type": "community",
+          "url": "https://www.ncei.noaa.gov/products/etopo-global-relief-model"
+        },
+        {
+          "name": "GLOBathy",
+          "freshness": "",
+          "type": "ML-derived",
+          "url": "https://www.nature.com/articles/s41597-022-01132-9"
+        },
+        {
+          "name": "ESA WorldCover",
+          "freshness": "",
+          "type": "ML-derived",
+          "url": "https://esa-worldcover.org/en"
+        }
+      ],
+      "gers": {
+        "gersified": {
+          "flag": false,
+          "note": ""
+        },
+        "bridge_files": {
+          "flag": false,
+          "note": ""
+        },
+        "GERS_registry": {
+          "flag": false,
+          "note": ""
+        },
+        "data_changelog": {
+          "flag": true,
+          "note": ""
+        }
+      },
+      "signal_confidence_score": {
+        "flag": false,
+        "note": ""
+      },
+      "excluded_by_design": [],
+      "freshness": {
+        "release_frequency": "monthly",
+        "last_updated": ""
+      },
+      "quality_assurance": {
+        "coverage_summary": "Global",
+        "coverage": "Features in base are not considered to be their own entities, so non-bathymetry coverage is just basic features from OSM with all the pass through tags.",
+        "quality_summary": "Derived from OSM tags",
+        "quality": [],
+        "violations": []
+      },
+      "filtering": {
+        "summary": "Tag-based filtering (non-bathymetry)",
+        "location": [],
+        "topological": [],
+        "geometrical": [],
+        "properties": [],
+        "others": []
+      },
+      "matching": {
+        "summary": "",
+        "logic": "n/a (single source)",
+        "properties": []
+      },
+      "merging": {
+        "summary": [],
+        "logic": "n/a (single source)",
+        "constraints": []
+      },
+      "types": [
+        "land",
+        "land_cover",
+        "land_use",
+        "water",
+        "bathymetry",
+        "infrastructure"
+      ]
+    },
+    "Buildings": {
+      "guide": "./buildings",
+      "brief_description": "Permanent human-made structures with a roof.",
+      "licenses": [
+        {
+          "name": "ODbL",
+          "url": "https://opendatacommons.org/licenses/odbl/"
+        }
+      ],
+      "sources": [
+        {
+          "name": "OSM",
+          "freshness": "monthly",
+          "type": "community",
+          "url": "https://osm.org/"
+        },
+        {
+          "name": "Esri",
+          "freshness": "biannually",
+          "type": "community",
+          "url": "https://communitymaps.arcgis.com/home"
+        },
+        {
+          "name": "Vancouver",
+          "freshness": "biannually",
+          "type": "authoritative",
+          "url": "https://opendata.vancouver.ca/"
+        },
+        {
+          "name": "IGN Spain",
+          "freshness": "one-time ingestion",
+          "type": "authoritative",
+          "url": "https://www.ign.es/"
+        },
+        {
+          "name": "Microsoft",
+          "freshness": "irregularly",
+          "type": "ML-derived",
+          "url": "https://github.com/microsoft/GlobalMLBuildingFootprints"
+        },
+        {
+          "name": "Google",
+          "freshness": "one-time ingestion",
+          "type": "ML-derived",
+          "url": "https://sites.research.google/open-buildings/"
+        },
+        {
+          "name": "East Asian countries",
+          "freshness": "one-time ingestion",
+          "type": "ML-derived",
+          "url": "https://zenodo.org/records/8174931"
+        }
+      ],
+      "gers": {
+        "gersified": {
+          "flag": true,
+          "note": "only building, not building_part"
+        },
+        "bridge_files": {
+          "flag": true,
+          "note": "One-to-one matches only"
+        },
+        "GERS_registry": {
+          "flag": true,
+          "note": ""
+        },
+        "data_changelog": {
+          "flag": true,
+          "note": ""
+        }
+      },
+      "signal_confidence_score": {
+        "flag": false,
+        "note": ""
+      },
+      "excluded_by_design": [
+        "Features that are well defined in other themes. Examples:",
+        "Physical “regions”",
+        "Places of business"
+      ],
+      "freshness": {
+        "release_frequency": "monthly",
+        "last_updated": ""
+      },
+      "quality_assurance": {
+        "coverage_summary": "Global",
+        "coverage": "Global",
+        "quality_summary": "Lower footprint precision in ML-derived sources",
+        "quality": [
+          "Lower footprint precision in Global South due to high share of ML-derived buildings"
+        ],
+        "violations": [
+          "Pre-match violations: `building_tiny`, `building_large`, `building_huge`, `building_invalid_geometry`, `building_duplicate_record_id`.",
+          "Post-merge violations: `building_transportation_intersection`, `building_water_intersection`, `building_invalid_area`, `building_too_many_small_angles`"
+        ]
+      },
+      "filtering": {
+        "summary": "Overlap allowed within source, but not between sources",
+        "location": [
+          "Buildings in water"
+        ],
+        "topological": [
+          "Overlap allowed within source, but not between sources"
+        ],
+        "geometrical": [
+          "Geometry identical to source",
+          "(Multi)Polygons with too many sharp angles are excluded",
+          "Footprint area > 10m for ML-derived sources"
+        ],
+        "properties": [
+          "`height` < 900m"
+        ],
+        "others": []
+      },
+      "matching": {
+        "summary": "Geometric similarity (Intersection-over-Union > 0.5)",
+        "logic": "Intersection-over-Union > 0.5",
+        "properties": [
+          "`geometry`"
+        ]
+      },
+      "merging": {
+        "summary": [
+          "Hierarchical merging of non-overlapping footprints",
+          "Merging of height attributes between matches"
+        ],
+        "logic": [
+          "Hierarchical merging of non-overlapping building footprints",
+          "Merging of building height attributes between matches"
+        ],
+        "constraints": [
+          "No spatial overlap for footprint merging",
+          "Intersection-over-Union > 0.5 for attribute merging"
+        ]
+      },
+      "types": [
+        "building",
+        "building_part"
+      ]
+    },
+    "Divisions": {
+      "guide": "./divisions",
+      "brief_description": "Recognized areas for governance, culture, or organization.",
+      "licenses": [
+        {
+          "name": "ODbL",
+          "url": "https://opendatacommons.org/licenses/odbl"
+        }
+      ],
+      "sources": [
+        {
+          "name": "OSM",
+          "freshness": "",
+          "type": "community",
+          "url": "https://osm.org/"
+        },
+        {
+          "name": "geoBoundaries",
+          "freshness": "",
+          "type": "community",
+          "url": "https://www.geoboundaries.org/"
+        }
+      ],
+      "gers": {
+        "gersified": {
+          "flag": true,
+          "note": ""
+        },
+        "bridge_files": {
+          "flag": true,
+          "note": ""
+        },
+        "GERS_registry": {
+          "flag": true,
+          "note": "The features in this theme are included in the GERS registry."
+        },
+        "data_changelog": {
+          "flag": true,
+          "note": ""
+        }
+      },
+      "signal_confidence_score": {
+        "flag": false,
+        "note": ""
+      },
+      "excluded_by_design": [],
+      "freshness": {
+        "release_frequency": "monthly",
+        "last_updated": ""
+      },
+      "quality_assurance": {
+        "coverage_summary": "Global",
+        "coverage": [
+          "Coverage generally aligns with admin_level tags in OSM and geoboundaries datasets.",
+          "Global coverage of country, dependency, region, and county.",
+          "Macroregion and macrocounty should be present, but are miscategorized as other subtypes.",
+          "Subtypes below county (locality, borough. neighborhood, microhood) should be present in every country, but coverage is often spotty."
+        ],
+        "quality_summary": "Minor macroregion issues; sub-county coverage spotty",
+        "quality": [],
+        "violations": []
+      },
+      "filtering": {
+        "summary": "Deduplication; overlap not allowed for countries",
+        "location": [
+          ""
+        ],
+        "topological": [
+          "Overlap allowed at lower subtypes (ex locality), not allowed in others (ex country)"
+        ],
+        "geometrical": [],
+        "properties": [],
+        "others": [
+          "Deduplication"
+        ]
+      },
+      "matching": {
+        "summary": "",
+        "logic": "",
+        "properties": []
+      },
+      "merging": {
+        "summary": [],
+        "logic": "",
+        "constraints": []
+      },
+      "types": [
+        "division",
+        "division_area",
+        "division_boundary"
+      ]
+    },
+    "Places": {
+      "guide": "./places",
+      "brief_description": "Concrete, physically identifiable, stationary destinations.",
+      "licenses": [
+        {
+          "name": "CDLA Permissive 2.0",
+          "url": "https://cdla.dev/permissive-2-0/"
+        },
+        {
+          "name": "Apache 2.0.",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "sources": [
+        {
+          "name": "Meta",
+          "freshness": "",
+          "type": "commercial",
+          "url": ""
+        },
+        {
+          "name": "Foursquare",
+          "freshness": "",
+          "type": "commercial",
+          "url": ""
+        },
+        {
+          "name": "Microsoft",
+          "freshness": "",
+          "type": "commercial",
+          "url": ""
+        },
+        {
+          "name": "PinMeTo",
+          "freshness": "",
+          "type": "commercial",
+          "url": ""
+        }
+      ],
+      "gers": {
+        "gersified": {
+          "flag": true,
+          "note": ""
+        },
+        "bridge_files": {
+          "flag": true,
+          "note": ""
+        },
+        "GERS_registry": {
+          "flag": true,
+          "note": ""
+        },
+        "data_changelog": {
+          "flag": true,
+          "note": ""
+        }
+      },
+      "signal_confidence_score": {
+        "flag": true,
+        "note": ""
+      },
+      "excluded_by_design": [
+        "Concrete and physically identifiable: to exclude divisions and addresses",
+        "Stationary: to exclude noise from UGC datasets for things like food carts or vehicles/boats/aircraft",
+        "Destination: to exclude bus stops and train platforms and other intermediate waypoints",
+        "Private: we only include places that do not include PII"
+      ],
+      "freshness": {
+        "release_frequency": "monthly",
+        "last_updated": ""
+      },
+      "quality_assurance": {
+        "coverage_summary": "Global",
+        "coverage": [
+          "Global",
+          "US ~73%"
+        ],
+        "quality_summary": "Duplicates",
+        "quality": [
+          "Duplicates",
+          "High junk rate",
+          "Low attribute completeness"
+        ],
+        "violations": []
+      },
+      "filtering": {
+        "summary": "None, except existence `confidence` > 0.2",
+        "location": [
+          ""
+        ],
+        "topological": [],
+        "geometrical": [],
+        "properties": [
+          "`confidence` > 0.2"
+        ],
+        "others": []
+      },
+      "matching": {
+        "summary": "ML-based matching with clustering",
+        "logic": [
+          "Identifying potential matching pairs based on quadkey",
+          "ML-based matching based on attribute similarity"
+        ],
+        "properties": [
+          "`name`",
+          "`address`",
+          "`phone number`",
+          "`house number`",
+          "`website`",
+          "`spatial distance`"
+        ]
+      },
+      "merging": {
+        "summary": [
+          "Promotion of single source for matched places",
+          "No merging of attributes"
+        ],
+        "logic": [
+          "Clustering of matched places",
+          "Promotion of place from source with the highest match count",
+          "No merging of attributes between matches"
+        ],
+        "constraints": []
+      },
+      "types": [
+        "place"
+      ]
+    },
+    "Transportation": {
+      "guide": "./transportation",
+      "brief_description": "Traversable segments (roads, railways, ferries) and connectors (intersections), representing how people and objects travel.",
+      "licenses": [
+        {
+          "name": "ODbL",
+          "url": "https://opendatacommons.org/licenses/odbl/"
+        }
+      ],
+      "sources": [
+        {
+          "name": "OSM",
+          "freshness": "",
+          "type": "community",
+          "url": "https://osm.org/"
+        },
+        {
+          "name": "TomTom",
+          "freshness": "",
+          "type": "commercial",
+          "url": "https://www.tomtom.com/"
+        }
+      ],
+      "gers": {
+        "gersified": {
+          "flag": true,
+          "note": ""
+        },
+        "bridge_files": {
+          "flag": true,
+          "note": ""
+        },
+        "GERS_registry": {
+          "flag": true,
+          "note": "The features in this theme are included in the GERS registry."
+        },
+        "data_changelog": {
+          "flag": true,
+          "note": ""
+        }
+      },
+      "signal_confidence_score": {
+        "flag": false,
+        "note": ""
+      },
+      "excluded_by_design": [
+        "Open, navigable spaces like fields, parks, or oceans",
+        "Aerial paths, such as flight paths or geostationary satellite orbits",
+        "Paths traversed by continuous entities: oil pipelines, electric lines"
+      ],
+      "freshness": {
+        "release_frequency": "monthly",
+        "last_updated": ""
+      },
+      "quality_assurance": {
+        "coverage_summary": "Global",
+        "coverage": [],
+        "quality_summary": "",
+        "quality": [
+          "Presence of navigational islands",
+          "Road name gap detection",
+          "Road sharp turn",
+          "Normalization of data, including dropping unrealistic outliers",
+          "Overlap/duplicate highways",
+          "Invalid intersections"
+        ],
+        "violations": []
+      },
+      "filtering": {
+        "summary": "Deduplication of nodes; OSM highway values filtering",
+        "logic": [
+          "Remove duplicate nodes based on location and properties",
+          "Filter OSM segments to specific highway values currently in scope"
+        ],
+        "highway_values": [
+          "railway",
+          "construction",
+          "cycleway",
+          "footway",
+          "living_street",
+          "motorway",
+          "motorway_link",
+          "path",
+          "pedestrian",
+          "primary",
+          "primary_link",
+          "residential",
+          "road",
+          "secondary",
+          "secondary_link",
+          "service",
+          "steps",
+          "tertiary",
+          "tertiary_link",
+          "track",
+          "trunk",
+          "trunk_link",
+          "unclassified"
+        ]
+      },
+      "matching": {
+        "summary": "Deduplication of nodes; OSM to Orbis matching for TomTom integration",
+        "logic": [
+          "TomTom roads matched to OSM using Orbis as part of OSM ingestion",
+          "Public OSM needs to be updated directly"
+        ],
+        "note": "If public OSM needs updating (e.g., road removed/rerouted), road must be reassigned or removed from TomTom road. Public OSM will be updated directly."
+      },
+      "merging": {
+        "summary": "Merging of OSM -> Orbis; ongoing merge of legacy network",
+        "logic": [
+          "OSM segments merged into Orbis as part of ingestion",
+          "Ongoing integration of TomTom legacy network"
+        ]
+      },
+      "types": [
+        "connector",
+        "segment"
+      ]
+    }
+  }
+};
 
-      // Load the theme definitions data from separate JSON file
-      // Use relative path to work regardless of base URL
-      fetch('theme_definitions.json')
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to load data: ' + response.status);
-          }
-          return response.json();
-        })
-        .then((data) => renderTable(data))
-        .catch((error) => {
-          document.getElementById('table-container').innerHTML =
-            '<div class="error">Error loading theme definitions: ' + error.message + '</div>';
-        });
+      let expandedRows = new Set();
 
       function toggleRow(themeName) {
         const row = document.getElementById(`row-${themeName}`);
         const detailsRow = document.getElementById(`details-${themeName}`);
-
         if (expandedRows.has(themeName)) {
           expandedRows.delete(themeName);
           row.classList.remove('expanded');
@@ -528,87 +830,57 @@
           detailsRow.classList.add('show');
         }
       }
+      window.toggleRow = toggleRow;
 
       function renderTable(data) {
         const themes = data.themes;
         const container = document.getElementById('table-container');
-
         let html = '<div class="table-wrapper"><table>';
-
-        // Streamlined header
         html += `
-                <thead>
-                    <tr>
-                        <th>Theme</th>
-                        <th>Definition</th>
-                        <th>Type</th>
-                        <th>Coverage</th>
-                        <th>Sources</th>
-                        <th>Release Artifacts</th>
-                        <th>Release Frequency</th>
-                        <th>Processing</th>
-                    </tr>
-                </thead>
-                <tbody>
-            `;
+          <thead>
+            <tr>
+              <th>Theme</th>
+              <th>Definition</th>
+              <th>Type</th>
+              <th>Coverage</th>
+              <th>Sources</th>
+              <th>Release Artifacts</th>
+              <th>Release Frequency</th>
+              <th>Processing</th>
+            </tr>
+          </thead>
+          <tbody>`;
 
-        // Rows with expandable details
         for (const [name, theme] of Object.entries(themes)) {
           const gers = theme.gers || {};
           const safeId = name.replace(/\s+/g, '-');
-
-          // Main row (streamlined)
+          const guideLink = theme.guide
+            ? `<a class="theme-guide-link" href="${theme.guide}" onclick="event.stopPropagation()">${name}</a>`
+            : name;
           html += `
-                    <tr class="theme-row" id="row-${safeId}" onclick="toggleRow('${safeId}')">
-                        <td class="theme-name">
-                            <span class="expand-icon">▶</span>
-                            ${name}
-                        </td>
-                        <td>${theme.brief_description || '—'}</td>
-                        <td>${renderTypes(theme.types)}</td>
-                        <td>${renderCoverageBadge(theme.quality_assurance?.coverage_summary)}</td>
-                        <td>${renderSourceCount(theme.sources)}</td>
-                        <td>${renderReleaseArtifacts(gers)}</td>
-                        <td>${theme.freshness?.release_frequency || '—'}</td>
-                        <td>${renderProcessingSummary(theme)}</td>
-                    </tr>
-                `;
-
-          // Details row (hidden by default)
-          html += `
-                    <tr class="details-row" id="details-${safeId}">
-                        <td colspan="8">
-                            <div class="details-content">
-                                ${renderFullDetails(theme)}
-                            </div>
-                        </td>
-                    </tr>
-                `;
+            <tr class="theme-row" id="row-${safeId}" onclick="toggleRow('${safeId}')">
+              <td class="theme-name"><span class="expand-icon">▶</span>${guideLink}</td>
+              <td>${theme.brief_description || '—'}</td>
+              <td>${renderTypes(theme.types)}</td>
+              <td>${renderCoverageBadge(theme.quality_assurance?.coverage_summary)}</td>
+              <td>${renderSourceCount(theme.sources)}</td>
+              <td>${renderReleaseArtifacts(gers)}</td>
+              <td>${theme.freshness?.release_frequency || '—'}</td>
+              <td>${renderProcessingSummary(theme)}</td>
+            </tr>
+            <tr class="details-row" id="details-${safeId}">
+              <td colspan="8"><div class="details-content">${renderFullDetails(theme, name)}</div></td>
+            </tr>`;
         }
-
         html += '</tbody></table></div>';
         container.innerHTML = html;
-        container.classList.remove('loading');
       }
 
       function renderCoverageBadge(coverage) {
         if (!coverage) return '<span class="badge badge-quality">—</span>';
-        if (coverage.toLowerCase().includes('global')) {
-          return '<span class="badge badge-global">Global</span>';
-        } else if (
-          coverage.toLowerCase().includes('select') ||
-          coverage.toLowerCase().includes('countries')
-        ) {
-          return '<span class="badge badge-regional">Countries</span>';
-        }
+        if (coverage.toLowerCase().includes('global')) return '<span class="badge badge-global">Global</span>';
+        if (coverage.toLowerCase().includes('select') || coverage.toLowerCase().includes('countries')) return '<span class="badge badge-regional">Countries</span>';
         return `<span class="badge badge-quality">${coverage}</span>`;
-      }
-
-      function renderQualityBadge(quality) {
-        if (!quality || quality === '—') return '<span class="badge badge-quality">—</span>';
-        // Truncate long quality descriptions
-        const shortQuality = quality.length > 20 ? quality.substring(0, 20) + '...' : quality;
-        return `<span class="badge badge-quality" title="${quality}">${shortQuality}</span>`;
       }
 
       function renderSourceCount(sources) {
@@ -621,307 +893,148 @@
 
       function renderTypes(types) {
         if (!types || types.length === 0) return '—';
-        // Display all types as a simple comma-separated list without truncation
         return `<span style="font-size: 0.85rem; color: #6c757d;">${types.join(', ')}</span>`;
       }
 
       function renderReleaseArtifacts(gers) {
         const items = [];
-
-        // If it has Registry, show "GERS Registry"
-        if (gers.registry?.flag) {
-          items.push('<span class="status-indicator active">GERS registry</span>');
-        } else if (gers.gersified?.flag) {
-          // Only show GERS if no Registry
+        if (gers.registry?.flag || gers.GERS_registry?.flag || gers.gersified?.flag) {
           items.push('<span class="status-indicator active">GERS registry</span>');
         }
-
         if (gers.bridge_files?.flag) {
-          // Show as "Bridge Files"
           const title = gers.bridge_files.note || '';
           items.push(`<span class="status-indicator active" title="${title}">bridge files</span>`);
         }
-
-        if (gers.data_changelog?.flag) {
-          items.push('<span class="status-indicator active">changelog</span>');
-        }
-
+        if (gers.data_changelog?.flag) items.push('<span class="status-indicator active">changelog</span>');
         return items.length > 0 ? `<div class="status-grid">${items.join('')}</div>` : '—';
-      }
-
-      function renderConfidence(confidence) {
-        if (!confidence || !confidence.flag) return '—';
-        return '<span class="status-indicator active">Yes</span>';
       }
 
       function renderProcessingSummary(theme) {
         const parts = [];
-        if (theme.filtering?.summary) parts.push('Filtered');
-        if (
-          theme.matching?.summary &&
-          theme.matching.summary !== '—' &&
-          !theme.matching.summary.includes('n/a')
-        )
-          parts.push('Matched');
-        if (
-          theme.merging?.summary &&
-          theme.merging.summary !== '—' &&
-          !theme.merging.summary.includes('n/a')
-        )
-          parts.push('Merged');
-
+        if (theme.filtering && summaryText(theme.filtering)) parts.push('Filtered');
+        if (theme.matching && summaryText(theme.matching) && !summaryText(theme.matching).includes('n/a')) parts.push('Matched');
+        if (theme.merging && summaryText(theme.merging) && !summaryText(theme.merging).includes('n/a')) parts.push('Merged');
         if (parts.length === 0) return '<span class="processing-summary">Single source</span>';
         return `<span class="processing-summary">${parts.join(' → ')}</span>`;
       }
 
-      function renderFullDetails(theme) {
+      function summaryText(obj) {
+        if (!obj) return '';
+        const s = obj.summary;
+        if (Array.isArray(s)) return s.join(' ');
+        if (typeof s === 'string') return s;
+        // fall back to logic/highway_values presence
+        if (obj.logic && (Array.isArray(obj.logic) ? obj.logic.length : obj.logic)) return 'yes';
+        if (obj.highway_values && obj.highway_values.length) return 'yes';
+        return '';
+      }
+
+      function renderFullDetails(theme, name) {
         let html = '';
-
-        // Types section (if available)
+        if (theme.guide) {
+          html += `<div class="details-section"><a class="guide-cta" href="${theme.guide}">Open the ${name} guide →</a></div>`;
+        }
         if (theme.types && theme.types.length > 0) {
-          html += `
-                    <div class="details-section">
-                        <h3>Type</h3>
-                        <div class="status-grid">
-                            ${theme.types
-                              .map((type) => `<span class="status-indicator active">${type}</span>`)
-                              .join('')}
-                        </div>
-                    </div>
-                `;
+          html += `<div class="details-section"><h3>Type</h3><div class="status-grid">${theme.types.map((t) => `<span class="status-indicator active">${t}</span>`).join('')}</div></div>`;
         }
 
-        // Sources and Licenses section
         html += '<div class="detail-grid">';
-
-        // Sources
         if (theme.sources && theme.sources.length > 0) {
-          html += `
-                    <div class="detail-box">
-                        <h4>Data Sources (${theme.sources.length})</h4>
-                        <ul>
-                            ${theme.sources
-                              .map((s) => {
-                                const link = s.url
-                                  ? `<a href="${s.url}" target="_blank" onclick="event.stopPropagation()">${s.name}</a>`
-                                  : s.name;
-                                const meta = [s.type, s.freshness].filter(Boolean).join(', ');
-                                return `<li>${link}${meta ? ` — <em>${meta}</em>` : ''}</li>`;
-                              })
-                              .join('')}
-                        </ul>
-                    </div>
-                `;
+          html += `<div class="detail-box"><h4>Data Sources (${theme.sources.length})</h4><ul>${theme.sources.map((s) => {
+            const link = s.url ? `<a href="${s.url}" target="_blank" onclick="event.stopPropagation()">${s.name}</a>` : s.name;
+            const meta = [s.type, s.freshness].filter(Boolean).join(', ');
+            return `<li>${link}${meta ? ` — <em>${meta}</em>` : ''}</li>`;
+          }).join('')}</ul></div>`;
         }
-
-        // Licenses
         if (theme.licenses && theme.licenses.length > 0) {
-          html += `
-                    <div class="detail-box">
-                        <h4>Licenses</h4>
-                        <ul>
-                            ${theme.licenses
-                              .map((l) =>
-                                l.url
-                                  ? `<li><a href="${l.url}" target="_blank" onclick="event.stopPropagation()">${l.name}</a></li>`
-                                  : `<li>${l.name}</li>`
-                              )
-                              .join('')}
-                        </ul>
-                    </div>
-                `;
+          html += `<div class="detail-box"><h4>Licenses</h4><ul>${theme.licenses.map((l) => l.url ? `<li><a href="${l.url}" target="_blank" onclick="event.stopPropagation()">${l.name}</a></li>` : `<li>${l.name}</li>`).join('')}</ul></div>`;
         }
-
         html += '</div>';
 
-        // Data Quality Summary
         if (theme.quality_assurance?.quality_summary) {
-          html += `
-                    <div class="details-section">
-                        <h3>Data Quality Summary</h3>
-                        <p>${theme.quality_assurance.quality_summary}</p>
-                    </div>
-                `;
+          html += `<div class="details-section"><h3>Data Quality Summary</h3><p>${theme.quality_assurance.quality_summary}</p></div>`;
         }
-
-        // Confidence Score (only for Places)
         if (theme.signal_confidence_score?.flag) {
-          html += `
-                    <div class="details-section">
-                        <h3>Confidence Score</h3>
-                        <p>This theme includes confidence scores for each feature.</p>
-                    </div>
-                `;
+          html += `<div class="details-section"><h3>Confidence Score</h3><p>This theme includes confidence scores for each feature.</p></div>`;
         }
 
-        // Release Artifacts Details
         if (theme.gers) {
-          html += `
-                    <div class="details-section">
-                        <h3>Release Artifacts</h3>
-                        <ul>
-                `;
-
-          if (theme.gers.gersified?.flag) {
-            html += `<li><strong>GERS:</strong> Yes${theme.gers.gersified.note ? ` — ${theme.gers.gersified.note}` : ''}</li>`;
+          html += `<div class="details-section"><h3>Release Artifacts</h3><ul>`;
+          const g = theme.gers;
+          if (g.gersified?.flag) html += `<li><strong>GERS IDs:</strong> Yes${g.gersified.note ? ` — ${g.gersified.note}` : ''}</li>`;
+          {
+            const regFlag = g.registry?.flag || g.GERS_registry?.flag;
+            const regNote = g.GERS_registry?.note || g.registry?.note || '';
+            html += `<li><strong>Registry:</strong> ${regFlag ? 'Yes' : 'No'}${regNote ? ` — ${regNote}` : ''}</li>`;
           }
-          if (theme.gers.registry?.flag) {
-            html += `<li><strong>Registry:</strong> Yes${theme.gers.registry.note ? ` — ${theme.gers.registry.note}` : ''}</li>`;
-          }
-          if (theme.gers.bridge_files?.flag) {
-            html += `<li><strong>Bridge Files:</strong> Yes${theme.gers.bridge_files.note ? ` — ${theme.gers.bridge_files.note}` : ''}</li>`;
-          }
-          if (theme.gers.data_changelog?.flag) {
-            html += `<li><strong>Changelog:</strong> Yes${theme.gers.data_changelog.note ? ` — ${theme.gers.data_changelog.note}` : ''}</li>`;
-          }
-
+          if (g.bridge_files?.flag) html += `<li><strong>Bridge Files:</strong> Yes${g.bridge_files.note ? ` — ${g.bridge_files.note}` : ''}</li>`;
+          if (g.data_changelog?.flag) html += `<li><strong>Changelog:</strong> Yes${g.data_changelog.note ? ` — ${g.data_changelog.note}` : ''}</li>`;
           html += '</ul></div>';
         }
 
-        // Excluded by Design
         if (theme.excluded_by_design && theme.excluded_by_design.length > 0) {
-          html += `
-                    <div class="details-section">
-                        <h3>Excluded by Design</h3>
-                        <ul class="detail-list">
-                            ${theme.excluded_by_design.map((item) => `<li>${item}</li>`).join('')}
-                        </ul>
-                    </div>
-                `;
+          html += `<div class="details-section"><h3>Excluded by Design</h3><ul class="detail-list">${theme.excluded_by_design.map((i) => `<li>${i}</li>`).join('')}</ul></div>`;
         }
 
-        // Quality Assurance Details
         if (theme.quality_assurance) {
-          html += `
-                    <div class="details-section">
-                        <h3>Quality Assurance</h3>
-                        ${renderQualityDetails(theme.quality_assurance)}
-                    </div>
-                `;
+          html += `<div class="details-section"><h3>Quality Assurance</h3>${renderQualityDetails(theme.quality_assurance)}</div>`;
         }
 
-        // Processing Details
-        html += '<h3 style="margin-top: 2rem; margin-bottom: 1rem;">Processing Pipeline</h3>';
-        html += '<div class="detail-grid">';
-
-        // Filtering
-        if (theme.filtering) {
-          html += `
-                    <div class="detail-box">
-                        <h4>Filtering</h4>
-                        ${renderProcessingDetails(theme.filtering)}
-                    </div>
-                `;
-        }
-
-        // Matching
-        if (theme.matching) {
-          html += `
-                    <div class="detail-box">
-                        <h4>Matching</h4>
-                        ${renderProcessingDetails(theme.matching)}
-                    </div>
-                `;
-        }
-
-        // Merging
-        if (theme.merging) {
-          html += `
-                    <div class="detail-box">
-                        <h4>Merging</h4>
-                        ${renderProcessingDetails(theme.merging)}
-                    </div>
-                `;
-        }
-
+        html += '<h3 style="margin-top: 2rem; margin-bottom: 1rem;">Processing Pipeline</h3><div class="detail-grid">';
+        if (theme.filtering) html += `<div class="detail-box"><h4>Filtering</h4>${renderProcessingDetails(theme.filtering)}</div>`;
+        if (theme.matching) html += `<div class="detail-box"><h4>Matching</h4>${renderProcessingDetails(theme.matching)}</div>`;
+        if (theme.merging) html += `<div class="detail-box"><h4>Merging</h4>${renderProcessingDetails(theme.merging)}</div>`;
         html += '</div>';
-
         return html;
       }
 
       function renderQualityDetails(qa) {
         let html = '<ul>';
-
-        if (qa.coverage && Array.isArray(qa.coverage)) {
+        if (qa.coverage) {
+          const cov = Array.isArray(qa.coverage) ? qa.coverage : [qa.coverage];
           html += '<li><strong>Coverage:</strong><ul>';
-          qa.coverage.forEach((item) => {
-            if (item !== undefined && item !== null) {
-              html += `<li>${String(item)}</li>`;
-            }
-          });
+          cov.forEach((i) => { if (i) html += `<li>${String(i)}</li>`; });
           html += '</ul></li>';
         }
-
-        if (qa.quality && Array.isArray(qa.quality)) {
+        if (qa.quality && Array.isArray(qa.quality) && qa.quality.length) {
           html += '<li><strong>Quality Issues:</strong><ul>';
-          qa.quality.forEach((item) => {
-            if (item !== undefined && item !== null) {
-              html += `<li>${String(item)}</li>`;
-            }
-          });
+          qa.quality.forEach((i) => { if (i) html += `<li>${String(i)}</li>`; });
           html += '</ul></li>';
         }
-
-        if (qa.violations && Array.isArray(qa.violations) && qa.violations.length > 0) {
+        if (qa.violations && Array.isArray(qa.violations) && qa.violations.length) {
           html += '<li><strong>Violations:</strong><ul>';
-          qa.violations.forEach((item) => {
-            if (item !== undefined && item !== null) {
-              const itemText = String(item);
-              html += `<li>${itemText.replace(/`([^`]+)`/g, '<code>$1</code>')}</li>`;
-            }
-          });
+          qa.violations.forEach((i) => { if (i) html += `<li>${String(i).replace(/`([^`]+)`/g, '<code>$1</code>')}</li>`; });
           html += '</ul></li>';
         }
-
         html += '</ul>';
         return html;
       }
 
       function renderProcessingDetails(obj) {
         if (!obj) return '<p>—</p>';
-
         let html = '';
-
         if (obj.summary !== undefined && obj.summary !== null) {
-          const summaryText = String(obj.summary);
-          html += `<p><strong>Summary:</strong> ${summaryText.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>`;
+          const s = Array.isArray(obj.summary) ? obj.summary.join('; ') : String(obj.summary);
+          if (s.trim()) html += `<p><strong>Summary:</strong> ${s.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>`;
         }
-
-        if (obj.note) {
-          html += `<p><strong>Note:</strong> ${obj.note}</p>`;
-        }
-
-        const lists = [
-          'logic',
-          'properties',
-          'constraints',
-          'location',
-          'topological',
-          'geometrical',
-          'others',
-          'highway_values',
-        ];
-
+        if (obj.note) html += `<p><strong>Note:</strong> ${obj.note}</p>`;
+        const lists = ['logic', 'properties', 'constraints', 'location', 'topological', 'geometrical', 'others', 'highway_values'];
         lists.forEach((key) => {
-          if (obj[key] && Array.isArray(obj[key]) && obj[key].length > 0) {
-            const displayKey =
-              key === 'highway_values'
-                ? 'Highway Values in Scope'
-                : key.charAt(0).toUpperCase() + key.slice(1);
-            html += `<p><strong>${displayKey}:</strong></p>`;
-            html += '<ul>';
-            obj[key].forEach((item) => {
-              if (item !== undefined && item !== null) {
-                const itemText = String(item);
-                html += `<li>${itemText.replace(/`([^`]+)`/g, '<code>$1</code>')}</li>`;
-              }
-            });
+          const val = obj[key];
+          if (Array.isArray(val) && val.length > 0 && val.some((x) => String(x).trim())) {
+            const displayKey = key === 'highway_values' ? 'Highway Values in Scope' : key.charAt(0).toUpperCase() + key.slice(1);
+            html += `<p><strong>${displayKey}:</strong></p><ul>`;
+            val.forEach((i) => { if (i !== undefined && i !== null && String(i).trim()) html += `<li>${String(i).replace(/`([^`]+)`/g, '<code>$1</code>')}</li>`; });
             html += '</ul>';
+          } else if (typeof val === 'string' && val.trim()) {
+            const displayKey = key.charAt(0).toUpperCase() + key.slice(1);
+            html += `<p><strong>${displayKey}:</strong> ${val.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>`;
           }
         });
-
         return html || '<p>—</p>';
       }
+
+      renderTable(THEME_DATA);
     </script>
   </body>
 </html>
