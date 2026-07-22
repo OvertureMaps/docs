@@ -71,7 +71,7 @@ properties:
 ## Key Taxonomy Fields
 - `hierarchy`: An ordered list representing the full path from the top-level (L0) category down to the primary category. This array is essential for aggregating POIs based on subtype/supertype relationships (e.g., for aggregating all cantonese_restaurant POIs up to chinese_restaurant). 
 - `primary`: The most specific and appropriate category label for the POI, consistent with the lowest level of the hierarchy.
-- basic_category`: Identifies a  “cognitively basic” category, as a supplement to the Primary Place category. This is recommended for use in map applications for high-level filtering and defining map iconography, LLM’s as it offers a streamlined set of labels (approx. 280) that are less specific than the full 2.1k taxonomy.
+- `basic_category`: Identifies a  “cognitively basic” category, as a supplement to the Primary Place category. This is recommended for use in map applications for high-level filtering and defining map iconography, LLM’s as it offers a streamlined set of labels (approx. 280) that are less specific than the full 2.1k taxonomy.
 - `alternate`: Other relevant category labels for the POI.
 
 
@@ -88,3 +88,8 @@ The structured `hierarchy` property is designed to support robust aggregation lo
 | [..., cantonese_restaurant] | Specific Cantonese Restaurants | 
 
 
+## Provider Category Mappings
+
+Each data provider describes places using its own category system, so during ingest every provider's raw categories are mapped into the Overture taxonomy. Most of these mappings are exact or previously reviewed matches; the remainder are model-derived semantic matches that are held to a confidence floor and reviewed before becoming permanent lookups.
+
+Beginning with the July 2026 release, Overture also captures these provider category mappings in the pipeline, making it possible to trace how a source provider's original category was translated into the Overture taxonomy. The July 2026 release additionally expanded US coverage from BrightQuery with places in the `arts_and_entertainment`, `lodging`, and `cultural_and_historic_landmarks` categories, mapped to the taxonomy via NAICS-based mappings.

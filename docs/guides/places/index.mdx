@@ -14,18 +14,23 @@ import MillQuery from '!!raw-loader!@site/src/queries/duckdb/places_mills.sql';
 import ConfidenceQuery from '!!raw-loader!@site/src/queries/duckdb/places_confidence.sql';
 import ConflateOSMQuery from '!!raw-loader!@site/src/queries/duckdb/places_conflating_OSM.sql';
 import PlacesInBuildingsQuery from '!!raw-loader!@site/src/queries/duckdb/places_in_buildings.sql';
+import PlacesMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/places_mountains.sql';
+import BaseLandMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/base_land_mountains.sql';
 
 
 # Places Guide 
 
-The Overture places theme contains more than 75 million point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. Places are concrete, physically identifiable, stationary destinations.
+The Overture places theme contains more than 75 million point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. The theme contains no OpenStreetMap data, making places a **non-ODbL theme**: it is published under the CDLA Permissive 2.0 and Apache 2.0 licenses, with none of the share-alike obligations of the Open Database License.
 
+Overture defines a place as a *concrete, physically identifiable, stationary destination*, and each part of that definition does deliberate work. A place must be concrete and physically identifiable, which excludes abstract entities such as administrative areas — countries, states, cities, and neighborhoods, covered by the [divisions theme](/guides/divisions/) — and standalone address points, covered by the [addresses theme](/guides/addresses/). It must be stationary, which excludes movable things such as food carts, vehicles, boats, and aircraft that often appear as noise in user-generated content datasets. And it must be a destination, which excludes bus stops, train platforms, and other intermediate waypoints — those live in the base theme's [infrastructure type](../base/infrastructure) under the `transit` subtype. Finally, only places that do not include personally identifiable information (PII) are included in the theme.
 
+Places is not the only Overture theme with point data. Addresses are published as point features, divisions include point representations of populated places, and the base theme contains points for natural and infrastructure features. Some real-world entities appear in more than one theme by design: a mountain peak, for example, is in places as a destination and in the base theme's land type as a physical feature. What distinguishes a places record is what it carries — a name, categories, a confidence score, and a GERS-matched identity — rather than the kind of point it marks.
 
 ## In this guide
 
-This overview covers the feature type, dataset construction, and access for the places theme. A dedicated tool covers the category taxonomy in depth:
+This overview covers the feature type, dataset construction, and access for the places theme. A dedicated page and an interactive tool cover the category taxonomy in depth:
 
+- **[Places Taxonomy](./taxonomy):** How Overture organizes categories of places, including the `taxonomy` and `basic_category` properties, key fields, and aggregation using the category hierarchy.
 - **[Taxonomy Browser](./taxonomy-browser):** An interactive tool for exploring and comparing releases of the Overture Places category taxonomy hierarchy.
 
 ## Dataset description
@@ -33,6 +38,16 @@ This overview covers the feature type, dataset construction, and access for the 
 ### Feature type descriptions
 
 The places theme defines a single feature type, **place**, a point representation of a real-world entity — a school, business, hospital, landmark, and so on — carrying attributes such as name, categories, address, and a confidence score along with a point geometry.
+
+#### Core properties
+
+While the schema defines many properties, a small set is core to how the dataset is built and used:
+
+- **Matching**: the matcher relies on `names`, `addresses`, `websites`, `phones`, the category (`taxonomy`), and the point geometry itself to decide whether two provider records describe the same real-world place. Completeness of these properties directly affects data quality — records missing them are harder to deduplicate and more likely to persist as duplicates.
+- **Identity**: `id` carries the place's GERS ID, which anchors its identity across releases and is the join key for bridge files and the changelog.
+- **Filtering**: `confidence` is the primary tool for separating reliable records from suspect ones (see [Confidence score](#confidence-score)).
+
+The remaining properties are descriptive enrichment — useful where present, but not load-bearing for dataset construction.
 
 ### Taxonomy
 
@@ -68,13 +83,34 @@ Note: Joining CDLA Permissive 2.0 data to OpenStreetMap is permitted, but the re
 
 **Filtering.** No theme-wide filtering is applied beyond an existence threshold: places with a `confidence` score of 0.2 or less are removed.
 
-**Matching.** Places use **ML-based matching with clustering**. Potential matching pairs are first identified based on quadkey, then matched using an ML model based on attribute similarity. The properties considered include `name`, `address`, `phone number`, `house number`, `website`, and `spatial distance`.
+**Matching.** Places use **ML-based matching with clustering** to identify records from different providers that describe the same real-world place. The matcher runs in two stages — blocking, then pairwise matching — described in the next section.
 
 **Merging.** For matched places, a single source is promoted rather than combining attributes. Matched places are clustered, the place from the source with the highest match count is promoted, and no attributes are merged between matches.
 
+### How the matcher works
+
+The matching pipeline was substantially upgraded in the July 2026 release, with a particular focus on reducing *undermatching* — cases where two records for the same place were not recognized as duplicates, especially when the records are more than 100 meters apart or have only moderately similar names. Better matching also improves GERS ID consistency over time, because a place is less likely to split into (or merge from) multiple identities as source data shifts. Note that the July 2026 release itself re-matches the corpus with the new pipeline, so users should expect a one-time elevated level of GERS ID churn in that release; subsequent releases benefit from the more stable matching.
+
+**Blocking.** Comparing every place to every other place is computationally infeasible, so the matcher first narrows the search to a set of candidate pairs. Candidates are identified spatially, then filtered by a trained blocking model that uses embedding representations of each place's name, category (taxonomy), and address, together with distance thresholds. The blocking stage is tuned for high recall: it aims to keep every plausible duplicate pair in play for the pairwise stage, including pairs at longer distances that earlier versions of the matcher missed.
+
+**Pairwise matching.** Each candidate pair is then scored by a gradient-boosted decision tree (XGBoost) classifier that predicts whether the two records represent the same place. The model combines attribute-similarity features, including:
+
+- name similarity, using both string comparison (with common "core words" like *shop* or *restaurant* handled separately) and text-embedding similarity;
+- address similarity;
+- website features, comparing domains and paths;
+- phone number;
+- category similarity, using embeddings of each record's primary taxonomy category;
+- spatial distance and spatial context (how distinctive a name is within its local area).
+
+The model is trained on a large set of human- and LLM-generated match labels sampled across providers, countries, and categories.
+
+**Clustering and promotion.** Pairs the model scores as matches are grouped into clusters, and each cluster becomes a single place in the released dataset, following the merging rule above: the record from the source with the highest match count in the cluster is promoted, and its GERS ID carries the cluster's identity forward across releases.
+
 ### Confidence score
 
-The places theme includes a **confidence score** for each feature, representing the likelihood that the place exists and is accurate. You can use the `confidence` score to filter out data below a certain threshold to remove suspect data.
+The places theme includes a **confidence score** for each feature, a value between 0 and 1 representing the likelihood that the place exists. Confidence measures existence only — whether the record describes a real place rather than junk — and is independent of other attributes such as `operating_status`. A score of 0 means we are certain the place does not exist; a missing value means no confidence information is available.
+
+Confidence values derive from a mix of provider-supplied signals and internal scoring, and are not calibrated to be strictly comparable across providers. Treat the score as a relative filtering tool rather than a precise probability: raising the threshold trades coverage for precision. You can use `confidence` to filter out data below whatever threshold suits your use case.
 
 ## Coverage and data quality
 
@@ -85,15 +121,6 @@ The places theme includes a **confidence score** for each feature, representing 
 | *Overture places data, June 2026* |
 
 **Known quality issues.** Places is known to contain duplicates, a high junk rate, and low attribute completeness. The confidence score (above) is the primary tool for filtering suspect data.
-
-### Excluded by design
-
-The definition of a place — *concrete, physically identifiable, stationary destination* — is used to deliberately exclude certain entities:
-
-- **Concrete and physically identifiable**: to exclude divisions and addresses.
-- **Stationary**: to exclude noise from UGC datasets for things like food carts or vehicles/boats/aircraft.
-- **Destination**: to exclude bus stops, train platforms, and other intermediate waypoints.
-- **Private**: only places that do not include PII are included.
 
 ## Release artifacts and updates
 
@@ -194,5 +221,18 @@ The places theme has wide coverage and many of the place point features have add
 <QueryBuilder query={PlacesInBuildingsQuery}></QueryBuilder>
 </div>
 </details>
+</TabItem>
+<TabItem value="Compare with the base theme" label="Compare with the base theme" default>
+Some real-world entities appear in more than one Overture theme. Mountains are a good example: the places theme carries them as destinations with names, categories, and GERS IDs, while the base theme's land type carries them as OSM-derived physical features.
+
+Count mountains in places (125,458 in the July 2026 release):
+
+<QueryBuilder query={PlacesMountainsQuery}></QueryBuilder>
+
+Count mountain landforms in the base theme (over 1 million peaks alone):
+
+<QueryBuilder query={BaseLandMountainsQuery}></QueryBuilder>
+
+For transit features such as bus stops and platforms — excluded from places by definition — see the base theme's [infrastructure type](../base/infrastructure).
 </TabItem>
 </Tabs>

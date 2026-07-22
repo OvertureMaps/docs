@@ -18,6 +18,12 @@ Some of our schema design choices include:
 - extraction of consistent OSM tags, such as wikidata to top-level properties.
 - direct pass-through of remaining relevant OSM tags.
 
+## In this guide
+
+This overview covers the feature types, dataset construction, and access for the base theme. A dedicated page covers one feature type in more depth:
+
+- **[Infrastructure](./infrastructure):** Transit features such as bus stops, platforms, and stations — including how they relate to the places and transportation themes — and entities like mountains that appear in both base and places by design, with example queries.
+
 ## Dataset description
 
 ### Feature type descriptions
@@ -28,7 +34,7 @@ There are six feature types in the base theme:
 Bathymetry features provide topographic representations of underwater areas, such as parts of lake beds or ocean floors. The geometries are derived vectorized bathymetric data products from [ETOPO1](https://www.ncei.noaa.gov/products/etopo-global-relief-model) and [GLOBathy](https://www.nature.com/articles/s41597-022-01132-9) data.
 
 #### Infrastructure 
-Infrastructure features provide basic information about real-world infrastructure entitites such as bridges, airports, runways, aerialways, communication towers, and power lines. All of the features are pulled from OpenStreetMap and converted to the Overture schema.
+Infrastructure features provide basic information about real-world infrastructure entities such as bridges, airports, runways, aerialways, communication towers, and power lines. All of the features are pulled from OpenStreetMap and converted to the Overture schema. See the [infrastructure page](./infrastructure) for a closer look at transit features and how the infrastructure type relates to other themes.
 
 #### Land 
 Land features are representations of physical land surfaces. In Overture data releases, land features are sourced from OpenStreetMap. Global land derived from the inverse of OSM Coastlines. Translates natural tags from OpenStreetMap.
