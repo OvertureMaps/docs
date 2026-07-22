@@ -1,0 +1,172 @@
+---
+title: 2026-07-22 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+
+## Overview
+
+**The `2026-07-22.0` release of Overture data and `v1.18.0` of the Overture schema are now available.** You can access the datasets, changelog, GERS registry, bridge files, and PMTiles on AWS and Azure at the paths listed below.
+
+
+## Deprecations
+The `categories` property in the places schema has been deprecated and will be removed in the **September 2026** release, replaced by the new `basic_category` and `taxonomy` properties. All three properties will be available until then to ease the transition for our users. The taxonomy documentation is [here](https://docs.overturemaps.org/guides/places/taxonomy/).
+
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined in our [docs](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at community@overturemaps.org. We’d love to hear from you.
+
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/release/2026-07-22.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2026-07-22.0/
+```
+### Data changelog
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/changelog/2026-07-22.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2026-07-22.0/
+```
+
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/bridgefiles/2026-07-22.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2026-07-22.0/
+```
+
+### GERS registry
+
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+### PMTiles
+
+**Amazon S3:**
+```
+s3://overturemaps-extras-us-west-2/tiles/2026-07-22.0/
+```
+
+{/* truncate */}
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha. 
+:::
+
+### Addresses
+
+- made minor, incremental updates to the data
+
+
+### Base
+- same as previous release, no changes to the data
+
+
+### Buildings
+- made minor, incremental updates to the data
+
+
+### Divisions
+- OSM Cut-Off Date: `2026-06-06`
+
+- made minor, incremental updates to the data
+
+
+### Places
+- Introduced three new top level categories for BrightQuery previously filtered out including `arts_and_entertainment`, `lodging`, and `cultural_and_historic`
+- Matcher improvements which increased the number of matched places and reduced duplicates
+
+
+| Top Level Taxonomy | Count |
+| --- | --- |
+| Services and Business     | 17,435,507    |
+| Shopping                  | 13,708,264    |
+| Food and Drink            | 10,224,131    |
+| Lifestyle Services        | 4,609,813     |
+| Travel and Transportation | 3,941,044     |
+| Health Care               | 3,815,554     |
+| Education                 | 3,537,840     |
+| Cultural and Historic     | 3,219,997     |
+| Sports and Recreation     | 2,835,951     |
+| Community and Government  | 2,728,044     |
+| Lodging                   | 2,602,877     |
+| Arts and Entertainment    | 1,558,117     |
+| Geographic Entities       | 995,884       |
+
+### Transportation
+
+- OSM Cut-Off Date: `2026-07-07`
+
+| Dataset | Feature Count | Length (km) |
+|---|---|---|
+| OpenStreetMap | 755,509,788 | 94,387,017 |
+| TomTom | 9,931,494 | 1,766,985 |
+
+| Subtype | Length (km) |
+|---|---|
+| road | 92,691,265 |
+| rail | 2,876,943 |
+| water | 585,795 |
+
+#### Change Summary
+
+##### Count Changes
+
+| Dataset | Type | Diff | Diff (%) |
+|---|---|---|---|
+| TomTom | segment | 957,289 | 10.67% |
+| OpenStreetMap | connector | 3,533,681 | 0.86% |
+| OpenStreetMap | segment | 1,374,033 | 0.41% |
+
+##### Length Changes
+
+| Subtype | Diff (km) | Diff (%) |
+|---|---|---|
+| road | 401,726.15 | 0.44% |
+| water | 11,265.73 | 0.39% |
+| rail | 1,404.11 | 0.24% |
+
+
+
+## Schema changelog
+
+The changelog for Overture schema `v1.18.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/v1.18.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
