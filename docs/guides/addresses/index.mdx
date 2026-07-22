@@ -18,7 +18,7 @@ import UtahAddresses from '!!raw-loader!@site/src/queries/duckdb/addresses_utah.
 This theme is currently in Alpha. We invite the Overture community to test the addresses schema and data and offer feedback via the [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repos.
 :::
 
-Overture maintains over 473 million address point entities. An address represents a physical place through a series of attributes — street number, street name, unit, address levels, postal code, and/or country — together with a point geometry that gives an approximate location of the position most commonly associated with the feature.
+Overture maintains over 474 million address point entities. An address represents a physical place through a series of attributes — street number, street name, unit, address levels, postal code, and/or country — together with a point geometry that gives an approximate location of the position most commonly associated with the feature.
 
 Address data can be used for a variety of purposes, which can include:
 
@@ -29,7 +29,9 @@ Address data can be used for a variety of purposes, which can include:
 - **Normalization**: Adhering to standard and consistent forms of address components.
 - **Validation and Verification**: Confirming an address exists within a known list of addresses.
 
-
+| ![Overture address coverage](/img/addresses/address-coverage-h3-july.png) |
+|:--:|
+| *July 2026 coverage of Overture address data, visualized using H3 cells.* |
 
 ## Dataset description
 
@@ -60,10 +62,6 @@ Addresses are assembled from many independent source datasets with minimal trans
 
 **Coverage.** The addresses theme currently spans **39 countries** (see the per-country counts above). Several large countries have only partial coverage, including the US, Germany, and Taiwan. Individual datasets also have varying levels of completeness in their attributes — a dataset may be missing postcodes or have only partial coverage for `address_levels`, for example.
 
-| ![Overture address coverage](/img/addresses/address-coverage-h3-june.png) |
-|:--:|
-| *June 2026 coverage of Overture address data, visualized using H3 cells.* |
-
 <details>
 	<summary>Address counts, per country</summary>
 <div>
@@ -72,42 +70,42 @@ Addresses are assembled from many independent source datasets with minimal trans
 | --- | --- |
 | AT      | 2,516,341      |
 | AU      | 15,691,319     |
-| BE      | 6,704,165      |
+| BE      | 6,708,994      |
 | BR      | 89,899,299     |
-| CA      | 16,871,804     |
-| CH      | 3,289,780      |
+| CA      | 16,878,066     |
+| CH      | 3,295,061      |
 | CL      | 4,199,023      |
 | CO      | 7,786,046      |
-| CZ      | 3,016,594      |
-| DE      | 19,268,457     |
+| CZ      | 3,017,913      |
+| DE      | 19,268,966     |
 | DK      | 3,933,282      |
 | EE      | 2,230,000      |
 | ES      | 15,627,615     |
 | FI      | 3,656,855      |
-| FO      | 26,337         |
+| FO      | 26,403         |
 | FR      | 26,056,645     |
 | GL      | 20,335         |
 | HK      | 177,020        |
-| HR      | 1,680,037      |
-| IS      | 138,760        |
+| HR      | 1,680,649      |
+| IS      | 138,933        |
 | IT      | 25,914,431     |
 | JP      | 19,587,926     |
-| LI      | 12,950         |
+| LI      | 12,949         |
 | LT      | 1,127,290      |
-| LU      | 179,157        |
+| LU      | 179,388        |
 | LV      | 549,594        |
 | MX      | 30,723,333     |
 | NL      | 9,934,356      |
-| NO      | 3,580,290      |
-| NZ      | 2,414,934      |
+| NO      | 3,581,118      |
+| NZ      | 2,416,768      |
 | PL      | 8,584,407      |
 | PT      | 5,614,635      |
 | RS      | 2,681,230      |
 | SG      | 142,210        |
-| SI      | 579,215        |
+| SI      | 579,477        |
 | SK      | 1,697,528      |
 | TW      | 9,732,009      |
-| US      | 126,672,517    |
+| US      | 127,719,691    |
 | UY      | 1,059,027      |
 
 </div>

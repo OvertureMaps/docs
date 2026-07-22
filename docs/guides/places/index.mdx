@@ -22,6 +22,22 @@ import BaseLandMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/base_l
 
 The Overture places theme contains tens of millions of point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. The theme is published under the [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) and [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) licenses. It contains no OpenStreetMap data and carries none of the share-alike obligations of the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/).
 
+| ![Overture places theme coverage](/img/places/places-coverage-h3-july.png) |
+|:--:|
+| *Overture places data, July 2026* |
+
+| Sources | License | feature count, July 2026 |
+| --- | --- | --- |
+| AllThePlaces, Overture | CC0-1.0              | 1,418,830    |
+| BrightQuery, Overture  | CDLA-Permissive-2.0  | 831,651      |
+| DAC, Overture          | CDLA-Permissive-2.0  | 149,700      |
+| Foursquare, Overture   | Apache-2.0           | 4,748,001    |
+| Krick, Overture        | CDLA-Permissive-2.0  | 15,396       |
+| Microsoft, Overture    | CDLA-Permissive-2.0  | 6,305,853    |
+| PinMeTo, Overture      | CDLA-Permissive-2.0  | 159,426      |
+| RenderSEO, Overture    | CDLA-Permissive-2.0  | 3,655        |
+| meta, Overture         | CDLA-Permissive-2.0  | 60,591,049   |
+
 Overture defines a place as a *concrete, physically identifiable, stationary destination in a publicly observable space*. The [next section](#what-is-a-place) unpacks that definition and how it draws the line between places and Overture's other themes.
 
 ## In this guide
@@ -163,21 +179,21 @@ The structured `hierarchy` property is designed to support robust aggregation lo
 
 ### Top-level category counts
 
-| Top Level Taxonomy | feature count, June 2026 |
+| Top Level Taxonomy | feature count, July 2026 |
 | --- | --- |
-| Services and Business     | 17,720,766    |
-| Shopping                  | 14,049,117    |
-| Food and Drink            | 10,442,767    |
-| Lifestyle Services        | 4,598,491     |
-| Travel and Transportation | 4,135,169     |
-| Health Care               | 3,988,345     |
-| Education                 | 3,621,660     |
-| Cultural and Historic     | 3,165,849     |
-| Sports and Recreation     | 2,858,845     |
-| Community and Government  | 2,670,489     |
-| Lodging                   | 2,587,210     |
-| Arts and Entertainment    | 1,535,805     |
-| Geographic Entities       | 961,912       |
+| Services and Business     | 17,435,507    |
+| Shopping                  | 13,708,264    |
+| Food and Drink            | 10,224,131    |
+| Lifestyle Services        | 4,609,813     |
+| Travel and Transportation | 3,941,044     |
+| Health Care               | 3,815,554     |
+| Education                 | 3,537,840     |
+| Cultural and Historic     | 3,219,997     |
+| Sports and Recreation     | 2,835,951     |
+| Community and Government  | 2,728,044     |
+| Lodging                   | 2,602,877     |
+| Arts and Entertainment    | 1,558,117     |
+| Geographic Entities       | 995,884       |
 
 ### Provider category mappings
 
@@ -239,10 +255,6 @@ Confidence values derive from a mix of provider-supplied signals and internal sc
 ## Coverage and data quality
 
 **Coverage.** The places theme provides **global** coverage. Ongoing coverage measurements are in progress, and updated country-level figures will be published here as they are confirmed.
-
-| ![Overture places theme coverage](/img/places/places-coverage-h3-june.png) |
-|:--:|
-| *Overture places data, June 2026* |
 
 **Known quality issues.** Places is known to contain duplicates, a high junk rate, and low property completeness. The confidence score (above) is the primary tool for filtering potential junk data; it does not address duplicates or property completeness.
 
