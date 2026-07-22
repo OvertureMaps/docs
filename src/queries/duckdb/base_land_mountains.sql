@@ -10,4 +10,3 @@ FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=
 WHERE class IN ('peak', 'mountain_range', 'ridge', 'saddle', 'volcano')
 GROUP BY class
 ORDER BY base_land_features DESC;
- 
