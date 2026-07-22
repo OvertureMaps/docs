@@ -1,7 +1,7 @@
 ---
-title: Overview
+title: Places
 description: Points of interest around the world
-pagination_label: Places Overview
+pagination_label: Places Guide
 ---
 
 import Tabs from '@theme/Tabs';
@@ -14,27 +14,154 @@ import MillQuery from '!!raw-loader!@site/src/queries/duckdb/places_mills.sql';
 import ConfidenceQuery from '!!raw-loader!@site/src/queries/duckdb/places_confidence.sql';
 import ConflateOSMQuery from '!!raw-loader!@site/src/queries/duckdb/places_conflating_OSM.sql';
 import PlacesInBuildingsQuery from '!!raw-loader!@site/src/queries/duckdb/places_in_buildings.sql';
+import PlacesMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/places_mountains.sql';
+import BaseLandMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/base_land_mountains.sql';
 
 
-# Places Guide 
+# Places Guide
 
-The Overture places theme has one feature type, called `place`, and contains more than 75 million point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more.
+The Overture places theme contains tens of millions of point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. The theme is published under the [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) and [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) licenses. It contains no OpenStreetMap data and carries none of the share-alike obligations of the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/).
 
-| ![Overture places theme coverage](/img/places/places-coverage-h3-june.png) |
-|:--:|
-| *Overture places data, June 2026* |
+Overture defines a place as a *concrete, physically identifiable, stationary destination in a publicly observable space*. The [next section](#what-is-a-place) unpacks that definition and how it draws the line between places and Overture's other themes.
 
-| Sources | License | feature count, June 2026 |
-| --- | --- | --- |
-| AllThePlaces, Overture | CC0-1.0              | 1,860,091    |
-| BrightQuery, Overture  | CDLA-Permissive-2.0  | 472,412      |
-| DAC, Overture          | CDLA-Permissive-2.0  | 153,966      |
-| Foursquare, Overture   | Apache-2.0           | 6,630,199    |
-| Krick, Overture        | CDLA-Permissive-2.0  | 16,666       |
-| Microsoft, Overture    | CDLA-Permissive-2.0  | 7,397,080    |
-| PinMeTo, Overture      | CDLA-Permissive-2.0  | 161,637      |
-| RenderSEO, Overture    | CDLA-Permissive-2.0  | 5,137        |
-| meta, Overture         | CDLA-Permissive-2.0  | 58,945,101   |
+## In this guide
+
+- **[What is a place?](#what-is-a-place)**: How Overture defines a place, and what belongs in other themes instead.
+- **[Dataset description](#dataset-description)**: The place feature type, its core properties, and column definitions.
+- **[Category taxonomy](#category-taxonomy)**: The new `taxonomy` and `basic_category` properties, the deprecation of `categories`, and how to migrate.
+- **[Sources and licensing](#sources-and-licensing)**: Where the data comes from and the licenses it carries.
+- **[How we build the dataset](#how-we-build-the-dataset)**: The conflation pipeline, how matching quality is measured, and the confidence score.
+- **[Coverage and data quality](#coverage-and-data-quality)**: What the theme covers and its known quality issues.
+- **[Release artifacts and updates](#release-artifacts-and-updates)**: Monthly cadence, GERS registry, bridge files, and the changelog.
+- **[Data access and retrieval](#data-access-and-retrieval)**: Cloud locations and options for downloading just the data you need.
+- **[Querying and analysis](#querying-and-analysis)**: Example queries by property, plus advanced examples combining places with other datasets.
+- **[Tools and libraries](#tools-and-libraries)**: Tools from Overture and the wider ecosystem, including the interactive [Taxonomy Browser](./taxonomy-browser).
+
+## What is a place?
+
+Each part of Overture's definition of a place, a *concrete, physically identifiable, stationary destination in a publicly observable space*, does deliberate work:
+
+- **Concrete and physically identifiable** excludes abstract entities such as administrative areas (countries, states, cities, and neighborhoods, covered by the [divisions theme](/guides/divisions/)) and standalone address points, covered by the [addresses theme](/guides/addresses/).
+- **Stationary** excludes movable things such as food carts, vehicles, boats, and aircraft that often appear in user-generated content datasets.
+- **Destination** excludes bus stops, train platforms, and other intermediate waypoints, most of which live in the base theme's [infrastructure feature type](../base/infrastructure) under the `transit` subtype.
+- **Publicly observable** excludes non-public spaces such as private residences, even when they are otherwise identifiable destinations.
+
+Finally, only places that do not include personally identifiable information (PII) are included in the theme.
+
+The public observability requirement reflects a principle that applies across all of Overture's data:
+
+> Overture Maps Foundation focuses on map data about physical objects that can be publicly observed and are relevant to map applications. Our goal is to collect high quality data that reflects the physical world as it changes. We do not collect or publish data about non-public spaces or objects. If something is not observable from a publicly accessible area, it does not fit in Overture's datasets.
+
+Places is not the only Overture theme with point data. Addresses are published as point features, divisions include point representations of populated places, and the base theme contains points for natural and infrastructure features. Some real-world entities appear in more than one theme by design: a mountain peak, for example, is in places as a destination and in the base theme's land type as a physical feature. What distinguishes a places record is what it carries (a name, categories, an existence confidence score, and a GERS-matched identity) rather than the kind of point it marks.
+
+## Dataset description
+
+### Feature type descriptions
+
+The places theme defines a single feature type, **place**, a point representation of a real-world entity carrying attributes such as name, categories, address, and an existence confidence score along with a point geometry.
+
+#### Core properties
+
+While the schema defines many properties, a small set is core to how the dataset is built and used:
+
+- **Matching**: the matcher relies on `names`, `addresses`, `websites`, `phones`, the category (`taxonomy`), and the point geometry itself to decide whether two provider records describe the same real-world place. Completeness of these properties directly affects data quality. Records missing them are harder to deduplicate and more likely to persist as duplicates.
+- **Identity**: `id` carries the place's GERS ID, which anchors its identity across releases and is the join key for bridge files and the changelog.
+- **Filtering**: `confidence` is the primary tool for separating reliable records from suspect ones (see [Confidence score](#confidence-score)).
+
+The remaining properties are descriptive enrichment. They are useful where present, but not load-bearing for dataset construction.
+
+### Column definitions
+
+Column definitions for the `place` type are generated from the schema and live in the [schema reference](/schema/reference/places/place).
+
+## Category taxonomy
+
+The Overture Place Categories (OPC) taxonomy is a hierarchical system of roughly 2,300 categories, with broader/narrower relationships, for organizing points of interest: businesses, landmarks, attractions, and so on. It is expressed in the places schema through the `taxonomy` and `basic_category` properties, which were introduced to better categorize location entities and to facilitate search, display, and navigation in map applications.
+
+These properties are the product of a taxonomy redesign architected by Ron Rice, the taxonomist at Meta who leads the OPC work. The redesign addresses known issues with the original `categories` property, including structural inconsistencies, naming ambiguity, and coverage gaps, and applies taxonomy design best practices to improve structure for generalization (rolling up) and specialization (drilling down), compatibility across Overture themes, support for user discovery and visualization, and interoperability with other industry taxonomies.
+
+:::warning Deprecation
+
+The `categories` property in the places schema has been deprecated and will be removed in the **September 2026 release**, replaced by the new `basic_category` and `taxonomy` properties. All three properties will be available until then to ease the transition. You can explore the old-to-new category mappings [here](https://docs.google.com/spreadsheets/d/1_i2S48zTDoHff0uX-d8Nes3bR-Xee8drx27Gyi80CQ0/edit?usp=sharing0). We'd love your [feedback](https://github.com/orgs/OvertureMaps/discussions) on the new structure and suggestions for further improvement.
+
+:::
+
+### Taxonomy change summary
+
+Users should be aware of the following key updates when evaluating and integrating the new places taxonomy.
+
+| Change area | Details | Impact on Data Use |
+| -------- | -------- | -------- |
+| Top-Level Overhaul (L0) | Reduced top-level categories from 22 to 13. | Requires updating logic dependent on L0 categories. Consolidation reduces ambiguity. |
+| New Categories| 209 new categories added (e.g., artist_studio, pickleball_court). | New, more granular POI types are available for filtering and display. |
+| Removed Categories | 80 categories removed (resolved duplicates, merged obscure types). | Users must use the provided "redirect" rules to map old category IDs to active categories for backfill/historical data continuity. |
+| Renamed Categories | 407 categories renamed (primarily plural-to-singular conversion, e.g., banks to bank). | Update category-based lookups and display logic to use singular forms for better mapping interface labeling. |
+| Reparented Categories | 482 categories moved under a different direct parent. | The immediate parent-child relationship has changed for nearly 500 categories. |
+| Repathed Categories (Hierarchy) | 2,108 categories have a different hierarchical structure or "path". | Critical: Hierarchy-dependent processing (e.g., aggregation) must be updated to reflect the new paths, especially in areas like food_and_drink and arts_and_entertainment. |
+| Basic Category Mapping | All place categories are now mapped to a "Basic Level Category" (approx. 280 labels like restaurant, museum). | Facilitates simplified map iconography, high-level filtering, and cross-taxonomy mapping. |
+
+### Comparing the original and new properties
+
+#### Original categories system
+
+The original `categories` property remains in the schema until the September 2026 release to allow users to compare the old system to the new taxonomy and facilitate migration.
+
+```
+properties:
+    categories:
+        primary: greasy_diner
+```
+
+#### New basic level category
+
+The new `basic_category`, introduced in the October release, provides a single, high-level, "cognitively basic" label.
+
+```
+properties:
+    basic_category: casual_eatery
+```
+
+#### New taxonomy structure
+
+The new `taxonomy` property, introduced in the December 2025 release, contains a new hierarchy and category labels.
+
+```
+properties:
+    basic_category: casual_eatery
+    taxonomy:
+        hierarchy: [food_and_drink, restaurant, casual_eatery, gas_station_sushi]
+        primary: gas_station_sushi
+        alternate:
+            - gas_station
+            - sushi_restaurant
+```
+
+### Key taxonomy fields
+
+- `hierarchy`: An ordered list representing the full path from the top-level (L0) category down to the primary category. This array is essential for aggregating POIs based on subtype/supertype relationships (e.g., for aggregating all cantonese_restaurant POIs up to chinese_restaurant).
+- `primary`: The most specific and appropriate category label for the POI, consistent with the lowest level of the hierarchy.
+- `basic_category`: Identifies a "cognitively basic" category, as a supplement to the primary place category. This is recommended for use in map applications for high-level filtering and defining map iconography, and for LLMs, as it offers a streamlined set of labels (approx. 280) that are less specific than the full 2.1k taxonomy.
+- `alternate`: Other relevant category labels for the POI.
+
+### What are basic-level categories?
+
+The `basic_category` property draws on basic-level categorization, a model from cognitive science which asserts that some categories are more *cognitively basic* than others, requiring the least mental processing. Asked "what are you sitting on," most people say *chair* rather than a narrower term like *kitchen chair* or a broader term like *furniture*. The same principle applies to places: asked "where are you going," a term like *restaurant* comes more easily than a narrow term like *sushi restaurant* or a broad term like *food and beverage establishment*. Basic place categories are often (but not always) one-word terms like *hotel*, *farm*, *bar*, *cafe*, *park*, *hospital*, and *museum*.
+
+Every basic category is also a category in the full OPC taxonomy: about 300 of the roughly 2,300 OPC categories (13%) are basic-level, and they sit in the middle of the hierarchy, not too broad and not too narrow, typically one or two levels below the top level. Examples include casual_eatery > cafe, historic_site > castle, market > farmers_market, park > playground, and lodging > hotel. Every OPC category can therefore be described as superordinate (more general than basic), basic, or subordinate (more specific than basic). For example: arts_and_entertainment (superordinate) > museum (basic) > art_museum (subordinate).
+
+### Aggregation and generalization
+
+The structured `hierarchy` property is designed to support robust aggregation logic. Users can reliably generalize specialized POIs by traversing the path. For example, you can find all Asian restaurants by traversing the `hierarchy` property of POIs and checking for `asian_restaurant`.
+
+| Hierarchy Path | Aggregation Level |
+| -------- | -------- |
+| [food_and_drink, ...] | Food and Drink POIs |
+| [..., restaurant, ...] | All Restaurants |
+| [..., asian_restaurant, ...] | All Asian Restaurants |
+| [..., chinese_restaurant, ...] | All Chinese Restaurants |
+| [..., cantonese_restaurant] | Specific Cantonese Restaurants |
+
+### Top-level category counts
 
 | Top Level Taxonomy | feature count, June 2026 |
 | --- | --- |
@@ -52,38 +179,81 @@ The Overture places theme has one feature type, called `place`, and contains mor
 | Arts and Entertainment    | 1,535,805     |
 | Geographic Entities       | 961,912       |
 
-## Data dictionary
+### Provider category mappings
 
-All Overture data, including places data, is distributed as GeoParquet, a column-based data structure. Below you'll find a table with column-by-column descriptions of the properties in the place feature type. 
+Each data provider describes places using its own category system, so during ingest every provider's raw categories are mapped into the Overture taxonomy. Most of these mappings are exact or previously reviewed matches; the remainder are model-derived semantic matches that are held to a confidence floor and reviewed before becoming permanent lookups.
 
-<details>
-    <summary>Column definitions for the Places theme</summary>
-<div>
+Beginning with the July 2026 release, Overture also captures these provider category mappings in the pipeline, making it possible to trace how a source provider's original category was translated into the Overture taxonomy. The July 2026 release additionally expanded US coverage from BrightQuery with places in the `arts_and_entertainment`, `lodging`, and `cultural_and_historic_landmarks` categories, mapped to the taxonomy via NAICS-based mappings.
 
-| column | type | description |
-| --- | --- | --- |
-| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | The point representation of the Place's location. Place's geometry which MUST be a Point as defined by GeoJSON schema. |
-| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| version | integer | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources | struct | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
-| names | struct | Properties defining the names of a feature. |
-| categories | struct | The categories of the place. Complete list is available on GitHub: https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv |
-| basic_category | string | A simplified category taxonomy |
-| confidence | double | The confidence of the existence of the place. It's a number between 0 and 1. 0 means that we're sure that the place doesn't exist (anymore). 1 means that we're sure that the place exists. If there's no value for the confidence, it means that we don't have any confidence information. |
-| websites | string | The websites of the place. |
-| socials | string | The social media URLs of the place. |
-| emails | string | The email addresses of the place. |
-| phones | string | The phone numbers of the place. |
-| brand | struct | The brand of the place. A location with multiple brands is modeled as multiple separate places, each with its own brand. |
-| addresses | struct | The addresses of the place. |
-| operating_status | string | Indicates the operating status of a place. |
-| filename | string | Name of the file being queried. |
-| theme | string | Name of the Overture theme being queried. |
-| type | string | Name of the Overture feature type being queried. |
+### Taxonomy roadmap
 
-</div>
-</details>
+The taxonomy is maintained on a quarterly release cycle, with updates in March, June, September, and December of each year. The emphasis going forward is on expansion for interoperability and on adding definitions that clarify each category's scope and meaning. Planned infrastructure work includes migrating taxonomy management from spreadsheets to GitHub with semi-automated integration into the schema and documentation, a governance framework covering how stakeholders give feedback and how changes are submitted, evaluated, approved, and communicated, and a taxonomy reconciliation hub: a single source of record for industry taxonomies and their mappings, with hybrid curated and AI-assisted alignment.
+
+## Sources and licensing
+
+The places theme is built from a variety of data providers. Its primary source is Meta, which contributes the large majority of place records (roughly 59 million of the ~75 million total), alongside Microsoft, Foursquare, and PinMeTo, together with a number of smaller aggregators and providers such as AllThePlaces, BrightQuery, DAC, Krick, and RenderSEO. The theme does not include OpenStreetMap data.
+
+Places is published under the [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) and [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) licenses, depending on the source. For full per-source licensing information, see the [licensing and attribution page](../../attribution).
+
+Note: Joining CDLA Permissive 2.0 data to OpenStreetMap is permitted, but the resulting data may need to carry the Open Database License (ODbL) if it is a derivative database. See the [OSM Collective Database Guideline](https://osmfoundation.org/wiki/Licence/Community_Guidelines/Collective_Database_Guideline_Guideline) for more information.
+
+## How we build the dataset
+
+Because multiple providers contribute records describing overlapping sets of real-world places, the central problem in building the dataset is **conflation**: determining which records refer to the same real-world entity. Conflation quality matters beyond deduplication. It is key to GERS stability, because a place whose records are conflated consistently keeps the same GERS ID from release to release, while inconsistent conflation causes identities to split or merge as source data shifts.
+
+**Filtering.** No theme-wide filtering is applied beyond an existence threshold: places with a `confidence` score of 0.2 or less are removed.
+
+**Matching.** Places use **ML-based matching with clustering** to identify records from different providers that describe the same real-world place. The full conflation pipeline is described in the next section.
+
+**Merging.** For matched places, a single source is promoted rather than combining attributes. Matched places are clustered, the place from the source with the highest match count is promoted, and no attributes are merged between matches.
+
+### The conflation pipeline
+
+Each provider feed passes through a four-stage pipeline on its way into the corpus:
+
+1. **History matches.** Incoming records are first checked for exact matches with places already in the corpus. For a provider that is already in the corpus, roughly 90% of feed records are history matches; only the remaining ~10% of new records continue through the stages below.
+2. **Blocking.** A pre-filter narrows down the number of possible pairs. Comparing every place to every other place is computationally irresponsible {/* TODO: link to the permutation/compute analysis */}, so the matcher first narrows the search to a set of candidate pairs. Candidates are identified spatially, then filtered by a trained blocking model that uses embedding representations of each place's name, category (taxonomy), and address, together with distance thresholds. The blocking stage is tuned for high recall: it aims to keep every plausible duplicate pair in play for the pairwise stage, including pairs at longer distances that earlier versions of the matcher missed.
+3. **Pairwise matching.** Each candidate pair is then scored by a gradient-boosted decision tree (XGBoost) classifier that predicts whether the two records represent the same place. The model combines attribute-similarity features, including:
+   - name similarity, using both string comparison (with common "core words" like *shop* or *restaurant* handled separately) and text-embedding similarity;
+   - address similarity;
+   - website features, comparing domains and paths;
+   - phone number;
+   - category similarity, using embeddings of each record's primary taxonomy category;
+   - spatial distance and spatial context (how distinctive a name is within its local area).
+4. **Clustering and promotion.** Pairs the model scores as matches are grouped into clusters, resolving chains of matches into a single entity (if record *a* matches record *b* and record *c* matches record *b*, all three form one cluster). Each cluster becomes a single place in the released dataset, following the merging rule above: the record from the source with the highest match count in the cluster is promoted, and its GERS ID carries the cluster's identity forward across releases.
+
+### How matching quality is measured and improved
+
+The matching model is trained and evaluated on a large set of human- and LLM-generated match labels sampled across providers, countries, and categories. Human labels come from an in-house Overture labeling team working with purpose-built pairwise labeling and QA tools. Because human labeling is slow and costly, Overture also generates labels at scale with LLMs, using an iteratively optimized prompt built around an evidence hierarchy (functional identity, phone, name uniqueness and distance, and supporting signals such as website, category, and brand). In production, two independent models label each pair; agreements are accepted automatically and disagreements go to human review, which keeps accuracy high while automating the large majority of labeling work.
+
+These labels make conflation quality measurable, turning matching from an ambiguous production problem into a tractable optimization task. Mapping the true distribution of matches by name similarity and pair distance showed that the previous pipeline suffered from *undermatching*, cases where two records for the same place were not recognized as duplicates, especially when records are more than 100 meters apart or have only moderately similar names, and that the blocking stage was the largest bottleneck.
+
+The matching pipeline was substantially upgraded in the July 2026 release to address these gaps. Better matching also improves GERS ID consistency over time, because a place is less likely to split into (or merge from) multiple identities as source data shifts. Note that the July 2026 release itself re-matches the corpus with the new pipeline, so users should expect a one-time elevated level of GERS ID churn in that release; subsequent releases benefit from the more stable matching.
+
+### Confidence score
+
+The places theme includes an existence confidence score for each feature, a value between 0 and 1 representing the likelihood that the place exists. Confidence measures existence only, whether the record describes a real place rather than junk, and is independent of other attributes such as `operating_status`. A score of 0 means we are certain the place does not exist; a missing value means no confidence information is available.
+
+Confidence values derive from a mix of provider-supplied signals and internal scoring, and are not calibrated to be strictly comparable across providers. Treat the score as a relative filtering tool rather than a precise probability: raising the threshold trades coverage for precision. You can use `confidence` to filter out data below whatever threshold suits your use case.
+
+## Coverage and data quality
+
+**Coverage.** The places theme provides **global** coverage. Ongoing coverage measurements are in progress, and updated country-level figures will be published here as they are confirmed.
+
+| ![Overture places theme coverage](/img/places/places-coverage-h3-june.png) |
+|:--:|
+| *Overture places data, June 2026* |
+
+**Known quality issues.** Places is known to contain duplicates, a high junk rate, and low property completeness. The confidence score (above) is the primary tool for filtering potential junk data; it does not address duplicates or property completeness.
+
+## Release artifacts and updates
+
+The places theme is released on a **monthly** cadence. Alongside the data, the following release artifacts are provided:
+
+- **[GERS registry](/gers/registry)**: Place features are included in the GERS registry.
+- **[GERS IDs](/gers/)**: Assigned to place features.
+- **[Bridge files](/gers/bridge-files)**: Provided.
+- **[Data changelog](/gers/changelog)**: A changelog accompanies each release.
 
 ## Data access and retrieval
 
@@ -94,25 +264,9 @@ Overture's places theme data is freely available on both Amazon S3 and Microsoft
 | Amazon S3 | <QueryBuilder query="s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder>|
 | Azure Blob Storage | <QueryBuilder query="https://overturemapswestus2.blob.core.windows.net/release/__OVERTURE_RELEASE/theme=places/type=place/*" language="text"></QueryBuilder> |
 
+Releases are published under dated paths. Rather than hard-coding a specific release date, you can use [Overture's STAC catalog](https://stac.overturemaps.org/) to discover the latest release and its assets programmatically.
+
 More information can be found in the [Getting Overture Data](/getting-data/cloud-sources/) section of this documentation. You can download the entire dataset directly from the S3 or Azure locations above. Warning: the output will be a very large file.
-Depending on your use case, these methods might be more practical for you:
-
-<Tabs>
-<TabItem value="Python Client" label="Python Client" default>
-First, follow the [setup guide for the Python Client](/getting-data/overturemaps-py/).
-
-```
-overturemaps download -f geoparquet --type=place -o places.geoparquet
-```
-</TabItem>
-<TabItem value="DuckDB" label="DuckDB" default>
-First, follow the [setup guide for DuckDB](/getting-data/duckdb/).
-
-<QueryBuilder query={PlacesQuery}></QueryBuilder>
-</TabItem>
-</Tabs>
-
-## Data usage guidelines
 
 We recommend downloading only the Overture data you need. If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract places data and output a GeoJSON file.
 
@@ -140,7 +294,7 @@ Replace the `bbox.xmin` and `bbox.ymin` values with a new bounding box to run th
 </TabItem>
 </Tabs>
 
-## Data manipulation and analysis
+## Querying and analysis
 
 ### Querying by properties
 
@@ -153,7 +307,8 @@ The `address` column can be used to quickly filter data down to a particular pol
 <TabItem value="Query by category" label="Query by category" default>
 For filtering data by a particular type of place we can use the `categories` column. In this example we'll extract all the places with categories of `rice_mill` or `flour_mill`
 
-The full category list is available [here](https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv).
+Note: this example uses the deprecated `categories` property, which will be removed in the September 2026 release. It will be updated to use the new `taxonomy` property (see [Category taxonomy](#category-taxonomy)).
+
 <QueryBuilder query={MillQuery}></QueryBuilder>
 </TabItem>
 <TabItem value="Query by confidence score" label="Query by confidence score" default>
@@ -177,40 +332,39 @@ Using some basic matching logic, we can join these two datasets together to crea
 To run this example yourself, an Oregon PBF can be obtained from [Geofabrik](https://download.geofabrik.de/north-america/us/oregon.html).
 
 Note: Joining data with a CDLA Permissive 2.0 license to OSM is permitted but the resulting data may need to carry the Open Database License (ODbL) if it is a derivative database.  Please see the [OSM Collective Database Guideline](https://osmfoundation.org/wiki/Licence/Community_Guidelines/Collective_Database_Guideline_Guideline) for information on this topic.
-<details>
-    <summary>Query</summary>
-<div>
+
 <QueryBuilder query={ConflateOSMQuery}></QueryBuilder>
-</div>
-</details>
+
 </TabItem>
 <TabItem value="Find building addresses" label="Find building addresses" default>
 Suppose you are interested in having address data attached to buildings. The [Overture addresses](/schema/reference/addresses/address/) theme might be a good place to check, but let's assume it does not cover the area you are interested in.
 
 The places theme has wide coverage and many of the place point features have addresses associated with them. Using an intersect we can find places that fall inside buildings and then join the place's address to the building polygon.
-<details>
-    <summary>Query</summary>
-<div>
+
 <QueryBuilder query={PlacesInBuildingsQuery}></QueryBuilder>
-</div>
-</details>
+
+</TabItem>
+<TabItem value="Compare with the base theme" label="Compare with the base theme" default>
+Some real-world entities appear in more than one Overture theme. Mountains are a good example: the places theme carries them as destinations with names, categories, and GERS IDs, while the base theme's land type carries them as OSM-derived physical features.
+
+Count mountains in places (125,458 in the July 2026 release):
+
+<QueryBuilder query={PlacesMountainsQuery}></QueryBuilder>
+
+Count mountain landforms in the base theme (over 1 million peaks alone):
+
+<QueryBuilder query={BaseLandMountainsQuery}></QueryBuilder>
+
+For transit features such as bus stops and platforms, which are excluded from places by definition, see the base theme's [infrastructure type](../base/infrastructure).
 </TabItem>
 </Tabs>
 
 ## Tools and libraries
 
-### Rapid
-Rapid, an OpenStreetMap editor, is capable of displaying places data as a reference layer by following the guide [here](/examples/rapid/).
+Tools from Overture and the wider ecosystem can help you explore, visualize, and work with places data:
 
-The license is compatible with OSM and this data can be used for mapping.
-
-
-## Get support
-
-Overture is an open project and we welcome feedback, questions, and bug reports through our [public GitHub repositories](https://github.com/OvertureMaps).
-
-**Where to go.** Use [GitHub Discussions](https://github.com/orgs/OvertureMaps/discussions) for general questions, workflow help, feature suggestions, or broader conversations about Overture. Use GitHub Issues in the [data repository](https://github.com/OvertureMaps/data) or the [schema repository](https://github.com/OvertureMaps/schema) for specific bug reports: missing entities, geometry problems, duplicate records, or country-specific data concerns.
-
-**What to expect.** We review incoming issues regularly and try to respond within a few business days, but we can't guarantee a resolution timeline. Issues that affect data integrity or block common workflows get higher priority.
-
-**Filing a good issue.** The more detail you include, the faster we can help. When reporting a data problem, please include: the Overture release version you're using, a query or code snippet that reproduces the issue, specific entity IDs or bounding boxes where you see the problem, and any relevant screenshots or map views. If you can share a minimal reproducible example, that goes a long way.
+- **[Taxonomy Browser](./taxonomy-browser)**: An interactive tool for exploring and comparing releases of the Overture Places category taxonomy hierarchy.
+- **Taxonomy visualizations**: Interactive visual maps of the OPC and basic-category taxonomies, including views of how many places fall within each category. {/* TODO: add links to Ron Rice's taxonomy visualization tools */}
+- **[Overture Maps Explorer](https://explore.overturemaps.org/)**: A browser-based tool for viewing and downloading modest amounts of Overture data.
+- **POI library**: A cross-dataset point-of-interest library, presented at State of the Map, that combines Overture, Foursquare, and OpenStreetMap data for users looking for the most inclusive dataset. {/* TODO: add link to the POI library */}
+- **Community visualizations**: Visualizations of places data built by the wider ecosystem. {/* TODO: add links to community visualization tools */}

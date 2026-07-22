@@ -1,0 +1,72 @@
+---
+title: Infrastructure
+description: Transit, transportation support, and built-environment features in the base theme
+pagination_label: Base Infrastructure
+---
+
+import QueryBuilder from '@site/src/components/queryBuilder';
+import TransitCountsQuery from '!!raw-loader!@site/src/queries/duckdb/base_transit_counts.sql';
+import TransitRomeQuery from '!!raw-loader!@site/src/queries/duckdb/base_transit_rome.sql';
+import PlacesMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/places_mountains.sql';
+import BaseLandMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/base_land_mountains.sql';
+
+# Infrastructure
+
+The base theme's **infrastructure** feature type contains built-environment features derived from OpenStreetMap: bridges, airports, communication towers, power lines, piers, barriers — and the transit features described on this page. Infrastructure features can carry Point, LineString, Polygon, or MultiPolygon geometries, and are classified with a `subtype` and `class` derived from OSM tags.
+
+## Transit features
+
+The places theme deliberately excludes intermediate waypoints — a place must be a *destination*, so bus stops, train platforms, and similar features are not places. They are not part of the transportation theme either, which contains only the road network itself (segments and connectors). Instead, they live here, in the infrastructure type under the `transit` subtype.
+
+The `transit` subtype covers both transit stops and the parking and access features around them:
+
+<QueryBuilder query={TransitCountsQuery}></QueryBuilder>
+
+Results from the July 2026 release:
+
+| class | feature count |
+| --- | --- |
+| parking | 6,665,988 |
+| parking_space | 4,780,513 |
+| bus_stop | 4,097,754 |
+| stop_position | 1,378,033 |
+| bicycle_parking | 900,081 |
+| platform | 521,589 |
+| parking_entrance | 270,848 |
+| bicycle_rental | 92,944 |
+| railway_station | 85,319 |
+| bus_station | 65,734 |
+| motorcycle_parking | 45,633 |
+| ferry_terminal | 38,722 |
+| railway_halt | 34,528 |
+| subway_station | 18,101 |
+
+To pull individual transit features for an area of interest, filter on `subtype` and `class` with a bounding box. This example uses central Rome:
+
+<QueryBuilder query={TransitRomeQuery}></QueryBuilder>
+
+Note: the `geometry` column is already a native geometry type in current releases — no `ST_GeomFromWKB` conversion is needed. Load the DuckDB `spatial` extension if you want to transform it (for example, `ST_AsGeoJSON(geometry)`).
+
+## One entity, multiple themes
+
+Some real-world things legitimately appear in more than one Overture theme, represented differently in each. Mountains are a good example. The places theme contains mountain features as *destinations* — provider-sourced records with names, categories (`geographic_entities > land_feature > mountain`), a confidence score, and a GERS-matched identity:
+
+<QueryBuilder query={PlacesMountainsQuery}></QueryBuilder>
+
+| places_mountains |
+| --- |
+| 125,458 |
+
+The base theme's **land** type contains mountains as *physical features* — OSM-derived geometries classified by landform:
+
+<QueryBuilder query={BaseLandMountainsQuery}></QueryBuilder>
+
+| class | base_land_features |
+| --- | --- |
+| peak | 1,085,246 |
+| ridge | 255,191 |
+| saddle | 78,321 |
+| mountain_range | 7,533 |
+| volcano | 5,853 |
+
+Neither copy is redundant: use the places record when you need a named, categorized destination with a stable GERS ID; use the base land feature when you need the OSM-derived physical representation. The same pattern applies to other entities that are both destinations and physical or network features, so when a feature seems "missing" from one theme, it's worth checking whether another theme carries it by design. See the [places guide](/guides/places/) for how the places theme defines what it includes.

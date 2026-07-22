@@ -18,9 +18,7 @@ import UtahAddresses from '!!raw-loader!@site/src/queries/duckdb/addresses_utah.
 This theme is currently in Alpha. We invite the Overture community to test the addresses schema and data and offer feedback via the [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repos.
 :::
 
-Overture maintains over 473 million address point entities. Data in the address theme is derived from over 175 sources, many distributed by [OpenAddresses](https://openaddresses.io/) and [AddressForAll](https://www.addressforall.org/en/), but also includes open data from the [City of New York](https://data.cityofnewyork.us/City-Government/NYC-Address-Points/g6pj-hd8k), the [U.S. Department of Transportation](https://www.transportation.gov/gis/national-address-database), and various public agencies.
-
-For licensing information, please see the [Attribution and Licensing page](../../attribution).
+Overture maintains over 473 million address point entities. An address represents a physical place through a series of attributes — street number, street name, unit, address levels, postal code, and/or country — together with a point geometry that gives an approximate location of the position most commonly associated with the feature.
 
 Address data can be used for a variety of purposes, which can include:
 
@@ -31,15 +29,40 @@ Address data can be used for a variety of purposes, which can include:
 - **Normalization**: Adhering to standard and consistent forms of address components.
 - **Validation and Verification**: Confirming an address exists within a known list of addresses.
 
-| ![Overture address coverage](/img/addresses/address-coverage-h3-june.png) |
-|:--:|
-| *June 2026 coverage of Overture address data, visualized using H3 cells.* |
+
 
 ## Dataset description
 
 ### Feature type descriptions
 
-An `address` is a feature type that represents a physical place through a series of attributes: street number, street name, unit, address_levels, postalcode and/or country. They also have a `Point` geometry, which provides an approximate location of the position most commonly associated with the feature. We encourage you to consult the [schema reference documentation for the `address` feature type](/schema/reference/addresses/address/).
+The addresses theme defines a single feature type, **address**, which represents a physical place through a series of attributes — street number, street name, unit, address levels, postal code, and/or country — along with a point geometry giving the approximate location most commonly associated with the feature.
+
+
+### Column definitions
+
+Column definitions for the address type are generated from the schema and live in the [schema reference](/schema/reference/addresses/address).
+
+## Sources and licensing
+
+The addresses theme is compiled from over 175 sources. Most address points are distributed through community aggregators — chiefly [OpenAddresses](https://openaddresses.io/) and [AddressForAll](https://www.addressforall.org/en/) — supplemented by authoritative open datasets published by public agencies, such as the [City of New York](https://data.cityofnewyork.us/City-Government/NYC-Address-Points/g6pj-hd8k) and the [U.S. Department of Transportation](https://www.transportation.gov/gis/national-address-database). Because it aggregates many independent datasets, the theme carries a variety of source licenses rather than a single overall license. For the specific terms that apply to each source, see the [licensing and attribution page](../../attribution).
+
+## How we build the dataset
+
+Addresses are assembled from many independent source datasets with minimal transformation, so the processing pipeline is intentionally light.
+
+**Filtering.** Global filtering for partial data or columns with placeholder values.
+
+**Matching.** Addresses are matched using **exact matching** — matches are determined by exact point geometry together with the address properties. All properties, including geometry, participate in the match.
+
+**Merging.** For matched addresses, a single source is promoted rather than combining attributes. All addresses except for perfect duplicates/matches are released, and no merging of attributes is performed between sources.
+
+## Coverage and data quality
+
+**Coverage.** The addresses theme currently spans **39 countries** (see the per-country counts above). Several large countries have only partial coverage, including the US, Germany, and Taiwan. Individual datasets also have varying levels of completeness in their attributes — a dataset may be missing postcodes or have only partial coverage for `address_levels`, for example.
+
+| ![Overture address coverage](/img/addresses/address-coverage-h3-june.png) |
+|:--:|
+| *June 2026 coverage of Overture address data, visualized using H3 cells.* |
 
 <details>
 	<summary>Address counts, per country</summary>
@@ -90,32 +113,15 @@ An `address` is a feature type that represents a physical place through a series
 </div>
 </details>
 
-### Data Dictionary
+**Known quality issues.** Address point locations vary from dataset to dataset and most often represent either building centroids, building entrances, points on a road, or parcel centroids. ID stability is limited: the theme relies on identical-value matching rather than a stable matcher, so any change to an attribute or location produces a new ID. Because a stable matcher for addresses has not yet been built, address feature IDs are not published in the GERS registry.
 
-<details>
-	<summary>Column definitions for addresses</summary>
-<div>
+## Release artifacts and updates
 
-| column | type | description |
-| --- | --- | --- |
-| id | string | A feature ID. This may be an ID associated with the Global Entity Reference System (GERS) if—and-only-if the feature represents an entity that is part of GERS. |
-| geometry | binary | A WKB representation of the entity's geometry. MUST be a Point as defined by GeoJSON schema. |
-| bbox | struct | Area defined by two longitudes and two latitudes: latitude is a decimal number between -90.0 and 90.0; longitude is a decimal number between -180.0 and 180.0. |
-| country | string | ISO 3166-1 alpha-2 country code of the country or country-like entity, that this address represents or belongs to. |
-| postcode | string | The postcode for the address. |
-| street | string | The street name associated with this address. The street name can include the street "type" or street suffix, e.g., Main Street. Ideally this is fully spelled out and not abbreviated but we acknowledge that many address datasets abbreviate the street name so it is acceptable. |
-| number | string | The house number for this address. This field may not strictly be a number. Values such as "74B", "189 1/2", "208.5" are common as the number part of an address and they are not part of the "unit" of this address. |
-| unit | string | The suite/unit/apartment/floor number. |
-| address_levels | array | The administrative levels present in an address. The number of values in this list and their meaning is country-dependent. For example, in the United States we expect two values: the state and the municipality. In other countries there might be only one. Other countries could have three or more. The array is ordered with the highest levels first. |
-| postal_city | string | In some countries or regions, a mailing address may need to specify a different city name than the city that actually contains the address coordinates. This optional field can be used to specify the alternate city name to use. |
-| version | boolean | Version number of the feature, incremented in each Overture release where the geometry or attributes of this feature changed. |
-| sources | array | The array of source information for the properties of a given feature, with each entry being a source object which lists the property in JSON Pointer notation and the dataset that specific value came from. All features must have a root level source which is the default source if a specific property's source is not specified. |
-| filename | string | Name of the file being queried. |
-| theme | string | Name of the Overture theme being queried. |
-| type | string | Name of the Overture feature type being queried. |
+The addresses theme is released on a **monthly** cadence. Alongside the data, the following release artifacts are provided:
 
-</div>
-</details>
+- **GERS registry**: Address feature IDs are **not** currently included in the GERS registry. The addresses theme does not yet have a stable matcher — Overture is seeking engineering support to build one — so address feature IDs are not stable enough to be registered. (See Coverage and data quality for more on ID stability.)
+- **Data changelog**: A changelog accompanies each release.
+- **Bridge files**: Not currently provided for the addresses theme.
 
 ## Data access and retrieval
 
@@ -130,7 +136,6 @@ Overture distributes its datasets as [GeoParquet](https://geoparquet.org/), a co
 
 [The Getting Data section of this documentation](/getting-data/cloud-sources/) offers instructions for using several tools to access Overture data, including DuckDB and Overture's Python command-line tool. See examples below for addresses.
 
-We recommend querying and downloading only the Overture data you need.
 If you have a particular geographic area of interest, there are several options for using a simple bounding box to extract address data.
 
 <Tabs>
@@ -161,37 +166,21 @@ This command results in the following address points, displayed in QGIS:
 
 </Tabs>
 
-## Data manipulation and analysis
+## Querying and analysis
 
 Using this query, you can get a count of addresses per country:
 
-<details>
-	<summary>Query</summary>
+
 <QueryBuilder query={AddressCounts}></QueryBuilder>
 
-</details>
 
 This query will create a shapefile of address data in New Zealand, with limited attributes:
 
-<details>
-	<summary>Query</summary>
+
 <QueryBuilder query={AddressesNZExport}></QueryBuilder>
-</details>
+
 
 This query will create a CSV file of address within the State of Utah, using the `divisions` theme data in a spatial query:
 
-<details>
-	<summary>Query</summary>
+
 <QueryBuilder query={UtahAddresses}></QueryBuilder>
-</details>
-
-
-## Get support
-
-Overture is an open project and we welcome feedback, questions, and bug reports through our [public GitHub repositories](https://github.com/OvertureMaps).
-
-**Where to go.** Use [GitHub Discussions](https://github.com/orgs/OvertureMaps/discussions) for general questions, workflow help, feature suggestions, or broader conversations about Overture. Use GitHub Issues in the [data repository](https://github.com/OvertureMaps/data) or the [schema repository](https://github.com/OvertureMaps/schema) for specific bug reports: missing entities, geometry problems, duplicate records, or country-specific data concerns.
-
-**What to expect.** We review incoming issues regularly and try to respond within a few business days, but we can't guarantee a resolution timeline. Issues that affect data integrity or block common workflows get higher priority.
-
-**Filing a good issue.** The more detail you include, the faster we can help. When reporting a data problem, please include: the Overture release version you're using, a query or code snippet that reproduces the issue, specific entity IDs or bounding boxes where you see the problem, and any relevant screenshots or map views. If you can share a minimal reproducible example, that goes a long way.
