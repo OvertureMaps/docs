@@ -20,4 +20,4 @@ Underlying type: `string`
 
 ## Used By
 
-- [`SourceItem`](../core/source_item.md)
+- [`SourceItem`](../common/source_item.md)

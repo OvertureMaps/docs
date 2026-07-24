@@ -11,7 +11,7 @@ Route reference with linear referencing support.
 | `ref` | [`StrippedString`](../../system/stripped_string.md) (optional) | Code or number used to reference the route<br/><br/>*Minimum length: 1* |
 | `symbol` | [`StrippedString`](../../system/stripped_string.md) (optional) | URL or description of route signage<br/><br/>*Minimum length: 1* |
 | `wikidata` | [`WikidataId`](../../system/wikidata_id.md) (optional) | A wikidata ID, as found on https://www.wikidata.org/ |
-| `between` | [`LinearlyReferencedRange`](../../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing RouteReference applies to. |
+| `between` | [`LinearlyReferencedRange`](../../common/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing RouteReference applies to. |
 
 ## Used By
 

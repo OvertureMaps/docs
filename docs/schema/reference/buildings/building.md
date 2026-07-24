@@ -1,6 +1,5 @@
 ---
 sidebar_position: 1
-hide_table_of_contents: true
 ---
 
 # Building
@@ -22,31 +21,34 @@ model of the building.
 | `geometry` | [`geometry`](../system/primitive/geometry.md) | The building's footprint or roofprint (if traced from aerial/satellite imagery).<br/><br/>*Allowed geometry types: MultiPolygon, Polygon* |
 | `theme` | `"buildings"` | |
 | `type` | `"building"` | |
-| `version` | [`FeatureVersion`](../core/feature_version.md) | |
-| `sources[]` | [`Sources`](../core/sources.md) (list, optional) | Information about the source data used to assemble the feature. |
+| `version` | [`FeatureVersion`](../common/feature_version.md) | |
+| `sources[]` | [`Sources`](../common/sources.md) (list, optional) | Information about the source data used to assemble the feature. |
 | `sources[].property` | [`JsonPointer`](../system/json_pointer.md) | A JSON Pointer identifying the property (field) that this source information applies to.<br/><br/>The root document value `""` indicates that this source information applies to the entire feature, excepting properties (fields) for which a dedicated source information record exists.<br/><br/>Any other JSON Pointer apart from `""` indicates that this source record provides dedicated source information for the property at the path in the JSON Pointer. As an example, the value `"/names/common/en"` indicates that the source information applies to the English common name of a named feature, while the value `"/geometry"` indicates that it applies to the feature geometry. |
 | `sources[].dataset` | `string` | Name of the dataset where the source data can be found. |
 | `sources[].license` | [`StrippedString`](../system/stripped_string.md) (optional) | Source data license name.<br/><br/>This should be a valid SPDX license identifier when available.<br/><br/>If omitted, contact the data provider for more license information. |
 | `sources[].record_id` | `string` (optional) | Identifies the specific record within the source dataset where the source data can be found.<br/><br/>The format of record identifiers is dataset-specific. |
 | `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
-| `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
-| `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
+| `sources[].confidence` | [`ConfidenceScore`](../common/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
+| `sources[].provider` | [`SnakeCaseString`](../system/snake_case_string.md) (optional) | The provider label for the entity that contributed this data (e.g., osm, meta, esri). |
+| `sources[].resource` | [`SnakeCaseString`](../system/snake_case_string.md) (optional) | The subject or type of data contributed by the provider (e.g., planet, buildings, division_names). |
+| `sources[].version` | [`NoWhitespaceString`](../system/no_whitespace_string.md) (optional) | A sortable identifier for the specific snapshot of the resource (e.g., 2026-02-13, 5.3, A5692). |
+| `sources[].between` | [`LinearlyReferencedRange`](../common/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
 | `subtype` | [`BuildingSubtype`](types/building_subtype.md) (optional) | A broad classification of the current use and purpose of the building.<br/><br/>If the current use of the building no longer accords with the original built purpose, the current use should be specified. For example, a building built as a train station but later converted into a shopping mall would have the value `"commercial"` rather than `"transportation"`. |
 | `class` | [`BuildingClass`](types/building_class.md) (optional) | A more specific classification of the current use and purpose of the building.<br/><br/>If the current use of the building no longer accords with the original built purpose, the current use should be specified. |
 | `has_parts` | `boolean` (optional) | Whether the building has associated building part features<br/><br/>*`strict=True`* |
-| `names` | [`Names`](../core/names.md) (optional) | |
+| `names` | [`Names`](../common/names.md) (optional) | All known names by which the feature is called |
 | `names.primary` | [`StrippedString`](../system/stripped_string.md) | The most commonly used name. |
-| `names.common` | [`CommonNames`](../core/common_names.md) (map, optional) | |
-| `names.rules[]` | `list<`[`NameRule`](../core/name_rule.md)`>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
+| `names.common` | [`CommonNames`](../common/common_names.md) (map, optional) | |
+| `names.rules[]` | `list<`[`NameRule`](../common/name_rule.md)`>` (optional) | Rules for names that cannot be specified in the simple common names property. These rules can cover other name variants such as official, alternate, and short; and they can optionally include geometric scoping (linear referencing) and side-of-road scoping for complex cases. |
 | `names.rules[].value` | [`StrippedString`](../system/stripped_string.md) | The actual name value. |
-| `names.rules[].variant` | [`NameVariant`](../core/name_variant.md) | The name variant for this name rule. |
+| `names.rules[].variant` | [`NameVariant`](../common/name_variant.md) | The name variant for this name rule. |
 | `names.rules[].language` | [`LanguageTag`](../system/language_tag.md) (optional) | The language in which the name `value` is specified, if known, as an IETF BCP 47 language tag. |
-| `names.rules[].perspectives` | [`Perspectives`](../core/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
-| `names.rules[].perspectives.mode` | [`PerspectiveMode`](../core/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
+| `names.rules[].perspectives` | [`Perspectives`](../common/perspectives.md) (optional) | Political perspectives from which a named feature is viewed. |
+| `names.rules[].perspectives.mode` | [`PerspectiveMode`](../common/perspective_mode.md) | Whether the perspective holder accepts or disputes this name. |
 | `names.rules[].perspectives.countries` | `list<`[`CountryCodeAlpha2`](../system/country_code_alpha2.md)`>` | Countries holding the given mode of perspective. |
-| `names.rules[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
-| `names.rules[].side` | [`Side`](../core/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
-| `level` | [`Level`](../core/level.md) (optional) | Z-order of the feature where 0 is visual level |
+| `names.rules[].between` | [`LinearlyReferencedRange`](../common/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing NameRule applies to. |
+| `names.rules[].side` | [`Side`](../common/scoping/side.md) (optional) | The side, either left or right, that the containing NameRule applies to. |
+| `level` | [`Level`](../common/level.md) (optional) | Z-order of the feature where 0 is visual level |
 | `height` | [`float64`](../system/primitive/primitives.md) (optional) | Height of the building or part in meters.<br/><br/>This is the distance from the lowest point to the highest point.<br/><br/>*`> 0`* |
 | `is_underground` | `boolean` (optional) | Whether the entire building or part is completely below ground.<br/><br/>The underground flag is useful for display purposes. Buildings and building parts that are entirely below ground can be styled differently or omitted from the rendered image.<br/><br/>This flag is conceptually different from the `level` field, which indicates relative z-ordering and, notably, can be negative even if the building is entirely above-ground.<br/><br/>*`strict=True`* |
 | `num_floors` | [`int32`](../system/primitive/primitives.md) (optional) | Number of above-ground floors of the building or part.<br/><br/>*`> 0`* |
@@ -68,8 +70,8 @@ model of the building.
 | -------: | ------- |
 | `id` | `148f35b1-7bc1-4180-9280-10d39b13883b` |
 | `bbox.xmin` | `-176.643798828125` |
-| `bbox.xmax` | `-176.64349365234375` |
 | `bbox.ymin` | `-43.9938850402832` |
+| `bbox.xmax` | `-176.64349365234375` |
 | `bbox.ymax` | `-43.993709564208984` |
 | `geometry` | `POLYGON ((-176.6435004 -43.9938042, -176.6435738 -43.9937107, -176.6437726 -43.9937913, -176.6436...` |
 | `theme` | `buildings` |
@@ -77,15 +79,19 @@ model of the building.
 | `version` | `1` |
 | `sources[0].property` |  |
 | `sources[0].dataset` | `OpenStreetMap` |
+| `sources[0].license` | `null` |
 | `sources[0].record_id` | `w519166507@1` |
-| `sources[0].update_time` | `2017-08-27T21:39:50.000Z` |
+| `sources[0].update_time` | `2017-08-27T21:39:50+00:00` |
 | `sources[0].confidence` | `null` |
+| `sources[0].provider` | `null` |
+| `sources[0].resource` | `null` |
+| `sources[0].version` | `null` |
 | `sources[0].between` | `null` |
 | `subtype` | `null` |
 | `class` | `null` |
 | `has_parts` | `false` |
 | `names` | `null` |
-| `level` | `null` |
+| `level` | `0` |
 | `height` | `null` |
 | `is_underground` | `false` |
 | `num_floors` | `null` |

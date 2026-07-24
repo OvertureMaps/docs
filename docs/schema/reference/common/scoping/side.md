@@ -12,4 +12,4 @@ travel of a person or vehicle.
 ## Used By
 
 - [`NameRule`](../name_rule.md)
-- [`Norms`](../../divisions/types/division/norms.md)
+- [`Norms`](../../divisions/types/norms.md)

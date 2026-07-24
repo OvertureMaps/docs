@@ -6,7 +6,7 @@ Scope for DestinationRule:
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `heading` | [`Heading`](../../core/scoping/heading.md) | The heading, either forward or backward, that the containing DestinationRule applies to. |
+| `heading` | [`Heading`](../../common/scoping/heading.md) | The heading, either forward or backward, that the containing DestinationRule applies to. |
 
 ## Used By
 

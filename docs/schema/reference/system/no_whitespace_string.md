@@ -10,5 +10,5 @@ Underlying type: `string`
 
 ## Used By
 
-- [`DivisionId`](../divisions/types/division_id.md)
+- [`SourceItem`](../common/source_item.md)
 - [`Id`](ref/id.md)

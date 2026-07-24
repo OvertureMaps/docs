@@ -6,4 +6,5 @@ See: [Pydantic docs](https://docs.pydantic.dev/latest/api/networks/#pydantic.net
 
 ## Used By
 
+- [`Dataset`](../../annex/types/dataset.md)
 - [`Place`](../../places/place.md)

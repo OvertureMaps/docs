@@ -1,7 +1,3 @@
----
-hide_table_of_contents: true
----
-
 # FacadeMaterial
 
 The outer surface material of building facade.

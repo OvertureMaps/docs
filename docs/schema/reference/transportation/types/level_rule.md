@@ -7,8 +7,8 @@ on the road segment.
 
 | Name | Type | Description |
 | -----: | :----: | ------------- |
-| `value` | [`Level`](../../core/level.md) | Z-order of the feature where 0 is visual level |
-| `between` | [`LinearlyReferencedRange`](../../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing LevelRule applies to. |
+| `value` | [`Level`](../../common/level.md) | Z-order of the feature where 0 is visual level |
+| `between` | [`LinearlyReferencedRange`](../../common/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing LevelRule applies to. |
 
 ## Used By
 

@@ -12,7 +12,8 @@ Underlying type: `string`
 
 - [`Address`](../addresses/address.md)
 - [`Address`](../places/types/address.md)
+- [`Dataset`](../annex/types/dataset.md)
 - [`Division`](../divisions/division.md)
 - [`DivisionArea`](../divisions/division_area.md)
 - [`DivisionBoundary`](../divisions/division_boundary.md)
-- [`Perspectives`](../core/perspectives.md)
+- [`Perspectives`](../common/perspectives.md)

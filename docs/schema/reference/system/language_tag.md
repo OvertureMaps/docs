@@ -22,6 +22,6 @@ Underlying type: `string`
 ## Used By
 
 - [`Division`](../divisions/division.md)
-- [`NameRule`](../core/name_rule.md)
-- [`Names`](../core/names.md)
-- [`CommonNames`](../core/common_names.md)
+- [`NameRule`](../common/name_rule.md)
+- [`Names`](../common/names.md)
+- [`CommonNames`](../common/common_names.md)

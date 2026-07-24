@@ -1,6 +1,5 @@
 ---
 sidebar_position: 1
-hide_table_of_contents: true
 ---
 
 # Address
@@ -29,15 +28,18 @@ provinces, state, and regions, and similar addressing units are found.
 | `geometry` | [`geometry`](../system/primitive/geometry.md) | Position of the address. Addresses are point geometries.<br/><br/>*Allowed geometry types: Point* |
 | `theme` | `"addresses"` | |
 | `type` | `"address"` | |
-| `version` | [`FeatureVersion`](../core/feature_version.md) | |
-| `sources[]` | [`Sources`](../core/sources.md) (list, optional) | Information about the source data used to assemble the feature. |
+| `version` | [`FeatureVersion`](../common/feature_version.md) | |
+| `sources[]` | [`Sources`](../common/sources.md) (list, optional) | Information about the source data used to assemble the feature. |
 | `sources[].property` | [`JsonPointer`](../system/json_pointer.md) | A JSON Pointer identifying the property (field) that this source information applies to.<br/><br/>The root document value `""` indicates that this source information applies to the entire feature, excepting properties (fields) for which a dedicated source information record exists.<br/><br/>Any other JSON Pointer apart from `""` indicates that this source record provides dedicated source information for the property at the path in the JSON Pointer. As an example, the value `"/names/common/en"` indicates that the source information applies to the English common name of a named feature, while the value `"/geometry"` indicates that it applies to the feature geometry. |
 | `sources[].dataset` | `string` | Name of the dataset where the source data can be found. |
 | `sources[].license` | [`StrippedString`](../system/stripped_string.md) (optional) | Source data license name.<br/><br/>This should be a valid SPDX license identifier when available.<br/><br/>If omitted, contact the data provider for more license information. |
 | `sources[].record_id` | `string` (optional) | Identifies the specific record within the source dataset where the source data can be found.<br/><br/>The format of record identifiers is dataset-specific. |
 | `sources[].update_time` | `datetime` (optional) | Last update time of the source data record. |
-| `sources[].confidence` | [`ConfidenceScore`](../core/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
-| `sources[].between` | [`LinearlyReferencedRange`](../core/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
+| `sources[].confidence` | [`ConfidenceScore`](../common/confidence_score.md) (optional) | Confidence value from the source dataset.<br/><br/>This is a value between 0.0 and 1.0 and is particularly relevant for ML-derived data. |
+| `sources[].provider` | [`SnakeCaseString`](../system/snake_case_string.md) (optional) | The provider label for the entity that contributed this data (e.g., osm, meta, esri). |
+| `sources[].resource` | [`SnakeCaseString`](../system/snake_case_string.md) (optional) | The subject or type of data contributed by the provider (e.g., planet, buildings, division_names). |
+| `sources[].version` | [`NoWhitespaceString`](../system/no_whitespace_string.md) (optional) | A sortable identifier for the specific snapshot of the resource (e.g., 2026-02-13, 5.3, A5692). |
+| `sources[].between` | [`LinearlyReferencedRange`](../common/scoping/linearly_referenced_range.md) (list, optional) | The linearly-referenced sub-segment of the geometry, specified as a range (pair) of percentage displacements from the start of the geometry, that the containing SourceItem applies to. |
 | `address_levels[]` | `list<`[`AddressLevel`](types/address_level.md)`>` (optional) | Names of the sub-country addressing areas the address belongs to, including the city or locality, in descending order of generality.<br/><br/>The list is sorted so that the highest, or most general, level comes first (*e.g.*, region) and the lowest, or most particular level, comes last (*e.g.*, city or town).<br/><br/>The number of items in this list and their meaning is country-dependent. For example, in the United States, we expect two items: the state, and the locality or municipality within the state. Other countries might have as few as one, or even three or more.<br/><br/>When a specific level that is required for a country is not known. most likely because the data provider has not supplied it and we have not derived it from another source, the list item corresponding to that level must be present, but its `value` field should be omitted.<br/><br/>*Minimum length: 1*<br/>*Maximum length: 5* |
 | `address_levels[].value` | [`StrippedString`](../system/stripped_string.md) (optional) | A string without leading or trailing whitespace |
 | `country` | [`CountryCodeAlpha2`](../system/country_code_alpha2.md) | The country the address belongs to, as an ISO 3166-1 alpha-2 country code. |
@@ -53,8 +55,8 @@ provinces, state, and regions, and similar addressing units are found.
 | -------: | ------- |
 | `id` | `416ab01c-d836-4c4f-aedc-2f30941ce94d` |
 | `bbox.xmin` | `-176.56381225585938` |
-| `bbox.xmax` | `-176.56378173828125` |
 | `bbox.ymin` | `-43.94719696044922` |
+| `bbox.xmax` | `-176.56378173828125` |
 | `bbox.ymax` | `-43.94718933105469` |
 | `geometry` | `POINT (-176.5637854 -43.9471955)` |
 | `theme` | `addresses` |
@@ -62,9 +64,13 @@ provinces, state, and regions, and similar addressing units are found.
 | `version` | `1` |
 | `sources[0].property` |  |
 | `sources[0].dataset` | `OpenAddresses/LINZ` |
+| `sources[0].license` | `null` |
 | `sources[0].record_id` | `null` |
 | `sources[0].update_time` | `null` |
 | `sources[0].confidence` | `null` |
+| `sources[0].provider` | `null` |
+| `sources[0].resource` | `null` |
+| `sources[0].version` | `null` |
 | `sources[0].between` | `null` |
 | `address_levels[0].value` | `Chatham Islands` |
 | `address_levels[1].value` | `Chatham Island` |

@@ -1,13 +1,16 @@
 # AdminLevel
 
-Integer representing the division's position in its country's administrative hierarchy, where lower numbers correspond to higher level administrative units.
+Integer representing the division's position in its country's administrative
+hierarchy, where lower numbers correspond to higher level administrative units.
 
-Underlying type: `uint8`
+Underlying type: `int32`
 
 ## Constraints
 
-- `≥ 0` (from [`uint8`](../../system/primitive/primitives.md))
-- `≤ 255` (from [`uint8`](../../system/primitive/primitives.md))
+- `≥ 0`
+- `≤ 16`
+- `≥ -2147483648` (from [`int32`](../../system/primitive/primitives.md))
+- `≤ 2147483647` (from [`int32`](../../system/primitive/primitives.md))
 
 ## Used By
 

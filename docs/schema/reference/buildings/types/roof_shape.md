@@ -1,7 +1,3 @@
----
-hide_table_of_contents: true
----
-
 # RoofShape
 
 The shape of the roof.

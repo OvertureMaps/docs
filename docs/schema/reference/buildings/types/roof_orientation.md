@@ -1,7 +1,3 @@
----
-hide_table_of_contents: true
----
-
 # RoofOrientation
 
 Orientation of the roof shape relative to the footprint shape.
