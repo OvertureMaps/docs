@@ -1,0 +1,99 @@
+# BuildingClass
+
+Further classification of the type and purpose of a building.
+
+The building class adds detail to the broad classification of `BuildingSubtype`.
+
+## Values
+
+- `agricultural`
+- `allotment_house`
+- `apartments`
+- `barn`
+- `beach_hut`
+- `boathouse`
+- `bridge_structure`
+- `bungalow`
+- `bunker`
+- `cabin`
+- `carport`
+- `cathedral`
+- `chapel`
+- `church`
+- `civic`
+- `college`
+- `commercial`
+- `cowshed`
+- `detached`
+- `digester`
+- `dormitory`
+- `dwelling_house`
+- `factory`
+- `farm`
+- `farm_auxiliary`
+- `fire_station`
+- `garage`
+- `garages`
+- `ger`
+- `glasshouse`
+- `government`
+- `grandstand`
+- `greenhouse`
+- `guardhouse`
+- `hangar`
+- `hospital`
+- `hotel`
+- `house`
+- `houseboat`
+- `hut`
+- `industrial`
+- `kindergarten`
+- `kiosk`
+- `library`
+- `manufacture`
+- `military`
+- `monastery`
+- `mosque`
+- `office`
+- `outbuilding`
+- `parking`
+- `pavilion`
+- `post_office`
+- `presbytery`
+- `public`
+- `religious`
+- `residential`
+- `retail`
+- `roof`
+- `school`
+- `semi`
+- `semidetached_house`
+- `service`
+- `shed`
+- `shrine`
+- `silo`
+- `slurry_tank`
+- `sports_centre`
+- `sports_hall`
+- `stable`
+- `stadium`
+- `static_caravan`
+- `stilt_house`
+- `storage_tank`
+- `sty`
+- `supermarket`
+- `synagogue`
+- `temple`
+- `terrace`
+- `toilets`
+- `train_station`
+- `transformer_tower`
+- `transportation`
+- `trullo`
+- `university`
+- `warehouse`
+- `wayside_shrine`
+
+## Used By
+
+- [`Building`](../building.md)
