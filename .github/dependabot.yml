@@ -40,6 +40,15 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    groups:
+      gh-aws-actions:
+        patterns:
+          - "actions/*"
+          - "aws-actions/*"
+          - "github/*"
+      docker:
+        patterns:
+          - "docker/*"
     labels:
       - "bot"
     commit-message:
