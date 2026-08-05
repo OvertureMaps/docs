@@ -43,7 +43,13 @@ Divisions data can be used for many purposes, which can include, but are not lim
 
 A **division** is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a point geometry which gives an approximate location of the position most commonly associated with the feature. 
 
-A **division_area** is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a division feature. It has a polygon or multipolygon geometry. 
+A **division_area** is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a division feature. It has a polygon or multipolygon geometry.
+
+The `is_land` and `is_territorial` booleans represent a division area's extent. The only combinations that occur are:
+
+- landlocked division areas: `is_land`=`TRUE`, `is_territorial`=`TRUE`
+- division areas clipped to land only, water excluded: `is_land`=`TRUE`, `is_territorial`=`FALSE`
+- unclipped division areas including water (the full territorial extent): `is_land`=`FALSE`, `is_territorial`=`TRUE`
 
 A **division_boundary** is a feature type that represents a shared border between two division features. It has a linestring geometry. The geometry of a divison_boundary is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. 
 
