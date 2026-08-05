@@ -1,6 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import * as maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { Protocol } from 'pmtiles';
 import '../css/map.css';
 
 function GlobalBuildingsMapInner() {
@@ -15,11 +18,6 @@ function GlobalBuildingsMapInner() {
 
   useEffect(() => {
     if (map.current) return; // stops map from intializing more than once
-
-    // Dynamic imports for browser-only modules
-    const maplibregl = require('maplibre-gl');
-    require('maplibre-gl/dist/maplibre-gl.css');
-    const { Protocol } = require('pmtiles');
 
     let protocol = new Protocol();
     maplibregl.addProtocol('pmtiles', protocol.tile);
