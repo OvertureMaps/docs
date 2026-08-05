@@ -9,7 +9,7 @@
     "start": "npm run copy-maplibre-worker && npm run docusaurus start",
     "build": "npm run copy-maplibre-worker && npm run docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
+    "deploy": "npm run copy-maplibre-worker && docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
