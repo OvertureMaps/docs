@@ -37,6 +37,6 @@ export default [
   },
   prettier,
   {
-    ignores: ['build/', '.docusaurus/', 'node_modules/'],
+    ignores: ['build/', '.docusaurus/', 'node_modules/', 'static/maplibre/'],
   },
 ];

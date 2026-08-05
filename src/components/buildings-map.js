@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Protocol } from 'pmtiles';
@@ -15,9 +16,16 @@ function GlobalBuildingsMapInner() {
   const {
     siteConfig: { customFields },
   } = useDocusaurusContext();
+  const workerUrl = useBaseUrl('/maplibre/maplibre-gl-worker.mjs');
 
   useEffect(() => {
     if (map.current) return; // stops map from intializing more than once
+
+    // MapLibre GL JS v6 ships ESM-only and can no longer locate its worker
+    // via import.meta.url inside a bundled chunk, so it must be pointed at
+    // a statically-served copy explicitly. See scripts/copy-maplibre-worker.mjs
+    // and the MapLibre v5->v6 migration guide.
+    maplibregl.setWorkerUrl(workerUrl);
 
     let protocol = new Protocol();
     maplibregl.addProtocol('pmtiles', protocol.tile);
