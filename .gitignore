@@ -2,3 +2,4 @@
 .docusaurus
 node_modules/
 build/
+static/maplibre/
