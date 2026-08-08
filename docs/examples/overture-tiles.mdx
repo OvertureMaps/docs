@@ -2,6 +2,7 @@
 description: tiles all day long
 title: PMTiles
 ---
+import QueryBuilder from '@site/src/components/queryBuilder';
 
 Overture is primarily distributed in the [GeoParquet format](/getting-data). While GeoParquet is a compact format, **tiles** are essential for creating pannable, zoomable slippy maps for display on the web.
 
@@ -33,7 +34,7 @@ These public S3 URLs can also be accessed via HTTP:
 
 Local and remote HTTP URLs can be previewed at [pmtiles.io](https://pmtiles.io).
 
-[View 2026-05-20.0/base.pmtiles on pmtiles.io](https://pmtiles.io/#url=https%3A%2F%2Foverturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com%2Ftiles%2F2026-05-20.0%2Fbase.pmtiles&map=0.39/0/0)
+<QueryBuilder query="View __OVERTURE_RELEASE/base.pmtiles on pmtiles.io" href="https://pmtiles.io/#url=https%3A%2F%2Foverturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com%2Ftiles%2F__OVERTURE_RELEASE%2Fbase.pmtiles&map=0.39/0/0" />
 
 ### Area Extracts
 
@@ -41,9 +42,7 @@ To create a new tileset for only part of the world, use the `extract` command of
 
 To get all `buildings` tiles around Ghent, Belgium:
 
-```
-pmtiles extract https://overturemaps-extras-us-west-2.s3.amazonaws.com/tiles/2026-05-20.0/buildings.pmtiles ghent.pmtiles --bbox=3.660507,51.004250,3.784790,51.065996
-```
+<QueryBuilder query="pmtiles extract https://overturemaps-extras-us-west-2.s3.amazonaws.com/tiles/__OVERTURE_RELEASE/buildings.pmtiles ghent.pmtiles --bbox=3.660507,51.004250,3.784790,51.065996" language="bash"></QueryBuilder>
 
 ## On AWS
 
@@ -64,7 +63,7 @@ tofu init
 tofu apply -var="bucket_name=my-overture-tiles"
 ```
 
-4. Submit jobs from the [AWS Batch](https://console.aws.amazon.com/batch/home#jobs) console. 
+4. Submit jobs from the [AWS Batch](https://console.aws.amazon.com/batch/home#jobs) console.
 
 ![explore.overturemaps.org](/img/overture-tiles-job-definitions.png)
 
@@ -74,14 +73,14 @@ tofu apply -var="bucket_name=my-overture-tiles"
 
   * Add three **Environment Variables**:
 
-    * `OUTPUT`: The path to the output on S3, such as `s3://your-bucket-name/2026-05-20.0/`
+    * `OUTPUT`: The path to the output on S3, such as <QueryBuilder query="s3://your-bucket-name/__OVERTURE_RELEASE/" inline />
 
     * `THEME`: e.g. `places`
 
-    * `RELEASE`: The Overture release, e.g. `2026-05-20.0`
+    * `RELEASE`: The Overture release, e.g. <QueryBuilder query="__OVERTURE_RELEASE" inline />
 
 
-  * Once the job is complete, the tileset will be available at `<OUTPUT>/<THEME>.pmtiles`, e.g. `s3://your-bucket-name/2026-05-20.0/places.pmtiles`
+  * Once the job is complete, the tileset will be available at `<OUTPUT>/<THEME>.pmtiles`, e.g. <QueryBuilder query="s3://your-bucket-name/__OVERTURE_RELEASE/places.pmtiles" inline />
 
 To provide a modified image to AWS Batch, upload the image to [Elastic Container Registry](https://aws.amazon.com/ecr/) and provide the `container_image` variable:
 
