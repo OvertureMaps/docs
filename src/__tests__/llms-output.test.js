@@ -15,6 +15,12 @@ const LLMS_TXT = join(BUILD_DIR, 'llms.txt');
 const LLMS_FULL_TXT = join(BUILD_DIR, 'llms-full.txt');
 const LLMS_SCHEMA_TXT = join(BUILD_DIR, 'llms-schema.txt');
 
+// Docs legitimately include JS import statements inside fenced code samples
+// (e.g. the maplibre-gl setup snippet in build-a-map.mdx). Strip fenced code
+// blocks before checking for leftover MDX-level imports so those samples
+// don't trip the "no stray imports" assertion below.
+const stripFencedCodeBlocks = (content) => content.replace(/^```[\s\S]*?^```$/gm, '');
+
 describe('llms.txt build output', () => {
   it.skipIf(!existsSync(LLMS_TXT))('llms.txt follows llmstxt.org format', () => {
     const content = readFileSync(LLMS_TXT, 'utf-8');
@@ -27,7 +33,7 @@ describe('llms.txt build output', () => {
   });
 
   it.skipIf(!existsSync(LLMS_TXT))('llms.txt does not contain MDX import statements', () => {
-    const content = readFileSync(LLMS_TXT, 'utf-8');
+    const content = stripFencedCodeBlocks(readFileSync(LLMS_TXT, 'utf-8'));
     // excludeImports: true should strip these
     expect(content).not.toMatch(/^import\s+.+from\s+['"]/m);
   });
@@ -52,7 +58,7 @@ describe('llms-full.txt build output', () => {
   it.skipIf(!existsSync(LLMS_FULL_TXT))(
     'llms-full.txt does not contain MDX import statements',
     () => {
-      const content = readFileSync(LLMS_FULL_TXT, 'utf-8');
+      const content = stripFencedCodeBlocks(readFileSync(LLMS_FULL_TXT, 'utf-8'));
       expect(content).not.toMatch(/^import\s+.+from\s+['"]/m);
     },
   );
