@@ -2,13 +2,13 @@ import CodeBlock from '@theme/CodeBlock';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 function replacePlaceholders(str, release) {
+  const athenaRelease = 'v' + release.replaceAll('.', '_').replaceAll('-', '_');
+  const pmtilesRelease = release.split('.', 1)[0];
+
   return str
-    .replaceAll('__OVERTURE_RELEASE', release)
-    .replaceAll(
-      '__ATHENA_OVERTURE_RELEASE',
-      'v' + release.replaceAll('.', '_').replaceAll('-', '_')
-    )
-    .replaceAll('__PMTILES_OVERTURE_RELEASE', release.split('.', 1));
+    .replaceAll('__ATHENA_OVERTURE_RELEASE', athenaRelease)
+    .replaceAll('__PMTILES_OVERTURE_RELEASE', pmtilesRelease)
+    .replaceAll('__OVERTURE_RELEASE', release);
 }
 
 export default function QueryBuilder(args) {
