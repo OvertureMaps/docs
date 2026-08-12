@@ -14,7 +14,7 @@ Bathymetry features carry Polygon or MultiPolygon geometries and a single classi
 
 Bathymetry is delivered as a set of **stacked depth levels**. Each depth level is a coverage polygon set: the features with `depth = d` together cover every point of the earth's surface where the water is **deeper than** `d` meters.
 
-Because deeper levels are subsets of shallower ones, the levels nest:
+Practically, this means entities with a lower `depth` will always totally cover entities with a higher `depth`:
 
 - `depth = 0` covers all water — oceans and the lakes captured by GLOBathy.
 - `depth = 200` covers only the water that is deeper than 200 m.
