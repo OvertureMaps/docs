@@ -24,7 +24,7 @@ A point on the ocean floor at 3,500 m depth is therefore covered by every level 
 
 To render a classic bathymetric tint map, draw the levels stacked from shallow to deep: paint `depth = 0` first in the lightest color, then paint each successively deeper level on top in a darker color. The `cartography.sort_key` property encodes this recommended stacking — features with a lower `sort_key` should be drawn in front of features with a higher `sort_key`. To extract a single disjoint depth *band* instead (for example, water between 200 m and 1000 m deep), subtract the deeper level's coverage from the shallower level's coverage.
 
-## What this means for consumers
+## Takeaways
 
 - **Land is not covered.** Bathymetry polygons only exist over water; no masking against land or water layers is needed.
 - **Geometries are grid chips.** Instead of a small number of world-spanning multipolygons, each depth level is delivered as many polygons chipped to a roughly 1° grid, the same way Overture's ocean water polygons are delivered. Spatial filters (for example, `bbox` predicates) are much more effective as a result.
