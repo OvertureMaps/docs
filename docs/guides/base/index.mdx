@@ -20,8 +20,9 @@ Some of our schema design choices include:
 
 ## In this guide
 
-This overview covers the feature types, dataset construction, and access for the base theme. A dedicated page covers one feature type in more depth:
+This overview covers the feature types, dataset construction, and access for the base theme. Dedicated pages cover some feature types in more depth:
 
+- **[Bathymetry](./bathymetry):** Underwater depth features — how the stacked "deeper-than" depth levels work, how the coverage is built, and what it means for rendering and querying.
 - **[Infrastructure](./infrastructure):** Transit features such as bus stops, platforms, and stations — including how they relate to the places and transportation themes — and entities like mountains that appear in both base and places by design, with example queries.
 
 ## Dataset description
@@ -31,7 +32,7 @@ This overview covers the feature types, dataset construction, and access for the
 There are six feature types in the base theme:
 
 #### Bathymetry 
-Bathymetry features provide topographic representations of underwater areas, such as parts of lake beds or ocean floors. The geometries are derived vectorized bathymetric data products from [ETOPO1](https://www.ncei.noaa.gov/products/etopo-global-relief-model) and [GLOBathy](https://www.nature.com/articles/s41597-022-01132-9) data.
+Bathymetry features provide topographic representations of underwater areas, such as parts of lake beds or ocean floors. The geometries are derived vectorized bathymetric data products from [ETOPO1](https://www.ncei.noaa.gov/products/etopo-global-relief-model) and [GLOBathy](https://www.nature.com/articles/s41597-022-01132-9) data. Bathymetry is delivered as stacked depth levels, where each feature with `depth = d` covers all water deeper than `d` meters; see the [bathymetry page](./bathymetry) for details.
 
 #### Infrastructure 
 Infrastructure features provide basic information about real-world infrastructure entities such as bridges, airports, runways, aerialways, communication towers, and power lines. All of the features are pulled from OpenStreetMap and converted to the Overture schema. See the [infrastructure page](./infrastructure) for a closer look at transit features and how the infrastructure type relates to other themes.
