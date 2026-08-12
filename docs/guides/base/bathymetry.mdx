@@ -12,7 +12,7 @@ Bathymetry features carry Polygon or MultiPolygon geometries and a single classi
 
 ## Stacked depth levels
 
-Bathymetry is delivered as a set of **stacked depth levels** rather than a partition of the seafloor into disjoint depth bands. Each depth level is a coverage polygon set: the features with `depth = d` together cover every point of the earth's surface where the water is **deeper than** `d` meters.
+Bathymetry is delivered as a set of **stacked depth levels**. Each depth level is a coverage polygon set: the features with `depth = d` together cover every point of the earth's surface where the water is **deeper than** `d` meters.
 
 Because deeper levels are subsets of shallower ones, the levels nest:
 
