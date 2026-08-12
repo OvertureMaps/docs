@@ -24,17 +24,6 @@ A point on the ocean floor at 3,500 m depth is therefore covered by every level 
 
 To render a classic bathymetric tint map, draw the levels stacked from shallow to deep: paint `depth = 0` first in the lightest color, then paint each successively deeper level on top in a darker color. The `cartography.sort_key` property encodes this recommended drawing order — features with a lower `sort_key` should be drawn first (behind features with a higher `sort_key`). To extract a single disjoint depth *band* instead (for example, water between 200 m and 1000 m deep), subtract the deeper level's coverage from the shallower level's coverage.
 
-## How the coverage is built
-
-The raw ETOPO/GLOBathy source product expresses each depth level in the opposite orientation: the source feature for `depth = d` covers everything *shallower* than `d` — which includes all land. Delivered directly, this made the bathymetry layer blanket the entire land surface (see [schema#311](https://github.com/OvertureMaps/schema/issues/311)).
-
-Overture's pipeline inverts each level ([tf-data-platform#4780](https://github.com/OvertureMaps/tf-data-platform/pull/4780)) so that the published `depth = d` features cover everything *deeper* than `d`:
-
-1. Source coverage polygons are repaired (`ST_MakeValid`) rather than dropped — dropping a shallow-coverage feature would incorrectly mark its area as deep water.
-2. A world grid (1° cells by default, matching how Overture's ocean water polygons are chipped) is intersected with each depth level's coverage.
-3. Within each grid cell, the covered ("shallower-than") area is subtracted from the cell, leaving the "deeper-than" remainder. Cells with no source coverage at a level are entirely deeper than that level and pass through whole.
-4. Each resulting chip gets a deterministic ID derived from its depth and geometry, and carries through the source `version`, `cartography`, and `sources` provenance.
-
 ## What this means for consumers
 
 - **Land is not covered.** Bathymetry polygons only exist over water; no masking against land or water layers is needed.
