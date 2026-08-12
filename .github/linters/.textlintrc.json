@@ -4,13 +4,7 @@
   },
   "rules": {
     "terminology": {
-      "exclude": [
-        "to-?do(s)?(?=[ ,.])",
-        "key[/ ]?value",
-        "web[- ]?site(s)?",
-        "ID",
-        "snake[- ]?case"
-      ]
+      "exclude": ["to-?do(s)?(?=[ ,.])", "ID"]
     }
   }
 }
