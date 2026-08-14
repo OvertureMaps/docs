@@ -4,6 +4,14 @@
 
 This repository uses [Docusaurus](https://docusaurus.io/) to publish the documentation pages seen at [docs.overturemaps.org](https://docs.overturemaps.org)
 
+Built something with Overture data? Add it to the [Community page](https://docs.overturemaps.org/community/).
+
+<p align="center">
+  <a href="https://github.com/OvertureMaps/docs/issues/new?template=community-project.yaml">
+    <img src="https://img.shields.io/badge/%2B_Submit_a_community_project-4051CC?style=for-the-badge&labelColor=001A39" alt="Submit a community project" height="60" />
+  </a>
+</p>
+
 ## Structure
 
 - `blog/`: Entries for the Overture engineering blog available at docs.overturemaps.org/blog
