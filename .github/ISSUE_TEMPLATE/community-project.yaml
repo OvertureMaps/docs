@@ -27,7 +27,7 @@ body:
     validations:
       required: true
   - type: input
-    id: creator-url
+    id: creatorUrl
     attributes:
       label: Creator URL
       description: Optional link to the creator's site, GitHub, or LinkedIn profile.
@@ -46,7 +46,9 @@ body:
     id: tags
     attributes:
       label: Tags
-      description: Comma-separated tags describing the project (e.g. theme, language, or format).
+      description: >-
+        Comma-separated, lowercase, single-word tags describing the project (e.g. theme, language, or format).
+        These map directly to the `tags` array in `community-projects.json`.
       placeholder: "python, buildings, tutorial"
     validations:
       required: true
