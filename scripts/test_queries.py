@@ -22,12 +22,12 @@ import sys
 import tempfile
 import time
 from pathlib import Path
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 import duckdb
 
 STAC_URL = "https://stac.overturemaps.org/catalog.json"
-FALLBACK_RELEASE = "2026-05-20.0"
+DOCUSAURUS_CONFIG = Path(__file__).parent.parent / "docusaurus.config.js"
 QUERIES_DIR = Path(__file__).parent.parent / "src" / "queries" / "duckdb"
 
 # Colorize SQL in the log to set it apart from status lines (GitHub Actions
@@ -74,13 +74,28 @@ def limit_copy(stmt: str) -> str:
     return f"{prefix}SELECT * FROM (\n{inner}\n) _q LIMIT 0{suffix}"
 
 
+def fallback_release() -> str:
+    """Reuse the docusaurus fallback so there's one release pin to keep fresh."""
+    m = re.search(r"const fallback = '(\d{4}-\d{2}-\d{2}\.\d+)'", DOCUSAURUS_CONFIG.read_text())
+    if not m:
+        sys.exit("No fallback release found in docusaurus.config.js")
+    return m.group(1)
+
+
 def fetch_release() -> str:
-    try:
-        with urlopen(STAC_URL, timeout=10) as r:
-            return json.loads(r.read())["latest"]
-    except Exception as exc:
-        print(f"  STAC fetch failed ({exc}), falling back to {FALLBACK_RELEASE}")
-        return FALLBACK_RELEASE
+    # CloudFront 403s the default Python-urllib user agent from some networks
+    # (GitHub Actions runners included), so send a real one and retry.
+    req = Request(STAC_URL, headers={"User-Agent": "overture-docs-query-tests"})
+    for attempt in range(1, 4):
+        try:
+            with urlopen(req, timeout=10) as r:
+                return json.loads(r.read())["latest"]
+        except Exception as exc:
+            print(f"  STAC fetch attempt {attempt} failed ({exc})")
+            time.sleep(2 * attempt)
+    fallback = fallback_release()
+    print(f"  Falling back to {fallback} from docusaurus.config.js")
+    return fallback
 
 
 def split_statements(sql: str) -> list[str]:

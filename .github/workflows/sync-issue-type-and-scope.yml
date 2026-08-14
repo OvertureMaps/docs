@@ -1,0 +1,25 @@
+---
+name: Sync issue Type and Scope
+
+on:
+  issues:
+    types: [opened]
+
+# One sync run per issue at a time; drop duplicate triggers.
+concurrency:
+  group: sync-issue-type-scope-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  sync-fields:
+    name: Sync Fields
+    runs-on: ubuntu-slim
+    permissions:
+      issues: write # for the sync action to set org-level Type, Scope, and Skillset
+    steps:
+      - name: Sync Type and Scope from form answers
+        uses: OvertureMaps/workflows/.github/actions/sync-issue-fields@main # zizmor: ignore[unpinned-uses] intentionally track main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

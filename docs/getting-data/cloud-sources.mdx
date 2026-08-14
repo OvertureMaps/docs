@@ -15,7 +15,7 @@ Overture distributes its core map data as [GeoParquet](https://geoparquet.org/) 
 | Amazon S3 | `s3://overturemaps-us-west-2/release/<RELEASE>` |
 | Microsoft Azure | `https://overturemapswestus2.blob.core.windows.net/release/<RELEASE>` |
 
-Find the latest `<RELEASE>` value in the [STAC catalog](https://stac.overturemaps.org/catalog.json) or the [STAC viewer](https://stac.overturemaps.org/). See the [quickstart](/getting-data/) for how to query the catalog programmatically.
+Find the latest `<RELEASE>` value in the [STAC catalog](https://stac.overturemaps.org/catalog.json) or browse it with [stac-browser](https://browser.moregeo.it/external/stac.overturemaps.org/catalog.json). See the [quickstart](/getting-data/) for how to query the catalog programmatically.
 
 ### Path structure
 
@@ -82,7 +82,7 @@ Preview any PMTiles URL at [pmtiles.io](https://pmtiles.io). To create your own 
 
 ## STAC catalog
 
-Overture's [STAC catalog](https://stac.overturemaps.org/catalog.json) is the machine-readable index for all releases. It always points to the latest release and includes metadata for every theme and type: spatial extents, feature counts, column names, links to GeoParquet files on AWS and Azure, and links to PMTiles. Browse it in the [STAC viewer](https://stac.overturemaps.org/).
+Overture's [STAC catalog](https://stac.overturemaps.org/catalog.json) is the machine-readable index for all releases. It always points to the latest release and includes metadata for every theme and type: spatial extents, feature counts, column names, links to GeoParquet files on AWS and Azure, and links to PMTiles. Browse it with [stac-browser](https://browser.moregeo.it/external/stac.overturemaps.org/catalog.json), since the raw JSON URL isn't a UI on its own.
 
 ## GERS registry, bridge files, and changelog
 

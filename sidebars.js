@@ -58,6 +58,7 @@ const sidebars = {
           collapsed: true,
           items: [
             'guides/base/index',
+            'guides/base/bathymetry',
             'guides/base/infrastructure',
           ],
         },

@@ -3,11 +3,8 @@ description: create your own map
 title: MapLibre
 ---
 
-import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Map from '@site/src/components/map';
-import {Admins, Buildings, Places, Transportation, Water, Landuse, Land} from '@site/src/components/layers.js';
 import QueryBuilder from '@site/src/components/queryBuilder';
 import SeattlePlaces from '!!raw-loader!@site/src/queries/duckdb/seattle_places_for_map.sql';
 import SeattlePlacenames from '!!raw-loader!@site/src/queries/duckdb/seattle_placenames_for_map.sql';
@@ -16,10 +13,6 @@ import SeattleRoads from '!!raw-loader!@site/src/queries/duckdb/seattle_roads_fo
 import SeattleLand from '!!raw-loader!@site/src/queries/duckdb/seattle_land_for_map.sql';
 import SeattleLanduse from '!!raw-loader!@site/src/queries/duckdb/seattle_land_use_for_map.sql';
 import SeattleWater from '!!raw-loader!@site/src/queries/duckdb/seattle_water_for_map.sql';
-
-
-
-<Map></Map>
 
 ## Download and process only the data you need
 
@@ -200,7 +193,7 @@ At this point, we have created five PMTiles archives from five of the Overture t
 4. `roads.pmtiles`
 5. `base.pmtiles`
 
-The map on this page combines a [react maplibre example](https://docs.maptiler.com/react/maplibre-gl-js/how-to-use-maplibre-gl-js/) with [PMTiles](https://codesandbox.io/s/black-dream-oycvf2?file=/src/App.js). You can [view the source](https://github.com/OvertureMaps/docs/blob/main/src/components/map.js) for the above map on github for a complete example using react, or, check out the [map based on July's release](https://labs.overturemaps.org/overture-with-daylight) for a non-react implementation of PMTiles.
+Check out the [map based on the latest release](https://labs.overturemaps.org/overture-with-daylight) for a complete example of styling these archives with MapLibre and PMTiles.
 
 Using PMTiles with react requires adding the [PMtiles protocol](https://docs.protomaps.com/pmtiles/maplibre):
 
@@ -234,30 +227,3 @@ Then, reference the tile archives with a relative path when initializing the map
       },
     ...
 ```
-
-## Style the layers
-Each tab below contains the complete styles in the [Maplibre Style Spec](https://maplibre.org/maplibre-style-spec/) for the map on this page.
-
-<Tabs queryString="map-layer" >
-<TabItem value="places" label="Places" default>
-    <CodeBlock language="json">{ JSON.stringify(Places, null, 2) }</CodeBlock>
-</TabItem>
-<TabItem value="placenames" label="Placenames" default>
-    <CodeBlock language="json">{ JSON.stringify(Admins, null, 2) }</CodeBlock>
-</TabItem>
-<TabItem value="buildings" label="Buildings" default>
-    <CodeBlock language="json">{ JSON.stringify(Buildings, null, 2) }</CodeBlock>
-</TabItem>
-<TabItem value="roads" label="Roads" default>
-    <CodeBlock language="json">{ JSON.stringify(Transportation, null, 2) }</CodeBlock>
-</TabItem>
-<TabItem value="land" label="Land" default>
-    <CodeBlock language="json">{ JSON.stringify(Land, null, 2) }</CodeBlock>
-</TabItem>
-<TabItem value="landuse" label="Landuse" default>
-    <CodeBlock language="json">{ JSON.stringify(Landuse, null, 2) }</CodeBlock>
-</TabItem>
-<TabItem value="water" label="Water" default>
-    <CodeBlock language="json">{ JSON.stringify(Water, null, 2) }</CodeBlock>
-</TabItem>
-</Tabs>

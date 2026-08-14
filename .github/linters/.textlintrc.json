@@ -4,7 +4,7 @@
   },
   "rules": {
     "terminology": {
-      "exclude": ["to-?do(s)?(?=[ ,.])"]
+      "exclude": ["to-?do(s)?(?=[ ,.])", "ID"]
     }
   }
 }
