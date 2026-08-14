@@ -1,7 +1,6 @@
 name: Community project submission
 description: Share a tutorial, blog post, tool, or project built with Overture data for the Community page.
-title: "[Community] "
-labels: ["community"]
+projects: ["OvertureMaps/84"]
 body:
   - type: input
     id: title
