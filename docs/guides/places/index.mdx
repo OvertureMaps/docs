@@ -22,21 +22,21 @@ import BaseLandMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/base_l
 
 The Overture places theme contains tens of millions of point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. The theme is published under the [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) and [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) licenses. It contains no OpenStreetMap data and carries none of the share-alike obligations of the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/).
 
-| ![Overture places theme coverage](/img/places/places-coverage-h3-july.png) |
+| ![Overture places theme coverage](/img/places/places-coverage-h3-august.png) |
 |:--:|
-| *Overture places data, July 2026* |
+| *Overture places data, August 2026* |
 
-| Sources | License | feature count, July 2026 |
+| Sources | License | feature count, August 2026 |
 | --- | --- | --- |
-| AllThePlaces, Overture | CC0-1.0              | 1,418,830    |
-| BrightQuery, Overture  | CDLA-Permissive-2.0  | 831,651      |
-| DAC, Overture          | CDLA-Permissive-2.0  | 149,700      |
-| Foursquare, Overture   | Apache-2.0           | 4,748,001    |
-| Krick, Overture        | CDLA-Permissive-2.0  | 15,396       |
-| Microsoft, Overture    | CDLA-Permissive-2.0  | 6,305,853    |
-| PinMeTo, Overture      | CDLA-Permissive-2.0  | 159,426      |
-| RenderSEO, Overture    | CDLA-Permissive-2.0  | 3,655        |
-| meta, Overture         | CDLA-Permissive-2.0  | 60,591,049   |
+| AllThePlaces, Overture | CC0-1.0              | 1,609,565    |
+| BrightQuery, Overture  | CDLA-Permissive-2.0  | 2,289,171    |
+| DAC, Overture          | CDLA-Permissive-2.0  | 148,797      |
+| Foursquare, Overture   | Apache-2.0           | 4,630,865    |
+| Krick, Overture        | CDLA-Permissive-2.0  | 16,955       |
+| Microsoft, Overture    | CDLA-Permissive-2.0  | 6,278,097    |
+| PinMeTo, Overture      | CDLA-Permissive-2.0  | 164,344      |
+| RenderSEO, Overture    | CDLA-Permissive-2.0  | 3,641        |
+| meta, Overture         | CDLA-Permissive-2.0  | 58,489,657   |
 
 Overture defines a place as a *concrete, physically identifiable, stationary destination in a publicly observable space*. The [next section](#what-is-a-place) unpacks that definition and how it draws the line between places and Overture's other themes.
 
@@ -179,27 +179,27 @@ The structured `hierarchy` property is designed to support robust aggregation lo
 
 ### Top-level category counts
 
-| Top Level Taxonomy | feature count, July 2026 |
+| Top Level Taxonomy | feature count, August 2026 |
 | --- | --- |
-| Services and Business     | 17,435,507    |
-| Shopping                  | 13,708,264    |
-| Food and Drink            | 10,224,131    |
-| Lifestyle Services        | 4,609,813     |
-| Travel and Transportation | 3,941,044     |
-| Health Care               | 3,815,554     |
-| Education                 | 3,537,840     |
-| Cultural and Historic     | 3,219,997     |
-| Sports and Recreation     | 2,835,951     |
-| Community and Government  | 2,728,044     |
-| Lodging                   | 2,602,877     |
-| Arts and Entertainment    | 1,558,117     |
-| Geographic Entities       | 995,884       |
+| Services and Business     | 16,963,744    |
+| Shopping                  | 13,416,679    |
+| Food and Drink            | 9,979,044     |
+| Lifestyle Services        | 4,624,751     |
+| Travel and Transportation | 3,866,782     |
+| Health Care               | 4,580,186     |
+| Education                 | 3,507,880     |
+| Cultural and Historic     | 3,109,831     |
+| Sports and Recreation     | 2,617,034     |
+| Community and Government  | 2,722,787     |
+| Lodging                   | 2,504,442     |
+| Arts and Entertainment    | 1,482,281     |
+| Geographic Entities       | 970,417       |
 
 ### Provider category mappings
 
 Each data provider describes places using its own category system, so during ingest every provider's raw categories are mapped into the Overture taxonomy. Most of these mappings are exact or previously reviewed matches; the remainder are model-derived semantic matches that are held to a confidence floor and reviewed before becoming permanent lookups.
 
-Beginning with the July 2026 release, Overture also captures these provider category mappings in the pipeline, making it possible to trace how a source provider's original category was translated into the Overture taxonomy. The July 2026 release additionally expanded US coverage from BrightQuery with places in the `arts_and_entertainment`, `lodging`, and `cultural_and_historic_landmarks` categories, mapped to the taxonomy via NAICS-based mappings.
+Beginning with the July 2026 release, Overture also captures these provider category mappings in the pipeline, making it possible to trace how a source provider's original category was translated into the Overture taxonomy.
 
 ### Taxonomy roadmap
 
@@ -207,7 +207,7 @@ The taxonomy is maintained on a quarterly release cycle, with updates in March, 
 
 ## Sources and licensing
 
-The places theme is built from a variety of data providers. Its primary source is Meta, which contributes the large majority of place records (roughly 59 million of the ~75 million total), alongside Microsoft, Foursquare, and PinMeTo, together with a number of smaller aggregators and providers such as AllThePlaces, BrightQuery, DAC, Krick, and RenderSEO. The theme does not include OpenStreetMap data.
+The places theme is built from a variety of data providers. Its primary source is Meta, which contributes the large majority of place records (roughly 58 million of the ~74 million total), alongside Microsoft, Foursquare, and PinMeTo, together with a number of smaller aggregators and providers such as AllThePlaces, BrightQuery, DAC, Krick, and RenderSEO. The theme does not include OpenStreetMap data.
 
 Places is published under the [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) and [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) licenses, depending on the source. For full per-source licensing information, see the [licensing and attribution page](../../attribution).
 
@@ -359,7 +359,7 @@ The places theme has wide coverage and many of the place point features have add
 <TabItem value="Compare with the base theme" label="Compare with the base theme" default>
 Some real-world entities appear in more than one Overture theme. Mountains are a good example: the places theme carries them as destinations with names, categories, and GERS IDs, while the base theme's land type carries them as OSM-derived physical features.
 
-Count mountains in places (125,458 in the July 2026 release):
+Count mountains in places (131,189 in the August 2026 release):
 
 <QueryBuilder query={PlacesMountainsQuery}></QueryBuilder>
 
