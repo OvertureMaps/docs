@@ -1,0 +1,54 @@
+name: Community project submission
+description: Share a tutorial, blog post, tool, or project built with Overture data for the Community page.
+projects: ["OvertureMaps/84"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: Name of the project, article, or tool.
+      placeholder: "Enrich Your Dataset With GERS and Create a Tile Server"
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL
+      description: Link to the project, article, or repo.
+      placeholder: "https://example.com/my-overture-project"
+    validations:
+      required: true
+  - type: input
+    id: creator
+    attributes:
+      label: Creator
+      description: Who made this? Include an affiliation if relevant.
+      placeholder: "Jane Doe, Example Corp"
+    validations:
+      required: true
+  - type: input
+    id: creatorUrl
+    attributes:
+      label: Creator URL
+      description: Optional link to the creator's site, GitHub, or LinkedIn profile.
+      placeholder: "https://github.com/janedoe"
+    validations:
+      required: false
+  - type: input
+    id: release
+    attributes:
+      label: Release date
+      description: Month and year the project or article was published.
+      placeholder: "August 2025"
+    validations:
+      required: true
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: >-
+        Comma-separated, lowercase, single-word tags describing the project (e.g. theme, language, or format).
+        These map directly to the `tags` array in `community-projects.json`.
+      placeholder: "python, buildings, tutorial"
+    validations:
+      required: true
