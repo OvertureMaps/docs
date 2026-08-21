@@ -20,6 +20,8 @@ import CountsPerEntity from '!!raw-loader!@site/src/queries/duckdb/divisions_cou
 import SubTypeCountsUSMXCA from '!!raw-loader!@site/src/queries/duckdb/divisions_subtype_counts_specific_countries.sql';
 import DenmarkLocalityNeighborhood from '!!raw-loader!@site/src/queries/duckdb/divisions_denmark_locality_neighborhood.sql';
 import PhillyPlaces from '!!raw-loader!@site/src/queries/duckdb/divisions_philly_places.sql';
+import IsLandTrue from '!!raw-loader!@site/src/queries/duckdb/divisions_is_land_true.sql';
+import IsTerritorialTrue from '!!raw-loader!@site/src/queries/duckdb/divisions_is_territorial_true.sql';
 
 # Divisions Guide
 
@@ -43,7 +45,13 @@ Divisions data can be used for many purposes, which can include, but are not lim
 
 A **division** is a feature type that represents an official or non-official organization of people: country, region, province, city, neighborhood, etc. &mdash; as seen from a given political perspective. It has a point geometry which gives an approximate location of the position most commonly associated with the feature. 
 
-A **division_area** is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a division feature. It has a polygon or multipolygon geometry. 
+A **division_area** is a feature type that captures the shape of the land area, or land and territorial sea (maritime), belonging to a division feature. It has a polygon or multipolygon geometry.
+
+The `is_land` and `is_territorial` booleans represent a division area's extent. The only combinations that occur are:
+
+- landlocked division areas: `is_land`=`TRUE`, `is_territorial`=`TRUE`
+- division areas clipped to land only, water excluded: `is_land`=`TRUE`, `is_territorial`=`FALSE`
+- unclipped division areas including water (the full territorial extent): `is_land`=`FALSE`, `is_territorial`=`TRUE`
 
 A **division_boundary** is a feature type that represents a shared border between two division features. It has a linestring geometry. The geometry of a divison_boundary is either wholly non-maritime, or wholly maritime. A maritime boundary is the extension of a non-maritime boundary into the water. 
 
@@ -231,9 +239,26 @@ This query will return a subset of fields and the geometry for each locality and
 
 <QueryBuilder query={DenmarkLocalityNeighborhood}></QueryBuilder>
 
-
 #### Exporting places data within Philadelphia to a local Parquet file
 
 This query will return Places theme data for any place within the locality of Philadelphia
 
 <QueryBuilder query={PhillyPlaces}></QueryBuilder>
+
+#### Exporting different representations of a division area geometry
+
+Using the `is_land` and `is_territorial` field values, you can export different extents of the same division area:
+
+<Tabs>
+
+<TabItem value="exporting a land-clipped division area" label="exporting a land-clipped division area" default>
+This query will return regions in Japan with land-clipped geometries.
+<QueryBuilder query={IsLandTrue}></QueryBuilder>
+</TabItem>
+
+<TabItem value="exporting a division's full territorial extent" label="exporting a division's full territorial extent" default>
+This query will return regions in Japan with geometries that represent full territorial extent, extending into water.
+<QueryBuilder query={IsTerritorialTrue}></QueryBuilder>
+</TabItem>
+
+</Tabs>
