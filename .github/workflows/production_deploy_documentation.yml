@@ -11,10 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       schema-ref:
-        description: 'Schema repo ref (branch, tag, or SHA) to generate reference docs from.'
+        description: 'Schema repo ref (branch, tag, or SHA) to generate reference docs from. Leave blank to use main.'
         type: string
         required: false
-        default: 'main'
 
 concurrency:
   group: pages
