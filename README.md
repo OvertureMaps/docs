@@ -17,7 +17,7 @@ This repository uses [Docusaurus](https://docusaurus.io/) to publish the documen
 
 The Overture schema repository [OvertureMaps/schema](https://github.com/OvertureMaps/schema) maintains the official Overture schema as Pydantic models, and the reference pages under `docs.overturemaps.org/schema` are generated directly from those models. This keeps the schema and its documentation permanently in sync.
 
-Every build (CI, PR preview, and production) runs the [`generate-schema-docs`](https://github.com/OvertureMaps/workflows/tree/main/.github/actions/generate-schema-docs) action, which generates markdown into `docs/schema/reference/` from the schema repo's `main` branch (or a specific `schema-ref` when triggered via `workflow_dispatch`, e.g. from an `overture-schema` release). `docs/schema/reference/` is gitignored and never committed here.
+Every build (CI, PR preview, and production) runs the [`generate-schema-docs`](https://github.com/OvertureMaps/workflows/tree/main/.github/actions/generate-schema-docs) action, which generates Markdown into `docs/schema/reference/` from the schema repository's `main` branch (or a specific `schema-ref` when triggered via `workflow_dispatch`, e.g. from an `overture-schema` release). `docs/schema/reference/` is gitignored and never committed here.
 
 **If you spot a typo or error under `docs.overturemaps.org/schema`, it is not fixable in this repository.** Open an issue or PR against the docstrings/models in [OvertureMaps/schema](https://github.com/OvertureMaps/schema) instead — any change here will be overwritten on the next build.
 
