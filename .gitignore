@@ -3,3 +3,7 @@
 node_modules/
 build/
 static/maplibre/
+
+# Schema reference docs are generated at build time by the
+# generate-schema-docs action; see docs/schema/index.md.
+docs/schema/reference/

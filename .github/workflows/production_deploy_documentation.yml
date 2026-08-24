@@ -6,8 +6,15 @@ on:
   push:
     branches: [main]
 
-  # Allow running from the actions tab
+  # Allow running from the actions tab, and lets the schema repo trigger a
+  # rebuild against a specific released schema version/tag.
   workflow_dispatch:
+    inputs:
+      schema-ref:
+        description: 'Schema repo ref (branch, tag, or SHA) to generate reference docs from.'
+        type: string
+        required: false
+        default: 'main'
 
 concurrency:
   group: pages
@@ -38,6 +45,12 @@ jobs:
 
       - name: Install NPM dependencies
         run: npm ci --prefer-dedupe
+
+      - name: Generate schema markdown docs
+        uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@faa3fa4bbe01d85dc2e2139ff1f74ce70feb7df9 # zizmor: ignore[stale-action-refs] - main
+        with:
+          output-dir: ${{ github.workspace }}/docs/schema/reference
+          schema-ref: ${{ inputs.schema-ref || 'main' }}
 
       - name: Build Docusaurus Pages 🔧
         run: npm run build
