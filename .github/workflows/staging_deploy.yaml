@@ -16,7 +16,6 @@ permissions:
 env:
   DOCS_PATH: docs
   PREVIEW_PATH: /${{ github.event.repository.name }}/pr/${{ github.event.number }}
-  PREVIEW_PATH_NO_AUTOGEN: /${{ github.event.repository.name }}/pr/${{ github.event.number }}-no-autogen
   STAGING_URL: https://staging.overturemaps.org
   SCHEMA_PREVIEW: false # Set to true to only publish Schema reference docs
   AWS_ROLE_ARN: arn:aws:iam::763944545891:role/pages-staging-oidc-overturemaps
@@ -32,8 +31,9 @@ jobs:
         run: |
           echo "::warning title=Staging deploy not supported for fork PRs::Staging previews are only available for PRs from branches within this repository, not forks. Please open your PR from a branch in OvertureMaps/docs."
 
-  build-auto-gen:
-    name: Build (auto-gen schema)
+  build:
+    # Branch ruleset set to this job name to require this status check
+    name: Build
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     needs: check-fork
@@ -75,44 +75,10 @@ jobs:
           path: build
           name: build-artifact
 
-  build-repo-schema:
-    # Branch ruleset set to this job name to require this status check
-    name: Build
-    if: github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-latest
-    needs: check-fork
-    steps:
-      - name: Check out the main docs repo repository and build.
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: 'package.json'
-
-      - uses: lowlydba/sustainable-npm@31d51025884f424f58f22e4e6578178bb4e79632 # v3.0.0
-
-      - run: npm ci --omit=dev
-
-      - name: Build Docusaurus website (using existing /schema/reference files)
-        run: npm run build
-        env:
-          DOCUSAURUS_URL: ${{ env.STAGING_URL }}/
-          DOCUSAURUS_BASE_URL: ${{ env.PREVIEW_PATH_NO_AUTOGEN }}/
-          SCHEMA_PREVIEW: ${{ env.SCHEMA_PREVIEW }}
-
-      - name: Upload docs build as an artifact 📦
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          path: build
-          name: build-artifact-no-autogen
-
   deploy:
     name: Deploy
     runs-on: ubuntu-slim
-    needs: [check-fork, build-auto-gen, build-repo-schema]
+    needs: [check-fork, build]
     environment:
       name: staging
       url: ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html
@@ -127,58 +93,46 @@ jobs:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Download auto-gen artifact 📥
+      - name: Download build artifact 📥
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: build-artifact
-          path: build-autogen
-
-      - name: Download repo schema artifact 📥
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: build-artifact-no-autogen
-          path: build-no-autogen
+          path: build
 
       - name: Copy to S3
         run: |
-          aws s3 sync --delete --quiet build-autogen s3://overture-managed-staging-usw2/gh-pages${PREVIEW_PATH}/
-          aws s3 sync --delete --quiet build-no-autogen s3://overture-managed-staging-usw2/gh-pages${PREVIEW_PATH_NO_AUTOGEN}/
+          aws s3 sync --delete --quiet build s3://overture-managed-staging-usw2/gh-pages${PREVIEW_PATH}/
 
       - name: Bust the Cache
         run: |
-          aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "${PREVIEW_PATH}/*" "${PREVIEW_PATH_NO_AUTOGEN}/*"
+          aws cloudfront create-invalidation --distribution-id E1KP2IN0H2RGGT --paths "${PREVIEW_PATH}/*"
 
       - name: Gather metadata for PR comment
         id: deploy-metadata
         run: |
           echo "time=$(date -u +'%b %d, %Y %H:%M UTC')" >> $GITHUB_OUTPUT
           echo "short-sha=${PR_HEAD_SHA:0:7}" >> $GITHUB_OUTPUT
-          schema_ref="${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF#refs/heads/}"
+          schema_ref="${NEEDS_BUILD_OUTPUTS_SCHEMA_REF#refs/heads/}"
           schema_ref="${schema_ref#refs/tags/}"
           echo "schema-ref-short=$schema_ref" >> $GITHUB_OUTPUT
-          echo "schema-short-sha=${NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA:0:7}" >> $GITHUB_OUTPUT
+          echo "schema-short-sha=${NEEDS_BUILD_OUTPUTS_SCHEMA_SHA:0:7}" >> $GITHUB_OUTPUT
         env:
-          NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_REF: ${{ needs.build-auto-gen.outputs.schema-ref }}
-          NEEDS_BUILD_AUTO_GEN_OUTPUTS_SCHEMA_SHA: ${{ needs.build-auto-gen.outputs.schema-sha }}
+          NEEDS_BUILD_OUTPUTS_SCHEMA_REF: ${{ needs.build.outputs.schema-ref }}
+          NEEDS_BUILD_OUTPUTS_SCHEMA_SHA: ${{ needs.build.outputs.schema-sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
       - name: Comment on PR
         uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
         with:
           message: |
-            ## 🗺️ OMF Docs previews are live!
+            ## 🗺️ Overture Docs preview is live!
 
             |                         |                                                                      |
             |-------------------------|----------------------------------------------------------------------|
-            | 🆕 **Auto-gen schema site (beta)**  | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html           |
-            | 🗂️ **Auto-gen schema ref** | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ steps.deploy-metadata.outputs.schema-short-sha }}](https://github.com/OvertureMaps/schema/tree/${{ needs.build-auto-gen.outputs.schema-ref }}) |
-            | 🌍 **Repo schema site**      | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH_NO_AUTOGEN }}/index.html |
+            | 🌍 **Preview site**     | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html            |
+            | 🗂️ **Schema ref**      | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ steps.deploy-metadata.outputs.schema-short-sha }}](https://github.com/OvertureMaps/schema/tree/${{ needs.build.outputs.schema-ref }}) |
             | 🕐 **Updated**          | ${{ steps.deploy-metadata.outputs.time }}                            |
             | 📝 **Commit**           | [${{ steps.deploy-metadata.outputs.short-sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
-
-            Auto-gen schema site is now available. This is an early preview of a future workflow where we will automatically generate and publish reference docs for the Overture Maps Format schema.
-
-            The auto-gen schema site may contain incomplete or inaccurate information as we are still refining the generation process, so please compare against the repo schema site and refer to the official Overture documentation for authoritative information.
 
             > [!NOTE]
             > ♻️ This preview updates automatically with each push to this PR.
