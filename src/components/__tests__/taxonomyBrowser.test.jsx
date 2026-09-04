@@ -109,6 +109,69 @@ describe('TaxonomyBrowser', () => {
     expect(basicRow.nextSibling).toHaveTextContent('casual eatery');
   });
 
+  describe('place counts in the detail panel', () => {
+    // A category's own count and its roll-up answer different questions, and
+    // for a parent they differ by orders of magnitude.
+    const COUNTED = {
+      version: 't',
+      stats: { categories: 3, basicCategories: 1, rootGroups: 1, maxDepth: 2, totalPlaces: 150 },
+      // Shaped as the generator emits it: `count` is the category's own, and
+      // `totalCount` is the roll-up it computes while walking the tree.
+      tree: [
+        {
+          name: 'food_and_drink', displayName: 'Food and Drink', isBasic: true,
+          count: 50, totalCount: 150,
+          children: [
+            {
+              name: 'casual_eatery', displayName: 'Casual Eatery', totalCount: 100,
+              children: [
+                { name: 'bagel_shop', displayName: 'Bagel Shop', count: 100, totalCount: 100 },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    const rows = () =>
+      Object.fromEntries(
+        [...document.querySelectorAll('.taxonomy-kv-item')].map(kv => [
+          kv.querySelector('.taxonomy-kv-label')?.textContent,
+          kv.querySelector('.taxonomy-kv-value')?.textContent,
+        ])
+      );
+    const openTree = async () => {
+      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(COUNTED) }));
+      render(<TaxonomyBrowser releases={RELEASES} />);
+      fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
+      await screen.findByText('Food and Drink');
+    };
+
+    it('separates a category own count from its roll-up', async () => {
+      await openTree();
+      fireEvent.click(screen.getByText('Food and Drink'));
+      expect(rows()['Places at this category']).toBe('50');
+      expect(rows()['Including subcategories']).toBe('150');
+    });
+
+    it('shows an explicit zero when nothing is filed at that level', async () => {
+      await openTree();
+      fireEvent.click(screen.getByText('Food and Drink'));
+      fireEvent.click(await screen.findByText('Casual Eatery'));
+      // Nothing has casual_eatery as its primary, but 100 places sit beneath it.
+      expect(rows()['Places at this category']).toBe('0');
+      expect(rows()['Including subcategories']).toBe('100');
+    });
+
+    it('omits the roll-up on a leaf, where it would repeat the same number', async () => {
+      await openTree();
+      fireEvent.click(screen.getByText('Food and Drink'));
+      fireEvent.click(await screen.findByText('Casual Eatery'));
+      fireEvent.click(await screen.findByText('Bagel Shop'));
+      expect(rows()['Places at this category']).toBe('100');
+      expect(rows()).not.toHaveProperty('Including subcategories');
+    });
+  });
+
   it('renders a download link per artifact', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
     const json = await screen.findByRole('link', { name: 'Taxonomy (JSON)' });

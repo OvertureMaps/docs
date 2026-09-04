@@ -300,6 +300,7 @@ function buildJsonRelease(data) {
       code,
       basicCategory: node.basicCategory,
       count: node.leafCount,
+      totalCount: node.totalCount,
       prevCount: null,
       basicCount: null,
       prevBasicCount: null,
@@ -513,7 +514,7 @@ function ChangeIndicator({ current, previous }) {
   );
 }
 
-function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, prevBasicCount, count, prevCount, pctTag, mappings, displayFields, data }) {
+function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, prevBasicCount, count, totalCount, prevCount, pctTag, mappings, displayFields, data }) {
   if (!hierarchy) return null;
   const parts = hierarchy.split(' > ');
   const items = parts.map((part, i) => ({
@@ -535,8 +536,24 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
   if (basicCount != null) {
     items.push({ label: 'Basic Count', value: basicCount.toLocaleString(), countChange: { current: basicCount, previous: prevBasicCount } });
   }
-  if (count != null) {
-    items.push({ label: 'Count', value: count.toLocaleString(), countChange: { current: count, previous: prevCount } });
+  // A parent's own count is only the places filed directly against it. The
+  // roll-up is what people mean by "how big is Food and Drink", so show both.
+  // An explicit 0 matters here: it says nothing is filed at this level, which
+  // is different from the count being unknown.
+  if (count != null || totalCount != null) {
+    const direct = count ?? 0;
+    items.push({
+      label: 'Places at this category',
+      value: direct.toLocaleString(),
+      countChange: { current: direct, previous: prevCount },
+    });
+  }
+  // Suppressed on a leaf, where the two numbers are the same.
+  if (totalCount != null && totalCount !== (count ?? 0)) {
+    items.push({
+      label: 'Including subcategories',
+      value: totalCount.toLocaleString(),
+    });
   }
   if (pctTag) {
     items.push({ label: 'Note', value: pctTag, isPctTag: true });
@@ -578,6 +595,7 @@ function SectionContent({ data, release }) {
         basicCount={data.basicCount}
         prevBasicCount={data.prevBasicCount}
         count={data.count}
+        totalCount={data.totalCount}
         prevCount={data.prevCount}
         pctTag={data.pctTag}
         displayFields={release.displayFields}
