@@ -5,10 +5,10 @@ An interactive tool for exploring and comparing Overture Maps Places taxonomy re
 There are two kinds of release entry:
 
 - **Canonical (JSON)** — generated from the places pipeline by
-  `scripts/build-taxonomy.mjs` and served as a static file that the browser
-  fetches. This is how every release from September 2026 onward is added.
+  `scripts/build-taxonomy.mjs` and served as a static file that the explorer
+  fetches. This is how every release from August 2026 onward is added.
 - **Legacy (CSV)** — the working spreadsheets produced during the taxonomy
-  project, inlined into the page bundle via `raw-loader`. Kept so the browser
+  project, inlined into the page bundle via `raw-loader`. Kept so the explorer
   can still show how the taxonomy looked at each earlier point.
 
 Both kinds live in the same `releases` array and can be selected and compared
