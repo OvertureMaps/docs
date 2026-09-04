@@ -106,6 +106,11 @@ const config = {
                 from: '/releases',
                 to: '/release-calendar/',
               },
+              {
+                // Renamed from "Taxonomy Browser" to "Taxonomy Explorer".
+                from: '/guides/places/taxonomy-browser',
+                to: '/guides/places/taxonomy-explorer/',
+              },
             ],
           },
         ],

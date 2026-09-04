@@ -13,7 +13,7 @@ There are two kinds of release entry:
 
 Both kinds live in the same `releases` array and can be selected and compared
 against each other. Adding either one only requires editing
-`taxonomy-browser.mdx` — no component changes.
+`taxonomy-explorer.mdx` — no component changes.
 
 ## Adding a canonical release
 
@@ -77,7 +77,7 @@ Place two CSV files in the `csv/` directory:
 
 ### 2. Add imports
 
-At the top of `taxonomy-browser.mdx`, add raw-loader imports for your new files:
+At the top of `taxonomy-explorer.mdx`, add raw-loader imports for your new files:
 
 ```js
 import newDataCsv from '!!raw-loader!./csv/YYYY-MM-DD-New-Release.csv';
@@ -86,7 +86,7 @@ import newCountsCsv from '!!raw-loader!./csv/YYYY-MM-DD-counts.csv';
 
 ### 3. Add a release entry
 
-Add an object to the `releases` array in `taxonomy-browser.mdx`:
+Add an object to the `releases` array in `taxonomy-explorer.mdx`:
 
 ```jsx
 {
@@ -178,7 +178,7 @@ first.
 
 ### Visibility and missing data
 
-Set `enabled: false` on a release entry in `taxonomy-browser.mdx` to exclude it from the built site:
+Set `enabled: false` on a release entry in `taxonomy-explorer.mdx` to exclude it from the built site:
 
 ```jsx
 {
