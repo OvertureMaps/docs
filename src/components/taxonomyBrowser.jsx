@@ -646,7 +646,10 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
   const [selected, setSelected] = useState(null);
   const [jsonReleases, setJsonReleases] = useState({});
   const [loadErrors, setLoadErrors] = useState({});
-  const [view, setView] = useState('tree');
+  // The sunburst is what makes the shape of the taxonomy legible at a glance;
+  // the tree is the precise view you switch to once you know what you want.
+  const [view, setView] = useState('sunburst');
+  const [fullscreen, setFullscreen] = useState(false);
 
   const { withBaseUrl } = useBaseUrlUtils();
 
@@ -654,12 +657,19 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
   // changes whenever the page re-renders. Tracking what has already been asked
   // for keeps that from re-issuing requests.
   const requested = useRef(new Set());
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   // Releases with a `dataUrl` are served as a static JSON file rather than
   // inlined into the bundle, so they are fetched once on mount. This keeps the
   // page's initial payload flat as releases accumulate.
   useEffect(() => {
-    let cancelled = false;
     for (const r of releases) {
       if (!r.dataUrl || requested.current.has(r.id)) continue;
       requested.current.add(r.id);
@@ -669,13 +679,16 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
           return res.json();
         })
         .then(data => {
-          if (!cancelled) setJsonReleases(prev => ({ ...prev, [r.id]: buildJsonRelease(data) }));
+          if (mounted.current) setJsonReleases(prev => ({ ...prev, [r.id]: buildJsonRelease(data) }));
         })
         .catch(err => {
-          if (!cancelled) setLoadErrors(prev => ({ ...prev, [r.id]: err.message }));
+          if (mounted.current) setLoadErrors(prev => ({ ...prev, [r.id]: err.message }));
         });
     }
-    return () => { cancelled = true; };
+    // Deliberately no per-run cancellation: `requested` already prevents a
+    // second fetch, so a cleanup that abandoned an in-flight response would
+    // strand the browser on "Loading…" with no way to retry. Only unmount
+    // stops a result from being applied.
   }, [releases, withBaseUrl]);
 
   // Parse all data CSVs. Releases sourced from JSON have no CSV to parse.
@@ -860,12 +873,30 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
     return hits;
   }, [tree, searchTerm]);
 
+  // Escape is the expected way out of anything that covers the page.
+  useEffect(() => {
+    if (!fullscreen) return undefined;
+    const onKey = e => {
+      if (e.key === 'Escape') setFullscreen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [fullscreen]);
+
   const activeRelease = releases.find(r => r.id === activeTab);
   const loadError = loadErrors[activeTab] ?? null;
   const isLoading = Boolean(activeRelease?.dataUrl) && !jsonReleases[activeTab] && !loadError;
 
   return (
-    <div className={`taxonomy-browser ${view !== 'tree' ? 'taxonomy-browser--viz' : ''}`}>
+    <div
+      className={[
+        'taxonomy-browser',
+        view !== 'tree' ? 'taxonomy-browser--viz' : '',
+        fullscreen ? 'taxonomy-browser--fullscreen' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       <div className="taxonomy-browser-left">
         <div className="taxonomy-browser-header">
           <span className="taxonomy-browser-header-label">Choose a release:</span>
@@ -974,6 +1005,15 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
               {v.label}
             </button>
           ))}
+          <button
+            type="button"
+            className="taxonomy-view-button taxonomy-view-button--expand"
+            onClick={() => setFullscreen(f => !f)}
+            aria-pressed={fullscreen}
+            title={fullscreen ? 'Exit full screen (Esc)' : 'Expand to full screen'}
+          >
+            {fullscreen ? 'Exit' : 'Expand'}
+          </button>
         </div>
         <input
           type="text"

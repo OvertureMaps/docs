@@ -2,9 +2,32 @@
   display: flex;
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 6px;
-  height: 700px;
+  /* Tall enough that six rings of taxonomy are legible, but always leaving
+     some page visible so it doesn't read as a broken full-screen takeover. */
+  height: min(82vh, 940px);
+  min-height: 560px;
   background: var(--ifm-background-color);
   font-family: var(--ifm-font-family-base);
+}
+
+/* The docs column is sized for prose, so the browser reclaims the article's
+   horizontal padding. Going wider than the column is left to Expand, which
+   takes the whole viewport — a viewport-width rule here risks a horizontal
+   scrollbar on layouts I can't check. */
+.taxonomy-browser--viz {
+  width: calc(100% + 2 * var(--ifm-spacing-horizontal, 1rem));
+  margin-left: calc(-1 * var(--ifm-spacing-horizontal, 1rem));
+}
+
+.taxonomy-browser--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border-radius: 0;
 }
 
 .taxonomy-browser-left {
@@ -644,6 +667,11 @@
   padding: 8px 16px 0;
 }
 
+.taxonomy-view-button--expand {
+  flex: 0 0 auto;
+  margin-left: 4px;
+}
+
 .taxonomy-view-button {
   flex: 1;
   padding: 4px 10px;
@@ -668,15 +696,27 @@
 
 .taxonomy-browser-viz {
   flex: 1;
-  overflow: auto;
+  min-height: 0;
+  overflow: hidden;
   padding: 8px 12px 12px;
+  display: flex;
+  flex-direction: column;
 }
 
 .taxonomy-viz {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 8px;
+  height: 100%;
+  min-height: 0;
+}
+
+.taxonomy-viz-canvas {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .taxonomy-viz-controls {
@@ -717,6 +757,8 @@
 
 .taxonomy-viz-stage {
   position: relative;
+  flex: 1;
+  min-height: 0;
 }
 
 .taxonomy-viz-arc {

@@ -79,12 +79,14 @@ describe('TaxonomyBrowser', () => {
 
   it('fetches a JSON-sourced release and renders its tree', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
     expect(global.fetch).toHaveBeenCalledWith('/taxonomy/2026-09-16.0/taxonomy.json');
     expect(await screen.findByText('Food and Drink')).toBeInTheDocument();
   });
 
   it('reconstructs the hierarchy path the generator omitted', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
     fireEvent.click(await screen.findByText('Food and Drink'));
     fireEvent.click(await screen.findByText('Casual Eatery'));
     fireEvent.click(await screen.findByText('Bagel Shop'));
@@ -98,6 +100,7 @@ describe('TaxonomyBrowser', () => {
 
   it('inherits the basic category from the nearest basic ancestor', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
     fireEvent.click(await screen.findByText('Food and Drink'));
     fireEvent.click(await screen.findByText('Casual Eatery'));
     fireEvent.click(await screen.findByText('Bagel Shop'));
@@ -131,8 +134,30 @@ describe('TaxonomyBrowser', () => {
   it('still renders legacy CSV releases', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'december' } });
+
+    // A CSV-sourced release drives the visualization too, not just the tree.
+    expect(await screen.findByText('Overture Places')).toBeInTheDocument();
+    expect(document.querySelectorAll('.taxonomy-viz-stage path').length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
     expect(await screen.findByText('Food and Drink')).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Taxonomy (JSON)' })).not.toBeInTheDocument();
+  });
+
+  it('does not strand on "Loading" when it re-renders before the fetch lands', async () => {
+    // The fetch effect must not abandon an in-flight response on cleanup: the
+    // duplicate-request guard would then block any retry, leaving the browser
+    // loading forever. Interacting before the response arrives reproduces it.
+    let resolveFetch;
+    global.fetch = vi.fn(
+      () => new Promise(resolve => { resolveFetch = () => resolve({ ok: true, json: () => Promise.resolve(CANONICAL_JSON) }); })
+    );
+    render(<TaxonomyBrowser releases={RELEASES} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
+    resolveFetch();
+    expect(await screen.findByText('Food and Drink')).toBeInTheDocument();
+    expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 
   it('surfaces a load failure instead of rendering an empty tree', async () => {
@@ -145,10 +170,11 @@ describe('TaxonomyBrowser', () => {
   });
 
   describe('visualization views', () => {
+    // Sunburst is the default view, so rendering is enough; the centre label is
+    // the signal that the fetched taxonomy has been laid out.
     const showSunburst = async () => {
       render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Food and Drink');
-      fireEvent.click(screen.getByRole('button', { name: 'Sunburst' }));
+      await screen.findByText('Overture Places');
     };
 
     it('renders an arc for every category', async () => {
@@ -203,7 +229,7 @@ describe('TaxonomyBrowser', () => {
 
     it('renders the icicle view with labels', async () => {
       render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Food and Drink');
+      await screen.findByText('Overture Places');
       fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
       expect(document.querySelectorAll('.taxonomy-viz-stage rect').length).toBeGreaterThan(0);
       expect(document.querySelectorAll('.taxonomy-viz-cell-label').length).toBeGreaterThan(0);
@@ -230,8 +256,7 @@ describe('TaxonomyBrowser', () => {
     const showDeepSunburst = async () => {
       global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(DEEP) }));
       render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Food and Drink');
-      fireEvent.click(screen.getByRole('button', { name: 'Sunburst' }));
+      await screen.findByText('Overture Places');
     };
 
     const hueSet = () =>
@@ -286,7 +311,7 @@ describe('TaxonomyBrowser', () => {
     it('steps back in the icicle view too', async () => {
       global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(DEEP) }));
       render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Food and Drink');
+      await screen.findByText('Overture Places');
       fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
 
       const before = document.querySelectorAll('.taxonomy-viz-stage rect').length;
@@ -319,6 +344,66 @@ describe('TaxonomyBrowser', () => {
         const { ringFor } = sunburstGeometry(260, 4);
         expect(ringFor(4).r1).toBeCloseTo(260, 6);
         expect(ringFor(2).r0).toBeCloseTo(ringFor(1).r1, 6);
+      });
+    });
+
+    describe('canvas sizing', () => {
+      const svg = () => document.querySelector('.taxonomy-viz-stage svg');
+      const sizeCanvas = (width, height) => {
+        const el = document.querySelector('.taxonomy-viz-canvas');
+        el.getBoundingClientRect = () => ({ width, height, left: 0, top: 0, right: width, bottom: height });
+        fireEvent(window, new Event('resize'));
+      };
+
+      it('fills the space it is given rather than a fixed size', async () => {
+        await showSunburst();
+        sizeCanvas(1200, 800);
+        expect(svg()).toHaveAttribute('width', '1200');
+        expect(svg()).toHaveAttribute('height', '800');
+        // The sunburst is square on the smaller axis, centred in the canvas.
+        expect(document.querySelector('.taxonomy-viz-stage svg > g > g')).toHaveAttribute(
+          'transform',
+          'translate(600,400)'
+        );
+      });
+
+      it('gives cells more room as the canvas grows', async () => {
+        // With real data this is what surfaces deeper labels; on a small
+        // fixture the measurable effect is the cell geometry itself.
+        render(<TaxonomyBrowser releases={RELEASES} />);
+        await screen.findByText('Overture Places');
+        fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
+
+        sizeCanvas(400, 300);
+        const small = document.querySelector('.taxonomy-viz-stage rect');
+        const smallBox = [small.getAttribute('width'), small.getAttribute('height')].map(Number);
+
+        sizeCanvas(1600, 1000);
+        const large = document.querySelector('.taxonomy-viz-stage rect');
+        const largeBox = [large.getAttribute('width'), large.getAttribute('height')].map(Number);
+
+        expect(largeBox[0]).toBeGreaterThan(smallBox[0]);
+        expect(largeBox[1]).toBeGreaterThan(smallBox[1]);
+      });
+
+      it('renders before it has been measured', async () => {
+        // ResizeObserver has not fired yet on first paint; a zero-size canvas
+        // would render an empty chart.
+        await showSunburst();
+        expect(Number(svg().getAttribute('width'))).toBeGreaterThan(0);
+        expect(document.querySelectorAll('.taxonomy-viz-stage path').length).toBeGreaterThan(0);
+      });
+
+      it('expands to full screen and leaves on Escape', async () => {
+        await showSunburst();
+        const browser = document.querySelector('.taxonomy-browser');
+        expect(browser.className).not.toContain('fullscreen');
+
+        fireEvent.click(screen.getByRole('button', { name: /Expand/ }));
+        expect(document.querySelector('.taxonomy-browser').className).toContain('fullscreen');
+
+        fireEvent.keyDown(window, { key: 'Escape' });
+        expect(document.querySelector('.taxonomy-browser').className).not.toContain('fullscreen');
       });
     });
 
@@ -414,7 +499,7 @@ describe('TaxonomyBrowser', () => {
 
       it('offers the same controls in the icicle view', async () => {
         render(<TaxonomyBrowser releases={RELEASES} />);
-        await screen.findByText('Food and Drink');
+        await screen.findByText('Overture Places');
         fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
         expect(document.querySelectorAll('.taxonomy-viz-zoom button')).toHaveLength(3);
         fireEvent.click(screen.getByRole('button', { name: 'Zoom in' }));
@@ -422,16 +507,21 @@ describe('TaxonomyBrowser', () => {
       });
     });
 
-    it('keeps the tree view as the default', async () => {
+    it('opens on the sunburst, with the tree one click away', async () => {
       render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Food and Drink');
-      expect(screen.getByRole('button', { name: 'Tree' })).toHaveAttribute('aria-pressed', 'true');
+      await screen.findByText('Overture Places');
+      expect(screen.getByRole('button', { name: 'Sunburst' })).toHaveAttribute('aria-pressed', 'true');
+      expect(document.querySelector('.taxonomy-viz-stage')).not.toBeNull();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
+      expect(await screen.findByText('Food and Drink')).toBeInTheDocument();
       expect(document.querySelector('.taxonomy-viz-stage')).toBeNull();
     });
   });
 
   it('filters the tree by search term', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
     await screen.findByText('Food and Drink');
     fireEvent.change(screen.getByPlaceholderText('Search categories...'), {
       target: { value: 'bagel' },

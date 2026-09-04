@@ -96,6 +96,45 @@ export function zoomAt(view, factor, px, py) {
 
 const IDENTITY = { k: 1, x: 0, y: 0 };
 
+// Floors rather than fixed sizes: the canvas fills whatever room it is given,
+// but still renders something sane before the first measurement and in
+// environments without ResizeObserver.
+const MIN_CANVAS_WIDTH = 320;
+const MIN_CANVAS_HEIGHT = 320;
+
+/** Track an element's rendered size so the canvas can fill its container. */
+function useElementSize() {
+  const ref = useRef(null);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+
+    const measure = () => {
+      const rect = el.getBoundingClientRect();
+      setSize({ width: rect.width, height: rect.height });
+    };
+    measure();
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure);
+      return () => window.removeEventListener('resize', measure);
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return [
+    ref,
+    {
+      width: Math.max(size.width, MIN_CANVAS_WIDTH),
+      height: Math.max(size.height, MIN_CANVAS_HEIGHT),
+    },
+  ];
+}
+
 /**
  * Wheel-to-zoom and drag-to-pan over an SVG canvas.
  *
@@ -274,7 +313,9 @@ function ZoomControls({ zoomBy, resetView, view }) {
   );
 }
 
-function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode, matches, showBasicOnly }) {
+function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, selectedCode, matches, showBasicOnly }) {
+  // A sunburst is square; take the smaller axis and centre it.
+  const size = Math.min(width, height);
   const radius = size / 2;
   const laidOut = useMemo(() => {
     const copy = root.copy();
@@ -332,9 +373,9 @@ function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode,
       {...stageProps}
     >
       <ZoomControls zoomBy={zoomBy} resetView={resetView} view={view} />
-      <svg width={size} height={size} role="img" aria-label="Taxonomy sunburst">
+      <svg width={width} height={height} role="img" aria-label="Taxonomy sunburst">
         <g transform={`translate(${view.x},${view.y}) scale(${view.k})`}>
-        <g transform={`translate(${radius},${radius})`}>
+        <g transform={`translate(${width / 2},${height / 2})`}>
           {segments.map(seg => {
             const { d } = seg;
             const isMatch = !matches || matches.has(d.data.code);
@@ -482,6 +523,7 @@ export default function TaxonomyViz({ treeChildren, view, onSelect, selectedCode
   // you were never looking at.
   const [focusStack, setFocusStack] = useState([]);
   const [showBasicOnly, setShowBasicOnly] = useState(false);
+  const [canvasRef, canvas] = useElementSize();
   const root = useLayout(treeChildren, sized);
 
   const focus = focusStack.length > 0 ? focusStack[focusStack.length - 1] : null;
@@ -535,11 +577,13 @@ export default function TaxonomyViz({ treeChildren, view, onSelect, selectedCode
           Highlight basic categories only
         </label>
       </div>
-      {view === 'sunburst' ? (
-        <Sunburst {...shared} size={520} />
-      ) : (
-        <Icicle {...shared} width={640} height={560} />
-      )}
+      <div className="taxonomy-viz-canvas" ref={canvasRef}>
+        {view === 'sunburst' ? (
+          <Sunburst {...shared} width={canvas.width} height={canvas.height} />
+        ) : (
+          <Icicle {...shared} width={canvas.width} height={canvas.height} />
+        )}
+      </div>
       <p className="taxonomy-viz-hint">
         {view === 'sunburst'
           ? 'Click a segment to drill into it; click the centre or Back to step out one level.'
