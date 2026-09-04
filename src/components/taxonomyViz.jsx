@@ -420,6 +420,15 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
   const blockHeight = labelLines.length * lineHeight + 12;
   const firstLineY = -blockHeight / 2 + labelSize;
 
+  // A circle narrows as you move away from its centre line, so a sub-label that
+  // clears the hole vertically can still stick out of the sides. Drop it when
+  // the chord at its baseline is too short to hold it.
+  const subText = `${beneath.toLocaleString()} categories`;
+  const subY = firstLineY + labelLines.length * lineHeight + 2;
+  const subHalfWidth = (subText.length * 10 * CHAR_WIDTH_RATIO) / 2;
+  const chordHalfWidth = Math.sqrt(Math.max(0, holeRadius ** 2 - (subY + 4) ** 2));
+  const showSub = chordHalfWidth >= subHalfWidth;
+
   return (
     <div
       className={`taxonomy-viz-stage ${isPanning ? 'taxonomy-viz-stage--panning' : ''}`}
@@ -473,14 +482,11 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
               </tspan>
             ))}
           </text>
-          <text
-            className="taxonomy-viz-center-sub"
-            textAnchor="middle"
-            x={0}
-            y={firstLineY + labelLines.length * lineHeight + 2}
-          >
-            {`${beneath.toLocaleString()} categories`}
-          </text>
+          {showSub && (
+            <text className="taxonomy-viz-center-sub" textAnchor="middle" x={0} y={subY}>
+              {subText}
+            </text>
+          )}
         </g>
         </g>
       </svg>

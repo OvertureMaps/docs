@@ -4,7 +4,7 @@ import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 // @docusaurus/useBaseUrl is aliased to a stub in vitest.config.js.
 import { render, screen, cleanup, fireEvent, waitFor } from '@testing-library/react';
 import TaxonomyBrowser from '../taxonomyBrowser';
-import { sunburstGeometry, zoomAt } from '../taxonomyViz';
+import { sunburstGeometry, zoomAt, wrapLabel } from '../taxonomyViz';
 
 // A two-release fixture: one legacy CSV release and one canonical JSON release,
 // which is the combination the browser has to support during the transition.
@@ -136,7 +136,7 @@ describe('TaxonomyBrowser', () => {
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'december' } });
 
     // A CSV-sourced release drives the visualization too, not just the tree.
-    expect(await screen.findByText('Overture Places')).toBeInTheDocument();
+    expect(await screen.findByRole('img', { name: 'Taxonomy sunburst' })).toBeInTheDocument();
     expect(document.querySelectorAll('.taxonomy-viz-stage path').length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
@@ -175,7 +175,7 @@ describe('TaxonomyBrowser', () => {
     // the signal that the fetched taxonomy has been laid out.
     const showSunburst = async () => {
       render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Overture Places');
+      await screen.findByRole('img', { name: 'Taxonomy sunburst' });
     };
 
     it('renders an arc for every category', async () => {
@@ -250,7 +250,7 @@ describe('TaxonomyBrowser', () => {
     const showDeepSunburst = async () => {
       global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(DEEP) }));
       render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Overture Places');
+      await screen.findByRole('img', { name: 'Taxonomy sunburst' });
     };
 
     const hueSet = () =>
@@ -386,6 +386,48 @@ describe('TaxonomyBrowser', () => {
       });
     });
 
+    // SVG text does not wrap, so the centre label is laid out by hand. Without
+    // this it spilled out over the surrounding ring.
+    describe('centre label wrapping', () => {
+      it('keeps a short label on one line', () => {
+        expect(wrapLabel('Education', 160, 13)).toEqual(['Education']);
+      });
+
+      it('breaks a long label across lines that fit', () => {
+        expect(wrapLabel('Services and Business', 160, 13)).toEqual(['Services and', 'Business']);
+      });
+
+      it('wraps harder when there is less room', () => {
+        const roomy = wrapLabel('Travel and Transportation', 160, 13);
+        const tight = wrapLabel('Travel and Transportation', 74, 13);
+        expect(tight.length).toBeGreaterThan(roomy.length);
+      });
+
+      it('hyphenates a single word too wide for the line', () => {
+        const lines = wrapLabel('Antidisestablishmentarianism', 74, 13);
+        expect(lines.length).toBeGreaterThan(1);
+        expect(lines[0]).toMatch(/-$/);
+      });
+
+      it('truncates rather than growing past three lines', () => {
+        const lines = wrapLabel('B2B Oil and Gas Exploration and Development', 96, 13);
+        expect(lines).toHaveLength(3);
+        expect(lines[2]).toMatch(/…$/);
+      });
+
+      it('handles empty input', () => {
+        expect(wrapLabel('', 160, 13)).toEqual([]);
+        expect(wrapLabel(undefined, 160, 13)).toEqual([]);
+      });
+
+      it('renders the label as tspans that still read as one string', async () => {
+        await showSunburst();
+        const el = document.querySelector('.taxonomy-viz-center-label');
+        expect(el.querySelectorAll('tspan').length).toBeGreaterThan(0);
+        expect(el.textContent.replace(/\s+/g, ' ').trim()).toBe('Overture Places');
+      });
+    });
+
     describe('viewport zoom and pan', () => {
       const transformOf = () =>
         document.querySelector('.taxonomy-viz-stage svg > g')?.getAttribute('transform');
@@ -480,7 +522,7 @@ describe('TaxonomyBrowser', () => {
 
     it('opens on the sunburst, with the tree one click away', async () => {
       render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Overture Places');
+      await screen.findByRole('img', { name: 'Taxonomy sunburst' });
       expect(screen.getByRole('button', { name: 'Sunburst' })).toHaveAttribute('aria-pressed', 'true');
       expect(document.querySelector('.taxonomy-viz-stage')).not.toBeNull();
 
