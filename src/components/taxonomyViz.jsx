@@ -14,8 +14,9 @@ import { arc as d3arc } from 'd3-shape';
  * re-splits it into distinct families exactly as the root view splits the 13
  * top-level groups, instead of leaving the whole branch one flat colour.
  *
- * Basic categories carry a stroke rather than a hue, so "is this basic?" stays
- * legible independently of which family a node belongs to.
+ * Every segment is drawn the same way; only selection changes a segment's
+ * outline. Basic categories are picked out by dimming everything else, via the
+ * highlight toggle — an extra outline competed with the colour families.
  */
 
 // Curated hues for the 13 top-level groups. These are the colours a reader sees
@@ -447,14 +448,11 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
                 key={d.data.code}
                 d={arcGen(seg)}
                 fill={colorOf(d, dimmed)}
-                stroke={
-                  isSelected
-                    ? 'var(--ifm-color-primary)'
-                    : d.data.isBasic && !dimmed
-                      ? 'rgba(0,0,0,0.55)'
-                      : 'rgba(255,255,255,0.35)'
-                }
-                strokeWidth={isSelected ? 2.5 : d.data.isBasic && !dimmed ? 1.1 : 0.4}
+                stroke={isSelected ? 'var(--ifm-color-primary)' : 'rgba(255,255,255,0.35)'}
+                // Every segment carries the same hairline. A heavier stroke on
+                // basic categories thickened with the viewport zoom and swamped
+                // the thin outer arcs, so the distinction is colour alone.
+                strokeWidth={isSelected ? 2.5 : 0.4}
                 className="taxonomy-viz-arc"
                 onMouseEnter={() => setHover(d)}
                 onMouseLeave={() => setHover(null)}
@@ -569,8 +567,8 @@ export default function TaxonomyViz({ treeChildren, onSelect, selectedCode, matc
       </div>
       <p className="taxonomy-viz-hint">
         Click a segment to drill in; the centre or Back steps out. Scroll to zoom,
-        drag to pan. Outlined segments are basic categories. Segments are sized
-        by how much taxonomy sits beneath them{hasCounts ? ', unless you size by place count' : ''}.
+        drag to pan. Segments are sized by how much taxonomy sits beneath them
+        {hasCounts ? ', unless you size by place count' : ''}.
       </p>
     </div>
   );

@@ -247,12 +247,19 @@ describe('TaxonomyBrowser', () => {
       expect(document.querySelectorAll('.taxonomy-viz-stage path')).toHaveLength(3);
     });
 
-    it('outlines basic categories and leaves the rest unoutlined', async () => {
+    it('draws every segment with the same outline, basic or not', async () => {
       await showSunburst();
-      const arcs = [...document.querySelectorAll('.taxonomy-viz-stage path')];
-      const outlined = arcs.filter(p => parseFloat(p.getAttribute('stroke-width')) > 1);
-      // food_and_drink and casual_eatery are basic; bagel_shop is not.
-      expect(outlined).toHaveLength(2);
+      const arcs = () => [...document.querySelectorAll('.taxonomy-viz-stage path')];
+      const uniform = () => ({
+        strokes: new Set(arcs().map(p => p.getAttribute('stroke'))),
+        widths: new Set(arcs().map(p => p.getAttribute('stroke-width'))),
+      });
+
+      // Basic categories are picked out by dimming the rest, not by an outline.
+      expect(uniform()).toEqual({ strokes: new Set(['rgba(255,255,255,0.35)']), widths: new Set(['0.4']) });
+
+      fireEvent.click(screen.getByLabelText(/Highlight basic categories only/));
+      expect(uniform()).toEqual({ strokes: new Set(['rgba(255,255,255,0.35)']), widths: new Set(['0.4']) });
     });
 
     it('reports the number of categories beneath, not just leaves', async () => {
