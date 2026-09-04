@@ -260,6 +260,52 @@ export function sunburstGeometry(radius, levelsBelow) {
   };
 }
 
+// Rough advance width per character as a fraction of font size, for the UI sans
+// stack. Deliberately a slight over-estimate: wrapping a little early looks
+// fine, overflowing the centre hole does not.
+const CHAR_WIDTH_RATIO = 0.6;
+
+/**
+ * Break a label into lines that fit `maxWidth`.
+ *
+ * SVG text does not wrap, so the centre label has to be laid out by hand. There
+ * is no cheap way to measure text before paint — getComputedTextLength needs a
+ * rendered node — so this estimates from the font size instead.
+ */
+export function wrapLabel(text, maxWidth, fontSize, maxLines = 3) {
+  const words = String(text ?? '').split(/\s+/).filter(Boolean);
+  if (words.length === 0) return [];
+
+  const maxChars = Math.max(4, Math.floor(maxWidth / (fontSize * CHAR_WIDTH_RATIO)));
+  const lines = [];
+  let line = '';
+
+  for (const word of words) {
+    const candidate = line ? `${line} ${word}` : word;
+    if (candidate.length <= maxChars) {
+      line = candidate;
+      continue;
+    }
+    if (line) lines.push(line);
+
+    // A single word wider than the line still has to go somewhere.
+    let rest = word;
+    while (rest.length > maxChars) {
+      lines.push(`${rest.slice(0, maxChars - 1)}-`);
+      rest = rest.slice(maxChars - 1);
+    }
+    line = rest;
+  }
+  if (line) lines.push(line);
+
+  if (lines.length > maxLines) {
+    const kept = lines.slice(0, maxLines);
+    kept[maxLines - 1] = `${kept[maxLines - 1].slice(0, -1)}…`;
+    return kept;
+  }
+  return lines;
+}
+
 /** Wrap the browser's node shape in a d3 hierarchy, counting leaves for size. */
 function useLayout(treeChildren, sized) {
   return useMemo(() => {
@@ -365,6 +411,15 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
   const label = focused ? focused.data.displayName : 'Overture Places';
   const beneath = base.descendants().length - 1;
 
+  // Lay the centre label out to fit inside the hole. 1.6r rather than the full
+  // 2r diameter, since lines away from the centre line have less room in a
+  // circle and the text should not touch the ring.
+  const labelSize = 13;
+  const labelLines = wrapLabel(label, holeRadius * 1.6, labelSize);
+  const lineHeight = labelSize * 1.15;
+  const blockHeight = labelLines.length * lineHeight + 12;
+  const firstLineY = -blockHeight / 2 + labelSize;
+
   return (
     <div
       className={`taxonomy-viz-stage ${isPanning ? 'taxonomy-viz-stage--panning' : ''}`}
@@ -409,8 +464,21 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
               <title>Back to the previous view</title>
             </circle>
           )}
-          <text className="taxonomy-viz-center-label" textAnchor="middle" dy="-0.2em">{label}</text>
-          <text className="taxonomy-viz-center-sub" textAnchor="middle" dy="1.1em">
+          <text className="taxonomy-viz-center-label" textAnchor="middle" fontSize={labelSize}>
+            {labelLines.map((line, i) => (
+              // The trailing space keeps the element's text content readable as
+              // one string for assistive tech; SVG trims it when rendering.
+              <tspan key={i} x={0} y={firstLineY + i * lineHeight}>
+                {i < labelLines.length - 1 ? `${line} ` : line}
+              </tspan>
+            ))}
+          </text>
+          <text
+            className="taxonomy-viz-center-sub"
+            textAnchor="middle"
+            x={0}
+            y={firstLineY + labelLines.length * lineHeight + 2}
+          >
             {`${beneath.toLocaleString()} categories`}
           </text>
         </g>

@@ -791,8 +791,8 @@
   cursor: pointer;
 }
 
+/* Size is set on the element so the wrap calculation and the rendering agree. */
 .taxonomy-viz-center-label {
-  font-size: 13px;
   font-weight: 600;
   fill: var(--ifm-font-color-base);
   pointer-events: none;
