@@ -271,6 +271,9 @@ const CHAR_WIDTH_RATIO = 0.6;
  * SVG text does not wrap, so the centre label has to be laid out by hand. There
  * is no cheap way to measure text before paint — getComputedTextLength needs a
  * rendered node — so this estimates from the font size instead.
+ *
+ * Breaks only ever happen at spaces. A single word longer than the line keeps
+ * its own line and overflows rather than being hyphenated.
  */
 export function wrapLabel(text, maxWidth, fontSize, maxLines = 3) {
   const words = String(text ?? '').split(/\s+/).filter(Boolean);
@@ -288,13 +291,10 @@ export function wrapLabel(text, maxWidth, fontSize, maxLines = 3) {
     }
     if (line) lines.push(line);
 
-    // A single word wider than the line still has to go somewhere.
-    let rest = word;
-    while (rest.length > maxChars) {
-      lines.push(`${rest.slice(0, maxChars - 1)}-`);
-      rest = rest.slice(maxChars - 1);
-    }
-    line = rest;
+    // A word wider than the line gets its own line and is allowed to overflow.
+    // Breaking it mid-word reads as a typo ("Profession-" / "al Service"), and
+    // a little spill over the ring is the lesser evil.
+    line = word;
   }
   if (line) lines.push(line);
 
@@ -408,7 +408,7 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
     })
     .filter(s => s.a1 - s.a0 > 0.0009);
 
-  const label = focused ? focused.data.displayName : 'Overture Places';
+  const label = base.data.displayName;
   const beneath = base.descendants().length - 1;
 
   // Lay the centre label out to fit inside the hole. 1.6r rather than the full

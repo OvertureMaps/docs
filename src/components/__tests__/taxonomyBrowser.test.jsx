@@ -403,10 +403,12 @@ describe('TaxonomyBrowser', () => {
         expect(tight.length).toBeGreaterThan(roomy.length);
       });
 
-      it('hyphenates a single word too wide for the line', () => {
-        const lines = wrapLabel('Antidisestablishmentarianism', 74, 13);
-        expect(lines.length).toBeGreaterThan(1);
-        expect(lines[0]).toMatch(/-$/);
+      it('never breaks inside a word, even one too wide for the line', () => {
+        // "Profession-" / "al Service" reads as a typo; overflowing is better.
+        expect(wrapLabel('Antidisestablishmentarianism', 74, 13)).toEqual([
+          'Antidisestablishmentarianism',
+        ]);
+        expect(wrapLabel('Professional Service', 74, 13)).toEqual(['Professional', 'Service']);
       });
 
       it('truncates rather than growing past three lines', () => {
