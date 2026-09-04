@@ -804,3 +804,50 @@
   border-radius: 3px;
   font-size: 0.9em;
 }
+
+/* Viewport zoom and pan. The stage clips, so panned content does not spill
+   over the surrounding chrome. */
+.taxonomy-viz-stage {
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.taxonomy-viz-stage--panning {
+  cursor: grabbing;
+}
+
+.taxonomy-viz-zoom {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.taxonomy-viz-zoom button {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  line-height: 1;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-emphasis-800);
+  cursor: pointer;
+}
+
+.taxonomy-viz-zoom button:hover:not(:disabled) {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.taxonomy-viz-zoom button:disabled {
+  color: var(--ifm-color-emphasis-400);
+  cursor: default;
+}

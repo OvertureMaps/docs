@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { hierarchy, partition } from 'd3-hierarchy';
 import { arc as d3arc } from 'd3-shape';
 
@@ -73,6 +73,133 @@ function buildColorScale(base, depthOffset) {
   };
 }
 
+const MIN_SCALE = 0.5;
+const MAX_SCALE = 12;
+
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+/**
+ * Scale about a point, keeping whatever is under (px, py) pinned there.
+ *
+ * Exported because the focal-point arithmetic is the part that is easy to get
+ * subtly wrong — zooming that drifts is worse than no zoom at all.
+ */
+export function zoomAt(view, factor, px, py) {
+  const k = clamp(view.k * factor, MIN_SCALE, MAX_SCALE);
+  const applied = k / view.k;
+  return {
+    k,
+    x: px - (px - view.x) * applied,
+    y: py - (py - view.y) * applied,
+  };
+}
+
+const IDENTITY = { k: 1, x: 0, y: 0 };
+
+/**
+ * Wheel-to-zoom and drag-to-pan over an SVG canvas.
+ *
+ * The wheel listener is attached manually because it must be non-passive to
+ * preventDefault, and React attaches wheel handlers passively. Panning uses
+ * pointer events so it covers touch as well as mouse; a drag that moved is
+ * swallowed on the capture phase so releasing after a pan does not also select
+ * whatever segment happens to be under the cursor.
+ */
+function useViewTransform() {
+  const [view, setView] = useState(IDENTITY);
+  const [panning, setPanning] = useState(false);
+  const stageRef = useRef(null);
+  const drag = useRef(null);
+  const moved = useRef(false);
+
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return undefined;
+    const onWheel = event => {
+      event.preventDefault();
+      const rect = el.getBoundingClientRect();
+      setView(prev =>
+        zoomAt(prev, Math.pow(1.0015, -event.deltaY), event.clientX - rect.left, event.clientY - rect.top)
+      );
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
+
+  // Deliberately no setPointerCapture here. A captured pointer retargets the
+  // following `click` to the capturing element, so segment clicks would never
+  // reach the arcs — panning would work and selection would silently stop.
+  // Panning is tracked on the window instead, which also keeps a drag alive
+  // when the cursor leaves the canvas.
+  const onPointerDown = useCallback(event => {
+    if (event.button !== 0) return;
+    // The zoom controls sit inside the stage. Without this, pressing one starts
+    // a pan, and a few pixels of movement makes the click-swallow below eat the
+    // button's own click.
+    if (event.target.closest?.('button')) return;
+    drag.current = { x: event.clientX, y: event.clientY };
+    moved.current = false;
+  }, []);
+
+  useEffect(() => {
+    const onMove = event => {
+      const start = drag.current;
+      if (!start) return;
+      const dx = event.clientX - start.x;
+      const dy = event.clientY - start.y;
+      if (!moved.current && Math.abs(dx) + Math.abs(dy) > 5) {
+        moved.current = true;
+        setPanning(true);
+      }
+      drag.current = { x: event.clientX, y: event.clientY };
+      setView(prev => ({ ...prev, x: prev.x + dx, y: prev.y + dy }));
+    };
+    const onUp = () => {
+      drag.current = null;
+      setPanning(false);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+    };
+  }, []);
+
+  // Capture phase: a click that ends a pan never reaches a segment.
+  const onClickCapture = useCallback(event => {
+    if (moved.current) {
+      event.stopPropagation();
+      moved.current = false;
+    }
+  }, []);
+
+  const zoomBy = useCallback(factor => {
+    const el = stageRef.current;
+    const rect = el?.getBoundingClientRect();
+    const px = rect ? rect.width / 2 : 0;
+    const py = rect ? rect.height / 2 : 0;
+    setView(prev => zoomAt(prev, factor, px, py));
+  }, []);
+
+  const resetView = useCallback(() => setView(IDENTITY), []);
+
+  return {
+    view,
+    stageRef,
+    zoomBy,
+    resetView,
+    isPanning: panning,
+    stageProps: {
+      ref: stageRef,
+      onPointerDown,
+      onClickCapture,
+    },
+  };
+}
+
 /**
  * Ring geometry for the sunburst.
  *
@@ -128,6 +255,25 @@ function Tooltip({ node, x, y }) {
   );
 }
 
+function ZoomControls({ zoomBy, resetView, view }) {
+  const atRest = Math.abs(view.k - 1) < 0.001 && view.x === 0 && view.y === 0;
+  return (
+    <div className="taxonomy-viz-zoom">
+      <button type="button" onClick={() => zoomBy(1.4)} aria-label="Zoom in" title="Zoom in">+</button>
+      <button type="button" onClick={() => zoomBy(1 / 1.4)} aria-label="Zoom out" title="Zoom out">−</button>
+      <button
+        type="button"
+        onClick={resetView}
+        aria-label="Reset view"
+        title="Reset view"
+        disabled={atRest}
+      >
+        ⤢
+      </button>
+    </div>
+  );
+}
+
 function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode, matches, showBasicOnly }) {
   const radius = size / 2;
   const laidOut = useMemo(() => {
@@ -138,8 +284,13 @@ function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode,
 
   const [hover, setHover] = useState(null);
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const { view, stageProps, zoomBy, resetView, isPanning } = useViewTransform();
 
-  // Zooming re-projects angles relative to the focused branch rather than
+  // Drilling into a branch re-draws the whole canvas, so a pan from the previous
+  // view would leave the new one off-centre.
+  useEffect(() => resetView(), [focus, resetView]);
+
+  // Drilling re-projects angles relative to the focused branch rather than
   // re-running the layout, so the ring structure stays stable while zoomed.
   const focused = useMemo(
     () => (focus ? (laidOut.descendants().find(d => d.data.code === focus) ?? null) : null),
@@ -175,8 +326,14 @@ function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode,
   const beneath = base.descendants().length - 1;
 
   return (
-    <div className="taxonomy-viz-stage" onMouseMove={e => setPointer({ x: e.clientX, y: e.clientY })}>
+    <div
+      className={`taxonomy-viz-stage ${isPanning ? 'taxonomy-viz-stage--panning' : ''}`}
+      onMouseMove={e => setPointer({ x: e.clientX, y: e.clientY })}
+      {...stageProps}
+    >
+      <ZoomControls zoomBy={zoomBy} resetView={resetView} view={view} />
       <svg width={size} height={size} role="img" aria-label="Taxonomy sunburst">
+        <g transform={`translate(${view.x},${view.y}) scale(${view.k})`}>
         <g transform={`translate(${radius},${radius})`}>
           {segments.map(seg => {
             const { d } = seg;
@@ -217,6 +374,7 @@ function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode,
             {`${beneath.toLocaleString()} categories`}
           </text>
         </g>
+        </g>
       </svg>
       <Tooltip node={hover} x={pointer.x} y={pointer.y} />
     </div>
@@ -232,6 +390,9 @@ function Icicle({ root, width, height, focus, onZoomIn, onSelect, selectedCode, 
 
   const [hover, setHover] = useState(null);
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const { view, stageProps, zoomBy, resetView, isPanning } = useViewTransform();
+
+  useEffect(() => resetView(), [focus, resetView]);
 
   const focused = useMemo(
     () => (focus ? (laidOut.descendants().find(d => d.data.code === focus) ?? null) : null),
@@ -265,8 +426,14 @@ function Icicle({ root, width, height, focus, onZoomIn, onSelect, selectedCode, 
     .filter(r => r.h > 1.2);
 
   return (
-    <div className="taxonomy-viz-stage" onMouseMove={e => setPointer({ x: e.clientX, y: e.clientY })}>
+    <div
+      className={`taxonomy-viz-stage ${isPanning ? 'taxonomy-viz-stage--panning' : ''}`}
+      onMouseMove={e => setPointer({ x: e.clientX, y: e.clientY })}
+      {...stageProps}
+    >
+      <ZoomControls zoomBy={zoomBy} resetView={resetView} view={view} />
       <svg width={width} height={height} role="img" aria-label="Taxonomy icicle chart">
+        <g transform={`translate(${view.x},${view.y}) scale(${view.k})`}>
         {rows.map(({ d, x, y, w, h }) => {
           const isMatch = !matches || matches.has(d.data.code);
           const passesBasic = !showBasicOnly || d.data.isBasic;
@@ -302,6 +469,7 @@ function Icicle({ root, width, height, focus, onZoomIn, onSelect, selectedCode, 
             </g>
           );
         })}
+        </g>
       </svg>
       <Tooltip node={hover} x={pointer.x} y={pointer.y} />
     </div>
@@ -356,7 +524,7 @@ export default function TaxonomyViz({ treeChildren, view, onSelect, selectedCode
           onClick={resetZoom}
           disabled={focusStack.length === 0}
         >
-          Reset zoom
+          Top level
         </button>
         <label className="taxonomy-viz-toggle">
           <input
@@ -374,9 +542,9 @@ export default function TaxonomyViz({ treeChildren, view, onSelect, selectedCode
       )}
       <p className="taxonomy-viz-hint">
         {view === 'sunburst'
-          ? 'Click a segment to select it and zoom in; click the centre or Back to step out one level.'
-          : 'Click a cell to select it and zoom into that branch; Back steps out one level.'}
-        {' '}Outlined segments are basic categories.
+          ? 'Click a segment to drill into it; click the centre or Back to step out one level.'
+          : 'Click a cell to drill into that branch; Back steps out one level.'}
+        {' '}Scroll to zoom and drag to pan. Outlined segments are basic categories.
       </p>
     </div>
   );
