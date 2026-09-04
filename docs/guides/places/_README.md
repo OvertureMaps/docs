@@ -1,4 +1,4 @@
-# Taxonomy Browser
+# Taxonomy Explorer
 
 An interactive tool for exploring and comparing Overture Maps Places taxonomy releases.
 
