@@ -11,23 +11,11 @@
 }
 
 /* The docs column is sized for prose, so the browser reclaims the article's
-   horizontal padding. Going wider than the column is left to Expand, which
-   takes the whole viewport — a viewport-width rule here risks a horizontal
-   scrollbar on layouts I can't check. */
+   horizontal padding. It deliberately stops there: sizing from the viewport
+   would risk a horizontal scrollbar on narrower layouts. */
 .taxonomy-browser--viz {
   width: calc(100% + 2 * var(--ifm-spacing-horizontal, 1rem));
   margin-left: calc(-1 * var(--ifm-spacing-horizontal, 1rem));
-}
-
-.taxonomy-browser--fullscreen {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  width: 100%;
-  height: 100%;
-  max-height: none;
-  margin: 0;
-  border-radius: 0;
 }
 
 .taxonomy-browser-left {
@@ -678,19 +666,10 @@
   padding: 12px;
 }
 
-.taxonomy-browser--fullscreen .taxonomy-browser-right {
-  flex: 0 0 320px;
-}
-
 .taxonomy-view-switch {
   display: flex;
   gap: 4px;
   flex: 0 0 auto;
-}
-
-.taxonomy-view-button--expand {
-  flex: 0 0 auto;
-  margin-left: 4px;
 }
 
 .taxonomy-view-button {

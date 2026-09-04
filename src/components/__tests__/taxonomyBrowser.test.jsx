@@ -364,26 +364,7 @@ describe('TaxonomyBrowser', () => {
         expect(views).toEqual(['Sunburst', 'Tree']);
       });
 
-      it('locks page scrolling while expanded and restores it after', async () => {
-        await showSunburst();
-        expect(document.body.style.overflow).toBe('');
-        fireEvent.click(screen.getByRole('button', { name: /Expand/ }));
-        expect(document.body.style.overflow).toBe('hidden');
-        fireEvent.keyDown(window, { key: 'Escape' });
-        expect(document.body.style.overflow).toBe('');
-      });
 
-      it('expands to full screen and leaves on Escape', async () => {
-        await showSunburst();
-        const browser = document.querySelector('.taxonomy-browser');
-        expect(browser.className).not.toContain('fullscreen');
-
-        fireEvent.click(screen.getByRole('button', { name: /Expand/ }));
-        expect(document.querySelector('.taxonomy-browser').className).toContain('fullscreen');
-
-        fireEvent.keyDown(window, { key: 'Escape' });
-        expect(document.querySelector('.taxonomy-browser').className).not.toContain('fullscreen');
-      });
     });
 
     // SVG text does not wrap, so the centre label is laid out by hand. Without

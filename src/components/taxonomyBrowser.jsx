@@ -649,7 +649,6 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
   // The sunburst is what makes the shape of the taxonomy legible at a glance;
   // the tree is the precise view you switch to once you know what you want.
   const [view, setView] = useState('sunburst');
-  const [fullscreen, setFullscreen] = useState(false);
 
   const { withBaseUrl } = useBaseUrlUtils();
 
@@ -873,36 +872,12 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
     return hits;
   }, [tree, searchTerm]);
 
-  // Escape is the expected way out of anything that covers the page, and the
-  // page behind must not scroll while it is covered.
-  useEffect(() => {
-    if (!fullscreen) return undefined;
-    const onKey = e => {
-      if (e.key === 'Escape') setFullscreen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [fullscreen]);
-
   const activeRelease = releases.find(r => r.id === activeTab);
   const loadError = loadErrors[activeTab] ?? null;
   const isLoading = Boolean(activeRelease?.dataUrl) && !jsonReleases[activeTab] && !loadError;
 
   return (
-    <div
-      className={[
-        'taxonomy-browser',
-        view !== 'tree' ? 'taxonomy-browser--viz' : '',
-        fullscreen ? 'taxonomy-browser--fullscreen' : '',
-      ]
-        .filter(Boolean)
-        .join(' ')}
-    >
+    <div className={`taxonomy-browser ${view !== 'tree' ? 'taxonomy-browser--viz' : ''}`}>
       <div className="taxonomy-browser-left">
         <div className="taxonomy-browser-header">
           <select
@@ -931,15 +906,6 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
               </button>
             ))}
           </div>
-          <button
-            type="button"
-            className="taxonomy-view-button taxonomy-view-button--expand"
-            onClick={() => setFullscreen(f => !f)}
-            aria-pressed={fullscreen}
-            title={fullscreen ? 'Exit full screen (Esc)' : 'Expand to full screen'}
-          >
-            {fullscreen ? 'Exit' : 'Expand'}
-          </button>
         </div>
         {(() => {
           const cfg = releases.find(r => r.id === activeTab);
