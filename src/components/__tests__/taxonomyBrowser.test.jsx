@@ -4,6 +4,7 @@ import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 // @docusaurus/useBaseUrl is aliased to a stub in vitest.config.js.
 import { render, screen, cleanup, fireEvent, waitFor } from '@testing-library/react';
 import TaxonomyBrowser from '../taxonomyBrowser';
+import { sunburstGeometry } from '../taxonomyViz';
 
 // A two-release fixture: one legacy CSV release and one canonical JSON release,
 // which is the combination the browser has to support during the transition.
@@ -293,6 +294,32 @@ describe('TaxonomyBrowser', () => {
       expect(document.querySelectorAll('.taxonomy-viz-stage rect').length).toBeLessThan(before);
       fireEvent.click(screen.getByRole('button', { name: '← Back' }));
       expect(document.querySelectorAll('.taxonomy-viz-stage rect').length).toBe(before);
+    });
+
+    // The centre of a zoomed sunburst is the click target for stepping back. If
+    // rings started at radius 0 the focused node's own children would be drawn
+    // underneath it, so every click on the innermost ring zoomed out instead of
+    // in. These pin the invariant that made that possible.
+    describe('ring geometry', () => {
+      it('starts the innermost ring at the edge of the centre hole, not at zero', () => {
+        const { holeRadius, ringFor } = sunburstGeometry(260, 5);
+        expect(holeRadius).toBeGreaterThan(0);
+        expect(ringFor(1).r0).toBe(holeRadius);
+      });
+
+      it('leaves the back target strictly inside the innermost ring', () => {
+        for (const [radius, levels] of [[260, 5], [160, 3], [400, 6], [120, 1]]) {
+          const { holeRadius, ringFor } = sunburstGeometry(radius, levels);
+          // The rendered circle is holeRadius - 2; nothing may reach into it.
+          expect(ringFor(1).r0).toBeGreaterThan(holeRadius - 2);
+        }
+      });
+
+      it('fills the remaining radius across the levels below the focus', () => {
+        const { ringFor } = sunburstGeometry(260, 4);
+        expect(ringFor(4).r1).toBeCloseTo(260, 6);
+        expect(ringFor(2).r0).toBeCloseTo(ringFor(1).r1, 6);
+      });
     });
 
     it('keeps the tree view as the default', async () => {

@@ -73,6 +73,28 @@ function buildColorScale(base, depthOffset) {
   };
 }
 
+/**
+ * Ring geometry for the sunburst.
+ *
+ * The centre is reserved as a hole: it holds the label, and when zoomed it is
+ * the click target for stepping back. Rings therefore start at the hole's edge,
+ * never at radius 0 — otherwise the focused node's own children are drawn
+ * underneath the back target and cannot be clicked.
+ */
+export function sunburstGeometry(radius, levelsBelow) {
+  const holeRadius = Math.max(46, radius * 0.2);
+  const ringCount = Math.max(1, levelsBelow);
+  const ringWidth = (radius - holeRadius) / ringCount;
+  return {
+    holeRadius,
+    ringWidth,
+    ringFor: rel => ({
+      r0: holeRadius + (rel - 1) * ringWidth,
+      r1: holeRadius + rel * ringWidth,
+    }),
+  };
+}
+
 /** Wrap the browser's node shape in a d3 hierarchy, counting leaves for size. */
 function useLayout(treeChildren, sized) {
   return useMemo(() => {
@@ -128,8 +150,7 @@ function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode,
   const spanStart = base.x0;
   const span = base.x1 - base.x0 || 2 * Math.PI;
   const depthOffset = base.depth;
-  const ringCount = Math.max(1, laidOut.height - depthOffset);
-  const ringWidth = radius / ringCount;
+  const { holeRadius, ringFor } = sunburstGeometry(radius, laidOut.height - depthOffset);
   const colorOf = useMemo(() => buildColorScale(base, depthOffset), [base, depthOffset]);
 
   const arcGen = d3arc()
@@ -146,7 +167,7 @@ function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode,
       const a0 = ((d.x0 - spanStart) / span) * 2 * Math.PI;
       const a1 = ((d.x1 - spanStart) / span) * 2 * Math.PI;
       const rel = d.depth - depthOffset;
-      return { d, a0, a1, r0: (rel - 1) * ringWidth, r1: rel * ringWidth };
+      return { d, a0, a1, ...ringFor(rel) };
     })
     .filter(s => s.a1 - s.a0 > 0.0009);
 
@@ -187,7 +208,7 @@ function Sunburst({ root, size, focus, onZoomIn, onBack, onSelect, selectedCode,
             );
           })}
           {focused && (
-            <circle r={ringWidth * 0.92} className="taxonomy-viz-center" onClick={onBack}>
+            <circle r={holeRadius - 2} className="taxonomy-viz-center" onClick={onBack}>
               <title>Back to the previous view</title>
             </circle>
           )}
