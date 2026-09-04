@@ -514,6 +514,23 @@ describe('TaxonomyBrowser', () => {
         expect(wrapLabel(undefined, 160, 13)).toEqual([]);
       });
 
+      it('always shows the category count, however the title wraps', async () => {
+        // It used to be dropped when a three-line title left the hole too
+        // narrow at the count's baseline, so the number came and went depending
+        // on which category you were looking at.
+        await showSunburst();
+        const canvas = document.querySelector('.taxonomy-viz-canvas');
+        for (const [w, h] of [[320, 320], [900, 900]]) {
+          canvas.getBoundingClientRect = () => ({ width: w, height: h, left: 0, top: 0, right: w, bottom: h });
+          fireEvent(window, new Event('resize'));
+          expect(document.querySelector('.taxonomy-viz-center-sub')).not.toBeNull();
+          // ...and still there once drilled in, where titles are longer.
+          fireEvent.click(document.querySelector('.taxonomy-viz-stage path'));
+          expect(document.querySelector('.taxonomy-viz-center-sub')).not.toBeNull();
+          fireEvent.click(screen.getByRole('button', { name: 'Top level' }));
+        }
+      });
+
       it('renders the label as tspans that still read as one string', async () => {
         await showSunburst();
         const el = document.querySelector('.taxonomy-viz-center-label');

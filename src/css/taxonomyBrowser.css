@@ -728,11 +728,24 @@
 }
 
 .taxonomy-viz-toggle {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.76em;
+  font-size: 0.8em;
   color: var(--ifm-color-emphasis-700);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* A default checkbox renders around 13px whatever the label size, and carries
+   its own margins — which land on top of the flex gap and read as the label
+   drifting away from the box. */
+.taxonomy-viz-toggle input[type='checkbox'] {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--ifm-color-primary);
   cursor: pointer;
 }
 
