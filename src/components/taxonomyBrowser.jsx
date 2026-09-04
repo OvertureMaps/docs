@@ -1007,7 +1007,7 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
                 onSelect={handleSelectByCode}
                 selectedCode={selected?.code ?? null}
                 matches={searchMatches}
-                sized={(releaseStats[activeTab]?.totalPlaces ?? 0) > 0}
+                hasCounts={(releaseStats[activeTab]?.totalPlaces ?? 0) > 0}
               />
             )}
           </div>

@@ -12,16 +12,15 @@ label. Together they replace the original `categories` property, addressing
 known issues with it including structural inconsistencies, naming ambiguity, and
 coverage gaps.
 
-:::info Removed: the `categories` property
+:::warning Deprecated: the `categories` property
 
-The original `categories` property was removed in the **September 2026**
-release, having been deprecated since February 2026. Use `taxonomy` and
+The original `categories` property has been deprecated since February 2026 and
+will be removed in the **September 2026** release. Use `taxonomy` and
 `basic_category` instead.
 
 If you are migrating, the [legacy crosswalk](#downloads) maps every original
-category to its taxonomy path. It is the same file the places pipeline used to
-back-fill `categories` while the property was still published, so it is the
-authoritative mapping.
+category to its taxonomy path. It is the same file the places pipeline uses to
+back-fill `categories`, so it is the authoritative mapping.
 
 :::
 
@@ -36,6 +35,7 @@ in the [Taxonomy Explorer](./taxonomy-explorer.mdx).
 | Top-level groups | 13 |
 | Depth | Up to 6 levels |
 | Basic categories | 298 |
+| Places carrying a taxonomy | 70,345,858 in the 2026-08-19.0 release |
 
 The 13 top-level groups are `arts_and_entertainment`, `community_and_government`,
 `cultural_and_historic`, `education`, `food_and_drink`, `geographic_entities`,
@@ -45,7 +45,7 @@ The 13 top-level groups are `arts_and_entertainment`, `community_and_government`
 ## What changed from the original categories
 
 The figures below compare the original `categories` system to the taxonomy as
-published in September 2026.
+published in the August 2026 release.
 
 | Change area | Details | Impact on data use |
 | --- | --- | --- |
@@ -110,15 +110,15 @@ by looking for an ancestor anywhere in the array.
 ## Downloads
 
 The taxonomy is published as a set of files with each release. These are the
-September 2026 artifacts; the [Taxonomy Explorer](./taxonomy-explorer.mdx) links
+August 2026 artifacts; the [Taxonomy Explorer](./taxonomy-explorer.mdx) links
 the equivalents for every release it covers.
 
 | File | Contents |
 | --- | --- |
-| [`taxonomy.json`](pathname:///taxonomy/2026-09-16.0/taxonomy.json) | The full taxonomy as a nested tree, with display names and basic-category flags. |
-| [`taxonomy.csv`](pathname:///taxonomy/2026-09-16.0/taxonomy.csv) | One row per category: path, name, display name, level, top-level group, and basic category. |
-| [`basic_categories.csv`](pathname:///taxonomy/2026-09-16.0/basic_categories.csv) | The 298 basic categories and where each sits in the hierarchy. |
-| [`legacy_crosswalk.csv`](pathname:///taxonomy/2026-09-16.0/legacy_crosswalk.csv) | Every original `categories` value mapped to its taxonomy path. |
+| [`taxonomy.json`](pathname:///taxonomy/2026-08-19.0/taxonomy.json) | The full taxonomy as a nested tree, with display names and basic-category flags. |
+| [`taxonomy.csv`](pathname:///taxonomy/2026-08-19.0/taxonomy.csv) | One row per category: path, name, display name, level, top-level group, and basic category. |
+| [`basic_categories.csv`](pathname:///taxonomy/2026-08-19.0/basic_categories.csv) | The 298 basic categories and where each sits in the hierarchy. |
+| [`legacy_crosswalk.csv`](pathname:///taxonomy/2026-08-19.0/legacy_crosswalk.csv) | Every original `categories` value mapped to its taxonomy path. |
 
 ## Feedback
 

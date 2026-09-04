@@ -182,8 +182,8 @@ describe('compactTree', () => {
 
 // Guards the committed artifact against a bad regeneration. These are the
 // invariants of the September 2026 canonical taxonomy.
-describe('generated 2026-09-16.0 artifact', () => {
-  const artifact = resolve(root, 'static/taxonomy/2026-09-16.0/taxonomy.json');
+describe('generated 2026-08-19.0 artifact', () => {
+  const artifact = resolve(root, 'static/taxonomy/2026-08-19.0/taxonomy.json');
   const present = existsSync(artifact);
   const it_ = present ? it : it.skip;
 

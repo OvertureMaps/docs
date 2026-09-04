@@ -24,9 +24,9 @@ Run the generator against the canonical files in the pipeline repo:
 ```bash
 npm run build-taxonomy -- \
   --source ../tf-data-platform/overture_places/overture_places/places_data_providers/category_mapping \
-  --version 2026-09-16.0 \
-  --schema v1.19.0 \
-  --date 2026-09-16 \
+  --version 2026-08-19.0 \
+  --schema v1.18.0 \
+  --date 2026-08-19 \
   --counts path/to/counts.csv    # optional
 ```
 
@@ -42,19 +42,19 @@ be added later by re-running the generator; no component change is needed.
 
 ```jsx
 {
-  id: 'september',
-  label: '2026 September (Canonical Taxonomy)',
+  id: 'august',
+  label: '2026 August (Canonical Taxonomy)',
   releaseUrl: 'https://docs.overturemaps.org/blog/...',
   note: 'Optional note displayed in the detail panel.',
   tags: [
-    { label: '16 September 2026', title: 'Date' },
-    { label: '2026-09-16.0', title: 'Data version' },
-    { label: 'v1.19.0', title: 'Schema version' },
+    { label: '19 August 2026', title: 'Date' },
+    { label: '2026-08-19.0', title: 'Data version' },
+    { label: 'v1.18.0', title: 'Schema version' },
   ],
-  dataUrl: '/taxonomy/2026-09-16.0/taxonomy.json',
+  dataUrl: '/taxonomy/2026-08-19.0/taxonomy.json',
   downloads: [
-    { label: 'Taxonomy (JSON)', url: '/taxonomy/2026-09-16.0/taxonomy.json' },
-    { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-09-16.0/taxonomy.csv' },
+    { label: 'Taxonomy (JSON)', url: '/taxonomy/2026-08-19.0/taxonomy.json' },
+    { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-08-19.0/taxonomy.csv' },
   ],
   displayFields: [
     { field: 'is_basic', label: 'Is Basic Category' },
@@ -215,6 +215,6 @@ These appear after the hierarchy levels and basic category, but before counts an
 | 2025 October | `match_type`, `modified`, `remove_from_v1` |
 | 2025 December | none |
 | 2026 March | `new_display_name`, `is_basic`, `pc_added`, `pc_hierarchy_change`, `pc_name_change`, `pc_removed`, `pc_redirect_to`, `blc_change` |
-| 2026 September | `is_basic` |
+| 2026 August | `is_basic` |
 
 For canonical releases the generator derives `is_basic`.

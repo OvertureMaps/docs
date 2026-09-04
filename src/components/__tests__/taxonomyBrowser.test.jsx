@@ -15,7 +15,7 @@ const LEGACY_CSV = [
 ].join('\n');
 
 const CANONICAL_JSON = {
-  version: '2026-09-16.0',
+  version: '2026-08-19.0',
   stats: { categories: 3, basicCategories: 2, rootGroups: 1, maxDepth: 2, totalPlaces: null },
   tree: [
     {
@@ -50,10 +50,10 @@ const RELEASES = [
     id: 'september',
     label: '2026 September (Canonical Taxonomy)',
     tags: [{ label: '16 September 2026', title: 'Date' }],
-    dataUrl: '/taxonomy/2026-09-16.0/taxonomy.json',
+    dataUrl: '/taxonomy/2026-08-19.0/taxonomy.json',
     downloads: [
-      { label: 'Taxonomy (JSON)', url: '/taxonomy/2026-09-16.0/taxonomy.json' },
-      { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-09-16.0/taxonomy.csv' },
+      { label: 'Taxonomy (JSON)', url: '/taxonomy/2026-08-19.0/taxonomy.json' },
+      { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-08-19.0/taxonomy.csv' },
     ],
     displayFields: [{ field: 'is_basic', label: 'Is Basic Category' }],
   },
@@ -80,7 +80,7 @@ describe('TaxonomyBrowser', () => {
   it('fetches a JSON-sourced release and renders its tree', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
     fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
-    expect(global.fetch).toHaveBeenCalledWith('/taxonomy/2026-09-16.0/taxonomy.json');
+    expect(global.fetch).toHaveBeenCalledWith('/taxonomy/2026-08-19.0/taxonomy.json');
     expect(await screen.findByText('Food and Drink')).toBeInTheDocument();
   });
 
@@ -112,7 +112,7 @@ describe('TaxonomyBrowser', () => {
   it('renders a download link per artifact', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
     const json = await screen.findByRole('link', { name: 'Taxonomy (JSON)' });
-    expect(json).toHaveAttribute('href', '/taxonomy/2026-09-16.0/taxonomy.json');
+    expect(json).toHaveAttribute('href', '/taxonomy/2026-08-19.0/taxonomy.json');
     expect(screen.getByRole('link', { name: 'Taxonomy (CSV)' })).toBeInTheDocument();
   });
 
@@ -326,6 +326,54 @@ describe('TaxonomyBrowser', () => {
         const { ringFor } = sunburstGeometry(260, 4);
         expect(ringFor(4).r1).toBeCloseTo(260, 6);
         expect(ringFor(2).r0).toBeCloseTo(ringFor(1).r1, 6);
+      });
+    });
+
+    describe('sizing by place count', () => {
+      // A release with counts must not lose categories from the chart by
+      // default: place counts are skewed enough that weighting by them drops
+      // most of the taxonomy below the minimum drawable angle.
+      const WITH_COUNTS = {
+        version: 't',
+        // The skew is the point: a category with no places weighs 1 against
+        // millions, which is far below the minimum drawable angle.
+        stats: { categories: 3, basicCategories: 1, rootGroups: 1, maxDepth: 2, totalPlaces: 10_000_000 },
+        tree: [
+          {
+            name: 'food_and_drink', displayName: 'Food and Drink', isBasic: true,
+            children: [
+              { name: 'busy', displayName: 'Busy', count: 10_000_000 },
+              { name: 'empty', displayName: 'Empty' },
+            ],
+          },
+        ],
+      };
+      const showWithCounts = async () => {
+        global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(WITH_COUNTS) }));
+        render(<TaxonomyBrowser releases={RELEASES} />);
+        await screen.findByRole('img', { name: 'Taxonomy sunburst' });
+      };
+      const arcs = () => document.querySelectorAll('.taxonomy-viz-stage path').length;
+
+      it('draws every category by default, even ones with no places', async () => {
+        await showWithCounts();
+        expect(arcs()).toBe(3);
+      });
+
+      it('offers the weighting as an opt-in', async () => {
+        await showWithCounts();
+        const toggle = screen.getByLabelText(/Size by place count/);
+        expect(toggle).not.toBeChecked();
+        fireEvent.click(toggle);
+        // The empty category now has zero angle and drops out.
+        expect(arcs()).toBeLessThan(3);
+        fireEvent.click(toggle);
+        expect(arcs()).toBe(3);
+      });
+
+      it('hides the toggle for a release with no counts', async () => {
+        await showSunburst();
+        expect(screen.queryByLabelText(/Size by place count/)).toBeNull();
       });
     });
 

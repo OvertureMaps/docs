@@ -495,14 +495,18 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
   );
 }
 
-export default function TaxonomyViz({ treeChildren, onSelect, selectedCode, matches, sized }) {
+export default function TaxonomyViz({ treeChildren, onSelect, selectedCode, matches, hasCounts }) {
   // A stack rather than a single focus, so Back returns to the view you came
   // from. Clicking a sibling branch and then Back should not jump to a parent
   // you were never looking at.
   const [focusStack, setFocusStack] = useState([]);
   const [showBasicOnly, setShowBasicOnly] = useState(false);
+  // Off by default. Place counts are heavily skewed — a handful of categories
+  // hold most of the places — so weighting by them collapses the majority of
+  // the taxonomy to slivers too thin to draw. Structure first; volume on ask.
+  const [sizeByCount, setSizeByCount] = useState(false);
   const [canvasRef, canvas] = useElementSize();
-  const root = useLayout(treeChildren, sized);
+  const root = useLayout(treeChildren, hasCounts && sizeByCount);
 
   const focus = focusStack.length > 0 ? focusStack[focusStack.length - 1] : null;
   const zoomIn = useCallback(code => {
@@ -554,13 +558,24 @@ export default function TaxonomyViz({ treeChildren, onSelect, selectedCode, matc
           />
           Highlight basic categories only
         </label>
+        {hasCounts && (
+          <label className="taxonomy-viz-toggle">
+            <input
+              type="checkbox"
+              checked={sizeByCount}
+              onChange={e => setSizeByCount(e.target.checked)}
+            />
+            Size by place count
+          </label>
+        )}
       </div>
       <div className="taxonomy-viz-canvas" ref={canvasRef}>
         <Sunburst {...shared} width={canvas.width} height={canvas.height} />
       </div>
       <p className="taxonomy-viz-hint">
         Click a segment to drill in; the centre or Back steps out. Scroll to zoom,
-        drag to pan. Outlined segments are basic categories.
+        drag to pan. Outlined segments are basic categories. Segments are sized
+        by how much taxonomy sits beneath them{hasCounts ? ', unless you size by place count' : ''}.
       </p>
     </div>
   );
