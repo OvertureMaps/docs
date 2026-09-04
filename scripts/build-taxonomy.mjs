@@ -106,8 +106,9 @@ function write(name, contents) {
   written.push([name, Buffer.byteLength(contents)]);
 }
 
-// 1. Nested tree — the browser's data source, the visualization's d3 hierarchy,
-//    and the JSON download, all from one file.
+// 1. Nested tree — the explorer's data source and the visualization's d3
+//    hierarchy. Not offered as a download: it carries the place counts and
+//    roll-ups the page needs, and the CSVs below are the human-facing form.
 write(
   'taxonomy.json',
   `${JSON.stringify(
@@ -123,19 +124,20 @@ write(
   )}\n`
 );
 
-// 2. Flat category list — the spreadsheet answer to the download request.
+// 2. Flat category list — the spreadsheet form of the taxonomy.
 write(
   'taxonomy.csv',
-  toCsv(flat, [
-    'path',
-    'name',
-    'displayName',
-    'level',
-    'group',
-    'isBasic',
-    'basicCategory',
-    'count',
-  ])
+  toCsv(
+    flat.map(entry => ({
+      taxonomy: entry.path,
+      primary: entry.name,
+      displayName: entry.displayName,
+      level: entry.level,
+      isBasic: entry.isBasic,
+      basicCategory: entry.basicCategory,
+    })),
+    ['taxonomy', 'primary', 'displayName', 'level', 'isBasic', 'basicCategory']
+  )
 );
 
 // 3. Basic categories on their own — the ~300-label set most map-iconography
@@ -145,12 +147,10 @@ const basicRows = flat
   .map(entry => ({
     basic_category: entry.name,
     display_name: entry.displayName,
-    path: entry.path,
+    taxonomy: entry.path,
     level: entry.level,
-    group: entry.group,
-    count: entry.count,
   }));
-write('basic_categories.csv', toCsv(basicRows, ['basic_category', 'display_name', 'path', 'level', 'group', 'count']));
+write('basic_categories.csv', toCsv(basicRows, ['basic_category', 'display_name', 'taxonomy', 'level']));
 
 // 4. Legacy crosswalk — the pipeline uses this file to back-fill the deprecated
 //    `categories` property, so it is the authoritative old -> new mapping and

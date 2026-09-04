@@ -1,299 +1,299 @@
-basic_category,display_name,path,level,group,count
-arts_and_entertainment,Arts and Entertainment,arts_and_entertainment,0,arts_and_entertainment,300372
-amusement_attraction,Amusement Attraction,arts_and_entertainment > amusement_attraction,1,arts_and_entertainment,
-amusement_park,Amusement Park,arts_and_entertainment > amusement_attraction > amusement_park,2,arts_and_entertainment,43182
-animal_attraction,Animal Attraction,arts_and_entertainment > animal_attraction,1,arts_and_entertainment,
-aquarium,Aquarium,arts_and_entertainment > animal_attraction > aquarium,2,arts_and_entertainment,6904
-zoo,Zoo,arts_and_entertainment > animal_attraction > zoo,2,arts_and_entertainment,9589
-arts_and_crafts_space,Arts and Crafts Space,arts_and_entertainment > arts_and_crafts_space,1,arts_and_entertainment,15
-art_gallery,Art Gallery,arts_and_entertainment > arts_and_crafts_space > art_gallery,2,arts_and_entertainment,150708
-sculpture_statue,Sculpture Statue,arts_and_entertainment > arts_and_crafts_space > sculpture_statue,2,arts_and_entertainment,4327
-street_art,Street Art,arts_and_entertainment > arts_and_crafts_space > street_art,2,arts_and_entertainment,1329
-event_venue,Event Venue,arts_and_entertainment > event_venue,1,arts_and_entertainment,22534
-festival_venue,Festival Venue,arts_and_entertainment > festival_venue,1,arts_and_entertainment,3327
-fairgrounds,Fairgrounds,arts_and_entertainment > festival_venue > fairgrounds,2,arts_and_entertainment,10464
-gaming_venue,Gaming Venue,arts_and_entertainment > gaming_venue,1,arts_and_entertainment,
-arcade,Arcade,arts_and_entertainment > gaming_venue > arcade,2,arts_and_entertainment,29707
-casino,Casino,arts_and_entertainment > gaming_venue > casino,2,arts_and_entertainment,31753
-movie_theater,Movie Theater,arts_and_entertainment > movie_theater,1,arts_and_entertainment,59201
-museum,Museum,arts_and_entertainment > museum,1,arts_and_entertainment,76188
-nightlife_venue,Nightlife Venue,arts_and_entertainment > nightlife_venue,1,arts_and_entertainment,
-adult_entertainment_venue,Adult Entertainment Venue,arts_and_entertainment > nightlife_venue > adult_entertainment_venue,2,arts_and_entertainment,11462
-dance_club,Dance Club,arts_and_entertainment > nightlife_venue > dance_club,2,arts_and_entertainment,85287
-performing_arts_venue,Performing Arts Venue,arts_and_entertainment > performing_arts_venue,1,arts_and_entertainment,20329
-comedy_club,Comedy Club,arts_and_entertainment > performing_arts_venue > comedy_club,2,arts_and_entertainment,7335
-music_venue,Music Venue,arts_and_entertainment > performing_arts_venue > music_venue,2,arts_and_entertainment,187181
-theatre_venue,Theatre Venue,arts_and_entertainment > performing_arts_venue > theatre_venue,2,arts_and_entertainment,53142
-rural_attraction,Rural Attraction,arts_and_entertainment > rural_attraction,1,arts_and_entertainment,
-rodeo,Rodeo,arts_and_entertainment > rural_attraction > rodeo,2,arts_and_entertainment,2190
-science_attraction,Science Attraction,arts_and_entertainment > science_attraction,1,arts_and_entertainment,
-makerspace,Makerspace,arts_and_entertainment > science_attraction > makerspace,2,arts_and_entertainment,128
-planetarium,Planetarium,arts_and_entertainment > science_attraction > planetarium,2,arts_and_entertainment,1372
-social_club,Social Club,arts_and_entertainment > social_club,1,arts_and_entertainment,9343
-country_club,Country Club,arts_and_entertainment > social_club > country_club,2,arts_and_entertainment,989
-spiritual_advising,Spiritual Advising,arts_and_entertainment > spiritual_advising,1,arts_and_entertainment,234
-astrological_advising,Astrological Advising,arts_and_entertainment > spiritual_advising > astrological_advising,2,arts_and_entertainment,7919
-psychic_advising,Psychic Advising,arts_and_entertainment > spiritual_advising > psychic_advising,2,arts_and_entertainment,16324
-stadium_arena,Stadium Arena,arts_and_entertainment > stadium_arena,1,arts_and_entertainment,92811
-ticket_office_or_booth,Ticket Office or Booth,arts_and_entertainment > ticket_office_or_booth,1,arts_and_entertainment,1059
-community_and_government,Community and Government,community_and_government,0,community_and_government,232773
-civic_organization,Civic Organization,community_and_government > civic_organization,1,community_and_government,53685
-civic_center,Civic Center,community_and_government > civic_organization > civic_center,2,community_and_government,559
-labor_union,Labor Union,community_and_government > civic_organization > labor_union,2,community_and_government,28433
-political_organization,Political Organization,community_and_government > civic_organization > political_organization,2,community_and_government,26869
-government_office,Government Office,community_and_government > government_office,1,community_and_government,522622
-courthouse,Courthouse,community_and_government > government_office > courthouse,2,community_and_government,34811
-embassy,Embassy,community_and_government > government_office > embassy,2,community_and_government,16931
-government_department,Government Department,community_and_government > government_office > government_department,2,community_and_government,
-military_site,Military Site,community_and_government > military_site,1,community_and_government,35584
-military_base,Military Base,community_and_government > military_site > military_base,2,community_and_government,
-military_office,Military Office,community_and_government > military_site > military_office,2,community_and_government,
-public_facility,Public Facility,community_and_government > public_facility,1,community_and_government,
-public_fountain,Public Fountain,community_and_government > public_facility > public_fountain,2,community_and_government,11910
-public_pathway,Public Pathway,community_and_government > public_facility > public_pathway,2,community_and_government,
-public_plaza,Public Plaza,community_and_government > public_facility > public_plaza,2,community_and_government,62362
-public_restroom,Public Restroom,community_and_government > public_facility > public_restroom,2,community_and_government,4616
-public_safety_service,Public Safety Service,community_and_government > public_safety_service,1,community_and_government,
-fire_station,Fire Station,community_and_government > public_safety_service > fire_station,2,community_and_government,83675
-jail_or_prison,Jail or Prison,community_and_government > public_safety_service > jail_or_prison,2,community_and_government,9083
-police_station,Police Station,community_and_government > public_safety_service > police_station,2,community_and_government,97337
-public_utility,Public Utility,community_and_government > public_utility,1,community_and_government,14646
-electric_utility_provider,Electric Utility Provider,community_and_government > public_utility > electric_utility_provider,2,community_and_government,23290
-natural_gas_utility_provider,Natural Gas Utility Provider,community_and_government > public_utility > natural_gas_utility_provider,2,community_and_government,10233
-water_utility_provider,Water Utility Provider,community_and_government > public_utility > water_utility_provider,2,community_and_government,17658
-social_or_community_service,Social or Community Service,community_and_government > social_or_community_service,1,community_and_government,821250
-community_center,Community Center,community_and_government > social_or_community_service > community_center,2,community_and_government,106008
-food_bank,Food Bank,community_and_government > social_or_community_service > food_bank,2,community_and_government,8346
-youth_organization,Youth Organization,community_and_government > social_or_community_service > youth_organization,2,community_and_government,57839
-cultural_and_historic,Cultural and Historic,cultural_and_historic,0,cultural_and_historic,
-cultural_center,Cultural Center,cultural_and_historic > cultural_center,1,cultural_and_historic,51870
-historic_site,Historic Site,cultural_and_historic > historic_site,1,cultural_and_historic,998562
-castle,Castle,cultural_and_historic > historic_site > castle,2,cultural_and_historic,15319
-fort,Fort,cultural_and_historic > historic_site > fort,2,cultural_and_historic,2330
-lighthouse,Lighthouse,cultural_and_historic > historic_site > lighthouse,2,cultural_and_historic,3747
-memorial_site,Memorial Site,cultural_and_historic > memorial_site,1,cultural_and_historic,
-cemetery,Cemetery,cultural_and_historic > memorial_site > cemetery,2,cultural_and_historic,3078
-monument,Monument,cultural_and_historic > memorial_site > monument,2,cultural_and_historic,46824
-place_of_worship,Place of Worship,cultural_and_historic > place_of_worship,1,cultural_and_historic,1408
-buddhist_place_of_worship,Buddhist Place of Worship,cultural_and_historic > place_of_worship > buddhist_place_of_worship,2,cultural_and_historic,110363
-christian_place_of_worship,Christian Place of Worship,cultural_and_historic > place_of_worship > christian_place_of_worship,2,cultural_and_historic,862941
-hindu_place_of_worship,Hindu Place of Worship,cultural_and_historic > place_of_worship > hindu_place_of_worship,2,cultural_and_historic,128014
-jewish_place_of_worship,Jewish Place of Worship,cultural_and_historic > place_of_worship > jewish_place_of_worship,2,cultural_and_historic,8295
-muslim_place_of_worship,Muslim Place of Worship,cultural_and_historic > place_of_worship > muslim_place_of_worship,2,cultural_and_historic,122811
-religious_landmark,Religious Landmark,cultural_and_historic > religious_landmark,1,cultural_and_historic,
-religious_organization,Religious Organization,cultural_and_historic > religious_organization,1,cultural_and_historic,388911
-religious_retreat_or_center,Religious Retreat or Center,cultural_and_historic > religious_retreat_or_center,1,cultural_and_historic,
-education,Education,education,0,education,437216
-education_office,Education Office,education > education_office,1,education,
-school_district_office,School District Office,education > education_office > school_district_office,2,education,1983
-educational_facility,Educational Facility,education > educational_facility,1,education,
-campus,Campus,education > educational_facility > campus,2,education,
-campus_building,Campus Building,education > educational_facility > campus_building,2,education,82488
-educational_service,Educational Service,education > educational_service,1,education,69509
-tutoring_service,Tutoring Service,education > educational_service > tutoring_service,2,education,87959
-library,Library,education > library,1,education,136849
-place_of_learning,Place of Learning,education > place_of_learning,1,education,
-academy,Academy,education > place_of_learning > academy,2,education,
-class_venue,Class Venue,education > place_of_learning > class_venue,2,education,
-college_university,College University,education > place_of_learning > college_university,2,education,365741
-elementary_school,Elementary School,education > place_of_learning > school > elementary_school,3,education,423059
-high_school,High School,education > place_of_learning > school > high_school,3,education,168990
-kindergarten,Kindergarten,education > place_of_learning > school > kindergarten,3,education,
-middle_school,Middle School,education > place_of_learning > school > middle_school,3,education,66983
-preschool,Preschool,education > place_of_learning > school > preschool,3,education,282188
-specialty_school,Specialty School,education > place_of_learning > specialty_school,2,education,52024
-research_institute,Research Institute,education > research_institute,1,education,3210
-food_and_drink,Food and Drink,food_and_drink,0,food_and_drink,98464
-alcoholic_beverage_venue,Alcoholic Beverage Venue,food_and_drink > alcoholic_beverage_venue,1,food_and_drink,
-bar,Bar,food_and_drink > alcoholic_beverage_venue > bar,2,food_and_drink,644080
-brewery,Brewery,food_and_drink > alcoholic_beverage_venue > brewery,2,food_and_drink,47917
-distillery,Distillery,food_and_drink > alcoholic_beverage_venue > distillery,2,food_and_drink,9919
-lounge,Lounge,food_and_drink > alcoholic_beverage_venue > lounge,2,food_and_drink,52495
-winery,Winery,food_and_drink > alcoholic_beverage_venue > winery,2,food_and_drink,76227
-casual_eatery,Casual Eatery,food_and_drink > casual_eatery,1,food_and_drink,
-cafe,Cafe,food_and_drink > casual_eatery > cafe,2,food_and_drink,700856
-fast_food_restaurant,Fast Food Restaurant,food_and_drink > casual_eatery > fast_food_restaurant,2,food_and_drink,409785
-food_court,Food Court,food_and_drink > casual_eatery > food_court,2,food_and_drink,2101
-food_truck_stand,Food Truck or Stand,food_and_drink > casual_eatery > food_truck_stand,2,food_and_drink,83367
-non_alcoholic_beverage_venue,Non-Alcoholic Beverage Venue,food_and_drink > non_alcoholic_beverage_venue,1,food_and_drink,155
-coffee_shop,Coffee Shop,food_and_drink > non_alcoholic_beverage_venue > coffee_shop,2,food_and_drink,610598
-smoothie_juice_bar,Smoothie or Juice Bar,food_and_drink > non_alcoholic_beverage_venue > smoothie_juice_bar,2,food_and_drink,62736
-restaurant,Restaurant,food_and_drink > restaurant,1,food_and_drink,1812921
-geographic_entities,Geographic Entities,geographic_entities,0,geographic_entities,176263
-built_feature,Built Feature,geographic_entities > built_feature,1,geographic_entities,
-bridge,Bridge,geographic_entities > built_feature > bridge,2,geographic_entities,43784
-building,Building,geographic_entities > built_feature > building,2,geographic_entities,
-dam,Dam,geographic_entities > built_feature > dam,2,geographic_entities,2
-dock,Dock,geographic_entities > built_feature > dock,2,geographic_entities,
-garden,Garden,geographic_entities > built_feature > garden,2,geographic_entities,
-marina,Marina,geographic_entities > built_feature > marina,2,geographic_entities,19183
-pier,Pier,geographic_entities > built_feature > pier,2,geographic_entities,4793
-land_feature,Land Feature,geographic_entities > land_feature,1,geographic_entities,
-beach,Beach,geographic_entities > land_feature > beach,2,geographic_entities,177958
-canyon,Canyon,geographic_entities > land_feature > canyon,2,geographic_entities,12
-forest,Forest,geographic_entities > land_feature > forest,2,geographic_entities,7854
-hill,Hill,geographic_entities > land_feature > hill,2,geographic_entities,
-island,Island,geographic_entities > land_feature > island,2,geographic_entities,2613
-mountain,Mountain,geographic_entities > land_feature > mountain,2,geographic_entities,131189
-nature_reserve,Nature Reserve,geographic_entities > land_feature > nature_reserve,2,geographic_entities,24277
-valley,Valley,geographic_entities > land_feature > valley,2,geographic_entities,
-scenic_viewpoint,Scenic Viewpoint,geographic_entities > scenic_viewpoint,1,geographic_entities,
-water_feature,Water Feature,geographic_entities > water_feature,1,geographic_entities,
-canal,Canal,geographic_entities > water_feature > canal,2,geographic_entities,2621
-hot_springs,Hot Springs,geographic_entities > water_feature > hot_springs,2,geographic_entities,5642
-lake,Lake,geographic_entities > water_feature > lake,2,geographic_entities,215556
-ocean,Ocean,geographic_entities > water_feature > ocean,2,geographic_entities,
-river,River,geographic_entities > water_feature > river,2,geographic_entities,134916
-sea,Sea,geographic_entities > water_feature > sea,2,geographic_entities,
-waterfall,Waterfall,geographic_entities > water_feature > waterfall,2,geographic_entities,8069
-health_care,Health Care,health_care,0,health_care,601038
-emergency_or_urgent_care_facility,Emergency or Urgent Care Facility,health_care > emergency_or_urgent_care_facility,1,health_care,3986
-emergency_department,Emergency Department,health_care > emergency_or_urgent_care_facility > emergency_department,2,health_care,13985
-urgent_care_clinic,Urgent Care Clinic,health_care > emergency_or_urgent_care_facility > urgent_care_clinic,2,health_care,5530
-walk_in_clinic,Walk-In Clinic,health_care > emergency_or_urgent_care_facility > walk_in_clinic,2,health_care,8395
-hospital,Hospital,health_care > hospital,1,health_care,483089
-general_hospital,General Hospital,health_care > hospital > general_hospital,2,health_care,
-specialty_hospital,Specialty Hospital,health_care > hospital > specialty_hospital,2,health_care,
-medical_service,Medical Service,health_care > medical_service,1,health_care,
-outpatient_care_facility,Outpatient Care Facility,health_care > outpatient_care_facility,1,health_care,210956
-behavioral_or_mental_health_clinic,Behavioral or Mental Health Clinic,health_care > outpatient_care_facility > behavioral_or_mental_health_clinic,2,health_care,32418
-complementary_and_alternative_medicine,Complementary and Alternative Medicine,health_care > outpatient_care_facility > complementary_and_alternative_medicine,2,health_care,19458
-dental_clinic,Dental Clinic,health_care > outpatient_care_facility > dental_clinic,2,health_care,505874
-diagnostics_imaging_or_lab_service,Diagnostics Imaging or Lab Service,health_care > outpatient_care_facility > diagnostics_imaging_or_lab_service,2,health_care,
-pediatric_clinic,Pediatric Clinic,health_care > outpatient_care_facility > pediatric_clinic,2,health_care,58503
-physical_medicine_and_rehabilitation,Physical Medicine and Rehabilitation,health_care > outpatient_care_facility > physical_medicine_and_rehabilitation,2,health_care,
-primary_care_or_general_clinic,Primary Care or General Clinic,health_care > outpatient_care_facility > primary_care_or_general_clinic,2,health_care,
-reproductive_perinatal_and_womens_care,Reproductive Perinatal and Women's Care,health_care > outpatient_care_facility > reproductive_perinatal_and_womens_care,2,health_care,12735
-specialized_health_care,Specialized Health Care,health_care > outpatient_care_facility > specialized_health_care,2,health_care,9268
-vision_or_eye_care_clinic,Vision or Eye Care Clinic,health_care > outpatient_care_facility > vision_or_eye_care_clinic,2,health_care,33767
-specialized_medical_facility,Specialized Medical Facility,health_care > specialized_medical_facility,1,health_care,
-surgery,Surgery,health_care > specialized_medical_facility > surgery,2,health_care,34095
-lifestyle_services,Lifestyle Services,lifestyle_services,0,lifestyle_services,
-animal_or_pet_service,Animal or Pet Service,lifestyle_services > animal_or_pet_service,1,lifestyle_services,80894
-food_service,Food Service,lifestyle_services > food_service,1,lifestyle_services,
-personal_or_beauty_service,Personal or Beauty Service,lifestyle_services > personal_or_beauty_service,1,lifestyle_services,34051
-wellness_service,Wellness Service,lifestyle_services > wellness_service,1,lifestyle_services,6714
-lodging,Lodging,lodging,0,lodging,430223
-bed_and_breakfast,Bed and Breakfast,lodging > bed_and_breakfast,1,lodging,155160
-campground,Campground,lodging > campground,1,lodging,104128
-hotel,Hotel,lodging > hotel,1,lodging,1172978
-inn,Inn,lodging > inn,1,lodging,25854
-private_lodging,Private Lodging,lodging > private_lodging,1,lodging,
-resort,Resort,lodging > resort,1,lodging,102837
-rv_park,RV Park,lodging > rv_park,1,lodging,23854
-services_and_business,Services and Business,services_and_business,0,services_and_business,
-agricultural_service,Agricultural Service,services_and_business > agricultural_service,1,services_and_business,89225
-farm,Farm,services_and_business > agricultural_service > farm,2,services_and_business,254727
-b2b_service,B2B Service,services_and_business > b2b_service,1,services_and_business,50289
-b2b_energy_and_utility_service,B2B Energy and Utility Service,services_and_business > b2b_service > b2b_energy_and_utility_service,2,services_and_business,35130
-b2b_industrial_and_machine_service,B2B Industrial and Machine Service,services_and_business > b2b_service > b2b_industrial_and_machine_service,2,services_and_business,3478
-b2b_office_and_professional_service,B2B Office and Professional Service,services_and_business > b2b_service > b2b_office_and_professional_service,2,services_and_business,
-b2b_science_and_technology_service,B2B Science and Technology Service,services_and_business > b2b_service > b2b_science_and_technology_service,2,services_and_business,14826
-b2b_transportation_and_storage_service,B2B Transportation and Storage Service,services_and_business > b2b_service > b2b_transportation_and_storage_service,2,services_and_business,1110
-manufacturer,Manufacturer,services_and_business > b2b_service > manufacturer,2,services_and_business,258533
-supplier_or_distributor,Supplier or Distributor,services_and_business > b2b_service > supplier_or_distributor,2,services_and_business,5376
-wholesaler,Wholesaler,services_and_business > b2b_service > wholesaler,2,services_and_business,15756
-building_or_construction_service,Building or Construction Service,services_and_business > building_or_construction_service,1,services_and_business,343319
-corporate_or_business_office,Corporate or Business Office,services_and_business > corporate_or_business_office,1,services_and_business,164478
-design_service,Design Service,services_and_business > design_service,1,services_and_business,
-environmental_or_ecological_service,Environmental or Ecological Service,services_and_business > environmental_or_ecological_service,1,services_and_business,11061
-event_or_party_service,Event or Party Service,services_and_business > event_or_party_service,1,services_and_business,1
-family_service,Family Service,services_and_business > family_service,1,services_and_business,
-financial_service,Financial Service,services_and_business > financial_service,1,services_and_business,313147
-atm,ATM,services_and_business > financial_service > atm,2,services_and_business,342719
-bank_or_credit_union,Bank or Credit Union,services_and_business > financial_service > bank_or_credit_union,2,services_and_business,358594
-home_service,Home Service,services_and_business > home_service,1,services_and_business,151878
-housing_or_property_service,Housing or Property Service,services_and_business > housing_or_property_service,1,services_and_business,
-apartment,Apartment,services_and_business > housing_or_property_service > apartment,2,services_and_business,28150
-condominium,Condominium,services_and_business > housing_or_property_service > condominium,2,services_and_business,13157
-senior_living_facility,Senior Living Facility,services_and_business > housing_or_property_service > senior_living_facility,2,services_and_business,
-industrial_facility_or_service,Industrial Facility or Service,services_and_business > industrial_facility_or_service,1,services_and_business,
-laundry_service,Laundry Service,services_and_business > laundry_service,1,services_and_business,16277
-legal_service,Legal Service,services_and_business > legal_service,1,services_and_business,67183
-attorney_or_law_firm,Attorney or Law Firm,services_and_business > legal_service > attorney_or_law_firm,2,services_and_business,316077
-media_service,Media Service,services_and_business > media_service,1,services_and_business,13702
-radio_station,Radio Station,services_and_business > media_service > media_news_company > radio_station,3,services_and_business,24573
-television_station,Television Station,services_and_business > media_service > media_news_company > television_station,3,services_and_business,1073
-printing_service,Printing Service,services_and_business > printing_service,1,services_and_business,298475
-professional_service,Professional Service,services_and_business > professional_service,1,services_and_business,1267482
-real_estate_service,Real Estate Service,services_and_business > real_estate_service,1,services_and_business,740534
-rental_service,Rental Service,services_and_business > rental_service,1,services_and_business,69201
-security_service,Security Service,services_and_business > security_service,1,services_and_business,7724
-shipping_or_delivery_service,Shipping or Delivery Service,services_and_business > shipping_or_delivery_service,1,services_and_business,
-storage_facility,Storage Facility,services_and_business > storage_facility,1,services_and_business,80256
-technical_service,Technical Service,services_and_business > technical_service,1,services_and_business,
-telecommunications_service,Telecommunications Service,services_and_business > telecommunications_service,1,services_and_business,35375
-utility_energy_infrastructure,Utility Energy Infrastructure,services_and_business > utility_energy_infrastructure,1,services_and_business,
-shopping,Shopping,shopping,0,shopping,1225096
-convenience_store,Convenience Store,shopping > convenience_store,1,shopping,469802
-department_store,Department Store,shopping > department_store,1,shopping,86591
-discount_store,Discount Store,shopping > discount_store,1,shopping,124970
-fashion_and_apparel_store,Fashion and Apparel Store,shopping > fashion_and_apparel_store,1,shopping,97108
-food_and_beverage_store,Food and Beverage Store,shopping > food_and_beverage_store,1,shopping,65762
-kiosk,Kiosk,shopping > kiosk,1,shopping,1865
-market,Market,shopping > market,1,shopping,
-farmers_market,Farmers Market,shopping > market > farmers_market,2,shopping,60196
-second_hand_store,Second Hand Store,shopping > second_hand_store,1,shopping,84231
-shopping_mall,Shopping Mall,shopping > shopping_mall,1,shopping,186795
-shopping_service,Shopping Service,shopping > shopping_service,1,shopping,
-specialty_store,Specialty Store,shopping > specialty_store,1,shopping,53
-animal_and_pet_store,Animal and Pet Store,shopping > specialty_store > animal_and_pet_store,2,shopping,
-arts_crafts_and_hobby_store,Arts Crafts and Hobby Store,shopping > specialty_store > arts_crafts_and_hobby_store,2,shopping,142261
-books_music_and_video_store,Books Music and Video Store,shopping > specialty_store > books_music_and_video_store,2,shopping,5663
-electronics_store,Electronics Store,shopping > specialty_store > electronics_store,2,shopping,256895
-flowers_and_gifts_store,Flowers and Gifts Store,shopping > specialty_store > flowers_and_gifts_store,2,shopping,398227
-hardware_home_and_garden_store,Hardware Home and Garden Store,shopping > specialty_store > hardware_home_and_garden_store,2,shopping,30904
-musical_instrument_and_pro_audio_store,Musical Instrument and Pro Audio Store,shopping > specialty_store > musical_instrument_and_pro_audio_store,2,shopping,
-office_supply_store,Office Supply Store,shopping > specialty_store > office_supply_store,2,shopping,57124
-personal_care_and_beauty_store,Personal Care and Beauty Store,shopping > specialty_store > personal_care_and_beauty_store,2,shopping,
-pharmacy_and_drug_store,Pharmacy and Drug Store,shopping > specialty_store > pharmacy_and_drug_store,2,shopping,
-sporting_goods_store,Sporting Goods Store,shopping > specialty_store > sporting_goods_store,2,shopping,128526
-toys_and_games_store,Toys and Games Store,shopping > specialty_store > toys_and_games_store,2,shopping,
-vehicle_parts_store,Vehicle Parts Store,shopping > specialty_store > vehicle_parts_store,2,shopping,
-superstore,Superstore,shopping > superstore,1,shopping,15014
-vehicle_dealer,Vehicle Dealer,shopping > vehicle_dealer,1,shopping,1512
-auto_dealer,Auto Dealer,shopping > vehicle_dealer > auto_dealer,2,shopping,542069
-warehouse_club_store,Warehouse Club Store,shopping > warehouse_club_store,1,shopping,121150
-sports_and_recreation,Sports and Recreation,sports_and_recreation,0,sports_and_recreation,198851
-park,Park,sports_and_recreation > park,1,sports_and_recreation,491407
-dog_park,Dog Park,sports_and_recreation > park > dog_park,2,sports_and_recreation,12924
-national_park,National Park,sports_and_recreation > park > national_park,2,sports_and_recreation,27732
-playground,Playground,sports_and_recreation > park > playground,2,sports_and_recreation,38750
-recreational_equipment_rental,Recreational Equipment Rental,sports_and_recreation > recreational_equipment_rental,1,sports_and_recreation,
-recreational_trail_or_path,Recreational Trail or Path,sports_and_recreation > recreational_trail_or_path,1,sports_and_recreation,24
-sport_league,Sport League,sports_and_recreation > sport_league,1,sports_and_recreation,
-sport_or_fitness_facility,Sport or Fitness Facility,sports_and_recreation > sport_or_fitness_facility,1,sports_and_recreation,135796
-fitness_studio,Fitness Studio,sports_and_recreation > sport_or_fitness_facility > fitness_studio,2,sports_and_recreation,
-golf_course,Golf Course,sports_and_recreation > sport_or_fitness_facility > golf_course,2,sports_and_recreation,37906
-gym,Gym,sports_and_recreation > sport_or_fitness_facility > gym,2,sports_and_recreation,541730
-skate_park,Skate Park,sports_and_recreation > sport_or_fitness_facility > skate_park,2,sports_and_recreation,18613
-skating_rink,Skating Rink,sports_and_recreation > sport_or_fitness_facility > skating_rink,2,sports_and_recreation,669
-sport_court,Sport Court,sports_and_recreation > sport_or_fitness_facility > sport_court,2,sports_and_recreation,
-sport_field,Sport Field,sports_and_recreation > sport_or_fitness_facility > sport_field,2,sports_and_recreation,
-sports_complex,Sports Complex,sports_and_recreation > sport_or_fitness_facility > sports_complex,2,sports_and_recreation,
-swimming_pool,Swimming Pool,sports_and_recreation > sport_or_fitness_facility > swimming_pool,2,sports_and_recreation,64630
-sport_or_recreation_club,Sport or Recreation Club,sports_and_recreation > sport_or_recreation_club,1,sports_and_recreation,10279
-sport_team,Sport Team,sports_and_recreation > sport_team,1,sports_and_recreation,
-travel_and_transportation,Travel and Transportation,travel_and_transportation,0,travel_and_transportation,207498
-air_transport_facility_or_service,Air Transport Facility or Service,travel_and_transportation > air_transport_facility_or_service,1,travel_and_transportation,
-airport,Airport,travel_and_transportation > air_transport_facility_or_service > airport,2,travel_and_transportation,53917
-fueling_station,Fueling Station,travel_and_transportation > fueling_station,1,travel_and_transportation,
-ev_charging_station,EV Charging Station,travel_and_transportation > fueling_station > ev_charging_station,2,travel_and_transportation,49715
-gas_station,Gas Station,travel_and_transportation > fueling_station > gas_station,2,travel_and_transportation,577515
-ground_transport_facility_or_service,Ground Transport Facility or Service,travel_and_transportation > ground_transport_facility_or_service,1,travel_and_transportation,
-public_transit_facility_or_service,Public Transit Facility or Service,travel_and_transportation > ground_transport_facility_or_service > public_transit_facility_or_service,2,travel_and_transportation,7875
-rail_facility_or_service,Rail Facility or Service,travel_and_transportation > ground_transport_facility_or_service > rail_facility_or_service,2,travel_and_transportation,221
-train_station,Train Station,travel_and_transportation > ground_transport_facility_or_service > rail_facility_or_service > train_station,3,travel_and_transportation,98033
-rest_stop,Rest Stop,travel_and_transportation > ground_transport_facility_or_service > road_structures_and_service > rest_stop,3,travel_and_transportation,549
-toll_station,Toll Station,travel_and_transportation > ground_transport_facility_or_service > road_structures_and_service > toll_station,3,travel_and_transportation,65
-taxi_or_ride_share_service,Taxi or Ride Share Service,travel_and_transportation > ground_transport_facility_or_service > taxi_or_ride_share_service,2,travel_and_transportation,
-parking,Parking,travel_and_transportation > parking,1,travel_and_transportation,143540
-park_and_ride,Park and Ride,travel_and_transportation > parking > park_and_ride,2,travel_and_transportation,164
-parking_garage,Parking Garage,travel_and_transportation > parking > parking_garage,2,travel_and_transportation,
-parking_lot,Parking Lot,travel_and_transportation > parking > parking_lot,2,travel_and_transportation,
-travel_service,Travel Service,travel_and_transportation > travel_service,1,travel_and_transportation,395616
-vehicle_service,Vehicle Service,travel_and_transportation > vehicle_service,1,travel_and_transportation,
-automotive_service,Automotive Service,travel_and_transportation > vehicle_service > automotive_service,2,travel_and_transportation,172801
-water_transport_facility_or_service,Water Transport Facility or Service,travel_and_transportation > water_transport_facility_or_service,1,travel_and_transportation,
-ferry_service,Ferry Service,travel_and_transportation > water_transport_facility_or_service > ferry_service,2,travel_and_transportation,369
-water_taxi_service,Water Taxi Service,travel_and_transportation > water_transport_facility_or_service > water_taxi_service,2,travel_and_transportation,2
+basic_category,display_name,taxonomy,level
+arts_and_entertainment,Arts and Entertainment,arts_and_entertainment,0
+amusement_attraction,Amusement Attraction,arts_and_entertainment > amusement_attraction,1
+amusement_park,Amusement Park,arts_and_entertainment > amusement_attraction > amusement_park,2
+animal_attraction,Animal Attraction,arts_and_entertainment > animal_attraction,1
+aquarium,Aquarium,arts_and_entertainment > animal_attraction > aquarium,2
+zoo,Zoo,arts_and_entertainment > animal_attraction > zoo,2
+arts_and_crafts_space,Arts and Crafts Space,arts_and_entertainment > arts_and_crafts_space,1
+art_gallery,Art Gallery,arts_and_entertainment > arts_and_crafts_space > art_gallery,2
+sculpture_statue,Sculpture Statue,arts_and_entertainment > arts_and_crafts_space > sculpture_statue,2
+street_art,Street Art,arts_and_entertainment > arts_and_crafts_space > street_art,2
+event_venue,Event Venue,arts_and_entertainment > event_venue,1
+festival_venue,Festival Venue,arts_and_entertainment > festival_venue,1
+fairgrounds,Fairgrounds,arts_and_entertainment > festival_venue > fairgrounds,2
+gaming_venue,Gaming Venue,arts_and_entertainment > gaming_venue,1
+arcade,Arcade,arts_and_entertainment > gaming_venue > arcade,2
+casino,Casino,arts_and_entertainment > gaming_venue > casino,2
+movie_theater,Movie Theater,arts_and_entertainment > movie_theater,1
+museum,Museum,arts_and_entertainment > museum,1
+nightlife_venue,Nightlife Venue,arts_and_entertainment > nightlife_venue,1
+adult_entertainment_venue,Adult Entertainment Venue,arts_and_entertainment > nightlife_venue > adult_entertainment_venue,2
+dance_club,Dance Club,arts_and_entertainment > nightlife_venue > dance_club,2
+performing_arts_venue,Performing Arts Venue,arts_and_entertainment > performing_arts_venue,1
+comedy_club,Comedy Club,arts_and_entertainment > performing_arts_venue > comedy_club,2
+music_venue,Music Venue,arts_and_entertainment > performing_arts_venue > music_venue,2
+theatre_venue,Theatre Venue,arts_and_entertainment > performing_arts_venue > theatre_venue,2
+rural_attraction,Rural Attraction,arts_and_entertainment > rural_attraction,1
+rodeo,Rodeo,arts_and_entertainment > rural_attraction > rodeo,2
+science_attraction,Science Attraction,arts_and_entertainment > science_attraction,1
+makerspace,Makerspace,arts_and_entertainment > science_attraction > makerspace,2
+planetarium,Planetarium,arts_and_entertainment > science_attraction > planetarium,2
+social_club,Social Club,arts_and_entertainment > social_club,1
+country_club,Country Club,arts_and_entertainment > social_club > country_club,2
+spiritual_advising,Spiritual Advising,arts_and_entertainment > spiritual_advising,1
+astrological_advising,Astrological Advising,arts_and_entertainment > spiritual_advising > astrological_advising,2
+psychic_advising,Psychic Advising,arts_and_entertainment > spiritual_advising > psychic_advising,2
+stadium_arena,Stadium Arena,arts_and_entertainment > stadium_arena,1
+ticket_office_or_booth,Ticket Office or Booth,arts_and_entertainment > ticket_office_or_booth,1
+community_and_government,Community and Government,community_and_government,0
+civic_organization,Civic Organization,community_and_government > civic_organization,1
+civic_center,Civic Center,community_and_government > civic_organization > civic_center,2
+labor_union,Labor Union,community_and_government > civic_organization > labor_union,2
+political_organization,Political Organization,community_and_government > civic_organization > political_organization,2
+government_office,Government Office,community_and_government > government_office,1
+courthouse,Courthouse,community_and_government > government_office > courthouse,2
+embassy,Embassy,community_and_government > government_office > embassy,2
+government_department,Government Department,community_and_government > government_office > government_department,2
+military_site,Military Site,community_and_government > military_site,1
+military_base,Military Base,community_and_government > military_site > military_base,2
+military_office,Military Office,community_and_government > military_site > military_office,2
+public_facility,Public Facility,community_and_government > public_facility,1
+public_fountain,Public Fountain,community_and_government > public_facility > public_fountain,2
+public_pathway,Public Pathway,community_and_government > public_facility > public_pathway,2
+public_plaza,Public Plaza,community_and_government > public_facility > public_plaza,2
+public_restroom,Public Restroom,community_and_government > public_facility > public_restroom,2
+public_safety_service,Public Safety Service,community_and_government > public_safety_service,1
+fire_station,Fire Station,community_and_government > public_safety_service > fire_station,2
+jail_or_prison,Jail or Prison,community_and_government > public_safety_service > jail_or_prison,2
+police_station,Police Station,community_and_government > public_safety_service > police_station,2
+public_utility,Public Utility,community_and_government > public_utility,1
+electric_utility_provider,Electric Utility Provider,community_and_government > public_utility > electric_utility_provider,2
+natural_gas_utility_provider,Natural Gas Utility Provider,community_and_government > public_utility > natural_gas_utility_provider,2
+water_utility_provider,Water Utility Provider,community_and_government > public_utility > water_utility_provider,2
+social_or_community_service,Social or Community Service,community_and_government > social_or_community_service,1
+community_center,Community Center,community_and_government > social_or_community_service > community_center,2
+food_bank,Food Bank,community_and_government > social_or_community_service > food_bank,2
+youth_organization,Youth Organization,community_and_government > social_or_community_service > youth_organization,2
+cultural_and_historic,Cultural and Historic,cultural_and_historic,0
+cultural_center,Cultural Center,cultural_and_historic > cultural_center,1
+historic_site,Historic Site,cultural_and_historic > historic_site,1
+castle,Castle,cultural_and_historic > historic_site > castle,2
+fort,Fort,cultural_and_historic > historic_site > fort,2
+lighthouse,Lighthouse,cultural_and_historic > historic_site > lighthouse,2
+memorial_site,Memorial Site,cultural_and_historic > memorial_site,1
+cemetery,Cemetery,cultural_and_historic > memorial_site > cemetery,2
+monument,Monument,cultural_and_historic > memorial_site > monument,2
+place_of_worship,Place of Worship,cultural_and_historic > place_of_worship,1
+buddhist_place_of_worship,Buddhist Place of Worship,cultural_and_historic > place_of_worship > buddhist_place_of_worship,2
+christian_place_of_worship,Christian Place of Worship,cultural_and_historic > place_of_worship > christian_place_of_worship,2
+hindu_place_of_worship,Hindu Place of Worship,cultural_and_historic > place_of_worship > hindu_place_of_worship,2
+jewish_place_of_worship,Jewish Place of Worship,cultural_and_historic > place_of_worship > jewish_place_of_worship,2
+muslim_place_of_worship,Muslim Place of Worship,cultural_and_historic > place_of_worship > muslim_place_of_worship,2
+religious_landmark,Religious Landmark,cultural_and_historic > religious_landmark,1
+religious_organization,Religious Organization,cultural_and_historic > religious_organization,1
+religious_retreat_or_center,Religious Retreat or Center,cultural_and_historic > religious_retreat_or_center,1
+education,Education,education,0
+education_office,Education Office,education > education_office,1
+school_district_office,School District Office,education > education_office > school_district_office,2
+educational_facility,Educational Facility,education > educational_facility,1
+campus,Campus,education > educational_facility > campus,2
+campus_building,Campus Building,education > educational_facility > campus_building,2
+educational_service,Educational Service,education > educational_service,1
+tutoring_service,Tutoring Service,education > educational_service > tutoring_service,2
+library,Library,education > library,1
+place_of_learning,Place of Learning,education > place_of_learning,1
+academy,Academy,education > place_of_learning > academy,2
+class_venue,Class Venue,education > place_of_learning > class_venue,2
+college_university,College University,education > place_of_learning > college_university,2
+elementary_school,Elementary School,education > place_of_learning > school > elementary_school,3
+high_school,High School,education > place_of_learning > school > high_school,3
+kindergarten,Kindergarten,education > place_of_learning > school > kindergarten,3
+middle_school,Middle School,education > place_of_learning > school > middle_school,3
+preschool,Preschool,education > place_of_learning > school > preschool,3
+specialty_school,Specialty School,education > place_of_learning > specialty_school,2
+research_institute,Research Institute,education > research_institute,1
+food_and_drink,Food and Drink,food_and_drink,0
+alcoholic_beverage_venue,Alcoholic Beverage Venue,food_and_drink > alcoholic_beverage_venue,1
+bar,Bar,food_and_drink > alcoholic_beverage_venue > bar,2
+brewery,Brewery,food_and_drink > alcoholic_beverage_venue > brewery,2
+distillery,Distillery,food_and_drink > alcoholic_beverage_venue > distillery,2
+lounge,Lounge,food_and_drink > alcoholic_beverage_venue > lounge,2
+winery,Winery,food_and_drink > alcoholic_beverage_venue > winery,2
+casual_eatery,Casual Eatery,food_and_drink > casual_eatery,1
+cafe,Cafe,food_and_drink > casual_eatery > cafe,2
+fast_food_restaurant,Fast Food Restaurant,food_and_drink > casual_eatery > fast_food_restaurant,2
+food_court,Food Court,food_and_drink > casual_eatery > food_court,2
+food_truck_stand,Food Truck or Stand,food_and_drink > casual_eatery > food_truck_stand,2
+non_alcoholic_beverage_venue,Non-Alcoholic Beverage Venue,food_and_drink > non_alcoholic_beverage_venue,1
+coffee_shop,Coffee Shop,food_and_drink > non_alcoholic_beverage_venue > coffee_shop,2
+smoothie_juice_bar,Smoothie or Juice Bar,food_and_drink > non_alcoholic_beverage_venue > smoothie_juice_bar,2
+restaurant,Restaurant,food_and_drink > restaurant,1
+geographic_entities,Geographic Entities,geographic_entities,0
+built_feature,Built Feature,geographic_entities > built_feature,1
+bridge,Bridge,geographic_entities > built_feature > bridge,2
+building,Building,geographic_entities > built_feature > building,2
+dam,Dam,geographic_entities > built_feature > dam,2
+dock,Dock,geographic_entities > built_feature > dock,2
+garden,Garden,geographic_entities > built_feature > garden,2
+marina,Marina,geographic_entities > built_feature > marina,2
+pier,Pier,geographic_entities > built_feature > pier,2
+land_feature,Land Feature,geographic_entities > land_feature,1
+beach,Beach,geographic_entities > land_feature > beach,2
+canyon,Canyon,geographic_entities > land_feature > canyon,2
+forest,Forest,geographic_entities > land_feature > forest,2
+hill,Hill,geographic_entities > land_feature > hill,2
+island,Island,geographic_entities > land_feature > island,2
+mountain,Mountain,geographic_entities > land_feature > mountain,2
+nature_reserve,Nature Reserve,geographic_entities > land_feature > nature_reserve,2
+valley,Valley,geographic_entities > land_feature > valley,2
+scenic_viewpoint,Scenic Viewpoint,geographic_entities > scenic_viewpoint,1
+water_feature,Water Feature,geographic_entities > water_feature,1
+canal,Canal,geographic_entities > water_feature > canal,2
+hot_springs,Hot Springs,geographic_entities > water_feature > hot_springs,2
+lake,Lake,geographic_entities > water_feature > lake,2
+ocean,Ocean,geographic_entities > water_feature > ocean,2
+river,River,geographic_entities > water_feature > river,2
+sea,Sea,geographic_entities > water_feature > sea,2
+waterfall,Waterfall,geographic_entities > water_feature > waterfall,2
+health_care,Health Care,health_care,0
+emergency_or_urgent_care_facility,Emergency or Urgent Care Facility,health_care > emergency_or_urgent_care_facility,1
+emergency_department,Emergency Department,health_care > emergency_or_urgent_care_facility > emergency_department,2
+urgent_care_clinic,Urgent Care Clinic,health_care > emergency_or_urgent_care_facility > urgent_care_clinic,2
+walk_in_clinic,Walk-In Clinic,health_care > emergency_or_urgent_care_facility > walk_in_clinic,2
+hospital,Hospital,health_care > hospital,1
+general_hospital,General Hospital,health_care > hospital > general_hospital,2
+specialty_hospital,Specialty Hospital,health_care > hospital > specialty_hospital,2
+medical_service,Medical Service,health_care > medical_service,1
+outpatient_care_facility,Outpatient Care Facility,health_care > outpatient_care_facility,1
+behavioral_or_mental_health_clinic,Behavioral or Mental Health Clinic,health_care > outpatient_care_facility > behavioral_or_mental_health_clinic,2
+complementary_and_alternative_medicine,Complementary and Alternative Medicine,health_care > outpatient_care_facility > complementary_and_alternative_medicine,2
+dental_clinic,Dental Clinic,health_care > outpatient_care_facility > dental_clinic,2
+diagnostics_imaging_or_lab_service,Diagnostics Imaging or Lab Service,health_care > outpatient_care_facility > diagnostics_imaging_or_lab_service,2
+pediatric_clinic,Pediatric Clinic,health_care > outpatient_care_facility > pediatric_clinic,2
+physical_medicine_and_rehabilitation,Physical Medicine and Rehabilitation,health_care > outpatient_care_facility > physical_medicine_and_rehabilitation,2
+primary_care_or_general_clinic,Primary Care or General Clinic,health_care > outpatient_care_facility > primary_care_or_general_clinic,2
+reproductive_perinatal_and_womens_care,Reproductive Perinatal and Women's Care,health_care > outpatient_care_facility > reproductive_perinatal_and_womens_care,2
+specialized_health_care,Specialized Health Care,health_care > outpatient_care_facility > specialized_health_care,2
+vision_or_eye_care_clinic,Vision or Eye Care Clinic,health_care > outpatient_care_facility > vision_or_eye_care_clinic,2
+specialized_medical_facility,Specialized Medical Facility,health_care > specialized_medical_facility,1
+surgery,Surgery,health_care > specialized_medical_facility > surgery,2
+lifestyle_services,Lifestyle Services,lifestyle_services,0
+animal_or_pet_service,Animal or Pet Service,lifestyle_services > animal_or_pet_service,1
+food_service,Food Service,lifestyle_services > food_service,1
+personal_or_beauty_service,Personal or Beauty Service,lifestyle_services > personal_or_beauty_service,1
+wellness_service,Wellness Service,lifestyle_services > wellness_service,1
+lodging,Lodging,lodging,0
+bed_and_breakfast,Bed and Breakfast,lodging > bed_and_breakfast,1
+campground,Campground,lodging > campground,1
+hotel,Hotel,lodging > hotel,1
+inn,Inn,lodging > inn,1
+private_lodging,Private Lodging,lodging > private_lodging,1
+resort,Resort,lodging > resort,1
+rv_park,RV Park,lodging > rv_park,1
+services_and_business,Services and Business,services_and_business,0
+agricultural_service,Agricultural Service,services_and_business > agricultural_service,1
+farm,Farm,services_and_business > agricultural_service > farm,2
+b2b_service,B2B Service,services_and_business > b2b_service,1
+b2b_energy_and_utility_service,B2B Energy and Utility Service,services_and_business > b2b_service > b2b_energy_and_utility_service,2
+b2b_industrial_and_machine_service,B2B Industrial and Machine Service,services_and_business > b2b_service > b2b_industrial_and_machine_service,2
+b2b_office_and_professional_service,B2B Office and Professional Service,services_and_business > b2b_service > b2b_office_and_professional_service,2
+b2b_science_and_technology_service,B2B Science and Technology Service,services_and_business > b2b_service > b2b_science_and_technology_service,2
+b2b_transportation_and_storage_service,B2B Transportation and Storage Service,services_and_business > b2b_service > b2b_transportation_and_storage_service,2
+manufacturer,Manufacturer,services_and_business > b2b_service > manufacturer,2
+supplier_or_distributor,Supplier or Distributor,services_and_business > b2b_service > supplier_or_distributor,2
+wholesaler,Wholesaler,services_and_business > b2b_service > wholesaler,2
+building_or_construction_service,Building or Construction Service,services_and_business > building_or_construction_service,1
+corporate_or_business_office,Corporate or Business Office,services_and_business > corporate_or_business_office,1
+design_service,Design Service,services_and_business > design_service,1
+environmental_or_ecological_service,Environmental or Ecological Service,services_and_business > environmental_or_ecological_service,1
+event_or_party_service,Event or Party Service,services_and_business > event_or_party_service,1
+family_service,Family Service,services_and_business > family_service,1
+financial_service,Financial Service,services_and_business > financial_service,1
+atm,ATM,services_and_business > financial_service > atm,2
+bank_or_credit_union,Bank or Credit Union,services_and_business > financial_service > bank_or_credit_union,2
+home_service,Home Service,services_and_business > home_service,1
+housing_or_property_service,Housing or Property Service,services_and_business > housing_or_property_service,1
+apartment,Apartment,services_and_business > housing_or_property_service > apartment,2
+condominium,Condominium,services_and_business > housing_or_property_service > condominium,2
+senior_living_facility,Senior Living Facility,services_and_business > housing_or_property_service > senior_living_facility,2
+industrial_facility_or_service,Industrial Facility or Service,services_and_business > industrial_facility_or_service,1
+laundry_service,Laundry Service,services_and_business > laundry_service,1
+legal_service,Legal Service,services_and_business > legal_service,1
+attorney_or_law_firm,Attorney or Law Firm,services_and_business > legal_service > attorney_or_law_firm,2
+media_service,Media Service,services_and_business > media_service,1
+radio_station,Radio Station,services_and_business > media_service > media_news_company > radio_station,3
+television_station,Television Station,services_and_business > media_service > media_news_company > television_station,3
+printing_service,Printing Service,services_and_business > printing_service,1
+professional_service,Professional Service,services_and_business > professional_service,1
+real_estate_service,Real Estate Service,services_and_business > real_estate_service,1
+rental_service,Rental Service,services_and_business > rental_service,1
+security_service,Security Service,services_and_business > security_service,1
+shipping_or_delivery_service,Shipping or Delivery Service,services_and_business > shipping_or_delivery_service,1
+storage_facility,Storage Facility,services_and_business > storage_facility,1
+technical_service,Technical Service,services_and_business > technical_service,1
+telecommunications_service,Telecommunications Service,services_and_business > telecommunications_service,1
+utility_energy_infrastructure,Utility Energy Infrastructure,services_and_business > utility_energy_infrastructure,1
+shopping,Shopping,shopping,0
+convenience_store,Convenience Store,shopping > convenience_store,1
+department_store,Department Store,shopping > department_store,1
+discount_store,Discount Store,shopping > discount_store,1
+fashion_and_apparel_store,Fashion and Apparel Store,shopping > fashion_and_apparel_store,1
+food_and_beverage_store,Food and Beverage Store,shopping > food_and_beverage_store,1
+kiosk,Kiosk,shopping > kiosk,1
+market,Market,shopping > market,1
+farmers_market,Farmers Market,shopping > market > farmers_market,2
+second_hand_store,Second Hand Store,shopping > second_hand_store,1
+shopping_mall,Shopping Mall,shopping > shopping_mall,1
+shopping_service,Shopping Service,shopping > shopping_service,1
+specialty_store,Specialty Store,shopping > specialty_store,1
+animal_and_pet_store,Animal and Pet Store,shopping > specialty_store > animal_and_pet_store,2
+arts_crafts_and_hobby_store,Arts Crafts and Hobby Store,shopping > specialty_store > arts_crafts_and_hobby_store,2
+books_music_and_video_store,Books Music and Video Store,shopping > specialty_store > books_music_and_video_store,2
+electronics_store,Electronics Store,shopping > specialty_store > electronics_store,2
+flowers_and_gifts_store,Flowers and Gifts Store,shopping > specialty_store > flowers_and_gifts_store,2
+hardware_home_and_garden_store,Hardware Home and Garden Store,shopping > specialty_store > hardware_home_and_garden_store,2
+musical_instrument_and_pro_audio_store,Musical Instrument and Pro Audio Store,shopping > specialty_store > musical_instrument_and_pro_audio_store,2
+office_supply_store,Office Supply Store,shopping > specialty_store > office_supply_store,2
+personal_care_and_beauty_store,Personal Care and Beauty Store,shopping > specialty_store > personal_care_and_beauty_store,2
+pharmacy_and_drug_store,Pharmacy and Drug Store,shopping > specialty_store > pharmacy_and_drug_store,2
+sporting_goods_store,Sporting Goods Store,shopping > specialty_store > sporting_goods_store,2
+toys_and_games_store,Toys and Games Store,shopping > specialty_store > toys_and_games_store,2
+vehicle_parts_store,Vehicle Parts Store,shopping > specialty_store > vehicle_parts_store,2
+superstore,Superstore,shopping > superstore,1
+vehicle_dealer,Vehicle Dealer,shopping > vehicle_dealer,1
+auto_dealer,Auto Dealer,shopping > vehicle_dealer > auto_dealer,2
+warehouse_club_store,Warehouse Club Store,shopping > warehouse_club_store,1
+sports_and_recreation,Sports and Recreation,sports_and_recreation,0
+park,Park,sports_and_recreation > park,1
+dog_park,Dog Park,sports_and_recreation > park > dog_park,2
+national_park,National Park,sports_and_recreation > park > national_park,2
+playground,Playground,sports_and_recreation > park > playground,2
+recreational_equipment_rental,Recreational Equipment Rental,sports_and_recreation > recreational_equipment_rental,1
+recreational_trail_or_path,Recreational Trail or Path,sports_and_recreation > recreational_trail_or_path,1
+sport_league,Sport League,sports_and_recreation > sport_league,1
+sport_or_fitness_facility,Sport or Fitness Facility,sports_and_recreation > sport_or_fitness_facility,1
+fitness_studio,Fitness Studio,sports_and_recreation > sport_or_fitness_facility > fitness_studio,2
+golf_course,Golf Course,sports_and_recreation > sport_or_fitness_facility > golf_course,2
+gym,Gym,sports_and_recreation > sport_or_fitness_facility > gym,2
+skate_park,Skate Park,sports_and_recreation > sport_or_fitness_facility > skate_park,2
+skating_rink,Skating Rink,sports_and_recreation > sport_or_fitness_facility > skating_rink,2
+sport_court,Sport Court,sports_and_recreation > sport_or_fitness_facility > sport_court,2
+sport_field,Sport Field,sports_and_recreation > sport_or_fitness_facility > sport_field,2
+sports_complex,Sports Complex,sports_and_recreation > sport_or_fitness_facility > sports_complex,2
+swimming_pool,Swimming Pool,sports_and_recreation > sport_or_fitness_facility > swimming_pool,2
+sport_or_recreation_club,Sport or Recreation Club,sports_and_recreation > sport_or_recreation_club,1
+sport_team,Sport Team,sports_and_recreation > sport_team,1
+travel_and_transportation,Travel and Transportation,travel_and_transportation,0
+air_transport_facility_or_service,Air Transport Facility or Service,travel_and_transportation > air_transport_facility_or_service,1
+airport,Airport,travel_and_transportation > air_transport_facility_or_service > airport,2
+fueling_station,Fueling Station,travel_and_transportation > fueling_station,1
+ev_charging_station,EV Charging Station,travel_and_transportation > fueling_station > ev_charging_station,2
+gas_station,Gas Station,travel_and_transportation > fueling_station > gas_station,2
+ground_transport_facility_or_service,Ground Transport Facility or Service,travel_and_transportation > ground_transport_facility_or_service,1
+public_transit_facility_or_service,Public Transit Facility or Service,travel_and_transportation > ground_transport_facility_or_service > public_transit_facility_or_service,2
+rail_facility_or_service,Rail Facility or Service,travel_and_transportation > ground_transport_facility_or_service > rail_facility_or_service,2
+train_station,Train Station,travel_and_transportation > ground_transport_facility_or_service > rail_facility_or_service > train_station,3
+rest_stop,Rest Stop,travel_and_transportation > ground_transport_facility_or_service > road_structures_and_service > rest_stop,3
+toll_station,Toll Station,travel_and_transportation > ground_transport_facility_or_service > road_structures_and_service > toll_station,3
+taxi_or_ride_share_service,Taxi or Ride Share Service,travel_and_transportation > ground_transport_facility_or_service > taxi_or_ride_share_service,2
+parking,Parking,travel_and_transportation > parking,1
+park_and_ride,Park and Ride,travel_and_transportation > parking > park_and_ride,2
+parking_garage,Parking Garage,travel_and_transportation > parking > parking_garage,2
+parking_lot,Parking Lot,travel_and_transportation > parking > parking_lot,2
+travel_service,Travel Service,travel_and_transportation > travel_service,1
+vehicle_service,Vehicle Service,travel_and_transportation > vehicle_service,1
+automotive_service,Automotive Service,travel_and_transportation > vehicle_service > automotive_service,2
+water_transport_facility_or_service,Water Transport Facility or Service,travel_and_transportation > water_transport_facility_or_service,1
+ferry_service,Ferry Service,travel_and_transportation > water_transport_facility_or_service > ferry_service,2
+water_taxi_service,Water Taxi Service,travel_and_transportation > water_transport_facility_or_service > water_taxi_service,2

@@ -30,9 +30,12 @@ npm run build-taxonomy -- \
   --counts path/to/counts.csv    # optional
 ```
 
-This writes `static/taxonomy/<version>/`, which Docusaurus serves verbatim — so
-each file is both the browser's data source and a public download. Commit the
-output; the docs build never reads the pipeline repo.
+This writes `static/taxonomy/<version>/`, which Docusaurus serves verbatim.
+Commit the output; the docs build never reads the pipeline repo.
+
+`taxonomy.json` is the explorer's data source, not a download: it carries the
+place counts and roll-ups the page needs. The CSVs are the human-facing form and
+are what `downloads` should link to.
 
 If `--counts` is omitted the taxonomy still renders, and the stats row reports
 "Not published" for place counts rather than showing a broken zero. Counts can
@@ -53,8 +56,8 @@ be added later by re-running the generator; no component change is needed.
   ],
   dataUrl: '/taxonomy/2026-08-19.0/taxonomy.json',
   downloads: [
-    { label: 'Taxonomy (JSON)', url: '/taxonomy/2026-08-19.0/taxonomy.json' },
     { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-08-19.0/taxonomy.csv' },
+    { label: 'Basic categories (CSV)', url: '/taxonomy/2026-08-19.0/basic_categories.csv' },
   ],
   displayFields: [
     { field: 'is_basic', label: 'Is Basic Category' },
