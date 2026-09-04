@@ -2,9 +2,71 @@
 
 An interactive tool for exploring and comparing Overture Maps Places taxonomy releases.
 
-## Adding a New Release
+There are two kinds of release entry:
 
-To add a new release, only edit `taxonomy-browser.mdx` — no component code changes are needed.
+- **Canonical (JSON)** — generated from the places pipeline by
+  `scripts/build-taxonomy.mjs` and served as a static file that the browser
+  fetches. This is how every release from September 2026 onward is added.
+- **Legacy (CSV)** — the working spreadsheets produced during the taxonomy
+  project, inlined into the page bundle via `raw-loader`. Kept so the browser
+  can still show how the taxonomy looked at each earlier point.
+
+Both kinds live in the same `releases` array and can be selected and compared
+against each other. Adding either one only requires editing
+`taxonomy-browser.mdx` — no component changes.
+
+## Adding a canonical release
+
+### 1. Generate the artifacts
+
+Run the generator against the canonical files in the pipeline repo:
+
+```bash
+npm run build-taxonomy -- \
+  --source ../tf-data-platform/overture_places/overture_places/places_data_providers/category_mapping \
+  --version 2026-09-16.0 \
+  --schema v1.19.0 \
+  --date 2026-09-16 \
+  --counts path/to/counts.csv    # optional
+```
+
+This writes `static/taxonomy/<version>/`, which Docusaurus serves verbatim — so
+each file is both the browser's data source and a public download. Commit the
+output; the docs build never reads the pipeline repo.
+
+If `--counts` is omitted the taxonomy still renders, and the stats row reports
+"Not published" for place counts rather than showing a broken zero. Counts can
+be added later by re-running the generator; no component change is needed.
+
+### 2. Add a release entry
+
+```jsx
+{
+  id: 'september',
+  label: '2026 September (Canonical Taxonomy)',
+  releaseUrl: 'https://docs.overturemaps.org/blog/...',
+  note: 'Optional note displayed in the detail panel.',
+  tags: [
+    { label: '16 September 2026', title: 'Date' },
+    { label: '2026-09-16.0', title: 'Data version' },
+    { label: 'v1.19.0', title: 'Schema version' },
+  ],
+  dataUrl: '/taxonomy/2026-09-16.0/taxonomy.json',
+  downloads: [
+    { label: 'Taxonomy (JSON)', url: '/taxonomy/2026-09-16.0/taxonomy.json' },
+    { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-09-16.0/taxonomy.csv' },
+  ],
+  displayFields: [
+    { field: 'is_basic', label: 'Is Basic Category' },
+  ],
+}
+```
+
+`dataUrl` is what makes an entry canonical: when it is present the component
+fetches that file and ignores the CSV fields entirely. URLs are resolved through
+Docusaurus's base URL, so write them site-absolute (leading `/`).
+
+## Adding a legacy CSV release
 
 ### 1. Add CSV files
 
@@ -80,11 +142,15 @@ hierarchyField: 'hierarchy_column_name',
 | `hierarchyField` | * | Single field containing a pre-built `" > "` hierarchy |
 | `basicCategoryField` | No | Field holding the basic-level category label, or `null` |
 | `enabled` | No | Set to `false` to hide this release from the built site. Defaults to `true` |
+| `dataUrl` | * | Site-absolute URL of a generated `taxonomy.json`. Marks the entry as canonical; the CSV fields are then unused |
+| `downloads` | No | Array of `{ label, url }` shown as download links under the stats row |
 | `displayFields` | No | Array of `{ field, label }` for extra key-value rows in the detail panel |
 | `matchColumn` | No | Column containing a code from another release for cross-tab matching |
 | `matchType` | No | Which release's codes `matchColumn` maps to: `'original'` or `'new'` |
 
-\* Exactly one of `hierarchyFields` or `hierarchyField` is required.
+\* A canonical entry needs `dataUrl` only. A legacy CSV entry needs `dataCsv`,
+`fieldNames`, `codeField`, and exactly one of `hierarchyFields` or
+`hierarchyField`.
 
 ### Cross-tab matching
 
@@ -104,7 +170,11 @@ If `matchColumn` is not set, cross-tab matching uses the `codeField` value direc
 
 ### Release ordering
 
-Releases are compared in array order. The first release has no previous-release comparison. Each subsequent release computes change indicators against the one before it. Place new releases at the end of the array.
+Releases are compared in array order, oldest first. The first release has no
+previous-release comparison; each subsequent release computes change indicators
+against the one before it. **Place new releases at the end of the array** — the
+browser opens on the last entry, so ordering determines what a visitor sees
+first.
 
 ### Visibility and missing data
 
@@ -121,7 +191,10 @@ Set `enabled: false` on a release entry in `taxonomy-browser.mdx` to exclude it 
 
 The release stays in the config for future use — just flip it to `true` (or remove the property) when ready. Only enabled releases appear in the dropdown, tree, and detail panel.
 
-If `countsCsv` is `null`, the stats row shows "No Data" instead of counts, and the tree nodes won't display count badges.
+If a release has no counts — `countsCsv: null`, or a canonical release generated
+without `--counts` — the stats row reports "Not published" for total places and
+the tree nodes carry no count badges. Category and basic-category totals are
+structural and still shown.
 
 ### Display fields
 
@@ -138,7 +211,10 @@ These appear after the hierarchy levels and basic category, but before counts an
 
 | Release | Display fields |
 | --- | --- |
-| April | `category_key` |
-| October | `match_type`, `modified`, `remove_from_v1` |
-| December | `old_primary_category`, `old_primary_hierarchy` |
-| February | `new_display_name`, `is_basic`, `added`, `renamed`, `removed`, `redirect_to` |
+| 2025 April | `category_key` |
+| 2025 October | `match_type`, `modified`, `remove_from_v1` |
+| 2025 December | none |
+| 2026 March | `new_display_name`, `is_basic`, `pc_added`, `pc_hierarchy_change`, `pc_name_change`, `pc_removed`, `pc_redirect_to`, `blc_change` |
+| 2026 September | `is_basic` |
+
+For canonical releases the generator derives `is_basic`.

@@ -99,6 +99,41 @@
   text-decoration: underline;
 }
 
+.taxonomy-info-value--muted {
+  color: var(--ifm-color-emphasis-500);
+}
+
+/* The download row holds a variable number of links, so it spans the full
+   width instead of sitting in the three-column stats grid above it. */
+.taxonomy-download-row {
+  grid-template-columns: 1fr;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  margin-top: 8px;
+}
+
+.taxonomy-download-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.taxonomy-download-link {
+  font-size: 0.75em;
+  padding: 2px 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.taxonomy-download-link:hover {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-emphasis-100);
+  text-decoration: none;
+}
+
 .taxonomy-section-note {
   font-size: 0.85em;
   color: var(--ifm-color-emphasis-600);
@@ -585,4 +620,187 @@
   color: #c0392b;
   font-size: 0.85em;
   font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------------
+   Visualization views
+   --------------------------------------------------------------------------- */
+
+/* The tree is a list and reads fine at half width; a partition layout needs the
+   room, so the split shifts in favour of the canvas when a viz view is active. */
+.taxonomy-browser--viz .taxonomy-browser-left {
+  max-width: none;
+  flex: 2;
+}
+
+.taxonomy-browser--viz .taxonomy-browser-right {
+  flex: 1;
+  min-width: 260px;
+}
+
+.taxonomy-view-switch {
+  display: flex;
+  gap: 4px;
+  padding: 8px 16px 0;
+}
+
+.taxonomy-view-button {
+  flex: 1;
+  padding: 4px 10px;
+  font-size: 0.76em;
+  font-family: var(--ifm-font-family-base);
+  color: var(--ifm-color-emphasis-700);
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.taxonomy-view-button:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+.taxonomy-view-button--active {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-white, #fff);
+}
+
+.taxonomy-browser-viz {
+  flex: 1;
+  overflow: auto;
+  padding: 8px 12px 12px;
+}
+
+.taxonomy-viz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.taxonomy-viz-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+  flex-wrap: wrap;
+}
+
+.taxonomy-viz-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76em;
+  color: var(--ifm-color-emphasis-700);
+  cursor: pointer;
+}
+
+.taxonomy-viz-nav {
+  font-size: 0.74em;
+  padding: 2px 9px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-primary);
+  cursor: pointer;
+}
+
+.taxonomy-viz-nav:hover:not(:disabled) {
+  border-color: var(--ifm-color-primary);
+}
+
+.taxonomy-viz-nav:disabled {
+  color: var(--ifm-color-emphasis-400);
+  cursor: default;
+}
+
+.taxonomy-viz-stage {
+  position: relative;
+}
+
+.taxonomy-viz-arc {
+  cursor: pointer;
+}
+
+.taxonomy-viz-arc:hover {
+  filter: brightness(1.12);
+}
+
+.taxonomy-viz-center {
+  fill: var(--ifm-background-color);
+  cursor: pointer;
+}
+
+.taxonomy-viz-center-label {
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--ifm-font-color-base);
+  pointer-events: none;
+}
+
+.taxonomy-viz-center-sub {
+  font-size: 10px;
+  fill: var(--ifm-color-emphasis-600);
+  pointer-events: none;
+}
+
+.taxonomy-viz-cell-label {
+  font-size: 10px;
+  fill: var(--ifm-font-color-base);
+  font-family: var(--ifm-font-family-base);
+}
+
+.taxonomy-viz-hint {
+  font-size: 0.74em;
+  color: var(--ifm-color-emphasis-600);
+  text-align: center;
+  margin: 0;
+  max-width: 46em;
+}
+
+.taxonomy-viz-empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--ifm-color-emphasis-500);
+  font-size: 0.85em;
+}
+
+.taxonomy-viz-tooltip {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background: var(--ifm-color-emphasis-900, #1b1b1d);
+  color: var(--ifm-color-emphasis-0, #fff);
+  font-size: 0.74rem;
+  line-height: 1.4;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 25%);
+}
+
+.taxonomy-viz-tooltip-name {
+  font-weight: 600;
+}
+
+.taxonomy-viz-tooltip-path {
+  opacity: 0.72;
+  font-size: 0.92em;
+  margin-top: 1px;
+}
+
+.taxonomy-viz-tooltip-meta {
+  margin-top: 4px;
+  opacity: 0.82;
+  font-size: 0.9em;
+}
+
+.taxonomy-viz-basic-chip {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 5px;
+  border: 1px solid currentcolor;
+  border-radius: 3px;
+  font-size: 0.9em;
 }
