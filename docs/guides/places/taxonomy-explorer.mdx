@@ -1,6 +1,7 @@
 ---
-title: Taxonomy Browser
+title: Taxonomy Explorer
 description: Browse and explore the Overture Places taxonomy hierarchy
+hide_table_of_contents: true
 ---
 
 import TaxonomyBrowser from '@site/src/components/taxonomyBrowser';
@@ -12,14 +13,19 @@ import originalCountsCsv from '!!raw-loader!./csv/2025-04-01-counts.csv';
 import basicLevelCountsCsv from '!!raw-loader!./csv/2025-10-22-counts.csv';
 import decemberCountsCsv from '!!raw-loader!./csv/2025-12-05-counts.csv';
 
-# Taxonomy Browser
+# Taxonomy Explorer
 
-Explore and compare updates to the Overture Taxonomy.
+Explore and compare updates to the Overture Taxonomy. The explorer opens on the
+current release; use the dropdown to see how the taxonomy looked at any earlier
+point, and the download links to take a release away as CSV.
+
+See [Places Taxonomy](./taxonomy.mdx) for what the `taxonomy` and
+`basic_category` properties mean and how to use them.
 
 <TaxonomyBrowser releases={[
   {
     id: 'original',
-    label: 'April (Original Taxonomy)',
+    label: '2025 April (Original Taxonomy)',
     releaseUrl: 'https://docs.overturemaps.org/blog/2025/04/23/release-notes/',
     note: "April's release was used as the basis for the taxonomy project.",
     tags: [
@@ -39,7 +45,7 @@ Explore and compare updates to the Overture Taxonomy.
   },
   {
     id: 'basicLevel',
-    label: 'October (Basic Level Category Addition)',
+    label: '2025 October (Basic Level Category Addition)',
     releaseUrl: 'https://docs.overturemaps.org/blog/2025/10/22/release-notes/',
     tags: [
       { label: '22 October 2025', title: 'Date' },
@@ -60,7 +66,7 @@ Explore and compare updates to the Overture Taxonomy.
   },
   {
     id: 'december',
-    label: 'December (New Hierarchy Addition)',
+    label: '2025 December (New Hierarchy Addition)',
     releaseUrl: 'https://docs.overturemaps.org/blog/2025/12/17/release-notes/',
     tags: [
       { label: '17 December 2025', title: 'Date' },
@@ -79,13 +85,13 @@ Explore and compare updates to the Overture Taxonomy.
   },
   {
     id: 'march',
-    label: 'March (Bug Fixes, Simplified Basic)',
-    releaseUrl: 'https://docs.overturemaps.org/blog/',
+    label: '2026 March (Bug Fixes, Simplified Basic)',
+    releaseUrl: 'https://docs.overturemaps.org/blog/2026/03/18/release-notes/',
     enabled: true,
     tags: [
-      { label: '04 March 2026', title: 'Date' },
-      { label: '2025-12-17.0', title: 'Data version' },
-      { label: 'v1.15.0', title: 'Schema version' },
+      { label: '18 March 2026', title: 'Date' },
+      { label: '2026-03-18.0', title: 'Data version' },
+      { label: 'v1.16.0', title: 'Schema version' },
     ],
     dataCsv: marchCsv,
     countsCsv: null,
@@ -104,6 +110,25 @@ Explore and compare updates to the Overture Taxonomy.
       { field: 'pc_removed', label: 'Primary Category Removed' },
       { field: 'pc_redirect_to', label: 'Primary Category Redirect To' },
       { field: 'blc_change', label: 'Basic Level Category Change' },
+    ],
+  },
+  {
+    id: 'august',
+    label: '2026 August (Canonical Taxonomy)',
+    releaseUrl: 'https://docs.overturemaps.org/blog/2026/08/19/release-notes/',
+    tags: [
+      { label: '19 August 2026', title: 'Date' },
+      { label: '2026-08-19.0', title: 'Data version' },
+      { label: 'v1.18.0', title: 'Schema version' },
+    ],
+    dataUrl: '/taxonomy/2026-08-19.0/taxonomy.json',
+    downloads: [
+      { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-08-19.0/taxonomy.csv' },
+      { label: 'Basic categories (CSV)', url: '/taxonomy/2026-08-19.0/basic_categories.csv' },
+      { label: 'Legacy crosswalk (CSV)', url: '/taxonomy/2026-08-19.0/legacy_crosswalk.csv' },
+    ],
+    displayFields: [
+      { field: 'is_basic', label: 'Is Basic Category' },
     ],
   },
 ]} />

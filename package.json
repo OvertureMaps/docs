@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "fetch-og": "node scripts/fetch-og-images.mjs",
+    "build-taxonomy": "node scripts/build-taxonomy.mjs",
     "copy-maplibre-worker": "node scripts/copy-maplibre-worker.mjs",
     "docusaurus": "docusaurus",
     "start": "npm run copy-maplibre-worker && npm run docusaurus start",
@@ -32,6 +33,8 @@
     "@docusaurus/preset-classic": "^3.10.2",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.1.1",
+    "d3-hierarchy": "^3.1.2",
+    "d3-shape": "^3.2.0",
     "docusaurus-plugin-llms": "^0.5.1",
     "js-yaml": "^5.4.0",
     "maplibre-gl": "^6.6.0",

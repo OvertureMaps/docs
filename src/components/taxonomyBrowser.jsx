@@ -1,4 +1,6 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
+import TaxonomyViz from './taxonomyViz';
 import '../css/taxonomyBrowser.css';
 
 const SMALL_WORDS = new Set(['and', 'or', 'the', 'in', 'of', 'for', 'to', 'a', 'an']);
@@ -253,6 +255,72 @@ function buildTree(rows, counts, config) {
 }
 
 // ---------------------------------------------------------------------------
+// Canonical JSON releases
+// ---------------------------------------------------------------------------
+
+/**
+ * Convert the compact tree emitted by scripts/build-taxonomy.mjs into the node
+ * shape the tree view already uses.
+ *
+ * The generator omits whatever is reconstructible while walking down from the
+ * roots — a node's full path, and its basic category when that is simply the
+ * nearest basic ancestor — so both are rebuilt here. `index` is filled in as a
+ * side effect so the detail panel can look a category up by its bare name;
+ * canonical category names are globally unique, which is what makes that safe.
+ */
+function buildTreeFromJson(nodes, parentPath, inheritedBasic, index) {
+  return nodes.map(node => {
+    const hierarchy = parentPath ? `${parentPath} > ${node.name}` : node.name;
+    const basicCategory = node.isBasic ? node.name : (node.basicCategory ?? inheritedBasic);
+    const built = {
+      hierarchy,
+      displayName: node.displayName,
+      code: node.name,
+      isBasic: Boolean(node.isBasic),
+      basicCategory,
+      leafCount: node.count ?? null,
+      totalCount: node.totalCount ?? null,
+      children: [],
+    };
+    built.children = buildTreeFromJson(node.children ?? [], hierarchy, basicCategory, index);
+    index[node.name] = built;
+    return built;
+  });
+}
+
+/** Build the tree, lookups and stats for a release loaded from taxonomy.json. */
+function buildJsonRelease(data) {
+  const index = {};
+  const children = buildTreeFromJson(data.tree ?? [], '', null, index);
+
+  const lookups = {};
+  for (const [code, node] of Object.entries(index)) {
+    lookups[code] = {
+      hierarchy: node.hierarchy,
+      code,
+      basicCategory: node.basicCategory,
+      count: node.leafCount,
+      totalCount: node.totalCount,
+      prevCount: null,
+      basicCount: null,
+      prevBasicCount: null,
+      pctTag: null,
+      is_basic: node.isBasic ? 'Yes' : 'No',
+    };
+  }
+
+  return {
+    tree: { children, totalCategories: data.stats?.categories ?? children.length },
+    lookups,
+    stats: {
+      totalPlaces: data.stats?.totalPlaces ?? 0,
+      uniqueCategories: data.stats?.categories ?? 0,
+      uniqueBasicCategories: data.stats?.basicCategories ?? 0,
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Cross-tab lookup maps
 // ---------------------------------------------------------------------------
 
@@ -446,7 +514,7 @@ function ChangeIndicator({ current, previous }) {
   );
 }
 
-function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, prevBasicCount, count, prevCount, pctTag, mappings, displayFields, data }) {
+function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, prevBasicCount, count, totalCount, prevCount, pctTag, mappings, displayFields, data }) {
   if (!hierarchy) return null;
   const parts = hierarchy.split(' > ');
   const items = parts.map((part, i) => ({
@@ -468,8 +536,24 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
   if (basicCount != null) {
     items.push({ label: 'Basic Count', value: basicCount.toLocaleString(), countChange: { current: basicCount, previous: prevBasicCount } });
   }
-  if (count != null) {
-    items.push({ label: 'Count', value: count.toLocaleString(), countChange: { current: count, previous: prevCount } });
+  // A parent's own count is only the places filed directly against it. The
+  // roll-up is what people mean by "how big is Food and Drink", so show both.
+  // An explicit 0 matters here: it says nothing is filed at this level, which
+  // is different from the count being unknown.
+  if (count != null || totalCount != null) {
+    const direct = count ?? 0;
+    items.push({
+      label: 'Places at this category',
+      value: direct.toLocaleString(),
+      countChange: { current: direct, previous: prevCount },
+    });
+  }
+  // Suppressed on a leaf, where the two numbers are the same.
+  if (totalCount != null && totalCount !== (count ?? 0)) {
+    items.push({
+      label: 'Including subcategories',
+      value: totalCount.toLocaleString(),
+    });
   }
   if (pctTag) {
     items.push({ label: 'Note', value: pctTag, isPctTag: true });
@@ -511,6 +595,7 @@ function SectionContent({ data, release }) {
         basicCount={data.basicCount}
         prevBasicCount={data.prevBasicCount}
         count={data.count}
+        totalCount={data.totalCount}
         prevCount={data.prevCount}
         pctTag={data.pctTag}
         displayFields={release.displayFields}
@@ -570,16 +655,64 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
     [allReleases]
   );
 
-  const [activeTab, setActiveTab] = useState(releases[0]?.id || '');
+  // Releases are listed oldest-first, so the newest is the last entry. Opening
+  // on the newest is what a visitor almost always wants; opening on the oldest
+  // showed a taxonomy two generations out of date.
+  const [activeTab, setActiveTab] = useState(releases[releases.length - 1]?.id || '');
   const [searchTerm, setSearchTerm] = useState('');
   const [expanded, setExpanded] = useState(new Set());
   const [selected, setSelected] = useState(null);
+  const [jsonReleases, setJsonReleases] = useState({});
+  const [loadErrors, setLoadErrors] = useState({});
+  // The sunburst is what makes the shape of the taxonomy legible at a glance;
+  // the tree is the precise view you switch to once you know what you want.
+  const [view, setView] = useState('sunburst');
 
-  // Parse all data CSVs
+  const { withBaseUrl } = useBaseUrlUtils();
+
+  // The MDX page passes `releases` as an inline array literal, so its identity
+  // changes whenever the page re-renders. Tracking what has already been asked
+  // for keeps that from re-issuing requests.
+  const requested = useRef(new Set());
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  // Releases with a `dataUrl` are served as a static JSON file rather than
+  // inlined into the bundle, so they are fetched once on mount. This keeps the
+  // page's initial payload flat as releases accumulate.
+  useEffect(() => {
+    for (const r of releases) {
+      if (!r.dataUrl || requested.current.has(r.id)) continue;
+      requested.current.add(r.id);
+      fetch(withBaseUrl(r.dataUrl))
+        .then(res => {
+          if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+          return res.json();
+        })
+        .then(data => {
+          if (mounted.current) setJsonReleases(prev => ({ ...prev, [r.id]: buildJsonRelease(data) }));
+        })
+        .catch(err => {
+          if (mounted.current) setLoadErrors(prev => ({ ...prev, [r.id]: err.message }));
+        });
+    }
+    // Deliberately no per-run cancellation: `requested` already prevents a
+    // second fetch, so a cleanup that abandoned an in-flight response would
+    // strand the browser on "Loading…" with no way to retry. Only unmount
+    // stops a result from being applied.
+  }, [releases, withBaseUrl]);
+
+  // Parse all data CSVs. Releases sourced from JSON have no CSV to parse.
   const allRows = useMemo(() => {
     const result = {};
     for (const r of releases) {
-      result[r.id] = parseCsv(r.dataCsv, r.fieldNames);
+      result[r.id] = r.dataCsv ? parseCsv(r.dataCsv, r.fieldNames) : [];
     }
     return result;
   }, [releases]);
@@ -606,25 +739,33 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
   const allTrees = useMemo(() => {
     const result = {};
     for (const r of releases) {
-      result[r.id] = buildTree(allRows[r.id], allCountsByPrimary[r.id], r);
+      result[r.id] = r.dataUrl
+        ? (jsonReleases[r.id]?.tree ?? { children: [], totalCategories: 0 })
+        : buildTree(allRows[r.id], allCountsByPrimary[r.id], r);
     }
     return result;
-  }, [releases, allRows, allCountsByPrimary]);
+  }, [releases, allRows, allCountsByPrimary, jsonReleases]);
 
   // Build lookups
-  const lookups = useMemo(
-    () => buildLookups(releases, allRows, allCountsByPrimary, allCountsByBasic),
-    [releases, allRows, allCountsByPrimary, allCountsByBasic]
-  );
+  const lookups = useMemo(() => {
+    const csvReleases = releases.filter(r => !r.dataUrl);
+    const result = buildLookups(csvReleases, allRows, allCountsByPrimary, allCountsByBasic);
+    for (const r of releases) {
+      if (r.dataUrl) result[r.id] = jsonReleases[r.id]?.lookups ?? {};
+    }
+    return result;
+  }, [releases, allRows, allCountsByPrimary, allCountsByBasic, jsonReleases]);
 
   // Stats per release
   const releaseStats = useMemo(() => {
     const result = {};
     for (const r of releases) {
-      result[r.id] = parseCountsStats(r.countsCsv);
+      result[r.id] = r.dataUrl
+        ? (jsonReleases[r.id]?.stats ?? { totalPlaces: 0, uniqueCategories: 0, uniqueBasicCategories: 0 })
+        : parseCountsStats(r.countsCsv);
     }
     return result;
-  }, [releases]);
+  }, [releases, jsonReleases]);
 
   // Previous release stats (for change indicators)
   const prevReleaseStats = useMemo(() => {
@@ -706,13 +847,60 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
     return autoExpanded;
   }, [expanded, searchTerm, tree]);
 
+  // The visualization selects by category name, so it needs a way back to the
+  // tree node the detail panel expects.
+  const nodesByCode = useMemo(() => {
+    const index = {};
+    const walk = nodes => {
+      for (const node of nodes) {
+        index[node.code] = node;
+        walk(node.children);
+      }
+    };
+    walk(tree.children);
+    return index;
+  }, [tree]);
+
+  const handleSelectByCode = useCallback(
+    code => {
+      const node = nodesByCode[code];
+      if (node) setSelected(node);
+    },
+    [nodesByCode]
+  );
+
+  // A search term dims non-matching segments rather than removing them, so the
+  // shape of the taxonomy stays readable while you narrow it down.
+  const searchMatches = useMemo(() => {
+    if (!searchTerm) return null;
+    const term = searchTerm.toLowerCase();
+    const hits = new Set();
+    const walk = nodes => {
+      for (const node of nodes) {
+        if (
+          node.displayName.toLowerCase().includes(term) ||
+          node.code.toLowerCase().includes(term)
+        ) {
+          for (const part of node.hierarchy.split(' > ')) hits.add(part);
+        }
+        walk(node.children);
+      }
+    };
+    walk(tree.children);
+    return hits;
+  }, [tree, searchTerm]);
+
+  const activeRelease = releases.find(r => r.id === activeTab);
+  const loadError = loadErrors[activeTab] ?? null;
+  const isLoading = Boolean(activeRelease?.dataUrl) && !jsonReleases[activeTab] && !loadError;
+
   return (
-    <div className="taxonomy-browser">
+    <div className={`taxonomy-browser ${view !== 'tree' ? 'taxonomy-browser--viz' : ''}`}>
       <div className="taxonomy-browser-left">
         <div className="taxonomy-browser-header">
-          <span className="taxonomy-browser-header-label">Choose a release:</span>
           <select
             className="taxonomy-browser-select"
+            aria-label="Choose a release"
             value={activeTab}
             onChange={e => handleTabChange(e.target.value)}
           >
@@ -720,13 +908,33 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
               <option key={r.id} value={r.id}>{r.label}</option>
             ))}
           </select>
+          <div className="taxonomy-view-switch" role="group" aria-label="View">
+            {[
+              { id: 'sunburst', label: 'Sunburst' },
+              { id: 'tree', label: 'Tree' },
+            ].map(v => (
+              <button
+                key={v.id}
+                type="button"
+                className={`taxonomy-view-button ${view === v.id ? 'taxonomy-view-button--active' : ''}`}
+                aria-pressed={view === v.id}
+                onClick={() => setView(v.id)}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
         </div>
         {(() => {
           const cfg = releases.find(r => r.id === activeTab);
           const tags = cfg?.tags || [];
           const releaseUrl = cfg?.releaseUrl || '';
           const stats = releaseStats[activeTab];
-          const prevStats = prevReleaseStats[activeTab];
+          // A release with no counts file reports zeros, which is absence of
+          // data rather than a measurement of zero. Comparing against it would
+          // label every figure "(new)".
+          const prevRaw = prevReleaseStats[activeTab];
+          const prevStats = prevRaw && prevRaw.uniqueCategories > 0 ? prevRaw : null;
           return (
             <div className="taxonomy-info-rows">
               <div className="taxonomy-info-row">
@@ -740,18 +948,25 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
                     </div>
                   </div>
                 ))}
-              </div>
-              {stats && stats.totalPlaces > 0 ? (
-                <div className="taxonomy-info-row">
+                {/* Place counts are published per release and may not be ready
+                    when the taxonomy is; the structural counts always are. */}
+                {stats && stats.uniqueCategories > 0 && (
+                  <>
                   <div className="taxonomy-info-cell">
                     <div className="taxonomy-info-label">Total Places</div>
                     <div className="taxonomy-info-value">
-                      {stats.totalPlaces.toLocaleString()}
-                      <ChangeIndicator current={stats.totalPlaces} previous={prevStats?.totalPlaces} />
+                      {stats.totalPlaces > 0 ? (
+                        <>
+                          {stats.totalPlaces.toLocaleString()}
+                          <ChangeIndicator current={stats.totalPlaces} previous={prevStats?.totalPlaces} />
+                        </>
+                      ) : (
+                        <span className="taxonomy-info-value--muted">Not published</span>
+                      )}
                     </div>
                   </div>
                   <div className="taxonomy-info-cell">
-                    <div className="taxonomy-info-label">Unique Categories</div>
+                    <div className="taxonomy-info-label">Categories</div>
                     <div className="taxonomy-info-value">
                       {stats.uniqueCategories.toLocaleString()}
                       <ChangeIndicator current={stats.uniqueCategories} previous={prevStats?.uniqueCategories} />
@@ -764,12 +979,25 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
                       <ChangeIndicator current={stats.uniqueBasicCategories} previous={prevStats?.uniqueBasicCategories} />
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div className="taxonomy-info-row">
-                  <div className="taxonomy-info-cell">
-                    <div className="taxonomy-info-label">Counts</div>
-                    <div className="taxonomy-info-value">No Data</div>
+                  </>
+                )}
+              </div>
+              {cfg?.downloads?.length > 0 && (
+                <div className="taxonomy-info-row taxonomy-download-row">
+                  <div className="taxonomy-info-cell taxonomy-info-cell--downloads">
+                    <div className="taxonomy-info-label">Download</div>
+                    <div className="taxonomy-download-links">
+                      {cfg.downloads.map(d => (
+                        <a
+                          key={d.url}
+                          className="taxonomy-download-link"
+                          href={withBaseUrl(d.url)}
+                          download
+                        >
+                          {d.label}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -783,7 +1011,34 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
         />
+        {view !== 'tree' ? (
+          <div className="taxonomy-browser-viz">
+            {isLoading && <div className="taxonomy-tree-empty">Loading the {activeRelease?.label} taxonomy…</div>}
+            {loadError && (
+              <div className="taxonomy-tree-empty">
+                Could not load the {activeRelease?.label} taxonomy ({loadError}). Try reloading the page.
+              </div>
+            )}
+            {!isLoading && !loadError && (
+              <TaxonomyViz
+                treeChildren={tree.children}
+                onSelect={handleSelectByCode}
+                selectedCode={selected?.code ?? null}
+                matches={searchMatches}
+                hasCounts={(releaseStats[activeTab]?.totalPlaces ?? 0) > 0}
+              />
+            )}
+          </div>
+        ) : (
         <div className="taxonomy-browser-tree">
+          {isLoading && (
+            <div className="taxonomy-tree-empty">Loading the {activeRelease?.label} taxonomy…</div>
+          )}
+          {loadError && (
+            <div className="taxonomy-tree-empty">
+              Could not load the {activeRelease?.label} taxonomy ({loadError}). Try reloading the page.
+            </div>
+          )}
           {filteredTree.map(node => (
             <TreeNode
               key={node.hierarchy}
@@ -795,10 +1050,11 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
               onSelect={handleSelect}
             />
           ))}
-          {filteredTree.length === 0 && (
+          {filteredTree.length === 0 && !isLoading && !loadError && (
             <div className="taxonomy-tree-empty">No categories match your search.</div>
           )}
         </div>
+        )}
       </div>
       <div className="taxonomy-browser-right">
         <DetailPanel node={selected} activeTab={activeTab} lookups={lookups} releases={releases} />
