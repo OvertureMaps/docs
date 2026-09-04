@@ -70,12 +70,12 @@
 
 .taxonomy-browser-select {
   flex: 1;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 4px;
   background: var(--ifm-background-color);
   color: var(--ifm-font-color-base);
-  font-size: 0.9em;
+  font-size: 0.82em;
   font-weight: 500;
   font-family: var(--ifm-font-family-base);
   cursor: pointer;
@@ -176,14 +176,18 @@
 }
 
 /* Search */
+/* Sized to sit with the release select above it: the two are the same control
+   row visually, so they share a type size and box height. */
 .taxonomy-browser-search {
   display: block;
   width: calc(100% - 24px);
   margin: 0 12px 6px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 4px;
-  font-size: 0.95em;
+  font-size: 0.82em;
+  line-height: 1.25;
+  font-family: var(--ifm-font-family-base);
   background: var(--ifm-background-color);
   color: var(--ifm-font-color-base);
   outline: none;
