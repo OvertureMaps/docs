@@ -51,8 +51,13 @@
 .taxonomy-browser-header {
   display: flex;
   align-items: center;
-  padding: 12px 16px 8px;
-  gap: 10px;
+  padding: 8px 12px 6px;
+  gap: 8px;
+}
+
+.taxonomy-browser-header .taxonomy-browser-select {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .taxonomy-browser-header-label {
@@ -85,32 +90,41 @@
 
 /* Info rows (left panel, between dropdown and search) */
 .taxonomy-info-rows {
-  padding: 0 16px 8px;
+  padding: 0 12px 6px;
   border-top: 1px solid var(--ifm-color-emphasis-200);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .taxonomy-info-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 4px;
-  padding: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 14px;
+  padding: 6px 0 0;
 }
 
 .taxonomy-info-cell {
-  text-align: center;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+}
+
+.taxonomy-info-cell--downloads {
+  flex-wrap: wrap;
 }
 
 .taxonomy-info-label {
-  font-size: 0.72em;
+  font-size: 0.68em;
   color: var(--ifm-color-emphasis-500);
   font-weight: 500;
-  margin-bottom: 2px;
+  white-space: nowrap;
 }
 
 .taxonomy-info-value {
-  font-size: 0.8em;
+  font-size: 0.76em;
   color: var(--ifm-font-color-base);
+  white-space: nowrap;
 }
 
 .taxonomy-info-value a {
@@ -129,20 +143,17 @@
 /* The download row holds a variable number of links, so it spans the full
    width instead of sitting in the three-column stats grid above it. */
 .taxonomy-download-row {
-  grid-template-columns: 1fr;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-  margin-top: 8px;
+  padding-top: 4px;
 }
 
 .taxonomy-download-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
+  gap: 4px;
 }
 
 .taxonomy-download-link {
-  font-size: 0.75em;
+  font-size: 0.7em;
   padding: 2px 8px;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 4px;
@@ -167,9 +178,9 @@
 /* Search */
 .taxonomy-browser-search {
   display: block;
-  width: calc(100% - 32px);
-  margin: 0 16px 8px;
-  padding: 14px 12px;
+  width: calc(100% - 24px);
+  margin: 0 12px 6px;
+  padding: 6px 10px;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 4px;
   font-size: 0.95em;
@@ -653,18 +664,24 @@
    room, so the split shifts in favour of the canvas when a viz view is active. */
 .taxonomy-browser--viz .taxonomy-browser-left {
   max-width: none;
-  flex: 2;
+  flex: 1;
 }
 
+/* The detail panel is a reference column, not a second canvas: fix it narrow so
+   every extra pixel of window goes to the sunburst. */
 .taxonomy-browser--viz .taxonomy-browser-right {
-  flex: 1;
-  min-width: 260px;
+  flex: 0 0 264px;
+  padding: 12px;
+}
+
+.taxonomy-browser--fullscreen .taxonomy-browser-right {
+  flex: 0 0 320px;
 }
 
 .taxonomy-view-switch {
   display: flex;
   gap: 4px;
-  padding: 8px 16px 0;
+  flex: 0 0 auto;
 }
 
 .taxonomy-view-button--expand {
@@ -673,7 +690,7 @@
 }
 
 .taxonomy-view-button {
-  flex: 1;
+  flex: 0 0 auto;
   padding: 4px 10px;
   font-size: 0.76em;
   font-family: var(--ifm-font-family-base);

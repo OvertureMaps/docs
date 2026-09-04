@@ -873,14 +873,20 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
     return hits;
   }, [tree, searchTerm]);
 
-  // Escape is the expected way out of anything that covers the page.
+  // Escape is the expected way out of anything that covers the page, and the
+  // page behind must not scroll while it is covered.
   useEffect(() => {
     if (!fullscreen) return undefined;
     const onKey = e => {
       if (e.key === 'Escape') setFullscreen(false);
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [fullscreen]);
 
   const activeRelease = releases.find(r => r.id === activeTab);
@@ -899,9 +905,9 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
     >
       <div className="taxonomy-browser-left">
         <div className="taxonomy-browser-header">
-          <span className="taxonomy-browser-header-label">Choose a release:</span>
           <select
             className="taxonomy-browser-select"
+            aria-label="Choose a release"
             value={activeTab}
             onChange={e => handleTabChange(e.target.value)}
           >
@@ -909,6 +915,31 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
               <option key={r.id} value={r.id}>{r.label}</option>
             ))}
           </select>
+          <div className="taxonomy-view-switch" role="group" aria-label="View">
+            {[
+              { id: 'sunburst', label: 'Sunburst' },
+              { id: 'tree', label: 'Tree' },
+            ].map(v => (
+              <button
+                key={v.id}
+                type="button"
+                className={`taxonomy-view-button ${view === v.id ? 'taxonomy-view-button--active' : ''}`}
+                aria-pressed={view === v.id}
+                onClick={() => setView(v.id)}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="taxonomy-view-button taxonomy-view-button--expand"
+            onClick={() => setFullscreen(f => !f)}
+            aria-pressed={fullscreen}
+            title={fullscreen ? 'Exit full screen (Esc)' : 'Expand to full screen'}
+          >
+            {fullscreen ? 'Exit' : 'Expand'}
+          </button>
         </div>
         {(() => {
           const cfg = releases.find(r => r.id === activeTab);
@@ -933,11 +964,10 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
                     </div>
                   </div>
                 ))}
-              </div>
-              {stats && stats.uniqueCategories > 0 && (
-                <div className="taxonomy-info-row">
-                  {/* Place counts are published per release and may not be ready
-                      when the taxonomy is; the structural counts always are. */}
+                {/* Place counts are published per release and may not be ready
+                    when the taxonomy is; the structural counts always are. */}
+                {stats && stats.uniqueCategories > 0 && (
+                  <>
                   <div className="taxonomy-info-cell">
                     <div className="taxonomy-info-label">Total Places</div>
                     <div className="taxonomy-info-value">
@@ -965,11 +995,12 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
                       <ChangeIndicator current={stats.uniqueBasicCategories} previous={prevStats?.uniqueBasicCategories} />
                     </div>
                   </div>
-                </div>
-              )}
+                  </>
+                )}
+              </div>
               {cfg?.downloads?.length > 0 && (
                 <div className="taxonomy-info-row taxonomy-download-row">
-                  <div className="taxonomy-info-cell">
+                  <div className="taxonomy-info-cell taxonomy-info-cell--downloads">
                     <div className="taxonomy-info-label">Download</div>
                     <div className="taxonomy-download-links">
                       {cfg.downloads.map(d => (
@@ -989,32 +1020,6 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
             </div>
           );
         })()}
-        <div className="taxonomy-view-switch" role="group" aria-label="View">
-          {[
-            { id: 'tree', label: 'Tree' },
-            { id: 'sunburst', label: 'Sunburst' },
-            { id: 'icicle', label: 'Icicle' },
-          ].map(v => (
-            <button
-              key={v.id}
-              type="button"
-              className={`taxonomy-view-button ${view === v.id ? 'taxonomy-view-button--active' : ''}`}
-              aria-pressed={view === v.id}
-              onClick={() => setView(v.id)}
-            >
-              {v.label}
-            </button>
-          ))}
-          <button
-            type="button"
-            className="taxonomy-view-button taxonomy-view-button--expand"
-            onClick={() => setFullscreen(f => !f)}
-            aria-pressed={fullscreen}
-            title={fullscreen ? 'Exit full screen (Esc)' : 'Expand to full screen'}
-          >
-            {fullscreen ? 'Exit' : 'Expand'}
-          </button>
-        </div>
         <input
           type="text"
           className="taxonomy-browser-search"
@@ -1033,7 +1038,6 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
             {!isLoading && !loadError && (
               <TaxonomyViz
                 treeChildren={tree.children}
-                view={view}
                 onSelect={handleSelectByCode}
                 selectedCode={selected?.code ?? null}
                 matches={searchMatches}

@@ -3,10 +3,9 @@ import { hierarchy, partition } from 'd3-hierarchy';
 import { arc as d3arc } from 'd3-shape';
 
 /**
- * Sunburst and icicle views over the taxonomy tree.
+ * Sunburst view over the taxonomy tree.
  *
- * Both are partition layouts of the same d3 hierarchy, so a view switch is a
- * change of projection rather than a rebuild. Selection and the detail panel are
+ * A radial partition of a d3 hierarchy. Selection and the detail panel are
  * shared with the tree view in taxonomyBrowser.
  *
  * Colour is assigned relative to whatever is currently at the centre, not to the
@@ -422,102 +421,7 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
   );
 }
 
-function Icicle({ root, width, height, focus, onZoomIn, onSelect, selectedCode, matches, showBasicOnly }) {
-  const laidOut = useMemo(() => {
-    const copy = root.copy();
-    partition().size([height, width])(copy);
-    return copy;
-  }, [root, width, height]);
-
-  const [hover, setHover] = useState(null);
-  const [pointer, setPointer] = useState({ x: 0, y: 0 });
-  const { view, stageProps, zoomBy, resetView, isPanning } = useViewTransform();
-
-  useEffect(() => resetView(), [focus, resetView]);
-
-  const focused = useMemo(
-    () => (focus ? (laidOut.descendants().find(d => d.data.code === focus) ?? null) : null),
-    [laidOut, focus]
-  );
-
-  // At full extent a leaf is a fraction of a pixel tall, so the whole taxonomy
-  // cannot be drawn at once. Re-projecting onto the focused branch is what makes
-  // the lower levels reachable, exactly as zooming does in the sunburst.
-  const base = focused ?? laidOut;
-  const spanStart = base.x0;
-  const span = base.x1 - base.x0 || height;
-  const depthOffset = base.depth;
-  const colCount = Math.max(1, laidOut.height - depthOffset);
-  const colWidth = width / colCount;
-  const colorOf = useMemo(() => buildColorScale(base, depthOffset), [base, depthOffset]);
-
-  const rows = base
-    .descendants()
-    .filter(d => d.depth > depthOffset)
-    .map(d => {
-      const rel = d.depth - depthOffset;
-      return {
-        d,
-        y: ((d.x0 - spanStart) / span) * height,
-        h: ((d.x1 - d.x0) / span) * height,
-        x: (rel - 1) * colWidth,
-        w: colWidth,
-      };
-    })
-    .filter(r => r.h > 1.2);
-
-  return (
-    <div
-      className={`taxonomy-viz-stage ${isPanning ? 'taxonomy-viz-stage--panning' : ''}`}
-      onMouseMove={e => setPointer({ x: e.clientX, y: e.clientY })}
-      {...stageProps}
-    >
-      <ZoomControls zoomBy={zoomBy} resetView={resetView} view={view} />
-      <svg width={width} height={height} role="img" aria-label="Taxonomy icicle chart">
-        <g transform={`translate(${view.x},${view.y}) scale(${view.k})`}>
-        {rows.map(({ d, x, y, w, h }) => {
-          const isMatch = !matches || matches.has(d.data.code);
-          const passesBasic = !showBasicOnly || d.data.isBasic;
-          const dimmed = !isMatch || !passesBasic;
-          const isSelected = d.data.code === selectedCode;
-          return (
-            <g key={d.data.code} transform={`translate(${x},${y})`}>
-              <rect
-                width={Math.max(0, w - 1)}
-                height={Math.max(0, h - 1)}
-                fill={colorOf(d, dimmed)}
-                stroke={
-                  isSelected
-                    ? 'var(--ifm-color-primary)'
-                    : d.data.isBasic && !dimmed
-                      ? 'rgba(0,0,0,0.5)'
-                      : 'transparent'
-                }
-                strokeWidth={isSelected ? 2.5 : 1}
-                className="taxonomy-viz-arc"
-                onMouseEnter={() => setHover(d)}
-                onMouseLeave={() => setHover(null)}
-                onClick={() => {
-                  onSelect(d.data.code);
-                  if (d.children) onZoomIn(d.data.code);
-                }}
-              />
-              {h > 11 && w > 46 && (
-                <text className="taxonomy-viz-cell-label" x={5} y={h / 2} dy="0.32em" pointerEvents="none">
-                  {d.data.displayName}
-                </text>
-              )}
-            </g>
-          );
-        })}
-        </g>
-      </svg>
-      <Tooltip node={hover} x={pointer.x} y={pointer.y} />
-    </div>
-  );
-}
-
-export default function TaxonomyViz({ treeChildren, view, onSelect, selectedCode, matches, sized }) {
+export default function TaxonomyViz({ treeChildren, onSelect, selectedCode, matches, sized }) {
   // A stack rather than a single focus, so Back returns to the view you came
   // from. Clicking a sibling branch and then Back should not jump to a parent
   // you were never looking at.
@@ -578,17 +482,11 @@ export default function TaxonomyViz({ treeChildren, view, onSelect, selectedCode
         </label>
       </div>
       <div className="taxonomy-viz-canvas" ref={canvasRef}>
-        {view === 'sunburst' ? (
-          <Sunburst {...shared} width={canvas.width} height={canvas.height} />
-        ) : (
-          <Icicle {...shared} width={canvas.width} height={canvas.height} />
-        )}
+        <Sunburst {...shared} width={canvas.width} height={canvas.height} />
       </div>
       <p className="taxonomy-viz-hint">
-        {view === 'sunburst'
-          ? 'Click a segment to drill into it; click the centre or Back to step out one level.'
-          : 'Click a cell to drill into that branch; Back steps out one level.'}
-        {' '}Scroll to zoom and drag to pan. Outlined segments are basic categories.
+        Click a segment to drill in; the centre or Back steps out. Scroll to zoom,
+        drag to pan. Outlined segments are basic categories.
       </p>
     </div>
   );

@@ -153,7 +153,8 @@ describe('TaxonomyBrowser', () => {
       () => new Promise(resolve => { resolveFetch = () => resolve({ ok: true, json: () => Promise.resolve(CANONICAL_JSON) }); })
     );
     render(<TaxonomyBrowser releases={RELEASES} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sunburst' }));
     fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
     resolveFetch();
     expect(await screen.findByText('Food and Drink')).toBeInTheDocument();
@@ -227,13 +228,6 @@ describe('TaxonomyBrowser', () => {
       expect(lit).toHaveLength(3);
     });
 
-    it('renders the icicle view with labels', async () => {
-      render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Overture Places');
-      fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
-      expect(document.querySelectorAll('.taxonomy-viz-stage rect').length).toBeGreaterThan(0);
-      expect(document.querySelectorAll('.taxonomy-viz-cell-label').length).toBeGreaterThan(0);
-    });
 
     // A wider fixture: two branches under food_and_drink, so zooming has more
     // than one child to assign colour to.
@@ -308,18 +302,6 @@ describe('TaxonomyBrowser', () => {
       expect(hueSet().size).toBe(2);
     });
 
-    it('steps back in the icicle view too', async () => {
-      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(DEEP) }));
-      render(<TaxonomyBrowser releases={RELEASES} />);
-      await screen.findByText('Overture Places');
-      fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
-
-      const before = document.querySelectorAll('.taxonomy-viz-stage rect').length;
-      fireEvent.click(document.querySelector('.taxonomy-viz-stage rect'));
-      expect(document.querySelectorAll('.taxonomy-viz-stage rect').length).toBeLessThan(before);
-      fireEvent.click(screen.getByRole('button', { name: '← Back' }));
-      expect(document.querySelectorAll('.taxonomy-viz-stage rect').length).toBe(before);
-    });
 
     // The centre of a zoomed sunburst is the click target for stepping back. If
     // rings started at radius 0 the focused node's own children would be drawn
@@ -367,24 +349,6 @@ describe('TaxonomyBrowser', () => {
         );
       });
 
-      it('gives cells more room as the canvas grows', async () => {
-        // With real data this is what surfaces deeper labels; on a small
-        // fixture the measurable effect is the cell geometry itself.
-        render(<TaxonomyBrowser releases={RELEASES} />);
-        await screen.findByText('Overture Places');
-        fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
-
-        sizeCanvas(400, 300);
-        const small = document.querySelector('.taxonomy-viz-stage rect');
-        const smallBox = [small.getAttribute('width'), small.getAttribute('height')].map(Number);
-
-        sizeCanvas(1600, 1000);
-        const large = document.querySelector('.taxonomy-viz-stage rect');
-        const largeBox = [large.getAttribute('width'), large.getAttribute('height')].map(Number);
-
-        expect(largeBox[0]).toBeGreaterThan(smallBox[0]);
-        expect(largeBox[1]).toBeGreaterThan(smallBox[1]);
-      });
 
       it('renders before it has been measured', async () => {
         // ResizeObserver has not fired yet on first paint; a zero-size canvas
@@ -392,6 +356,21 @@ describe('TaxonomyBrowser', () => {
         await showSunburst();
         expect(Number(svg().getAttribute('width'))).toBeGreaterThan(0);
         expect(document.querySelectorAll('.taxonomy-viz-stage path').length).toBeGreaterThan(0);
+      });
+
+      it('offers exactly two views, sunburst first', async () => {
+        await showSunburst();
+        const views = [...document.querySelectorAll('.taxonomy-view-switch button')].map(b => b.textContent);
+        expect(views).toEqual(['Sunburst', 'Tree']);
+      });
+
+      it('locks page scrolling while expanded and restores it after', async () => {
+        await showSunburst();
+        expect(document.body.style.overflow).toBe('');
+        fireEvent.click(screen.getByRole('button', { name: /Expand/ }));
+        expect(document.body.style.overflow).toBe('hidden');
+        fireEvent.keyDown(window, { key: 'Escape' });
+        expect(document.body.style.overflow).toBe('');
       });
 
       it('expands to full screen and leaves on Escape', async () => {
@@ -497,14 +476,6 @@ describe('TaxonomyBrowser', () => {
         expect(parseTransform().k).toBeCloseTo(1, 6);
       });
 
-      it('offers the same controls in the icicle view', async () => {
-        render(<TaxonomyBrowser releases={RELEASES} />);
-        await screen.findByText('Overture Places');
-        fireEvent.click(screen.getByRole('button', { name: 'Icicle' }));
-        expect(document.querySelectorAll('.taxonomy-viz-zoom button')).toHaveLength(3);
-        fireEvent.click(screen.getByRole('button', { name: 'Zoom in' }));
-        expect(parseTransform().k).toBeGreaterThan(1);
-      });
     });
 
     it('opens on the sunburst, with the tree one click away', async () => {
