@@ -17,6 +17,10 @@ The Overture Maps schema defines the structure, properties, and constraints for 
 
 The schema is authored as [Pydantic](https://docs.pydantic.dev/) models and the reference documentation is generated from those models. The source code lives in the [OvertureMaps/schema](https://github.com/OvertureMaps/schema) repository on GitHub.
 
+:::tip[Found an error on this page?]
+This page is generated from the Pydantic models in [OvertureMaps/schema](https://github.com/OvertureMaps/schema/issues). Please file an issue there for changes.
+:::
+
 ## Why Use Pydantic to Define Data Schemas?
 
 This project addresses a fundamental challenge in data consumption: bridging the semantic gap between raw data and human understanding while enabling machine-actionable workflows.
