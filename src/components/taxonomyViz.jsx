@@ -307,6 +307,52 @@ export function wrapLabel(text, maxWidth, fontSize, maxLines = 3) {
   return lines;
 }
 
+/**
+ * Stretch one node's children across the whole of its arc.
+ *
+ * A node's size includes the places filed directly against it, so its children
+ * add up to less than it does and a partition leaves the difference empty. In
+ * the rings that gap is the point — it shows how much of a category sits at the
+ * category itself rather than below it. But once that node is at the centre,
+ * the centre already *is* those places, and the ring around it should be its
+ * children and nothing else.
+ *
+ * Applied to the focused node only, and to its whole subtree, so gaps deeper
+ * down are preserved in proportion.
+ */
+function expandChildrenToFill(node) {
+  const kids = node.children;
+  if (!kids?.length) return;
+
+  const available = node.x1 - node.x0;
+  const used = kids[kids.length - 1].x1 - kids[0].x0;
+  if (Math.abs(used - available) < 1e-12) return;
+
+  const origin = node.x0;
+
+  // Every child is empty while the node itself is not. There is no ratio to
+  // scale by, so divide the circle evenly rather than draw nothing.
+  if (used <= 0) {
+    const each = available / kids.length;
+    kids.forEach((kid, i) => {
+      const x0 = origin + i * each;
+      kid.each(d => {
+        d.x0 = x0;
+        d.x1 = x0 + each;
+      });
+    });
+    return;
+  }
+
+  const scale = available / used;
+  for (const kid of kids) {
+    kid.each(d => {
+      d.x0 = origin + (d.x0 - origin) * scale;
+      d.x1 = origin + (d.x1 - origin) * scale;
+    });
+  }
+}
+
 /** Wrap the browser's node shape in a d3 hierarchy, counting leaves for size. */
 function useLayout(treeChildren, sized) {
   return useMemo(() => {
@@ -315,7 +361,10 @@ function useLayout(treeChildren, sized) {
     // Place counts are the honest weighting when we have them. Without counts,
     // every leaf weighs 1 so arc size reflects how much taxonomy sits beneath a
     // node rather than implying data we do not have.
-    if (sized) root.sum(d => (d.children?.length ? 0 : (d.leafCount ?? 1)));
+    //
+    // A node's own places count toward its size, so a category that holds most
+    // of its places directly is not shrunk to the size of its children.
+    if (sized) root.sum(d => d.leafCount ?? 0);
     else root.count();
 
     root.sort((a, b) => (b.value ?? 0) - (a.value ?? 0) || a.data.code.localeCompare(b.data.code));
@@ -328,6 +377,8 @@ function Tooltip({ node, x, y }) {
   // Ancestors only — the synthetic root off the front, the node itself off the
   // end. Including the node repeated the title on its own line for a
   // top-level category.
+  // Ancestors only — the synthetic root off the front, the node itself off the
+  // end, so the title is not repeated as its own breadcrumb.
   const path = node.ancestors().reverse().slice(1, -1).map(n => n.data.displayName);
 
   // Same pair as the detail panel: a category's own places, and everything
@@ -390,8 +441,14 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
   const laidOut = useMemo(() => {
     const copy = root.copy();
     partition().size([2 * Math.PI, radius])(copy);
+    // Only the node at the centre gets its children stretched to fill; every
+    // other ring keeps the gap that represents places held at that category.
+    if (focus) {
+      const target = copy.descendants().find(d => d.data.code === focus);
+      if (target) expandChildrenToFill(target);
+    }
     return copy;
-  }, [root, radius]);
+  }, [root, radius, focus]);
 
   const [hover, setHover] = useState(null);
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
@@ -409,9 +466,9 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
   );
 
   const base = focused ?? laidOut;
+  const depthOffset = base.depth;
   const spanStart = base.x0;
   const span = base.x1 - base.x0 || 2 * Math.PI;
-  const depthOffset = base.depth;
   const { holeRadius, ringFor } = sunburstGeometry(radius, laidOut.height - depthOffset);
   const colorOf = useMemo(() => buildColorScale(base, depthOffset), [base, depthOffset]);
 
@@ -463,26 +520,27 @@ function Sunburst({ root, width, height, focus, onZoomIn, onBack, onSelect, sele
         <g transform={`translate(${width / 2},${height / 2})`}>
           {segments.map(seg => {
             const { d } = seg;
-            const isMatch = !matches || matches.has(d.data.code);
+            const code = d.data.code;
+            const isMatch = !matches || matches.has(code);
             const passesBasic = !showBasicOnly || d.data.isBasic;
             const dimmed = !isMatch || !passesBasic;
-            const isSelected = d.data.code === selectedCode;
+            const isSelected = code === selectedCode;
+            // Every segment carries the same hairline weight. A heavier stroke
+            // on basic categories thickened with the viewport zoom and swamped
+            // the thin outer arcs, so any distinction is colour alone.
             return (
               <path
                 key={d.data.code}
                 d={arcGen(seg)}
                 fill={colorOf(d, dimmed)}
                 stroke={isSelected ? 'var(--ifm-color-primary)' : 'rgba(255,255,255,0.35)'}
-                // Every segment carries the same hairline. A heavier stroke on
-                // basic categories thickened with the viewport zoom and swamped
-                // the thin outer arcs, so the distinction is colour alone.
                 strokeWidth={isSelected ? 2.5 : 0.4}
                 className="taxonomy-viz-arc"
                 onMouseEnter={() => setHover(d)}
                 onMouseLeave={() => setHover(null)}
                 onClick={() => {
-                  onSelect(d.data.code);
-                  if (d.children) onZoomIn(d.data.code);
+                  onSelect(code);
+                  if (d.children) onZoomIn(code);
                 }}
               />
             );

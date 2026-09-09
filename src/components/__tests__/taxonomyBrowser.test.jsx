@@ -430,6 +430,127 @@ describe('TaxonomyBrowser', () => {
         expect(arcs()).toBe(3);
       });
 
+      it('sizes a category by its own places as well as its children', async () => {
+        // A category can hold most of its places directly and still have a
+        // child. Counting only the children made coffee_shop (610,598 of its
+        // own, one child of 1,610) smaller than a sibling with far fewer.
+        const HEAVY = {
+          version: 't',
+          stats: { categories: 3, basicCategories: 0, rootGroups: 1, maxDepth: 2, totalPlaces: 673_344 },
+          tree: [
+            {
+              name: 'drinks', displayName: 'Drinks', totalCount: 673_344,
+              children: [
+                {
+                  name: 'coffee_shop', displayName: 'Coffee Shop',
+                  count: 610_598, totalCount: 612_208,
+                  children: [{ name: 'roastery', displayName: 'Roastery', count: 1_610, totalCount: 1_610 }],
+                },
+                { name: 'juice_bar', displayName: 'Juice Bar', count: 62_736, totalCount: 62_736 },
+              ],
+            },
+          ],
+        };
+        global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(HEAVY) }));
+        render(<TaxonomyBrowser releases={RELEASES} />);
+        await screen.findByRole('img', { name: 'Taxonomy sunburst' });
+        fireEvent.click(screen.getByLabelText(/Size by place count/));
+
+        const nameOf = p => {
+          fireEvent.mouseEnter(p);
+          const n = document.querySelector('.taxonomy-viz-tooltip-name')?.textContent;
+          fireEvent.mouseLeave(p);
+          return n;
+        };
+        fireEvent.click(document.querySelector('.taxonomy-viz-stage path'));
+        const inDrinks = [...document.querySelectorAll('.taxonomy-viz-stage path')].map(nameOf);
+        // Ordered largest first: Coffee Shop outweighs Juice Bar ten to one.
+        expect(inDrinks[0]).toBe('Coffee Shop');
+      });
+
+      it('leaves a gap in the ring but fills the circle once centred', async () => {
+        // The gap is a category's own places: bank_or_credit_union holds
+        // 358,594 itself against 303,989 below it, so its children cover under
+        // half its arc. Centred, the centre *is* those places, so the ring
+        // around it is its children and nothing else.
+        const BANK = {
+          version: 't',
+          stats: { categories: 3, basicCategories: 0, rootGroups: 1, maxDepth: 2, totalPlaces: 662_583 },
+          tree: [
+            {
+              name: 'bank_or_credit_union', displayName: 'Bank or Credit Union',
+              count: 358_594, totalCount: 662_583,
+              children: [
+                { name: 'bank', displayName: 'Bank', count: 234_566, totalCount: 234_566 },
+                { name: 'credit_union', displayName: 'Credit Union', count: 69_423, totalCount: 69_423 },
+              ],
+            },
+          ],
+        };
+        global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(BANK) }));
+        render(<TaxonomyBrowser releases={RELEASES} />);
+        await screen.findByRole('img', { name: 'Taxonomy sunburst' });
+        fireEvent.click(screen.getByLabelText(/Size by place count/));
+
+        const nameOf = p => {
+          fireEvent.mouseEnter(p);
+          const n = document.querySelector('.taxonomy-viz-tooltip-name')?.textContent;
+          fireEvent.mouseLeave(p);
+          return n;
+        };
+
+        // In the ring, the parent and both children are drawn; the parent's own
+        // places are simply not covered by anything.
+        let arcs = [...document.querySelectorAll('.taxonomy-viz-stage path')];
+        expect(arcs.map(nameOf)).toEqual(['Bank or Credit Union', 'Bank', 'Credit Union']);
+
+        fireEvent.click(arcs[0]);
+        expect(document.querySelector('.taxonomy-viz-center-label')).toHaveTextContent('Bank or Credit Union');
+
+        // Centred: the two children only, and between them the whole circle.
+        arcs = [...document.querySelectorAll('.taxonomy-viz-stage path')];
+        expect(arcs.map(nameOf)).toEqual(['Bank', 'Credit Union']);
+      });
+
+      it('never shows a category beneath itself, and children fill the arc', async () => {
+        // Because a node's size includes its own places, its children add up to
+        // less than it does. Showing that difference as a slice put the
+        // category underneath itself; leaving it empty broke the ring. The
+        // children stretch to fill instead.
+        const DIRECT_HEAVY = {
+          version: 't',
+          stats: { categories: 2, basicCategories: 0, rootGroups: 1, maxDepth: 1, totalPlaces: 1_500_000 },
+          tree: [
+            {
+              name: 'japanese_restaurant', displayName: 'Japanese Restaurant',
+              count: 1_000_000, totalCount: 1_500_000,
+              children: [{ name: 'sushi', displayName: 'Sushi Restaurant', count: 500_000, totalCount: 500_000 }],
+            },
+          ],
+        };
+        global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(DIRECT_HEAVY) }));
+        render(<TaxonomyBrowser releases={RELEASES} />);
+        await screen.findByRole('img', { name: 'Taxonomy sunburst' });
+        fireEvent.click(screen.getByLabelText(/Size by place count/));
+
+        const nameOf = p => {
+          fireEvent.mouseEnter(p);
+          const n = document.querySelector('.taxonomy-viz-tooltip-name')?.textContent;
+          fireEvent.mouseLeave(p);
+          return n;
+        };
+
+        let arcs = [...document.querySelectorAll('.taxonomy-viz-stage path')];
+        expect(arcs.map(nameOf)).toEqual(['Japanese Restaurant', 'Sushi Restaurant']);
+
+        fireEvent.click(arcs[0]);
+        expect(document.querySelector('.taxonomy-viz-center-label')).toHaveTextContent('Japanese Restaurant');
+
+        // Drilled in: only the real child, filling the circle.
+        arcs = [...document.querySelectorAll('.taxonomy-viz-stage path')];
+        expect(arcs.map(nameOf)).toEqual(['Sushi Restaurant']);
+      });
+
       it('offers the weighting as an opt-in', async () => {
         await showWithCounts();
         const toggle = screen.getByLabelText(/Size by place count/);

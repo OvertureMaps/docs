@@ -879,7 +879,8 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
   );
 
   // A search term dims non-matching segments rather than removing them, so the
-  // shape of the taxonomy stays readable while you narrow it down.
+  // shape of the taxonomy stays readable while you narrow it down. Ancestors of
+  // a hit stay lit so the path down to it is visible.
   const searchMatches = useMemo(() => {
     if (!searchTerm) return null;
     const term = searchTerm.toLowerCase();
