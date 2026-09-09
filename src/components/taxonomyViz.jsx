@@ -40,6 +40,21 @@ const GROUP_HUES = {
 const FALLBACK_HUE = 210;
 
 /**
+ * Format a share for display.
+ *
+ * Shares are always named against a denominator at the call site, because the
+ * two figures in the detail panel are shares of different things. A bare
+ * percentage next to a count reads as "of everything", which for a 2,302
+ * category taxonomy over 70M places is a column of zeroes.
+ */
+export function formatShare(part, whole) {
+  if (!whole || part == null) return null;
+  const pct = (part / whole) * 100;
+  if (pct > 0 && pct < 0.1) return '<0.1%';
+  return `${pct.toFixed(1)}%`;
+}
+
+/**
  * Build a colour function for the currently focused subtree.
  *
  * `base` is the node at the centre; its children are the colour anchors. At the
@@ -386,6 +401,14 @@ function Tooltip({ node, x, y }) {
   const direct = node.data.leafCount;
   const total = node.data.totalCount;
   const hasCounts = direct != null || total != null;
+  // Both figures as shares of the same thing — the category that contains this
+  // one. Spelling out a denominator per row would need about 570px at the
+  // widest, so the tooltip states it once and the percentages stay comparable
+  // to each other: own places against total, measured against the same whole.
+  const parentTotal = node.data.parentTotal;
+  const parentLabel = node.data.parentLabel;
+  const directShare = formatShare(direct ?? 0, parentTotal);
+  const totalShare = formatShare(total, parentTotal);
 
   return (
     <div className="taxonomy-viz-tooltip" style={{ left: x + 14, top: y + 14 }}>
@@ -401,13 +424,19 @@ function Tooltip({ node, x, y }) {
         <div className="taxonomy-viz-tooltip-counts">
           <div>
             <span>Places at this category</span>
-            <span>{(direct ?? 0).toLocaleString()}</span>
+            <span className="taxonomy-viz-tooltip-num">{(direct ?? 0).toLocaleString()}</span>
+            {directShare && <span className="taxonomy-viz-tooltip-pct">{directShare}</span>}
           </div>
           {total != null && total !== (direct ?? 0) && (
             <div>
               <span>Including subcategories</span>
-              <span>{total.toLocaleString()}</span>
+              <span className="taxonomy-viz-tooltip-num">{total.toLocaleString()}</span>
+              {totalShare && <span className="taxonomy-viz-tooltip-pct">{totalShare}</span>}
             </div>
+          )}
+          {/* Names the denominator once, under the column it applies to. */}
+          {(directShare || totalShare) && parentLabel && (
+            <div className="taxonomy-viz-tooltip-share">of {parentLabel}</div>
           )}
         </div>
       )}

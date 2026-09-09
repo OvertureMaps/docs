@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
-import TaxonomyViz from './taxonomyViz';
+import TaxonomyViz, { formatShare } from './taxonomyViz';
 import '../css/taxonomyBrowser.css';
 
 const SMALL_WORDS = new Set(['and', 'or', 'the', 'in', 'of', 'for', 'to', 'a', 'an']);
@@ -268,7 +268,7 @@ function buildTree(rows, counts, config) {
  * side effect so the detail panel can look a category up by its bare name;
  * canonical category names are globally unique, which is what makes that safe.
  */
-function buildTreeFromJson(nodes, parentPath, inheritedBasic, index) {
+function buildTreeFromJson(nodes, parentPath, inheritedBasic, index, parent) {
   return nodes.map(node => {
     const hierarchy = parentPath ? `${parentPath} > ${node.name}` : node.name;
     const basicCategory = node.isBasic ? node.name : (node.basicCategory ?? inheritedBasic);
@@ -280,9 +280,14 @@ function buildTreeFromJson(nodes, parentPath, inheritedBasic, index) {
       basicCategory,
       leafCount: node.count ?? null,
       totalCount: node.totalCount ?? null,
+      // What this category is a share *of*. A top-level group has no parent, so
+      // it is measured against the release — which is the one level where a
+      // share of everything is a meaningful number rather than a rounding blip.
+      parentTotal: parent ? parent.totalCount : null,
+      parentLabel: parent ? parent.displayName : 'all places',
       children: [],
     };
-    built.children = buildTreeFromJson(node.children ?? [], hierarchy, basicCategory, index);
+    built.children = buildTreeFromJson(node.children ?? [], hierarchy, basicCategory, index, built);
     index[node.name] = built;
     return built;
   });
@@ -291,7 +296,10 @@ function buildTreeFromJson(nodes, parentPath, inheritedBasic, index) {
 /** Build the tree, lookups and stats for a release loaded from taxonomy.json. */
 function buildJsonRelease(data) {
   const index = {};
-  const children = buildTreeFromJson(data.tree ?? [], '', null, index);
+  const totalPlaces = data.stats?.totalPlaces ?? null;
+  const children = buildTreeFromJson(data.tree ?? [], '', null, index, null);
+  // Roots are measured against the whole release.
+  for (const child of children) child.parentTotal = totalPlaces;
 
   const lookups = {};
   for (const [code, node] of Object.entries(index)) {
@@ -301,6 +309,8 @@ function buildJsonRelease(data) {
       basicCategory: node.basicCategory,
       count: node.leafCount,
       totalCount: node.totalCount,
+      parentTotal: node.parentTotal,
+      parentLabel: node.parentLabel,
       prevCount: null,
       basicCount: null,
       prevBasicCount: null,
@@ -514,7 +524,12 @@ function ChangeIndicator({ current, previous }) {
   );
 }
 
-function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, prevBasicCount, count, totalCount, prevCount, pctTag, mappings, displayFields, data }) {
+/** Render a share as " (12.3% of Financial Service)", or nothing if unknown. */
+function withOf(share, label) {
+  return share && label ? ` (${share} of ${label})` : '';
+}
+
+function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, prevBasicCount, count, totalCount, parentTotal, parentLabel, prevCount, pctTag, mappings, displayFields, data }) {
   if (!hierarchy) return null;
   const parts = hierarchy.split(' > ');
   const items = parts.map((part, i) => ({
@@ -540,19 +555,29 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
   // roll-up is what people mean by "how big is Food and Drink", so show both.
   // An explicit 0 matters here: it says nothing is filed at this level, which
   // is different from the count being unknown.
+  //
+  // The two shares answer different questions and so have different
+  // denominators, which is why each names its own rather than printing a bare
+  // percentage the reader has to guess at.
+  const rolledUp = totalCount != null && totalCount !== (count ?? 0);
   if (count != null || totalCount != null) {
     const direct = count ?? 0;
+    // On a parent: how much of this category sits at it rather than below it.
+    // On a leaf there is no "below", so the useful share is of its parent.
+    const share = rolledUp
+      ? withOf(formatShare(direct, totalCount), 'this category')
+      : withOf(formatShare(direct, parentTotal), parentLabel);
     items.push({
       label: 'Places at this category',
-      value: direct.toLocaleString(),
+      value: `${direct.toLocaleString()}${share}`,
       countChange: { current: direct, previous: prevCount },
     });
   }
   // Suppressed on a leaf, where the two numbers are the same.
-  if (totalCount != null && totalCount !== (count ?? 0)) {
+  if (rolledUp) {
     items.push({
       label: 'Including subcategories',
-      value: totalCount.toLocaleString(),
+      value: `${totalCount.toLocaleString()}${withOf(formatShare(totalCount, parentTotal), parentLabel)}`,
     });
   }
   if (pctTag) {
@@ -596,6 +621,8 @@ function SectionContent({ data, release }) {
         prevBasicCount={data.prevBasicCount}
         count={data.count}
         totalCount={data.totalCount}
+        parentTotal={data.parentTotal}
+        parentLabel={data.parentLabel}
         prevCount={data.prevCount}
         pctTag={data.pctTag}
         displayFields={release.displayFields}

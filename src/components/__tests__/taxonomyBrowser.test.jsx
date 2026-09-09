@@ -149,8 +149,10 @@ describe('TaxonomyBrowser', () => {
     it('separates a category own count from its roll-up', async () => {
       await openTree();
       fireEvent.click(screen.getByText('Food and Drink'));
-      expect(rows()['Places at this category']).toBe('50');
-      expect(rows()['Including subcategories']).toBe('150');
+      // Each share names its own denominator: how much of the category sits at
+      // it, then how big the category is within what contains it.
+      expect(rows()['Places at this category']).toBe('50 (33.3% of this category)');
+      expect(rows()['Including subcategories']).toBe('150 (100.0% of all places)');
     });
 
     it('shows an explicit zero when nothing is filed at that level', async () => {
@@ -158,8 +160,17 @@ describe('TaxonomyBrowser', () => {
       fireEvent.click(screen.getByText('Food and Drink'));
       fireEvent.click(await screen.findByText('Casual Eatery'));
       // Nothing has casual_eatery as its primary, but 100 places sit beneath it.
-      expect(rows()['Places at this category']).toBe('0');
-      expect(rows()['Including subcategories']).toBe('100');
+      expect(rows()['Places at this category']).toBe('0 (0.0% of this category)');
+      expect(rows()['Including subcategories']).toBe('100 (66.7% of Food and Drink)');
+    });
+
+    it('shows no shares for a release without place counts', async () => {
+      render(<TaxonomyBrowser releases={RELEASES} />);
+      fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
+      await screen.findByText('Food and Drink');
+      fireEvent.click(screen.getByText('Food and Drink'));
+      // CANONICAL_JSON carries no counts, so there is nothing to take a share of.
+      for (const value of Object.values(rows())) expect(value).not.toMatch(/%/);
     });
 
     it('omits the roll-up on a leaf, where it would repeat the same number', async () => {
@@ -167,7 +178,8 @@ describe('TaxonomyBrowser', () => {
       fireEvent.click(screen.getByText('Food and Drink'));
       fireEvent.click(await screen.findByText('Casual Eatery'));
       fireEvent.click(await screen.findByText('Bagel Shop'));
-      expect(rows()['Places at this category']).toBe('100');
+      // A leaf has no "below", so its one row carries the share of its parent.
+      expect(rows()['Places at this category']).toBe('100 (100.0% of Casual Eatery)');
       expect(rows()).not.toHaveProperty('Including subcategories');
     });
   });

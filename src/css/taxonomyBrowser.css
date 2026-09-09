@@ -852,7 +852,7 @@
   position: fixed;
   z-index: 200;
   pointer-events: none;
-  max-width: 260px;
+  max-width: 320px;
   padding: 6px 10px;
   border-radius: 5px;
   background: var(--ifm-color-emphasis-900, #1b1b1d);
@@ -878,6 +878,14 @@
   font-size: 0.9em;
 }
 
+/* Names the denominator once, under the percentage column. */
+.taxonomy-viz-tooltip-share {
+  justify-content: flex-end;
+  opacity: 0.7;
+  margin-top: 2px;
+  font-size: 0.92em;
+}
+
 .taxonomy-viz-tooltip-counts {
   margin-top: 5px;
   padding-top: 5px;
@@ -890,16 +898,29 @@
 
 .taxonomy-viz-tooltip-counts div {
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
+  align-items: baseline;
+  gap: 10px;
 }
 
+/* Label takes the slack; the two figures hold their own right-aligned columns
+   so counts and percentages each line up down the block. */
 .taxonomy-viz-tooltip-counts span:first-child {
+  flex: 1;
   opacity: 0.75;
+  white-space: nowrap;
 }
 
-.taxonomy-viz-tooltip-counts span:last-child {
+.taxonomy-viz-tooltip-num {
+  min-width: 4.6em;
+  text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+.taxonomy-viz-tooltip-pct {
+  min-width: 2.9em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
 }
 
 .taxonomy-viz-basic-chip {
