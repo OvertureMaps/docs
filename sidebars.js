@@ -84,7 +84,8 @@ const sidebars = {
           collapsed: true,
           items: [
             'guides/places/index',
-            'guides/places/taxonomy-browser',
+            'guides/places/taxonomy',
+            'guides/places/taxonomy-explorer',
           ],
         },
         {
