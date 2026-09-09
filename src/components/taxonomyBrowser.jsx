@@ -609,7 +609,7 @@ function SectionContent({ data, release }) {
 // Detail panel with cross-tab collapsible sections
 // ---------------------------------------------------------------------------
 
-function DetailPanel({ node, activeTab, lookups, releases }) {
+function DetailPanel({ node, activeTab, lookups, releases, onClear }) {
   if (!node) {
     return (
       <div className="taxonomy-detail-empty">
@@ -623,6 +623,15 @@ function DetailPanel({ node, activeTab, lookups, releases }) {
 
   return (
     <div className="taxonomy-detail" key={node.hierarchy}>
+      <button
+        type="button"
+        className="taxonomy-detail-clear"
+        onClick={onClear}
+        aria-label="Clear selection"
+        title="Clear selection"
+      >
+        ×
+      </button>
       <h2 className="taxonomy-detail-name">{node.displayName}</h2>
       <div className="taxonomy-detail-sections">
         {releases.map(release => {
@@ -1057,7 +1066,13 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
         )}
       </div>
       <div className="taxonomy-browser-right">
-        <DetailPanel node={selected} activeTab={activeTab} lookups={lookups} releases={releases} />
+        <DetailPanel
+          node={selected}
+          activeTab={activeTab}
+          lookups={lookups}
+          releases={releases}
+          onClear={() => setSelected(null)}
+        />
       </div>
     </div>
   );

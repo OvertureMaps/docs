@@ -325,17 +325,41 @@ function useLayout(treeChildren, sized) {
 
 function Tooltip({ node, x, y }) {
   if (!node) return null;
-  const path = node.ancestors().reverse().slice(1).map(n => n.data.displayName);
+  // Ancestors only — the synthetic root off the front, the node itself off the
+  // end. Including the node repeated the title on its own line for a
+  // top-level category.
+  const path = node.ancestors().reverse().slice(1, -1).map(n => n.data.displayName);
+
+  // Same pair as the detail panel: a category's own places, and everything
+  // filed beneath it. They differ by orders of magnitude on a parent.
+  const direct = node.data.leafCount;
+  const total = node.data.totalCount;
+  const hasCounts = direct != null || total != null;
+
   return (
     <div className="taxonomy-viz-tooltip" style={{ left: x + 14, top: y + 14 }}>
       <div className="taxonomy-viz-tooltip-name">{node.data.displayName}</div>
-      <div className="taxonomy-viz-tooltip-path">{path.join(' › ')}</div>
+      {path.length > 0 && <div className="taxonomy-viz-tooltip-path">{path.join(' › ')}</div>}
       <div className="taxonomy-viz-tooltip-meta">
         {node.data.isBasic && <span className="taxonomy-viz-basic-chip">Basic category</span>}
         {node.children
           ? `${(node.descendants().length - 1).toLocaleString()} categories beneath`
           : 'Leaf category'}
       </div>
+      {hasCounts && (
+        <div className="taxonomy-viz-tooltip-counts">
+          <div>
+            <span>Places at this category</span>
+            <span>{(direct ?? 0).toLocaleString()}</span>
+          </div>
+          {total != null && total !== (direct ?? 0) && (
+            <div>
+              <span>Including subcategories</span>
+              <span>{total.toLocaleString()}</span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

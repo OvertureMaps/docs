@@ -270,6 +270,32 @@
 /* Detail panel - selected */
 .taxonomy-detail {
   width: 100%;
+  position: relative;
+}
+
+/* Sits in the panel's top-right corner; the heading is padded to clear it. */
+.taxonomy-detail-clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: none;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 1.1em;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.taxonomy-detail-clear:hover {
+  border-color: var(--ifm-color-emphasis-300);
+  color: var(--ifm-font-color-base);
 }
 
 /* Breadcrumb */
@@ -295,6 +321,7 @@
   font-size: 1.8em;
   font-weight: 600;
   margin: 4px 0 12px;
+  padding-right: 28px;
 }
 
 /* Level + Basic Category on same line */
@@ -849,6 +876,30 @@
   margin-top: 4px;
   opacity: 0.82;
   font-size: 0.9em;
+}
+
+.taxonomy-viz-tooltip-counts {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.9em;
+}
+
+.taxonomy-viz-tooltip-counts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.taxonomy-viz-tooltip-counts span:first-child {
+  opacity: 0.75;
+}
+
+.taxonomy-viz-tooltip-counts span:last-child {
+  font-variant-numeric: tabular-nums;
 }
 
 .taxonomy-viz-basic-chip {

@@ -487,6 +487,81 @@ describe('TaxonomyBrowser', () => {
 
     // SVG text does not wrap, so the centre label is laid out by hand. Without
     // this it spilled out over the surrounding ring.
+    const COUNTED_VIZ = {
+      version: 't',
+      stats: { categories: 3, basicCategories: 1, rootGroups: 1, maxDepth: 2, totalPlaces: 150 },
+      tree: [
+        {
+          name: 'food_and_drink', displayName: 'Food and Drink', isBasic: true,
+          count: 50, totalCount: 150,
+          children: [
+            {
+              name: 'casual_eatery', displayName: 'Casual Eatery', totalCount: 100,
+              children: [
+                { name: 'bagel_shop', displayName: 'Bagel Shop', count: 100, totalCount: 100 },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    const showCountedSunburst = async () => {
+      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(COUNTED_VIZ) }));
+      render(<TaxonomyBrowser releases={RELEASES} />);
+      await screen.findByRole('img', { name: 'Taxonomy sunburst' });
+    };
+
+    describe('tooltip', () => {
+      const hoverFirstArc = () => {
+        const arc = document.querySelector('.taxonomy-viz-stage path');
+        fireEvent.mouseEnter(arc);
+        return document.querySelector('.taxonomy-viz-tooltip');
+      };
+
+      it('reports both counts for a parent category', async () => {
+        await showCountedSunburst();
+        const tip = hoverFirstArc();
+        expect(tip).toHaveTextContent('Places at this category');
+        expect(tip).toHaveTextContent('Including subcategories');
+      });
+
+      it('omits the roll-up on a leaf, as the detail panel does', async () => {
+        await showCountedSunburst();
+        const arcs = [...document.querySelectorAll('.taxonomy-viz-stage path')];
+        fireEvent.mouseEnter(arcs[arcs.length - 1]);
+        const tip = document.querySelector('.taxonomy-viz-tooltip');
+        expect(tip).toHaveTextContent('Places at this category');
+        expect(tip).not.toHaveTextContent('Including subcategories');
+      });
+
+      it('shows no count rows for a release without counts', async () => {
+        await showSunburst();
+        expect(hoverFirstArc()).not.toHaveTextContent('Places at this category');
+      });
+
+      it('does not repeat the title as its own breadcrumb', async () => {
+        await showSunburst();
+        const tip = hoverFirstArc();
+        expect(tip.querySelector('.taxonomy-viz-tooltip-name')).toHaveTextContent('Food and Drink');
+        // A top-level category has no ancestors to show.
+        expect(tip.querySelector('.taxonomy-viz-tooltip-path')).toBeNull();
+      });
+    });
+
+    describe('clearing the selection', () => {
+      it('offers a clear control once something is selected', async () => {
+        await showSunburst();
+        expect(screen.queryByRole('button', { name: 'Clear selection' })).toBeNull();
+
+        fireEvent.click(document.querySelector('.taxonomy-viz-stage path'));
+        expect(document.querySelector('.taxonomy-detail-name')).toHaveTextContent('Food and Drink');
+
+        fireEvent.click(screen.getByRole('button', { name: 'Clear selection' }));
+        expect(document.querySelector('.taxonomy-detail-name')).toBeNull();
+        expect(document.querySelector('.taxonomy-detail-empty')).not.toBeNull();
+      });
+    });
+
     describe('centre label wrapping', () => {
       it('keeps a short label on one line', () => {
         expect(wrapLabel('Education', 160, 13)).toEqual(['Education']);
