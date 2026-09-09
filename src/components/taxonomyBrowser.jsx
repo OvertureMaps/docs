@@ -524,11 +524,6 @@ function ChangeIndicator({ current, previous }) {
   );
 }
 
-/** Render a share as " (12.3% of Financial Service)", or nothing if unknown. */
-function withOf(share, label) {
-  return share && label ? ` (${share} of ${label})` : '';
-}
-
 function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, prevBasicCount, count, totalCount, parentTotal, parentLabel, prevCount, pctTag, mappings, displayFields, data }) {
   if (!hierarchy) return null;
   const parts = hierarchy.split(' > ');
@@ -556,20 +551,23 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
   // An explicit 0 matters here: it says nothing is filed at this level, which
   // is different from the count being unknown.
   //
-  // The two shares answer different questions and so have different
-  // denominators, which is why each names its own rather than printing a bare
-  // percentage the reader has to guess at.
+  // Both shares are of the same thing — the category that contains this one —
+  // so the denominator is named once at the end. Spelling it out on each row
+  // wrapped the value mid-parenthetical in a panel this narrow, and a shared
+  // denominator also makes the two percentages comparable to each other.
   const rolledUp = totalCount != null && totalCount !== (count ?? 0);
+  const share = value => {
+    const pct = formatShare(value, parentTotal);
+    return pct ? ` (${pct})` : '';
+  };
+
   if (count != null || totalCount != null) {
     const direct = count ?? 0;
-    // On a parent: how much of this category sits at it rather than below it.
-    // On a leaf there is no "below", so the useful share is of its parent.
-    const share = rolledUp
-      ? withOf(formatShare(direct, totalCount), 'this category')
-      : withOf(formatShare(direct, parentTotal), parentLabel);
     items.push({
       label: 'Places at this category',
-      value: `${direct.toLocaleString()}${share}`,
+      value: `${direct.toLocaleString()}${share(direct)}`,
+      numeric: true,
+      stacked: true,
       countChange: { current: direct, previous: prevCount },
     });
   }
@@ -577,8 +575,13 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
   if (rolledUp) {
     items.push({
       label: 'Including subcategories',
-      value: `${totalCount.toLocaleString()}${withOf(formatShare(totalCount, parentTotal), parentLabel)}`,
+      value: `${totalCount.toLocaleString()}${share(totalCount)}`,
+      numeric: true,
+      stacked: true,
     });
+  }
+  if ((count != null || totalCount != null) && parentTotal && parentLabel) {
+    items.push({ label: 'Shares of', value: parentLabel });
   }
   if (pctTag) {
     items.push({ label: 'Note', value: pctTag, isPctTag: true });
@@ -594,12 +597,20 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
   return (
     <div className="taxonomy-kv-list">
       {items.map((item, i) => (
-        <div key={i} className="taxonomy-kv-item">
+        <div key={i} className={`taxonomy-kv-item ${item.stacked ? 'taxonomy-kv-item--stacked' : ''}`}>
           <span className="taxonomy-kv-label">{item.label}</span>
           {item.isPctTag ? (
             <PctTag tag={item.value} />
           ) : (
-            <span className={item.selected ? 'taxonomy-kv-value taxonomy-kv-value--selected' : 'taxonomy-kv-value'}>
+            <span
+              className={[
+                'taxonomy-kv-value',
+                item.selected ? 'taxonomy-kv-value--selected' : '',
+                item.numeric ? 'taxonomy-kv-value--numeric' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
               {item.value}
               {item.countChange && <ChangeIndicator current={item.countChange.current} previous={item.countChange.previous} />}
             </span>

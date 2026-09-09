@@ -149,10 +149,11 @@ describe('TaxonomyBrowser', () => {
     it('separates a category own count from its roll-up', async () => {
       await openTree();
       fireEvent.click(screen.getByText('Food and Drink'));
-      // Each share names its own denominator: how much of the category sits at
-      // it, then how big the category is within what contains it.
-      expect(rows()['Places at this category']).toBe('50 (33.3% of this category)');
-      expect(rows()['Including subcategories']).toBe('150 (100.0% of all places)');
+      // Both shares are of the same thing, named once, so the two percentages
+      // can be read against each other.
+      expect(rows()['Places at this category']).toBe('50 (33.3%)');
+      expect(rows()['Including subcategories']).toBe('150 (100.0%)');
+      expect(rows()['Shares of']).toBe('all places');
     });
 
     it('shows an explicit zero when nothing is filed at that level', async () => {
@@ -160,8 +161,9 @@ describe('TaxonomyBrowser', () => {
       fireEvent.click(screen.getByText('Food and Drink'));
       fireEvent.click(await screen.findByText('Casual Eatery'));
       // Nothing has casual_eatery as its primary, but 100 places sit beneath it.
-      expect(rows()['Places at this category']).toBe('0 (0.0% of this category)');
-      expect(rows()['Including subcategories']).toBe('100 (66.7% of Food and Drink)');
+      expect(rows()['Places at this category']).toBe('0 (0.0%)');
+      expect(rows()['Including subcategories']).toBe('100 (66.7%)');
+      expect(rows()['Shares of']).toBe('Food and Drink');
     });
 
     it('shows no shares for a release without place counts', async () => {
@@ -178,8 +180,8 @@ describe('TaxonomyBrowser', () => {
       fireEvent.click(screen.getByText('Food and Drink'));
       fireEvent.click(await screen.findByText('Casual Eatery'));
       fireEvent.click(await screen.findByText('Bagel Shop'));
-      // A leaf has no "below", so its one row carries the share of its parent.
-      expect(rows()['Places at this category']).toBe('100 (100.0% of Casual Eatery)');
+      expect(rows()['Places at this category']).toBe('100 (100.0%)');
+      expect(rows()['Shares of']).toBe('Casual Eatery');
       expect(rows()).not.toHaveProperty('Including subcategories');
     });
   });

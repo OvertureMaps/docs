@@ -638,6 +638,21 @@
   font-size: 0.9em;
 }
 
+/* A count and its share sit under their label rather than beside it. The label
+   does not wrap or shrink, and at this panel width the pair needs ~300px on one
+   line — so side by side it either wraps mid-parenthetical or scrolls
+   sideways. Stacked, the value has around 100px to spare. */
+.taxonomy-kv-item--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+
+.taxonomy-kv-value--numeric {
+  font-variant-numeric: tabular-nums;
+  color: var(--ifm-font-color-base);
+}
+
 .taxonomy-kv-value--selected {
   font-weight: 600;
   color: var(--ifm-color-primary);
