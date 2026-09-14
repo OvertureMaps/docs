@@ -33,6 +33,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
+          # GITHUB_STATUS_REPORTER defaults to false; enable it explicitly for
+          # per-linter commit statuses, matching Super-Linter's old behavior.
+          GITHUB_STATUS_REPORTER: true
           # Enable only Markdown (markdownlint), SQL (sqlfluff), and
           # JavaScript (ESLint). Listing linters in ENABLE_LINTERS causes
           # all other linters to default to disabled.
@@ -49,7 +52,7 @@ jobs:
           # - node_modules/.bin/eslint's bin symlink doesn't materialize, so
           #   invoke eslint's own bin/eslint.js through node instead.
           JAVASCRIPT_ES_CONFIG_FILE: eslint.config.mjs
-          JAVASCRIPT_ES_FILE_EXTENSIONS: '[".js", ".jsx"]'
+          JAVASCRIPT_ES_FILE_EXTENSIONS: '[".js", ".jsx", ".mjs", ".cjs"]'
           JAVASCRIPT_ES_PRE_COMMANDS: >-
             [{"command": "npm ci --no-audit --no-fund --include=dev", "cwd": "workspace", "continue_if_failed": false}]
           JAVASCRIPT_ES_CLI_EXECUTABLE: '["node", "/github/workspace/node_modules/eslint/bin/eslint.js"]'
