@@ -47,8 +47,8 @@ jobs:
           JAVASCRIPT_ES_FILE_EXTENSIONS: '[".js", ".jsx"]'
           JAVASCRIPT_ES_PRE_COMMANDS: >-
             [{"command": "npm ci", "cwd": "workspace", "continue_if_failed": false}]
-          # Relative here would break: MegaLinter execs a slash-containing
-          # CLI_EXECUTABLE as-is via a shell=False subprocess call, and
-          # Python resolves that relative to its own process cwd, not the
-          # workspace, regardless of the subprocess cwd argument.
-          JAVASCRIPT_ES_CLI_EXECUTABLE: /github/workspace/node_modules/.bin/eslint
+          # eslint's own bin symlink didn't materialize after npm ci in
+          # testing (FileNotFoundError even with an absolute path), so
+          # invoke its JS entrypoint directly through node instead of
+          # relying on node_modules/.bin/eslint existing.
+          JAVASCRIPT_ES_CLI_EXECUTABLE: '["node", "/github/workspace/node_modules/eslint/bin/eslint.js"]'
