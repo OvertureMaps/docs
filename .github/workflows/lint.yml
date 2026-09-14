@@ -36,7 +36,6 @@ jobs:
           # GITHUB_STATUS_REPORTER defaults to false; enable it explicitly for
           # per-linter commit statuses, matching Super-Linter's old behavior.
           GITHUB_STATUS_REPORTER: true
-          LOG_LEVEL: DEBUG
           # Enable only Markdown (markdownlint), SQL (sqlfluff), and
           # JavaScript (ESLint). Listing linters in ENABLE_LINTERS causes
           # all other linters to default to disabled.
