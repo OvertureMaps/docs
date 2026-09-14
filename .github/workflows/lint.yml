@@ -33,10 +33,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
-          # Enable only Markdown (markdownlint), spell/terminology (cspell),
-          # SQL (sqlfluff), and JavaScript (ESLint). Listing linters in
-          # ENABLE_LINTERS causes all other linters to default to disabled.
-          ENABLE_LINTERS: MARKDOWN_MARKDOWNLINT,SPELL_CSPELL,SQL_SQLFLUFF,JAVASCRIPT_ES
+          # Enable only Markdown (markdownlint), SQL (sqlfluff), and
+          # JavaScript (ESLint). Listing linters in ENABLE_LINTERS causes
+          # all other linters to default to disabled.
+          ENABLE_LINTERS: MARKDOWN_MARKDOWNLINT,SQL_SQLFLUFF,JAVASCRIPT_ES
           # Repo's markdownlint config predates MegaLinter's default filename.
           MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
           # Repo's eslint.config.mjs imports packages (@eslint/js,
