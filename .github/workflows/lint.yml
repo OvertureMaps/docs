@@ -37,6 +37,8 @@ jobs:
           ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: true
           ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
           VALIDATE_ALL_CODEBASE: true
+          # Generated schema reference snapshots; fix upstream in OvertureMaps/schema
+          FILTER_REGEX_EXCLUDE: .*schema_versioned_docs/.*
           # Enable only Markdown (markdownlint), natural language (textlint),
           # and SQL (sqlfluff). Setting any VALIDATE_* to true causes all
           # other linters to default to false.

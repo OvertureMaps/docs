@@ -5,5 +5,5 @@ build/
 static/maplibre/
 
 # Schema reference docs are generated at build time by the
-# generate-schema-docs action; see docs/schema/index.md.
-docs/schema/reference/
+# generate-schema-docs action; see schema/index.md and README.
+schema/reference/
