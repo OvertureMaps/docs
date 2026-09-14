@@ -46,5 +46,5 @@ jobs:
           JAVASCRIPT_ES_CONFIG_FILE: eslint.config.mjs
           JAVASCRIPT_ES_FILE_EXTENSIONS: '[".js", ".jsx"]'
           JAVASCRIPT_ES_PRE_COMMANDS: >-
-            [{"command": "npm ci --no-audit --no-fund && echo DEBUG_LS_START && ls -la node_modules/.bin/eslint node_modules/eslint/bin/eslint.js && echo DEBUG_LS_END", "cwd": "workspace", "continue_if_failed": false}]
+            [{"command": "npm ci --no-audit --no-fund --include=dev && echo DEBUG_LS_START && ls -la node_modules/.bin/eslint node_modules/eslint/bin/eslint.js && echo DEBUG_LS_END", "cwd": "workspace", "continue_if_failed": false}]
           JAVASCRIPT_ES_CLI_EXECUTABLE: '["node", "/github/workspace/node_modules/eslint/bin/eslint.js"]'
