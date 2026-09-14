@@ -39,12 +39,17 @@ jobs:
           ENABLE_LINTERS: MARKDOWN_MARKDOWNLINT,SQL_SQLFLUFF,JAVASCRIPT_ES
           # Repo's markdownlint config predates MegaLinter's default filename.
           MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
-          # Repo's eslint.config.mjs imports packages (@eslint/js,
-          # eslint-plugin-react, etc.) not bundled in MegaLinter's own
-          # node_modules, so install the project's deps and run its local
-          # eslint binary instead (see megalinter.io/latest/descriptors/javascript_eslint).
+          # eslint.config.mjs imports packages (@eslint/js, eslint-plugin-react,
+          # etc.) not bundled in MegaLinter's own node_modules, so install the
+          # project's deps and run its local eslint instead (see
+          # megalinter.io/latest/descriptors/javascript_eslint). Two quirks
+          # found by testing this in CI, not documented upstream:
+          # - the container's npm skips devDependencies (where eslint lives)
+          #   unless --include=dev is passed explicitly;
+          # - node_modules/.bin/eslint's bin symlink doesn't materialize, so
+          #   invoke eslint's own bin/eslint.js through node instead.
           JAVASCRIPT_ES_CONFIG_FILE: eslint.config.mjs
           JAVASCRIPT_ES_FILE_EXTENSIONS: '[".js", ".jsx"]'
           JAVASCRIPT_ES_PRE_COMMANDS: >-
-            [{"command": "npm ci --no-audit --no-fund --include=dev && echo DEBUG_LS_START && ls -la node_modules/.bin/eslint node_modules/eslint/bin/eslint.js && echo DEBUG_LS_END", "cwd": "workspace", "continue_if_failed": false}]
+            [{"command": "npm ci --no-audit --no-fund --include=dev", "cwd": "workspace", "continue_if_failed": false}]
           JAVASCRIPT_ES_CLI_EXECUTABLE: '["node", "/github/workspace/node_modules/eslint/bin/eslint.js"]'
