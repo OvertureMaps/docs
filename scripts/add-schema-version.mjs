@@ -10,7 +10,7 @@
 // prepends the tag to schema_versions.json. Those three outputs are committed.
 // schema/reference is left clean afterwards (it is gitignored and
 // regenerated from `main` on every build). See README "Schema Reference".
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -18,6 +18,9 @@ import { fileURLToPath } from 'node:url';
 
 const SCHEMA_REPO = 'https://github.com/OvertureMaps/schema.git';
 const TAG_PATTERN = /^v\d+\.\d+\.\d+$/;
+// Docstrings link into the schema repo at `main`; those paths drift after
+// release, so a snapshot pins them to its own tag.
+const SCHEMA_MAIN_LINK = /(github\.com\/OvertureMaps\/schema\/(?:blob|tree)\/)main\//g;
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const referenceDir = join(root, 'schema', 'reference');
@@ -29,6 +32,21 @@ const compareSemverDesc = (a, b) => {
   const [pa, pb] = [semverParts(a), semverParts(b)];
   return pb[0] - pa[0] || pb[1] - pa[1] || pb[2] - pa[2];
 };
+
+function pinSchemaLinks(dir, ref) {
+  let count = 0;
+  for (const entry of readdirSync(dir, { withFileTypes: true, recursive: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.md')) continue;
+    const file = join(entry.parentPath, entry.name);
+    const src = readFileSync(file, 'utf8');
+    const out = src.replace(SCHEMA_MAIN_LINK, `$1${ref}/`);
+    if (out !== src) {
+      writeFileSync(file, out);
+      count++;
+    }
+  }
+  return count;
+}
 
 const tag = process.argv[2];
 if (!tag || !TAG_PATTERN.test(tag)) {
@@ -73,6 +91,10 @@ try {
 
   console.log(`\n▶ Snapshotting Docusaurus version ${tag}`);
   run(process.execPath, [docusaurusBin, 'docs:version:schema', tag], root);
+
+  const versionDir = join(root, 'schema_versioned_docs', `version-${tag}`);
+  const pinned = pinSchemaLinks(versionDir, tag);
+  if (pinned) console.log(`  pinned schema repo links to ${tag} in ${pinned} file(s)`);
 
   // docs:version prepends; keep the dropdown ordered newest-first regardless
   // of the order tags are added in.

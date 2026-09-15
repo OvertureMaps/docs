@@ -2,7 +2,7 @@
 
 Categories a place belongs to.
 
-Complete list is available on GitHub: [https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv](https://github.com/OvertureMaps/schema/blob/main/docs/schema/concepts/by-theme/places/overture_categories.csv)
+Complete list is available on GitHub: [https://github.com/OvertureMaps/schema/blob/v1.18.0/docs/schema/concepts/by-theme/places/overture_categories.csv](https://github.com/OvertureMaps/schema/blob/v1.18.0/docs/schema/concepts/by-theme/places/overture_categories.csv)
 
 ## Fields
 
