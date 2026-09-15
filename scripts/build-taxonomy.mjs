@@ -25,10 +25,8 @@ import { fileURLToPath } from 'node:url';
 import {
   buildTaxonomy,
   compactTree,
-  parseCsv,
   parseCounts,
   toCsv,
-  toDisplayName,
 } from './lib/taxonomy-transform.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -36,7 +34,6 @@ const root = resolve(__dirname, '..');
 
 const TAXONOMY_FILE = 'overture_taxonomy.json';
 const BASIC_CATEGORY_FILE = 'overture_basic_category.json';
-const LEGACY_CROSSWALK_FILE = 'overture_taxonomy_to_legacy_category.csv';
 
 function parseArgs(argv) {
   const args = {};
@@ -68,12 +65,11 @@ const sourceDir = resolve(process.cwd(), args.source);
 const version = args.version;
 const outDir = join(root, 'static', 'taxonomy', version);
 
-for (const file of [TAXONOMY_FILE, BASIC_CATEGORY_FILE, LEGACY_CROSSWALK_FILE]) {
+for (const file of [TAXONOMY_FILE, BASIC_CATEGORY_FILE]) {
   if (!existsSync(join(sourceDir, file))) fail(`${file} not found in ${sourceDir}`);
 }
 
 const readJson = file => JSON.parse(readFileSync(join(sourceDir, file), 'utf8'));
-const readText = file => readFileSync(join(sourceDir, file), 'utf8');
 
 const canonical = readJson(TAXONOMY_FILE);
 const basicCategories = readJson(BASIC_CATEGORY_FILE);
@@ -152,26 +148,16 @@ const basicRows = flat
   }));
 write('basic_categories.csv', toCsv(basicRows, ['basic_category', 'display_name', 'taxonomy', 'level']));
 
-// 4. Legacy crosswalk — the pipeline uses this file to back-fill the deprecated
-//    `categories` property, so it is the authoritative old -> new mapping and
-//    replaces the Google Sheet the taxonomy guide currently links.
-const legacyRows = parseCsv(readText(LEGACY_CROSSWALK_FILE)).map(row => ({
-  legacy_primary_category: row['Legacy Primary Category'],
-  legacy_primary_hierarchy: row['Legacy Primary Hierarchy'],
-  taxonomy_primary: row['Taxonomy Primary'],
-  taxonomy_path: row['Taxonomy Path'],
-  taxonomy_display_name: toDisplayName(row['Taxonomy Primary']),
-}));
-write(
-  'legacy_crosswalk.csv',
-  toCsv(legacyRows, [
-    'legacy_primary_category',
-    'legacy_primary_hierarchy',
-    'taxonomy_primary',
-    'taxonomy_path',
-    'taxonomy_display_name',
-  ])
-);
+// 4. Legacy crosswalk — NOT generated here.
+//
+//    taxonomy_to_legacy_categories.csv is a committed static artifact. The
+//    live overture_taxonomy_to_legacy_category.csv covers only 2,007 of the
+//    2,117 legacy categories; the other 110 survive solely in deleted files in
+//    tf-data-platform's git history and were recovered once by hand.
+//
+//    Legacy categories are retired, so the mapping's left-hand side is frozen.
+//    Its right-hand side is not: a future release that renames a taxonomy value
+//    will leave the static file stale, and it will need regenerating.
 
 // ---------------------------------------------------------------------------
 // Report
@@ -188,7 +174,6 @@ console.log(`
   basic categories   ${stats.basicCategories}
   top-level groups   ${stats.rootGroups}
   max depth          ${stats.maxDepth}
-  legacy crosswalk   ${legacyRows.length} rows
   place counts       ${stats.totalPlaces === null ? 'not supplied' : stats.totalPlaces.toLocaleString()}
 `);
 
