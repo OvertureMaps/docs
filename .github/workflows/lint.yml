@@ -11,37 +11,48 @@ concurrency:
 
 permissions:
   contents: read
-  packages: read # for reading GitHub Packages registry images used by super-linter
 
 jobs:
   lint:
-    name: Super-Linter
+    name: MegaLinter
     runs-on: ubuntu-latest
     permissions:
-      issues: write # for super-linter to create issue annotations
-      pull-requests: write # for super-linter PR summary comments
-      statuses: write # for super-linter commit status updates
+      issues: write # for MegaLinter to create issue annotations
+      pull-requests: write # for MegaLinter PR summary comments
+      statuses: write # for MegaLinter commit status updates
     steps:
       - name: Checkout Repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # Required for super-linter to detect changed files
+          # Required for MegaLinter to detect changed files
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Super-Linter
-        uses: super-linter/super-linter/slim@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8.7.0
+      - name: MegaLinter
+        uses: oxsecurity/megalinter/flavors/javascript@9949bad031045f366be2467e00e8371a7328a2e2 # v10.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SAVE_SUPER_LINTER_SUMMARY: true
-          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: true
-          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
           VALIDATE_ALL_CODEBASE: true
-          # Enable only Markdown (markdownlint), natural language (textlint),
-          # and SQL (sqlfluff). Setting any VALIDATE_* to true causes all
-          # other linters to default to false.
-          VALIDATE_MARKDOWN: true
-          VALIDATE_NATURAL_LANGUAGE: true
-          NATURAL_LANGUAGE_CONFIG_FILE: .textlintrc.json # Literal path is .github/linters/.textlintrc.json
-          VALIDATE_SQLFLUFF: true
-          VALIDATE_JAVASCRIPT_ES: true
+          # GITHUB_STATUS_REPORTER defaults to false; enable it explicitly for
+          # per-linter commit statuses, matching Super-Linter's old behavior.
+          GITHUB_STATUS_REPORTER: true
+          # Enable only Markdown (markdownlint), SQL (sqlfluff), and
+          # JavaScript (ESLint). Listing linters in ENABLE_LINTERS causes
+          # all other linters to default to disabled.
+          ENABLE_LINTERS: MARKDOWN_MARKDOWNLINT,SQL_SQLFLUFF,JAVASCRIPT_ES
+          # Repo's markdownlint config predates MegaLinter's default filename.
+          MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
+          # eslint.config.mjs imports packages (@eslint/js, eslint-plugin-react,
+          # etc.) not bundled in MegaLinter's own node_modules, so install the
+          # project's deps and run its local eslint instead (see
+          # megalinter.io/latest/descriptors/javascript_eslint). Two quirks
+          # found by testing this in CI, not documented upstream:
+          # - the container's npm skips devDependencies (where eslint lives)
+          #   unless --include=dev is passed explicitly;
+          # - node_modules/.bin/eslint's bin symlink doesn't materialize, so
+          #   invoke eslint's own bin/eslint.js through node instead.
+          JAVASCRIPT_ES_CONFIG_FILE: eslint.config.mjs
+          JAVASCRIPT_ES_FILE_EXTENSIONS: '[".js", ".jsx", ".mjs", ".cjs"]'
+          JAVASCRIPT_ES_PRE_COMMANDS: >-
+            [{"command": "npm ci --no-audit --no-fund --include=dev", "cwd": "workspace", "continue_if_failed": false}]
+          JAVASCRIPT_ES_CLI_EXECUTABLE: '["node", "/github/workspace/node_modules/eslint/bin/eslint.js"]'

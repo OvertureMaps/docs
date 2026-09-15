@@ -35,6 +35,16 @@ export default [
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     },
   },
+  {
+    files: ['**/*.{mjs,cjs}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
   prettier,
   {
     ignores: ['build/', '.docusaurus/', 'node_modules/', 'static/maplibre/'],
