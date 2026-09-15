@@ -672,20 +672,28 @@ function DetailPanel({ node, activeTab, lookups, releases, onClear }) {
       </button>
       <h2 className="taxonomy-detail-name">{node.displayName}</h2>
       <div className="taxonomy-detail-sections">
-        {releases.map(release => {
-          const data = lookups[release.id]?.[code] || null;
-          return (
-            <CollapsibleSection
-              key={release.id}
-              title={release.label}
-              defaultOpen={activeTab === release.id}
-              noMatch={!data}
-              note={release.note}
-            >
-              {data && <SectionContent data={data} release={release} />}
-            </CollapsibleSection>
-          );
-        })}
+        {releases.length === 1
+          ? (() => {
+              // One release: show its detail directly. Wrapping a lone section
+              // in a collapsible header only adds a row to click past.
+              const release = releases[0];
+              const data = lookups[release.id]?.[code] || null;
+              return data ? <SectionContent data={data} release={release} /> : null;
+            })()
+          : releases.map(release => {
+              const data = lookups[release.id]?.[code] || null;
+              return (
+                <CollapsibleSection
+                  key={release.id}
+                  title={release.label}
+                  defaultOpen={activeTab === release.id}
+                  noMatch={!data}
+                  note={release.note}
+                >
+                  {data && <SectionContent data={data} release={release} />}
+                </CollapsibleSection>
+              );
+            })}
       </div>
     </div>
   );
@@ -946,16 +954,18 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
     <div className={`taxonomy-browser ${view !== 'tree' ? 'taxonomy-browser--viz' : ''}`}>
       <div className="taxonomy-browser-left">
         <div className="taxonomy-browser-header">
-          <select
-            className="taxonomy-browser-select"
-            aria-label="Choose a release"
-            value={activeTab}
-            onChange={e => handleTabChange(e.target.value)}
-          >
-            {releases.map(r => (
-              <option key={r.id} value={r.id}>{r.label}</option>
-            ))}
-          </select>
+          {releases.length > 1 && (
+            <select
+              className="taxonomy-browser-select"
+              aria-label="Choose a release"
+              value={activeTab}
+              onChange={e => handleTabChange(e.target.value)}
+            >
+              {releases.map(r => (
+                <option key={r.id} value={r.id}>{r.label}</option>
+              ))}
+            </select>
+          )}
           <div className="taxonomy-view-switch" role="group" aria-label="View">
             {[
               { id: 'sunburst', label: 'Sunburst' },
