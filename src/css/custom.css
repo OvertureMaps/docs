@@ -348,6 +348,14 @@ article li a {
     0 0 / contain;
 }
 
+/* ── Schema version dropdown ──
+ * The navbar is global; only show the schema version switcher while browsing
+ * the `schema` docs instance (Docusaurus sets plugin-id-<id> on <html>). */
+
+html:not(.plugin-id-schema) .schema-version-dropdown {
+  display: none;
+}
+
 /* ── Schema smart tables ── */
 
 /* Smart table container */

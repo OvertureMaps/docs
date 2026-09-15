@@ -59,7 +59,7 @@ jobs:
         id: schema-docs
         uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@faa3fa4bbe01d85dc2e2139ff1f74ce70feb7df9 # zizmor: ignore[stale-action-refs] - main
         with:
-          output-dir: ${{ github.workspace }}/docs/schema/reference
+          output-dir: ${{ github.workspace }}/schema/reference
           schema-ref: 'main'
 
       - name: Build Docusaurus website

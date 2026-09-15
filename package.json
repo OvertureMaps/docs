@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "fetch-og": "node scripts/fetch-og-images.mjs",
+    "add-schema-version": "node scripts/add-schema-version.mjs",
     "copy-maplibre-worker": "node scripts/copy-maplibre-worker.mjs",
     "docusaurus": "docusaurus",
     "start": "npm run copy-maplibre-worker && npm run docusaurus start",
@@ -16,8 +17,8 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint:md": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules",
-    "lint:md:fix": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules --fix",
+    "lint:md": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'schema/*.md' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules",
+    "lint:md:fix": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'schema/*.md' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",

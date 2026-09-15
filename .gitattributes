@@ -1,0 +1,2 @@
+# Generated schema snapshots; codegen emits CRLF on Windows
+schema_versioned_docs/** text eol=lf
