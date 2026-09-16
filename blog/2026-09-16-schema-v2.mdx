@@ -4,14 +4,9 @@ tags:
   - schema
 ---
 
+Two weeks ago we [quietly published v2.0.0](https://github.com/OvertureMaps/schema/pull/709) of the Overture schema to [PyPI](https://pypi.org/project/overture-schema/). It used to be JSON Schema, lovingly handwritten in YAML to get around some of JSON’s rough edges. Now it’s a Python library you install and import, with Pydantic models you can inspect, validate data against, and build on. 
 
-Two weeks ago we [quietly published v2.0.0](https://github.com/OvertureMaps/schema/pull/709) of the Overture schema to [PyPI](https://pypi.org/project/overture-schema/). It used to be JSON Schema, published monthly alongside each [data release](https://docs.overturemaps.org/blog/tags/releases/) as [handwritten YAML files](https://github.com/OvertureMaps/schema/tree/main/schema). Now it’s a Python library you install and import, with Pydantic models you can validate data against, ours or your own. 
-
-For most of you – our data enjoyers and schema readers – this is not a big deal. You might notice that we made a few correctness fixes to the schema structure and improved our documentation.
-
-For others, this is a huge and welcome change. The schema has gone from a document to code that is useful to you, independent of the data itself. 
-
-In any case, you can do this now:
+Try it out:
 
 ```bash
 pip install overture-schema
@@ -29,13 +24,17 @@ A structured representation of the place's category within the Overture taxonomy
 Provides the primary classification, full hierarchy path, and alternate categories.
 ```
 
-You can ask a feature type what fields it has, read the documentation for anything, and validate a record against a feature type or other model. You can do that from the Python interpreter, your favorite IDE with type hints and completion, or at scale within a Spark job. 
+You can ask a feature type what fields it has, read the documentation for anything, and validate your own data against a feature type or model. You can do that from the Python interpreter, your favorite IDE with type hints and completion, or at scale within a Spark job. 
+
+For some of you, our migration to [Pydantic](https://pydantic.dev/) isn't a big deal. Maybe you'll notice that we made a few correctness fixes to the schema structure and improved our documentation. For others, this is a huge and welcome change. The schema has gone from a document you read to code you can build with.
+
+{/* truncate */}
 
 ## Install and generate what you need
 
 The `overture-schema` package is the umbrella: install it to get all six themes and the schema tooling. Twelve packages sit underneath it, versioned and released together but split so each can change independently and be reused on its own.
 
-Each schema package registers its feature types through [setuptools entry points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html), metadata that is exposed on installation. If you only install the [buildings theme](https://github.com/OvertureMaps/schema/tree/main/packages/overture-schema-theme-buildings), `overture-schema list-types` will show you just the two feature types for buildings instead of all fifteen types across the Overture catalog.
+Each schema package registers its feature types through [setuptools entry points](https://setuptools.pypa.io/en/latest/userguide/entry_point.html) -- metadata that is exposed on installation. If you only install the [buildings theme](https://github.com/OvertureMaps/schema/tree/main/packages/overture-schema-theme-buildings), `overture-schema list-types` will show you just the two feature types for buildings instead of all fifteen types across the Overture catalog.
 
 
 ```bash
@@ -45,11 +44,11 @@ building           feature  overture  overture:theme=buildings
 building_part      feature  overture  overture:theme=buildings
 ```
 
-We began porting the schema from JSON Schema to Pydantic last August, and since last November we've updated both the Pydantic models and the YAML versions with every release. The new Pydantic models are now the source of truth, and everything else we ship is generated from them: the [JSON Schema](https://github.com/OvertureMaps/schema/releases/download/overture-schema-v2.0.0/overture-schema.json), the [PySpark validation expressions](https://github.com/OvertureMaps/schema/tree/main/packages/overture-schema-pyspark) used by Overture’s internal data pipelines, and the [reference documentation](https://docs.overturemaps.org/schema/) on this site. They can't drift apart, because they all come from the same place.
+We began porting the schema from JSON Schema to Pydantic last August, and since last November we've updated both the Pydantic models and the [YAML versions](https://github.com/OvertureMaps/schema/tree/main/schema) with every release. The new Pydantic models are now the source of truth, and everything else we ship is generated from them: the JSON Schema, the [PySpark validation expressions](https://github.com/OvertureMaps/schema/tree/main/packages/overture-schema-pyspark) used by Overture’s internal data pipelines, and the [reference documentation](https://docs.overturemaps.org/schema/) on this site. They can't drift apart, because they all come from the same place.
 
 Our new [code generation engine for Pydantic models](https://github.com/OvertureMaps/schema/tree/main/packages/overture-schema-codegen) has opened significant opportunities. The generated reference docs are simpler than the old docs and carry more detail like field- and model-level constraints and inline example data. The generated PySpark expressions validate modeled data at scale. Best of all, the code generation system can be extended as new use cases emerge from the ecosystem.
 
-The [YAML files](https://github.com/OvertureMaps/schema/tree/main/schema) are deprecated as of this release, and we'll remove them in December 2026. The JSON Schema stays, except now it’s a derived output instead of the source of truth. It’s functionally the same, even if it’s structured differently and published as JSON. You can grab it as a [release artifact](https://github.com/OvertureMaps/schema/releases/download/overture-schema-v2.0.0/overture-schema.json), or generate it yourself for the subset of types you need:
+**The YAML files are deprecated as of this release, and we'll remove them in December 2026.* The JSON Schema stays, except now it’s a derived output instead of the source of truth. It’s functionally the same, even if it’s structured differently and published as JSON. You can grab it as a [release artifact](https://github.com/OvertureMaps/schema/releases/download/overture-schema-v2.0.0/overture-schema.json), or generate it yourself for the subset of types you need:
 
 ```bash
 # One type
@@ -66,17 +65,13 @@ overture-schema json-schema > overture.schema.json
 
 The schema we replaced dates to early 2023, when the OG member engineers from Amazon, Microsoft, Meta, and TomTom began designing it. "We started with a GeoJSON mental model before choosing a distribution format, and since we were already working with JSON, JSON Schema was the obvious choice," said Seth Fitzsimmons, a software engineer who has been working on the schema from the beginning, first for Amazon and now as an independent consultant. 
 
-At first it worked. Then it grew, and maintaining it turned into programming using JSON Schema constructs: $ref for reuse, oneOf for branching, conditional rules layered on top, all in a format meant to describe documents rather than express and verify logic. 
+At first it worked. Then it grew, and maintaining it turned into programming using JSON Schema constructs: `$ref` for reuse, `oneOf` for branching, conditional rules layered on top, all in a format meant to describe documents rather than express and verify logic. And we hit some conceptual snags once Overture started shipping data in GeoParquet in late 2023. "The lesson we learned is that JSON Schema is an excellent way to model JSON," said Vic Schappert, a software engineer from Amazon and one of the original architects of the schema. "But it does not generalize well to non-JSON use cases." The new Pydantic-based schema describes GeoJSON and GeoParquet equally well, and should extend just as well to GeoPackages, PostgreSQL tables, Flatgeobufs, Shapefiles, and whatever new geospatial formats tomorrow brings.
 
-We hit some conceptual snags once Overture started shipping data in GeoParquet in late 2023. "The lesson we learned is that JSON Schema is an excellent way to model JSON," said Vic Schappert, a software engineer from Amazon and one of the original architects of the schema. "But it does not generalize well to non-JSON use cases." The new Pydantic-based schema describes GeoJSON and GeoParquet equally well, and should extend just as well to GeoPackages, PostgreSQL tables, Flatgeobufs, Shapefiles, and whatever new geospatial formats tomorrow brings.
-
-The documentation was separate from the schema rather than integrated within it, so it went stale. It used GeoJSON terminology and nesting to describe a GeoParquet dataset, which confused people. And authoring was hard enough that changes stayed with the handful of people who knew the YAML.
-
-Also, the old schema let things through. For example, every name rule was meant to carry a variant; the JSON Schema required only value, so rules without one validated cleanly. And when validation did fail it failed obscurely: schema.yaml is a single top-level oneOf with one branch per feature type, so a segment missing one variant reported that it had also failed to be an address, a building, a division, and every other type in the schema. The report ran hundreds of lines; the answer was a single line near the bottom. 
+The documentation was separate from the schema rather than integrated within it, so it went stale. It used GeoJSON terminology and nesting to describe a GeoParquet dataset, which confused people. And making changes to the schema was difficult and limited to the handful of authors who knew the YAML well. Also, the old schema let things through. For example, every name rule was meant to carry a variant; the JSON Schema required only value, so rules without one validated cleanly. And when validation did fail it failed obscurely: schema.yaml is a single top-level oneOf with one branch per feature type, so a segment missing one variant reported that it had also failed to be an address, a building, a division, and every other type in the schema. The report ran hundreds of lines; the answer was a single line near the bottom. 
 
 The same validation with Pydantic reports one error:
 
-```bash
+```python
 >>> from overture.schema.transportation import RoadSegment
 >>> record = {
 ...     "id": "08f2aa6c5a4a1b3c",
@@ -102,7 +97,7 @@ names.rules.0.variant
 
 ```
 
-## Extending the models
+## Extending Pydantic, extending Overture
 
 We’re truly excited about the work we did to extend Pydantic’s functionality. The validator, the code generator, the documentation generator, and the Spark package all work on any Pydantic model, not just Overture’s.
 
@@ -135,19 +130,17 @@ vineyard = "mypkg.models:Vineyard"
 
 Install that, and `overture-schema list-types` shows vineyard next to building and `place.overture-schema validate` supports it and will validate your own data. You can generate its reference documentation and JSON Schema alongside ours.
 
-You can already use the new libraries to build a custom feature type that stands on its own. What you can't do yet is add a field to one of ours. That’s coming soon.
-
-Our next milestone is schema extensions. An extension standardizes a set of schema fields -- opening hours for POIs, capacity for buildings, advisory speeds for roads --  and will enable an ecosystem of new data that interoperates with Overture without needing to be hosted by Overture. Data that's proprietary, or that refreshes far faster than our release cadence, can't live inside an Overture release; this way it doesn't have to. An extension adds columns to features that already carry a [Global Entity Reference System](https://docs.overturemaps.org/gers/) (GERS) ID, so the consumer can connect the extension data to the Overture data by joining on the GERS ID.
+You can already use the new libraries to build a custom feature type that stands on its own. What you can't do yet is add a field to one of ours. That’s coming soon. Our next big milestone is schema extensions. An extension standardizes a set of schema fields -- opening hours for POIs, capacity for buildings, advisory speeds for roads --  and enables an ecosystem of new data that interoperates with Overture without needing to be hosted by Overture. An extension adds columns to features that already carry a [Global Entity Reference System](https://docs.overturemaps.org/gers/) (GERS) ID, so consumers can connect the extension data to the Overture data by joining on the GERS ID.
 
 ## Read more
 
-The schema reference documents every feature type property by property, and the theme guides explain what the data means before you write a query against it. The schema repo carries the working documentation for the models: how to install and use the packages, how to author using them, the conventions we follow, and the vocabulary we use for all of it.
+The [schema reference](https://docs.overturemaps.org/schema/) documents every feature type property by property, and the [theme guides](https://docs.overturemaps.org/guides/) explain what the data means before you write a query against it. The working documentation for the models lives in the [schema repo](https://github.com/overturemaps/schema): [how to install and use the packages](https://github.com/OvertureMaps/schema/blob/main/SCHEMA_GUIDE.md), [how to write your own models](https://github.com/OvertureMaps/schema/blob/main/AUTHORING.md), the [conventions](https://github.com/OvertureMaps/schema/blob/main/SCHEMA_CONVENTIONS.md) we follow, and the [vocabulary](https://github.com/OvertureMaps/schema/blob/main/GLOSSARY.md) we use for all of it.
 
 ## Talk to us
 
-Talk to us
+We build in the open at [github.com/OvertureMaps/schema](https://github.com/OvertureMaps/schema). File an issue, [start a discussion](https://github.com/orgs/OvertureMaps/discussions), or write to us at community@overturemaps.org. Tell us what breaks or what you plan to build on top of our new foundation. 
 
-We build in the open at github.com/OvertureMaps/schema. File an issue, open a discussion, or write to us at community@overturemaps.org. Tell us what breaks or what you've built on top of our new foundation. And if you have data you'd attach to Overture features, let us know how we can support you.
+And, as always, enjoy the data!
 
 
 
