@@ -1,10 +1,11 @@
 ---
 title: The Overture Schema Is a Library Now
+authors: [dana, seth, vic, jennings, roel, tristan]
 tags:
   - schema
 ---
 
-Two weeks ago we [quietly published v2.0.0](https://github.com/OvertureMaps/schema/pull/709) of the Overture schema to [PyPI](https://pypi.org/project/overture-schema/). It used to be JSON Schema, lovingly handwritten in YAML to get around some of JSON’s rough edges. Now it’s a Python library you install and import, with Pydantic models you can inspect, validate data against, and build on. 
+Two weeks ago we [quietly published v2.0.0](https://github.com/OvertureMaps/schema/pull/709) of the Overture schema to [PyPI](https://pypi.org/project/overture-schema/). It used to be JSON Schema, lovingly handwritten in YAML to get around some of JSON’s rough edges. Now it’s a Python library you install and import, with Pydantic models you can inspect, validate data against, build on, and extend.
 
 Try it out:
 
@@ -67,7 +68,7 @@ The schema we replaced dates to early 2023, when the OG member engineers from Am
 
 At first it worked. Then it grew, and maintaining it turned into programming using JSON Schema constructs: `$ref` for reuse, `oneOf` for branching, conditional rules layered on top, all in a format meant to describe documents rather than express and verify logic. And we hit some conceptual snags once Overture started shipping data in GeoParquet in late 2023. "The lesson we learned is that JSON Schema is an excellent way to model JSON," said Vic Schappert, a software engineer from Amazon and one of the original architects of the schema. "But it does not generalize well to non-JSON use cases." The new Pydantic-based schema describes GeoJSON and GeoParquet equally well, and should extend just as well to GeoPackages, PostgreSQL tables, Flatgeobufs, Shapefiles, and whatever new geospatial formats tomorrow brings.
 
-The documentation was separate from the schema rather than integrated within it, so it went stale. It used GeoJSON terminology and nesting to describe a GeoParquet dataset, which confused people. And making changes to the schema was difficult and limited to the handful of authors who knew the YAML well. Also, the old schema let things through. For example, every name rule was meant to carry a variant; the JSON Schema required only value, so rules without one validated cleanly. And when validation did fail it failed obscurely: schema.yaml is a single top-level oneOf with one branch per feature type, so a segment missing one variant reported that it had also failed to be an address, a building, a division, and every other type in the schema. The report ran hundreds of lines; the answer was a single line near the bottom. 
+The documentation was separate from the schema rather than integrated within it, so it went stale. It used GeoJSON terminology and nesting to describe a GeoParquet dataset, which confused people. And making changes to the schema was difficult and limited to the handful of authors who knew the YAML well. Also, the old schema let things through. For example, every `name` rule was meant to carry a `variant`; the JSON Schema required only value, so rules without one validated cleanly. And when validation did fail it failed obscurely: `schema.yaml` is a single top-level `oneOf` with one branch per feature type, so a segment missing one `variant` reported that it had also failed to be an address, a building, a division, and every other type in the schema. The report ran hundreds of lines; the answer was a single line near the bottom. 
 
 The same validation with Pydantic reports one error: `1 validation error for segment (road)
 names.rules.0.variant
@@ -124,15 +125,15 @@ class Vineyard(OvertureFeature[Literal["agriculture"], Literal["vineyard"]]):
     area_hectares: float32 | None = None
 ```
 
-```bash
+```toml
 # mypkg/pyproject.toml
 [project.entry-points."overture.models"]
 vineyard = "mypkg.models:Vineyard"
 ```
 
-Install that, and `overture-schema list-types` shows vineyard next to building and `place.overture-schema validate` supports it and will validate your own data. You can generate its reference documentation and JSON Schema alongside ours.
+Install that, and `overture-schema list-types` shows "vineyard" next to "building" and "place."" You can validate it, generate its reference documentation, and even create a JSON Schema for it.
 
-You can already use the new libraries to build a custom feature type that stands on its own. What you can't do yet is add a field to one of ours. That’s coming soon. Our next big milestone is schema extensions. An extension standardizes a set of schema fields -- opening hours for POIs, capacity for buildings, advisory speeds for roads --  and enables an ecosystem of new data that interoperates with Overture without needing to be hosted by Overture. An extension adds columns to features that already carry a [Global Entity Reference System](https://docs.overturemaps.org/gers/) (GERS) ID, so consumers can connect the extension data to the Overture data by joining on the GERS ID.
+Our next big milestone is schema extensions. An extension standardizes a set of new schema fields -- opening hours for POIs, capacity for buildings, advisory speeds for roads --  and enables an ecosystem of new data that interoperates with Overture without needing to be hosted by Overture. An extension adds columns to features that already carry a [Global Entity Reference System](https://docs.overturemaps.org/gers/) (GERS) ID, so consumers can connect the extension data to the Overture data by joining on the GERS ID.
 
 ## Read more
 
