@@ -73,7 +73,7 @@ jobs:
 
   query-tests:
     name: DuckDB query smoke tests
-    uses: ./.github/workflows/query-tests.yml
+    uses: $/.github/workflows/query-tests.yml
     permissions:
       contents: read
 
