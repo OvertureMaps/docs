@@ -48,7 +48,7 @@ We began porting the schema from JSON Schema to Pydantic last August, and since 
 
 Our new [code generation engine for Pydantic models](https://github.com/OvertureMaps/schema/tree/main/packages/overture-schema-codegen) has opened significant opportunities. The generated reference docs are simpler than the old docs and carry more detail like field- and model-level constraints and inline example data. The generated PySpark expressions validate modeled data at scale. Best of all, the code generation system can be extended as new use cases emerge from the ecosystem.
 
-**The YAML files are deprecated as of this release, and we'll remove them in December 2026.* The JSON Schema stays, except now it’s a derived output instead of the source of truth. It’s functionally the same, even if it’s structured differently and published as JSON. You can grab it as a [release artifact](https://github.com/OvertureMaps/schema/releases/download/overture-schema-v2.0.0/overture-schema.json), or generate it yourself for the subset of types you need:
+**The YAML files are deprecated as of this release, and we'll remove them in December 2026.** The JSON Schema stays, except now it’s a derived output instead of the source of truth. It’s functionally the same, even if it’s structured differently and published as JSON. You can grab it as a [release artifact](https://github.com/OvertureMaps/schema/releases/download/overture-schema-v2.0.0/overture-schema.json), or generate it yourself for the subset of types you need:
 
 ```bash
 # One type
