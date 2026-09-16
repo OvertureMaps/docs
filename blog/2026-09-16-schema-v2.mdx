@@ -69,7 +69,9 @@ At first it worked. Then it grew, and maintaining it turned into programming usi
 
 The documentation was separate from the schema rather than integrated within it, so it went stale. It used GeoJSON terminology and nesting to describe a GeoParquet dataset, which confused people. And making changes to the schema was difficult and limited to the handful of authors who knew the YAML well. Also, the old schema let things through. For example, every name rule was meant to carry a variant; the JSON Schema required only value, so rules without one validated cleanly. And when validation did fail it failed obscurely: schema.yaml is a single top-level oneOf with one branch per feature type, so a segment missing one variant reported that it had also failed to be an address, a building, a division, and every other type in the schema. The report ran hundreds of lines; the answer was a single line near the bottom. 
 
-The same validation with Pydantic reports one error:
+The same validation with Pydantic reports one error: `1 validation error for segment (road)
+names.rules.0.variant
+  Field required [type=missing, input_value={'value': 'Main St'}, input_type=dict]`
 
 ```python
 >>> from overture.schema.transportation import RoadSegment
