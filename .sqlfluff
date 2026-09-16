@@ -1,0 +1,6 @@
+# Present only so MegaLinter's SQL_SQLFLUFF activation check (which looks
+# for a .sqlfluff file at the repo root) considers the linter active.
+# Actual dialect/rule config lives closer to the SQL files themselves:
+# src/queries/athena/.sqlfluff, src/queries/duckdb/.sqlfluff, and
+# src/queries/.sqlfluffignore (which excludes the other query directories).
+[sqlfluff]

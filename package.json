@@ -27,6 +27,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@csstools/css-parser-algorithms": "^4.0.0",
+    "@csstools/css-tokenizer": "^4.0.0",
     "@docusaurus/core": "^3.10.2",
     "@docusaurus/faster": "^3.10.2",
     "@docusaurus/plugin-client-redirects": "^3.10.2",
@@ -35,7 +37,7 @@
     "clsx": "^2.1.1",
     "d3-hierarchy": "^3.1.2",
     "d3-shape": "^3.2.0",
-    "docusaurus-plugin-llms": "^0.5.1",
+    "docusaurus-plugin-llms": "^0.6.0",
     "js-yaml": "^5.4.0",
     "maplibre-gl": "^6.6.0",
     "pmtiles": "^4.5.0",
@@ -51,7 +53,7 @@
     "@eslint/js": "^10.0.0",
     "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "^16.3.3",
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-react": "^7.37.4",
@@ -61,7 +63,8 @@
     "playwright": "^1.62.1",
     "prettier": "^3.9.6",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vite": "^8.3.0",
+    "vitest": "^5.0.0"
   },
   "browserslist": {
     "production": [
