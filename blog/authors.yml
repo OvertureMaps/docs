@@ -3,6 +3,11 @@ dana:
   title: Technical Product Manager, Overture 
   email: dana@overturemaps.org
 
+seth:
+  name: Seth Fitzsimmons
+  title: Independent Consultant
+  email: seth@mojodna.net
+
 jonah:
   name: Jonah Adkins
   title: Cartography Lead, Meta
@@ -26,3 +31,23 @@ bdon:
   name: Brandon Liu
   title: Lead Developer, Protomaps
   email: brandon@protomaps.com
+
+vic:
+  name: Victor Schappert
+  title: Principal Engineer, AWS
+  email: schapper@amazon.com
+
+tristan:
+  name: Tristan Diet
+  title: Specifications Engineer, TomTom
+  email: tristan.diet@tomtom.com
+
+roel:
+  name: Roel Bollens
+  title: Technical Program Manager, TomTom
+  email: roel.bollens@tomtom.com
+
+jennings:
+  name: Jennings Anderson
+  title: GeoInformation Scientist, Meta
+  email: jenningsa@meta.com
