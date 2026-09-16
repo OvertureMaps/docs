@@ -5,7 +5,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Mirror the @site alias that Docusaurus/webpack provides at build time
-      '@site': path.resolve(__dirname),
+      '@site': path.resolve(import.meta.dirname),
     },
   },
   test: {
