@@ -42,15 +42,28 @@ function getLatestOvertureRelease() {
 const latestOvertureRelease = getLatestOvertureRelease();
 
 // Schema reference docs are a separate, versioned docs instance (see README
-// "Schema Reference"). `current` is generated at build time from the schema
-// repo's default branch into schema/reference and served at /schema/; released
-// tags live in schema_versioned_docs/ and are served at /schema/<tag>/. Released
-// versions are stable, so suppress the default "unmaintained" banner on them.
-// It can't live under docs/: nested docs instances get their MDX compiled twice.
-const schemaVersionConfig = {
-  current: { label: 'latest', path: '' },
-  ...Object.fromEntries(schemaVersions.map((v) => [v, { label: v, banner: 'none' }])),
-};
+// "Schema Reference"). Only released schema tags are published: snapshots live
+// in schema_versioned_docs/, the newest is served at /schema/ and older ones at
+// /schema/<tag>/. The `current` version (schema/reference, generated from a
+// schema branch by the schema repo's CI) is built only for schema PR previews.
+// Released versions are stable, so suppress the default "unmaintained" banner.
+// The instance can't live under docs/: nested docs instances get their MDX
+// compiled twice.
+const [latestSchemaVersion] = schemaVersions;
+const latestSchemaDocsDir = `schema_versioned_docs/version-${latestSchemaVersion}`;
+const schemaVersionOptions = isSchemaPreview
+  ? {
+      includeCurrentVersion: true,
+      onlyIncludeVersions: ['current'],
+      versions: { current: { label: 'preview', path: '' } },
+    }
+  : {
+      includeCurrentVersion: false,
+      lastVersion: latestSchemaVersion,
+      versions: Object.fromEntries(
+        schemaVersions.map((v) => [v, { label: v, banner: 'none', path: v === latestSchemaVersion ? '' : v }]),
+      ),
+    };
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -118,8 +131,7 @@ const config = {
         sidebarPath: require.resolve('./sidebars-schema.js'),
         showLastUpdateTime: true,
         breadcrumbs: false,
-        lastVersion: 'current',
-        versions: schemaVersionConfig,
+        ...schemaVersionOptions,
       }),
     ],
     ...(isSchemaPreview
@@ -150,10 +162,10 @@ const config = {
             {
               generateLLMsTxt: true,
               generateLLMsFullTxt: true,
-              // Latest schema reference only; versioned snapshots are excluded
+              // Newest schema version only; older snapshots are excluded
               docsDir: [
-                { path: 'docs', routeBasePath: '/' },
-                { path: 'schema', routeBasePath: 'schema' },
+                { path: 'docs', routeBasePath: '/', label: 'Docs' },
+                { path: latestSchemaDocsDir, routeBasePath: 'schema', label: 'Schema Reference' },
               ],
               excludeImports: true,
               removeDuplicateHeadings: true,
@@ -162,7 +174,7 @@ const config = {
               includeOrder: [
                 'getting-data/**',
                 'guides/**',
-                'schema/**',
+                `${latestSchemaDocsDir}/**`,
                 'examples/**',
                 'gers/**',
               ],
@@ -173,7 +185,7 @@ const config = {
               customLLMFiles: [
                 {
                   filename: 'llms-schema.txt',
-                  includePatterns: ['schema/**'],
+                  includePatterns: [`${latestSchemaDocsDir}/**`],
                   fullContent: true,
                   title: 'Overture Maps Schema Reference',
                   description:
@@ -252,15 +264,15 @@ const config = {
                   label: 'Community',
                   position: 'left',
                 },
+                {
+                  type: 'docsVersionDropdown',
+                  docsPluginId: 'schema',
+                  position: 'right',
+                  // Only shown on schema pages; see custom.css
+                  className: 'schema-version-dropdown',
+                },
               ]
             : []),
-          {
-            type: 'docsVersionDropdown',
-            docsPluginId: 'schema',
-            position: 'right',
-            // Only shown on schema pages; see custom.css
-            className: 'schema-version-dropdown',
-          },
           {
             to: 'https://github.com/OvertureMaps/docs',
             position: 'right',

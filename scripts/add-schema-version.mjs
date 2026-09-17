@@ -4,12 +4,12 @@
 //   npm run add-schema-version -- v2.0.0
 //
 // Steps: clone the schema repo at the tag, run its own overture-codegen (same
-// as the generate-schema-docs CI action) into schema/reference, then run
+// as the schema repo's generate-schema-docs action) into schema/reference, then run
 // `docusaurus docs:version:schema <tag>`, which copies schema/ into
 // schema_versioned_docs/version-<tag>/, snapshots sidebars-schema.js, and
 // prepends the tag to schema_versions.json. Those three outputs are committed.
-// schema/reference is left clean afterwards (it is gitignored and
-// regenerated from `main` on every build). See README "Schema Reference".
+// schema/reference is left clean afterwards (it is gitignored scratch space).
+// See README "Schema Reference".
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';

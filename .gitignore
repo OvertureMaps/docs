@@ -4,6 +4,6 @@ node_modules/
 build/
 static/maplibre/
 
-# Schema reference docs are generated at build time by the
-# generate-schema-docs action; see schema/index.md and README.
+# Scratch output of the schema doc generator: written by add-schema-version and
+# by the schema repo's PR preview workflow (SCHEMA_PREVIEW=true). See README.
 schema/reference/
