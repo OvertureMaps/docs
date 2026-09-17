@@ -1,6 +1,6 @@
 ---
 id: index
-slug: /schema/
+slug: /
 title: Schema Reference
 sidebar_label: Overview
 description: Pydantic schemas for Overture Maps data
