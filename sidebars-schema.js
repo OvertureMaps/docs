@@ -1,5 +1,5 @@
 /**
- * Sidebar for the versioned `schema` docs instance (docs/schema and
+ * Sidebar for the versioned `schema` docs instance (schema/ and
  * schema_versioned_docs/). Snapshotted per version by docs:version:schema.
  *
  * @type {import('@docusaurus/plugin-content-docs').SidebarsConfig}
