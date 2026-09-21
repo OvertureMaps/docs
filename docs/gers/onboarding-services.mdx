@@ -1,0 +1,59 @@
+---
+title: Onboarding Services
+---
+
+Matching your data to GERS IDs is work, and keeping the match alive across monthly releases is more work. Several organizations in the Overture ecosystem will do some or all of it for you.
+
+Overture does not offer matching as a service. We run matchers on data that enters our own pipeline as a source, and we publish the [places, addresses and divisions matchers](https://github.com/OvertureMaps/overture-matchers) so you can read what they do, but we do not match customer data on request and we provide limited hands-on support for the work. The services below exist to fill that gap.
+
+Listing here is not an endorsement, and Overture makes no claim about the quality of any provider's matching. Ask any provider how they handle the maintenance pass, because that is where the recurring cost sits.
+
+{/* MAINTENANCE: this roster is the canonical one. overturemaps.org/gers/ should link here rather than repeating the list. If that page keeps its own copy, the two will drift, and they already have. */}
+
+
+## Services that match your data
+
+Some of these organizations are Overture members and some are not. Membership says nothing about the quality of the service. It does mean a member has a governance relationship with the project and a seat in the working groups that decide how GERS develops.
+
+### Third-party onboarders
+
+**[TomTom](https://www.tomtom.com/)** connects customer data to GERS within its platform. TomTom also supplies Overture's transportation data.
+
+**[Esri](https://www.esri.com/)** publishes GERS-enabled layers of its own and offers tooling within ArcGIS to connect customer data to GERS. Esri Community Maps is also a source dataset in Overture's buildings and divisions themes.
+
+**[Precisely](https://www.precisely.com/)** both publishes datasets keyed to GERS IDs and connects customer data to them as a platform.
+
+**[Wherobots](https://wherobots.com/)** provides spatial matching at scale. Wherobots is also one of the supported execution environments for Overture's own buildings pipeline, so its engine runs the same class of workload we do.
+
+**[Fused](https://www.fused.io/)** offers GERS matching as UDFs in its workbench, including a worked demonstration that matches a point dataset to Overture places with a configurable distance threshold and a choice of nearest-neighbour or fuzzy name matching, then scales the same logic to millions of records.
+
+**[CARTO](https://carto.com/overture-gersify)** provides GERS matching in its analytics platform.
+
+## What to ask a provider
+
+The first match is the easy half. Before committing, find out:
+
+- **What happens each release.** Overture publishes monthly. Does the provider re-run the match, and is that included or billed separately?
+- **How removals are handled.** A GERS ID that disappears is the failure mode that breaks joins silently. See [stability](../stability).
+- **What comes back.** A column of GERS IDs added to your records, or a separate crosswalk table? A crosswalk is easier to re-run and easier to audit.
+- **What the match rate was, and how it was measured.** Match rate alone is not enough. A high match rate with a low rate of clean one-to-one matches means you need a link table rather than an ID column, which is a different integration.
+
+## Doing it yourself
+
+If your data already shares an identifier system with one of Overture's sources, you may not need to match anything. [Bridge files](../bridge-files) map source record IDs to GERS IDs for OpenStreetMap and several other providers. This is the cheapest path and is easy to miss.
+
+Otherwise the [GERS tutorial](../gers-tutorial) walks through an initial match and a maintenance pass with DuckDB, using a county restaurant inspection dataset and Overture places.
+
+## GERS in the wild
+
+**Addresscloud** builds property risk data for insurers and uses GERS IDs as the join key across 40-plus risk databases. It has published flood risk for 300 million buildings in Europe and 155 million in North America. Mark Varley of Addresscloud on why the identifiers matter: "Without unique identifiers for each building, Addresscloud would have to change everything again and again. It would be a nightmare."
+
+**Esri** matched Overture buildings to FEMA's USA Structures across the contiguous United States, adding occupancy, address, and height to 75 million structures. The [combined layer](https://overture.maps.arcgis.com/home/item.html?id=52e3ebfaf01141d8bdfbaa06dcd96638) is published on ArcGIS Online, and an [earlier four-city demonstration](https://www.esri.com/arcgis-blog/products/arcgis-online/mapping/enriching-overture-data-with-gers/) shows the combined popup. Esri has also published a layer joining the [Overture divisions theme to Census county geometries and socioeconomic data](https://www.arcgis.com/home/item.html?id=c640a11058e34316a69f6a1e74049f9e).
+
+![Overture Buildings and FEMA USA Structures](/img/gers/overture-buildings-fema-structures.png)
+
+**TomTom** wrote up [why GERS matters in Overture's transportation data model](https://engineering.tomtom.com/overture-transportation-network-linear-referencing/), including how linear referencing lets attributes apply to part of a segment without splitting it.
+
+**Drew Breunig** published a [step-by-step guide to joining Overture buildings to Census block groups with DuckDB](https://www.dbreunig.com/2024/06/25/using-duckdb-spatial-joins-to-map-overture-gers-ids-to-us-census-fips-codes.html), which is a good model for a first match if you want to see the whole thing in one page.
+
+**SafeGraph** published [a tutorial on using Placekey to match Overture POIs to National Provider Identifier data](https://www.placekey.io/blog/joining-overture-and-npi-datasets), with an accompanying [notebook](https://colab.research.google.com/drive/17BimmoiW4bqpyBb0-MdK2z9MwcSVAb-8?usp=sharing).

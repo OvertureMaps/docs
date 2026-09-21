@@ -1,46 +1,98 @@
 ---
 title: Data Changelog
 ---
+
 import QueryBuilder from '@site/src/components/queryBuilder';
 import changelog_buildings_churn from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_churn.sql';
 import changelog_buildings_feature_by_change_type from '!!raw-loader!@site/src/queries/duckdb/changelog_buildings_feature_by_change_type.sql';
 import changelog_buildings_join from '!!raw-loader!@site/src/queries/athena/changelog_buildings_join.sql';
 
-With each data release, Overture publishes a **changelog** that capture changes in the data from the previous release to the current release. This information can be used to guide decisions about data matching, better understand data stability, and help detect data errors.
-
-The data changelog is available as Parquet files, partitioned by `theme`, `type`, and `change_type` and sorted geospatially with a unique index on `id`. The changelog files are available at the following locations:
+With each release, Overture publishes a **changelog** reporting what changed between the previous release and this one, feature by feature. If you hold GERS IDs, the changelog is how you find out which of them need attention without downloading and diffing two releases.
 
 | Provider | Location |
-| ------ | -------- |
+| -------- | -------- |
 | Amazon S3 | `s3://overturemaps-us-west-2/changelog/<RELEASE>` |
 | Microsoft Azure | `wasbs://changelog@overturemapswestus2.blob.core.windows.net/<RELEASE>` |
 
-The latest path is:
+The latest `<RELEASE>` is:
+
 <QueryBuilder query="__OVERTURE_RELEASE/" language="text"></QueryBuilder>
 
-## Types of changes
+The files are Parquet, partitioned by `theme`, `type`, and `change_type`, and written in spatial order so that a bounding-box filter reads few row groups.
 
-The `change_type` property in the changelog includes these types of changes to the entities:
+```
+changelog/<RELEASE>/theme=<theme>/type=<type>/change_type=<change_type>/*.parquet
+```
 
-- **added**: the entity with this ID is new in the current release and was not present in the previous release
-- **removed**: the entity with this ID is not present in the current release but was present in the previous release
-- **data_changed**: the entity with this ID in the current release contains a change in geometry or properties from the entity with this ID that was in the previous release
-- **unchanged**: the entity with this ID in the current release matches the geometry and properties of the entity with this ID that was in the previous release
+## Coverage
 
-## Querying the data changelog
+The changelog covers all six themes and every type within them, including the `base` theme and `addresses`. This is broader than the [GERS registry](../registry), which excludes those, and much broader than [bridge files](../bridge-files), which cover five theme and type combinations. A feature can appear in the changelog without carrying a GERS ID.
 
-We can query the changelog to get a quick look at changes in data from the last release to the current release. In this example, we're using DuckDB to grab the `id`, `type`, and `change_type` for buildings in several towns across the [Amhara Region](https://en.wikipedia.org/wiki/Amhara_Region) in Ethiopia.
+## Schema
+
+| Column | Type | Description |
+| ------ | ---- | ----------- |
+| `id` | string | The feature's identifier. For the feature types in the [GERS registry](../registry) this is a GERS ID. For everything else, including the whole `base` theme, it is an identifier with no stability commitment behind it. |
+| `bbox` | struct of float | Bounding box, for spatial filtering. |
+| `columns_changed` | array of string | The top-level column names that differ from the previous release, such as `geometry`, `names` or `categories`. Populated only on `data_changed` rows, and never lists a column that was not compared. |
+| `theme`, `type`, `change_type` | string | Partition keys, present in the path rather than in the file. |
+
+`columns_changed` is the column to reach for first. It tells you whether a change touched something you depend on, which usually means you can skip most `data_changed` rows rather than comparing features yourself.
+
+## Types of change
+
+- **added**: the ID is in this release and was not in the previous one.
+- **removed**: the ID was in the previous release and is not in this one.
+- **data_changed**: the ID is in both releases, and its geometry or one of its compared properties differs.
+- **unchanged**: the ID is in both releases with identical geometry and compared properties.
+
+`unchanged` is published as a partition like the others, so the changelog is a complete account of the release rather than a diff.
+
+:::note What "added" means
+A feature reported as `added` is new in Overture, not necessarily new in the world. Much of the volume in `added` is coverage expansion or a new source being ingested. Likewise, `removed` can mean a source was dropped or a feature was merged into another, not that the thing stopped existing.
+:::
+
+### What counts as a change
+
+Overture compares geometry and properties, with two exclusions you can see and one you cannot. `sources` and `confidence` are never compared, because both change on nearly every feature in most releases and would bury the real edits. The comparison also skips Overture's own record of whether a feature is still active in the corpus, which is internal bookkeeping rather than part of the published data.
+
+The practical consequence is that **a feature whose only change is its provenance reports as `unchanged`**. If you track which source a feature came from, the changelog will not tell you when that changed.
+
+Geometry is compared on its normalized text form rather than its raw bytes, so a re-encoding that produces the same shape does not register as a change.
+
+### Splits, merges, and restores
+
+There is no change type for a split or a merge. When a segment splits, at most one of the pieces keeps the original identifier; the others appear as `added`. Nothing connects them. See [GERS ID stability](../stability) for what that means for a maintained join.
+
+There is also no change type for an ID that was removed in an earlier release and has come back. A restored ID appears as `added`, indistinguishable from an ID that is genuinely new. A `restored` state has been discussed since 2024 and is not implemented. If you process releases consecutively and keep your links after a removal, a restore is something you can act on and we would like to hear about it.
+
+## Querying the changelog
+
+Get the `id`, `type`, and `change_type` for buildings across several towns in the [Amhara Region](https://en.wikipedia.org/wiki/Amhara_Region) of Ethiopia:
 
 <QueryBuilder query={changelog_buildings_churn}></QueryBuilder>
 
-We can also get a count of building features by `change_type` for our area of interest.
+Count features by `change_type` for the same area:
 
 <QueryBuilder query={changelog_buildings_feature_by_change_type}></QueryBuilder>
 
-Taking this one step further, this time using Athena to run our query, we can join the changelog and data via the `id` to connect the `change_type` and entity properties.
+Join the changelog to the release data on `id` to see the properties alongside the change type, this time in Athena:
 
 <QueryBuilder query={changelog_buildings_join}></QueryBuilder>
 
-Finally we can use the results of our query to visualize building features by `change_type` and inspect the properties for each feature. The example below, created using [kepler.gl](https://kepler.gl/), shows buildings in [Finote Selam](https://en.wikipedia.org/wiki/Finote_Selam), a city in the Amhara Region of Ethiopia. The data is from Overture's `2024-06-13-beta.0` release, to which we added 100 million new buildings, many of them derived from satellite imagery by Microsoft.
+The result can be mapped directly. The example below, built in [kepler.gl](https://kepler.gl/), shows buildings in [Finote Selam](https://en.wikipedia.org/wiki/Finote_Selam) coloured by `change_type`.
 
 ![Buildings By Change Type](/img/gers/buildings-change-type-amhara-region.png)
+
+*Rendered from the 2024-06-13-beta.0 release, which added 100 million buildings and so shows an unusually high proportion of `added`. Run the queries above against the current release for a more typical picture.*
+
+## Using the changelog to maintain a match
+
+The maintenance pattern is the same whichever theme you work in:
+
+1. Join your matched GERS IDs to this release's changelog.
+2. For `removed` IDs, re-match those records against the current release. These are the ones that will otherwise silently break.
+3. For `data_changed` IDs, check `columns_changed` and act only where a column you depend on has moved.
+4. For `added` IDs in your area of interest, decide whether any of them match records you previously could not place.
+
+The [GERS tutorial](../gers-tutorial) works through this end to end.

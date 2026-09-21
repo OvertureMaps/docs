@@ -2,8 +2,9 @@ LOAD spatial; -- noqa
 LOAD httpfs;  -- noqa
 SET s3_region='us-west-2';
 
+-- Buildings that changed in several towns across the Amhara Region, Ethiopia.
 SELECT id, type, change_type
-FROM read_parquet('s3://overturemaps-us-west-2/changelog/2024-06-13-beta.0/theme=buildings/type=*/change_type=*/*', filename=true, hive_partitioning=1)
+FROM read_parquet('s3://overturemaps-us-west-2/changelog/__OVERTURE_RELEASE/theme=buildings/type=*/change_type=*/*', filename=true, hive_partitioning=1)
 WHERE
         bbox.xmin > 37.165914
         AND bbox.xmax < 37.902271

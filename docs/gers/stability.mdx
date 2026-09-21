@@ -1,32 +1,87 @@
 ---
 title: GERS ID Stability
-draft: true
 ---
 
-At the feature `type` level, Overture strives to maintain stability of GERS IDs from one release to another. Currently, we consider the IDs for the following feature types to be stable:
+import QueryBuilder from '@site/src/components/queryBuilder';
+import gers_churn_by_change_type from '!!raw-loader!@site/src/queries/duckdb/gers_churn_by_change_type.sql';
+import gers_registry_lookup_id from '!!raw-loader!@site/src/queries/duckdb/gers_registry_lookup_id.sql';
 
-| `theme` | `type` | Stable GERS ID |
-|-------|------|-----------|
-| `buildings` | `building` | Yes |
-| `divisions` | `division` | Yes |
-| `places` | `place` | Yes |
-| `transportation` | `segment` | Yes |
-| `transportation` | `connector` | Yes |
+A GERS ID is stable when the same identifier refers to the same real-world entity in every release, and refers to nothing else. That is the promise. This page covers what it does and does not cover, what causes an ID to change, and how to measure churn in the data you care about rather than taking our word for it.
 
+## What the commitment covers
 
-We are working toward ID stability for the follow feature types:
+Overture commits to stability for the feature types in the [GERS registry](../registry): `building`, `division`, `division_area`, `division_boundary`, `place`, `segment`, and `connector`.
 
-| `theme` | `type` | Stable GERS ID |
-|-------|------|-----------|
-| `addresses` | `address` | No |
-| `base` | `bathymetry` | No |
-| `base` | `infrastructure` | No |
-| `base` | `land` | No |
-| `base` | `land_cover` | No |
-| `base` | `land_use` | No |
-| `base` | `water` | No |
-| `buildings` | `building_part` | No |
-| `divisions` | `division_area` | No |
-| `divisions` | `division_boundary` | No |
+Registry membership is the commitment. It means that Overture runs matchers for that type, that it intends to keep those IDs stable release over release, and that it will report the changes when they happen. Feature types outside the registry, which today means everything in the `base` theme and the `building_part` type, carry identifiers generated from a single source with no matching behind them. Those identifiers are as stable as their source data happens to be, which is a different and much weaker statement.
 
+Addresses are excluded from the registry pending general availability of the addresses theme, not as a permanent decision.
 
+## What changes an ID
+
+A feature keeps its identifier when the matcher recognizes it as something Overture already holds, and gets a new one when it does not. So what changes an identifier is whatever changes the matcher's answer, and that differs by theme.
+
+**A large enough move changes a building's identifier.** Buildings are matched on geometric overlap alone, at an intersection over union above 0.5. A footprint keeps its identifier only while it still overlaps its former self by more than half, which for a straight shift means moving less than about a third of the building's own width. A house-sized footprint moved ten metres does not overlap its former self at all, and gets a new identifier. Larger buildings tolerate larger shifts.
+
+**A name change can change a place or division identifier.** Names are part of how those themes recognize a feature, so a business that rebrands with no other continuity, or a division that is renamed, may not be matched to its former self. Addresses work the same way on street and house number. Buildings are unaffected, because their matcher never reads a name.
+
+**Most property changes do not change an identifier.** A road segment whose `speed_limits`, `road_surface` or `access_restrictions` change keeps its identifier, because the transportation matcher reads geometry, length, road class and sources, and nothing else. Road class is the exception: it carries enough weight in the score that a reclassified road can fail to match.
+
+**Splits and merges produce new identifiers.** When a segment is split, at most one of the pieces keeps the original identifier and the rest are new. The original simply stops being issued. Nothing marks it as superseded.
+
+**A change of container does not follow the occupant.** A museum that moves to the building next door keeps its `place` identifier, because places are matched without reference to buildings at all. The building it vacated keeps its own. This holds for a move of a few hundred metres. A place that moves further than that is beyond the distance within which candidates are compared at all, and gets a new identifier.
+
+:::note Traceability is not yet published
+When an identifier stops being issued after a split or a merge, Overture does not publish the mapping from the old identifier to the new ones. The changelog reports the old ID as `removed` and the new IDs as `added`, with no link between them. Recovering the relationship means re-matching.
+
+The Product Council parked traceability in February 2025 as high-cost and post-MVP. If you have a use case that depends on it, say so in the [Map Data Working Group](https://github.com/OvertureMaps/map-data-wg), because the case for building it is currently made from first principles rather than from demand.
+:::
+
+## Why the rules differ by theme
+
+The precise rules differ by theme, because the matchers do, and the matchers differ because the data does. The signal a matcher uses has to be something that is reliably present.
+
+**Buildings** match on geometry alone: intersection over union at a threshold of 0.5, with a fixed source priority resolving conflicts, OpenStreetMap first, then licensed government sources, then sources derived from imagery. Geometry is the only reliable cross-source signal for buildings. Most buildings have no name, and the largest source volumes come from imagery-derived datasets that carry no meaningful name attributes at all.
+
+**Divisions** match on a composite of name similarity and geographic similarity rather than on geometry alone, because every division has a name and because boundaries for the same division vary widely between sources. Name similarity is computed with a cross-lingual sentence transformer over all of a feature's name variants, so "München" and "Munich" score as similar without a translation table. The composite is evaluated under several weightings and the lowest score is taken, which penalizes a pair where one signal is strong and the other is weak.
+
+**Transportation** matches on shape and extent: the Fréchet distance between two candidate lines, the ratio of their lengths, whether the road class agrees, and how far their source sets overlap. Speed limits, surface and access restrictions play no part.
+
+The differences are also partly historical. The theme pipelines were built at different times by different groups, within Overture's shared engineering tenets but not to a single matching standard. Divisions is written in Scala while most themes are Python. Blocking is done three different ways: quadkeys for divisions, H3 cells for addresses, a spatial distance join for places. Two identifier generators are still in use across themes. The places matching block is four lines because its scoring lives in a trained model, while the divisions one runs to nearly two hundred lines of per-subtype thresholds.
+
+## History matching, and why your crosswalk mirrors it
+
+Places, addresses and divisions match on history first. Before any scoring runs, the pipeline checks whether a candidate already held a GERS identifier in a prior release, by comparing a signature built from the source and a handful of key fields. If the signature matches, the feature gets its identifier back directly and the scoring never runs.
+
+That fast path is a large part of why identifiers stay stable in those themes, and it explains a quirk. Geometry is part of the signature for divisions and addresses, so any coordinate change drops a feature out of the fast path and into full scoring, even when scoring then matches it comfortably.
+
+Buildings have no fast path. The geometric comparison is the whole mechanism, which is why buildings are the theme where movement most directly threatens an identifier.
+
+The pattern is worth copying. A crosswalk table mapping your identifiers to GERS identifiers is structurally a hand-built version of that history register: a record of which of your records are already resolved, checked before you spend anything on geometry comparison. That is also the argument for keeping the crosswalk as its own table rather than a column on your records. Identity matching is cheaper than scoring, for us and for you.
+
+## Two events that broke stability by design
+
+**The June 2025 identifier switchover.** Overture replaced every GERS ID with a UUID in the `2025-06-25.0` release. Churn was 100 percent by design, and a one-off mapping from old IDs to new ones was published alongside that release. If you are carrying IDs from before June 2025 and have not migrated, your IDs will not resolve against any current release. [PLACEHOLDER: confirm whether the old-to-new mapping file is still available, and at what path. Two internal paths are recorded, `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/` and an internal bucket, and the June 2025 release notes described the mapping as available "for this release only."]
+
+**The transportation splitter changes cardinality, not IDs.** If you use the [transportation splitter](/guides/transportation/linear-referencing), one segment becomes several output rows that all carry the same GERS ID, with `start_lr` and `end_lr` giving the linear reference. The ID is still stable. It is no longer unique per row in that output, and code that treats it as a primary key will fail.
+
+## Measuring churn yourself
+
+Stability is a property of the matchers, and matcher quality varies by theme and by region. Rather than quoting a global figure, measure churn on the data you actually use. The [changelog](../changelog) makes this a single query per release.
+
+Count features by change type for a theme and an area of interest, swapping the bounding box for your own:
+
+<QueryBuilder query={gers_churn_by_change_type}></QueryBuilder>
+
+The number that matters for a maintained join is the share of your matched IDs that appear as `removed`, because those are the records you MUST re-match. `data_changed` is cheaper: the ID still resolves, and you only need to look if the change affects an attribute you rely on. Use the `columns_changed` column to decide that without comparing releases yourself.
+
+Two cautions when reading the results. A feature reported as `added` is new in Overture, not necessarily new in the world; a great deal of `added` volume is coverage expansion. And a feature whose only change is its provenance reports as `unchanged`, because `sources` and `confidence` are excluded from change detection.
+
+[PLACEHOLDER: Overture tracks internal churn targets per theme, currently 5 percent for places and better than 99 percent stability for transportation. Decide whether to publish these. My recommendation is yes, with the release they were measured against and a note that they are targets rather than guarantees, because evaluators who cannot find a number assume the worst. A team ingesting the addresses theme concluded from their own measurements that churn was roughly 20 percent and wrote a standing rule that nothing in their schema may join on a GERS ID. They arrived at that by measuring, because we published nothing.]
+
+## Checking a single ID
+
+To find out whether an ID is still live, and when it last changed, query the [registry](../registry) rather than diffing releases:
+
+<QueryBuilder query={gers_registry_lookup_id}></QueryBuilder>
+
+A null `path` means the ID is in GERS but is not in the current release. `last_seen` tells you which release last contained it.

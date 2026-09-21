@@ -3,60 +3,109 @@ title: Registry
 ---
 
 import QueryBuilder from '@site/src/components/queryBuilder';
+import gers_registry_lookup_id from '!!raw-loader!@site/src/queries/duckdb/gers_registry_lookup_id.sql';
+import gers_registry_fetch_feature from '!!raw-loader!@site/src/queries/duckdb/gers_registry_fetch_feature.sql';
+import gers_registry_file_path from '!!raw-loader!@site/src/queries/duckdb/gers_registry_file_path.sql';
+import gers_registry_check_matched_ids from '!!raw-loader!@site/src/queries/duckdb/gers_registry_check_matched_ids.sql';
 
-With each data release, Overture publishes a **GERS Registry** that serves as the single source of truth for all entities that are part of the Global Entity Reference System. It serves as a comprehensive catalog that tracks every stable ID ever published across all Overture data releases.
+The **GERS registry** is the catalog of identifiers that carry a stability commitment. The registry can tell you if the ID is part of GERS at all, in the current release, and when the feature associated with that ID last changed.
 
-There is only ever one GERS Registry. It's not versioned. We update it with each release by comparing the last published GERS Registry with the current Overture data release. 
-
-The registry is available as Parquet files at the following locations:
+There is only ever one registry. It is not versioned. Each release rebuilds it by comparing the published registry with the new release data and overwriting it in place, so what you read is always current.
 
 | Provider | Location |
-| ----------- | -------- |
+| -------- | -------- |
 | Amazon S3 | `s3://overturemaps-us-west-2/registry/` |
-| Microsoft Azure Blob Storage | `az://overturemapswestus2.blob.core.windows.net/registry/` |
+| Microsoft Azure Blob Storage | `https://overturemapswestus2.blob.core.windows.net/registry/` |
 
+The files are Parquet, sorted by `id` across roughly 50 files, so a lookup by ID is fast and efficient.
 
-## Registry schema
+## What the registry is for
 
-The GERS Registry files have the following schema:
+Overture publishes identifiers for every feature in every theme. Only some of them are GERS IDs. Features in the `base` theme and features of type `building_part` carry deterministic UUIDs that are structurally identical to GERS IDs and carry no stability commitment at all.
 
-| Column | Data type | Description |
-|-------|------|-------------|
-| `id` | string | GERS identifier (UUID) |
-| `version` | integer | current version number |
-| `first_seen` | string | release when entity first appeared |
-| `last_seen` | string | most recent release containing entity |
-| `last_changed` | string | last release the entity was changed, sourced from changelog |
-| `path` | string | relative path to feature in release data |
-| `bbox` | struct(xmin float, xmax float, ymin float, ymax float) | bounding box coordinates | 
+**You cannot tell the difference by looking at the identifier.** Presence in the registry is the only discriminator, and that is the registry's main job.
 
+## Schema
 
-## Supported themes and types
+| Column | Type | Description |
+| ------ | ---- | ----------- |
+| `id` | string | The GERS ID, an opaque 128-bit value in UUID form. See [what a GERS ID is](/gers#what-a-gers-id-is). |
+| `version` | integer | The feature's version at `last_seen`. |
+| `first_seen` | string | The release in which this identifier first appeared. Identifiers predating the `2025-06-25.0` switchover all show that release, so this is not the feature's age. |
+| `last_seen` | string | The most recent release containing the ID. |
+| `last_changed` | string | The most recent release in which the feature changed, taken from the changelog. |
+| `path` | string | Path to the Parquet file holding the feature, relative to the release root. Null when the ID is not in the current release. |
+| `bbox` | struct of float | Bounding box of the feature. Null when the ID is not in the current release. |
 
-The following feature types are included in the GERS registry:
+### `first_seen` is not the age of the feature
 
-- `building`
-- `division`
-- `division_area`
-- `division_boundary`
-- `place`
-- `segment`
-- `connector`
+Every identifier in Overture was replaced in the `2025-06-25.0` release, and the registry begins there. Roughly 3.3 billion identifiers carry that release as their `first_seen`, against 7 to 27 million added in each release since. For most of the registry, `first_seen` records when the current identifier was minted, not when Overture first carried the feature. Use it to reason about identifiers, not about how long the thing they point at has existed.
 
-Inclusion in the GERS Registry signifies Overture's long-term commitment to entity matching and stability for those types. We may add additional feature types to the GERS Registry in future releases.
+**A null `path` is meaningful.** It means the ID is part of GERS and is not in the current release. `bbox` is null on those rows for the same reason. Use `path IS NOT NULL` as your test for "still live", and `last_seen` to find the release that last carried it.
 
-
-## Example
-
-You can use the GERS Registry to verify that an entity exists in Overture, track the history of that entity, and find new entities that have been added. For example, you might ask, "Is `fea28f69-7afa-460c-b270-61ef74cd340c` part of GERS?" You can query the GERS Registry to find out.  
+`path` is relative to the release root. It starts at `theme=` and has no leading slash, so prepend the release root to get a full path:
 
 ```
-SELECT 
-    *
-FROM read_parquet('s3://overturemaps-us-west-2/registry/*.parquet')
-WHERE id='fea28f69-7afa-460c-b270-61ef74cd340c';
+s3://overturemaps-us-west-2/release/<RELEASE>/theme=buildings/type=building/part-00403-e684fe1e-d4f5-5b6a-8315-f17bb5d8394c-c000.zstd.parquet
 ```
 
-We can see that `fea28f69-7afa-460c-b270-61ef74cd340c` is a building first released by Overture in June 2025 and last seen in August 2025 (`2025-08-20.1`), the current release. The exact bounding box of the feature is `{'xmin': 80.67177, 'xmax': 80.67182, 'ymin': 26.619795, 'ymax': 26.619843}` and the relative path to the feature is `/theme=buildings/type=building/part-00149-8a741876-e04d-4e66-bc96-0171910fa1b1-c000.zstd.parquet`. You can directly access the Parquet file that contains this feature by appending the relative path to the current release path: `s3://overturemaps-us-west-2/release/2025-08-20.1`. Since you know the exact bounding box of the feature, you can optimize your query and you should be able to fetch this feature directly from the data release in seconds. 
+Or have the query do it:
 
+<QueryBuilder query={gers_registry_file_path}></QueryBuilder>
 
+## What is in the registry
+
+`building`, `division`, `division_area`, `division_boundary`, `place`, `segment`, and `connector`.
+
+Inclusion signifies Overture's long-term commitment to matching and stability for that type. The three exclusions are the `base` theme, the `building_part` type, and the `addresses` theme. Base and `building_part` come from a single source and need no matching to conflate, so they cannot offer stability through matching, which is the thing GERS provides. Addresses are excluded pending general availability of that theme rather than as a permanent decision.
+
+The filter is written as a deny-list, so a new feature type added to a theme that is not excluded joins the registry automatically.
+
+### Addresses
+
+Address features carry identifiers, and between the July and December 2025 releases those identifiers were in the registry. They were withdrawn pending general availability of the addresses theme, and the identifiers published during that window were withdrawn with them.
+
+So an address ID from a 2025 release will not be found in the registry today. That is a statement about the commitment, not about the identifier: it means Overture is not yet promising stability for addresses, because the addresses matcher is still being built. Addresses are expected to return to the registry at GA.
+
+## Guarantees
+
+Every release candidate validates the registry before it can be published, and any failure blocks the release. Four of those checks are guarantees you can build assertions against:
+
+- `id` is unique in the registry.
+- `first_seen`, `last_seen`, and `last_changed` are never null, and `first_seen <= last_changed <= last_seen` always holds.
+- Any row with a populated `path` has `last_seen` equal to the current release.
+- Registry contents and release contents never disagree in either direction. No row claims to be in the release when it is not, and no row claims absence when the ID is present.
+
+## Example: is this ID part of GERS?
+
+<QueryBuilder query={gers_registry_lookup_id}></QueryBuilder>
+
+One row comes back, so this identifier is part of GERS rather than a bare UUID:
+
+| Column | Value |
+| ------ | ----- |
+| `id` | `fea28f69-7afa-460c-b270-61ef74cd340c` |
+| `version` | 1 |
+| `first_seen` | `2025-06-25.0` |
+| `last_seen` | `2026-08-19.0` |
+| `last_changed` | `2025-06-25.0` |
+| `path` | `theme=buildings/type=building/part-00403-e684fe1e-d4f5-5b6a-8315-f17bb5d8394c-c000.zstd.parquet` |
+| `bbox` | xmin 80.67177, xmax 80.67182, ymin 26.61979, ymax 26.61984 |
+
+Reading it: this is a building, `last_seen` is the current release so the identifier is still live, and `last_changed` is the switchover release, meaning nothing about this building has changed in any release since. `path` names the one file that holds it, so you can read the feature without scanning the theme.
+
+<QueryBuilder query={gers_registry_fetch_feature}></QueryBuilder>
+
+## Looking up an ID without SQL
+
+The [Overture Explorer](https://explore.overturemaps.org/) finds features by GERS ID. Paste an identifier into the search box and Explorer switches to GERS mode on its own, goes straight to the feature, and selects it. The result can be shared as a link.
+
+Explorer only shows features that are in the current release. The registry also covers identifiers that have dropped out of one, so if you need to tell a removed feature from an identifier that was never in GERS, use the registry.
+
+## Example: which of my IDs are still live?
+
+Registry lookups are cheap enough to run over a whole table of held identifiers:
+
+<QueryBuilder query={gers_registry_check_matched_ids}></QueryBuilder>
+
+A null `r.last_seen` means the ID is not in GERS at all: either it was never a GERS ID, or you are holding an identifier from before the June 2025 switchover. `in_current_release = false` means the feature has gone and those records need re-matching. See [GERS ID stability](../stability).
