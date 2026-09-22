@@ -8,7 +8,7 @@ import gers_registry_lookup_id from '!!raw-loader!@site/src/queries/duckdb/gers_
 
 A GERS ID is stable when the same identifier refers to the same real-world entity in every release, and refers to nothing else. That is the promise. This page covers what it does and does not cover, what causes an ID to change, and how to measure churn in the data you care about rather than taking our word for it.
 
-## What the commitment covers
+## The commitment
 
 Overture commits to stability for the feature types in the [GERS registry](../registry): `building`, `division`, `division_area`, `division_boundary`, `place`, `segment`, and `connector`.
 
@@ -16,7 +16,7 @@ Registry membership is the commitment. It means that Overture runs matchers for 
 
 Addresses are excluded from the registry pending general availability of the addresses theme, not as a permanent decision.
 
-## What changes an ID
+## What changes an identifier
 
 A feature keeps its identifier when the matcher recognizes it as something Overture already holds, and gets a new one when it does not. So what changes an identifier is whatever changes the matcher's answer, and that differs by theme.
 
@@ -36,7 +36,7 @@ When an identifier stops being issued after a split or a merge, Overture does no
 The Product Council parked traceability in February 2025 as high-cost and post-MVP. If you have a use case that depends on it, say so in the [Map Data Working Group](https://github.com/OvertureMaps/map-data-wg), because the case for building it is currently made from first principles rather than from demand.
 :::
 
-## Why the rules differ by theme
+## Matching by theme
 
 The precise rules differ by theme, because the matchers do, and the matchers differ because the data does. The signal a matcher uses has to be something that is reliably present.
 
@@ -48,7 +48,7 @@ The precise rules differ by theme, because the matchers do, and the matchers dif
 
 The differences are also partly historical. The theme pipelines were built at different times by different groups, within Overture's shared engineering tenets but not to a single matching standard. Divisions is written in Scala while most themes are Python. Blocking is done three different ways: quadkeys for divisions, H3 cells for addresses, a spatial distance join for places. Two identifier generators are still in use across themes. The places matching block is four lines because its scoring lives in a trained model, while the divisions one runs to nearly two hundred lines of per-subtype thresholds.
 
-## History matching, and why your crosswalk mirrors it
+## History matching
 
 Places, addresses and divisions match on history first. Before any scoring runs, the pipeline checks whether a candidate already held a GERS identifier in a prior release, by comparing a signature built from the source and a handful of key fields. If the signature matches, the feature gets its identifier back directly and the scoring never runs.
 
@@ -58,13 +58,13 @@ Buildings have no fast path. The geometric comparison is the whole mechanism, wh
 
 The pattern is worth copying. A crosswalk table mapping your identifiers to GERS identifiers is structurally a hand-built version of that history register: a record of which of your records are already resolved, checked before you spend anything on geometry comparison. That is also the argument for keeping the crosswalk as its own table rather than a column on your records. Identity matching is cheaper than scoring, for us and for you.
 
-## Two events that broke stability by design
+## Known exceptions
 
-**The June 2025 identifier switchover.** Overture replaced every GERS ID with a UUID in the `2025-06-25.0` release. Churn was 100 percent by design, and a one-off mapping from old IDs to new ones was published alongside that release. If you are carrying IDs from before June 2025 and have not migrated, your IDs will not resolve against any current release. [PLACEHOLDER: confirm whether the old-to-new mapping file is still available, and at what path. Two internal paths are recorded, `s3://overturemaps-extras-us-west-2/june_to_may_id_mapping/` and an internal bucket, and the June 2025 release notes described the mapping as available "for this release only."]
+**The June 2025 identifier switchover.** Overture replaced every GERS ID with a UUID in the `2025-06-25.0` release. Churn was 100 percent by design, and a one-off mapping from old IDs to new ones was published alongside that release. If you are carrying identifiers from before June 2025 and have not migrated, they will not resolve against any current release.
 
 **The transportation splitter changes cardinality, not IDs.** If you use the [transportation splitter](/guides/transportation/linear-referencing), one segment becomes several output rows that all carry the same GERS ID, with `start_lr` and `end_lr` giving the linear reference. The ID is still stable. It is no longer unique per row in that output, and code that treats it as a primary key will fail.
 
-## Measuring churn yourself
+## Measuring churn
 
 Stability is a property of the matchers, and matcher quality varies by theme and by region. Rather than quoting a global figure, measure churn on the data you actually use. The [changelog](../changelog) makes this a single query per release.
 
@@ -76,9 +76,7 @@ The number that matters for a maintained join is the share of your matched IDs t
 
 Two cautions when reading the results. A feature reported as `added` is new in Overture, not necessarily new in the world; a great deal of `added` volume is coverage expansion. And a feature whose only change is its provenance reports as `unchanged`, because `sources` and `confidence` are excluded from change detection.
 
-[PLACEHOLDER: Overture tracks internal churn targets per theme, currently 5 percent for places and better than 99 percent stability for transportation. Decide whether to publish these. My recommendation is yes, with the release they were measured against and a note that they are targets rather than guarantees, because evaluators who cannot find a number assume the worst. A team ingesting the addresses theme concluded from their own measurements that churn was roughly 20 percent and wrote a standing rule that nothing in their schema may join on a GERS ID. They arrived at that by measuring, because we published nothing.]
-
-## Checking a single ID
+## Checking one identifier
 
 To find out whether an ID is still live, and when it last changed, query the [registry](../registry) rather than diffing releases:
 

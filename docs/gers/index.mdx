@@ -37,19 +37,9 @@ A GERS ID is a 128-bit random UUID that looks like this: `fea28f69-7afa-460c-b27
 
 There is nothing to infer from its contents. It does not encode location, theme, or any other logic.
 
-:::note
+Until the `2025-06-25.0` release it did: identifiers were hex strings carrying an H3 cell and a theme byte. We replaced every one with a UUID in that release, because encoding meaning into an identifier cost more than it returned, and identifiers collided when an entity moved between cells or themes.
 
-Identifiers captured before the `2025-06-25.0` release will not resolve against current data. Overture replaced every identifier in that release.
-
-:::
-
-### The identifier format before June 2025
-
-Until `2025-06-25.0`, Overture used a 32-character hex string such as `08b29a4c428ebfff02002b827866f466`, encoding an H3 cell, a theme byte, and a random suffix. Every identifier was replaced with a UUID in that release, and all identifiers in the [GERS registry](./registry) are in the new format.
-
-The format changed because encoding meaning into an identifier cost more than it returned. Identifiers collided when an entity moved between cells or themes, generation could not be centralized across pipelines, and a deterministic identifier can expose information about the data behind it.
-
-Filtering on an identifier prefix was never a reliable spatial query, even on the old H3-based identifiers. Use the `bbox` column instead, and compute an H3 cell from the geometry when you want one, at whatever resolution suits.
+Identifiers captured before `2025-06-25.0` will not resolve against current data. Filtering on an identifier prefix was never a reliable spatial query either, so use the `bbox` column.
 
 ## What carries a GERS ID
 
