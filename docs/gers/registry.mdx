@@ -87,12 +87,12 @@ One row comes back, so this identifier is part of GERS rather than a bare UUID:
 | `id` | `fea28f69-7afa-460c-b270-61ef74cd340c` |
 | `version` | 1 |
 | `first_seen` | `2025-06-25.0` |
-| `last_seen` | `2026-08-19.0` |
+| `last_seen` | <QueryBuilder query="__OVERTURE_RELEASE" inline /> |
 | `last_changed` | `2025-06-25.0` |
-| `path` | `theme=buildings/type=building/part-00403-e684fe1e-d4f5-5b6a-8315-f17bb5d8394c-c000.zstd.parquet` |
+| `path` | `theme=buildings/type=building/part-00403-….zstd.parquet` |
 | `bbox` | xmin 80.67177, xmax 80.67182, ymin 26.61979, ymax 26.61984 |
 
-Reading it: this is a building, `last_seen` is the current release so the identifier is still live, and `last_changed` is the switchover release, meaning nothing about this building has changed in any release since. `path` names the one file that holds it, so you can read the feature without scanning the theme.
+Reading it: this is a building, `last_seen` is the current release so the identifier is still live, and `last_changed` is the switchover release, meaning nothing about this building has changed in any release since. `path` names the one file that holds it, so you can read the feature without scanning the theme. Part file names change with every release, which is why the query below takes the path from the registry rather than hardcoding one.
 
 <QueryBuilder query={gers_registry_fetch_feature}></QueryBuilder>
 

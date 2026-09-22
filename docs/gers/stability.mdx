@@ -83,3 +83,5 @@ To find out whether an ID is still live, and when it last changed, query the [re
 <QueryBuilder query={gers_registry_lookup_id}></QueryBuilder>
 
 A null `path` means the ID is in GERS but is not in the current release. `last_seen` tells you which release last contained it.
+
+For a maintained join, `last_changed` is the more useful of the two. When it equals `first_seen`, the feature has never registered a change since it entered GERS. The building in the [registry example](../registry) is one of those. It entered at the `2025-06-25.0` switchover and has appeared in every release since without registering one, which is what the commitment at the top of this page looks like in practice.
