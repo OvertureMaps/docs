@@ -108,6 +108,7 @@ const sidebars = {
         'gers/bridge-files',
         'gers/changelog',
         'gers/registry',
+        'gers/onboarding-services',
         'gers/gers-tutorial',
       ],
     },

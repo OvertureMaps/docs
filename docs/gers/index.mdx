@@ -4,47 +4,96 @@ slug: /gers
 sidebar_label: Overview
 pagination_label: GERS Overview
 ---
+
 import QueryBuilder from '@site/src/components/queryBuilder';
+import gers_divisions_hierarchy from '!!raw-loader!@site/src/queries/duckdb/gers_divisions_hierarchy.sql';
+import gers_divisions_hierarchy_areas from '!!raw-loader!@site/src/queries/duckdb/gers_divisions_hierarchy_areas.sql';
 
-## Global Entity Reference System
+## Why GERS exists
 
-The Global Entity Reference System (GERS) is a universal framework for structuring and matching map data across systems. GERS, coupled with Overture datasets, is a potential standard for identifying and referencing the physical and conceptual entities we've defined in our world. It's also a mechanism that can simplify the integration and exchange of data layers.
+Map data from different sources can be hard to combine because the same real-world entity can be represented in different ways. One source's building footprint might not match another's. The POIs for the same grocery store may sit feet apart, with its name spelled differently. Matching map datasets means a spatial join, feature by feature, which can be computationally expensive at scale and often returns messy matches: one to many, many to one, many to many. Resolving those takes judgment, and that work is conflation, redone for every pair of datasets and again whenever either one is refreshed.
 
-GERS provides stable identifiers called GERS IDs for real-world geospatial entities across data releases and maintains consistency when entities appear in multiple source datasets.
+The Global Entity Reference System moves some of that work upstream. Overture assigns a stable identifier to each feature in its reference map, so anyone who matches their data to those features once can join on the identifier afterward.
+
+The rest of this documentation explains how GERS works and how you can use it.
 
 ## GERS is a system
 
-The "S" in GERS stands for a *system*, with the following components:
+The "S" in GERS stands for *system*. A stable identifier on its own is not enough to keep two datasets joined across releases, so GERS is five components rather than one.
 
-| Component | Description |
-| ---------- | ---------- | 
-| [Overture reference map](/getting-data/cloud-sources/) | consists of the canonical datasets Overture releases each month |
-| [Global registry of GERS IDs](./registry) | catalogs all GERS IDs ever published |
-| [Data changelog](./changelog) | describes changes to entities across releases |
-| [Bridge files](./bridge-files) | connects the GERS IDs in a release to the IDs from the underlying source data |
+| Component | What it does |
+| --------- | ------------ |
+| [Overture reference map](/getting-data/cloud-sources/) | The canonical datasets Overture releases each month. A feature MUST be in the reference map to have a GERS ID. |
+| [GERS registry](./registry) | Catalogs the IDs that carry a stability commitment, and records when each one was first seen, last seen, and last changed. |
+| [Data changelog](./changelog) | Reports what changed between the previous release and this one, per feature. |
+| [Bridge files](./bridge-files) | Map the IDs in Overture's source data to the GERS IDs those sources contributed to. |
+| [Onboarding services](./onboarding-services) | Third-party services that match your data to GERS IDs and keep the match current. |
 
+The registry, changelog, and bridge files exist to help you reconcile your GERS ID assignments from release to release. The registry tells you whether an ID is still live. The changelog tells you which of your matched features moved. Bridge files let you skip matching entirely when your data already shares an identifier system with one of Overture's sources.
 
-## How does GERS work?
+## What a GERS ID is
 
-1. Overture assigns a **unique ID** to discrete entities. These could be buildings, road segments, places, or addresses. These IDs are intended to be **stable** across Overture releases. 
+A GERS ID is a 128-bit random UUID that looks like this: `fea28f69-7afa-460c-b270-61ef74cd340c`.
 
-2. Overture maintains open-source **matching and conflation libraries** to ensure that the ID remains stable across releases.
+There is nothing to infer from its contents. It does not encode location, theme, or any other logic.
 
-3. Each Overture release is the latest **reference map** for these IDs.
+Until the `2025-06-25.0` release it did: identifiers were hex strings carrying an H3 cell and a theme byte. We replaced every one with a UUID in that release, because encoding meaning into an identifier cost more than it returned, and identifiers collided when an entity moved between cells or themes.
 
-4. The reference map is **global** and **open**.
+Identifiers captured before `2025-06-25.0` will not resolve against current data. Filtering on an identifier prefix was never a reliable spatial query either, so use the `bbox` column.
 
+## What carries a GERS ID
+
+Not every feature in an Overture release has a GERS ID. Features in the `base` theme and features of type `building_part` carry deterministic UUIDs that are valid UUIDs but are not GERS IDs. They come from a single source, they are not matched across sources, and Overture makes no stability commitment for them.
+
+**Presence in the [GERS registry](./registry) is what makes an identifier a GERS ID.** If you hold an ID from an Overture release and need to know whether a stability commitment stands behind it, query the registry. There is no way to tell from the identifier itself.
+
+The registry currently includes `building`, `division`, `division_area`, `division_boundary`, `place`, `segment`, and `connector`. See [GERS ID stability](./stability) for what the commitment actually promises.
+
+## GERS inside Overture
+
+GERS IDs are not only for connecting outside data to Overture. Overture features reference each other by GERS ID too, and the divisions theme is the clearest case.
+
+Every division carries a `hierarchies` array giving the chain of divisions it sits inside, running from the country down to the division itself, and each entry in that chain is a GERS ID. Take a locality and read its hierarchy:
+
+<QueryBuilder query={gers_divisions_hierarchy}></QueryBuilder>
+
+```
+┌──────────────────┬──────────┬──────────────────────────────────────┐
+│       name       │ subtype  │             division_id              │
+├──────────────────┼──────────┼──────────────────────────────────────┤
+│ United States    │ country  │ f39eb4af-5206-481b-b19e-bd784ded3f05 │
+│ Utah             │ region   │ 506017c0-8932-44b5-b82c-92f9dcffdcf1 │
+│ Salt Lake County │ county   │ 53d671bc-c294-44fb-a767-169bffedc5cb │
+│ South Salt Lake  │ locality │ fa6ba2e0-cc93-4f51-bfe9-ef41e33741c9 │
+└──────────────────┴──────────┴──────────────────────────────────────┘
+```
+
+Those four identifiers are GERS IDs like any other, so the boundaries themselves are one more join away, in the `division_area` type:
+
+<QueryBuilder query={gers_divisions_hierarchy_areas}></QueryBuilder>
+
+This is worth seeing early, because it shows that the identifier is load-bearing rather than decorative. The same join works whether the thing on the other side is another Overture feature or a table of your own.
 
 ## Using GERS
 
-We envision the Overture ecosystem using GERS in the following ways:
+### Matching your data
 
-### Matching and associating data
-You can independently associate your own data (or a third-party dataset) with Overture data. For example, you might want to link real-time traffic data to Overture road segments, insurance data to Overture buildings, restaurant reviews to features in Overture's places dataset, and socioeconomic data features in Overture's divisions dataset. When third-party data is matched to an Overture feature it picks up that feature's GERS ID and becomes "GERS-enabled" data, ready to be associated via ID to any other GERS-enabled dataset in the Overture ecosystem.
+You can associate your own data, or a third party's, with Overture features: real-time traffic on road segments, insurance exposure on buildings, reviews on places, socioeconomic indicators on divisions. Once your records carry GERS IDs, they join to any other GERS-enabled dataset by ID.
+
+Matching is real work. The first match is a conflation job against the current release. After that, each monthly release changes some of the features you matched to, so a maintenance pass keeps the association alive. The [GERS tutorial](./gers-tutorial) walks through both halves with a worked example, and [onboarding services](./onboarding-services) covers the third parties who will do it for you.
 
 <img src="/img/gers-layers.png" alt="GERS and Overture data layers" width="400"/>
 
+### Publishing data keyed to GERS
 
-### Contributing data
-You can contribute data to the Overture Maps Foundation, and we will use Overture's matching algorithms to match the features in your dataset to features in Overture. Matched features may be assigned an existing GERS ID, and we may generate new GERS IDs for new features. 
+Because a GERS ID is a shared identifier, a dataset keyed to GERS IDs is usable by anyone holding the reference map, without a conflation step. This is what lets a provider of traffic data publish traffic without also publishing roads, or a demographic data provider publish indicators without also publishing boundaries.
 
+### Contributing source data
+
+Overture accepts new source data into the reference map through a defined process, and matching contributed features to existing ones is part of that pipeline. It is not a service Overture offers on request, and the queue is long: integrating a new source takes months rather than weeks, and the matchers for some themes are still being built.
+
+**A GERS ID can only be assigned to a feature that is in the Overture reference map.** To get one for a feature we do not carry, contribute the data: once a source is accepted and ingested, its features are matched against what Overture already has, so entities we already hold keep their existing GERS IDs and genuinely new ones are assigned their own.
+
+Acceptance takes time and is not guaranteed, so your unmatched records still need identifiers in the meantime, and your own are fine. Do not publish them as GERS IDs: they will not be in the registry, they will not join to anyone else's data, and any feature that later turns out to exist in Overture becomes a duplicate to reconcile.
+
+For the current pathways for contributing data to Overture, see [Contributing Data to Overture](https://overturemaps.org/contributing-data-to-overture/).
