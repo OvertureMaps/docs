@@ -4,5 +4,5 @@ Retrieves the geographic IDs (geoid), phone numbers (phones), and primary names 
 */
 SELECT id, phones['list'][0]['element'] AS phone, names['primary'] AS name
 FROM CARTO.PLACE
-WHERE categories['primary'] = 'restaurant'
+WHERE taxonomy['primary'] = 'restaurant'
 LIMIT 100;

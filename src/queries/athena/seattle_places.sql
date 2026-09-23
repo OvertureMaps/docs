@@ -2,7 +2,7 @@ SELECT
     id,
     names,
     addresses,
-    categories,
+    taxonomy,
     confidence,
     sources,
     ST_GEOMFROMBINARY(geometry) AS geometry
