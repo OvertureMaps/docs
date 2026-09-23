@@ -22,21 +22,21 @@ import BaseLandMountainsQuery from '!!raw-loader!@site/src/queries/duckdb/base_l
 
 The Overture places theme contains tens of millions of point representations of real-world entities: schools, businesses, hospitals, religious organizations, landmarks, mountain peaks, and much more. The theme is published under the [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) and [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) licenses. It contains no OpenStreetMap data and carries none of the share-alike obligations of the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/).
 
-| ![Overture places theme coverage](/img/places/places-coverage-h3-august.png) |
+| ![Overture places theme coverage](/img/places/places-coverage-h3-september.png) |
 |:--:|
-| *Overture places data, August 2026* |
+| *Overture places data, September 2026* |
 
-| Sources | License | feature count, August 2026 |
+| Sources | License | feature count, September 2026 |
 | --- | --- | --- |
-| AllThePlaces, Overture | CC0-1.0              | 1,609,565    |
-| BrightQuery, Overture  | CDLA-Permissive-2.0  | 2,289,171    |
-| DAC, Overture          | CDLA-Permissive-2.0  | 148,797      |
-| Foursquare, Overture   | Apache-2.0           | 4,630,865    |
-| Krick, Overture        | CDLA-Permissive-2.0  | 16,955       |
-| Microsoft, Overture    | CDLA-Permissive-2.0  | 6,278,097    |
-| PinMeTo, Overture      | CDLA-Permissive-2.0  | 164,344      |
-| RenderSEO, Overture    | CDLA-Permissive-2.0  | 3,641        |
-| meta, Overture         | CDLA-Permissive-2.0  | 58,489,657   |
+| AllThePlaces, Overture | CC0-1.0              | 1,809,219    |
+| BrightQuery, Overture  | CDLA-Permissive-2.0  | 10,255,071   |
+| DAC, Overture          | CDLA-Permissive-2.0  | 148,791      |
+| Foursquare, Overture   | Apache-2.0           | 4,138,835    |
+| Krick, Overture        | CDLA-Permissive-2.0  | 13,501       |
+| Microsoft, Overture    | CDLA-Permissive-2.0  | 6,135,466    |
+| PinMeTo, Overture      | CDLA-Permissive-2.0  | 167,667      |
+| RenderSEO, Overture    | CDLA-Permissive-2.0  | 3,752        |
+| meta, Overture         | CDLA-Permissive-2.0  | 58,783,121   |
 
 Overture defines a place as a *concrete, physically identifiable, stationary destination in a publicly observable space*. The [next section](#what-is-a-place) unpacks that definition and how it draws the line between places and Overture's other themes.
 
@@ -44,7 +44,7 @@ Overture defines a place as a *concrete, physically identifiable, stationary des
 
 - **[What is a place?](#what-is-a-place)**: How Overture defines a place, and what belongs in other themes instead.
 - **[Dataset description](#dataset-description)**: The place feature type, its core properties, and column definitions.
-- **[Category taxonomy](#category-taxonomy)**: The new `taxonomy` and `basic_category` properties, the deprecation of `categories`, and how to migrate.
+- **[Category taxonomy](#category-taxonomy)**: The new `taxonomy` and `basic_category` properties, the removal of `categories`, and how to migrate.
 - **[Sources and licensing](#sources-and-licensing)**: Where the data comes from and the licenses it carries.
 - **[How we build the dataset](#how-we-build-the-dataset)**: The conflation pipeline, how matching quality is measured, and the confidence score.
 - **[Coverage and data quality](#coverage-and-data-quality)**: What the theme covers and its known quality issues.
@@ -68,7 +68,7 @@ The public observability requirement reflects a principle that applies across al
 
 > Overture Maps Foundation focuses on map data about physical objects that can be publicly observed and are relevant to map applications. Our goal is to collect high quality data that reflects the physical world as it changes. We do not collect or publish data about non-public spaces or objects. If something is not observable from a publicly accessible area, it does not fit in Overture's datasets.
 
-Places is not the only Overture theme with point data. Addresses are published as point features, divisions include point representations of populated places, and the base theme contains points for natural and infrastructure features. Some real-world entities appear in more than one theme by design: a mountain peak, for example, is in places as a destination and in the base theme's land type as a physical feature. What distinguishes a places record is what it carries (a name, categories, an existence confidence score, and a GERS-matched identity) rather than the kind of point it marks.
+Places is not the only Overture theme with point data. Addresses are published as point features, divisions include point representations of populated places, and the base theme contains points for natural and infrastructure features. Some real-world entities appear in more than one theme by design: a mountain peak, for example, is in places as a destination and in the base theme's land type as a physical feature. What distinguishes a places record is what it carries (a name, taxonomy, an existence confidence score, and a GERS-matched identity) rather than the kind of point it marks.
 
 ## Dataset description
 
@@ -96,9 +96,9 @@ The Overture Place Categories (OPC) taxonomy is a hierarchical system of roughly
 
 These properties are the product of a taxonomy redesign architected by Ron Rice, the taxonomist at Meta who leads the OPC work. The redesign addresses known issues with the original `categories` property, including structural inconsistencies, naming ambiguity, and coverage gaps, and applies taxonomy design best practices to improve structure for generalization (rolling up) and specialization (drilling down), compatibility across Overture themes, support for user discovery and visualization, and interoperability with other industry taxonomies.
 
-:::warning Deprecation
+:::warning Removed
 
-The `categories` property in the places schema has been deprecated and will be removed in the **September 2026 release**, replaced by the new `basic_category` and `taxonomy` properties. All three properties will be available until then to ease the transition. You can explore the old-to-new category mappings [here](https://docs.google.com/spreadsheets/d/1_i2S48zTDoHff0uX-d8Nes3bR-Xee8drx27Gyi80CQ0/edit?usp=sharing0). We'd love your [feedback](https://github.com/orgs/OvertureMaps/discussions) on the new structure and suggestions for further improvement.
+The `categories` property has been removed from the places schema as of the **September 2026 release**, replaced by the `basic_category` and `taxonomy` properties. Users still reading `categories` should migrate to `taxonomy` (and `basic_category` where a simpler label suffices); see the mapping and migration notes below. You can explore the old-to-new category mappings [here](https://docs.google.com/spreadsheets/d/1_i2S48zTDoHff0uX-d8Nes3bR-Xee8drx27Gyi80CQ0/edit?usp=sharing0). We'd love your [feedback](https://github.com/orgs/OvertureMaps/discussions) on the new structure and suggestions for further improvement.
 
 :::
 
@@ -120,7 +120,7 @@ Users should be aware of the following key updates when evaluating and integrati
 
 #### Original categories system
 
-The original `categories` property remains in the schema until the September 2026 release to allow users to compare the old system to the new taxonomy and facilitate migration.
+Prior to the September 2026 release, the schema included a `categories` property, shown below, to allow users to compare the old system to the new taxonomy and facilitate migration. It has since been removed.
 
 ```
 properties:
@@ -147,7 +147,7 @@ properties:
     taxonomy:
         hierarchy: [food_and_drink, restaurant, casual_eatery, gas_station_sushi]
         primary: gas_station_sushi
-        alternate:
+        alternates:
             - gas_station
             - sushi_restaurant
 ```
@@ -157,7 +157,7 @@ properties:
 - `hierarchy`: An ordered list representing the full path from the top-level (L0) category down to the primary category. This array is essential for aggregating POIs based on subtype/supertype relationships (e.g., for aggregating all cantonese_restaurant POIs up to chinese_restaurant).
 - `primary`: The most specific and appropriate category label for the POI, consistent with the lowest level of the hierarchy.
 - `basic_category`: Identifies a "cognitively basic" category, as a supplement to the primary place category. This is recommended for use in map applications for high-level filtering and defining map iconography, and for LLMs, as it offers a streamlined set of labels (approx. 280) that are less specific than the full 2.1k taxonomy.
-- `alternate`: Other relevant category labels for the POI.
+- `alternates`: Other relevant category labels for the POI.
 
 ### What are basic-level categories?
 
@@ -179,21 +179,21 @@ The structured `hierarchy` property is designed to support robust aggregation lo
 
 ### Top-level category counts
 
-| Top Level Taxonomy | feature count, August 2026 |
+| Top Level Taxonomy | feature count, September 2026 |
 | --- | --- |
-| Services and Business     | 16,963,744    |
-| Shopping                  | 13,416,679    |
-| Food and Drink            | 9,979,044     |
-| Lifestyle Services        | 4,624,751     |
-| Travel and Transportation | 3,866,782     |
-| Health Care               | 4,580,186     |
-| Education                 | 3,507,880     |
-| Cultural and Historic     | 3,109,831     |
-| Sports and Recreation     | 2,617,034     |
-| Community and Government  | 2,722,787     |
-| Lodging                   | 2,504,442     |
-| Arts and Entertainment    | 1,482,281     |
-| Geographic Entities       | 970,417       |
+| Services and Business     | 21,176,033    |
+| Shopping                  | 14,395,494    |
+| Food and Drink            | 10,559,834    |
+| Lifestyle Services        | 5,007,526     |
+| Travel and Transportation | 4,198,209     |
+| Health Care               | 5,202,712     |
+| Education                 | 3,597,112     |
+| Cultural and Historic     | 3,167,325     |
+| Sports and Recreation     | 3,003,530     |
+| Community and Government  | 2,826,472     |
+| Lodging                   | 2,760,980     |
+| Arts and Entertainment    | 1,637,265     |
+| Geographic Entities       | 985,270       |
 
 ### Provider category mappings
 
@@ -207,7 +207,7 @@ The taxonomy is maintained on a quarterly release cycle, with updates in March, 
 
 ## Sources and licensing
 
-The places theme is built from a variety of data providers. Its primary source is Meta, which contributes the large majority of place records (roughly 58 million of the ~74 million total), alongside Microsoft, Foursquare, and PinMeTo, together with a number of smaller aggregators and providers such as AllThePlaces, BrightQuery, DAC, Krick, and RenderSEO. The theme does not include OpenStreetMap data.
+The places theme is built from a variety of data providers. Its primary source is Meta, which contributes the large majority of place records (roughly 59 million of the ~81 million total), alongside Microsoft, Foursquare, and PinMeTo, together with a number of smaller aggregators and providers such as AllThePlaces, BrightQuery, DAC, Krick, and RenderSEO. The theme does not include OpenStreetMap data.
 
 Places is published under the [CDLA Permissive 2.0](https://cdla.dev/permissive-2-0/) and [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) licenses, depending on the source. For full per-source licensing information, see the [licensing and attribution page](../../attribution).
 
@@ -216,8 +216,6 @@ Note: Joining CDLA Permissive 2.0 data to OpenStreetMap is permitted, but the re
 ## How we build the dataset
 
 Because multiple providers contribute records describing overlapping sets of real-world places, the central problem in building the dataset is **conflation**: determining which records refer to the same real-world entity. Conflation quality matters beyond deduplication. It is key to GERS stability, because a place whose records are conflated consistently keeps the same GERS ID from release to release, while inconsistent conflation causes identities to split or merge as source data shifts.
-
-**Filtering.** No theme-wide filtering is applied beyond an existence threshold: places with a `confidence` score of 0.2 or less are removed.
 
 **Matching.** Places use **ML-based matching with clustering** to identify records from different providers that describe the same real-world place. The full conflation pipeline is described in the next section.
 
@@ -317,9 +315,9 @@ The `address` column can be used to quickly filter data down to a particular pol
 <QueryBuilder query={LithuaniaQuery}></QueryBuilder>
 </TabItem>
 <TabItem value="Query by category" label="Query by category" default>
-For filtering data by a particular type of place we can use the `categories` column. In this example we'll extract all the places with categories of `rice_mill` or `flour_mill`
+For filtering data by a particular type of place we can use the `taxonomy` column. In this example we'll extract all the places with a primary taxonomy category of `rice_mill` or `flour_mill`
 
-Note: this example uses the deprecated `categories` property, which will be removed in the September 2026 release. It will be updated to use the new `taxonomy` property (see [Category taxonomy](#category-taxonomy)).
+Note: prior to the September 2026 release, this example used the now-removed `categories` property instead (see [Category taxonomy](#category-taxonomy)).
 
 <QueryBuilder query={MillQuery}></QueryBuilder>
 </TabItem>
@@ -359,7 +357,7 @@ The places theme has wide coverage and many of the place point features have add
 <TabItem value="Compare with the base theme" label="Compare with the base theme" default>
 Some real-world entities appear in more than one Overture theme. Mountains are a good example: the places theme carries them as destinations with names, categories, and GERS IDs, while the base theme's land type carries them as OSM-derived physical features.
 
-Count mountains in places (131,189 in the August 2026 release):
+Count mountains in places (130,491 in the September 2026 release):
 
 <QueryBuilder query={PlacesMountainsQuery}></QueryBuilder>
 

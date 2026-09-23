@@ -18,7 +18,7 @@ import UtahAddresses from '!!raw-loader!@site/src/queries/duckdb/addresses_utah.
 This theme is currently in Alpha. We invite the Overture community to test the addresses schema and data and offer feedback via the [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repos.
 :::
 
-Overture maintains over 472 million address point entities. An address represents a physical place through a series of attributes — street number, street name, unit, address levels, postal code, and/or country — together with a point geometry that gives an approximate location of the position most commonly associated with the feature.
+Overture maintains over 474 million address point entities. An address represents a physical place through a series of attributes — street number, street name, unit, address levels, postal code, and/or country — together with a point geometry that gives an approximate location of the position most commonly associated with the feature.
 
 Address data can be used for a variety of purposes, which can include:
 
@@ -29,9 +29,9 @@ Address data can be used for a variety of purposes, which can include:
 - **Normalization**: Adhering to standard and consistent forms of address components.
 - **Validation and Verification**: Confirming an address exists within a known list of addresses.
 
-| ![Overture address coverage](/img/addresses/address-coverage-h3-august.png) |
+| ![Overture address coverage](/img/addresses/address-coverage-h3-september.png) |
 |:--:|
-| *August 2026 coverage of Overture address data, visualized using H3 cells.* |
+| *September 2026 coverage of Overture address data, visualized using H3 cells.* |
 
 ## Dataset description
 
@@ -60,7 +60,7 @@ Addresses are assembled from many independent source datasets with minimal trans
 
 ## Coverage and data quality
 
-**Coverage.** The addresses theme currently spans **39 countries** (see the per-country counts above). Several large countries have only partial coverage, including the US, Germany, and Taiwan. Individual datasets also have varying levels of completeness in their attributes — a dataset may be missing postcodes or have only partial coverage for `address_levels`, for example.
+**Coverage.** The addresses theme currently spans **41 countries** (see the per-country counts above). Several large countries have only partial coverage, including the US, Germany, and Taiwan. Individual datasets also have varying levels of completeness in their attributes — a dataset may be missing postcodes or have only partial coverage for `address_levels`, for example.
 
 <details>
 	<summary>Address counts, per country</summary>
@@ -69,43 +69,45 @@ Addresses are assembled from many independent source datasets with minimal trans
 | country | address count |
 | --- | --- |
 | AT      | 2,516,341      |
-| AU      | 15,691,319     |
-| BE      | 6,721,587      |
-| BR      | 89,899,299     |
-| CA      | 16,901,320     |
-| CH      | 3,296,538      |
+| AU      | 15,739,608     |
+| BE      | 6,995,381      |
+| BR      | 89,887,635     |
+| CA      | 16,938,808     |
+| CH      | 3,300,945      |
 | CL      | 4,199,023      |
 | CO      | 7,786,046      |
-| CZ      | 3,019,137      |
-| DE      | 19,269,891     |
+| CZ      | 3,020,120      |
+| DE      | 19,296,806     |
 | DK      | 3,933,282      |
 | EE      | 2,230,000      |
 | ES      | 15,627,615     |
-| FI      | 3,656,855      |
-| FO      | 26,426         |
-| FR      | 26,056,645     |
-| GL      | 20,335         |
-| HK      | 177,020        |
-| HR      | 1,680,795      |
-| IS      | 139,055        |
-| IT      | 25,914,431     |
+| FI      | 3,656,853      |
+| FO      | 26,428         |
+| FR      | 26,049,978     |
+| GL      | 20,297         |
+| HK      | 176,772        |
+| HR      | 1,682,125      |
+| IS      | 139,466        |
+| IT      | 26,841,754     |
 | JP      | 19,587,926     |
-| LI      | 12,949         |
-| LT      | 1,128,144      |
-| LU      | 179,408        |
+| LI      | 12,966         |
+| LT      | 1,130,062      |
+| LU      | 179,533        |
 | LV      | 549,594        |
-| MX      | 30,723,333     |
-| NL      | 9,934,356      |
-| NO      | 3,581,468      |
-| NZ      | 2,420,509      |
+| MX      | 30,726,687     |
+| NC      | 41,536         |
+| NL      | 9,981,787      |
+| NO      | 3,581,944      |
+| NZ      | 2,426,460      |
+| PF      | 2,000          |
 | PL      | 8,584,407      |
-| PT      | 5,614,635      |
+| PT      | 5,607,450      |
 | RS      | 2,681,230      |
 | SG      | 142,210        |
-| SI      | 579,695        |
-| SK      | 1,697,528      |
-| TW      | 9,732,009      |
-| US      | 125,825,772    |
+| SI      | 579,979        |
+| SK      | 1,704,346      |
+| TW      | 10,174,827     |
+| US      | 125,367,277    |
 | UY      | 1,059,027      |
 
 </div>

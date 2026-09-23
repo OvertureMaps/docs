@@ -24,7 +24,7 @@ COPY (
   places AS (
     SELECT
       names.primary AS name,
-      categories.primary AS category,
+      taxonomy.primary AS category,
       ROUND(confidence,2) AS confidence,
       geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
     FROM

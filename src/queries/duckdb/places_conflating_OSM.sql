@@ -40,7 +40,7 @@ COPY (
         FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
         WHERE region = 'OR'
             AND country = 'US'
-            AND categories.primary ilike '%restaurant%'
+            AND taxonomy.primary ilike '%restaurant%'
     )
 -- Now that we have our input data we will join them together.
     SELECT
