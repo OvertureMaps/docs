@@ -6,14 +6,6 @@ import { render, screen, cleanup, fireEvent, waitFor } from '@testing-library/re
 import TaxonomyBrowser from '../taxonomyBrowser';
 import { sunburstGeometry, zoomAt, wrapLabel } from '../taxonomyViz';
 
-// A two-release fixture: one legacy CSV release and one canonical JSON release,
-// which is the combination the browser has to support during the transition.
-const LEGACY_CSV = [
-  'New Primary Category,New Primary Hierarchy,Basic Level Category',
-  'restaurant,food_and_drink > restaurant,restaurant',
-  'diner,food_and_drink > restaurant > diner,restaurant',
-].join('\n');
-
 const CANONICAL_JSON = {
   version: '2026-09-23.0',
   stats: { categories: 3, basicCategories: 2, rootGroups: 1, maxDepth: 2, totalPlaces: null },
@@ -35,17 +27,6 @@ const CANONICAL_JSON = {
 };
 
 const RELEASES = [
-  {
-    id: 'december',
-    label: '2025 December (New Hierarchy Addition)',
-    tags: [{ label: '17 December 2025', title: 'Date' }],
-    dataCsv: LEGACY_CSV,
-    countsCsv: null,
-    hierarchyField: 'new_primary_hierarchy',
-    codeField: 'new_primary_category',
-    fieldNames: ['new_primary_category', 'new_primary_hierarchy', 'basic_level_category'],
-    basicCategoryField: 'basic_level_category',
-  },
   {
     id: 'september',
     label: '2026 September (Canonical Taxonomy)',
@@ -71,10 +52,11 @@ afterEach(() => {
 });
 
 describe('TaxonomyBrowser', () => {
-  it('opens on the newest release, not the oldest', async () => {
+  it('hides the release picker when there is only one release', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
-    const select = screen.getByRole('combobox');
-    expect(select).toHaveValue('september');
+    expect(await screen.findByText('Categories')).toBeInTheDocument();
+    // A picker offering a single choice is a row to look past, not a control.
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 
   it('fetches a JSON-sourced release and renders its tree', async () => {
@@ -197,28 +179,6 @@ describe('TaxonomyBrowser', () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
     expect(await screen.findByText('Categories')).toBeInTheDocument();
     expect(screen.getByText('Not published')).toBeInTheDocument();
-  });
-
-  it('does not label figures "(new)" when the previous release simply has no counts', async () => {
-    // The December fixture has countsCsv: null, so its stats are zeros. That is
-    // missing data, not a measured zero, and must not drive a change indicator.
-    render(<TaxonomyBrowser releases={RELEASES} />);
-    const categories = await screen.findByText('Categories');
-    expect(categories.nextSibling).toHaveTextContent(/^3$/);
-    expect(categories.nextSibling).not.toHaveTextContent('new');
-  });
-
-  it('still renders legacy CSV releases', async () => {
-    render(<TaxonomyBrowser releases={RELEASES} />);
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'december' } });
-
-    // A CSV-sourced release drives the visualization too, not just the tree.
-    expect(await screen.findByRole('img', { name: 'Taxonomy sunburst' })).toBeInTheDocument();
-    expect(document.querySelectorAll('.taxonomy-viz-stage path').length).toBeGreaterThan(0);
-
-    fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
-    expect(await screen.findByText('Food and Drink')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'Taxonomy (JSON)' })).not.toBeInTheDocument();
   });
 
   it('does not strand on "Loading" when it re-renders before the fetch lands', async () => {

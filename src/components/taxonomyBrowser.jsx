@@ -13,247 +13,6 @@ function toDisplayName(code) {
   }).join(' ');
 }
 
-/**
- * Parse a single CSV line, handling quoted fields that contain commas.
- * Returns an array of field values.
- */
-function parseCsvLine(line) {
-  const fields = [];
-  let i = 0;
-  while (i <= line.length) {
-    if (i === line.length) {
-      fields.push('');
-      break;
-    }
-    if (line[i] === '"') {
-      let j = i + 1;
-      let value = '';
-      while (j < line.length) {
-        if (line[j] === '"') {
-          if (j + 1 < line.length && line[j + 1] === '"') {
-            value += '"';
-            j += 2;
-          } else {
-            j++;
-            break;
-          }
-        } else {
-          value += line[j];
-          j++;
-        }
-      }
-      fields.push(value);
-      if (j < line.length && line[j] === ',') j++;
-      i = j;
-    } else {
-      const commaIdx = line.indexOf(',', i);
-      if (commaIdx === -1) {
-        fields.push(line.slice(i));
-        break;
-      } else {
-        fields.push(line.slice(i, commaIdx));
-        i = commaIdx + 1;
-      }
-    }
-  }
-  return fields;
-}
-
-// ---------------------------------------------------------------------------
-// Generic CSV parser
-// ---------------------------------------------------------------------------
-
-function parseCsv(csvText, fieldNames) {
-  const lines = csvText.replace(/\r\n?/g, '\n').trim().split('\n');
-  lines.shift();
-  return lines
-    .map(line => {
-      const parts = parseCsvLine(line);
-      if (!parts[0]) return null;
-      const row = {};
-      for (let i = 0; i < fieldNames.length; i++) {
-        row[fieldNames[i]] = parts[i] || '';
-      }
-      return row;
-    })
-    .filter(Boolean);
-}
-
-function parseCountsCsv(csvText) {
-  if (!csvText) return {};
-  const lines = csvText.replace(/\r\n?/g, '\n').replace(/^\uFEFF/, '').trim().split('\n');
-  lines.shift();
-  const map = {};
-  for (const line of lines) {
-    const parts = parseCsvLine(line);
-    const count = parseInt(parts[0], 10);
-    const category = parts[1];
-    if (category && !isNaN(count)) {
-      map[category] = (map[category] || 0) + count;
-    }
-  }
-  return map;
-}
-
-function parseCountsStats(csvText) {
-  if (!csvText) return { totalPlaces: 0, uniqueCategories: 0, uniqueBasicCategories: 0 };
-  const lines = csvText.replace(/\r\n?/g, '\n').replace(/^\uFEFF/, '').trim().split('\n');
-  lines.shift();
-  let totalPlaces = 0;
-  const categories = new Set();
-  const basicCategories = new Set();
-  for (const line of lines) {
-    const parts = parseCsvLine(line);
-    const count = parseInt(parts[0], 10);
-    if (!isNaN(count)) totalPlaces += count;
-    if (parts[1]) categories.add(parts[1]);
-    if (parts[2]) basicCategories.add(parts[2]);
-  }
-  return { totalPlaces, uniqueCategories: categories.size, uniqueBasicCategories: basicCategories.size };
-}
-
-function parseCountsCsvByBasic(csvText) {
-  if (!csvText) return {};
-  const lines = csvText.replace(/\r\n?/g, '\n').replace(/^\uFEFF/, '').trim().split('\n');
-  lines.shift();
-  const map = {};
-  for (const line of lines) {
-    const parts = parseCsvLine(line);
-    const count = parseInt(parts[0], 10);
-    const basicCategory = parts[2];
-    if (basicCategory && !isNaN(count)) {
-      map[basicCategory] = (map[basicCategory] || 0) + count;
-    }
-  }
-  return map;
-}
-
-// ---------------------------------------------------------------------------
-// Generic tree builder
-// ---------------------------------------------------------------------------
-
-function buildTree(rows, counts, config) {
-  const nodeMap = {};
-
-  if (config.hierarchyFields) {
-    // Multi-field mode (April style): build path from multiple fields
-    function ensureNode(hierarchy, displayName) {
-      if (nodeMap[hierarchy]) return nodeMap[hierarchy];
-      const node = {
-        hierarchy,
-        displayName,
-        code: '',
-        children: [],
-        data: null,
-        leafCount: null,
-        totalCount: null,
-      };
-      nodeMap[hierarchy] = node;
-      return node;
-    }
-
-    for (const row of rows) {
-      const pathParts = [];
-      for (const f of config.hierarchyFields) {
-        const val = row[f];
-        if (val) {
-          // Skip duplicate when category === theme (original taxonomy quirk)
-          if (pathParts.length > 0 && val === pathParts[pathParts.length - 1]) continue;
-          pathParts.push(val);
-        }
-      }
-
-      for (let i = 0; i < pathParts.length; i++) {
-        const path = pathParts.slice(0, i + 1).join(' > ');
-        const node = ensureNode(path, toDisplayName(pathParts[i]));
-        node.code = pathParts[i];
-      }
-
-      const leafPath = pathParts.join(' > ');
-      if (nodeMap[leafPath]) {
-        nodeMap[leafPath].data = row;
-        const c = counts[row[config.codeField]];
-        if (c != null) {
-          nodeMap[leafPath].leafCount = c;
-          nodeMap[leafPath].totalCount = c;
-        }
-      }
-    }
-  } else {
-    // Single-field mode (Oct/Dec style): split a pre-built hierarchy string
-    function ensureNode(hierarchy) {
-      if (nodeMap[hierarchy]) return nodeMap[hierarchy];
-      const parts = hierarchy.split(' > ');
-      const lastSegment = parts[parts.length - 1];
-      const node = {
-        hierarchy,
-        displayName: toDisplayName(lastSegment),
-        code: lastSegment,
-        children: [],
-        leafCount: null,
-        totalCount: null,
-      };
-      nodeMap[hierarchy] = node;
-      return node;
-    }
-
-    for (const row of rows) {
-      const hierarchyValue = row[config.hierarchyField];
-      if (!hierarchyValue) continue;
-      const parts = hierarchyValue.split(' > ');
-      for (let i = 0; i < parts.length; i++) {
-        const path = parts.slice(0, i + 1).join(' > ');
-        ensureNode(path);
-      }
-
-      const leafPath = hierarchyValue;
-      const codeValue = row[config.codeField];
-      if (nodeMap[leafPath] && codeValue) {
-        nodeMap[leafPath].code = codeValue;
-        const c = counts[codeValue];
-        if (c != null) {
-          nodeMap[leafPath].leafCount = c;
-          nodeMap[leafPath].totalCount = c;
-        }
-      }
-    }
-  }
-
-  // Build parent-child relationships
-  const root = [];
-  const paths = Object.keys(nodeMap).sort();
-  for (const path of paths) {
-    const node = nodeMap[path];
-    const parts = path.split(' > ');
-    if (parts.length === 1) {
-      root.push(node);
-    } else {
-      const parentPath = parts.slice(0, -1).join(' > ');
-      if (nodeMap[parentPath]) {
-        if (!nodeMap[parentPath].children.find(c => c.hierarchy === path)) {
-          nodeMap[parentPath].children.push(node);
-        }
-      }
-    }
-  }
-
-  // Aggregate counts up the tree
-  if (Object.keys(counts).length > 0) {
-    function computeTotal(node) {
-      if (node.children.length === 0) return node.leafCount || 0;
-      let total = node.leafCount || 0;
-      for (const child of node.children) {
-        total += computeTotal(child);
-      }
-      node.totalCount = total;
-      return total;
-    }
-    for (const node of root) computeTotal(node);
-  }
-
-  return { children: root, totalCategories: rows.length };
-}
-
 // ---------------------------------------------------------------------------
 // Canonical JSON releases
 // ---------------------------------------------------------------------------
@@ -311,9 +70,7 @@ function buildJsonRelease(data) {
       totalCount: node.totalCount,
       parentTotal: node.parentTotal,
       parentLabel: node.parentLabel,
-      prevCount: null,
       basicCount: null,
-      prevBasicCount: null,
       pctTag: null,
       is_basic: node.isBasic ? 'Yes' : 'No',
     };
@@ -350,71 +107,6 @@ function computePercentileTags(counts) {
     else tags[key] = null;
   }
   return tags;
-}
-
-function buildLookups(releases, allRows, allCountsByPrimary, allCountsByBasic) {
-  const lookups = {};
-  for (let i = 0; i < releases.length; i++) {
-    const cfg = releases[i];
-    const rows = allRows[cfg.id];
-    const counts = allCountsByPrimary[cfg.id];
-    const basicCounts = allCountsByBasic[cfg.id];
-    const prevBasicCounts = i > 0 ? allCountsByBasic[releases[i - 1].id] : null;
-    const pctTags = computePercentileTags(counts);
-
-    // Determine which release's counts to use for prevCount based on matchType
-    let prevCountSource = null;
-    if (cfg.matchType === 'original') {
-      prevCountSource = allCountsByPrimary[releases[0].id];
-    } else if (cfg.matchType === 'new' && i > 0) {
-      prevCountSource = allCountsByPrimary[releases[i - 1].id];
-    } else if (i > 0) {
-      prevCountSource = allCountsByPrimary[releases[i - 1].id];
-    }
-
-    lookups[cfg.id] = {};
-    for (const row of rows) {
-      const code = row[cfg.codeField];
-      if (!code || lookups[cfg.id][code]) continue;
-
-      const hierarchy = cfg.hierarchyField
-        ? row[cfg.hierarchyField]
-        : cfg.hierarchyFields.filter(f => row[f]).map(f => row[f]).join(' > ');
-
-      const basicLabel = cfg.basicCategoryField ? row[cfg.basicCategoryField] : null;
-
-      // Use matchColumn for prevCount lookup when available, otherwise fall back to code
-      const matchCode = cfg.matchColumn ? row[cfg.matchColumn] : null;
-      let prevCount = null;
-      if (prevCountSource) {
-        if (matchCode) {
-          prevCount = prevCountSource[matchCode] ?? null;
-        } else {
-          prevCount = prevCountSource[code] ?? null;
-        }
-      }
-
-      const entry = {
-        ...row,
-        hierarchy,
-        code,
-        basicCategory: basicLabel,
-        count: counts[code] ?? null,
-        prevCount,
-        basicCount: basicLabel && basicCounts ? (basicCounts[basicLabel] ?? null) : null,
-        prevBasicCount: basicLabel && prevBasicCounts ? (prevBasicCounts[basicLabel] ?? null) : null,
-        pctTag: pctTags[code] || null,
-      };
-
-      lookups[cfg.id][code] = entry;
-
-      // Also index by matchColumn value for cross-tab lookups
-      if (matchCode && matchCode !== code && !lookups[cfg.id][matchCode]) {
-        lookups[cfg.id][matchCode] = entry;
-      }
-    }
-  }
-  return lookups;
 }
 
 // ---------------------------------------------------------------------------
@@ -468,33 +160,6 @@ function TreeNode({ node, depth, expanded, onToggle, selected, onSelect }) {
   );
 }
 
-function CollapsibleSection({ title, defaultOpen, noMatch, note, children }) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="taxonomy-collapsible">
-      <button
-        className={`taxonomy-collapsible-header ${open ? 'taxonomy-collapsible-header--open' : ''}`}
-        onClick={noMatch ? undefined : () => setOpen(!open)}
-        style={noMatch ? { cursor: 'default' } : undefined}
-      >
-        <span className="taxonomy-collapsible-chevron">{noMatch ? '·' : (open ? '▾' : '▸')}</span>
-        <span>{title}</span>
-        {noMatch && <span className="taxonomy-no-match-tag">No Match</span>}
-      </button>
-      {!noMatch && open && (
-        <div className="taxonomy-collapsible-content">
-          {note && <p className="taxonomy-section-note">{note}</p>}
-          {children}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Section content renderer
-// ---------------------------------------------------------------------------
-
 function pctTagClass(tag) {
   if (!tag) return '';
   if (tag.startsWith('Top')) return 'taxonomy-pct-top';
@@ -507,24 +172,7 @@ function PctTag({ tag }) {
   return <span className={`taxonomy-pct-tag ${pctTagClass(tag)}`}>{tag}</span>;
 }
 
-function ChangeIndicator({ current, previous }) {
-  if (previous == null || current == null) return null;
-  if (previous === 0 && current === 0) return null;
-  if (previous === 0) {
-    return <span className="taxonomy-change-up"> (new)</span>;
-  }
-  const pctRaw = ((current - previous) / previous) * 100;
-  const pct = Math.abs(pctRaw) >= 1 ? Math.round(pctRaw) : Math.round(pctRaw * 10) / 10;
-  if (pct === 0) return null;
-  const isUp = pct > 0;
-  return (
-    <span className={isUp ? 'taxonomy-change-up' : 'taxonomy-change-down'}>
-      {' '}({isUp ? '↑' : '↓'} {Math.abs(pct)}%)
-    </span>
-  );
-}
-
-function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, prevBasicCount, count, totalCount, parentTotal, parentLabel, prevCount, pctTag, mappings, displayFields, data }) {
+function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount, count, totalCount, parentTotal, parentLabel, pctTag, mappings, displayFields, data }) {
   if (!hierarchy) return null;
   const parts = hierarchy.split(' > ');
   const items = parts.map((part, i) => ({
@@ -544,7 +192,7 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
     }
   }
   if (basicCount != null) {
-    items.push({ label: 'Basic Count', value: basicCount.toLocaleString(), countChange: { current: basicCount, previous: prevBasicCount } });
+    items.push({ label: 'Basic Count', value: basicCount.toLocaleString() });
   }
   // A parent's own count is only the places filed directly against it. The
   // roll-up is what people mean by "how big is Food and Drink", so show both.
@@ -568,7 +216,6 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
       value: `${direct.toLocaleString()}${share(direct)}`,
       numeric: true,
       stacked: true,
-      countChange: { current: direct, previous: prevCount },
     });
   }
   // Suppressed on a leaf, where the two numbers are the same.
@@ -612,7 +259,6 @@ function HierarchyLevelList({ hierarchy, selectedCode, basicCategory, basicCount
                 .join(' ')}
             >
               {item.value}
-              {item.countChange && <ChangeIndicator current={item.countChange.current} previous={item.countChange.previous} />}
             </span>
           )}
         </div>
@@ -629,12 +275,10 @@ function SectionContent({ data, release }) {
         selectedCode={data.code}
         basicCategory={data.basicCategory}
         basicCount={data.basicCount}
-        prevBasicCount={data.prevBasicCount}
         count={data.count}
         totalCount={data.totalCount}
         parentTotal={data.parentTotal}
         parentLabel={data.parentLabel}
-        prevCount={data.prevCount}
         pctTag={data.pctTag}
         displayFields={release.displayFields}
         data={data}
@@ -672,28 +316,12 @@ function DetailPanel({ node, activeTab, lookups, releases, onClear }) {
       </button>
       <h2 className="taxonomy-detail-name">{node.displayName}</h2>
       <div className="taxonomy-detail-sections">
-        {releases.length === 1
-          ? (() => {
-              // One release: show its detail directly. Wrapping a lone section
-              // in a collapsible header only adds a row to click past.
-              const release = releases[0];
-              const data = lookups[release.id]?.[code] || null;
-              return data ? <SectionContent data={data} release={release} /> : null;
-            })()
-          : releases.map(release => {
-              const data = lookups[release.id]?.[code] || null;
-              return (
-                <CollapsibleSection
-                  key={release.id}
-                  title={release.label}
-                  defaultOpen={activeTab === release.id}
-                  noMatch={!data}
-                  note={release.note}
-                >
-                  {data && <SectionContent data={data} release={release} />}
-                </CollapsibleSection>
-              );
-            })}
+        {(() => {
+          const release = releases.find(r => r.id === activeTab) ?? releases[0];
+          if (!release) return null;
+          const data = lookups[release.id]?.[code] || null;
+          return data ? <SectionContent data={data} release={release} /> : null;
+        })()}
       </div>
     </div>
   );
@@ -763,73 +391,30 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
     // stops a result from being applied.
   }, [releases, withBaseUrl]);
 
-  // Parse all data CSVs. Releases sourced from JSON have no CSV to parse.
-  const allRows = useMemo(() => {
-    const result = {};
-    for (const r of releases) {
-      result[r.id] = r.dataCsv ? parseCsv(r.dataCsv, r.fieldNames) : [];
-    }
-    return result;
-  }, [releases]);
-
-  // Parse all counts (by primary category)
-  const allCountsByPrimary = useMemo(() => {
-    const result = {};
-    for (const r of releases) {
-      result[r.id] = parseCountsCsv(r.countsCsv);
-    }
-    return result;
-  }, [releases]);
-
-  // Parse all counts (by basic category)
-  const allCountsByBasic = useMemo(() => {
-    const result = {};
-    for (const r of releases) {
-      result[r.id] = parseCountsCsvByBasic(r.countsCsv);
-    }
-    return result;
-  }, [releases]);
-
-  // Build all trees
   const allTrees = useMemo(() => {
     const result = {};
     for (const r of releases) {
-      result[r.id] = r.dataUrl
-        ? (jsonReleases[r.id]?.tree ?? { children: [], totalCategories: 0 })
-        : buildTree(allRows[r.id], allCountsByPrimary[r.id], r);
-    }
-    return result;
-  }, [releases, allRows, allCountsByPrimary, jsonReleases]);
-
-  // Build lookups
-  const lookups = useMemo(() => {
-    const csvReleases = releases.filter(r => !r.dataUrl);
-    const result = buildLookups(csvReleases, allRows, allCountsByPrimary, allCountsByBasic);
-    for (const r of releases) {
-      if (r.dataUrl) result[r.id] = jsonReleases[r.id]?.lookups ?? {};
-    }
-    return result;
-  }, [releases, allRows, allCountsByPrimary, allCountsByBasic, jsonReleases]);
-
-  // Stats per release
-  const releaseStats = useMemo(() => {
-    const result = {};
-    for (const r of releases) {
-      result[r.id] = r.dataUrl
-        ? (jsonReleases[r.id]?.stats ?? { totalPlaces: 0, uniqueCategories: 0, uniqueBasicCategories: 0 })
-        : parseCountsStats(r.countsCsv);
+      result[r.id] = jsonReleases[r.id]?.tree ?? { children: [], totalCategories: 0 };
     }
     return result;
   }, [releases, jsonReleases]);
 
-  // Previous release stats (for change indicators)
-  const prevReleaseStats = useMemo(() => {
+  const lookups = useMemo(() => {
     const result = {};
-    for (let i = 0; i < releases.length; i++) {
-      result[releases[i].id] = i > 0 ? releaseStats[releases[i - 1].id] : null;
+    for (const r of releases) {
+      result[r.id] = jsonReleases[r.id]?.lookups ?? {};
     }
     return result;
-  }, [releases, releaseStats]);
+  }, [releases, jsonReleases]);
+
+  const releaseStats = useMemo(() => {
+    const result = {};
+    for (const r of releases) {
+      result[r.id] = jsonReleases[r.id]?.stats
+        ?? { totalPlaces: 0, uniqueCategories: 0, uniqueBasicCategories: 0 };
+    }
+    return result;
+  }, [releases, jsonReleases]);
 
   // Current tree based on activeTab
   const tree = allTrees[activeTab] || { children: [], totalCategories: 0 };
@@ -988,11 +573,6 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
           const tags = cfg?.tags || [];
           const releaseUrl = cfg?.releaseUrl || '';
           const stats = releaseStats[activeTab];
-          // A release with no counts file reports zeros, which is absence of
-          // data rather than a measurement of zero. Comparing against it would
-          // label every figure "(new)".
-          const prevRaw = prevReleaseStats[activeTab];
-          const prevStats = prevRaw && prevRaw.uniqueCategories > 0 ? prevRaw : null;
           return (
             <div className="taxonomy-info-rows">
               <div className="taxonomy-info-row">
@@ -1014,10 +594,7 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
                     <div className="taxonomy-info-label">Total Places</div>
                     <div className="taxonomy-info-value">
                       {stats.totalPlaces > 0 ? (
-                        <>
-                          {stats.totalPlaces.toLocaleString()}
-                          <ChangeIndicator current={stats.totalPlaces} previous={prevStats?.totalPlaces} />
-                        </>
+                        stats.totalPlaces.toLocaleString()
                       ) : (
                         <span className="taxonomy-info-value--muted">Not published</span>
                       )}
@@ -1027,14 +604,12 @@ export default function TaxonomyBrowser({ releases: allReleases }) {
                     <div className="taxonomy-info-label">Categories</div>
                     <div className="taxonomy-info-value">
                       {stats.uniqueCategories.toLocaleString()}
-                      <ChangeIndicator current={stats.uniqueCategories} previous={prevStats?.uniqueCategories} />
                     </div>
                   </div>
                   <div className="taxonomy-info-cell">
                     <div className="taxonomy-info-label">Basic Categories</div>
                     <div className="taxonomy-info-value">
                       {stats.uniqueBasicCategories.toLocaleString()}
-                      <ChangeIndicator current={stats.uniqueBasicCategories} previous={prevStats?.uniqueBasicCategories} />
                     </div>
                   </div>
                   </>

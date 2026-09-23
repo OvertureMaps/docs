@@ -48,14 +48,6 @@
   min-width: 0;
 }
 
-.taxonomy-browser-header-label {
-  font-size: 0.78em;
-  font-weight: 500;
-  color: var(--ifm-color-emphasis-500);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
 .taxonomy-browser-select {
   flex: 1;
   padding: 8px 10px;
@@ -154,13 +146,6 @@
   border-color: var(--ifm-color-primary);
   background: var(--ifm-color-emphasis-100);
   text-decoration: none;
-}
-
-.taxonomy-section-note {
-  font-size: 0.85em;
-  color: var(--ifm-color-emphasis-600);
-  font-style: italic;
-  margin: 6px 0 8px;
 }
 
 /* Search */
@@ -298,25 +283,6 @@
   color: var(--ifm-font-color-base);
 }
 
-/* Breadcrumb */
-.taxonomy-detail-breadcrumb {
-  margin-bottom: 4px;
-  font-size: 0.9em;
-  display: inline;
-}
-
-.taxonomy-detail-crumb {
-  color: var(--ifm-color-primary);
-  font-weight: 500;
-}
-
-.taxonomy-detail-arrow {
-  color: var(--ifm-font-color-base);
-  font-weight: 700;
-  font-size: 1.1em;
-  margin: 0 2px;
-}
-
 .taxonomy-detail-name {
   font-size: 1.8em;
   font-weight: 600;
@@ -324,281 +290,11 @@
   padding-right: 28px;
 }
 
-/* Level + Basic Category on same line */
-.taxonomy-detail-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.taxonomy-detail-level {
-  background: var(--ifm-color-emphasis-200);
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 0.85em;
-  font-family: var(--ifm-font-family-monospace);
-}
-
-.taxonomy-detail-basic-inline {
-  font-size: 0.9em;
-  color: var(--ifm-color-emphasis-700);
-}
-
-.taxonomy-detail-basic-inline code {
-  font-size: 0.9em;
-}
-
-.taxonomy-detail-badge {
-  display: inline-block;
-  padding: 3px 10px;
-  background: var(--ifm-color-primary-lightest);
-  color: var(--ifm-color-primary-darkest);
-  border-radius: 4px;
-  font-size: 0.8em;
-  font-weight: 500;
-}
-
-/* POI count row */
-.taxonomy-detail-poi-row {
-  margin-top: 12px;
-  font-size: 0.95em;
-}
-
-.taxonomy-detail-pct {
-  color: var(--ifm-color-emphasis-500);
-  font-size: 0.9em;
-}
-
-/* Cross-reference section (old/new taxonomy comparison) */
-.taxonomy-detail-crossref {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.taxonomy-detail-crossref h4 {
-  font-size: 0.95em;
-  font-weight: 600;
-  margin: 0 0 12px;
-  color: var(--ifm-color-emphasis-800);
-}
-
-.taxonomy-detail-crossref-row {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-size: 0.9em;
-}
-
-.taxonomy-detail-crossref-label {
-  color: var(--ifm-color-emphasis-600);
-  font-weight: 500;
-  flex-shrink: 0;
-}
-
-.taxonomy-detail-crossref-row code {
-  font-size: 0.9em;
-}
-
-.taxonomy-detail-crossref-note {
-  font-size: 0.9em;
-  color: var(--ifm-color-emphasis-500);
-  font-style: italic;
-  margin: 0;
-}
-
-/* Mappings table - grey style (Basic Level) */
-.taxonomy-mappings-grey-table {
-  width: 100%;
-  margin-top: 12px;
-  border-collapse: collapse;
-  font-size: 0.8em;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 4px;
-  color: var(--ifm-color-emphasis-500);
-}
-
-.taxonomy-mappings-grey-table th {
-  padding: 4px 8px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 0.9em;
-  background: var(--ifm-color-emphasis-100);
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  border-right: 1px solid var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-500);
-}
-
-.taxonomy-mappings-grey-table th:last-child {
-  border-right: none;
-}
-
-.taxonomy-mappings-grey-table td {
-  padding: 4px 8px;
-  text-align: center;
-  border-bottom: 1px solid var(--ifm-color-emphasis-100);
-  border-right: 1px solid var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-500);
-}
-
-.taxonomy-mappings-grey-table td:last-child {
-  border-right: none;
-}
-
-.taxonomy-mappings-grey-table tr:last-child td {
-  border-bottom: none;
-}
-
-/* Mappings table (Tab 2) */
-.taxonomy-mappings-table {
-  margin-top: 8px;
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 4px;
-}
-
-.taxonomy-mappings-header {
-  display: grid;
-  grid-template-columns: 90px 1fr 1fr;
-  gap: 8px;
-  padding: 8px 12px;
-  background: var(--ifm-color-emphasis-100);
-  font-size: 0.8em;
-  font-weight: 600;
-  color: var(--ifm-color-emphasis-700);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  position: sticky;
-  top: 0;
-}
-
-.taxonomy-mappings-row {
-  display: grid;
-  grid-template-columns: 90px 1fr 1fr;
-  gap: 8px;
-  padding: 6px 12px;
-  font-size: 0.85em;
-  border-bottom: 1px solid var(--ifm-color-emphasis-100);
-  align-items: baseline;
-}
-
-.taxonomy-mappings-row:last-child {
-  border-bottom: none;
-}
-
-.taxonomy-mappings-row code {
-  font-size: 0.9em;
-  word-break: break-word;
-}
-
-.taxonomy-mappings-hierarchy {
-  font-size: 0.85em;
-}
-
-.taxonomy-mappings-hierarchy .taxonomy-detail-breadcrumb {
-  margin-bottom: 0;
-}
-
-/* Match type badges */
-.taxonomy-match-exact {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-size: 0.8em;
-  font-weight: 600;
-  background: #d4edda;
-  color: #155724;
-}
-
-.taxonomy-match-close {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-size: 0.8em;
-  font-weight: 600;
-  background: #fff3cd;
-  color: #856404;
-}
-
-.taxonomy-match-narrower {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-size: 0.8em;
-  font-weight: 600;
-  background: var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-700);
-}
-
-/* Cross-reference groups (Tab 3) */
-.taxonomy-detail-crossref-group {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--ifm-color-emphasis-100);
-}
-
-.taxonomy-detail-crossref-group:last-child {
-  border-bottom: none;
-}
-
 /* Collapsible sections in detail panel */
 .taxonomy-detail-sections {
   margin-top: 16px;
   border-top: 1px solid var(--ifm-color-emphasis-200);
   padding-top: 8px;
-}
-
-.taxonomy-collapsible {
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.taxonomy-collapsible:last-child {
-  border-bottom: none;
-}
-
-.taxonomy-collapsible-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  padding: 10px 4px;
-  border: none;
-  background: transparent;
-  color: var(--ifm-font-color-base);
-  font-size: 1.1em;
-  font-weight: 400;
-  cursor: pointer;
-  font-family: var(--ifm-font-family-base);
-  transition: color 0.15s;
-}
-
-.taxonomy-collapsible-header:hover {
-  color: var(--ifm-color-primary);
-}
-
-.taxonomy-no-match-tag {
-  display: inline-block;
-  padding: 1px 8px;
-  border-radius: 3px;
-  font-size: 0.75em;
-  font-weight: 400;
-  background: #f8d7da;
-  color: #721c24;
-  margin-left: 4px;
-}
-
-.taxonomy-collapsible-chevron {
-  font-size: 0.75em;
-  color: var(--ifm-color-emphasis-500);
-  width: 14px;
-  flex-shrink: 0;
-}
-
-.taxonomy-collapsible-content {
-  padding: 0 4px 12px 20px;
 }
 
 .taxonomy-section-body {
@@ -675,19 +371,6 @@
 .taxonomy-pct-bottom {
   background: #f8d7da;
   color: #721c24;
-}
-
-/* Change indicators (↑/↓ percentages in summary table) */
-.taxonomy-change-up {
-  color: #1a8a3f;
-  font-size: 0.85em;
-  font-weight: 600;
-}
-
-.taxonomy-change-down {
-  color: #c0392b;
-  font-size: 0.85em;
-  font-weight: 600;
 }
 
 /* ---------------------------------------------------------------------------
@@ -840,12 +523,6 @@
   font-size: 10px;
   fill: var(--ifm-color-emphasis-600);
   pointer-events: none;
-}
-
-.taxonomy-viz-cell-label {
-  font-size: 10px;
-  fill: var(--ifm-font-color-base);
-  font-family: var(--ifm-font-family-base);
 }
 
 .taxonomy-viz-hint {

@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "fetch-og": "node scripts/fetch-og-images.mjs",
-    "build-taxonomy": "node scripts/build-taxonomy.mjs",
     "copy-maplibre-worker": "node scripts/copy-maplibre-worker.mjs",
     "docusaurus": "docusaurus",
     "start": "npm run copy-maplibre-worker && npm run docusaurus start",
