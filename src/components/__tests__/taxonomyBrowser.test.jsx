@@ -15,7 +15,7 @@ const LEGACY_CSV = [
 ].join('\n');
 
 const CANONICAL_JSON = {
-  version: '2026-08-19.0',
+  version: '2026-09-23.0',
   stats: { categories: 3, basicCategories: 2, rootGroups: 1, maxDepth: 2, totalPlaces: null },
   tree: [
     {
@@ -50,10 +50,10 @@ const RELEASES = [
     id: 'september',
     label: '2026 September (Canonical Taxonomy)',
     tags: [{ label: '16 September 2026', title: 'Date' }],
-    dataUrl: '/taxonomy/2026-08-19.0/taxonomy.json',
+    dataUrl: '/taxonomy/2026-09-23.0/taxonomy.json',
     downloads: [
-      { label: 'Taxonomy (JSON)', url: '/taxonomy/2026-08-19.0/taxonomy.json' },
-      { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-08-19.0/taxonomy.csv' },
+      { label: 'Taxonomy (JSON)', url: '/taxonomy/2026-09-23.0/taxonomy.json' },
+      { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-09-23.0/taxonomy.csv' },
     ],
     displayFields: [{ field: 'is_basic', label: 'Is Basic Category' }],
   },
@@ -80,7 +80,7 @@ describe('TaxonomyBrowser', () => {
   it('fetches a JSON-sourced release and renders its tree', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
     fireEvent.click(screen.getByRole('button', { name: 'Tree' }));
-    expect(global.fetch).toHaveBeenCalledWith('/taxonomy/2026-08-19.0/taxonomy.json');
+    expect(global.fetch).toHaveBeenCalledWith('/taxonomy/2026-09-23.0/taxonomy.json');
     expect(await screen.findByText('Food and Drink')).toBeInTheDocument();
   });
 
@@ -189,7 +189,7 @@ describe('TaxonomyBrowser', () => {
   it('renders a download link per artifact', async () => {
     render(<TaxonomyBrowser releases={RELEASES} />);
     const json = await screen.findByRole('link', { name: 'Taxonomy (JSON)' });
-    expect(json).toHaveAttribute('href', '/taxonomy/2026-08-19.0/taxonomy.json');
+    expect(json).toHaveAttribute('href', '/taxonomy/2026-09-23.0/taxonomy.json');
     expect(screen.getByRole('link', { name: 'Taxonomy (CSV)' })).toBeInTheDocument();
   });
 
