@@ -30,7 +30,7 @@ A feature keeps its identifier when the matcher recognizes it as something Overt
 
 **A change of container does not follow the occupant.** A museum that moves to the building next door keeps its `place` identifier, because places are matched without reference to buildings at all. The building it vacated keeps its own. This holds for a move of a few hundred metres. A place that moves further than that is beyond the distance within which candidates are compared at all, and gets a new identifier.
 
-:::note Traceability is not yet published
+:::note[Traceability is not yet published]
 When an identifier stops being issued after a split or a merge, Overture does not publish the mapping from the old identifier to the new ones. The changelog reports the old ID as `removed` and the new IDs as `added`, with no link between them. Recovering the relationship means re-matching.
 
 The Product Council parked traceability in February 2025 as high-cost and post-MVP. If you have a use case that depends on it, say so in the [Map Data Working Group](https://github.com/OvertureMaps/map-data-wg), because the case for building it is currently made from first principles rather than from demand.

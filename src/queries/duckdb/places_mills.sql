@@ -12,5 +12,5 @@ COPY (
     geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
 FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
 WHERE
-    categories.primary IN ('flour_mill', 'rice_mill')
+    taxonomy.primary IN ('flour_mill', 'rice_mill')
 ) TO 'mills.parquet';

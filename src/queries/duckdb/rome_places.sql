@@ -10,7 +10,8 @@ COPY (
     -- We are casting these columns to JSON in order to ensure compatibility with our GeoJSON output.
     -- These conversions may be not necessary for other output formats.
        CAST(names AS JSON) AS names,
-       CAST(categories AS JSON) AS categories,
+       basic_category,
+       CAST(taxonomy AS JSON) AS taxonomy,
        confidence,
        CAST(websites AS JSON) AS websites,
        CAST(socials AS JSON) AS socials,
