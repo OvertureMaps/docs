@@ -2,9 +2,20 @@
   display: flex;
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 6px;
-  height: 700px;
+  /* Tall enough that six rings of taxonomy are legible, but always leaving
+     some page visible so it doesn't read as a broken full-screen takeover. */
+  height: min(82vh, 940px);
+  min-height: 560px;
   background: var(--ifm-background-color);
   font-family: var(--ifm-font-family-base);
+}
+
+/* The docs column is sized for prose, so the browser reclaims the article's
+   horizontal padding. It deliberately stops there: sizing from the viewport
+   would risk a horizontal scrollbar on narrower layouts. */
+.taxonomy-browser--viz {
+  width: calc(100% + 2 * var(--ifm-spacing-horizontal, 1rem));
+  margin-left: calc(-1 * var(--ifm-spacing-horizontal, 1rem));
 }
 
 .taxonomy-browser-left {
@@ -28,26 +39,23 @@
 .taxonomy-browser-header {
   display: flex;
   align-items: center;
-  padding: 12px 16px 8px;
-  gap: 10px;
+  padding: 8px 12px 6px;
+  gap: 8px;
 }
 
-.taxonomy-browser-header-label {
-  font-size: 0.78em;
-  font-weight: 500;
-  color: var(--ifm-color-emphasis-500);
-  white-space: nowrap;
-  flex-shrink: 0;
+.taxonomy-browser-header .taxonomy-browser-select {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .taxonomy-browser-select {
   flex: 1;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 4px;
   background: var(--ifm-background-color);
   color: var(--ifm-font-color-base);
-  font-size: 0.9em;
+  font-size: 0.82em;
   font-weight: 500;
   font-family: var(--ifm-font-family-base);
   cursor: pointer;
@@ -62,32 +70,41 @@
 
 /* Info rows (left panel, between dropdown and search) */
 .taxonomy-info-rows {
-  padding: 0 16px 8px;
+  padding: 0 12px 6px;
   border-top: 1px solid var(--ifm-color-emphasis-200);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .taxonomy-info-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 4px;
-  padding: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 14px;
+  padding: 6px 0 0;
 }
 
 .taxonomy-info-cell {
-  text-align: center;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+}
+
+.taxonomy-info-cell--downloads {
+  flex-wrap: wrap;
 }
 
 .taxonomy-info-label {
-  font-size: 0.72em;
+  font-size: 0.68em;
   color: var(--ifm-color-emphasis-500);
   font-weight: 500;
-  margin-bottom: 2px;
+  white-space: nowrap;
 }
 
 .taxonomy-info-value {
-  font-size: 0.8em;
+  font-size: 0.76em;
   color: var(--ifm-font-color-base);
+  white-space: nowrap;
 }
 
 .taxonomy-info-value a {
@@ -99,22 +116,51 @@
   text-decoration: underline;
 }
 
-.taxonomy-section-note {
-  font-size: 0.85em;
-  color: var(--ifm-color-emphasis-600);
-  font-style: italic;
-  margin: 6px 0 8px;
+.taxonomy-info-value--muted {
+  color: var(--ifm-color-emphasis-500);
+}
+
+/* The download row holds a variable number of links, so it spans the full
+   width instead of sitting in the three-column stats grid above it. */
+.taxonomy-download-row {
+  padding-top: 4px;
+}
+
+.taxonomy-download-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.taxonomy-download-link {
+  font-size: 0.7em;
+  padding: 2px 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.taxonomy-download-link:hover {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-emphasis-100);
+  text-decoration: none;
 }
 
 /* Search */
+/* Sized to sit with the release select above it: the two are the same control
+   row visually, so they share a type size and box height. */
 .taxonomy-browser-search {
   display: block;
-  width: calc(100% - 32px);
-  margin: 0 16px 8px;
-  padding: 14px 12px;
+  width: calc(100% - 24px);
+  margin: 0 12px 6px;
+  padding: 8px 10px;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 4px;
-  font-size: 0.95em;
+  font-size: 0.82em;
+  line-height: 1.25;
+  font-family: var(--ifm-font-family-base);
   background: var(--ifm-background-color);
   color: var(--ifm-font-color-base);
   outline: none;
@@ -209,251 +255,39 @@
 /* Detail panel - selected */
 .taxonomy-detail {
   width: 100%;
+  position: relative;
 }
 
-/* Breadcrumb */
-.taxonomy-detail-breadcrumb {
-  margin-bottom: 4px;
-  font-size: 0.9em;
-  display: inline;
-}
-
-.taxonomy-detail-crumb {
-  color: var(--ifm-color-primary);
-  font-weight: 500;
-}
-
-.taxonomy-detail-arrow {
-  color: var(--ifm-font-color-base);
-  font-weight: 700;
+/* Sits in the panel's top-right corner; the heading is padded to clear it. */
+.taxonomy-detail-clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: none;
+  color: var(--ifm-color-emphasis-600);
   font-size: 1.1em;
-  margin: 0 2px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.taxonomy-detail-clear:hover {
+  border-color: var(--ifm-color-emphasis-300);
+  color: var(--ifm-font-color-base);
 }
 
 .taxonomy-detail-name {
   font-size: 1.8em;
   font-weight: 600;
   margin: 4px 0 12px;
-}
-
-/* Level + Basic Category on same line */
-.taxonomy-detail-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.taxonomy-detail-level {
-  background: var(--ifm-color-emphasis-200);
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 0.85em;
-  font-family: var(--ifm-font-family-monospace);
-}
-
-.taxonomy-detail-basic-inline {
-  font-size: 0.9em;
-  color: var(--ifm-color-emphasis-700);
-}
-
-.taxonomy-detail-basic-inline code {
-  font-size: 0.9em;
-}
-
-.taxonomy-detail-badge {
-  display: inline-block;
-  padding: 3px 10px;
-  background: var(--ifm-color-primary-lightest);
-  color: var(--ifm-color-primary-darkest);
-  border-radius: 4px;
-  font-size: 0.8em;
-  font-weight: 500;
-}
-
-/* POI count row */
-.taxonomy-detail-poi-row {
-  margin-top: 12px;
-  font-size: 0.95em;
-}
-
-.taxonomy-detail-pct {
-  color: var(--ifm-color-emphasis-500);
-  font-size: 0.9em;
-}
-
-/* Cross-reference section (old/new taxonomy comparison) */
-.taxonomy-detail-crossref {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.taxonomy-detail-crossref h4 {
-  font-size: 0.95em;
-  font-weight: 600;
-  margin: 0 0 12px;
-  color: var(--ifm-color-emphasis-800);
-}
-
-.taxonomy-detail-crossref-row {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-size: 0.9em;
-}
-
-.taxonomy-detail-crossref-label {
-  color: var(--ifm-color-emphasis-600);
-  font-weight: 500;
-  flex-shrink: 0;
-}
-
-.taxonomy-detail-crossref-row code {
-  font-size: 0.9em;
-}
-
-.taxonomy-detail-crossref-note {
-  font-size: 0.9em;
-  color: var(--ifm-color-emphasis-500);
-  font-style: italic;
-  margin: 0;
-}
-
-/* Mappings table - grey style (Basic Level) */
-.taxonomy-mappings-grey-table {
-  width: 100%;
-  margin-top: 12px;
-  border-collapse: collapse;
-  font-size: 0.8em;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 4px;
-  color: var(--ifm-color-emphasis-500);
-}
-
-.taxonomy-mappings-grey-table th {
-  padding: 4px 8px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 0.9em;
-  background: var(--ifm-color-emphasis-100);
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  border-right: 1px solid var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-500);
-}
-
-.taxonomy-mappings-grey-table th:last-child {
-  border-right: none;
-}
-
-.taxonomy-mappings-grey-table td {
-  padding: 4px 8px;
-  text-align: center;
-  border-bottom: 1px solid var(--ifm-color-emphasis-100);
-  border-right: 1px solid var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-500);
-}
-
-.taxonomy-mappings-grey-table td:last-child {
-  border-right: none;
-}
-
-.taxonomy-mappings-grey-table tr:last-child td {
-  border-bottom: none;
-}
-
-/* Mappings table (Tab 2) */
-.taxonomy-mappings-table {
-  margin-top: 8px;
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 4px;
-}
-
-.taxonomy-mappings-header {
-  display: grid;
-  grid-template-columns: 90px 1fr 1fr;
-  gap: 8px;
-  padding: 8px 12px;
-  background: var(--ifm-color-emphasis-100);
-  font-size: 0.8em;
-  font-weight: 600;
-  color: var(--ifm-color-emphasis-700);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  position: sticky;
-  top: 0;
-}
-
-.taxonomy-mappings-row {
-  display: grid;
-  grid-template-columns: 90px 1fr 1fr;
-  gap: 8px;
-  padding: 6px 12px;
-  font-size: 0.85em;
-  border-bottom: 1px solid var(--ifm-color-emphasis-100);
-  align-items: baseline;
-}
-
-.taxonomy-mappings-row:last-child {
-  border-bottom: none;
-}
-
-.taxonomy-mappings-row code {
-  font-size: 0.9em;
-  word-break: break-word;
-}
-
-.taxonomy-mappings-hierarchy {
-  font-size: 0.85em;
-}
-
-.taxonomy-mappings-hierarchy .taxonomy-detail-breadcrumb {
-  margin-bottom: 0;
-}
-
-/* Match type badges */
-.taxonomy-match-exact {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-size: 0.8em;
-  font-weight: 600;
-  background: #d4edda;
-  color: #155724;
-}
-
-.taxonomy-match-close {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-size: 0.8em;
-  font-weight: 600;
-  background: #fff3cd;
-  color: #856404;
-}
-
-.taxonomy-match-narrower {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-size: 0.8em;
-  font-weight: 600;
-  background: var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-700);
-}
-
-/* Cross-reference groups (Tab 3) */
-.taxonomy-detail-crossref-group {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--ifm-color-emphasis-100);
-}
-
-.taxonomy-detail-crossref-group:last-child {
-  border-bottom: none;
+  padding-right: 28px;
 }
 
 /* Collapsible sections in detail panel */
@@ -461,56 +295,6 @@
   margin-top: 16px;
   border-top: 1px solid var(--ifm-color-emphasis-200);
   padding-top: 8px;
-}
-
-.taxonomy-collapsible {
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.taxonomy-collapsible:last-child {
-  border-bottom: none;
-}
-
-.taxonomy-collapsible-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  padding: 10px 4px;
-  border: none;
-  background: transparent;
-  color: var(--ifm-font-color-base);
-  font-size: 1.1em;
-  font-weight: 400;
-  cursor: pointer;
-  font-family: var(--ifm-font-family-base);
-  transition: color 0.15s;
-}
-
-.taxonomy-collapsible-header:hover {
-  color: var(--ifm-color-primary);
-}
-
-.taxonomy-no-match-tag {
-  display: inline-block;
-  padding: 1px 8px;
-  border-radius: 3px;
-  font-size: 0.75em;
-  font-weight: 400;
-  background: #f8d7da;
-  color: #721c24;
-  margin-left: 4px;
-}
-
-.taxonomy-collapsible-chevron {
-  font-size: 0.75em;
-  color: var(--ifm-color-emphasis-500);
-  width: 14px;
-  flex-shrink: 0;
-}
-
-.taxonomy-collapsible-content {
-  padding: 0 4px 12px 20px;
 }
 
 .taxonomy-section-body {
@@ -550,6 +334,21 @@
   font-size: 0.9em;
 }
 
+/* A count and its share sit under their label rather than beside it. The label
+   does not wrap or shrink, and at this panel width the pair needs ~300px on one
+   line — so side by side it either wraps mid-parenthetical or scrolls
+   sideways. Stacked, the value has around 100px to spare. */
+.taxonomy-kv-item--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+
+.taxonomy-kv-value--numeric {
+  font-variant-numeric: tabular-nums;
+  color: var(--ifm-font-color-base);
+}
+
 .taxonomy-kv-value--selected {
   font-weight: 600;
   color: var(--ifm-color-primary);
@@ -574,15 +373,300 @@
   color: #721c24;
 }
 
-/* Change indicators (↑/↓ percentages in summary table) */
-.taxonomy-change-up {
-  color: #1a8a3f;
+/* ---------------------------------------------------------------------------
+   Visualization views
+   --------------------------------------------------------------------------- */
+
+/* The tree is a list and reads fine at half width; a partition layout needs the
+   room, so the split shifts in favour of the canvas when a viz view is active. */
+.taxonomy-browser--viz .taxonomy-browser-left {
+  max-width: none;
+  flex: 1;
+}
+
+/* The detail panel is a reference column, not a second canvas: fix it narrow so
+   every extra pixel of window goes to the sunburst. */
+.taxonomy-browser--viz .taxonomy-browser-right {
+  flex: 0 0 264px;
+  padding: 12px;
+}
+
+.taxonomy-view-switch {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.taxonomy-view-button {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  font-size: 0.76em;
+  font-family: var(--ifm-font-family-base);
+  color: var(--ifm-color-emphasis-700);
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.taxonomy-view-button:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+.taxonomy-view-button--active {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-white, #fff);
+}
+
+.taxonomy-browser-viz {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 8px 12px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.taxonomy-viz {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+}
+
+.taxonomy-viz-canvas {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.taxonomy-viz-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+  flex-wrap: wrap;
+}
+
+.taxonomy-viz-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8em;
+  color: var(--ifm-color-emphasis-700);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* A default checkbox renders around 13px whatever the label size, and carries
+   its own margins — which land on top of the flex gap and read as the label
+   drifting away from the box. */
+.taxonomy-viz-toggle input[type='checkbox'] {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--ifm-color-primary);
+  cursor: pointer;
+}
+
+.taxonomy-viz-nav {
+  font-size: 0.74em;
+  padding: 2px 9px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-primary);
+  cursor: pointer;
+}
+
+.taxonomy-viz-nav:hover:not(:disabled) {
+  border-color: var(--ifm-color-primary);
+}
+
+.taxonomy-viz-nav:disabled {
+  color: var(--ifm-color-emphasis-400);
+  cursor: default;
+}
+
+.taxonomy-viz-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.taxonomy-viz-arc {
+  cursor: pointer;
+}
+
+.taxonomy-viz-arc:hover {
+  filter: brightness(1.12);
+}
+
+.taxonomy-viz-center {
+  fill: var(--ifm-background-color);
+  cursor: pointer;
+}
+
+/* Size is set on the element so the wrap calculation and the rendering agree. */
+.taxonomy-viz-center-label {
+  font-weight: 600;
+  fill: var(--ifm-font-color-base);
+  pointer-events: none;
+}
+
+.taxonomy-viz-center-sub {
+  font-size: 10px;
+  fill: var(--ifm-color-emphasis-600);
+  pointer-events: none;
+}
+
+.taxonomy-viz-hint {
+  font-size: 0.74em;
+  color: var(--ifm-color-emphasis-600);
+  text-align: center;
+  margin: 0;
+  max-width: 46em;
+}
+
+.taxonomy-viz-empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--ifm-color-emphasis-500);
   font-size: 0.85em;
+}
+
+.taxonomy-viz-tooltip {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  max-width: 320px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background: var(--ifm-color-emphasis-900, #1b1b1d);
+  color: var(--ifm-color-emphasis-0, #fff);
+  font-size: 0.74rem;
+  line-height: 1.4;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 25%);
+}
+
+.taxonomy-viz-tooltip-name {
   font-weight: 600;
 }
 
-.taxonomy-change-down {
-  color: #c0392b;
-  font-size: 0.85em;
-  font-weight: 600;
+.taxonomy-viz-tooltip-path {
+  opacity: 0.72;
+  font-size: 0.92em;
+  margin-top: 1px;
+}
+
+.taxonomy-viz-tooltip-meta {
+  margin-top: 4px;
+  opacity: 0.82;
+  font-size: 0.9em;
+}
+
+/* Names the denominator once, under the percentage column. */
+.taxonomy-viz-tooltip-share {
+  justify-content: flex-end;
+  opacity: 0.7;
+  margin-top: 2px;
+  font-size: 0.92em;
+}
+
+.taxonomy-viz-tooltip-counts {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.9em;
+}
+
+.taxonomy-viz-tooltip-counts div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+/* Label takes the slack; the two figures hold their own right-aligned columns
+   so counts and percentages each line up down the block. */
+.taxonomy-viz-tooltip-counts span:first-child {
+  flex: 1;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.taxonomy-viz-tooltip-num {
+  min-width: 4.6em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.taxonomy-viz-tooltip-pct {
+  min-width: 2.9em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+.taxonomy-viz-basic-chip {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 5px;
+  border: 1px solid currentcolor;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Viewport zoom and pan. The stage clips, so panned content does not spill
+   over the surrounding chrome. */
+.taxonomy-viz-stage {
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.taxonomy-viz-stage--panning {
+  cursor: grabbing;
+}
+
+.taxonomy-viz-zoom {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.taxonomy-viz-zoom button {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  line-height: 1;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-emphasis-800);
+  cursor: pointer;
+}
+
+.taxonomy-viz-zoom button:hover:not(:disabled) {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.taxonomy-viz-zoom button:disabled {
+  color: var(--ifm-color-emphasis-400);
+  cursor: default;
 }
