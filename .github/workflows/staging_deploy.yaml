@@ -37,9 +37,6 @@ jobs:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     needs: check-fork
-    outputs:
-      schema-sha: ${{ steps.schema-docs.outputs.schema-sha }}
-      schema-ref: ${{ steps.schema-docs.outputs.schema-ref }}
     steps:
       - name: Check out the main docs repo repository and build.
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -54,13 +51,6 @@ jobs:
       - uses: lowlydba/sustainable-npm@31d51025884f424f58f22e4e6578178bb4e79632 # v3.0.0
 
       - run: npm ci --omit=dev
-
-      - name: Generate schema markdown docs
-        id: schema-docs
-        uses: OvertureMaps/workflows/.github/actions/generate-schema-docs@faa3fa4bbe01d85dc2e2139ff1f74ce70feb7df9 # zizmor: ignore[stale-action-refs] - main
-        with:
-          output-dir: ${{ github.workspace }}/docs/schema/reference
-          schema-ref: 'main'
 
       - name: Build Docusaurus website
         run: npm run build
@@ -88,7 +78,7 @@ jobs:
 
     steps:
       - name: Configure AWS credentials 🔐
-        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
@@ -112,13 +102,7 @@ jobs:
         run: |
           echo "time=$(date -u +'%b %d, %Y %H:%M UTC')" >> $GITHUB_OUTPUT
           echo "short-sha=${PR_HEAD_SHA:0:7}" >> $GITHUB_OUTPUT
-          schema_ref="${NEEDS_BUILD_OUTPUTS_SCHEMA_REF#refs/heads/}"
-          schema_ref="${schema_ref#refs/tags/}"
-          echo "schema-ref-short=$schema_ref" >> $GITHUB_OUTPUT
-          echo "schema-short-sha=${NEEDS_BUILD_OUTPUTS_SCHEMA_SHA:0:7}" >> $GITHUB_OUTPUT
         env:
-          NEEDS_BUILD_OUTPUTS_SCHEMA_REF: ${{ needs.build.outputs.schema-ref }}
-          NEEDS_BUILD_OUTPUTS_SCHEMA_SHA: ${{ needs.build.outputs.schema-sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
       - name: Comment on PR
@@ -130,7 +114,6 @@ jobs:
             |                         |                                                                      |
             |-------------------------|----------------------------------------------------------------------|
             | 🌍 **Preview site**     | ${{ env.STAGING_URL }}${{ env.PREVIEW_PATH }}/index.html            |
-            | 🗂️ **Schema ref**      | [${{ steps.deploy-metadata.outputs.schema-ref-short }}@${{ steps.deploy-metadata.outputs.schema-short-sha }}](https://github.com/OvertureMaps/schema/tree/${{ needs.build.outputs.schema-ref }}) |
             | 🕐 **Updated**          | ${{ steps.deploy-metadata.outputs.time }}                            |
             | 📝 **Commit**           | [${{ steps.deploy-metadata.outputs.short-sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
 

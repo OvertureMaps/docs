@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "fetch-og": "node scripts/fetch-og-images.mjs",
+    "add-schema-version": "node scripts/add-schema-version.mjs",
     "copy-maplibre-worker": "node scripts/copy-maplibre-worker.mjs",
     "docusaurus": "docusaurus",
     "start": "npm run copy-maplibre-worker && npm run docusaurus start",
@@ -16,8 +17,8 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint:md": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules",
-    "lint:md:fix": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules --fix",
+    "lint:md": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'schema/*.md' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules",
+    "lint:md:fix": "markdownlint 'docs/**/*.md' 'docs/**/*.mdx' 'schema/*.md' 'blog/**/*.md' 'blog/**/*.mdx' --ignore node_modules --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
@@ -37,20 +38,20 @@
     "d3-hierarchy": "^3.1.2",
     "d3-shape": "^3.2.0",
     "docusaurus-plugin-llms": "^0.6.0",
-    "js-yaml": "^5.4.0",
-    "maplibre-gl": "^6.6.0",
+    "js-yaml": "^5.4.2",
+    "maplibre-gl": "^6.10.0",
     "pmtiles": "^4.5.0",
     "prism-react-renderer": "^2.1.0",
     "raw-loader": "^4.0.2",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@docusaurus/module-type-aliases": "^3.10.0",
     "@docusaurus/types": "^3.10.0",
     "@eslint/js": "^10.0.0",
-    "@testing-library/dom": "^10.0.0",
+    "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "eslint": "^10.9.1",
@@ -63,7 +64,7 @@
     "prettier": "^3.9.6",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.1"
   },
   "browserslist": {
     "production": [

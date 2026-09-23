@@ -17,15 +17,42 @@ This repository uses [Docusaurus](https://docusaurus.io/) to publish the documen
   - `community-projects.json` - source data for all community project cards
   - `og-image-cache.json` - cached `og:image` URLs for entries without an explicit `image` field (see [OG Image Cache](#og-image-cache) below)
 - `docs/`: The main documentation pages available at docs.overturemaps.org/. The sidebar for these pages is manually curated in the `sidebars.js` file.
-- Notice there is no `schema reference` folder. See below.
+- `schema/`: Source for the schema reference overview page (`index.md`) and scratch output of the schema doc generator. See below.
+- `schema_versioned_docs/`, `schema_versioned_sidebars/`, `schema_versions.json`: committed snapshots of the schema reference for each released schema tag. See below.
 
 ## Schema Reference (`docs.overturemaps.org/schema`)
 
-The Overture schema repository [OvertureMaps/schema](https://github.com/OvertureMaps/schema) maintains the official Overture schema as Pydantic models, and the reference pages under `docs.overturemaps.org/schema` are generated directly from those models. This keeps the schema and its documentation permanently in sync.
+The Overture schema repository [OvertureMaps/schema](https://github.com/OvertureMaps/schema) maintains the official Overture schema as Pydantic models, and the reference pages under `docs.overturemaps.org/schema` are generated directly from those models.
 
-Every build (CI, PR preview, and production) runs the [`generate-schema-docs`](https://github.com/OvertureMaps/workflows/tree/main/.github/actions/generate-schema-docs) action, which generates Markdown into `docs/schema/reference/` from the schema repository's `main` branch (or a specific `schema-ref` when triggered via `workflow_dispatch`, e.g. from an `overture-schema` release). `docs/schema/reference/` is gitignored and never committed here.
+The schema reference is its own [versioned Docusaurus docs instance](https://docusaurus.io/docs/versioning) (plugin id `schema`, config in `docusaurus.config.js`, sidebar in `sidebars-schema.js`), separate from the main `docs/` instance. Only released schema tags are published; there is no rolling "latest" built from `main`. The newest tag in `schema_versions.json` is served at `/schema/`, older tags at `/schema/vX.Y.Z/`, and a version dropdown appears in the navbar on schema pages only.
 
-**If you spot a typo or error under `docs.overturemaps.org/schema`, it is not fixable in this repository.** Open an issue or PR against the docstrings/models in [OvertureMaps/schema](https://github.com/OvertureMaps/schema) instead — any change here will be overwritten on the next build.
+Snapshots are generated once per tag and committed under `schema_versioned_docs/version-vX.Y.Z/`. Builds do not call the schema generator, so a production deploy only ever changes the schema pages when a new snapshot lands here.
+
+**If you spot a typo or error under `docs.overturemaps.org/schema`, it is not fixable in this repository.** Open an issue or PR against the docstrings/models in [OvertureMaps/schema](https://github.com/OvertureMaps/schema) instead; the fix appears in the next release's snapshot. Re-snapshotting an existing tag is possible (delete its three artifacts and re-run the script below) but pointless unless the tag itself moved.
+
+The overview page (`schema/index.md`) is copied into each snapshot when it's created. Edits to it need to be applied to the `index.md` in each `schema_versioned_docs/version-*/` too.
+
+### Adding a schema version
+
+Run this after a `vX.Y.Z` tag is published in [OvertureMaps/schema](https://github.com/OvertureMaps/schema/releases). It needs `git`, [`uv`](https://docs.astral.sh/uv/), and `npm install` already done.
+
+```shell
+npm run add-schema-version -- v2.0.0
+```
+
+The script (`scripts/add-schema-version.mjs`) clones the schema repo at that tag, runs its `overture-codegen` into `schema/reference/`, then runs `docusaurus docs:version:schema <tag>`, which writes:
+
+- `schema_versioned_docs/version-<tag>/` (with links into the schema repo pinned to the tag)
+- `schema_versioned_sidebars/version-<tag>-sidebars.json`
+- an entry in `schema_versions.json` (kept sorted newest-first; the first entry is what `/schema/` serves)
+
+Commit those three and open a PR. `schema/reference/` is cleaned up afterwards.
+
+Only tags that ship the `overture-schema-codegen` package (v1.17.0 and later) can be added; earlier releases were JSON Schema and have no generator. The script refuses tags that don't match `vX.Y.Z` or are already in `schema_versions.json`.
+
+### Schema PR previews
+
+The schema repo's PR preview workflow checks out this repo, generates Markdown from the PR branch into `schema/reference/`, and builds with `SCHEMA_PREVIEW=true`. In that mode the `schema` instance builds only the `current` version from `schema/reference/` at `/schema/`; committed snapshots, the version dropdown, blog, and community pages are skipped.
 
 ## Developing
 
@@ -51,6 +78,7 @@ Now navigate to <http://localhost:3000> to see the live preview.
 - `npm run serve` - Serve the built site locally
 - `npm run deploy` - Deploy the site
 - `npm run fetch-og` - Fetch and cache `og:image` metadata for community project entries (see [OG Image Cache](#og-image-cache) below)
+- `npm run add-schema-version -- vX.Y.Z` - Snapshot the schema reference for a released schema tag (see [Adding a schema version](#adding-a-schema-version) above)
 - `npm run swizzle` - Customize Docusaurus components by "ejecting" them for modification
 - `npm run write-translations` - Generate translation files for internationalization
 - `npm run write-heading-ids` - Auto-generate heading IDs for better linking

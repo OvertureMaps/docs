@@ -2,6 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const { themes } = require('prism-react-renderer');
+const schemaVersions = require('./schema_versions.json');
 
 // both modes use the dark palette — code blocks are forced dark bg in
 // light mode too (see custom.css), so light-theme token colors fail contrast.
@@ -39,6 +40,30 @@ function getLatestOvertureRelease() {
 }
 
 const latestOvertureRelease = getLatestOvertureRelease();
+
+// Schema reference docs are a separate, versioned docs instance (see README
+// "Schema Reference"). Only released schema tags are published: snapshots live
+// in schema_versioned_docs/, the newest is served at /schema/ and older ones at
+// /schema/<tag>/. The `current` version (schema/reference, generated from a
+// schema branch by the schema repo's CI) is built only for schema PR previews.
+// Released versions are stable, so suppress the default "unmaintained" banner.
+// The instance can't live under docs/: nested docs instances get their MDX
+// compiled twice.
+const [latestSchemaVersion] = schemaVersions;
+const latestSchemaDocsDir = `schema_versioned_docs/version-${latestSchemaVersion}`;
+const schemaVersionOptions = isSchemaPreview
+  ? {
+      includeCurrentVersion: true,
+      onlyIncludeVersions: ['current'],
+      versions: { current: { label: 'preview', path: '' } },
+    }
+  : {
+      includeCurrentVersion: false,
+      lastVersion: latestSchemaVersion,
+      versions: Object.fromEntries(
+        schemaVersions.map((v) => [v, { label: v, banner: 'none', path: v === latestSchemaVersion ? '' : v }]),
+      ),
+    };
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -95,67 +120,87 @@ const config = {
 
   themes: [],
 
-  plugins: isSchemaPreview
-    ? []
-    : [
-        [
-          '@docusaurus/plugin-client-redirects',
-          {
-            redirects: [
-              {
-                from: '/releases',
-                to: '/release-calendar/',
-              },
-              {
-                // Renamed from "Taxonomy Browser" to "Taxonomy Explorer".
-                from: '/guides/places/taxonomy-browser',
-                to: '/guides/places/taxonomy-explorer/',
-              },
-            ],
-          },
-        ],
-        [
-          '@docusaurus/plugin-content-pages',
-          {
-            id: 'community',
-            path: './community',
-            routeBasePath: 'community',
-            showLastUpdateTime: true,
-          },
-        ],
-        [
-          'docusaurus-plugin-llms',
-          {
-            generateLLMsTxt: true,
-            generateLLMsFullTxt: true,
-            excludeImports: true,
-            removeDuplicateHeadings: true,
-            includeBlog: true,
-            // Order docs from most introductory to most detailed
-            includeOrder: [
-              'getting-data/**',
-              'guides/**',
-              'schema/**',
-              'examples/**',
-              'gers/**',
-            ],
-            includeUnmatchedLast: true,
-            // Playground pages are interactive components, not useful for LLMs
-            ignoreFiles: ['playground/**'],
-            // Schema-only subset for LLMs focused on the data model
-            customLLMFiles: [
-              {
-                filename: 'llms-schema.txt',
-                includePatterns: ['schema/**'],
-                fullContent: true,
-                title: 'Overture Maps Schema Reference',
-                description:
-                  'Schema reference for all Overture Maps data types: addresses, base, buildings, divisions, places, and transportation.',
-              },
-            ],
-          },
-        ],
-      ],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      /** @type {import('@docusaurus/plugin-content-docs').Options} */
+      ({
+        id: 'schema',
+        path: 'schema',
+        routeBasePath: 'schema',
+        sidebarPath: require.resolve('./sidebars-schema.js'),
+        showLastUpdateTime: true,
+        breadcrumbs: false,
+        ...schemaVersionOptions,
+      }),
+    ],
+    ...(isSchemaPreview
+      ? []
+      : [
+          [
+            '@docusaurus/plugin-client-redirects',
+            {
+              redirects: [
+                {
+                  from: '/releases',
+                  to: '/release-calendar/',
+                },
+                {
+                  // Renamed from "Taxonomy Browser" to "Taxonomy Explorer".
+                  from: '/guides/places/taxonomy-browser',
+                  to: '/guides/places/taxonomy-explorer/',
+                },
+              ],
+            },
+          ],
+          [
+            '@docusaurus/plugin-content-pages',
+            {
+              id: 'community',
+              path: './community',
+              routeBasePath: 'community',
+              showLastUpdateTime: true,
+            },
+          ],
+          [
+            'docusaurus-plugin-llms',
+            {
+              generateLLMsTxt: true,
+              generateLLMsFullTxt: true,
+              // Newest schema version only; older snapshots are excluded
+              docsDir: [
+                { path: 'docs', routeBasePath: '/', label: 'Docs' },
+                { path: latestSchemaDocsDir, routeBasePath: 'schema', label: 'Schema Reference' },
+              ],
+              excludeImports: true,
+              removeDuplicateHeadings: true,
+              includeBlog: true,
+              // Order docs from most introductory to most detailed
+              includeOrder: [
+                'getting-data/**',
+                'guides/**',
+                `${latestSchemaDocsDir}/**`,
+                'examples/**',
+                'gers/**',
+              ],
+              includeUnmatchedLast: true,
+              // Playground pages are interactive components, not useful for LLMs
+              ignoreFiles: ['playground/**'],
+              // Schema-only subset for LLMs focused on the data model
+              customLLMFiles: [
+                {
+                  filename: 'llms-schema.txt',
+                  includePatterns: [`${latestSchemaDocsDir}/**`],
+                  fullContent: true,
+                  title: 'Overture Maps Schema Reference',
+                  description:
+                    'Schema reference for all Overture Maps data types: addresses, base, buildings, divisions, places, and transportation.',
+                },
+              ],
+            },
+          ],
+        ]),
+  ],
 
   presets: [
     [
@@ -223,6 +268,13 @@ const config = {
                   to: 'community',
                   label: 'Community',
                   position: 'left',
+                },
+                {
+                  type: 'docsVersionDropdown',
+                  docsPluginId: 'schema',
+                  position: 'right',
+                  // Only shown on schema pages; see custom.css
+                  className: 'schema-version-dropdown',
                 },
               ]
             : []),
