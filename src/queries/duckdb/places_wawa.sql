@@ -7,7 +7,7 @@ COPY(
   SELECT
     id,
     names.primary as name,
-    categories.primary as category,
+    taxonomy.primary as category,
     addresses[1].freeform as address,
     geometry
   FROM read_parquet(
