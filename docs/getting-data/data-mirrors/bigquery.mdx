@@ -57,7 +57,7 @@ To get started using Overture data in BigQuery, you must create or select a Goog
     -- Identify places within the "Restaurant" category
     SELECT id, phones.list[0].element AS phone, names.primary AS name
     FROM `bigquery-public-data.overture_maps.place`
-    WHERE categories.primary = "restaurant"
+    WHERE taxonomy.primary = "restaurant"
     LIMIT 100;
     ```
 

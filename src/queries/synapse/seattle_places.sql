@@ -7,7 +7,7 @@ FROM
 WITH
     (
         names VARCHAR(MAX),
-        categories VARCHAR(MAX),
+        taxonomy VARCHAR(MAX),
         websites VARCHAR(MAX),
         phones VARCHAR(MAX),
         bbox VARCHAR(200),

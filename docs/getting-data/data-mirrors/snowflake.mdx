@@ -40,7 +40,7 @@ Overture data is accessible through the [Snowflake Data Marketplace](https://app
     -- Identify places within the "Restaurant" category
     SELECT id, phones['list'][0]['element'] AS phone, names['primary'] AS name
     FROM CARTO.PLACE
-    WHERE categories['primary'] = 'restaurant'
+    WHERE taxonomy['primary'] = 'restaurant'
     LIMIT 100;
     ```
 
