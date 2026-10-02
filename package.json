@@ -22,7 +22,6 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:a11y": "node --test --test-reporter=spec __tests__/a11y.test.mjs",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
@@ -47,7 +46,6 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
     "@docusaurus/module-type-aliases": "^3.10.0",
     "@docusaurus/types": "^3.10.0",
     "@eslint/js": "^10.0.0",
@@ -60,7 +58,6 @@
     "globals": "^17.11.0",
     "jsdom": "^30.1.1",
     "markdownlint-cli": "^0.49.1",
-    "playwright": "^1.62.1",
     "prettier": "^3.9.8",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",

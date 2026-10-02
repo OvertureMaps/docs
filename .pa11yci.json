@@ -1,0 +1,20 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "runners": ["axe"],
+    "timeout": 30000,
+    "wait": 1000,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox"]
+    }
+  },
+  "urls": [
+    "http://localhost:3000/",
+    "http://localhost:3000/docs/",
+    "http://localhost:3000/getting-data/",
+    "http://localhost:3000/guides/",
+    "http://localhost:3000/examples/",
+    "http://localhost:3000/blog/",
+    "http://localhost:3000/community/"
+  ]
+}
