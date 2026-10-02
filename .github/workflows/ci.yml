@@ -37,7 +37,7 @@ jobs:
         run: npm test
 
   a11y:
-    name: Accessibility (WCAG 2.2 AA)
+    name: Accessibility (WCAG 2.1 AA)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
