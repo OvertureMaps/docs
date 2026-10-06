@@ -26,7 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@csstools/css-parser-algorithms": "^4.0.0",
+    "@csstools/css-parser-algorithms": "^4.0.1",
     "@csstools/css-tokenizer": "^4.0.0",
     "@docusaurus/core": "^3.10.2",
     "@docusaurus/faster": "^3.10.2",
