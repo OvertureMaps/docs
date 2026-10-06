@@ -1,0 +1,408 @@
+---
+title: One Model to Generate The All
+authors: [seth, jennings]
+tags:
+  - schema
+  - tools
+  - extensions
+---
+
+
+# One model to generate them all
+
+If you publish geospatial data, you've probably done this. You put a dataset on a data portal or shared it with colleagues, maybe as a Shapefile, a GeoPackage, or a GeoParquet file. You describe its columns somewhere else: a PDF data dictionary, an [FGDC metadata record](<https://www.fgdc.gov/metadata/csdgm-standard>), a spreadsheet of codes. Someone asks what a code means, so you add a note to the description, and later you fix a column in the data without going back to the description. Now there are three versions of the truth: the data, the portal entry, and the document. They disagree.
+
+You do have a model. You just wrote it in a place nothing else can read. The data dictionary describes the columns, but no validator checks the data against it, and no tool can look up which values are legal. Every copy of that knowledge gets maintained by hand, and hand-maintained copies drift.
+
+We had the same problem at Overture, at a larger scale. The [Overture Schema](<https://docs.overturemaps.org/schema/>) started as JSON Schema, hand-written as YAML, with reference docs written separately and validation that only ran on JSON. When the schema changed, the docs had to catch up by hand, and they didn't always. So we asked how we could write the model so that the data, the validation, and the reference material all derive from it and can't diverge. Our answer was code. [Last month we published v2.0.0 of the schema](<https://docs.overturemaps.org/blog/2026/09/16/schema-v2/>) as a Python library built on Pydantic. The model is the source, and the JSON Schema, the reference docs, and the validation checks are all generated from it.
+
+This post follows the workshop we're teaching today at the [CNG Forum in Snowbird](<https://cloudnativegeo.org/events/cng-forum-2026>). If you're in the room, it's the written version of what we're doing together. If you're not, it's an invitation: the packages are on PyPI, the workshop material is in [a public repo](https://github.com/OvertureMaps/workshop/tree/cng-snowbird) with a [Codespace that has everything installed](https://bit.ly/4jH4Rp8), and you can work through it on your own data. It's written for people on their own data modeling journey: you have a model you built, one you inherited, or one that's implicit in how your data happens to look, and it isn't working as well as you'd like. You want something that holds together better and fits with other datasets and tools.
+
+
+{/* truncate */}
+
+## Background: JSON Schema and Pydantic
+
+### JSON Schema
+
+JSON Schema is a JSON document that describes what other JSON documents must look like:
+
+```json
+{"type": "object",
+ "properties": {
+   "stars": {"type": "integer", "minimum": 1, "maximum": 5,
+             "description": "Star rating from 1 (least safe) to 5 (safest)."},
+   "road_type": {"enum": ["motorway", "arterial", "local"],
+                 "description": "Kind of road that was rated."}},
+ "required": ["stars"]}
+```
+
+It can describe groups of named fields (which can contain other groups), lists, fields limited to a fixed set of values (called enums, short for enumerations), required fields, bounds and patterns, and a description on every field. Validators exist for most languages. If your data already has a JSON Schema, it already has a model. Overture's schema started this way, written by hand as YAML to make it easier to read and edit.
+
+JSON Schema describes JSON, so for geospatial features the natural way to represent the data is as GeoJSON. A GeoJSON feature keeps `id`, `bbox`, and `geometry` in an envelope, and your own fields under `properties`, nested into more complex structures if your tools support them.
+
+### JSON vs. tables
+
+Most geospatial data doesn't stay in (or start as) GeoJSON. It becomes GeoParquet, CSV, Shapefiles, and databases, and those are all tables at their core. A table has one set of columns that apply to every row. GeoJSON features in the same collection can each have their own set of keys. When features differ, on purpose or by accident, every key that appears anywhere becomes a column, and the table gets wide and mostly null:
+
+```text
+id   stars  lanes  surface
+a    4      null   null
+b    2      4      asphalt
+```
+
+Nested fields have the same problem in the other direction. In a Shapefile or a CSV, and in Parquet as GDAL writes it, a nested object turns into a string of JSON text in a single column to facilitate round-tripping. Parquet supports real structs, but a conversion can't infer them. Something has to know the structure, and that something is the model.
+
+Overture ships GeoParquet. GeoJSON is what we use to describe individual features, extracts, and examples. We wanted one model to describe both.
+
+### Python type hints and Pydantic
+
+Python lets you say what type a value should be. Python itself doesn't check:
+
+```python
+def double(n: int) -> int:
+    return n * 2
+
+double("5")  # returns '55', no error
+```
+
+Other tools read the hints: your editor uses them for completions and warnings, and a type checker reports `double("5")` as an error before the code runs. Pydantic is the library that enforces them when data arrives. You describe data as classes with type hints and check inputs against them:
+
+```python
+class Rating(BaseModel):
+    stars: Annotated[int, Field(ge=1, le=5)]
+    road_type: str | None = None
+
+Rating.model_validate_json('{"stars": 7}')
+```
+
+```text
+1 validation error for Rating
+stars
+  Input should be less than or equal to 5
+```
+
+[Pydantic](<https://pydantic.dev/docs/validation/latest/get-started/>) also generates JSON Schema from a model, which is how Overture keeps publishing JSON Schema while no longer maintaining one.
+
+## Why write a schema as code
+
+### Start with the authoring experience
+
+As we considered moving away from hand-written JSON Schema, the first thing we wanted was a better way to write and manage the schema. Editing YAML gave us little help: no completion, no refactoring, no way to tell whether a change did what we meant except by creating examples and counterexamples through a validator and hoping they covered the case in the way we intended.
+
+A type system was the thing we wanted most, because it improves the authoring experience. Programming languages have editors, type checkers, and refactoring tools built for millions of developers, and that pointed us in that direction. TypeScript's type system was appealing too, especially since JSON itself came from JavaScript. Python and Pydantic fit Overture's pipelines and team.
+
+Pydantic's usual job is different from ours. Most people use it inside a Python program, to reject a malformed request before a web service acts on it. We use it structurally: what we care about are the definitions, not how they behave inside a Python program. Python is what the model is written in, not executed. The data is read elsewhere, by DuckDB, Spark, GDAL, and QGIS, and none of them runs our Python.
+
+### Produce better reference material
+
+The second focus was to generate everything else from the model. Code is malleable: once the model is code, turning it into another artifact is just another program.
+
+```text
+                    ┌──▶  JSON Schema
+                    ├──▶  Markdown reference docs
+   models.py  ──────┼──▶  Validation (Python, CLI)
+                    ├──▶  PySpark checks for Parquet at scale
+                    └──▶  STAC table:columns  (soon)
+```
+
+The types, constraints, and descriptions live in one place, so each output is regenerated rather than maintained. That makes better docs cheaper. When the docs were written separately, making them richer meant more text to keep in sync by hand, so every improvement made them more likely to be wrong, especially as the schema evolved. When the docs are generated, an improvement to the model reaches [the docs](<https://docs.overturemaps.org/schema/>), [the JSON Schema](<https://github.com/OvertureMaps/schema/releases/download/overture-schema-v2.0.0/overture-schema.json>), and the validators all at once. Each output can still be reviewed independently: someone reading the Markdown assesses whether it explains the data appropriately, a Spark job runs [the PySpark expressions](<https://github.com/OvertureMaps/schema/tree/main/packages/overture-schema-pyspark>) to check the data itself, and both are drawn from the same model, even if indirectly.
+
+### Richer than a data dictionary
+
+A simple data dictionary gives each column a storage type and a line of text:
+
+| Column | Type | Description |
+| -- | -- | -- |
+| `stars` | integer | Star rating |
+| `road_type` | string | Road type code |
+
+A model gives the column a type of its own, with the range, the meaning, and every legal value attached:
+
+```python
+StarRating = NewType("StarRating", Annotated[uint8, Field(
+    ge=1, le=5, description="Star rating from 1 (least safe) to 5 (safest).")])
+
+class RoadType(str, DocumentedEnum):
+    """Kind of road that was rated."""
+    MOTORWAY = ("motorway", "Divided highway with controlled access.")
+    LOCAL = ("local", "Street serving the properties along it.")
+```
+
+Here is a real Overture model, condensed:
+
+```python
+class Building(
+    OvertureFeature[Literal["buildings"], Literal["building"]],
+    Named, Stacked, Appearance,  # names, level, height, facade_color, ...
+):
+    """
+    Buildings are man-made structures with roofs that exist permanently in one place.
+    """
+    geometry: Annotated[
+        Geometry,
+        GeometryTypeConstraint(GeometryType.POLYGON, GeometryType.MULTI_POLYGON),
+        Field(description="The building's footprint or roofprint (if traced from aerial/satellite imagery)."),
+    ]
+    subtype: Annotated[
+        BuildingSubtype | None,
+        Field(description="A broad classification of the current use and purpose of the building."),
+    ] = None
+```
+
+The output generator turns it into [a documentation page](<https://docs.overturemaps.org/schema/reference/buildings/building/>):
+
+> **Building**
+> Buildings are man-made structures with roofs that exist permanently in one place…
+>
+> | Name | Type | Description |
+> | -- | -- | -- |
+> | `geometry` | geometry | The building's footprint or roofprint (if traced from aerial/satellite imagery). *Allowed geometry types: MultiPolygon, Polygon* |
+> | `subtype` | `BuildingSubtype` (optional) | A broad classification of the current use and purpose of the building… |
+> | `facade_color` | `HexColor` (optional) | Facade color in `#rgb` or `#rrggbb` hex notation |
+
+`BuildingSubtype` and `HexColor` link to pages of their own. [The `BuildingSubtype` page](<https://docs.overturemaps.org/schema/reference/buildings/types/building_subtype/>) lists every legal value. [The `HexColor` page](<https://docs.overturemaps.org/schema/reference/system/hex_color/>) describes the concept with examples, shows its storage type (`string`), and lists its constraint, which is a pattern that matches `#rgb` or `#rrggbb`. Those pages are the data dictionary entries, generated. The validator reads the same model and rejects a building whose `facade_color` is `red`, which is the rule the `HexColor` page lists.
+
+The model can say more about a value than that it's legal. `BuildingSubtype` is a plain `Enum`, so its page lists the values and nothing else:
+
+```python
+class BuildingSubtype(str, Enum):
+    """Broadest classification of the type and purpose of a building."""
+    AGRICULTURAL = "agricultural"
+    CIVIC = "civic"
+    ...
+```
+
+> * `agricultural`
+> * `civic`
+> * …
+
+`RoofOrientation`, also on Building, is a `DocumentedEnum`. Each value has its meaning attached, and [the page](<https://docs.overturemaps.org/schema/reference/buildings/types/roof_orientation/>) lists both:
+
+```python
+class RoofOrientation(str, DocumentedEnum):
+    """Orientation of the roof shape relative to the footprint shape."""
+    ACROSS = ("across", "The roof ridge runs perpendicular to the longer of the two building edges, parallel to the shorter")
+    ALONG = ("along", "The roof ridge runs parallel to the longer of the two building edges")
+```
+
+> * `across` - The roof ridge runs perpendicular to the longer of the two building edges, parallel to the shorter
+> * `along` - The roof ridge runs parallel to the longer of the two building edges
+
+## How: a model, its fields, its constraints
+
+Here is one example built from scratch, a road-safety star rating for a stretch of road:
+
+```python
+from typing import Annotated, NewType
+from pydantic import Field
+from overture.schema.system.feature import Feature
+from overture.schema.system.geometric import Geometry, GeometryType, GeometryTypeConstraint
+from overture.schema.system.model_constraint import no_extra_fields
+from overture.schema.system.numeric import uint8
+
+StarRating = NewType("StarRating", Annotated[
+    uint8, Field(ge=1, le=5, description="Star rating from 1 (least safe) to 5 (safest).")])
+
+@no_extra_fields
+class RoadSafetyRating(Feature):
+    """A road-safety star rating for a stretch of road."""
+
+    geometry: Annotated[Geometry, GeometryTypeConstraint(GeometryType.LINE_STRING),
+                        Field(description="The rated stretch of road.")]
+    stars: StarRating
+```
+
+### Pick a base class
+
+A model is a Python class, and every model extends a base class—a class that supplies the fields and behavior its subclasses share—so each model declares only the fields its base class doesn't already supply. The base class decides what kind of record the model describes. There are three to choose from:
+
+* `BaseModel`, Pydantic's own, is a plain record with no geometry. Use it for nested structures and for tables without geometry.
+* `Feature` adds `geometry` and an optional `id` and `bbox`. It describes both a GeoJSON feature and a flat row, as in GeoParquet or other tabular formats.
+* `OvertureFeature` extends `Feature` for Overture's own data. It groups features by theme and type, and provides fields for versioning and provenance.
+
+A road-safety rating has geometry and isn't part of Overture's data, so it starts from `Feature`.
+
+### Required or optional
+
+```python
+name: str                       # required: no default
+height: float64 | None = None   # optional: absent is null
+id: Omitable[Id]                # optional: absent, never null
+```
+
+A field with no default is required. `X | None = None` is optional, and we only allow `None` as a default.
+
+`X | None` is about the value: it may be `null`. `Omitable` is about the key: the key may be missing, but when it's present its value is never `null`. The difference comes from the gap between JSON and tabular data. A JSON object can leave a property out. A table row can't, so a Parquet column is `null` where an entry is absent. GeoJSON allows a feature's `id` and `bbox` to be left out but not set to `null`, so `Feature` uses `Omitable` for those two fields, and when they're absent the output leaves them out.
+
+Overture's JSON Schema output treats every optional field as omitable: `X | None = None` and `Omitable[X]` both become a plain type that may be left out but may not be `null`. They differ in Python. Pydantic accepts an explicit `null` for `X | None`, and writes `null` for an unset field unless you serialize with `exclude_unset=True`. `Omitable[X]` rejects `null` in Python too, so use it when the Python model needs to match the JSON Schema exactly.
+
+We don't allow other defaults because programmatically-declared defaults live in the Python model, not in the data. Pydantic fills them in when it parses, so the value only appears when using Python. Everyone else sees the data as it was published. If absence means something, the field's description needs to say so. If a value belongs in the data, the publisher writes it.
+
+### No extra fields
+
+This is one of Overture's opinionated choices: a model declares every field it accepts, and anything else is an error. The model is 1:1 with a dataset that conforms to it. Pydantic ignores undeclared keys by default, so in a table, each of those keys becomes a column with no type and no validation, and tables widen with whatever each publisher added, allowing a typo like `spead_limit_kph` to appear as a new column instead of an error. `@no_extra_fields` rejects them.
+
+### Types
+
+Numbers say how big they are: `int8` through `int64`, `uint8` through `uint32`, `float32`, and `float64`. Sized types correspond to the column types in GeoParquet and other formats, and to the ones you'd declare in a database (`smallint`, `integer`, `bigint`, `real`, `double precision`), so a tool writing the data doesn't have to guess a width. When you're unsure, use `int32` and `float64`. Numbers don't carry their units yet: that a height is in meters lives in the field's description, not in its type. Tagging numbers with units is something we're thinking about.
+
+A geometry field declares a geometry, not an encoding, so GeoJSON coordinates, WKB, and WKT all fit it (or Shapely, if you're working in Python). You can restrict the specific types allowed, and the docs and the validator both follow the restriction. The model doesn't constrain the coordinate reference system (CRS), the definition that says what a geometry's coordinates mean, such as longitude and latitude in WGS84 or meters in a UTM zone. A CRS usually belongs to the dataset as a whole rather than to each feature, and a dataset can be reprojected and still conform to the same schema, so constraining it is an optional capability we haven't built yet.
+
+A nested `BaseModel` groups related fields into a struct. Structs reject undeclared keys when decorated with `@no_extra_fields`, so a stray `rated_by` inside a `survey` struct is an error, the same as a misspelled field at the top level. In the generated docs, the struct's fields get rows of their own on the feature's page, named like `survey.assessor`.
+
+A `NewType` defines a domain type once, with a name, a description, and its constraints:
+
+```python
+CountryCodeAlpha2 = NewType("CountryCodeAlpha2", Annotated[
+    str,
+    CountryCodeAlpha2Constraint(),
+    Field(description="An ISO 3166-1 alpha-2 country code"),
+])
+```
+
+A `NewType` gives an existing type a new name that a type checker treats as distinct. At runtime a `CountryCodeAlpha2` is just a string. To a type checker it is its own type: you can use one anywhere a `str` is expected, but not the other way around. If a field expects a `CountryCodeAlpha2` and you assign it an arbitrary string, or a `LanguageTag` (also a string underneath), the type checker flags it before the code runs. That makes it harder to mix up two strings that mean different things, such as a country code and a language tag, when authoring a model or the code that produces data for it.
+
+Every field that uses it gets the description and the checks, and the docs give it its own page.
+
+### Enums that say what values mean
+
+Most spatial data has coded columns, and I think expounding on the vocabulary is one of the most valuable parts of producing a model.
+
+```python
+class Material(str, DocumentedEnum):
+    """Primary material of a building's walls."""
+
+    BRICK = ("brick", "Fired-clay brick masonry.")
+    TIMBER = ("timber", "Structural wood framing or log construction.")
+```
+
+If you build a vocabulary by running `DISTINCT` over an extract, you get the values that extract happens to contain, and you still don't know what they mean. Listing every legal value with its meaning moves that knowledge out of a PDF or someone's head and into the model.
+
+### Constraints
+
+Pydantic's bounds and lengths work as usual, and the system adds constraints for things that come up often in geospatial data: country and region codes, language tags, Wikidata IDs, phone numbers, colors. Rules that span fields are class decorators:
+
+```python
+@require_if(["admin_level"], FieldEqCondition("subtype", "region"))
+@forbid_if(["country"], FieldEqCondition("subtype", "country"))
+@require_any_of("name", "ref")
+```
+
+The docs render them as English: `country` *is forbidden when* `subtype` *=* `country`.
+
+Custom checks have to be written as data, not as functions. Every output is derived from the model, so a derivative can only be lossless if the constraint is encoded as data first. Pydantic lets you write a validator function, and it runs (in Python), but no other tool can see what it checks:
+
+```python
+# A function: it runs, but no tool can see what it checks
+class RoadSafetyRating(Feature):
+    @model_validator(mode="after")
+    def motorways_need_speed_limit(self):
+        if self.road_type == "motorway" and self.speed_limit_kph is None:
+            raise ValueError("speed_limit_kph is required on motorways")
+        return self
+```
+
+```python
+# Data: the same rule, in a form tools can read
+@require_if(["speed_limit_kph"], FieldEqCondition("road_type", "motorway"))
+class RoadSafetyRating(Feature):
+    ...
+```
+
+Validating in Python, with Pydantic or `overture-schema validate`, enforces both. Only the second reaches the docs, the JSON Schema, and the PySpark checks:
+
+| The same rule, written as… | Docs | JSON Schema | PySpark |
+| -- | -- | -- | -- |
+| `@model_validator` function | nothing | nothing | nothing |
+| `@require_if(...)` | `speed_limit_kph` *is required when* `road_type` *=* `motorway` | `if` / `then` | `check_require_if` |
+| `Field(ge=1, le=5)` | `≥ 1`, `≤ 5` | `minimum`, `maximum` | `check_bounds` |
+
+A rule that only one output can consume is the divergence problem again, within a single model.
+
+### Make it a package
+
+Your models live in an ordinary Python package. An entry point in `pyproject.toml` surfaces them for discovery, and a second registers a tag provider, a small function that marks them as yours:
+
+```toml
+[project.entry-points."overture.models"]
+road_safety_rating = "my_schema:RoadSafetyRating"
+
+[project.entry-points."overture.tag_providers"]
+my_schema = "my_schema.tags:my_schema_provider"
+```
+
+```python
+# my_schema/tags.py
+from collections.abc import Iterable
+
+from pydantic import BaseModel
+
+from overture.schema.system.discovery import ModelKey
+
+def my_schema_provider(
+    types: Iterable[type[BaseModel]], key: ModelKey, tags: set[str]
+) -> set[str]:
+    """Add `my_schema` to every model registered from this package."""
+    if key.entry_point.startswith("my_schema:"):
+        tags.add("my_schema")
+    return tags
+```
+
+The tools call every registered provider for each model they discover, passing the tags it has so far. This one adds `my_schema` to any model whose entry point comes from this package.
+
+After that, `--tag my_schema` selects your models in every tool: listing types, validating data, generating JSON Schema, and generating docs. A larger collection can use its own tag vocabulary, for example to group related models or to omit drafts from the published docs.
+
+Validating data is one command:
+
+```console
+$ overture-schema validate --type road_safety_rating my-schema/examples/bad.json
+          geometry      Point ← geometry type not allowed: <GeometryType.POINT: …>
+             stars          7 ← Input should be less than or equal to 5
+   survey.rated_by       "me" ← Extra inputs are not permitted
+```
+
+### Markdown
+
+Producing reference documentation is another:
+
+```console
+overture-codegen generate --format markdown --tag my_schema --output-dir docs/
+```
+
+> **RoadSafetyRating**
+> A road-safety star rating for a stretch of road.
+>
+> | Name | Type | Description |
+> | -- | -- | -- |
+> | `geometry` | geometry | The rated stretch of road. *Allowed geometry types: LineString* |
+> | `stars` | `StarRating` | Star rating from 1 (least safe) to 5 (safest). |
+> | `road_type` | `RoadType` (optional) | Kind of road that was rated. `speed_limit_kph` *is required when* `road_type` *=* `motorway` |
+
+These are what most people working with your data would read. When someone wants to improve a row, refinements go into the model, and the page, the JSON Schema, and the checks all change with it.
+
+## Faster starts: have an agent write the generator
+
+Writing a model for a large existing spec or dataset by hand is slow, and the obvious shortcut is to give an agent the spec and ask it to generate Pydantic models for you. When I first built out Overture's models, that's what I did, and it caused a lot of problems. An agent writing models from a spec is transcribing, and transcription loses things quietly: an enum value dropped, another added, a description credibly paraphrased, a constraint the spec never stated.
+
+What works better is asking the agent for a script that reads the source and writes the models. Most agents bias toward writing code to solve problems, but check that yours does. The source can be a spec, a data dictionary, a JSON Schema, or the data files, saved as a snapshot rather than read from a live URL. Give it the same rules the rest of this post uses: sized number types, the provided constraints, no validator functions. A generator's output can be checked: regenerate it and diff it against the models you've since edited by hand. When a generator is wrong, it is wrong the same way on every field, and that's easier to detect than subtle transcription errors.
+
+## Future directions
+
+A few things we experimented with while preparing the workshop look promising. One of them you can try now, as long as you don't mind rough edges.
+
+**Start from the data and its catalogue.** Many government (and other) datasets come with a feature catalogue, a separate file published alongside the data, in ISO 19110 or FGDC form, describing each column and listing the meaning of each code. Reading those catalogues is a good way to fill in the descriptions and vocabularies a model needs, and to find codes that appear in the data but in no catalogue. We've been building a tool, tentatively named `schema-bootstrap`, that reads a dataset and its catalogue and emits a first draft of a model, with everything it couldn't work out marked as a TODO. It's experimental and hasn't shipped, but you can find it on the [`cng-snowbird` branch of the workshop repo](https://github.com/OvertureMaps/workshop/tree/cng-snowbird). If you try it on your own data, tell us what it got wrong. I'd like to write about it properly once more people have used it.
+
+**STAC** `table:columns`**.** STAC describes a dataset's spatio-temporal envelope: where, when, and what it covers. A model describes its contents. A generator that writes a model's columns, types, descriptions, and declared geometry types into STAC's `table:columns` would give a catalog more than just column names.
+
+## Where to go next
+
+The packages are on PyPI:
+
+```console
+pip install overture-schema overture-schema-codegen   # Python 3.10+
+```
+
+[`SCHEMA_GUIDE.md`](<https://github.com/OvertureMaps/schema/blob/main/SCHEMA_GUIDE.md>) and [`AUTHORING.md`](<https://github.com/OvertureMaps/schema/blob/main/AUTHORING.md>) in the schema repository cover the system in more depth. The workshop material, including a Codespace with everything installed, is in [OvertureMaps/workshop](<https://github.com/OvertureMaps/workshop>).  The announcement of schema v2, which covers what changed for people using Overture's data, is [on the Overture blog](<https://docs.overturemaps.org/blog/2026/09/16/schema-v2/>).
+
+If you're modeling your own data this way, or deciding whether to, we'd like to hear what you run into
