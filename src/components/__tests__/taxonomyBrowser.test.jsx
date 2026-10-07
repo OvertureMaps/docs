@@ -782,7 +782,7 @@ describe('TaxonomyBrowser', () => {
         fireEvent.pointerDown(stage(), { button: 0, clientX: 100, clientY: 100, pointerId: 1 });
         fireEvent.pointerMove(stage(), { clientX: 160, clientY: 130, pointerId: 1 });
         fireEvent.pointerUp(stage(), { pointerId: 1 });
-        expect(parseTransform()).toMatchObject({ x: 60, y: 30 });
+        await waitFor(() => expect(parseTransform()).toMatchObject({ x: 60, y: 30 }));
       });
 
       it('does not select a segment when a drag ends over one', async () => {
