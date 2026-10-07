@@ -65,7 +65,7 @@ jobs:
           npx --yes wait-on@9 --timeout 60000 http://localhost:3000/
 
       - name: Run accessibility tests
-        uses: lowlysre/pa11y-ci-action@9cfc00c514ae1d06afa84ce15d3959f8bbca2e73 # v1.0.0
+        uses: lowlysre/pa11y-ci-action@84174759cd514bd3ea3bcaa30dc1798dde81f713 # v1.1.0
 
   query-tests:
     name: DuckDB query smoke tests
