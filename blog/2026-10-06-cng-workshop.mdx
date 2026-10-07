@@ -16,10 +16,11 @@ You do have a model. You just wrote it in a place nothing else can read. The dat
 
 We had the same problem at Overture, at a larger scale. The [Overture Schema](<https://docs.overturemaps.org/schema/>) started as JSON Schema, hand-written as YAML, with reference docs written separately and validation that only ran on JSON. When the schema changed, the docs had to catch up by hand, and they didn't always. So we asked how we could write the model so that the data, the validation, and the reference material all derive from it and can't diverge. Our answer was code. [Last month we published v2.0.0 of the schema](<https://docs.overturemaps.org/blog/2026/09/16/schema-v2/>) as a Python library built on Pydantic. The model is the source, and the JSON Schema, the reference docs, and the validation checks are all generated from it.
 
+{/* truncate */}
+
 This post follows the workshop we're teaching today at the [CNG Forum in Snowbird](<https://cloudnativegeo.org/events/cng-forum-2026>). If you're in the room, it's the written version of what we're doing together. If you're not, it's an invitation: the packages are on PyPI, the workshop material is in [a public repo](https://github.com/OvertureMaps/workshop/tree/cng-snowbird) with a [Codespace that has everything installed](https://bit.ly/4jH4Rp8), and you can work through it on your own data. It's written for people on their own data modeling journey: you have a model you built, one you inherited, or one that's implicit in how your data happens to look, and it isn't working as well as you'd like. You want something that holds together better and fits with other datasets and tools.
 
 
-{/* truncate */}
 
 ## Background: JSON Schema and Pydantic
 
