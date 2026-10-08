@@ -34,7 +34,7 @@ import ibis
 from ibis import _
 
 t = ibis.read_parquet(
-    "s3://overturemaps-us-west-2/release/2024-09-18.0/theme=base/type=infrastructure/*",
+    "s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=base/type=infrastructure/*",
     table_name="infra",
 )
 
@@ -47,6 +47,7 @@ expr = t.filter(
     _.subtype == "power",
 ).select(["names", "geometry", "sources", "class"])
 ```
+
 
 :::tip
 Ibis uses lazy evaluation — `expr` is just an expression tree and no data is fetched until you execute it. DuckDB pushes the filters and column projections down to the parquet reader, minimizing data transfer.
