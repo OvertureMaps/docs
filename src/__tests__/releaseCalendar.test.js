@@ -44,8 +44,16 @@ describe('releaseNotesPath', () => {
 
 describe('release-calendar.json', () => {
   it('validates against its schema', () => {
-    const validate = new Ajv({ strict: false }).compile(schema);
+    const validate = new Ajv({ format: 'full' }).compile(schema);
     expect(validate(calendar), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it('rejects impossible dates', () => {
+    const validate = new Ajv({ format: 'full' }).compile(schema);
+    const bad = {
+      releases: [{ date: '2026-02-30', dataVersion: '2026-02-30.0', schemaVersion: null }],
+    };
+    expect(validate(bad)).toBe(false);
   });
 
   it('points $schema at the published schema', () => {

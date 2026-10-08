@@ -48,7 +48,6 @@ expr = t.filter(
 ).select(["names", "geometry", "sources", "class"])
 ```
 
-
 :::tip
 Ibis uses lazy evaluation — `expr` is just an expression tree and no data is fetched until you execute it. DuckDB pushes the filters and column projections down to the parquet reader, minimizing data transfer.
 :::

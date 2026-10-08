@@ -16,7 +16,7 @@ Each month, add an entry for the release that's three to four months out, so at 
 
 The fallback release in `docusaurus.config.js` (`getLatestOvertureRelease()`) is the newest shipped entry in this file. It's only used when the STAC catalog is unreachable at build time.
 
-Don't hardcode the current release in docs examples. Use the `__OVERTURE_RELEASE` placeholder, which resolves the latest release from [STAC](https://stac.overturemaps.org/) at build time. It works in plain fenced code blocks and in the `QueryBuilder` component. Pin a version only when the surrounding text depends on that exact release, as in `docs/gers/gers-tutorial.mdx`.
+Don't hardcode the current release in docs examples. Use the `__OVERTURE_RELEASE` placeholder, which resolves the latest release from [STAC](https://stac.overturemaps.org/) at build time. It works in plain fenced code blocks and in the `QueryBuilder` component. Pin a version only when the surrounding text depends on that exact release.
 
 ## Schema reference
 

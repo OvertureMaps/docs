@@ -71,7 +71,7 @@ export function ReleaseHistory() {
         return path ? <Link to={path}>{code}</Link> : code;
       }}
       renderSchema={(r) => {
-        const code = <code>{r.schemaVersion}</code>;
+        const code = <code>{r.schemaVersion ?? 'TBD'}</code>;
         const href = schemaLink(r.schemaVersion);
         return href ? <a href={href}>{code}</a> : code;
       }}
