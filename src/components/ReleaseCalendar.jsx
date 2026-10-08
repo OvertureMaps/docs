@@ -56,14 +56,14 @@ export function ReleaseSchedule() {
   );
 }
 
-export function ReleaseHistory() {
+function ShippedTable({ rows }) {
   const {
     siteConfig: { customFields },
   } = useDocusaurusContext();
 
   return (
     <ReleaseTable
-      rows={shipped}
+      rows={rows}
       renderDate={(r) => formatDate(r.date)}
       renderVersion={(r) => {
         const code = <code>{r.dataVersion}</code>;
@@ -77,4 +77,12 @@ export function ReleaseHistory() {
       }}
     />
   );
+}
+
+export function CurrentRelease() {
+  return <ShippedTable rows={shipped.slice(0, 1)} />;
+}
+
+export function ReleaseHistory() {
+  return <ShippedTable rows={shipped} />;
 }
