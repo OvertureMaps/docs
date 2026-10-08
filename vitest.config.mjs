@@ -12,6 +12,16 @@ export default defineConfig({
       // Docusaurus client exports need site context that doesn't exist in a
       // unit test; stub the ones components import directly.
       '@docusaurus/useBaseUrl': path.resolve(dirname, 'src/__mocks__/docusaurus-useBaseUrl.js'),
+      '@docusaurus/useDocusaurusContext': path.resolve(
+        dirname,
+        'src/__mocks__/docusaurus-useDocusaurusContext.js'
+      ),
+      '@docusaurus/Link': path.resolve(dirname, 'src/__mocks__/docusaurus-Link.jsx'),
+      // Swizzled theme wrappers import the original component through this alias.
+      '@theme-original/CodeBlock': path.resolve(
+        dirname,
+        'src/__mocks__/theme-original-CodeBlock.jsx'
+      ),
     },
   },
   test: {

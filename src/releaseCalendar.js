@@ -2,11 +2,12 @@
 
 /**
  * Splits release-calendar.json entries into shipped (newest first) and upcoming
- * (soonest first). A release dated today counts as shipped.
+ * (soonest first). A release dated today counts as shipped. `today` is passed in
+ * rather than read from the clock so builds and tests are deterministic.
  * @param {Array<{date: string}>} releases
  * @param {string} today ISO date, e.g. 2026-10-08
  */
-function splitReleases(releases, today = new Date().toISOString().slice(0, 10)) {
+function splitReleases(releases, today) {
   const byDate = (a, b) => a.date.localeCompare(b.date);
   const sorted = [...releases].sort(byDate);
   return {

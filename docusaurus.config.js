@@ -25,9 +25,14 @@ function getFromEnvironment(variableName, defaultValue) {
   return environmentValue ? environmentValue : defaultValue;
 }
 
+// The date this build runs, used to decide which release-calendar.json entries have
+// shipped. It's exposed via customFields so the React components use the same date as
+// the server-rendered HTML instead of the browser clock (see ReleaseCalendar.jsx).
+const buildDate = new Date().toISOString().slice(0, 10);
+
 function getLatestOvertureRelease() {
   // Used only when the STAC catalog is unreachable: the newest release in release-calendar.json.
-  const fallback = splitReleases(releaseCalendar.releases).shipped[0].dataVersion;
+  const fallback = splitReleases(releaseCalendar.releases, buildDate).shipped[0].dataVersion;
   try {
     const { execSync } = require('child_process');
     const response = execSync('curl -s https://stac.overturemaps.org/catalog.json', {
@@ -88,6 +93,7 @@ const config = {
 
   customFields: {
     overtureRelease: latestOvertureRelease,
+    buildDate,
     releaseNoteDates,
     pmtiles_path: 'https://tiles.overturemaps.org/' + latestOvertureRelease,
   },
