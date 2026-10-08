@@ -4,6 +4,9 @@
 const { themes } = require('prism-react-renderer');
 const schemaVersions = require('./schema_versions.json');
 
+const { splitReleases } = require('./src/releaseCalendar');
+const releaseCalendar = require('./static/release-calendar.json');
+
 // both modes use the dark palette — code blocks are forced dark bg in
 // light mode too (see custom.css), so light-theme token colors fail contrast.
 const codeTheme = themes.nightOwl;
@@ -23,7 +26,8 @@ function getFromEnvironment(variableName, defaultValue) {
 }
 
 function getLatestOvertureRelease() {
-  const fallback = '2026-09-23.1';
+  // Used only when the STAC catalog is unreachable: the newest release in release-calendar.json.
+  const fallback = splitReleases(releaseCalendar.releases).shipped[0].dataVersion;
   try {
     const { execSync } = require('child_process');
     const response = execSync('curl -s https://stac.overturemaps.org/catalog.json', {
@@ -40,6 +44,14 @@ function getLatestOvertureRelease() {
 }
 
 const latestOvertureRelease = getLatestOvertureRelease();
+
+// Dates with a release notes post (blog/YYYY-MM-DD-release-notes.mdx). The release
+// history table links only to posts that exist; the blog isn't built for schema previews.
+const releaseNoteDates = isSchemaPreview
+  ? []
+  : require('fs')
+      .readdirSync('blog')
+      .flatMap((file) => /^(\d{4}-\d{2}-\d{2})-release-notes\.mdx?$/.exec(file)?.[1] ?? []);
 
 // Schema reference docs are a separate, versioned docs instance (see README
 // "Schema Reference"). Only released schema tags are published: snapshots live
@@ -61,7 +73,10 @@ const schemaVersionOptions = isSchemaPreview
       includeCurrentVersion: false,
       lastVersion: latestSchemaVersion,
       versions: Object.fromEntries(
-        schemaVersions.map((v) => [v, { label: v, banner: 'none', path: v === latestSchemaVersion ? '' : v }]),
+        schemaVersions.map((v) => [
+          v,
+          { label: v, banner: 'none', path: v === latestSchemaVersion ? '' : v },
+        ])
       ),
     };
 
@@ -73,6 +88,7 @@ const config = {
 
   customFields: {
     overtureRelease: latestOvertureRelease,
+    releaseNoteDates,
     pmtiles_path: 'https://tiles.overturemaps.org/' + latestOvertureRelease,
   },
 
@@ -145,6 +161,19 @@ const config = {
                   from: '/releases',
                   to: '/release-calendar/',
                 },
+                // Release notes posts used custom slugs (/blog/<data version>/) before they
+                // were renamed to the standard blog/YYYY-MM-DD-release-notes.mdx.
+                ...[
+                  '2024-07-22',
+                  '2024-08-20',
+                  '2024-09-18',
+                  '2024-10-23',
+                  '2024-11-13',
+                  '2024-12-18',
+                ].map((date) => ({
+                  from: `/blog/${date}.0`,
+                  to: `/blog/${date.replaceAll('-', '/')}/release-notes/`,
+                })),
                 {
                   // Renamed from "Taxonomy Browser" to "Taxonomy Explorer".
                   from: '/guides/places/taxonomy-browser',
@@ -241,10 +270,10 @@ const config = {
       docs: {
         sidebar: {
           hideable: true,
-         },
         },
-        image: 'img/omf_logo_transparent.png',
-        navbar: {
+      },
+      image: 'img/omf_logo_transparent.png',
+      navbar: {
         title: 'Overture Maps',
         logo: {
           alt: 'Overture Maps Foundation Logo',

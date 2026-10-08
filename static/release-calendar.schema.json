@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://docs.overturemaps.org/release-calendar.schema.json",
+  "title": "Overture release calendar",
+  "type": "object",
+  "required": ["releases"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "releases": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/release" }
+    }
+  },
+  "definitions": {
+    "release": {
+      "type": "object",
+      "required": ["date", "dataVersion", "schemaVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "description": "Release date, ISO 8601.",
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "dataVersion": {
+          "description": "Data version, e.g. 2026-10-21.0.",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}(-(alpha|beta))?\\.\\d+$"
+        },
+        "schemaVersion": {
+          "description": "Schema version, or null when not yet determined.",
+          "type": ["string", "null"],
+          "pattern": "^v\\d+\\.\\d+\\.\\d+(-(alpha|beta))?$"
+        },
+        "majorChangeMonth": {
+          "description": "True when the release is reserved for quarterly major breaking changes.",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

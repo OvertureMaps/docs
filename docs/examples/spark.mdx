@@ -49,7 +49,7 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 
 # Define constants for our read
-OVERTURE_RELEASE = "2025-01-22.0"
+OVERTURE_RELEASE = "__OVERTURE_RELEASE"
 COUNTRY_CODES_OF_INTEREST = ["US", "GH"]
 SOURCE_DATA_URL = f"s3a://overturemaps-us-west-2/release/{OVERTURE_RELEASE}/theme=places/type=place"
 OUTPUT_FILE = "my_super_cool_data.parquet"

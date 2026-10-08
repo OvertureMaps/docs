@@ -1,0 +1,218 @@
+{
+  "$schema": "https://docs.overturemaps.org/release-calendar.schema.json",
+  "releases": [
+    {
+      "date": "2023-07-26",
+      "dataVersion": "2023-07-26-alpha.0",
+      "schemaVersion": "v0.4.0"
+    },
+    {
+      "date": "2023-10-19",
+      "dataVersion": "2023-10-19-alpha.0",
+      "schemaVersion": "v0.5.0"
+    },
+    {
+      "date": "2023-11-14",
+      "dataVersion": "2023-11-14-alpha.0",
+      "schemaVersion": "v0.6.0"
+    },
+    {
+      "date": "2023-12-14",
+      "dataVersion": "2023-12-14-alpha.0",
+      "schemaVersion": "v0.7.0"
+    },
+    {
+      "date": "2024-01-17",
+      "dataVersion": "2024-01-17-alpha.0",
+      "schemaVersion": "v0.7.0"
+    },
+    {
+      "date": "2024-02-15",
+      "dataVersion": "2024-02-15-alpha.0",
+      "schemaVersion": "v0.8.0"
+    },
+    {
+      "date": "2024-03-12",
+      "dataVersion": "2024-03-12-alpha.0",
+      "schemaVersion": "v0.9.0"
+    },
+    {
+      "date": "2024-04-16",
+      "dataVersion": "2024-04-16-beta.0",
+      "schemaVersion": "v0.10.0-beta"
+    },
+    {
+      "date": "2024-05-16",
+      "dataVersion": "2024-05-16-beta.0",
+      "schemaVersion": "v0.11.0-beta"
+    },
+    {
+      "date": "2024-06-13",
+      "dataVersion": "2024-06-13-beta.0",
+      "schemaVersion": "v0.12.0-beta"
+    },
+    {
+      "date": "2024-06-24",
+      "dataVersion": "2024-06-13-beta.1",
+      "schemaVersion": "v0.12.0-beta"
+    },
+    {
+      "date": "2024-07-22",
+      "dataVersion": "2024-07-22.0",
+      "schemaVersion": "v1.0.0"
+    },
+    {
+      "date": "2024-08-20",
+      "dataVersion": "2024-08-20.0",
+      "schemaVersion": "v1.1.0"
+    },
+    {
+      "date": "2024-09-18",
+      "dataVersion": "2024-09-18.0",
+      "schemaVersion": "v1.1.0"
+    },
+    {
+      "date": "2024-10-23",
+      "dataVersion": "2024-10-23.0",
+      "schemaVersion": "v1.2.0"
+    },
+    {
+      "date": "2024-11-13",
+      "dataVersion": "2024-11-13.0",
+      "schemaVersion": "v1.3.0"
+    },
+    {
+      "date": "2024-12-18",
+      "dataVersion": "2024-12-18.0",
+      "schemaVersion": "v1.4.0"
+    },
+    {
+      "date": "2025-01-22",
+      "dataVersion": "2025-01-22.0",
+      "schemaVersion": "v1.5.0"
+    },
+    {
+      "date": "2025-02-19",
+      "dataVersion": "2025-02-19.0",
+      "schemaVersion": "v1.6.0"
+    },
+    {
+      "date": "2025-03-19",
+      "dataVersion": "2025-03-19.0",
+      "schemaVersion": "v1.7.0"
+    },
+    {
+      "date": "2025-03-20",
+      "dataVersion": "2025-03-19.1",
+      "schemaVersion": "v1.7.0"
+    },
+    {
+      "date": "2025-04-23",
+      "dataVersion": "2025-04-23.0",
+      "schemaVersion": "v1.8.0"
+    },
+    {
+      "date": "2025-05-21",
+      "dataVersion": "2025-05-21.0",
+      "schemaVersion": "v1.9.0"
+    },
+    {
+      "date": "2025-06-25",
+      "dataVersion": "2025-06-25.0",
+      "schemaVersion": "v1.10.0"
+    },
+    {
+      "date": "2025-07-23",
+      "dataVersion": "2025-07-23.0",
+      "schemaVersion": "v1.11.0"
+    },
+    {
+      "date": "2025-08-20",
+      "dataVersion": "2025-08-20.0",
+      "schemaVersion": "v1.11.0"
+    },
+    {
+      "date": "2025-09-24",
+      "dataVersion": "2025-09-24.0",
+      "schemaVersion": "v1.12.0"
+    },
+    {
+      "date": "2025-10-22",
+      "dataVersion": "2025-10-22.0",
+      "schemaVersion": "v1.13.0"
+    },
+    {
+      "date": "2025-11-19",
+      "dataVersion": "2025-11-19.0",
+      "schemaVersion": "v1.14.0"
+    },
+    {
+      "date": "2025-12-17",
+      "dataVersion": "2025-12-17.0",
+      "schemaVersion": "v1.15.0"
+    },
+    {
+      "date": "2026-01-21",
+      "dataVersion": "2026-01-21.0",
+      "schemaVersion": "v1.15.0"
+    },
+    {
+      "date": "2026-02-18",
+      "dataVersion": "2026-02-18.0",
+      "schemaVersion": "v1.16.0"
+    },
+    {
+      "date": "2026-03-18",
+      "dataVersion": "2026-03-18.0",
+      "schemaVersion": "v1.16.0"
+    },
+    {
+      "date": "2026-04-15",
+      "dataVersion": "2026-04-15.0",
+      "schemaVersion": "v1.16.0"
+    },
+    {
+      "date": "2026-05-20",
+      "dataVersion": "2026-05-20.0",
+      "schemaVersion": "v1.17.0"
+    },
+    {
+      "date": "2026-06-17",
+      "dataVersion": "2026-06-17.0",
+      "schemaVersion": "v1.17.0"
+    },
+    {
+      "date": "2026-07-22",
+      "dataVersion": "2026-07-22.0",
+      "schemaVersion": "v1.18.0"
+    },
+    {
+      "date": "2026-08-19",
+      "dataVersion": "2026-08-19.0",
+      "schemaVersion": "v1.18.0"
+    },
+    {
+      "date": "2026-09-23",
+      "dataVersion": "2026-09-23.1",
+      "schemaVersion": "v2.0.0"
+    },
+    {
+      "date": "2026-10-21",
+      "dataVersion": "2026-10-21.0",
+      "schemaVersion": null,
+      "majorChangeMonth": false
+    },
+    {
+      "date": "2026-11-18",
+      "dataVersion": "2026-11-18.0",
+      "schemaVersion": null,
+      "majorChangeMonth": false
+    },
+    {
+      "date": "2026-12-16",
+      "dataVersion": "2026-12-16.0",
+      "schemaVersion": null,
+      "majorChangeMonth": true
+    }
+  ]
+}

@@ -182,7 +182,7 @@ D CREATE TABLE IF NOT EXISTS places AS
     confidence 
   FROM (
     SELECT * 
-    FROM read_parquet('s3://overturemaps-us-west-2/release/2025-04-23.0/theme=places/type=place/*', filename=true, hive_partitioning=1),
+    FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/*', filename=true, hive_partitioning=1),
       bounding_box
     WHERE addresses[1] IS NOT NULL 
       AND bbox.xmin BETWEEN (bounding_box.min_lon - 0.01) AND (bounding_box.max_lon + 0.01)
@@ -196,7 +196,7 @@ We’re doing several things here that are worth breaking down:
 2. Our following `SELECT` statement prepares the Places data to more closely align with the conventions of our inspections data: the `addresses` column is broken down into component columns and we use only the primary name from the `names` column and label it to match `Facility_Name`.
 3. Finally, we obtain the data from the Overture S3 bucket by remotely reading the parquet. A `WHERE` statement limits our request to a slightly buffered bounding box (buffered to ensure we’re capturing places near those facilities on the edges of our dataset).
 
-We now have three tables: `inspections` with 27,515 records, `facilities` with 4,340 records, and `places` with 73,985 records.
+We now have three tables: `inspections` with 27,515 records, `facilities` with 4,340 records, and `places` with 73,985 records. These counts, and the match results below, come from the April 2025 release. Expect different numbers when you run this against current data.
 
 Before we work on connecting them, we’ll add some spatial indexes to each table, making our lookups much faster:
 
@@ -471,7 +471,7 @@ D CREATE TABLE places AS
     categories 
   FROM (
     SELECT * 
-    FROM read_parquet('s3://overturemaps-us-west-2/release/2025-04-23.0/theme=places/type=place/*', filename=true, hive_partitioning=1),
+    FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/*', filename=true, hive_partitioning=1),
             bounding_box
     WHERE addresses[1] IS NOT NULL AND
         bbox.xmin BETWEEN (bounding_box.min_lon - 0.01) AND (bounding_box.max_lon + 0.01) AND
