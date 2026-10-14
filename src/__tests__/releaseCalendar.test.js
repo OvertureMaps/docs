@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
 import calendar from '../../static/release-calendar.json';
 import schema from '../../static/release-calendar.schema.json';
 import { splitReleases, releaseNotesPath } from '../releaseCalendar';
@@ -42,14 +43,20 @@ describe('releaseNotesPath', () => {
   });
 });
 
+const compileSchema = () => {
+  const ajv = new Ajv();
+  addFormats(ajv);
+  return ajv.compile(schema);
+};
+
 describe('release-calendar.json', () => {
   it('validates against its schema', () => {
-    const validate = new Ajv({ format: 'full' }).compile(schema);
+    const validate = compileSchema();
     expect(validate(calendar), JSON.stringify(validate.errors)).toBe(true);
   });
 
   it('rejects impossible dates', () => {
-    const validate = new Ajv({ format: 'full' }).compile(schema);
+    const validate = compileSchema();
     const bad = {
       releases: [{ date: '2026-02-30', dataVersion: '2026-02-30.0', schemaVersion: null }],
     };
