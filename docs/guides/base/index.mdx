@@ -49,6 +49,8 @@ Land use features specify the predominant human use of an area of land, for exam
 #### Water 
 Water features represent ocean and inland water bodies. In Overture data releases, water features are sourced from OpenStreetMap. There are two main categories of water feature: ocean and inland water bodies — physical representations of inland and ocean marine surfaces, translating natural and waterway tags from OpenStreetMap.
 
+Physical water features (`subtype = "physical"`), such as named bays, straits, and seas, overlap the ocean and inland water polygons by design. Use them for labels, and filter them out (`subtype != 'physical'`) when drawing water fills or computing water area. See the [water schema reference](/schema/reference/base/water/) for the full list of subtypes.
+
 ### Column definitions 
 
 The column definitions for every type in the base theme are generated from the schema and live in the schema reference:
