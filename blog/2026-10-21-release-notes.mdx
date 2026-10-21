@@ -1,0 +1,211 @@
+---
+title: 2026-10-21 release notes
+tags:
+  - releases
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
+
+## Overview
+
+**The `2026-10-21.0` release of Overture data and `v2.0.0` of the Overture schema are now available.** Places grew 8.5% to 88.4 million features, as BrightQuery coverage expanded across Western Europe and three new places sources were added: Uberall, Birdeye, and OpenTravel.
+
+You can access the datasets, changelog, GERS registry, bridge files, and PMTiles on AWS and Azure at the paths listed below.
+
+
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined in our [docs](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at community@overturemaps.org. We'd love to hear from you.
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/release/2026-10-21.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2026-10-21.0/
+```
+
+### Data changelog
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/changelog/2026-10-21.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2026-10-21.0/
+```
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/bridgefiles/2026-10-21.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2026-10-21.0/
+```
+
+### GERS registry
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+### PMTiles
+
+**Amazon S3:**
+```
+s3://overturemaps-extras-us-west-2/tiles/2026-10-21.0/
+```
+
+{/* truncate */}
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha.
+:::
+
+### Addresses
+
+- Address count grew from 474,186,531 to 475,263,892, an increase of 0.23%.
+- Replaced the countrywide dataset for Uruguay (`UY`) with 19 regional datasets, one per department, sourced from Direcciones Geográficas del Uruguay. Uruguay now has 1,052,295 addresses, down from 1,059,027, and `address_levels` coverage in Uruguay rose from 85.76% to 100%.
+- Refreshed data from the US National Address Database; gained 935,021 addresses, an increase of 1.11%. New Caledonia (`NC`) grew from 41,536 to 51,702 addresses, an increase of 24.48%.
+- Core field coverage is stable: `street` 98.52% to 98.52%, `number` 92.78% to 92.80%, `postcode` 78.87% to 78.70%, and `address_levels_2` 76.11% to 78.74%.
+
+### Base
+
+- OSM Cut-Off Date: `2026-10-10`
+
+- Feature counts by type:
+
+| Type | Count | Change |
+|---|---|---|
+| infrastructure | 158,979,260 | +0.86% |
+| land_cover | 123,302,114 | 0.00% |
+| land | 76,553,724 | +0.93% |
+| water | 66,814,038 | +0.92% |
+| land_use | 56,446,032 | +0.62% |
+| bathymetry | 407,277 | 0.00% |
+
+- GERS churn is low, at 1.01% for `infrastructure`, 1.13% for `land`, 0.87% for `land_use`, and 1.09% for `water`. The `land_cover` and `bathymetry` types have no added or removed features.
+
+### Buildings
+
+- OSM Cut-Off Date: `2026-09-12`
+
+- No changes, re-promoted the data from the September release. Building count is 2,533,842,612, and building parts are 4,486,107.
+
+| Source | Building Count | Change |
+|---|---|---|
+| Google Open Buildings | 898,130,959 | 0.00% |
+| OpenStreetMap | 706,818,187 | 0.00% |
+| Microsoft ML Buildings | 689,237,083 | 0.00% |
+| Zenodo (doi:10.5281/zenodo.8174931) | 212,222,368 | 0.00% |
+| Esri Community Maps | 15,119,688 | 0.00% |
+| Instituto Geográfico Nacional (España) | 12,298,053 | 0.00% |
+| City of Vancouver | 16,274 | 0.00% |
+
+### Divisions
+
+- OSM Cut-Off Date: `2026-10-13`
+
+- Feature counts by type:
+
+| Type | Count | Change |
+|---|---|---|
+| division | 4,700,999 | +0.27% |
+| division_area | 1,084,259 | +0.33% |
+| division_boundary | 87,536 | +0.01% |
+
+- GERS churn is low across all three types, at 0.45% for `division`, 0.56% for `division_area`, and 0.04% for `division_boundary`.
+- Made mostly minor, incremental changes to the theme this month.
+
+### Places
+
+Places grew 8.5% this release, driven by the expansion of BrightQuery coverage across Western Europe and the addition of three new sources.
+
+- Place count grew from 81,455,423 to 88,418,123, an increase of 8.55%.
+- Expanded BrightQuery from coverage in the United States, Germany, Italy, and Denmark to coverage in the United States, Germany, Italy, Denmark, the United Kingdom, France, Spain, the Netherlands, Belgium, Switzerland, Austria, Sweden, Norway, and Finland. BrightQuery places grew from 10,255,071 to 15,771,907, an increase of 53.8%; the largest additions are France (1,949,361), the United Kingdom (1,447,574), and Spain (1,225,103).
+- Removed BrightQuery places that had neither a BrightQuery confidence score nor a known address type. BrightQuery places fell 24.3% in Germany, from 3,482,295 to 2,634,572; 21.1% in Italy, from 2,250,549 to 1,776,040; and 23.0% in Denmark, from 283,399 to 218,112.
+- Added three new sources: Uberall (424,600 places across 217 countries, led by Germany, the United States, and France), Birdeye (11,855 places, mostly in the United States), and OpenTravel (2,698 Hilton properties).
+- In the newly covered countries, BrightQuery is now the primary source for many places that Meta, Foursquare, and Microsoft already contributed, so primary source counts for those providers fell there while the places themselves remain.
+- Operating status coverage improved, from 23.74% to 32.54% of places: places marked `open` grew 47.6%, from 18,361,914 to 27,103,902, and places marked `permanently_closed` grew 70.2%, from 978,895 to 1,666,495. Operating status is now chosen by majority vote across a place's contributing sources, and `sources` records which source supplied it under the `/properties/operating_status` property.
+- GERS churn is 11.92%, with 8,335,526 places added and 1,372,826 removed, driven by the BrightQuery expansion and removals.
+
+| Top Level Taxonomy | Count |
+|---|---|
+| Services and Business | 23,685,854 |
+| Shopping | 15,290,245 |
+| Food and Drink | 10,991,382 |
+| Health Care | 5,951,686 |
+| Lifestyle Services | 5,538,364 |
+| Travel and Transportation | 4,570,596 |
+| Education | 3,772,770 |
+| Cultural and Historic | 3,286,267 |
+| Sports and Recreation | 3,249,641 |
+| Lodging | 3,063,219 |
+| Community and Government | 2,966,696 |
+| Arts and Entertainment | 1,773,417 |
+| Geographic Entities | 1,028,881 |
+| Uncategorized | 3,249,095 |
+
+### Transportation
+
+- OSM Cut-Off Date: `2026-10-10`
+
+| Dataset | Feature Count | Length (km) |
+|---|---|---|
+| OpenStreetMap | 766,045,338 | 95,078,931 |
+| TomTom | 11,171,523 | 2,032,053 |
+
+| Subtype | Length (km) |
+|---|---|
+| road | 93,623,743 |
+| rail | 2,888,084 |
+| water | 599,156 |
+
+#### Change Summary
+
+##### Count Changes
+
+| Dataset | Type | Diff | Diff (%) |
+|---|---|---|---|
+| OpenStreetMap | connector | 1,910,024 | 0.45% |
+| OpenStreetMap | segment | 1,103,668 | 0.32% |
+| TomTom | segment | 169,482 | 1.54% |
+
+##### Length Changes
+
+| Subtype | Diff (km) | Diff (%) |
+|---|---|---|
+| road | 254,743 | 0.27% |
+| rail | 3,885 | 0.13% |
+| water | -602 | -0.10% |
+
+- GERS churn is low, at 0.70% for connectors and 0.83% for segments.
+
+## Schema changelog
+
+The changelog for Overture schema `v2.0.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/overture-schema-v2.0.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
