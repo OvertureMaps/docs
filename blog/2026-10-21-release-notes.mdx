@@ -105,8 +105,6 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 | land_use | 56,446,032 | +0.62% |
 | bathymetry | 407,277 | 0.00% |
 
-- GERS churn is low, at 1.01% for `infrastructure`, 1.13% for `land`, 0.87% for `land_use`, and 1.09% for `water`. The `land_cover` and `bathymetry` types have no added or removed features.
-
 ### Buildings
 
 - OSM Cut-Off Date: `2026-09-12`
@@ -136,18 +134,18 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 | division_boundary | 87,536 | +0.01% |
 
 - GERS churn is low across all three types, at 0.45% for `division`, 0.56% for `division_area`, and 0.04% for `division_boundary`.
+- Added new ESRI Community Maps sourced name values.
 - Made mostly minor, incremental changes to the theme this month.
 
 ### Places
 
 Places grew 8.5% this release, driven by the expansion of BrightQuery coverage across Western Europe and the addition of three new sources.
 
-- Place count grew from 81,455,423 to 88,418,123, an increase of 8.55%.
-- Expanded BrightQuery from coverage in the United States, Germany, Italy, and Denmark to coverage in the United States, Germany, Italy, Denmark, the United Kingdom, France, Spain, the Netherlands, Belgium, Switzerland, Austria, Sweden, Norway, and Finland. BrightQuery places grew from 10,255,071 to 15,771,907, an increase of 53.8%; the largest additions are France (1,949,361), the United Kingdom (1,447,574), and Spain (1,225,103).
-- Removed BrightQuery places that had neither a BrightQuery confidence score nor a known address type. BrightQuery places fell 24.3% in Germany, from 3,482,295 to 2,634,572; 21.1% in Italy, from 2,250,549 to 1,776,040; and 23.0% in Denmark, from 283,399 to 218,112.
+- Place count grew from 81,455,423 to 88,418,121, an increase of 8.55%.
+- BrightQuery places grew from 10,255,071 to 15,771,907, an increase of 53.8%; the largest additions are France (1,949,361), the United Kingdom (1,447,574), and Spain (1,225,103).
 - Added three new sources: Uberall (424,600 places across 217 countries, led by Germany, the United States, and France), Birdeye (11,855 places, mostly in the United States), and OpenTravel (2,698 Hilton properties).
-- In the newly covered countries, BrightQuery is now the primary source for many places that Meta, Foursquare, and Microsoft already contributed, so primary source counts for those providers fell there while the places themselves remain.
-- Operating status coverage improved, from 23.74% to 32.54% of places: places marked `open` grew 47.6%, from 18,361,914 to 27,103,902, and places marked `permanently_closed` grew 70.2%, from 978,895 to 1,666,495. Operating status is now chosen by majority vote across a place's contributing sources, and `sources` records which source supplied it under the `/properties/operating_status` property.
+- In the newly covered countries, 1,861,523 existing places now carry BrightQuery data in place of their previous Meta, Foursquare, or Microsoft record, and keep their GERS IDs. As a result, primary source counts for those providers fell in those countries.
+- Operating status coverage improved, from 23.74% to 32.54% of places, driven mostly by the BrightQuery expansion. Places marked `open` grew 47.6%, from 18,361,914 to 27,103,902, with BrightQuery places accounting for 4,962,192 of the increase. Places marked `permanently_closed` grew 70.2%, from 978,895 to 1,666,495, with BrightQuery places accounting for 554,597 of the increase. Places marked `temporarily_closed` grew from 29 to 3,496. Operating status is now chosen by majority vote across a place's contributing sources, and `sources` records which source supplied it under the `/properties/operating_status` property.
 - GERS churn is 11.92%, with 8,335,526 places added and 1,372,826 removed, driven by the BrightQuery expansion and removals.
 
 | Top Level Taxonomy | Count |
