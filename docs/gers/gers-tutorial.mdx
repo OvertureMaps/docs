@@ -95,12 +95,16 @@ In the Overture places dataset, the record which matches the inspection example 
            "common": null,
            "rules": null
        },
-       "categories": {
+       "basic_category": "restaurant",
+       "taxonomy": {
            "primary": "mexican_restaurant",
-           "alternate": [
+           "hierarchy": [
+               "food_and_drink",
                "restaurant",
-               "eat_and_drink"
-           ]
+               "latin_american_restaurant",
+               "mexican_restaurant"
+           ],
+           "alternates": null
        },
        "confidence": 0.9793990828827596,
        "socials": [
@@ -178,7 +182,7 @@ D CREATE TABLE IF NOT EXISTS places AS
     upper(addresses[1]['region']) as State, 
     left(addresses[1]['postcode'], 5) as Zip, 
     geometry as geom, 
-    categories,
+    taxonomy,
     confidence 
   FROM (
     SELECT * 
@@ -468,7 +472,7 @@ D CREATE TABLE places AS
     left(addresses[1]['postcode'], 5) as Zip, 
     geometry as geom, 
     confidence,
-    categories 
+    taxonomy 
   FROM (
     SELECT * 
     FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/type=place/*', filename=true, hive_partitioning=1),
