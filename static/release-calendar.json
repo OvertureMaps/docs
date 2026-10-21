@@ -204,8 +204,7 @@
     {
       "date": "2026-10-21",
       "dataVersion": "2026-10-21.0",
-      "schemaVersion": null,
-      "majorChangeMonth": false
+      "schemaVersion": "v2.0.0"
     },
     {
       "date": "2026-11-18",
