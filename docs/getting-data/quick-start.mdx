@@ -52,6 +52,8 @@ SET VARIABLE latest = (
 );
 ```
 
+To skip release paths entirely, attach [`latest.ddb`](./cloud-sources#latestddb), a DuckDB file with a view per feature type over the latest release.
+
 Browse all release artifacts with [stac-browser](https://browser.moregeo.it/external/stac.overturemaps.org/catalog.json). The Python client uses the STAC catalog automatically.
 
 ## Next steps
