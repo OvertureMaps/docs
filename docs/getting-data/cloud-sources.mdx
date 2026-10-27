@@ -28,6 +28,23 @@ SELECT latest FROM 'https://stac.overturemaps.org/catalog.json';
 
 The raw JSON isn't a browsing interface. To explore the catalog visually, open it in [stac-browser](https://browser.moregeo.it/external/stac.overturemaps.org/catalog.json).
 
+### `latest.ddb`
+
+The root catalog also links to [`latest.ddb`](https://stac.overturemaps.org/latest.ddb) (`rel: alternate`, `type: application/vnd.duckdb`), a small [DuckDB](/getting-data/duckdb) database file. It holds one view per feature type (`place`, `building`, `segment`, and so on), all reading the latest release's GeoParquet in place. Attach it and query by name, with no release path to look up:
+
+```sql
+INSTALL spatial; LOAD spatial;
+INSTALL httpfs; LOAD httpfs;
+
+ATTACH 'https://stac.overturemaps.org/latest.ddb' AS overture (READ_ONLY);
+
+SELECT count(*) FROM overture.place;
+```
+
+- `LOAD spatial` is required before attaching or querying. The views store geometry as the spatial `GEOMETRY` type.
+- The file is rebuilt when a new release becomes `latest`, so the views follow it. To pin a release, use the [release paths](#published-datasets) instead.
+- The file is created with DuckDB 1.2.0. Use that version or newer.
+
 ## Published datasets
 
 Overture distributes its core map data as [GeoParquet](https://geoparquet.org/) files, a column-oriented spatial data format optimized for cloud-native queries. You can scan across the files and pull only the data you need without downloading everything. See [this guide](https://guide.cloudnativegeo.org/geoparquet/) from the Cloud Native Geospatial Forum for more on GeoParquet.
