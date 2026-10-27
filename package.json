@@ -38,7 +38,7 @@
     "d3-shape": "^3.2.0",
     "docusaurus-plugin-llms": "^0.6.1",
     "js-yaml": "^5.4.3",
-    "maplibre-gl": "^6.13.0",
+    "maplibre-gl": "^6.14.0",
     "pmtiles": "^4.5.0",
     "prism-react-renderer": "^2.1.0",
     "raw-loader": "^4.0.2",
@@ -60,10 +60,10 @@
     "globals": "^17.13.0",
     "jsdom": "^30.1.2",
     "markdownlint-cli": "^0.49.1",
-    "prettier": "^3.9.9",
+    "prettier": "^3.9.10",
     "typescript": "^7.0.2",
-    "vite": "^8.3.3",
-    "vitest": "^5.0.3"
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
   },
   "browserslist": {
     "production": [

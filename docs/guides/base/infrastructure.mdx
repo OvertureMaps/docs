@@ -22,24 +22,24 @@ The `transit` subtype covers both transit stops and the parking and access featu
 
 <QueryBuilder query={TransitCountsQuery}></QueryBuilder>
 
-Results from the August 2026 release:
+Results from the October 2026 release:
 
 | class | feature count |
 | --- | --- |
-| parking | 6,764,487 |
-| parking_space | 4,896,576 |
-| bus_stop | 4,139,973 |
-| stop_position | 1,404,601 |
-| bicycle_parking | 918,687 |
-| platform | 524,058 |
-| parking_entrance | 277,093 |
-| bicycle_rental | 93,504 |
-| railway_station | 85,595 |
-| bus_station | 66,000 |
-| motorcycle_parking | 46,386 |
-| ferry_terminal | 38,963 |
-| railway_halt | 34,549 |
-| subway_station | 18,149 |
+| parking | 6,886,203 |
+| parking_space | 5,051,018 |
+| bus_stop | 4,190,592 |
+| stop_position | 1,428,350 |
+| bicycle_parking | 944,666 |
+| platform | 527,388 |
+| parking_entrance | 283,772 |
+| bicycle_rental | 94,484 |
+| railway_station | 85,788 |
+| bus_station | 66,144 |
+| motorcycle_parking | 47,470 |
+| ferry_terminal | 39,278 |
+| railway_halt | 34,526 |
+| subway_station | 18,274 |
 
 To pull individual transit features for an area of interest, filter on `subtype` and `class` with a bounding box. This example uses central Rome:
 
@@ -55,7 +55,7 @@ Some real-world things legitimately appear in more than one Overture theme, repr
 
 | places_mountains |
 | --- |
-| 131,189 |
+| 137,150 |
 
 The base theme's **land** type contains mountains as *physical features* — OSM-derived geometries classified by landform:
 
@@ -63,10 +63,10 @@ The base theme's **land** type contains mountains as *physical features* — OSM
 
 | class | base_land_features |
 | --- | --- |
-| peak | 1,100,237 |
-| ridge | 261,709 |
-| saddle | 79,746 |
-| mountain_range | 7,566 |
-| volcano | 5,868 |
+| peak | 1,113,462 |
+| ridge | 268,355 |
+| saddle | 80,496 |
+| mountain_range | 7,833 |
+| volcano | 6,016 |
 
 Neither copy is redundant: use the places record when you need a named, categorized destination with a stable GERS ID; use the base land feature when you need the OSM-derived physical representation. The same pattern applies to other entities that are both destinations and physical or network features, so when a feature seems "missing" from one theme, it's worth checking whether another theme carries it by design. See the [places guide](/guides/places/) for how the places theme defines what it includes.

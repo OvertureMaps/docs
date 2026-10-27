@@ -29,9 +29,11 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
+          # Minimum pip that distrusts the compromised emSign ECC Root CA - G3
+          pip-version: '26.2.2'
 
       - name: Install duckdb
-        run: pip install duckdb
+        run: python -m pip install duckdb
 
       - name: Run query smoke tests
         run: python scripts/test_queries.py

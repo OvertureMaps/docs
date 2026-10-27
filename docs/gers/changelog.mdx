@@ -34,7 +34,7 @@ The changelog covers all six themes and every type within them, including the `b
 | ------ | ---- | ----------- |
 | `id` | string | The feature's identifier. For the feature types in the [GERS registry](../registry) this is a GERS ID. For everything else, including the whole `base` theme, it is an identifier with no stability commitment behind it. |
 | `bbox` | struct of float | Bounding box, for spatial filtering. |
-| `columns_changed` | array of string | The top-level column names that differ from the previous release, such as `geometry`, `names` or `categories`. Populated only on `data_changed` rows, and never lists a column that was not compared. |
+| `columns_changed` | array of string | The top-level column names that differ from the previous release, such as `geometry`, `names` or `taxonomy`. Populated only on `data_changed` rows, and never lists a column that was not compared. |
 | `theme`, `type`, `change_type` | string | Partition keys, present in the path rather than in the file. |
 
 `columns_changed` is the column to reach for first. It tells you whether a change touched something you depend on, which usually means you can skip most `data_changed` rows rather than comparing features yourself.
