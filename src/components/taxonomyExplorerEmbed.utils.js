@@ -2,7 +2,7 @@
 // GitHub Pages. Keep its URL and query parameters here so the docs only need
 // updating in one place if either changes.
 
-export const TAXONOMY_EXPLORER_URL = 'https://overturemaps.github.io/web-tools/taxonomy-explorer/';
+export const TAXONOMY_EXPLORER_URL = 'https://labs.overturemaps.org/web-tools/taxonomy-explorer/';
 
 export const TAXONOMY_DOWNLOADS_URL = `${TAXONOMY_EXPLORER_URL}taxonomy/2026-09-23.0/`;
 
