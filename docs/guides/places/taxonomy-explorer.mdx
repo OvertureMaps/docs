@@ -4,7 +4,11 @@ description: Browse and explore the Overture Places taxonomy hierarchy
 hide_table_of_contents: true
 ---
 
-import TaxonomyBrowser from '@site/src/components/taxonomyBrowser';
+import TaxonomyExplorerEmbed from '@site/src/components/TaxonomyExplorerEmbed';
+import {
+  TAXONOMY_EXPLORER_URL,
+  TAXONOMY_DOWNLOADS_URL,
+} from '@site/src/components/taxonomyExplorerEmbed.utils';
 
 # Taxonomy Explorer
 
@@ -14,24 +18,14 @@ to find one by name, and use the download links to take the release away as CSV.
 See [Places Taxonomy](./taxonomy.mdx) for what the `taxonomy` and
 `basic_category` properties mean and how to use them.
 
-<TaxonomyBrowser releases={[
-  {
-    id: 'september',
-    label: '2026 September (Canonical Taxonomy)',
-    releaseUrl: 'https://docs.overturemaps.org/blog/2026/09/23/release-notes/',
-    tags: [
-      { label: '23 September 2026', title: 'Date' },
-      { label: '2026-09-23.0', title: 'Data version' },
-      { label: 'v2.0.0', title: 'Schema version' },
-    ],
-    dataUrl: '/taxonomy/2026-09-23.0/taxonomy.json',
-    downloads: [
-      { label: 'Taxonomy (CSV)', url: '/taxonomy/2026-09-23.0/taxonomy.csv' },
-      { label: 'Basic categories (CSV)', url: '/taxonomy/2026-09-23.0/basic_categories.csv' },
-      { label: 'Taxonomy to legacy categories (CSV)', url: '/taxonomy/2026-09-23.0/taxonomy_to_legacy_categories.csv' },
-    ],
-    displayFields: [
-      { field: 'is_basic', label: 'Is Basic Category' },
-    ],
-  },
-]} />
+<TaxonomyExplorerEmbed />
+
+If the explorer doesn't load here, <a href={TAXONOMY_EXPLORER_URL} target="_blank" rel="noopener noreferrer">open the Taxonomy Explorer in a new tab</a>.
+
+## Downloads
+
+CSV files for the `2026-09-23.0` release:
+
+- <a href={`${TAXONOMY_DOWNLOADS_URL}taxonomy.csv`}>Taxonomy</a>
+- <a href={`${TAXONOMY_DOWNLOADS_URL}basic_categories.csv`}>Basic categories</a>
+- <a href={`${TAXONOMY_DOWNLOADS_URL}taxonomy_to_legacy_categories.csv`}>Taxonomy to legacy categories</a>
