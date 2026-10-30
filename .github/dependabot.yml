@@ -11,7 +11,7 @@ updates:
     labels:
       - "bot"
     commit-message:
-      prefix: "[CHORE](deps)"
+      prefix: "chore"
       include: "scope"
     groups:
       dev-deps:
@@ -65,7 +65,7 @@ updates:
     labels:
       - "bot"
     commit-message:
-      prefix: "[CHORE](deps)"
+      prefix: "chore"
       include: "scope"
     cooldown:
       default-days: 7
