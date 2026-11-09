@@ -30,7 +30,7 @@ The reference pages under `docs.overturemaps.org/schema` are generated from the 
 
 ## Release Calendar
 
-Release dates are published as JSON at `https://docs.overturemaps.org/release-calendar.json`. A jsDelivr CDN mirror of the same file is at `https://cdn.jsdelivr.net/gh/OvertureMaps/docs@main/static/release-calendar.json`. jsDelivr caches branch references such as `@main` for up to 12 hours, so the mirror can lag the site. Replace `@main` with a tag or commit SHA to pin a version. A JSON Schema sits alongside the file at `release-calendar.schema.json` (referenced by the file's `$schema` key, so editors validate edits as you type). `releases` is a flat list, and each entry has:
+Release dates are published as JSON at `https://docs.overturemaps.org/release-calendar.json`. A jsDelivr CDN mirror of the same file is at `https://cdn.jsdelivr.net/gh/OvertureMaps/docs@main/static/release-calendar.json`. A JSON Schema sits alongside the file at `release-calendar.schema.json` (referenced by the file's `$schema` key, so editors validate edits as you type). `releases` is a flat list, and each entry has:
 
 - `date`: release date, ISO 8601
 - `dataVersion`: the release's data version
