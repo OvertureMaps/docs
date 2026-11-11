@@ -218,6 +218,42 @@
       "dataVersion": "2026-12-16.0",
       "schemaVersion": null,
       "majorChangeMonth": true
+    },
+    {
+      "date": "2027-01-20",
+      "dataVersion": "2027-01-20.0",
+      "schemaVersion": null,
+      "majorChangeMonth": false
+    },
+    {
+      "date": "2027-02-24",
+      "dataVersion": "2027-02-24.0",
+      "schemaVersion": null,
+      "majorChangeMonth": false
+    },
+    {
+      "date": "2027-03-24",
+      "dataVersion": "2027-03-24.0",
+      "schemaVersion": null,
+      "majorChangeMonth": true
+    },
+    {
+      "date": "2027-04-21",
+      "dataVersion": "2027-04-21.0",
+      "schemaVersion": null,
+      "majorChangeMonth": false
+    },
+    {
+      "date": "2027-05-26",
+      "dataVersion": "2027-05-26.0",
+      "schemaVersion": null,
+      "majorChangeMonth": false
+    },
+    {
+      "date": "2027-06-23",
+      "dataVersion": "2027-06-23.0",
+      "schemaVersion": null,
+      "majorChangeMonth": true
     }
   ]
 }
