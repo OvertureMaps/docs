@@ -3,90 +3,213 @@ title: 2026-11-18 release notes
 tags:
   - releases
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import QueryBuilder from '@site/src/components/queryBuilder';
 
 ## Overview
 
-This is the 2026-11-18.0 monthly release, a full rebuild of all six Overture themes (Addresses, Base, Buildings, Divisions, Places, Transportation) from current source data. Schema version v2.0.0 is unchanged across every theme, and no column, type, or nested-structure changes were found in any of the 15 theme/type tables compared with the prior monthly release (2026-10-21.0).
+**The `2026-11-18.0` release of Overture data and `v2.0.0` of the Overture schema are now available.** Buildings grew by 10.3 million features, led by a refreshed Esri Community Maps extract that added 5.3 million buildings. Places grew 2.1% to 90.3 million features.
 
-Across all themes and types combined, total feature count moved from 4,367,602,832 to 4,386,384,117, an increase of 18,781,285 rows (+0.43 percent). This is consistent with the normal month-to-month variance seen in recent releases, driven primarily by routine upstream source refreshes rather than any single structural change.
+You can access the datasets, changelog, GERS registry, bridge files, and PMTiles on AWS and Azure at the paths listed below.
 
-OpenStreetMap content incorporated in this release reflects data through 2026-11-06 for Base, Buildings, and Transportation, and through 2026-11-09 for Divisions. Addresses and Places do not draw directly from OpenStreetMap in this release.
 
-The sections below summarize evidenced, theme-level changes. Counts are rounded to the nearest whole number; percentages are calculated from the underlying counts.
+## Getting the data and release artifacts
+
+You can access this month's data and release artifacts by following the process outlined in our [docs](/getting-data). We encourage you to ask questions and provide feedback on the Overture Maps [Discussion forum on GitHub](https://github.com/orgs/OvertureMaps/discussions). You can also file issues and report bugs in our [data](https://github.com/OvertureMaps/data/issues) and [schema](https://github.com/OvertureMaps/schema/issues) repositories. If you have a suggestion for a new dataset or if you have data you'd like to contribute to Overture, you can email us at community@overturemaps.org. We'd love to hear from you.
+
+
+### Release data
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/release/2026-11-18.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/release/2026-11-18.0/
+```
+
+### Data changelog
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/changelog/2026-11-18.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/changelog/2026-11-18.0/
+```
+
+### Bridge files
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/bridgefiles/2026-11-18.0/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/bridgefiles/2026-11-18.0/
+```
+
+### GERS registry
+
+**Microsoft Azure:**
+```
+https://overturemapswestus2.blob.core.windows.net/registry/
+```
+
+**Amazon S3:**
+```
+s3://overturemaps-us-west-2/registry/
+```
+
+### PMTiles
+
+**Amazon S3:**
+```
+s3://overturemaps-extras-us-west-2/tiles/2026-11-18.0/
+```
+
+{/* truncate */}
+
+
+## Theme-specific updates
+
+:::info
+The base, buildings, divisions, places, and transportation themes are in GA. The addresses theme is in alpha.
+:::
 
 ### Addresses
 
-Addresses held essentially steady this release.
-
-| Type | Previous count | New count | Change | Change (percent) |
-|---|---:|---:|---:|---:|
-| address | 475,263,892 | 475,239,461 | -24,431 | -0.01 percent |
-
-Row-level churn was modest and balanced: about 2.33 million addresses were added and about 2.36 million were removed (0.49 percent and 0.50 percent of the prior total, respectively), with no attribute-level changes detected on surviving rows. The net effect is a change of less than 0.1 percent in total address count.
-
-One source label changed from "NAD" to "National Address Database" with the same row count (85,538,791 rows); this is a cosmetic labeling update with no effect on the underlying data.
+- Address count went from 475,263,892 to 475,239,461, a decrease of 0.01%.
+- Riverside County, California (`us/ca/riverside`) fell from 942,294 to 811,215 addresses, a decrease of 13.91%. The upstream OpenAddresses source removed records without a house number; Riverside addresses with a house number grew slightly, from 809,103 to 811,127.
+- Latvian addresses no longer carry the postcode inside `address_levels`; the postcode stays in `postcode`. All 550,972 Latvian addresses received new GERS IDs as a result. Latvian addresses now credit Valsts zemes dienests (the State Land Service), which produces the data.
+- Empty `address_levels` arrays are now null, and the affected addresses keep their GERS IDs.
+- GERS churn is 0.99%, with 2,331,669 addresses added and 2,356,100 removed.
+- Core field coverage is stable: `street` 98.52% to 98.52%, `number` 92.80% to 92.83%, `postcode` 78.70% to 78.69%, and `address_levels_2` 78.74% to 78.73%.
 
 ### Base
 
-Base grew modestly overall, with growth concentrated in infrastructure, land, land use, and water, and no net change in bathymetry or land cover.
+- OSM Cut-Off Date: `2026-11-06`
 
-| Type | Previous count | New count | Change | Change (percent) |
-|---|---:|---:|---:|---:|
-| bathymetry | 407,277 | 407,277 | 0 | unchanged |
-| infrastructure | 158,979,260 | 160,422,524 | +1,443,264 | +0.91 percent |
-| land | 76,553,724 | 77,516,732 | +963,008 | +1.26 percent |
-| land_cover | 123,302,114 | 123,302,114 | 0 | unchanged |
-| land_use | 56,446,032 | 56,848,786 | +402,754 | +0.71 percent |
-| water | 66,814,038 | 67,137,224 | +323,186 | +0.48 percent |
+- Feature counts by type:
 
-The infrastructure growth is attributable entirely to routine OpenStreetMap refresh. Land, land use, and water also grew from the same routine OpenStreetMap refresh cycle. Land cover and bathymetry show no net count change this release; bathymetry's single upstream source (ETOPO/GLOBathy) was not itself refreshed this cycle.
+| Type | Count | Change |
+|---|---|---|
+| infrastructure | 160,422,524 | +0.91% |
+| land_cover | 123,302,114 | 0.00% |
+| land | 77,516,732 | +1.26% |
+| water | 67,137,224 | +0.48% |
+| land_use | 56,848,786 | +0.71% |
+| bathymetry | 407,277 | 0.00% |
+
+- Refreshed the coastline data used for ocean and land polygons to the `2026-10-19` OSM coastlines.
 
 ### Buildings
 
-Buildings grew by just over 10.3 million features, driven by multiple source refreshes.
+- OSM Cut-Off Date: `2026-11-06`
 
-| Type | Previous count | New count | Change | Change (percent) |
-|---|---:|---:|---:|---:|
-| building | 2,533,842,612 | 2,544,125,628 | +10,283,016 | +0.41 percent |
-| building_part | 4,486,107 | 4,669,725 | +183,618 | +4.09 percent |
+- Building count grew from 2,533,842,612 to 2,544,125,628, an increase of 0.41%. Building parts grew from 4,486,107 to 4,669,725, an increase of 4.09%.
 
-The building growth is fully attributable to source-level changes:
-- Esri Community Maps contributed +5,344,832 buildings (+35.35 percent off its prior base), reflecting a refreshed extract (dated 2026-09-29) roughly 14 months newer than the extract used in the prior release (dated 2025-08-11).
-- OpenStreetMap contributed +4,874,096 buildings (+0.69 percent), a routine refresh.
-- Google Open Buildings contributed +1,129,286 buildings (+0.13 percent).
-- These gains were partly offset by decreases from Microsoft ML Buildings (-852,302), a Zenodo-hosted open dataset, DOI 10.5281/zenodo.8174931 (-169,720), Instituto Geografico Nacional (Espana) (-43,076), and City of Vancouver (-100).
+| Source | Building Count | Change |
+|---|---|---|
+| Google Open Buildings | 899,260,245 | +0.13% |
+| OpenStreetMap | 711,692,283 | +0.69% |
+| Microsoft ML Buildings | 688,384,781 | -0.12% |
+| Zenodo (doi:10.5281/zenodo.8174931) | 212,052,648 | -0.08% |
+| Esri Community Maps | 20,464,520 | +35.35% |
+| Instituto Geográfico Nacional (España) | 12,254,977 | -0.35% |
+| City of Vancouver | 16,174 | -0.61% |
 
-building_part growth of +183,618 (+4.09 percent) is attributable entirely to OpenStreetMap.
+- Refreshed data from Esri Community Maps with an extract dated `2026-09-29`, replacing one from `2025-08-11`. This added 5,344,832 buildings.
+- Overture now removes ML building footprints that intersect inland water in the base theme (rivers, streams, lakes, canals, and reservoirs), not only the ocean. Named water areas such as bays and straits, and man made water such as swimming pools, are excluded from this check.
+- `sources[].license` is now populated for Google Open Buildings, Zenodo, Instituto Geográfico Nacional (España), and City of Vancouver buildings. `sources[].update_time` is now null for Google Open Buildings and Zenodo buildings, which carry no capture date.
 
 ### Divisions
 
-Divisions grew slightly overall, with small movements across all three types.
+- OSM Cut-Off Date: `2026-11-09`
 
-| Type | Previous count | New count | Change | Change (percent) |
-|---|---:|---:|---:|---:|
-| division | 4,700,999 | 4,714,501 | +13,502 | +0.29 percent |
-| division_area | 1,084,259 | 1,087,919 | +3,660 | +0.34 percent |
-| division_boundary | 87,536 | 87,523 | -13 | -0.01 percent |
+- Feature counts by type:
 
-Combined across all three division types, the net change is +17,149 rows (+0.29 percent), consistent with routine upstream refresh; no individual type moved by more than a fraction of one percent.
+| Type | Count | Change |
+|---|---|---|
+| division | 4,714,501 | +0.29% |
+| division_area | 1,087,919 | +0.34% |
+| division_boundary | 87,523 | -0.01% |
+
+- Made mostly minor, incremental changes to the theme this month.
 
 ### Places
 
-Places grew by about 1.9 million rows, alongside a broad refresh of place attributes.
+Places grew 2.12% this release, led by BrightQuery and Meta, and Overture now normalizes address countries, regions, and phone numbers for every source.
 
-| Type | Previous count | New count | Change | Change (percent) |
-|---|---:|---:|---:|---:|
-| place | 88,418,121 | 90,295,754 | +1,877,633 | +2.12 percent |
+- Place count grew from 88,418,121 to 90,295,748, an increase of 2.12%.
+- BrightQuery places grew from 15,771,907 to 16,774,347, an increase of 6.36%. Meta places grew from 60,299,571 to 61,265,630, an increase of 1.60%. Uberall places grew from 424,600 to 491,470, an increase of 15.75%.
+- Overture now normalizes three place properties for every source. `addresses[].country` is an ISO 3166-1 alpha-2 code, and `addresses[].region` is an ISO 3166-2 code; a region that can't be matched to a valid code is set to null. `phones` are in E.164 format, and numbers that can't be parsed are dropped. As a result, 57,292,153 places (64.80%) carry changed data, mostly in `addresses` and `phones`, and keep their GERS IDs.
+- PinMeTo records now use a fixed confidence of 0.9 instead of the feed's open or closed flag. Where PinMeTo overlaps other sources, another source's record now more often supplies the place's primary attributes, so places with PinMeTo as the primary source fell from 170,156 to 150,879, a decrease of 11.33%.
+- Places marked `open` grew 5.74%, from 27,103,902 to 28,660,871. Places marked `permanently_closed` fell 4.89%, from 1,666,495 to 1,585,060, and places marked `temporarily_closed` grew from 3,496 to 4,653.
+- GERS churn is 6.55%, with 3,835,684 places added and 1,958,051 removed.
 
-About 3.84 million places were added and about 1.96 million were removed (4.34 percent and 2.21 percent of the prior total), netting to the +1,877,633 count increase. A large share of surviving places had attributes refreshed this cycle: addresses changed on about 50.9 million rows, phone numbers on about 20.8 million rows, geometry on about 8.3 million rows, websites on about 3.3 million rows, and smaller numbers of rows saw updates to taxonomy, operating status, category, social links, names, brand, and email fields. Name and identifier coverage remained complete, indicating this is attribute refresh churn rather than any loss of coverage.
+| Top Level Taxonomy | Count |
+|---|---|
+| Services and Business | 24,235,411 |
+| Shopping | 15,583,243 |
+| Food and Drink | 11,273,357 |
+| Health Care | 6,058,619 |
+| Lifestyle Services | 5,633,614 |
+| Travel and Transportation | 4,677,788 |
+| Education | 3,904,322 |
+| Cultural and Historic | 3,337,477 |
+| Sports and Recreation | 3,320,042 |
+| Lodging | 3,138,533 |
+| Community and Government | 3,022,233 |
+| Arts and Entertainment | 1,883,533 |
+| Geographic Entities | 1,045,956 |
+| Uncategorized | 3,181,617 |
 
 ### Transportation
 
-Transportation grew moderately in both connectors and segments, driven by OpenStreetMap refresh with a smaller contribution from TomTom.
+- OSM Cut-Off Date: `2026-11-06`
 
-| Type | Previous count | New count | Change | Change (percent) |
-|---|---:|---:|---:|---:|
-| connector | 423,889,001 | 425,897,510 | +2,008,509 | +0.47 percent |
-| segment | 353,327,860 | 354,631,439 | +1,303,579 | +0.37 percent |
+| Dataset | Feature Count | Length (km) |
+|---|---|---|
+| OpenStreetMap | 769,107,174 | 95,281,481 |
+| TomTom | 11,421,775 | 2,084,593 |
 
-Connector growth is attributable entirely to OpenStreetMap. Segment growth of +1,303,579 is attributable mostly to OpenStreetMap (about +1,053,327) with the remainder from TomTom (about +250,252).
+| Subtype | Length (km) |
+|---|---|
+| road | 93,873,501 |
+| rail | 2,892,198 |
+| water | 600,375 |
+
+#### Change Summary
+
+##### Count Changes
+
+| Dataset | Type | Diff | Diff (%) |
+|---|---|---|---|
+| OpenStreetMap | connector | 2,008,509 | 0.47% |
+| OpenStreetMap | segment | 1,053,327 | 0.31% |
+| TomTom | segment | 250,252 | 2.24% |
+
+##### Length Changes
+
+| Subtype | Diff (km) | Diff (%) |
+|---|---|---|
+| road | 249,758 | 0.27% |
+| rail | 4,114 | 0.14% |
+| water | 1,218 | 0.20% |
+
+- GERS churn is low, at 0.71% for connectors and 0.80% for segments.
+
+## Schema changelog
+
+The changelog for Overture schema `v2.0.0` is [here](https://github.com/OvertureMaps/schema/releases/tag/overture-schema-v2.0.0).
+
+## Attribution
+
+You'll find information about attribution and licensing [here](/attribution).
