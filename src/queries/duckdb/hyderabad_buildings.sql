@@ -1,4 +1,4 @@
-LOAD spatial; -- noqa
+LOAD spatial;
 
 COPY (
     SELECT
@@ -14,4 +14,4 @@ COPY (
         AND bbox.xmax < 78.5129
         AND bbox.ymin > 17.3427
         AND bbox.ymax < 17.4192
-) TO 'buildings_hyderabad.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
+) TO 'buildings_hyderabad.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON'); -- noqa: PRS

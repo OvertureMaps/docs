@@ -99,8 +99,11 @@ def fetch_release() -> str:
 
 
 def split_statements(sql: str) -> list[str]:
-    """Naive semicolon split — sufficient for S3-path SQL with no semicolons in strings."""
-    return [s.strip() for s in sql.split(";") if s.strip()]
+    """
+    Naive semicolon split, sufficient for S3-path SQL with no semicolons in strings.
+    Drops comment-only fragments such as a trailing "; -- noqa: PRS".
+    """
+    return [s.strip() for s in sql.split(";") if re.sub(r"--[^\n]*", "", s).strip()]
 
 
 def prepare(raw: str, release: str) -> tuple[str, bool]:
