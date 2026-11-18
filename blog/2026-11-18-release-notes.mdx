@@ -85,9 +85,12 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ### Addresses
 
-- Address count fell from 475,263,892 to 475,239,461, a decrease of 0.01%.
-- GERS churn is 0.99%, with about 2.33 million addresses added and 2.36 million removed.
-- Relabeled the `NAD` source as `National Address Database`. The 85,538,791 addresses from this source are unchanged.
+- Address count went from 475,263,892 to 475,239,461, a decrease of 0.01%.
+- Riverside County, California (`us/ca/riverside`) fell from 942,294 to 811,215 addresses, a decrease of 13.91%. The upstream OpenAddresses source removed records without a house number; Riverside addresses with a house number grew slightly, from 809,103 to 811,127.
+- Latvian addresses no longer carry the postcode inside `address_levels`; the postcode stays in `postcode`. All 550,972 Latvian addresses received new GERS IDs as a result. Latvian addresses now credit Valsts zemes dienests (the State Land Service), which produces the data.
+- Empty `address_levels` arrays are now null, and the affected addresses keep their GERS IDs.
+- GERS churn is 0.99%, with 2,331,669 addresses added and 2,356,100 removed.
+- Core field coverage is stable: `street` 98.52% to 98.52%, `number` 92.80% to 92.83%, `postcode` 78.70% to 78.69%, and `address_levels_2` 78.74% to 78.73%.
 
 ### Base
 
@@ -103,6 +106,8 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 | water | 67,137,224 | +0.48% |
 | land_use | 56,848,786 | +0.71% |
 | bathymetry | 407,277 | 0.00% |
+
+- Refreshed the coastline data used for ocean and land polygons to the `2026-10-19` OSM coastlines.
 
 ### Buildings
 
@@ -121,6 +126,8 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 | City of Vancouver | 16,174 | -0.61% |
 
 - Refreshed data from Esri Community Maps with an extract dated `2026-09-29`, replacing one from `2025-08-11`. This added 5,344,832 buildings.
+- Overture now removes ML building footprints that intersect inland water in the base theme (rivers, streams, lakes, canals, and reservoirs), not only the ocean. Named water areas such as bays and straits, and man made water such as swimming pools, are excluded from this check.
+- `sources[].license` is now populated for Google Open Buildings, Zenodo, Instituto Geográfico Nacional (España), and City of Vancouver buildings. `sources[].update_time` is now null for Google Open Buildings and Zenodo buildings, which carry no capture date.
 
 ### Divisions
 
@@ -138,18 +145,46 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 
 ### Places
 
-- Place count grew from 88,418,121 to 90,295,754, an increase of 2.12%.
-- GERS churn is 6.55%, with about 3.84 million places added and 1.96 million removed.
-- Refreshed attributes on many existing places. Addresses changed on about 50.9 million places, phone numbers on 20.8 million, geometry on 8.3 million, and websites on 3.3 million.
+Places grew 2.12% this release, led by BrightQuery and Meta, and Overture now normalizes address countries, regions, and phone numbers for every source.
+
+- Place count grew from 88,418,121 to 90,295,748, an increase of 2.12%.
+- BrightQuery places grew from 15,771,907 to 16,774,347, an increase of 6.36%. Meta places grew from 60,299,571 to 61,265,630, an increase of 1.60%. Uberall places grew from 424,600 to 491,470, an increase of 15.75%.
+- Overture now normalizes three place properties for every source. `addresses[].country` is an ISO 3166-1 alpha-2 code, and `addresses[].region` is an ISO 3166-2 code; a region that can't be matched to a valid code is set to null. `phones` are in E.164 format, and numbers that can't be parsed are dropped. As a result, 57,292,153 places (64.80%) carry changed data, mostly in `addresses` and `phones`, and keep their GERS IDs.
+- PinMeTo records now use a fixed confidence of 0.9 instead of the feed's open or closed flag. Where PinMeTo overlaps other sources, another source's record now more often supplies the place's primary attributes, so places with PinMeTo as the primary source fell from 170,156 to 150,879, a decrease of 11.33%.
+- Places marked `open` grew 5.74%, from 27,103,902 to 28,660,871. Places marked `permanently_closed` fell 4.89%, from 1,666,495 to 1,585,060, and places marked `temporarily_closed` grew from 3,496 to 4,653.
+- GERS churn is 6.55%, with 3,835,684 places added and 1,958,051 removed.
+
+| Top Level Taxonomy | Count |
+|---|---|
+| Services and Business | 24,235,411 |
+| Shopping | 15,583,243 |
+| Food and Drink | 11,273,357 |
+| Health Care | 6,058,619 |
+| Lifestyle Services | 5,633,614 |
+| Travel and Transportation | 4,677,788 |
+| Education | 3,904,322 |
+| Cultural and Historic | 3,337,477 |
+| Sports and Recreation | 3,320,042 |
+| Lodging | 3,138,533 |
+| Community and Government | 3,022,233 |
+| Arts and Entertainment | 1,883,533 |
+| Geographic Entities | 1,045,956 |
+| Uncategorized | 3,181,617 |
 
 ### Transportation
 
 - OSM Cut-Off Date: `2026-11-06`
 
-| Dataset | Feature Count |
+| Dataset | Feature Count | Length (km) |
+|---|---|---|
+| OpenStreetMap | 769,107,174 | 95,281,481 |
+| TomTom | 11,421,775 | 2,084,593 |
+
+| Subtype | Length (km) |
 |---|---|
-| OpenStreetMap | 769,107,174 |
-| TomTom | 11,421,775 |
+| road | 93,873,501 |
+| rail | 2,892,198 |
+| water | 600,375 |
 
 #### Change Summary
 
@@ -160,6 +195,16 @@ The base, buildings, divisions, places, and transportation themes are in GA. The
 | OpenStreetMap | connector | 2,008,509 | 0.47% |
 | OpenStreetMap | segment | 1,053,327 | 0.31% |
 | TomTom | segment | 250,252 | 2.24% |
+
+##### Length Changes
+
+| Subtype | Diff (km) | Diff (%) |
+|---|---|---|
+| road | 249,758 | 0.27% |
+| rail | 4,114 | 0.14% |
+| water | 1,218 | 0.20% |
+
+- GERS churn is low, at 0.71% for connectors and 0.80% for segments.
 
 ## Schema changelog
 
