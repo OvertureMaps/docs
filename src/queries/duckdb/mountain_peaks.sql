@@ -1,11 +1,11 @@
-LOAD spatial; -- noqa
+LOAD spatial;
 
 SET s3_region='us-west-2';
 
 COPY(
   SELECT
     id,
-    names.primary as name,
+    names.primary AS name,
     CAST(elevation * 3.28084 AS INT) AS elevation_ft,
     geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
   FROM
@@ -16,4 +16,4 @@ COPY(
     AND elevation IS NOT NULL
     AND bbox.xmin BETWEEN -124.71 AND -116.47
     AND bbox.ymin BETWEEN 41.99 AND 46.30
-) TO 'oregon_peaks.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
+) TO 'oregon_peaks.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON'); -- noqa: PRS

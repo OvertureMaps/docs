@@ -1,5 +1,5 @@
-LOAD spatial; -- noqa
-LOAD httpfs;  -- noqa
+LOAD spatial;
+LOAD httpfs;
 SET s3_region='us-west-2';
 
 -- The same area of interest, counted by change type.

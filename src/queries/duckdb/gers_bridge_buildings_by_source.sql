@@ -1,4 +1,4 @@
-LOAD httpfs;  -- noqa
+LOAD httpfs;
 SET s3_region='us-west-2';
 
 -- Which sources contributed the buildings in a small area near the

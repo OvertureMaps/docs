@@ -1,12 +1,12 @@
-LOAD spatial; -- noqa
-LOAD httpfs;  -- noqa
+LOAD spatial;
+LOAD httpfs;
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
 COPY (
   SELECT
     id,
-    names.primary as name,
+    names.primary AS name,
     subtype,
     geometry -- DuckDB v.1.1.0 will autoload this as a `geometry` type
   FROM
@@ -17,7 +17,7 @@ COPY (
 )
 TO
   'overture_denmark_locality_neighborhood.shp'
-WITH (
+WITH ( -- noqa: PRS
   FORMAT GDAL,
   DRIVER 'ESRI Shapefile',
   SRS 'EPSG:4326'

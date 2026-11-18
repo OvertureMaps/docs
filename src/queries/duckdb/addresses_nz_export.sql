@@ -1,5 +1,5 @@
-LOAD spatial; --noqa
-LOAD httpfs;  --noqa
+LOAD spatial;
+LOAD httpfs;
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
@@ -18,7 +18,7 @@ COPY (
   )
   TO
     'NZaddresses.shp'
-  WITH (
+  WITH ( -- noqa: PRS
     FORMAT GDAL,
     DRIVER 'ESRI Shapefile',
     SRS 'EPSG:4326'
