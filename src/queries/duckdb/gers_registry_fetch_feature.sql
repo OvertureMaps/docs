@@ -1,4 +1,4 @@
-LOAD httpfs;  -- noqa
+LOAD httpfs;
 SET s3_region='us-west-2';
 
 -- The registry gives the path to the exact Parquet file holding a feature, so

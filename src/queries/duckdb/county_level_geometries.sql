@@ -1,4 +1,4 @@
-LOAD spatial; -- noqa
+LOAD spatial;
 
 SET s3_region='us-west-2';
 
@@ -14,4 +14,4 @@ COPY(
     subtype = 'county'
     AND country = 'US'
     AND region = 'US-PA'
-) TO 'pennsylvania_counties.gpkg' WITH (FORMAT GDAL, DRIVER 'GPKG');
+) TO 'pennsylvania_counties.gpkg' WITH (FORMAT GDAL, DRIVER 'GPKG'); -- noqa: PRS

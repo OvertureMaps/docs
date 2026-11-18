@@ -1,4 +1,4 @@
-LOAD httpfs;  -- noqa
+LOAD httpfs;
 SET s3_region='us-west-2';
 
 -- Check a whole table of held identifiers against the registry in one pass.
