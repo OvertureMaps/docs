@@ -1,4 +1,4 @@
-LOAD httpfs;  -- noqa
+LOAD httpfs;
 SET s3_region='us-west-2';
 
 -- The registry's path column is relative to the release root and starts at

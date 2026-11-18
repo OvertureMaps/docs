@@ -1,4 +1,4 @@
-LOAD spatial; -- noqa
+LOAD spatial;
 
 SET s3_region='us-west-2';
 

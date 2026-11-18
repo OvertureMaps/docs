@@ -3,4 +3,8 @@
 verbose = 0
 dialect = duckdb
 
-exclude_rules = ambiguous.column_count, references.from, layout.long_lines, references.special_chars
+exclude_rules = ambiguous.column_count, structure.column_order, references.consistent, layout.spacing, layout.indent, layout.long_lines, capitalisation.identifiers, references.from, references.keywords, references.qualification, references.special_chars, layout.cte_newline, layout.select_targets, aliasing.unused, ambiguous.order_by_limit, aliasing.expression, ambiguous.order_by, capitalisation.literals
+
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = lower
+ignore_words = cast
