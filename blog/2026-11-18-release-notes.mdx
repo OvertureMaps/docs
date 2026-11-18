@@ -1,0 +1,92 @@
+---
+title: 2026-11-18 release notes
+tags:
+  - releases
+---
+
+## Overview
+
+This is the 2026-11-18.0 monthly release, a full rebuild of all six Overture themes (Addresses, Base, Buildings, Divisions, Places, Transportation) from current source data. Schema version v2.0.0 is unchanged across every theme, and no column, type, or nested-structure changes were found in any of the 15 theme/type tables compared with the prior monthly release (2026-10-21.0).
+
+Across all themes and types combined, total feature count moved from 4,367,602,832 to 4,386,384,117, an increase of 18,781,285 rows (+0.43 percent). This is consistent with the normal month-to-month variance seen in recent releases, driven primarily by routine upstream source refreshes rather than any single structural change.
+
+OpenStreetMap content incorporated in this release reflects data through 2026-11-06 for Base, Buildings, and Transportation, and through 2026-11-09 for Divisions. Addresses and Places do not draw directly from OpenStreetMap in this release.
+
+The sections below summarize evidenced, theme-level changes. Counts are rounded to the nearest whole number; percentages are calculated from the underlying counts.
+
+### Addresses
+
+Addresses held essentially steady this release.
+
+| Type | Previous count | New count | Change | Change (percent) |
+|---|---:|---:|---:|---:|
+| address | 475,263,892 | 475,239,461 | -24,431 | -0.01 percent |
+
+Row-level churn was modest and balanced: about 2.33 million addresses were added and about 2.36 million were removed (0.49 percent and 0.50 percent of the prior total, respectively), with no attribute-level changes detected on surviving rows. The net effect is a change of less than 0.1 percent in total address count.
+
+One source label changed from "NAD" to "National Address Database" with the same row count (85,538,791 rows); this is a cosmetic labeling update with no effect on the underlying data.
+
+### Base
+
+Base grew modestly overall, with growth concentrated in infrastructure, land, land use, and water, and no net change in bathymetry or land cover.
+
+| Type | Previous count | New count | Change | Change (percent) |
+|---|---:|---:|---:|---:|
+| bathymetry | 407,277 | 407,277 | 0 | unchanged |
+| infrastructure | 158,979,260 | 160,422,524 | +1,443,264 | +0.91 percent |
+| land | 76,553,724 | 77,516,732 | +963,008 | +1.26 percent |
+| land_cover | 123,302,114 | 123,302,114 | 0 | unchanged |
+| land_use | 56,446,032 | 56,848,786 | +402,754 | +0.71 percent |
+| water | 66,814,038 | 67,137,224 | +323,186 | +0.48 percent |
+
+The infrastructure growth is attributable entirely to routine OpenStreetMap refresh. Land, land use, and water also grew from the same routine OpenStreetMap refresh cycle. Land cover and bathymetry show no net count change this release; bathymetry's single upstream source (ETOPO/GLOBathy) was not itself refreshed this cycle.
+
+### Buildings
+
+Buildings grew by just over 10.3 million features, driven by multiple source refreshes.
+
+| Type | Previous count | New count | Change | Change (percent) |
+|---|---:|---:|---:|---:|
+| building | 2,533,842,612 | 2,544,125,628 | +10,283,016 | +0.41 percent |
+| building_part | 4,486,107 | 4,669,725 | +183,618 | +4.09 percent |
+
+The building growth is fully attributable to source-level changes:
+- Esri Community Maps contributed +5,344,832 buildings (+35.35 percent off its prior base), reflecting a refreshed extract (dated 2026-09-29) roughly 14 months newer than the extract used in the prior release (dated 2025-08-11).
+- OpenStreetMap contributed +4,874,096 buildings (+0.69 percent), a routine refresh.
+- Google Open Buildings contributed +1,129,286 buildings (+0.13 percent).
+- These gains were partly offset by decreases from Microsoft ML Buildings (-852,302), a Zenodo-hosted open dataset, DOI 10.5281/zenodo.8174931 (-169,720), Instituto Geografico Nacional (Espana) (-43,076), and City of Vancouver (-100).
+
+building_part growth of +183,618 (+4.09 percent) is attributable entirely to OpenStreetMap.
+
+### Divisions
+
+Divisions grew slightly overall, with small movements across all three types.
+
+| Type | Previous count | New count | Change | Change (percent) |
+|---|---:|---:|---:|---:|
+| division | 4,700,999 | 4,714,501 | +13,502 | +0.29 percent |
+| division_area | 1,084,259 | 1,087,919 | +3,660 | +0.34 percent |
+| division_boundary | 87,536 | 87,523 | -13 | -0.01 percent |
+
+Combined across all three division types, the net change is +17,149 rows (+0.29 percent), consistent with routine upstream refresh; no individual type moved by more than a fraction of one percent.
+
+### Places
+
+Places grew by about 1.9 million rows, alongside a broad refresh of place attributes.
+
+| Type | Previous count | New count | Change | Change (percent) |
+|---|---:|---:|---:|---:|
+| place | 88,418,121 | 90,295,754 | +1,877,633 | +2.12 percent |
+
+About 3.84 million places were added and about 1.96 million were removed (4.34 percent and 2.21 percent of the prior total), netting to the +1,877,633 count increase. A large share of surviving places had attributes refreshed this cycle: addresses changed on about 50.9 million rows, phone numbers on about 20.8 million rows, geometry on about 8.3 million rows, websites on about 3.3 million rows, and smaller numbers of rows saw updates to taxonomy, operating status, category, social links, names, brand, and email fields. Name and identifier coverage remained complete, indicating this is attribute refresh churn rather than any loss of coverage.
+
+### Transportation
+
+Transportation grew moderately in both connectors and segments, driven by OpenStreetMap refresh with a smaller contribution from TomTom.
+
+| Type | Previous count | New count | Change | Change (percent) |
+|---|---:|---:|---:|---:|
+| connector | 423,889,001 | 425,897,510 | +2,008,509 | +0.47 percent |
+| segment | 353,327,860 | 354,631,439 | +1,303,579 | +0.37 percent |
+
+Connector growth is attributable entirely to OpenStreetMap. Segment growth of +1,303,579 is attributable mostly to OpenStreetMap (about +1,053,327) with the remainder from TomTom (about +250,252).
