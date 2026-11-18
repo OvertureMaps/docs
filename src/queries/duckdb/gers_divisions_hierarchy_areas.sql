@@ -1,5 +1,5 @@
-LOAD spatial;  -- noqa
-LOAD httpfs;  -- noqa
+LOAD spatial;
+LOAD httpfs;
 SET s3_region='us-west-2';
 
 -- The identifiers in a hierarchy are GERS IDs like any other, so the

@@ -1,11 +1,11 @@
-INSTALL spatial; --noqa
-LOAD spatial; --noqa
+INSTALL spatial;
+LOAD spatial;
 
 
 -- SET variable division_id = <GERS ID HERE>
 
 -- Or, search for it:
-SET variable division_id = (
+SET variable division_id = ( -- noqa: PRS
     SELECT
         id
     FROM

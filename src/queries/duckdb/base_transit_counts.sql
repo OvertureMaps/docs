@@ -1,4 +1,4 @@
-LOAD httpfs;  -- noqa
+LOAD httpfs;
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 

@@ -1,5 +1,5 @@
-LOAD spatial; -- noqa
-LOAD httpfs;  -- noqa
+LOAD spatial;
+LOAD httpfs;
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
@@ -36,11 +36,11 @@ COPY (
             addresses[1].postcode AS postcode,
             addresses[1].region AS region,
             addresses[1].country AS country,
-            geometry AS geometry  -- DuckDB v.1.1.0 will autoload this as a `geometry` type
+            geometry  -- DuckDB v.1.1.0 will autoload this as a `geometry` type
         FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=places/*/*')
         WHERE region = 'OR'
             AND country = 'US'
-            AND taxonomy.primary ilike '%restaurant%'
+            AND taxonomy.primary ILIKE '%restaurant%'
     )
 -- Now that we have our input data we will join them together.
     SELECT
@@ -53,22 +53,10 @@ COPY (
             OR osm.street IS NOT NULL THEN concat(osm.housenumber, ' ', osm.street)
             ELSE overture.freeform
         END AS address,
-        CASE
-            WHEN osm.city IS NOT NULL THEN osm.city
-            ELSE overture.locality
-        END AS city,
-        CASE
-            WHEN osm.postcode IS NOT NULL THEN osm.postcode
-            ELSE overture.postcode
-        END AS postcode,
-        CASE
-            WHEN osm.website IS NOT NULL THEN osm.website
-            ELSE overture.website
-        END AS website,
-        CASE
-            WHEN osm.phone IS NOT NULL THEN osm.phone
-            ELSE overture.phone
-        END AS phone,
+        coalesce(osm.city, overture.locality) AS city,
+        coalesce(osm.postcode, overture.postcode) AS postcode,
+        coalesce(osm.website, overture.website) AS website,
+        coalesce(osm.phone, overture.phone) AS phone,
         overture.social,
         overture.email,
         st_point(osm.lon, osm.lat) AS geometry
@@ -76,8 +64,8 @@ COPY (
 -- To join the data, we'll first match features that have the same OR similar names
         LEFT JOIN overture ON (
             osm.name = overture."names.primary"
-            OR osm.name ilike concat('%', overture."names.primary", '%')
-            OR overture."names.primary" ilike concat('%', osm.name, '%')
+            OR osm.name ILIKE concat('%', overture."names.primary", '%')
+            OR overture."names.primary" ILIKE concat('%', osm.name, '%')
             OR damerau_levenshtein(osm.name, overture."names.primary") < 3
         )
 -- Then use a small buffer to match features that are nearby to each other
