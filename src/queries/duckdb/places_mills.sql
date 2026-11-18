@@ -1,11 +1,11 @@
-LOAD spatial; -- noqa
-LOAD httpfs;  -- noqa
+LOAD spatial;
+LOAD httpfs;
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
 COPY (
     SELECT
-    names.primary as primary_name,
+    names.primary AS primary_name,
     confidence,
     addresses,
     websites,

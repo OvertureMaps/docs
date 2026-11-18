@@ -1,11 +1,11 @@
-LOAD spatial; -- noqa
+LOAD spatial;
 
 SET s3_region='us-west-2';
 
 COPY(
   SELECT
     id,
-    names.primary as name,
+    names.primary AS name,
     class,
     geometry   -- DuckDB v.1.1.0 will autoload this as a `geometry` type
   FROM
@@ -15,4 +15,4 @@ COPY(
     AND bbox.ymin < 48.882 
     AND bbox.xmax > 2.276 
     AND bbox.ymax > 48.865
-) TO 'paris_roads_intersecting.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON');
+) TO 'paris_roads_intersecting.geojson' WITH (FORMAT GDAL, DRIVER 'GeoJSON'); -- noqa: PRS
