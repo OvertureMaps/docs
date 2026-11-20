@@ -1,4 +1,4 @@
-LOAD spatial; -- noqa
+LOAD spatial;
 
 COPY (
     SELECT
@@ -12,4 +12,4 @@ COPY (
         bbox.xmin > -122.68 AND bbox.xmax < -121.98
         AND bbox.ymin > 47.36 AND bbox.ymax < 47.79
     )
-TO 'seattle_land_use.geojsonseq' WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326');
+TO 'seattle_land_use.geojsonseq' WITH (FORMAT GDAL, DRIVER 'GeoJSONSeq', SRS 'EPSG:4326'); -- noqa: PRS

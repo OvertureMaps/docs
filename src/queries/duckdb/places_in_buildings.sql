@@ -1,5 +1,5 @@
-LOAD spatial; -- noqa
-LOAD httpfs;  -- noqa
+LOAD spatial;
+LOAD httpfs;
 -- Access the data on AWS in this example
 SET s3_region='us-west-2';
 
@@ -14,7 +14,7 @@ COPY (
         AND addresses[1].freeform IS NOT NULL
         ),
     -- Then get buildings in the same area
-    buildings as
+    buildings AS
         (
         SELECT *
         FROM read_parquet('s3://overturemaps-us-west-2/release/__OVERTURE_RELEASE/theme=buildings/type=building/*')
@@ -22,8 +22,8 @@ COPY (
         AND bbox.ymin > 50.07 AND bbox.ymax < 50.11
         )
     -- Join the data using an intersect and select distinct to avoid duplicates
-    SELECT distinct(buildings.id), buildings.*, places.addresses
+    SELECT DISTINCT buildings.id, buildings.*, places.addresses
     FROM buildings
-    LEFT JOIN places on st_intersects(places.geometry, buildings.geometry)
+    LEFT JOIN places ON st_intersects(places.geometry, buildings.geometry)
     ORDER BY buildings.id
 ) TO 'prague_places_in_buildings.parquet';

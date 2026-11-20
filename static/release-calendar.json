@@ -210,7 +210,7 @@
     {
       "date": "2026-11-18",
       "dataVersion": "2026-11-18.0",
-      "schemaVersion": null,
+      "schemaVersion": "v2.0.0",
       "majorChangeMonth": false
     },
     {
