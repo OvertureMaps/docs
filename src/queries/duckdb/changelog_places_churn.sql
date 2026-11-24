@@ -1,5 +1,5 @@
-LOAD spatial; -- noqa
-LOAD httpfs;  -- noqa
+LOAD spatial;
+LOAD httpfs;
 SET s3_region='us-west-2';
 
 -- Places that changed in Hanoi, Vietnam.
